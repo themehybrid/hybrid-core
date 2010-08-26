@@ -1,0 +1,61 @@
+/**
+ * Two columns with content floated right.
+ * Fixed width of 960px.
+ *
+ * @since 0.6
+ * @package Hybrid
+ * @subpackage CSS
+ */
+
+#body-container {
+	overflow: hidden;
+	width: 960px;
+	margin: 0 auto;
+	}
+
+#container {
+	overflow: hidden;
+	float: left;
+	width: 960px;
+	}
+
+.content {
+	overflow: hidden;
+	float: right;
+	width: 620px;
+	}
+.no-widgets .content, .no-default-widgets .content {
+	width: 960px;
+	}
+
+#primary {
+	float: left;
+	width: 300px;
+	}
+
+#secondary {
+	clear: left;
+	float: left;
+	width: 300px;
+	}
+
+#subsidiary {
+	overflow: hidden;
+	}
+
+#subsidiary .widget {
+	overflow: hidden;
+	float: left;
+	width: 300px;
+	margin: 0 20px 0 0;
+	}
+
+#footer-container {
+	clear: both;
+	overflow: hidden;
+	}
+
+#footer {
+	clear: both;
+	overflow: hidden;
+	}

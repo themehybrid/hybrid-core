@@ -1,0 +1,20 @@
+/**
+ * Base stylesheet for use with the jQuery UI Tabs component.
+ *
+ * @since 0.9
+ * @package HybridCore
+ * @subpackage CSS
+ */
+
+.ui-tabs {}
+
+.ui-tabs-wrap {}
+
+.ui-tabs-nav {}
+.ui-tabs-nav li {}
+.ui-tabs-nav li a {}
+.ui-tabs-nav li.ui-tabs-selected {}
+.ui-tabs-nav li.ui-tabs-selected a {}
+
+.ui-tabs-hide {}
+.ui-tabs-panel {}

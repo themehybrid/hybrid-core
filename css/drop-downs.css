@@ -1,0 +1,61 @@
+/**
+ * Dropdowns Stylesheet
+ * Sets up some default dropdown menu styles
+ * Style rules for both the page and category menus
+ *
+ * @since 0.5
+ * @package Hybrid
+ * @subpackage CSS
+ */
+
+/* @deprecated 0.8 Default page menu styles */
+#page-nav ul{margin:0;padding:0;list-style:none}#page-nav ul{line-height:1.0}#page-nav .menu ul{position:absolute;top:-999em;width:10em}#page-nav ul ul li{width:100%}#page-nav li:hover{visibility:inherit}#page-nav li{float:left;position:relative}#page-nav a{display:block;position:relative}#page-nav li:hover ul,li.sfHover ul{left:0;top:2em;z-index:99}#page-nav li:hover li ul,li.sfHover li ul{top:-999em}#page-nav li li:hover ul,li li.sfHover ul{left:10em;top:0}#page-nav li li:hover li ul,li li.sfHover li ul{top:-999em}#page-nav li li li:hover ul,li li li.sfHover ul{left:10em;top:0}
+
+/* @deprecated 0.8 Default category menu styles */
+#cat-nav ul{margin:0;padding:0;list-style:none}#cat-nav ul{line-height:1.0}#cat-nav .menu ul{position:absolute;top:-999em;width:10em}#cat-nav ul ul li{width:100%}#cat-nav li:hover{visibility:inherit}#cat-nav li{float:left;position:relative}#cat-nav a{display:block;position:relative}#cat-nav li:hover ul,li.sfHover ul{left:0;top:2em;z-index:99}#cat-nav li:hover li ul,li.sfHover li ul{top:-999em}#cat-nav li li:hover ul,li li.sfHover ul{left:10em;top:0}#cat-nav li li:hover li ul,li li.sfHover li ul{top:-999em}#cat-nav li li li:hover ul,li li li.sfHover ul{left:10em;top:0}
+
+/* Drop-down styles. */
+div.menu ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	line-height: 1.0;
+	}
+div.menu ul ul {
+	position: absolute;
+	top: -999em;
+	width: 10em;
+	}
+div.menu ul ul li {
+	width: 100%;
+	}
+div.menu li:hover {
+	visibility: inherit;
+	}
+div.menu li {
+	float: left;
+	position: relative;
+	}
+div.menu a {
+	display: block;
+	position: relative;
+	}
+div.menu li:hover ul, li.sfHover ul {
+	left: 0;
+	top: 2em;
+	z-index: 99;
+	}
+div.menu li:hover li ul, li.sfHover li ul {
+	top: -999em;
+	}
+div.menu li li:hover ul, li li.sfHover ul {
+	left: 10em;
+	top: 0;
+	}
+div.menu li li:hover li ul, li li.sfHover li ul {
+	top: -999em;
+	}
+div.menu li li li:hover ul, li li li.sfHover ul {
+	left: 10em;
+	top: 0;
+	}
