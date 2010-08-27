@@ -196,7 +196,7 @@ function hybrid_comment_class( $class = '' ) {
 		}
 
 		/* Set a class with the user's name. */
-		$classes[] = 'user-' . sanitize_html_class( $user->user_nicename, $user->user_id );
+		$classes[] = 'user-' . sanitize_html_class( $user->user_nicename, $user->ID );
 	}
 
 	/* If not a registered user */
