@@ -251,7 +251,7 @@ function hybrid_body_class( $class = '' ) {
 	if ( is_singular() ) {
 
 		/* Checks for custom template. */
-		$template = str_replace( array ( "{$wp_query->post->post_type}-", "{$wp_query->post->post_type}-template-", '.php' ), '', get_post_meta( $wp_query->post->ID, "_wp_{$wp_query->post->post_type}_template", true ) );
+		$template = str_replace( array ( "{$wp_query->post->post_type}-template-", "{$wp_query->post->post_type}-", '.php' ), '', get_post_meta( $wp_query->post->ID, "_wp_{$wp_query->post->post_type}_template", true ) );
 		if ( $template ) {
 			//$template = str_replace(  ), '', $template );
 			$classes[] = "{$wp_query->post->post_type}-template-{$template}";
