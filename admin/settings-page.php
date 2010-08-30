@@ -139,6 +139,9 @@ function hybrid_save_theme_settings() {
 	if ( $settings['feed_url'] )
 		$settings['feed_url'] = esc_url( $settings['feed_url'] );
 
+	/* Allow developers to futher validate/sanitize the data. */
+	$settings = apply_filters( "{$prefix}_validate_theme_settings", $settings );
+
 	/* Update the theme settings. */
 	$updated = update_option( "{$prefix}_theme_settings", $settings );
 }
