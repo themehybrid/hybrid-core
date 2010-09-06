@@ -260,6 +260,7 @@ class Hybrid {
 
 		/* Stylesheet filters. */
 		add_filter( 'stylesheet_uri', 'hybrid_post_stylesheets', 10, 2 );
+		add_filter( 'stylesheet_uri', 'hybrid_debug_stylesheet', 10, 2 );
 
 		/* Template filters. */
 		add_filter( 'date_template', 'hybrid_date_template' );

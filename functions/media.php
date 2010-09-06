@@ -8,11 +8,16 @@
  * @subpackage Functions
  */
 
-add_filter( 'stylesheet_uri', 'hybrid_debug_stylesheet', 10, 2 );
-
+/**
+ * Function for using a debug stylesheet when developing.  To develop with the debug stylesheet, 
+ * SCRIPT_DEBUG must be set to 'true' in the 'wp-config.php' file.  This will check if a 'style.dev.css'
+ * file is present within the theme folder and use it if it exists.  Else, it defaults to 'style.css'.
+ *
+ * @since 0.9
+ */
 function hybrid_debug_stylesheet( $stylesheet_uri, $stylesheet_dir_uri ) {
 
-	if ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) {
+	if ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG && current_theme_supports( 'dev-stylesheet' ) ) {
 		$stylesheet = str_replace( trailingslashit( $stylesheet_dir_uri ), '', $stylesheet_uri );
 		$stylesheet = str_replace( '.css', '.dev.css', $stylesheet );
 
