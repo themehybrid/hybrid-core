@@ -206,7 +206,7 @@ function breadcrumb_trail( $args = array() ) {
 
 			elseif ( get_query_var( 'w' ) ) {
 				$trail[] = '<a href="' . get_year_link( get_the_time( __( 'Y', $textdomain ) ) ) . '" title="' . get_the_time( __( 'Y', $textdomain ) ) . '">' . get_the_time( __( 'Y', $textdomain ) ) . '</a>';
-				$trail['trail_end'] = sprintf( __( 'Week %1$s', 'hybrid' ), get_the_time( __( 'W', $textdomain ) ) );
+				$trail['trail_end'] = sprintf( __( 'Week %1$s', $textdomain ), get_the_time( __( 'W', $textdomain ) ) );
 			}
 
 			elseif ( is_month() ) {
