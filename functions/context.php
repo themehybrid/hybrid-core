@@ -115,38 +115,50 @@ function hybrid_get_context() {
  * @param string|array $class Additional classes for more control.
  * @return string $class
  */
-function hybrid_entry_class( $class = '' ) {
-	global $post;
+function hybrid_entry_class( $class = '', $post_id = null ) {
 	static $post_alt;
 
-	/* Add hentry for microformats compliance and the post type. */
-	$classes = array( 'hentry', $post->post_type, $post->post_status );
+	$post = get_post( $post_id );
 
-	/* Post alt class. */
-	$classes[] = 'post-' . ++$post_alt;
-	$classes[] = ( $post_alt % 2 ) ? 'odd' : 'even alt';
+	/* Make sure we have a real post first. */
+	if ( !empty( $post ) ) {
 
-	/* Author class. */
-	$classes[] = 'author-' . sanitize_html_class( get_the_author_meta( 'user_nicename' ), get_the_author_meta( 'ID' ) );
+		$post_id = $post->ID;
 
-	/* Sticky class (only on home/blog page). */
-	if ( is_home() && is_sticky() )
-		$classes[] = 'sticky';
+		/* Add hentry for microformats compliance and the post type. */
+		$classes = array( 'hentry', $post->post_type, $post->post_status );
 
-	/* Password-protected posts. */
-	if ( post_password_required() )
-		$classes[] = 'protected';
+		/* Post alt class. */
+		$classes[] = 'post-' . ++$post_alt;
+		$classes[] = ( $post_alt % 2 ) ? 'odd' : 'even alt';
 
-	/* Add category and post tag terms as classes. */
-	if ( 'post' == $post->post_type ) {
+		/* Author class. */
+		$classes[] = 'author-' . sanitize_html_class( get_the_author_meta( 'user_nicename' ), get_the_author_meta( 'ID' ) );
 
-		foreach ( array( 'category', 'post_tag' ) as $tax ) {
+		/* Sticky class (only on home/blog page). */
+		if ( is_home() && is_sticky() )
+			$classes[] = 'sticky';
 
-			foreach ( (array)get_the_terms( $post->ID, $tax ) as $term ) {
-				if ( !empty( $term->slug ) )
-					$classes[] = $tax . '-' . sanitize_html_class( $term->slug, $term->term_id );
+		/* Password-protected posts. */
+		if ( post_password_required() )
+			$classes[] = 'protected';
+
+		/* Add category and post tag terms as classes. */
+		if ( 'post' == $post->post_type ) {
+
+			foreach ( array( 'category', 'post_tag' ) as $tax ) {
+
+				foreach ( (array)get_the_terms( $post->ID, $tax ) as $term ) {
+					if ( !empty( $term->slug ) )
+						$classes[] = $tax . '-' . sanitize_html_class( $term->slug, $term->term_id );
+				}
 			}
 		}
+	}
+
+	/* If not a post. */
+	else {
+		$classes = array( 'hentry', 'error' );
 	}
 
 	/* User-created classes. */
@@ -157,7 +169,7 @@ function hybrid_entry_class( $class = '' ) {
 	}
 
 	/* Apply the filters for WP's 'post_class'. */
-	$classes = apply_filters( 'post_class', $classes, $class, $post->ID );
+	$classes = apply_filters( 'post_class', $classes, $class, $post_id );
 
 	/* Join all the classes into one string and echo them. */
 	$class = join( ' ', $classes );
