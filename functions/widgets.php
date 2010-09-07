@@ -9,12 +9,6 @@
  */
 
 /**
- * Add theme support for widgets.
- * @since 0.8
- */
-add_theme_support( 'widgets' );
-
-/**
  * Register widget areas
  * @since 0.7
  */
