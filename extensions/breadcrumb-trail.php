@@ -5,7 +5,7 @@
  * While not perfect, it attempts to fill in the gaps left by many other breadcrumb scripts.
  *
  * @copyright 2008 - 2010
- * @version 0.3.1
+ * @version 0.3.2
  * @author Justin Tadlock
  * @link http://justintadlock.com/archives/2009/04/05/breadcrumb-trail-wordpress-plugin
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
@@ -230,10 +230,22 @@ function breadcrumb_trail( $args = array() ) {
 
 	/* Connect the breadcrumb trail if there are items in the trail. */
 	if ( is_array( $trail ) ) {
+
+		/* Open the breadcrumb trail containers. */
 		$breadcrumb = '<div class="breadcrumb breadcrumbs"><div class="breadcrumb-trail">';
-		$breadcrumb .= " {$before} ";
+
+		/* If $before was set, wrap it in a container. */
+		if ( !empty( $before ) )
+			$breadcrumb .= '<span class="trail-before">' . $before . '</span>';
+
+		/* Join the individual trail items into a single string. */
 		$breadcrumb .= join( " {$separator} ", $trail );
-		$breadcrumb .= " {$after} ";
+
+		/* If $after was set, wrap it in a container. */
+		if ( !empty( $after ) )
+			$breadcrumb .= ' <span class="trail-after">' . $after . '</span>';
+
+		/* Close the breadcrumb trail containers. */
 		$breadcrumb .= '</div></div>';
 	}
 
