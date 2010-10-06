@@ -243,10 +243,12 @@ function hybrid_body_class( $class = '' ) {
 	$classes = array( 'wordpress', get_bloginfo( 'text_direction' ), get_locale() );
 
 	/* Layout class. */
-	if ( ( current_theme_supports( 'post-layouts' ) || 'hybrid' == get_stylesheet() ) && is_singular() ) {
-		$layout = get_post_meta( $wp_query->post->ID, 'Layout', true );
-		if ( !empty( $layout ) )
-			$classes[] = 'layout-' . strip_tags( esc_attr( $layout ) );
+	if ( current_theme_supports( 'post-layouts' ) ) {
+
+		if ( is_singular() )
+			$layout = get_post_meta( $wp_query->post->ID, 'Layout', true );
+
+		$classes[] = ( !empty( $layout ) ? 'layout-' . strip_tags( esc_attr( $layout ) ) : 'layout-default' );
 	}
 
 	/* Date classes. */
