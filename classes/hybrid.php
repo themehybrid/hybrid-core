@@ -135,6 +135,7 @@ class Hybrid {
 		require_once( HYBRID_FUNCTIONS . '/comments.php' );
 		require_once( HYBRID_FUNCTIONS . '/context.php' );
 		require_once( HYBRID_FUNCTIONS . '/media.php' );
+		require_once( HYBRID_FUNCTIONS . '/menus.php' );
 		require_once( HYBRID_FUNCTIONS . '/shortcodes.php' );
 		require_once( HYBRID_FUNCTIONS . '/template.php' );
 		require_once( HYBRID_FUNCTIONS . '/widgets.php' );
@@ -142,10 +143,6 @@ class Hybrid {
 		/* Load the Hybrid theme functions if it's the parent theme. */
 		if ( 'hybrid' == get_template() )
 			require_once( HYBRID_FUNCTIONS . '/defaults.php' );
-
-		/* Menus compatibility. */
-		if ( hybrid_get_setting( 'use_menus' ) || 'hybrid' !== get_template() )
-			require_once( HYBRID_FUNCTIONS . '/menus.php' );
 	}
 
 	/**
