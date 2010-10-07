@@ -158,28 +158,22 @@ class Hybrid {
 	function extensions() {
 
 		/* Load the Breadcrumb Trail extension if supported. */
-		if ( current_theme_supports( 'breadcrumb-trail' ) )
-			require_once( HYBRID_EXTENSIONS . '/breadcrumb-trail.php' );
+		require_if_theme_supports( 'breadcrumb-trail', HYBRID_EXTENSIONS . '/breadcrumb-trail.php' );
 
 		/* Load the Custom Field Series extension if supported. */
-		if ( current_theme_supports( 'custom-field-series' ) )
-			require_once( HYBRID_EXTENSIONS . '/custom-field-series.php' );
+		require_if_theme_supports( 'custom-field-series', HYBRID_EXTENSIONS . '/custom-field-series.php' );
 
 		/* Load the Get the Image extension if supported. */
-		if ( current_theme_supports( 'get-the-image' ) )
-			require_once( HYBRID_EXTENSIONS . '/get-the-image.php' );
+		require_if_theme_supports( 'get-the-image', HYBRID_EXTENSIONS . '/get-the-image.php' );
 
 		/* Load the Get the Object extension if supported. */
-		if ( current_theme_supports( 'get-the-object' ) )
-			require_once( HYBRID_EXTENSIONS . '/get-the-object.php' );
+		require_if_theme_supports( 'get-the-object', HYBRID_EXTENSIONS . '/get-the-object.php' );
 
 		/* Load the Pagination extension if supported. */
-		if ( current_theme_supports( 'loop-pagination' ) )
-			require_once( HYBRID_EXTENSIONS . '/loop-pagination.php' );
+		require_if_theme_supports( 'loop-pagination', HYBRID_EXTENSIONS . '/loop-pagination.php' );
 
 		/* Load the Entry Views extension if supported. */
-		if ( current_theme_supports( 'entry-views' ) )
-			require_once( HYBRID_EXTENSIONS . '/entry-views.php' );
+		require_if_theme_supports( 'entry-views', HYBRID_EXTENSIONS . '/entry-views.php' );
 	}
 
 	/**
