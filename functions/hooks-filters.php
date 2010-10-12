@@ -372,20 +372,4 @@ function hybrid_other_feed_link( $link ) {
 	return $link;
 }
 
-/**
- * Displays the breadcrumb trail.  Calls the get_the_breadcrumb() function.
- * Use the get_the_breadcrumb_args filter hook.  The hybrid_breadcrumb_args 
- * filter is deprecated.
- *
- * @deprecated 0.5 Theme still needs this function.
- * @todo Find an elegant way to transition to breadcrumb_trail() 
- * in child themes and filter breadcrumb_trail_args instead.
- *
- * @since 0.1
- */
-function hybrid_breadcrumb() {
-	if ( current_theme_supports( 'breadcrumb-trail' ) )
-		breadcrumb_trail( array( 'front_page' => false, 'singular_post_taxonomy' => 'category' ) );
-}
-
 ?>
