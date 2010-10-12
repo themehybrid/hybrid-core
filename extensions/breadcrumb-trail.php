@@ -236,7 +236,10 @@ function breadcrumb_trail( $args = array() ) {
 
 		/* If $before was set, wrap it in a container. */
 		if ( !empty( $before ) )
-			$breadcrumb .= '<span class="trail-before">' . $before . '</span>';
+			$breadcrumb .= '<span class="trail-before">' . $before . '</span> ';
+
+		/* Wrap the $trail['trail_end'] value in a container. */
+		$trail['trail_end'] = '<span class="trail-end">' . $trail['trail_end'] . '</span>';
 
 		/* Join the individual trail items into a single string. */
 		$breadcrumb .= join( " {$separator} ", $trail );
