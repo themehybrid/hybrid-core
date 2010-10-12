@@ -171,6 +171,9 @@ class Hybrid {
 
 		/* Load the Entry Views extension if supported. */
 		require_if_theme_supports( 'entry-views', HYBRID_EXTENSIONS . '/entry-views.php' );
+
+		/* Load the Post Layouts extension if supported. */
+		require_if_theme_supports( 'post-layouts', HYBRID_EXTENSIONS . '/post-layouts.php' );
 	}
 
 	/**
