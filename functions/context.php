@@ -7,7 +7,7 @@
  * Many of the ideas behind context-aware functions originated with the great Sandbox theme.
  * @link http://www.plaintxt.org/themes/sandbox
  *
- * @package Hybrid
+ * @package HybridCore
  * @subpackage Functions
  */
 
@@ -59,8 +59,8 @@ function hybrid_get_context() {
 		if ( is_tax() || is_category() || is_tag() ) {
 			$term = $wp_query->get_queried_object();
 			$hybrid->context[] = 'taxonomy';
-			$hybrid->context[] = $term->taxonomy;
-			$hybrid->context[] = "{$term->taxonomy}-" . sanitize_html_class( $term->slug, $term->term_id );
+			$hybrid->context[] = "taxonomy-{$term->taxonomy}";
+			$hybrid->context[] = "taxonomy-{$term->taxonomy}-" . sanitize_html_class( $term->slug, $term->term_id );
 		}
 
 		/* User/author archives. */
@@ -237,7 +237,7 @@ function hybrid_comment_class( $class = '' ) {
  * @return string
  */
 function hybrid_body_class( $class = '' ) {
-	global $wp_query, $is_lynx, $is_gecko, $is_IE, $is_opera, $is_NS4, $is_safari, $is_chrome;
+	global $wp_query;
 
 	/* Text direction (which direction does the text flow). */
 	$classes = array( 'wordpress', get_bloginfo( 'text_direction' ), get_locale() );
@@ -257,10 +257,8 @@ function hybrid_body_class( $class = '' ) {
 
 		/* Checks for custom template. */
 		$template = str_replace( array ( "{$wp_query->post->post_type}-template-", "{$wp_query->post->post_type}-", '.php' ), '', get_post_meta( $wp_query->post->ID, "_wp_{$wp_query->post->post_type}_template", true ) );
-		if ( $template ) {
-			//$template = str_replace(  ), '', $template );
+		if ( !empty( $template ) )
 			$classes[] = "{$wp_query->post->post_type}-template-{$template}";
-		}
 
 		/* Comments class. */
 		$classes[] = ( ( comments_open() ) ? 'comments-open' : 'comments-closed' );
@@ -270,12 +268,6 @@ function hybrid_body_class( $class = '' ) {
 			foreach ( explode( '/', get_post_mime_type() ) as $type )
 				$classes[] = "attachment-{$type}";
 		}
-
-		/* Deprecated classes. */
-		elseif ( is_page() )
-			$classes[] = "page-{$wp_query->post->ID}"; // Use singular-page-ID
-		elseif ( is_singular( 'post' ) )
-			$classes[] = "single-{$wp_query->post->ID}"; // Use singular-post-ID
 	}
 
 	/* Paged views. */
@@ -283,22 +275,6 @@ function hybrid_body_class( $class = '' ) {
 		$page = intval( $page );
 		$classes[] = 'paged paged-' . $page;
 	}
-
-	/* Browser detection. */
-	$browsers = array( 	'gecko' => $is_gecko, 'opera' => $is_opera, 'lynx' => $is_lynx, 'ns4' => $is_NS4, 'safari' => $is_safari, 'chrome' => $is_chrome, 'msie' => $is_IE );
-	foreach ( $browsers as $key => $value ) {
-		if ( $value ) {
-			$classes[] = $key;
-			break;
-		}
-	}
-
-	/* Hybrid theme widgets detection. */
-	foreach ( array( 'primary', 'secondary', 'subsidiary' ) as $sidebar )
-		$classes[] = ( is_active_sidebar( $sidebar ) ) ? "{$sidebar}-active" : "{$sidebar}-inactive";
-
-	if ( in_array( 'primary-inactive', $classes ) && in_array( 'secondary-inactive', $classes ) && in_array( 'subsidiary-inactive', $classes ) )
-		$classes[] = 'no-widgets';
 
 	/* Input class. */
 	if ( !empty( $class ) ) {

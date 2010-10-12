@@ -112,6 +112,51 @@ function hybrid_setup_theme() {
 	/* Add the comment avatar and comment meta before individual comments. */
 	add_action( "{$prefix}_before_comment", 'hybrid_avatar' );
 	add_action( "{$prefix}_before_comment", 'hybrid_comment_meta' );
+
+	/* Add Hybrid theme-specific body classes. */
+	add_filter( 'body_class', 'hybrid_theme_body_class' );
+}
+
+/**
+ * Function for adding Hybrid theme <body> classes.
+ *
+ * @since 0.9
+ */
+function hybrid_theme_body_class( $classes ) {
+	global $wp_query, $is_lynx, $is_gecko, $is_IE, $is_opera, $is_NS4, $is_safari, $is_chrome;
+
+	/* Singular post classes (deprecated). */
+	if ( is_singular() ) {
+
+		if ( is_page() )
+			$classes[] = "page-{$wp_query->post->ID}"; // Use singular-page-ID
+
+		elseif ( is_singular( 'post' ) )
+			$classes[] = "single-{$wp_query->post->ID}"; // Use singular-post-ID
+	}
+	elseif ( is_tax() || is_category() || is_tag() ) {
+		$term = $wp_query->get_queried_object();
+		$classes[] = "taxonomy-{$term->taxonomy}";
+		$classes[] = "taxonomy-{$term->taxonomy}-" . sanitize_html_class( $term->slug, $term->term_id );
+	}
+
+	/* Browser detection. */
+	$browsers = array( 'gecko' => $is_gecko, 'opera' => $is_opera, 'lynx' => $is_lynx, 'ns4' => $is_NS4, 'safari' => $is_safari, 'chrome' => $is_chrome, 'msie' => $is_IE );
+	foreach ( $browsers as $key => $value ) {
+		if ( $value ) {
+			$classes[] = $key;
+			break;
+		}
+	}
+
+	/* Hybrid theme widgets detection. */
+	foreach ( array( 'primary', 'secondary', 'subsidiary' ) as $sidebar )
+		$classes[] = ( is_active_sidebar( $sidebar ) ) ? "{$sidebar}-active" : "{$sidebar}-inactive";
+
+	if ( in_array( 'primary-inactive', $classes ) && in_array( 'secondary-inactive', $classes ) && in_array( 'subsidiary-inactive', $classes ) )
+		$classes[] = 'no-widgets';
+
+	return $classes;
 }
 
 ?>
