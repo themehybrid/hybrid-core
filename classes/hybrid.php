@@ -130,7 +130,6 @@ class Hybrid {
 	 */
 	function functions() {
 		require_once( HYBRID_FUNCTIONS . '/core.php' );
-		require_once( HYBRID_FUNCTIONS . '/hooks-actions.php' );
 		require_once( HYBRID_FUNCTIONS . '/hooks-filters.php' );
 		require_once( HYBRID_FUNCTIONS . '/comments.php' );
 		require_once( HYBRID_FUNCTIONS . '/context.php' );
@@ -207,10 +206,8 @@ class Hybrid {
 
 		/* Remove WP and plugin functions. */
 		remove_action( 'wp_head', 'wp_generator' );
-		add_action( 'wp_print_styles', 'hybrid_disable_styles' );
 
 		/* Head actions. */
-		$actions[] = 'hybrid_meta_content_type';
 		$actions[] = 'wp_generator';
 		$actions[] = 'hybrid_meta_template';
 		if ( current_theme_supports( 'hybrid-core-seo' ) ) {
@@ -222,10 +219,9 @@ class Hybrid {
 			$actions[] = 'hybrid_meta_keywords';
 		}
 		$actions[] = 'hybrid_head_pingback';
-		$actions[] = 'hybrid_favicon';
 
 		foreach ( $actions as $action )
-			add_action( "{$this->prefix}_head", $action );
+			add_action( 'wp_head', $action, 1 );
 
 		/* WP print scripts and styles. */
 		add_action( 'template_redirect', 'hybrid_enqueue_style' );
@@ -264,13 +260,6 @@ class Hybrid {
 		add_filter( 'single_template', 'hybrid_singular_template' );
 		add_filter( 'page_template', 'hybrid_singular_template' );
 		add_filter( 'attachment_template', 'hybrid_singular_template' );
-
-		/* Feed links. */
-		add_filter( 'feed_link', 'hybrid_feed_link', 1, 2 );
-		add_filter( 'category_feed_link', 'hybrid_other_feed_link' );
-		add_filter( 'author_feed_link', 'hybrid_other_feed_link' );
-		add_filter( 'tag_feed_link', 'hybrid_other_feed_link' );
-		add_filter( 'search_feed_link', 'hybrid_other_feed_link' );
 	}
 }
 

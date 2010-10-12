@@ -254,60 +254,6 @@ function hybrid_site_description() {
 }
 
 /**
- * Displays the default entry title.  Wraps the title in the appropriate header tag. 
- * Use the hybrid_entry_title filter to customize.
- *
- * @since 0.5
- */
-function hybrid_entry_title( $title = '' ) {
-	if ( !$title )
-		$title =  hybrid_entry_title_shortcode();
-
-	echo apply_atomic_shortcode( 'entry_title', $title );
-}
-
-/**
- * Default entry byline for posts.  Shows the author, date, and edit link.  Use the 
- * hybrid_byline filter to customize.
- *
- * @since 0.5
- */
-function hybrid_byline( $byline = '' ) {
-	global $post;
-
-	if ( $byline )
-		$byline = '<p class="byline">' . $byline . '</p>';
-
-	elseif ( 'post' == $post->post_type && 'link_category' !== get_query_var( 'taxonomy' ) )
-		$byline = '<p class="byline">' . __( '<span class="byline-prep byline-prep-author">By</span> [entry-author] <span class="byline-prep byline-prep-published">on</span> [entry-published] [entry-edit-link before="| "]', hybrid_get_textdomain() ) . '</p>';
-
-	echo apply_atomic_shortcode( 'byline', $byline );
-}
-
-/**
- * Displays the default entry metadata.  Shows the category, tag, and comments 
- * link.  Use the hybrid_entry_meta filter to customize.
- *
- * @since 0.5
- */
-function hybrid_entry_meta( $metadata = '' ) {
-	global $post;
-
-	$domain = hybrid_get_textdomain();
-
-	if ( $metadata )
-		$metadata = '<p class="entry-meta">' . $metadata . '</p>';
-
-	elseif ( 'post' == $post->post_type )
-		$metadata = '<p class="entry-meta">[entry-terms taxonomy="category" before="' . __( 'Posted in', $domain ) . ' "] [entry-terms taxonomy="post_tag" before="| ' . __( 'Tagged', $domain ) . ' "] [entry-comments-link before="| "]</p>';
-
-	elseif ( is_page() && current_user_can( 'edit_pages' ) )
-		$metadata = '<p class="entry-meta">[entry-edit-link]</p>';
-
-	echo apply_atomic_shortcode( 'entry_meta', $metadata, $post->ID );
-}
-
-/**
  * Default entry utility for posts.
  *
  * @since 0.9
@@ -330,46 +276,6 @@ function hybrid_entry_utility( $utility = '' ) {
  */
 function hybrid_profile_uri() {
 	echo apply_atomic( 'profile_uri', 'http://gmpg.org/xfn/11' );
-}
-
-/**
- * Filters main feed links for the site.  This changes the feed links  to the user's 
- * alternate feed URL.  This change only happens if the user chooses it from the 
- * theme settings.
- *
- * @since 0.4
- * @param string $output
- * @param string $feed
- * @return string $output
- */
-function hybrid_feed_link( $output, $feed ) {
-
-	$url = esc_url( hybrid_get_setting( 'feed_url' ) );
-
-	if ( $url ) {
-		$outputarray = array( 'rss' => $url, 'rss2' => $url, 'atom' => $url, 'rdf' => $url, 'comments_rss2' => '' );
-		$outputarray[$feed] = $url;
-		$output = $outputarray[$feed];
-	}
-
-	return $output;
-}
-
-/**
- * Filters the category, author, and tag feed links.  This changes all of these feed 
- * links to the user's alternate feed URL.  This change only happens if the user chooses 
- * it from the theme settings.
- *
- * @since 0.4
- * @param string $link
- * @return string $link
- */
-function hybrid_other_feed_link( $link ) {
-
-	if ( hybrid_get_setting( 'feeds_redirect' ) && $url = hybrid_get_setting( 'feed_url' ) )
-		$link = esc_url( $url );
-
-	return $link;
 }
 
 ?>

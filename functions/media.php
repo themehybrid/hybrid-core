@@ -99,18 +99,6 @@ function hybrid_enqueue_script() {
 }
 
 /**
- * Disables stylesheets for particular plugins to allow the theme to easily write its own
- * styles for the plugins' features.
- *
- * @since 0.7
- * @link http://wordpress.org/extend/plugins/wp-pagenavi
- */
-function hybrid_disable_styles() {
-	/* Deregister the WP PageNavi plugin style. */
-	wp_deregister_style( 'wp-pagenavi' );
-}
-
-/**
  * Loads the correct function for handling attachments. Checks the attachment mime 
  * type to call correct function. Image attachments are not loaded with this function.
  * The functionality for them resides in image.php.

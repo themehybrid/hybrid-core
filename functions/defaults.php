@@ -10,6 +10,8 @@
  * @subpackage Functions
  */
 
+require_once( HYBRID_LEGACY . '/hooks-actions.php' );
+
 /* Do theme setup on the 'after_setup_theme' hook. */
 add_action( 'after_setup_theme', 'hybrid_setup_theme' );
 
@@ -115,6 +117,20 @@ function hybrid_setup_theme() {
 
 	/* Add Hybrid theme-specific body classes. */
 	add_filter( 'body_class', 'hybrid_theme_body_class' );
+
+	/* Add elements to the <head> area. */
+	add_action( "{$prefix}_head", 'hybrid_meta_content_type' );
+	add_action( 'wp_head', 'hybrid_favicon' );
+
+	/* Feed links. */
+	add_filter( 'feed_link', 'hybrid_feed_link', 1, 2 );
+	add_filter( 'category_feed_link', 'hybrid_other_feed_link' );
+	add_filter( 'author_feed_link', 'hybrid_other_feed_link' );
+	add_filter( 'tag_feed_link', 'hybrid_other_feed_link' );
+	add_filter( 'search_feed_link', 'hybrid_other_feed_link' );
+
+	/* Remove WP and plugin functions. */
+	add_action( 'wp_print_styles', 'hybrid_disable_styles' );
 }
 
 /**
@@ -173,6 +189,112 @@ function hybrid_theme_body_class( $classes ) {
 function hybrid_breadcrumb() {
 	if ( current_theme_supports( 'breadcrumb-trail' ) )
 		breadcrumb_trail( array( 'front_page' => false, 'singular_post_taxonomy' => 'category' ) );
+}
+
+/**
+ * Filters main feed links for the site.  This changes the feed links  to the user's 
+ * alternate feed URL.  This change only happens if the user chooses it from the 
+ * theme settings.
+ *
+ * @since 0.4
+ * @param string $output
+ * @param string $feed
+ * @return string $output
+ */
+function hybrid_feed_link( $output, $feed ) {
+
+	$url = esc_url( hybrid_get_setting( 'feed_url' ) );
+
+	if ( $url ) {
+		$outputarray = array( 'rss' => $url, 'rss2' => $url, 'atom' => $url, 'rdf' => $url, 'comments_rss2' => '' );
+		$outputarray[$feed] = $url;
+		$output = $outputarray[$feed];
+	}
+
+	return $output;
+}
+
+/**
+ * Filters the category, author, and tag feed links.  This changes all of these feed 
+ * links to the user's alternate feed URL.  This change only happens if the user chooses 
+ * it from the theme settings.
+ *
+ * @since 0.4
+ * @param string $link
+ * @return string $link
+ */
+function hybrid_other_feed_link( $link ) {
+
+	if ( hybrid_get_setting( 'feeds_redirect' ) && $url = hybrid_get_setting( 'feed_url' ) )
+		$link = esc_url( $url );
+
+	return $link;
+}
+
+/**
+ * Displays the default entry title.  Wraps the title in the appropriate header tag. 
+ * Use the hybrid_entry_title filter to customize.
+ *
+ * @since 0.5
+ */
+function hybrid_entry_title( $title = '' ) {
+	if ( !$title )
+		$title =  hybrid_entry_title_shortcode();
+
+	echo apply_atomic_shortcode( 'entry_title', $title );
+}
+
+/**
+ * Default entry byline for posts.  Shows the author, date, and edit link.  Use the 
+ * hybrid_byline filter to customize.
+ *
+ * @since 0.5
+ */
+function hybrid_byline( $byline = '' ) {
+	global $post;
+
+	if ( $byline )
+		$byline = '<p class="byline">' . $byline . '</p>';
+
+	elseif ( 'post' == $post->post_type && 'link_category' !== get_query_var( 'taxonomy' ) )
+		$byline = '<p class="byline">' . __( '<span class="byline-prep byline-prep-author">By</span> [entry-author] <span class="byline-prep byline-prep-published">on</span> [entry-published] [entry-edit-link before="| "]', hybrid_get_textdomain() ) . '</p>';
+
+	echo apply_atomic_shortcode( 'byline', $byline );
+}
+
+/**
+ * Displays the default entry metadata.  Shows the category, tag, and comments 
+ * link.  Use the hybrid_entry_meta filter to customize.
+ *
+ * @since 0.5
+ */
+function hybrid_entry_meta( $metadata = '' ) {
+	global $post;
+
+	$domain = hybrid_get_textdomain();
+
+	if ( $metadata )
+		$metadata = '<p class="entry-meta">' . $metadata . '</p>';
+
+	elseif ( 'post' == $post->post_type )
+		$metadata = '<p class="entry-meta">[entry-terms taxonomy="category" before="' . __( 'Posted in', $domain ) . ' "] [entry-terms taxonomy="post_tag" before="| ' . __( 'Tagged', $domain ) . ' "] [entry-comments-link before="| "]</p>';
+
+	elseif ( is_page() && current_user_can( 'edit_pages' ) )
+		$metadata = '<p class="entry-meta">[entry-edit-link]</p>';
+
+	echo apply_atomic_shortcode( 'entry_meta', $metadata, $post->ID );
+}
+
+/**
+ * Disables stylesheets for particular plugins to allow the theme to easily write its own
+ * styles for the plugins' features.
+ *
+ * @since 0.7
+ * @link http://wordpress.org/extend/plugins/wp-pagenavi
+ */
+function hybrid_disable_styles() {
+	/* Deregister the WP PageNavi plugin style. */
+	wp_deregister_style( 'wp-pagenavi' );
 }
 
 ?>
