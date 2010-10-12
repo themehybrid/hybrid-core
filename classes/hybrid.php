@@ -58,6 +58,10 @@ class Hybrid {
 		/* Load theme extensions later since we need to check if they're supported. */
 		add_action( 'after_setup_theme', array( &$this, 'extensions' ), 12 );
 
+		/* Load the default action and filters after the theme is set up. */
+		//add_action( 'after_setup_theme', array( &$this, 'actions' ), 13 );
+		//add_action( 'after_setup_theme', array( &$this, 'filters' ), 13 );
+
 		/* Load theme textdomain. */
 		$domain = hybrid_get_textdomain();
 		$locale = get_locale();
@@ -173,6 +177,9 @@ class Hybrid {
 
 		/* Load the Post Layouts extension if supported. */
 		require_if_theme_supports( 'post-layouts', HYBRID_EXTENSIONS . '/post-layouts.php' );
+
+		/* Load the temporary core SEO component. */
+		require_if_theme_supports( 'hybrid-core-seo', HYBRID_FUNCTIONS . '/core-seo.php' );
 	}
 
 	/**
@@ -208,20 +215,9 @@ class Hybrid {
 		remove_action( 'wp_head', 'wp_generator' );
 
 		/* Head actions. */
-		$actions[] = 'wp_generator';
-		$actions[] = 'hybrid_meta_template';
-		if ( current_theme_supports( 'hybrid-core-seo' ) ) {
-			$actions[] = 'hybrid_meta_robots';
-			$actions[] = 'hybrid_meta_author';
-			$actions[] = 'hybrid_meta_copyright';
-			$actions[] = 'hybrid_meta_revised';
-			$actions[] = 'hybrid_meta_description';
-			$actions[] = 'hybrid_meta_keywords';
-		}
-		$actions[] = 'hybrid_head_pingback';
-
-		foreach ( $actions as $action )
-			add_action( 'wp_head', $action, 1 );
+		add_action( 'wp_head', 'wp_generator', 1 );
+		add_action( 'wp_head', 'hybrid_meta_template', 1 );
+		add_action( 'wp_head', 'hybrid_head_pingback' );
 
 		/* WP print scripts and styles. */
 		add_action( 'template_redirect', 'hybrid_enqueue_style' );
