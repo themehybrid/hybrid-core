@@ -18,21 +18,21 @@ class Hybrid {
 	var $prefix;
 
 	/**
-	 * Constructor method for the Hybrid class.  Just calls the init() method.
+	 * PHP4 constructor method.
 	 *
 	 * @since 0.9
 	 */
 	function Hybrid() {
-		$this->init();
+		$this->__construct();
 	}
 
 	/**
-	 * Initializes the theme framework, loads the required files, and calls the
-	 * functions needed to run the theme.
+	 * Constructor method for the Hybrid class.  Initializes the theme framework, loads the 
+	 * required files, and calls the functions needed to run the framework.
 	 *
-	 * @since 0.7
+	 * @since 0.9.1
 	 */
-	function init() {
+	function __construct() {
 
 		/* Define theme constants. */
 		$this->constants();
