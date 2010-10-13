@@ -93,34 +93,34 @@ class Hybrid {
 		define( 'CHILD_THEME_URI', get_stylesheet_directory_uri() );
 
 		/* Sets the path to the core framework directory. */
-		define( 'HYBRID_DIR', THEME_DIR . '/library' );
+		define( 'HYBRID_DIR', trailingslashit( THEME_DIR ) . basename( dirname( __FILE__ ) ) );
 
 		/* Sets the path to the core framework directory URI. */
-		define( 'HYBRID_URI', THEME_URI . '/library' );
+		define( 'HYBRID_URI', trailingslashit( THEME_URI ) . basename( dirname( __FILE__ ) ) );
 
 		/* Sets the path to the core framework admin directory. */
-		define( 'HYBRID_ADMIN', HYBRID_DIR . '/admin' );
+		define( 'HYBRID_ADMIN', trailingslashit( HYBRID_DIR ) . 'admin' );
 
 		/* Sets the path to the core framework classes directory. */
-		define( 'HYBRID_CLASSES', HYBRID_DIR . '/classes' );
+		define( 'HYBRID_CLASSES', trailingslashit( HYBRID_DIR ) . 'classes' );
 
 		/* Sets the path to the core framework extensions directory. */
-		define( 'HYBRID_EXTENSIONS', HYBRID_DIR . '/extensions' );
+		define( 'HYBRID_EXTENSIONS', trailingslashit( HYBRID_DIR ) . 'extensions' );
 
 		/* Sets the path to the core framework functions directory. */
-		define( 'HYBRID_FUNCTIONS', HYBRID_DIR . '/functions' );
+		define( 'HYBRID_FUNCTIONS', trailingslashit( HYBRID_DIR ) . 'functions' );
 
 		/* Sets the path to the core framework legacy directory. */
-		define( 'HYBRID_LEGACY', HYBRID_DIR . '/legacy' );
+		define( 'HYBRID_LEGACY', trailingslashit( HYBRID_DIR ) . 'legacy' );
 
 		/* Sets the path to the core framework images directory URI. */
-		define( 'HYBRID_IMAGES', HYBRID_URI . '/images' );
+		define( 'HYBRID_IMAGES', trailingslashit( HYBRID_URI ) . 'images' );
 
 		/* Sets the path to the core framework CSS directory URI. */
-		define( 'HYBRID_CSS', HYBRID_URI . '/css' );
+		define( 'HYBRID_CSS', trailingslashit( HYBRID_URI ) . 'css' );
 
 		/* Sets the path to the core framework JavaScript directory URI. */
-		define( 'HYBRID_JS', HYBRID_URI . '/js' );
+		define( 'HYBRID_JS', trailingslashit( HYBRID_URI ) . 'js' );
 	}
 
 	/**
