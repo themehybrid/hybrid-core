@@ -252,6 +252,17 @@ function hybrid_add_theme_support() {
 	add_theme_support( 'hybrid-core-theme-settings' );
 }
 
+/**
+ * Per-post stylesheets.  Moved to the post-stylesheets.php extension.
+ *
+ * @since 0.9
+ * @deprecated 0.9.1
+ */
+function hybrid_post_stylesheets( $deprecated_1 = '', $deprecated_2 = '') {
+	_deprecated_function( __FUNCTION__, '0.9.1', 'post_stylesheets_stylesheet_uri()' );
+	return post_stylesheets_stylesheet_uri( $deprecated_1, $deprecated_2 );
+}
+
 /* === Removed Functions === */
 
 /* Functions removed in the 0.5 branch. */

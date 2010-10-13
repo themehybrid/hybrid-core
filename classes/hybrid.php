@@ -58,10 +58,6 @@ class Hybrid {
 		/* Load theme extensions later since we need to check if they're supported. */
 		add_action( 'after_setup_theme', array( &$this, 'extensions' ), 12 );
 
-		/* Load the default action and filters after the theme is set up. */
-		//add_action( 'after_setup_theme', array( &$this, 'actions' ), 13 );
-		//add_action( 'after_setup_theme', array( &$this, 'filters' ), 13 );
-
 		/* Load theme textdomain. */
 		$domain = hybrid_get_textdomain();
 		$locale = get_locale();
@@ -142,10 +138,6 @@ class Hybrid {
 		require_once( HYBRID_FUNCTIONS . '/shortcodes.php' );
 		require_once( HYBRID_FUNCTIONS . '/template.php' );
 		require_once( HYBRID_FUNCTIONS . '/widgets.php' );
-
-		/* Load the Hybrid theme functions if it's the parent theme. */
-		//if ( 'hybrid' == get_template() )
-		//	require_once( HYBRID_FUNCTIONS . '/defaults.php' );
 	}
 
 	/**
@@ -177,6 +169,9 @@ class Hybrid {
 
 		/* Load the Post Layouts extension if supported. */
 		require_if_theme_supports( 'post-layouts', HYBRID_EXTENSIONS . '/post-layouts.php' );
+
+		/* Load the Post Stylesheets extension if supported. */
+		require_if_theme_supports( 'post-stylesheets', HYBRID_EXTENSIONS . '/post-stylesheets.php' );
 
 		/* Load the temporary core SEO component. */
 		require_if_theme_supports( 'hybrid-core-seo', HYBRID_FUNCTIONS . '/core-seo.php' );
@@ -245,7 +240,6 @@ class Hybrid {
 		add_filter( 'get_the_author_description', 'do_shortcode' );
 
 		/* Stylesheet filters. */
-		add_filter( 'stylesheet_uri', 'hybrid_post_stylesheets', 10, 2 );
 		add_filter( 'stylesheet_uri', 'hybrid_debug_stylesheet', 10, 2 );
 
 		/* Template filters. */

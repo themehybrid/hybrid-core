@@ -29,26 +29,6 @@ function hybrid_debug_stylesheet( $stylesheet_uri, $stylesheet_dir_uri ) {
 }
 
 /**
- * Checks for a custom field called 'Stylesheet' for a CSS file name in the form of 'example.css'.
- *  If the file exists in the child theme '/css' folder, replace the normal 'style.css' used with this 
- * file for the singular view of the post.
- *
- * @since 0.9
- */
-function hybrid_post_stylesheets( $stylesheet_uri, $stylesheet_dir_uri ) {
-	global $wp_query;
-
-	if ( is_singular() && current_theme_supports( 'post-stylesheets' ) ) {
-		$stylesheet = get_post_meta( $wp_query->post->ID, 'Stylesheet', true );
-
-		if ( !empty( $stylesheet ) && file_exists( get_stylesheet_directory() . "/css/{$stylesheet}" ) )
-			$stylesheet_uri = $stylesheet_dir_uri . "/css/{$stylesheet}";
-	}
-
-	return $stylesheet_uri;
-}
-
-/**
  * Function to load CSS at an appropriate time. Adds print.css if user chooses to use it. 
  * Users should load their own CSS using wp_enqueue_style() in their child theme's 
  * functions.php file.
