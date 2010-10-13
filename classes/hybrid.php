@@ -144,8 +144,8 @@ class Hybrid {
 		require_once( HYBRID_FUNCTIONS . '/widgets.php' );
 
 		/* Load the Hybrid theme functions if it's the parent theme. */
-		if ( 'hybrid' == get_template() )
-			require_once( HYBRID_FUNCTIONS . '/defaults.php' );
+		//if ( 'hybrid' == get_template() )
+		//	require_once( HYBRID_FUNCTIONS . '/defaults.php' );
 	}
 
 	/**
