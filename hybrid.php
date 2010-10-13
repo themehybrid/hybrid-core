@@ -37,11 +37,8 @@ class Hybrid {
 		/* Define theme constants. */
 		$this->constants();
 
-		/* Load theme functions. */
-		$this->functions();
-
-		/* Load legacy files and functions. */
-		$this->legacy();
+		/* Load the core theme functions. */
+		$this->core();
 
 		/* Load admin files. */
 		$this->admin();
@@ -54,6 +51,9 @@ class Hybrid {
 
 		/* Initialize the theme's default filters. */
 		$this->filters();
+
+		/* Load theme framework functions. */
+		add_action( 'after_setup_theme', array( &$this, 'functions' ), 12 );
 
 		/* Load theme extensions later since we need to check if they're supported. */
 		add_action( 'after_setup_theme', array( &$this, 'extensions' ), 12 );
@@ -126,18 +126,46 @@ class Hybrid {
 	/**
 	 * Loads the core theme functions.
 	 *
+	 * @since 0.9.1
+	 */
+	function core() {
+		require_once( HYBRID_FUNCTIONS . '/core.php' );
+		require_once( HYBRID_FUNCTIONS . '/context.php' );
+	}
+
+	/**
+	 * Loads the theme functions.
+	 *
 	 * @since 0.7
 	 */
 	function functions() {
-		require_once( HYBRID_FUNCTIONS . '/core.php' );
-		require_once( HYBRID_FUNCTIONS . '/hooks-filters.php' );
+
+		/* Load the comments functions. */
 		require_once( HYBRID_FUNCTIONS . '/comments.php' );
-		require_once( HYBRID_FUNCTIONS . '/context.php' );
+
+		/* Load media-related functions. */
 		require_once( HYBRID_FUNCTIONS . '/media.php' );
-		require_once( HYBRID_FUNCTIONS . '/menus.php' );
-		require_once( HYBRID_FUNCTIONS . '/shortcodes.php' );
+
+		/* Load the template functions. */
 		require_once( HYBRID_FUNCTIONS . '/template.php' );
+
+		/* Load the widget functions. */
 		require_once( HYBRID_FUNCTIONS . '/widgets.php' );
+
+		/* Load the menus functions if supported. */
+		require_if_theme_supports( 'hybrid-core-menus', HYBRID_FUNCTIONS . '/menus.php' );
+
+		/* Load the temporary core SEO component. */
+		require_if_theme_supports( 'hybrid-core-seo', HYBRID_FUNCTIONS . '/core-seo.php' );
+
+		/* Load the shortcodes if supported. */
+		require_if_theme_supports( 'hybrid-core-shortcodes', HYBRID_FUNCTIONS . '/shortcodes.php' );
+
+		/* Load the template hierarchy if supported. */
+		require_if_theme_supports( 'hybrid-core-template-hierarchy', HYBRID_FUNCTIONS . '/template-hierarchy.php' );
+
+		/* Load the deprecated functions if supported. */
+		require_if_theme_supports( 'hybrid-core-deprecated', HYBRID_LEGACY . '/deprecated.php' );
 	}
 
 	/**
@@ -172,18 +200,6 @@ class Hybrid {
 
 		/* Load the Post Stylesheets extension if supported. */
 		require_if_theme_supports( 'post-stylesheets', HYBRID_EXTENSIONS . '/post-stylesheets.php' );
-
-		/* Load the temporary core SEO component. */
-		require_if_theme_supports( 'hybrid-core-seo', HYBRID_FUNCTIONS . '/core-seo.php' );
-	}
-
-	/**
-	 * Load legacy functions for backwards compatibility.
-	 *
-	 * @since 0.7
-	 */
-	function legacy() {
-		require_once( HYBRID_LEGACY . '/deprecated.php' );
 	}
 
 	/**
@@ -232,24 +248,13 @@ class Hybrid {
 		add_filter( 'get_the_author_description', 'wptexturize' );
 		add_filter( 'get_the_author_description', 'convert_chars' );
 		add_filter( 'get_the_author_description', 'wpautop' );
-		add_filter( 'get_the_author_description', 'shortcode_unautop' );
 
-		/* Make text widgets, term descriptions, and user descriptions shortcode aware. */
+		/* Make text widgets and term descriptions shortcode aware. */
 		add_filter( 'widget_text', 'do_shortcode' );
 		add_filter( 'term_description', 'do_shortcode' );
-		add_filter( 'get_the_author_description', 'do_shortcode' );
 
 		/* Stylesheet filters. */
 		add_filter( 'stylesheet_uri', 'hybrid_debug_stylesheet', 10, 2 );
-
-		/* Template filters. */
-		add_filter( 'date_template', 'hybrid_date_template' );
-		add_filter( 'author_template', 'hybrid_user_template' );
-		add_filter( 'tag_template', 'hybrid_taxonomy_template' );
-		add_filter( 'category_template', 'hybrid_taxonomy_template' );
-		add_filter( 'single_template', 'hybrid_singular_template' );
-		add_filter( 'page_template', 'hybrid_singular_template' );
-		add_filter( 'attachment_template', 'hybrid_singular_template' );
 	}
 }
 
