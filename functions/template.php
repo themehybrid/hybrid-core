@@ -17,12 +17,6 @@
 add_action( 'init', 'hybrid_add_post_type_support' );
 
 /**
- * Add theme support for feed links.
- * @since 0.8
- */
-add_action( 'after_setup_theme', 'hybrid_add_theme_support' );
-
-/**
  * This function is for adding extra support for features not default to the core post types.
  * Excerpts are added to the 'page' post type.  Comments and trackbacks are added for the
  * 'attachment' post type.  Technically, these are already used for attachments in core, but 
@@ -34,16 +28,6 @@ function hybrid_add_post_type_support() {
 	add_post_type_support( 'post', array( hybrid_get_prefix() . '-post-settings', 'entry-views' ) );
 	add_post_type_support( 'page', array( 'excerpt', hybrid_get_prefix() . '-post-settings', 'entry-views' ) );
 	add_post_type_support( 'attachment', array( 'comments', 'trackbacks', 'entry-views' ) );
-}
-
-/**
- * This function is for adding extra support for theme features to the theme.
- *
- * @since 0.8
- */
-function hybrid_add_theme_support() {
-	add_theme_support( 'automatic-feed-links' );
-	add_theme_support( 'hybrid-core-theme-settings' );
 }
 
 /**
@@ -197,18 +181,6 @@ function hybrid_singular_template( $template ) {
 	$templates[] = "singular.php";
 
 	return locate_template( $templates );
-}
-
-/**
- * Loads the navigation-links.php template file for use on archives, single posts,
- * and attachments. Developers can overwrite this individual template within
- * their custom child themes.
- *
- * @since 0.2
- * @uses get_template_part() Checks for template in child and parent theme.
- */
-function hybrid_navigation_links() {
-	get_template_part( 'navigation-links' );
 }
 
 /**

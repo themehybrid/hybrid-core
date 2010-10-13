@@ -23,7 +23,7 @@ add_action( 'init', 'hybrid_register_menus' );
  */
 function hybrid_register_menus() {
 	if ( current_theme_supports( 'hybrid-core-menus' ) )
-		register_nav_menu( 'primary-menu', __( 'Primary Menu', hybrid_get_textdomain() ) );
+		register_nav_menu( 'primary', __( 'Primary Menu', hybrid_get_textdomain() ) );
 }
 
 /**

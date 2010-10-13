@@ -26,6 +26,9 @@ function hybrid_setup_theme() {
 	/* Get the theme prefix. */
 	$prefix = hybrid_get_prefix();
 
+	/* Add support for automatic feed links. */
+	add_theme_support( 'automatic-feed-links' );
+
 	/* Add support for the core sidebars. */
 	add_theme_support( 'hybrid-core-sidebars' );
 
@@ -55,6 +58,7 @@ function hybrid_setup_theme() {
 		add_theme_support( 'hybrid-core-print-style' );
 
 	/* Add support for core theme settings meta boxes. */
+	add_theme_support( 'hybrid-core-theme-settings' );
 	add_theme_support( 'hybrid-core-meta-box-general' );
 	add_theme_support( 'hybrid-core-meta-box-footer' );
 
@@ -75,6 +79,9 @@ function hybrid_setup_theme() {
 		add_theme_support( 'post-layouts' );
 		add_theme_support( 'loop-pagination' );
 	}
+
+	/* Register sidebars. */
+	add_action( 'init', 'hybrid_theme_register_sidebars' );
 
 	/* Header actions. */
 	add_action( "{$prefix}_header", 'hybrid_site_title' );
@@ -131,6 +138,81 @@ function hybrid_setup_theme() {
 
 	/* Remove WP and plugin functions. */
 	add_action( 'wp_print_styles', 'hybrid_disable_styles' );
+
+	add_action( "load-appearance_page_theme-settings", 'hybrid_create_settings_meta_boxes' );
+}
+
+function hybrid_theme_create_settings_meta_boxes() {
+	/* Creates a meta box for the general theme settings. */
+	add_meta_box( "{$prefix}-general-settings-meta-box", __( 'General settings', $domain ), 'hybrid_general_settings_meta_box', $hybrid->settings_page, 'normal', 'high' );
+}
+
+/**
+ * Adds a general settings suite suitable for the average theme, which includes a print stylesheet,
+ * drop-downs JavaScript option, and the ability to change the feed URL.
+ *
+ * @since 0.7
+ */
+function hybrid_general_settings_meta_box() {
+	$domain = hybrid_get_textdomain(); ?>
+
+	<table class="form-table">
+
+		<tr>
+			<th><label for="print_style"><?php _e( 'Stylesheets:', $domain ); ?></label></th>
+			<td>
+				<input id="print_style" name="print_style" type="checkbox" <?php if ( hybrid_get_setting( 'print_style' ) ) echo 'checked="checked"'; ?> value="true" /> 
+				<label for="print_style"><?php _e( 'Select this to have the theme automatically include a print stylesheet.', $domain ); ?></label>
+			</td>
+		</tr>
+		<tr>
+			<th><label for="superfish_js"><?php _e( 'JavaScript:', $domain ); ?></label></th>
+			<td>
+				<input id="superfish_js" name="superfish_js" type="checkbox" <?php if ( hybrid_get_setting( 'superfish_js' ) ) echo 'checked="checked"'; ?> value="true" /> 
+				<label for="superfish_js"><?php _e( 'Include the drop-down menu JavaScript.', $domain ); ?></label>
+			</td>
+		</tr>
+		<?php if ( 'hybrid' == get_template() ) { // Only show if 'hybrid' is the template ?>
+		<tr>
+			<th><label for="use_menus"><?php _e( 'Menus:', $domain ); ?></label></th>
+			<td>
+				<input id="use_menus" name="use_menus" type="checkbox" <?php if ( hybrid_get_setting( 'use_menus' ) ) echo 'checked="checked"'; ?> value="true" /> 
+				<label for="use_menus"><?php _e( 'Use the WordPress 3.0+ menu system? Child themes built prior to <em>Hybrid</em> 0.8 may need to be updated to use this.', $domain ); ?></label>
+			</td>
+		</tr>
+		<?php } ?>
+		<tr>
+			<th><label for="feed_url"><?php _e( 'Feeds:', $domain ); ?></label></th>
+			<td>
+				<input id="feed_url" name="feed_url" type="text" value="<?php echo hybrid_get_setting( 'feed_url' ); ?>" size="30" /><br />
+				<?php _e( 'If you have an alternate feed address, such as one from <a href="http://feedburner.com" title="Feedburner">Feedburner</a>, you can enter it here to have the theme redirect your feed links.', $domain ); ?><br /><br />
+				<input id="feeds_redirect" name="feeds_redirect" type="checkbox" <?php if ( hybrid_get_setting( 'feeds_redirect' ) ) echo 'checked="checked"'; ?> value="true" /> 
+				<label for="feeds_redirect"><?php _e( 'Direct category, tag, search, and author feeds to your alternate feed address?', $domain ); ?></label>
+			</td>
+		</tr>
+		<tr>
+			<th><label for="seo_plugin"><acronym title="<?php _e( 'Search Engine Optimization', $domain ); ?>"><?php _e( 'SEO:', $domain ); ?></acronym></label></th>
+			<td>
+				<input id="seo_plugin" name="seo_plugin" type="checkbox" <?php if ( hybrid_get_setting( 'seo_plugin' ) ) echo 'checked="checked"'; ?> value="true" /> 
+				<label for="seo_plugin"><?php _e( 'Are you using an <acronym title="Search Engine Optimization">SEO</acronym> plugin? Select this to disable the theme\'s meta and indexing features.', $domain ); ?></label>
+			</td>
+			</tr>
+
+	</table><!-- .form-table --><?php
+}
+
+/**
+ * Function for adding extra sidebars.
+ *
+ * @since 0.9
+ */
+function hybrid_theme_register_sidebars() {
+	/* Register template widget areas only if the templates are available. */
+	if ( locate_template( array( 'page-widgets.php' ) ) )
+		register_sidebar( array( 'name' => __( 'Widgets Template', $domain ), 'id' => 'widgets-template', 'description' => __( 'Used as the content of the Widgets page template.', $domain ), 'before_widget' => '<div id="%1$s" class="widget %2$s widget-%2$s"><div class="widget-inside">', 'after_widget' => '</div></div>', 'before_title' => '<h3 class="widget-title">', 'after_title' => '</h3>' ) );
+	if ( locate_template( array( '404.php' ) ) )
+		register_sidebar( array( 'name' => __( '404 Template', $domain ), 'id' => 'error-404-template', 'description' => __( 'Replaces the default 404 error page content.', $domain ), 'before_widget' => '<div id="%1$s" class="widget %2$s widget-%2$s"><div class="widget-inside">', 'after_widget' => '</div></div>', 'before_title' => '<h3 class="widget-title">', 'after_title' => '</h3>' ) );
+
 }
 
 /**
@@ -309,6 +391,18 @@ function hybrid_favicon() {
 	if ( file_exists( CHILD_THEME_DIR . '/images/favicon.ico' ) )
 		$favicon =  '<link rel="shortcut icon" type="image/x-icon" href="' . CHILD_THEME_URI . '/images/favicon.ico" />' . "\n";
 	echo apply_atomic( 'favicon', $favicon );
+}
+
+/**
+ * Loads the navigation-links.php template file for use on archives, single posts,
+ * and attachments. Developers can overwrite this individual template within
+ * their custom child themes.
+ *
+ * @since 0.2
+ * @uses get_template_part() Checks for template in child and parent theme.
+ */
+function hybrid_navigation_links() {
+	get_template_part( 'navigation-links' );
 }
 
 ?>

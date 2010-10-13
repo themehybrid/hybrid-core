@@ -170,10 +170,6 @@ function hybrid_create_settings_meta_boxes() {
 		add_meta_box( "{$prefix}-about-child-meta-box", sprintf( __( 'About %1$s', $domain ), $child_data['Title'] ), 'hybrid_about_theme_meta_box', $hybrid->settings_page, 'normal', 'high' );
 	}
 
-	/* Creates a meta box for the general theme settings. */
-	if ( current_theme_supports( 'hybrid-core-meta-box-general' ) )
-		add_meta_box( "{$prefix}-general-settings-meta-box", __( 'General settings', $domain ), 'hybrid_general_settings_meta_box', $hybrid->settings_page, 'normal', 'high' );
-
 	/* Creates a meta box for the footer settings. */
 	if ( current_theme_supports( 'hybrid-core-meta-box-footer' ) )
 		add_meta_box( "{$prefix}-footer-settings-meta-box", __( 'Footer settings', $domain ), 'hybrid_footer_settings_meta_box', $hybrid->settings_page, 'normal', 'high' );
@@ -214,60 +210,6 @@ function hybrid_about_theme_meta_box( $object, $box ) {
 			<th><?php _e( 'Description:', $domain ); ?></th>
 			<td><?php echo $theme_data['Description']; ?></td>
 		</tr>
-	</table><!-- .form-table --><?php
-}
-
-/**
- * Adds a general settings suite suitable for the average theme, which includes a print stylesheet,
- * drop-downs JavaScript option, and the ability to change the feed URL.
- *
- * @since 0.7
- */
-function hybrid_general_settings_meta_box() {
-	$domain = hybrid_get_textdomain(); ?>
-
-	<table class="form-table">
-
-		<tr>
-			<th><label for="print_style"><?php _e( 'Stylesheets:', $domain ); ?></label></th>
-			<td>
-				<input id="print_style" name="print_style" type="checkbox" <?php if ( hybrid_get_setting( 'print_style' ) ) echo 'checked="checked"'; ?> value="true" /> 
-				<label for="print_style"><?php _e( 'Select this to have the theme automatically include a print stylesheet.', $domain ); ?></label>
-			</td>
-		</tr>
-		<tr>
-			<th><label for="superfish_js"><?php _e( 'JavaScript:', $domain ); ?></label></th>
-			<td>
-				<input id="superfish_js" name="superfish_js" type="checkbox" <?php if ( hybrid_get_setting( 'superfish_js' ) ) echo 'checked="checked"'; ?> value="true" /> 
-				<label for="superfish_js"><?php _e( 'Include the drop-down menu JavaScript.', $domain ); ?></label>
-			</td>
-		</tr>
-		<?php if ( 'hybrid' == get_template() ) { // Only show if 'hybrid' is the template ?>
-		<tr>
-			<th><label for="use_menus"><?php _e( 'Menus:', $domain ); ?></label></th>
-			<td>
-				<input id="use_menus" name="use_menus" type="checkbox" <?php if ( hybrid_get_setting( 'use_menus' ) ) echo 'checked="checked"'; ?> value="true" /> 
-				<label for="use_menus"><?php _e( 'Use the WordPress 3.0+ menu system? Child themes built prior to <em>Hybrid</em> 0.8 may need to be updated to use this.', $domain ); ?></label>
-			</td>
-		</tr>
-		<?php } ?>
-		<tr>
-			<th><label for="feed_url"><?php _e( 'Feeds:', $domain ); ?></label></th>
-			<td>
-				<input id="feed_url" name="feed_url" type="text" value="<?php echo hybrid_get_setting( 'feed_url' ); ?>" size="30" /><br />
-				<?php _e( 'If you have an alternate feed address, such as one from <a href="http://feedburner.com" title="Feedburner">Feedburner</a>, you can enter it here to have the theme redirect your feed links.', $domain ); ?><br /><br />
-				<input id="feeds_redirect" name="feeds_redirect" type="checkbox" <?php if ( hybrid_get_setting( 'feeds_redirect' ) ) echo 'checked="checked"'; ?> value="true" /> 
-				<label for="feeds_redirect"><?php _e( 'Direct category, tag, search, and author feeds to your alternate feed address?', $domain ); ?></label>
-			</td>
-		</tr>
-		<tr>
-			<th><label for="seo_plugin"><acronym title="<?php _e( 'Search Engine Optimization', $domain ); ?>"><?php _e( 'SEO:', $domain ); ?></acronym></label></th>
-			<td>
-				<input id="seo_plugin" name="seo_plugin" type="checkbox" <?php if ( hybrid_get_setting( 'seo_plugin' ) ) echo 'checked="checked"'; ?> value="true" /> 
-				<label for="seo_plugin"><?php _e( 'Are you using an <acronym title="Search Engine Optimization">SEO</acronym> plugin? Select this to disable the theme\'s meta and indexing features.', $domain ); ?></label>
-			</td>
-			</tr>
-
 	</table><!-- .form-table --><?php
 }
 

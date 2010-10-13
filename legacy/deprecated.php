@@ -240,6 +240,18 @@ function hybrid_comment_author() {
 	return hybrid_comment_author_shortcode();
 }
 
+/**
+ * This function is for adding extra support for theme features to the theme.
+ *
+ * @since 0.8
+ * @deprecated 0.9.1
+ */
+function hybrid_add_theme_support() {
+	_deprecated_function( __FUNCTION__, '0.9.1' );
+	add_theme_support( 'automatic-feed-links' );
+	add_theme_support( 'hybrid-core-theme-settings' );
+}
+
 /* === Removed Functions === */
 
 /* Functions removed in the 0.5 branch. */
