@@ -1,7 +1,13 @@
 <?php
 /**
- * The Hybrid class launches the framework.  It's the organizational structure behind the
- * entire theme.  This class should be initialized before anything else in the theme is called.
+ * The Hybrid class launches the framework.  It's the organizational structure behind the entire framework. 
+ * This class should be loaded and initialized before anything else within the theme is called to properly use 
+ * the framework.  
+ *
+ * After parent themes call the Hybrid class, they should perform a theme setup function on the 
+ * 'after_setup_theme' hook with a priority of 10.  Child themes should add their theme setup function on
+ * the 'after_setup_theme' hook with a priority of 11.  This allows the class to load theme-supported features
+ * at the appropriate time, which is on the 'after_setup_theme' hook with a priority of 12.
  *
  * @package HybridCore
  * @subpackage Classes
@@ -18,7 +24,8 @@ class Hybrid {
 	var $prefix;
 
 	/**
-	 * PHP4 constructor method.
+	 * PHP4 constructor method.  This simply provides backwards compatibility for users with setups
+	 * on older versions of PHP.  Once WordPress no longer supports PHP4, this method will be removed.
 	 *
 	 * @since 0.9
 	 */
@@ -124,17 +131,23 @@ class Hybrid {
 	}
 
 	/**
-	 * Loads the core theme functions.
+	 * Loads the core framework functions.  These files are needed before loading anything else in the 
+	 * framework because they have required functions for use.
 	 *
 	 * @since 0.9.1
 	 */
 	function core() {
+
+		/* Load the core framework functions. */
 		require_once( HYBRID_FUNCTIONS . '/core.php' );
+
+		/* Load the context-based functions. */
 		require_once( HYBRID_FUNCTIONS . '/context.php' );
 	}
 
 	/**
-	 * Loads the theme functions.
+	 * Loads the framework functions.  Many of these functions are needed to properly run the 
+	 * framework.  Some components are only loaded if the theme supports them.
 	 *
 	 * @since 0.7
 	 */
@@ -169,9 +182,10 @@ class Hybrid {
 	}
 
 	/**
-	 * Load extensions (external projects).  Themes must use add_theme_support( $extension ) to
-	 * use a specific extension within the theme.  This should be declared on 'after_setup_theme' no
-	 * later than the default priority of 10.
+	 * Load extensions (external projects).  Extensions are projects that are included within the 
+	 * framework but are not a part of it.  They are external projects developed outside of the 
+	 * framework.  Themes must use add_theme_support( $extension ) to use a specific extension 
+	 * within the theme.  This should be declared on 'after_setup_theme' no later than a priority of 11.
 	 *
 	 * @since 0.7
 	 */
@@ -203,14 +217,22 @@ class Hybrid {
 	}
 
 	/**
-	 * Load admin files.
+	 * Load admin files for the framework.
 	 *
 	 * @since 0.7
 	 */
 	function admin() {
+
+		/* Check if in the WordPress admin. */
 		if ( is_admin() ) {
+
+			/* Load the main admin file. */
 			require_once( HYBRID_ADMIN . '/admin.php' );
+
+			/* Load the post meta box file. */
 			require_once( HYBRID_ADMIN . '/meta-box.php' );
+
+			/* Load the settings page file. */
 			require_once( HYBRID_ADMIN . '/settings-page.php' );
 		}
 	}
