@@ -91,6 +91,8 @@ function hybrid_meta_revised() {
 function hybrid_meta_description() {
 	global $wp_query;
 
+	$description = '';
+
 	if ( is_home() ) {
 		$description = get_bloginfo( 'description' );
 	}
@@ -112,6 +114,11 @@ function hybrid_meta_description() {
 
 		elseif ( is_category() || is_tag() || is_tax() )
 			$description = term_description( '', get_query_var( 'taxonomy' ) );
+
+		elseif ( is_archive() && get_query_var( 'post_type' ) ) {
+			$post_type = get_post_type_object( get_query_var( 'post_type' ) );
+			$description = $post_type->description;
+		}
 	}
 
 	/* Format the meta description. */
