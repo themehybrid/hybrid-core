@@ -30,7 +30,7 @@ function hybrid_post_class( $deprecated = '' ) {
  * @since 0.1
  */
 function hybrid_cat_nav() {
-	_deprecated_function( __FUNCTION__, '0.6', 'wp_list_categories()' );
+	_deprecated_function( __FUNCTION__, '0.6', 'wp_nav_menu()' );
 
 	echo "<div id='cat-navigation'>";
 
@@ -46,7 +46,7 @@ function hybrid_cat_nav() {
 /**
  * Menu listing for categories. Much like WP's wp_page_menu() functionality.
  *
- * @deprecated 0.6 Child themes should manually add a category menu using wp_list_categories().
+ * @deprecated 0.6 Themes should add menus with the wp_nav_menu() function.
  * @internal This function needs to stay for the long haul (post-1.0).
  *
  * @since 0.2.3
@@ -58,19 +58,14 @@ function hybrid_category_menu( $args = array() ) {
 	_deprecated_function( __FUNCTION__, '0.6', 'wp_nav_menu()' );
 
 	$defaults = array( 'menu_class' => 'cat-nav', 'style' => 'list', 'hide_empty' => 1, 'use_desc_for_title' => 0, 'depth' => 4, 'hierarchical' => true, 'echo' => 1 );
-	$args = apply_filters( 'hybrid_category_menu_args', $args );
-	$args = wp_parse_args( $args, $defaults );
+	$args = wp_parse_args( apply_filters( 'hybrid_category_menu_args', $args ), $defaults );
 	extract( $args );
 
 	$args['title_li'] = false;
 	$args['echo'] = false;
 
-	$menu = '<div id="' . $menu_class . '" class="' . $menu_class . '"><ul class="menu sf-menu">';
-
-	$menu .= str_replace( array( "\t", "\n", "\r" ), '', wp_list_categories( $args ) );
-
-	$menu .= '</ul></div>';
-
+	$menu = str_replace( array( "\t", "\n", "\r" ), '', wp_list_categories( $args ) );
+	$menu = '<div id="' . $menu_class . '" class="' . $menu_class . '"><ul class="menu sf-menu">' . $menu . '</ul></div>';
 	$menu = apply_filters( 'hybrid_category_menu', $menu );
 
 	if ( $echo )
@@ -102,7 +97,7 @@ function hybrid_search_form() {
  * @deprecated 0.7 Use hybrid_after_singular().
  */
 function hybrid_after_single() {
-	_deprecated_function( __FUNCTION__, '0.7', 'hybrid_after_singular()' );
+	_deprecated_function( __FUNCTION__, '0.7', "apply_atomic( 'after_singular' )" );
 	hybrid_after_singular();
 }
 
@@ -112,7 +107,7 @@ function hybrid_after_single() {
  * @deprecated 0.7 Use hybrid_after_singular().
  */
 function hybrid_after_page() {
-	_deprecated_function( __FUNCTION__, '0.7', 'hybrid_after_singular()' );
+	_deprecated_function( __FUNCTION__, '0.7', "apply_atomic( 'after_singular' )" );
 	hybrid_after_singular();
 }
 
@@ -123,7 +118,7 @@ function hybrid_after_page() {
  * @deprecated 0.7 Use hybrid_get_utility_after_singular().
  */
 function hybrid_get_utility_after_single() {
-	_deprecated_function( __FUNCTION__, '0.7', 'hybrid_get_utility_after_singular()' );
+	_deprecated_function( __FUNCTION__, '0.7', 'get_sidebar()' );
 	hybrid_get_utility_after_singular();
 }
 
@@ -134,7 +129,7 @@ function hybrid_get_utility_after_single() {
  * @deprecated 0.7 Use hybrid_get_utility_after_singular().
  */
 function hybrid_get_utility_after_page() {
-	_deprecated_function( __FUNCTION__, '0.7', 'hybrid_get_utility_after_singular()' );
+	_deprecated_function( __FUNCTION__, '0.7', 'get_sidebar()' );
 	hybrid_get_utility_after_singular();
 }
 
@@ -151,7 +146,7 @@ function hybrid_get_utility_after_page() {
  * @link http://codex.wordpress.org/Template_Tags/wp_page_menu
  */
 function hybrid_page_nav() {
-	_deprecated_function( __FUNCTION__, '0.8', 'hybrid_get_primary_menu()' );
+	_deprecated_function( __FUNCTION__, '0.8', 'wp_nav_menu()' );
 
 	/* Opening wrapper for the navigation area. */
 	echo '<div id="navigation">' . "\n\t\t\t";
@@ -269,6 +264,7 @@ function hybrid_post_stylesheets( $deprecated_1 = '', $deprecated_2 = '') {
  * @deprecated 0.9.1
  */
 function hybrid_before_html() {
+	_deprecated_function( __FUNCTION__, '0.9.1', "do_atomic( 'before_html' )" );
 	do_atomic( 'before_html' );
 }
 
@@ -278,6 +274,7 @@ function hybrid_before_html() {
  * @deprecated 0.9.1
  */
 function hybrid_after_html() {
+	_deprecated_function( __FUNCTION__, '0.9.1', "do_atomic( 'after_html' )" );
 	do_atomic( 'after_html' );
 }
 
@@ -287,6 +284,7 @@ function hybrid_after_html() {
  * @deprecated 0.9.1
  */
 function hybrid_head() {
+	_deprecated_function( __FUNCTION__, '0.9.1', "do_atomic( 'head' )" );
 	do_atomic( 'head' );
 }
 
@@ -296,6 +294,7 @@ function hybrid_head() {
  * @deprecated 0.9.1
  */
 function hybrid_before_header() {
+	_deprecated_function( __FUNCTION__, '0.9.1', "do_atomic( 'before_header' )" );
 	do_atomic( 'before_header' );
 }
 
@@ -305,6 +304,7 @@ function hybrid_before_header() {
  * @deprecated 0.9.1
  */
 function hybrid_header() {
+	_deprecated_function( __FUNCTION__, '0.9.1', "do_atomic( 'header' )" );
 	do_atomic( 'header' );
 }
 
@@ -314,6 +314,7 @@ function hybrid_header() {
  * @deprecated 0.9.1
  */
 function hybrid_after_header() {
+	_deprecated_function( __FUNCTION__, '0.9.1', "do_atomic( 'after_header' )" );
 	do_atomic( 'after_header' );
 }
 
@@ -323,6 +324,7 @@ function hybrid_after_header() {
  * @deprecated 0.9.1
  */
 function hybrid_before_primary_menu() {
+	_deprecated_function( __FUNCTION__, '0.9.1', "do_atomic( 'before_primary_menu' )" );
 	do_atomic( 'before_primary_menu' );
 }
 
@@ -332,6 +334,7 @@ function hybrid_before_primary_menu() {
  * @deprecated 0.9.1
  */
 function hybrid_after_primary_menu() {
+	_deprecated_function( __FUNCTION__, '0.9.1', "do_atomic( 'after_primary_menu' )" );
 	do_atomic( 'after_primary_menu' );
 }
 
@@ -341,6 +344,7 @@ function hybrid_after_primary_menu() {
  * @deprecated 0.9.1
  */
 function hybrid_before_container() {
+	_deprecated_function( __FUNCTION__, '0.9.1', "do_atomic( 'before_container' )" );
 	do_atomic( 'before_container' );
 }
 
@@ -350,6 +354,7 @@ function hybrid_before_container() {
  * @deprecated 0.9.1
  */
 function hybrid_before_content() {
+	_deprecated_function( __FUNCTION__, '0.9.1', "do_atomic( 'before_content' )" );
 	do_atomic( 'before_content' );
 }
 
@@ -359,6 +364,7 @@ function hybrid_before_content() {
  * @deprecated 0.9.1
  */
 function hybrid_after_content() {
+	_deprecated_function( __FUNCTION__, '0.9.1', "do_atomic( 'after_content' )" );
 	do_atomic( 'after_content' );
 }
 
@@ -368,6 +374,7 @@ function hybrid_after_content() {
  * @deprecated 0.9.1
  */
 function hybrid_before_entry() {
+	_deprecated_function( __FUNCTION__, '0.9.1', "do_atomic( 'before_entry' )" );
 	do_atomic( 'before_entry' );
 }
 
@@ -377,6 +384,7 @@ function hybrid_before_entry() {
  * @deprecated 0.9.1
  */
 function hybrid_after_entry() {
+	_deprecated_function( __FUNCTION__, '0.9.1', "do_atomic( 'after_entry' )" );
 	do_atomic( 'after_entry' );
 }
 
@@ -386,6 +394,8 @@ function hybrid_after_entry() {
  * @deprecated 0.9.1
  */
 function hybrid_after_singular() {
+	_deprecated_function( __FUNCTION__, '0.9.1', "do_atomic( 'after_singular' )" );
+
 	if ( is_singular( 'post' ) && !is_attachment() )
 		do_action( 'hybrid_after_single' ); // Deprecated
 	elseif ( is_page() )
@@ -400,6 +410,7 @@ function hybrid_after_singular() {
  * @deprecated 0.9.1
  */
 function hybrid_before_primary() {
+	_deprecated_function( __FUNCTION__, '0.9.1', "do_atomic( 'before_primary' )" );
 	do_atomic( 'before_primary' );
 }
 
@@ -409,6 +420,7 @@ function hybrid_before_primary() {
  * @deprecated 0.9.1
  */
 function hybrid_after_primary() {
+	_deprecated_function( __FUNCTION__, '0.9.1', "do_atomic( 'after_primary' )" );
 	do_atomic( 'after_primary' );
 }
 
@@ -418,6 +430,7 @@ function hybrid_after_primary() {
  * @deprecated 0.9.1
  */
 function hybrid_before_secondary() {
+	_deprecated_function( __FUNCTION__, '0.9.1', "do_atomic( 'before_secondary' )" );
 	do_atomic( 'before_secondary' );
 }
 
@@ -427,6 +440,7 @@ function hybrid_before_secondary() {
  * @deprecated 0.9.1
  */
 function hybrid_after_secondary() {
+	_deprecated_function( __FUNCTION__, '0.9.1', "do_atomic( 'after_secondary' )" );
 	do_atomic( 'after_secondary' );
 }
 
@@ -436,6 +450,7 @@ function hybrid_after_secondary() {
  * @deprecated 0.9.1
  */
 function hybrid_before_subsidiary() {
+	_deprecated_function( __FUNCTION__, '0.9.1', "do_atomic( 'before_subsidiary' )" );
 	do_atomic( 'before_subsidiary' );
 }
 
@@ -445,6 +460,7 @@ function hybrid_before_subsidiary() {
  * @deprecated 0.9.1
  */
 function hybrid_after_subsidiary() {
+	_deprecated_function( __FUNCTION__, '0.9.1', "do_atomic( 'after_subsidiary' )" );
 	do_atomic( 'after_subsidiary' );
 }
 
@@ -454,6 +470,7 @@ function hybrid_after_subsidiary() {
  * @deprecated 0.9.1
  */
 function hybrid_after_container() {
+	_deprecated_function( __FUNCTION__, '0.9.1', "do_atomic( 'after_container' )" );
 	do_atomic( 'after_container' );
 }
 
@@ -463,6 +480,7 @@ function hybrid_after_container() {
  * @deprecated 0.9.1
  */
 function hybrid_before_footer() {
+	_deprecated_function( __FUNCTION__, '0.9.1', "do_atomic( 'before_footer' )" );
 	do_atomic( 'before_footer' );
 }
 
@@ -472,6 +490,7 @@ function hybrid_before_footer() {
  * @deprecated 0.9.1
  */
 function hybrid_footer() {
+	_deprecated_function( __FUNCTION__, '0.9.1', "do_atomic( 'footer' )" );
 	do_atomic( 'footer' );
 }
 
@@ -481,6 +500,7 @@ function hybrid_footer() {
  * @deprecated 0.9.1
  */
 function hybrid_after_footer() {
+	_deprecated_function( __FUNCTION__, '0.9.1', "do_atomic( 'after_footer' )" );
 	do_atomic( 'after_footer' );
 }
 
@@ -490,6 +510,7 @@ function hybrid_after_footer() {
  * @deprecated 0.9.1
  */
 function hybrid_before_comment() {
+	_deprecated_function( __FUNCTION__, '0.9.1', "do_atomic( 'before_comment' )" );
 	do_atomic( 'before_comment' );
 }
 
@@ -499,6 +520,7 @@ function hybrid_before_comment() {
  * @deprecated 0.9.1
  */
 function hybrid_after_comment() {
+	_deprecated_function( __FUNCTION__, '0.9.1', "do_atomic( 'after_comment' )" );
 	do_atomic( 'after_comment' );
 }
 
@@ -508,6 +530,7 @@ function hybrid_after_comment() {
  * @deprecated 0.9.1
  */
 function hybrid_before_comment_list() {
+	_deprecated_function( __FUNCTION__, '0.9.1', "do_atomic( 'before_comment_list' )" );
 	do_atomic( 'before_comment_list' );
 }
 
@@ -517,6 +540,7 @@ function hybrid_before_comment_list() {
  * @deprecated 0.9.1
  */
 function hybrid_after_comment_list() {
+	_deprecated_function( __FUNCTION__, '0.9.1', "do_atomic( 'after_comment_list' )" );
 	do_atomic( 'after_comment_list' );
 }
 
