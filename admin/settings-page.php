@@ -262,7 +262,7 @@ function hybrid_settings_page() {
 
 		<div id="poststuff">
 
-			<form method="post" action="<?php admin_url( 'themes.php?page=theme-settings' ); ?>">
+			<form method="post" action="<?php echo admin_url( 'themes.php?page=theme-settings' ); ?>">
 
 				<?php wp_nonce_field( "{$prefix}-settings-page" ); ?>
 				<?php wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false ); ?>
