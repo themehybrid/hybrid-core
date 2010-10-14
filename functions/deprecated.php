@@ -6,8 +6,8 @@
  * child theme is using one of these, you should use the listed alternative or remove it from 
  * your child theme if necessary.
  *
- * @package Hybrid
- * @subpackage Legacy
+ * @package HybridCore
+ * @subpackage Functions
  */
 
 /**

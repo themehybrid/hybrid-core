@@ -117,9 +117,6 @@ class Hybrid {
 		/* Sets the path to the core framework functions directory. */
 		define( 'HYBRID_FUNCTIONS', trailingslashit( HYBRID_DIR ) . 'functions' );
 
-		/* Sets the path to the core framework legacy directory. */
-		define( 'HYBRID_LEGACY', trailingslashit( HYBRID_DIR ) . 'legacy' );
-
 		/* Sets the path to the core framework images directory URI. */
 		define( 'HYBRID_IMAGES', trailingslashit( HYBRID_URI ) . 'images' );
 
@@ -178,7 +175,7 @@ class Hybrid {
 		require_if_theme_supports( 'hybrid-core-template-hierarchy', HYBRID_FUNCTIONS . '/template-hierarchy.php' );
 
 		/* Load the deprecated functions if supported. */
-		require_if_theme_supports( 'hybrid-core-deprecated', HYBRID_LEGACY . '/deprecated.php' );
+		require_if_theme_supports( 'hybrid-core-deprecated', HYBRID_FUNCTIONS . '/deprecated.php' );
 	}
 
 	/**
