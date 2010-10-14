@@ -159,6 +159,28 @@ function breadcrumb_trail( $args = array() ) {
 			$trail['trail_end'] = $term->name;
 		}
 
+		/* If viewing a post type archive. */
+		elseif ( get_query_var( 'post_type' ) ) {
+
+			/* Get the post type object. */
+			$post_type_object = get_post_type_object( get_query_var( 'post_type' ) );
+
+			/* If $front has been set, add it to the $path. */
+			if ( $post_type_object->rewrite['with_front'] && $wp_rewrite->front )
+				$path .= trailingslashit( $wp_rewrite->front );
+
+			/* If there's a slug, add it to the $path. */
+			if ( !empty( $post_type_object->rewrite['archive'] ) )
+				$path .= $post_type_object->rewrite['archive'];
+
+			/* If there's a path, check for parents. */
+			if ( !empty( $path ) )
+				$trail = array_merge( $trail, breadcrumb_trail_get_parents( '', $path ) );
+
+			/* Add the post type [plural] name to the trail end. */
+			$trail['trail_end'] = $post_type_object->labels->name;
+		}
+
 		/* If viewing an author archive. */
 		elseif ( is_author() ) {
 
@@ -239,7 +261,8 @@ function breadcrumb_trail( $args = array() ) {
 			$breadcrumb .= '<span class="trail-before">' . $before . '</span> ';
 
 		/* Wrap the $trail['trail_end'] value in a container. */
-		$trail['trail_end'] = '<span class="trail-end">' . $trail['trail_end'] . '</span>';
+		if ( !empty( $trail['trail_end'] ) )
+			$trail['trail_end'] = '<span class="trail-end">' . $trail['trail_end'] . '</span>';
 
 		/* Join the individual trail items into a single string. */
 		$breadcrumb .= join( " {$separator} ", $trail );
