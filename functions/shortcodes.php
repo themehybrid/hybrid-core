@@ -22,10 +22,6 @@ add_action( 'init', 'hybrid_add_shortcodes' );
  */
 function hybrid_add_shortcodes() {
 
-	/* If the current theme doesn't support core shortcodes, return. */
-	if ( !current_theme_supports( 'hybrid-core-shortcodes' ) )
-		return;
-
 	/* Add theme-specific shortcodes. */
 	add_shortcode( 'the-year', 'hybrid_the_year_shortcode' );
 	add_shortcode( 'site-link', 'hybrid_site_link_shortcode' );
