@@ -1,5 +1,32 @@
 <?php
 /**
+ * Hybrid Core is a framework for developing WordPress themes.  The framework allows theme developers to
+ * quickly build themes without having to handle all of the "logic" behind the theme or having to code complex 
+ * functionality for features that are often needed in themes.  The framework does these things for developers
+ * to allow them to get back to what matters the most:  developing and designing themes.  The framework 
+ * was built to make it easy for developers to include (or not include) specific, pre-coded features.  Themes 
+ * handle all the markup, style, and scripts while the framework handles the logic.
+ *
+ * @copyright 2008 - 2010
+ * @version 0.9.1
+ * @author Justin Tadlock
+ * @link http://themehybrid.com
+ * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ *
+ * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General 
+ * Public License version 2, as published by the Free Software Foundation.  You may NOT assume that you can 
+ * use any other version of the GPL.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even 
+ * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ * You should have received a copy of the GNU General Public License along with this program; if not, write to the 
+ * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+ *
+ * @package HybridCore
+ */
+
+/**
  * The Hybrid class launches the framework.  It's the organizational structure behind the entire framework. 
  * This class should be loaded and initialized before anything else within the theme is called to properly use 
  * the framework.  
@@ -9,10 +36,8 @@
  * the 'after_setup_theme' hook with a priority of 11.  This allows the class to load theme-supported features
  * at the appropriate time, which is on the 'after_setup_theme' hook with a priority of 12.
  *
- * @package HybridCore
- * @subpackage Classes
+ * @since 0.7
  */
-
 class Hybrid {
 
 	/**
