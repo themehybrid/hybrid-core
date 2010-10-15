@@ -63,7 +63,7 @@ function hybrid_save_theme_settings( $settings ) {
 	$prefix = hybrid_get_prefix();
 
 	/* Allow developers to futher validate/sanitize the data. */
-	/* @deprecated 0.9.1. Developers should filter "sanitize_option_{$prefix}_theme_settings" instead. */
+	/* @deprecated 1.0.0. Developers should filter "sanitize_option_{$prefix}_theme_settings" instead. */
 	$settings = apply_filters( "{$prefix}_validate_theme_settings", $settings );
 
 	/* Return the validated settings. */
@@ -74,7 +74,7 @@ function hybrid_save_theme_settings( $settings ) {
  * Creates an empty array of the default theme settings.  If the theme adds support for the 
  * 'hybrid-core-meta-box-footer' feature, it'll automatically add that setting to the $settings array.
  *
- * @since 0.9.1
+ * @since 1.0.0
  */
 function hybrid_get_default_theme_settings() {
 
@@ -95,7 +95,7 @@ function hybrid_get_default_theme_settings() {
 			$settings['footer_insert'] = '<p class="copyright">' . __( 'Copyright &#169; [the-year] [site-link].', $domain ) . '</p>' . "\n\n" . '<p class="credit">' . __( 'Powered by [wp-link] and [theme-link].', $domain ) . '</p>';
 	}
 
-	/* Backwards compatibility hook. @deprecated 0.9.1. */
+	/* Backwards compatibility hook. @deprecated 1.0.0. */
 	$settings = apply_filters( "{$prefix}_settings_args", $settings );
 
 	/* Return the $settings array and provide a hook for overwriting the default settings. */

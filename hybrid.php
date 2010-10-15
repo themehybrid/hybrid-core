@@ -8,7 +8,7 @@
  * handle all the markup, style, and scripts while the framework handles the logic.
  *
  * @copyright 2008 - 2010
- * @version 0.9.1
+ * @version 1.0
  * @author Justin Tadlock
  * @link http://themehybrid.com
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
@@ -62,7 +62,7 @@ class Hybrid {
 	 * Constructor method for the Hybrid class.  Initializes the theme framework, loads the 
 	 * required files, and calls the functions needed to run the framework.
 	 *
-	 * @since 0.9.1
+	 * @since 1.0.0
 	 */
 	function __construct() {
 
@@ -156,7 +156,7 @@ class Hybrid {
 	 * Loads the core framework functions.  These files are needed before loading anything else in the 
 	 * framework because they have required functions for use.
 	 *
-	 * @since 0.9.1
+	 * @since 1.0.0
 	 */
 	function core() {
 

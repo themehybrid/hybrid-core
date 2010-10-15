@@ -239,20 +239,20 @@ function hybrid_comment_author() {
  * Simply not used anymore.  But, the function name may come in handy later.
  *
  * @since 0.1
- * @deprecated 0.9.1
+ * @deprecated 1.0.0
  */
 function hybrid_enqueue_style() {
-	_deprecated_function( __FUNCTION__, '0.9.1', '' );
+	_deprecated_function( __FUNCTION__, '1.0.0', '' );
 }
 
 /**
  * This function creates all of the default theme settings and adds them to a single array.
  *
  * @since 0.4
- * @deprecated 0.9.1
+ * @deprecated 1.0.0
  */
 function hybrid_theme_settings() {
-	_deprecated_function( __FUNCTION__, '0.9.1', 'hybrid_get_default_theme_settings()' );
+	_deprecated_function( __FUNCTION__, '1.0.0', 'hybrid_get_default_theme_settings()' );
 	$prefix = hybrid_get_prefix();
 	return apply_filters( hybrid_get_prefix() . '_settings_args', hybrid_get_default_theme_settings() );
 }
@@ -261,10 +261,10 @@ function hybrid_theme_settings() {
  * Loads the admin.css stylesheet for the theme settings page.
  *
  * @since 0.7
- * @deprecated 0.9.1
+ * @deprecated 1.0.0
  */
 function hybrid_settings_page_enqueue_style() {
-	_deprecated_function( __FUNCTION__, '0.9.1', 'hybrid_admin_enqueue_style()' );
+	_deprecated_function( __FUNCTION__, '1.0.0', 'hybrid_admin_enqueue_style()' );
 	hybrid_admin_enqueue_style();
 }
 
@@ -272,10 +272,10 @@ function hybrid_settings_page_enqueue_style() {
  * This function is for adding extra support for theme features to the theme.
  *
  * @since 0.8
- * @deprecated 0.9.1
+ * @deprecated 1.0.0
  */
 function hybrid_add_theme_support() {
-	_deprecated_function( __FUNCTION__, '0.9.1', 'add_theme_support()' );
+	_deprecated_function( __FUNCTION__, '1.0.0', 'add_theme_support()' );
 	add_theme_support( 'automatic-feed-links' );
 	add_theme_support( 'hybrid-core-theme-settings' );
 }
@@ -284,150 +284,150 @@ function hybrid_add_theme_support() {
  * Per-post stylesheets.  Moved to the post-stylesheets.php extension.
  *
  * @since 0.9
- * @deprecated 0.9.1
+ * @deprecated 1.0.0
  */
 function hybrid_post_stylesheets( $deprecated_1 = '', $deprecated_2 = '') {
-	_deprecated_function( __FUNCTION__, '0.9.1', 'post_stylesheets_stylesheet_uri()' );
+	_deprecated_function( __FUNCTION__, '1.0.0', 'post_stylesheets_stylesheet_uri()' );
 	return post_stylesheets_stylesheet_uri( $deprecated_1, $deprecated_2 );
 }
 
 /**
  * Before HTML.  Loaded just after <body> but before any content is displayed.
  * @since 0.3.2
- * @deprecated 0.9.1
+ * @deprecated 1.0.0
  */
 function hybrid_before_html() {
-	_deprecated_function( __FUNCTION__, '0.9.1', "do_atomic( 'before_html' )" );
+	_deprecated_function( __FUNCTION__, '1.0.0', "do_atomic( 'before_html' )" );
 	do_atomic( 'before_html' );
 }
 
 /**
  * After HTML. Loaded just before </body> and after all content.
  * @since 0.3.2
- * @deprecated 0.9.1
+ * @deprecated 1.0.0
  */
 function hybrid_after_html() {
-	_deprecated_function( __FUNCTION__, '0.9.1', "do_atomic( 'after_html' )" );
+	_deprecated_function( __FUNCTION__, '1.0.0', "do_atomic( 'after_html' )" );
 	do_atomic( 'after_html' );
 }
 
 /**
  * Added to the header before wp_head().
  * @since 0.1
- * @deprecated 0.9.1
+ * @deprecated 1.0.0
  */
 function hybrid_head() {
-	_deprecated_function( __FUNCTION__, '0.9.1', "do_atomic( 'head' )" );
+	_deprecated_function( __FUNCTION__, '1.0.0', "do_atomic( 'head' )" );
 	do_atomic( 'head' );
 }
 
 /**
  * Before the header.
  * @since 0.1
- * @deprecated 0.9.1
+ * @deprecated 1.0.0
  */
 function hybrid_before_header() {
-	_deprecated_function( __FUNCTION__, '0.9.1', "do_atomic( 'before_header' )" );
+	_deprecated_function( __FUNCTION__, '1.0.0', "do_atomic( 'before_header' )" );
 	do_atomic( 'before_header' );
 }
 
 /**
  * Header.
  * @since 0.1
- * @deprecated 0.9.1
+ * @deprecated 1.0.0
  */
 function hybrid_header() {
-	_deprecated_function( __FUNCTION__, '0.9.1', "do_atomic( 'header' )" );
+	_deprecated_function( __FUNCTION__, '1.0.0', "do_atomic( 'header' )" );
 	do_atomic( 'header' );
 }
 
 /**
  * After the header.
  * @since 0.1
- * @deprecated 0.9.1
+ * @deprecated 1.0.0
  */
 function hybrid_after_header() {
-	_deprecated_function( __FUNCTION__, '0.9.1', "do_atomic( 'after_header' )" );
+	_deprecated_function( __FUNCTION__, '1.0.0', "do_atomic( 'after_header' )" );
 	do_atomic( 'after_header' );
 }
 
 /**
  * Before primary menu.
  * @since 0.8
- * @deprecated 0.9.1
+ * @deprecated 1.0.0
  */
 function hybrid_before_primary_menu() {
-	_deprecated_function( __FUNCTION__, '0.9.1', "do_atomic( 'before_primary_menu' )" );
+	_deprecated_function( __FUNCTION__, '1.0.0', "do_atomic( 'before_primary_menu' )" );
 	do_atomic( 'before_primary_menu' );
 }
 
 /**
  * After primary menu.
  * @since 0.8
- * @deprecated 0.9.1
+ * @deprecated 1.0.0
  */
 function hybrid_after_primary_menu() {
-	_deprecated_function( __FUNCTION__, '0.9.1', "do_atomic( 'after_primary_menu' )" );
+	_deprecated_function( __FUNCTION__, '1.0.0', "do_atomic( 'after_primary_menu' )" );
 	do_atomic( 'after_primary_menu' );
 }
 
 /**
  * Before the container.
  * @since 0.1
- * @deprecated 0.9.1
+ * @deprecated 1.0.0
  */
 function hybrid_before_container() {
-	_deprecated_function( __FUNCTION__, '0.9.1', "do_atomic( 'before_container' )" );
+	_deprecated_function( __FUNCTION__, '1.0.0', "do_atomic( 'before_container' )" );
 	do_atomic( 'before_container' );
 }
 
 /**
  * Before the content.
  * @since 0.1
- * @deprecated 0.9.1
+ * @deprecated 1.0.0
  */
 function hybrid_before_content() {
-	_deprecated_function( __FUNCTION__, '0.9.1', "do_atomic( 'before_content' )" );
+	_deprecated_function( __FUNCTION__, '1.0.0', "do_atomic( 'before_content' )" );
 	do_atomic( 'before_content' );
 }
 
 /**
  * After the content.
  * @since 0.1
- * @deprecated 0.9.1
+ * @deprecated 1.0.0
  */
 function hybrid_after_content() {
-	_deprecated_function( __FUNCTION__, '0.9.1', "do_atomic( 'after_content' )" );
+	_deprecated_function( __FUNCTION__, '1.0.0', "do_atomic( 'after_content' )" );
 	do_atomic( 'after_content' );
 }
 
 /**
  * Before each entry.
  * @since 0.5
- * @deprecated 0.9.1
+ * @deprecated 1.0.0
  */
 function hybrid_before_entry() {
-	_deprecated_function( __FUNCTION__, '0.9.1', "do_atomic( 'before_entry' )" );
+	_deprecated_function( __FUNCTION__, '1.0.0', "do_atomic( 'before_entry' )" );
 	do_atomic( 'before_entry' );
 }
 
 /**
  * After each entry.
  * @since 0.5
- * @deprecated 0.9.1
+ * @deprecated 1.0.0
  */
 function hybrid_after_entry() {
-	_deprecated_function( __FUNCTION__, '0.9.1', "do_atomic( 'after_entry' )" );
+	_deprecated_function( __FUNCTION__, '1.0.0', "do_atomic( 'after_entry' )" );
 	do_atomic( 'after_entry' );
 }
 
 /**
  * After singular views but before the comments template.
  * @since 0.7
- * @deprecated 0.9.1
+ * @deprecated 1.0.0
  */
 function hybrid_after_singular() {
-	_deprecated_function( __FUNCTION__, '0.9.1', "do_atomic( 'after_singular' )" );
+	_deprecated_function( __FUNCTION__, '1.0.0', "do_atomic( 'after_singular' )" );
 
 	if ( is_singular( 'post' ) && !is_attachment() )
 		do_action( 'hybrid_after_single' ); // Deprecated
@@ -440,151 +440,151 @@ function hybrid_after_singular() {
 /**
  * Before the primary widget area content.  Only called if Primary is active.
  * @since 0.1
- * @deprecated 0.9.1
+ * @deprecated 1.0.0
  */
 function hybrid_before_primary() {
-	_deprecated_function( __FUNCTION__, '0.9.1', "do_atomic( 'before_primary' )" );
+	_deprecated_function( __FUNCTION__, '1.0.0', "do_atomic( 'before_primary' )" );
 	do_atomic( 'before_primary' );
 }
 
 /**
  * After the primary widget area content.  Only called if Primary is active.
  * @since 0.1
- * @deprecated 0.9.1
+ * @deprecated 1.0.0
  */
 function hybrid_after_primary() {
-	_deprecated_function( __FUNCTION__, '0.9.1', "do_atomic( 'after_primary' )" );
+	_deprecated_function( __FUNCTION__, '1.0.0', "do_atomic( 'after_primary' )" );
 	do_atomic( 'after_primary' );
 }
 
 /**
  * Before the secondary widget area.  Only called if Secondary is active.
  * @since 0.2
- * @deprecated 0.9.1
+ * @deprecated 1.0.0
  */
 function hybrid_before_secondary() {
-	_deprecated_function( __FUNCTION__, '0.9.1', "do_atomic( 'before_secondary' )" );
+	_deprecated_function( __FUNCTION__, '1.0.0', "do_atomic( 'before_secondary' )" );
 	do_atomic( 'before_secondary' );
 }
 
 /**
  * After the secondary widget area.  Only called if Secondary is active.
  * @since 0.2
- * @deprecated 0.9.1
+ * @deprecated 1.0.0
  */
 function hybrid_after_secondary() {
-	_deprecated_function( __FUNCTION__, '0.9.1', "do_atomic( 'after_secondary' )" );
+	_deprecated_function( __FUNCTION__, '1.0.0', "do_atomic( 'after_secondary' )" );
 	do_atomic( 'after_secondary' );
 }
 
 /**
  * Before the subsidiary widget area.  Only called if Subsidiary is active.
  * @since 0.3.1
- * @deprecated 0.9.1
+ * @deprecated 1.0.0
  */
 function hybrid_before_subsidiary() {
-	_deprecated_function( __FUNCTION__, '0.9.1', "do_atomic( 'before_subsidiary' )" );
+	_deprecated_function( __FUNCTION__, '1.0.0', "do_atomic( 'before_subsidiary' )" );
 	do_atomic( 'before_subsidiary' );
 }
 
 /**
  * After the subsidiary widget area.  Only called if Subsidiary is active.
  * @since 0.3.1
- * @deprecated 0.9.1
+ * @deprecated 1.0.0
  */
 function hybrid_after_subsidiary() {
-	_deprecated_function( __FUNCTION__, '0.9.1', "do_atomic( 'after_subsidiary' )" );
+	_deprecated_function( __FUNCTION__, '1.0.0', "do_atomic( 'after_subsidiary' )" );
 	do_atomic( 'after_subsidiary' );
 }
 
 /**
  * After the container area.
  * @since 0.1
- * @deprecated 0.9.1
+ * @deprecated 1.0.0
  */
 function hybrid_after_container() {
-	_deprecated_function( __FUNCTION__, '0.9.1', "do_atomic( 'after_container' )" );
+	_deprecated_function( __FUNCTION__, '1.0.0', "do_atomic( 'after_container' )" );
 	do_atomic( 'after_container' );
 }
 
 /**
  * Before the footer.
  * @since 0.1
- * @deprecated 0.9.1
+ * @deprecated 1.0.0
  */
 function hybrid_before_footer() {
-	_deprecated_function( __FUNCTION__, '0.9.1', "do_atomic( 'before_footer' )" );
+	_deprecated_function( __FUNCTION__, '1.0.0', "do_atomic( 'before_footer' )" );
 	do_atomic( 'before_footer' );
 }
 
 /**
  * The footer.
  * @since 0.1
- * @deprecated 0.9.1
+ * @deprecated 1.0.0
  */
 function hybrid_footer() {
-	_deprecated_function( __FUNCTION__, '0.9.1', "do_atomic( 'footer' )" );
+	_deprecated_function( __FUNCTION__, '1.0.0', "do_atomic( 'footer' )" );
 	do_atomic( 'footer' );
 }
 
 /**
  * After the footer.
  * @since 0.1
- * @deprecated 0.9.1
+ * @deprecated 1.0.0
  */
 function hybrid_after_footer() {
-	_deprecated_function( __FUNCTION__, '0.9.1', "do_atomic( 'after_footer' )" );
+	_deprecated_function( __FUNCTION__, '1.0.0', "do_atomic( 'after_footer' )" );
 	do_atomic( 'after_footer' );
 }
 
 /**
  * Fires before each comment's information.
  * @since 0.5
- * @deprecated 0.9.1
+ * @deprecated 1.0.0
  */
 function hybrid_before_comment() {
-	_deprecated_function( __FUNCTION__, '0.9.1', "do_atomic( 'before_comment' )" );
+	_deprecated_function( __FUNCTION__, '1.0.0', "do_atomic( 'before_comment' )" );
 	do_atomic( 'before_comment' );
 }
 
 /**
  * Fires after each comment's information.
  * @since 0.5
- * @deprecated 0.9.1
+ * @deprecated 1.0.0
  */
 function hybrid_after_comment() {
-	_deprecated_function( __FUNCTION__, '0.9.1', "do_atomic( 'after_comment' )" );
+	_deprecated_function( __FUNCTION__, '1.0.0', "do_atomic( 'after_comment' )" );
 	do_atomic( 'after_comment' );
 }
 
 /**
  * Fires before the comment list.
  * @since 0.6
- * @deprecated 0.9.1
+ * @deprecated 1.0.0
  */
 function hybrid_before_comment_list() {
-	_deprecated_function( __FUNCTION__, '0.9.1', "do_atomic( 'before_comment_list' )" );
+	_deprecated_function( __FUNCTION__, '1.0.0', "do_atomic( 'before_comment_list' )" );
 	do_atomic( 'before_comment_list' );
 }
 
 /**
  * Fires after the comment list.
  * @since 0.6
- * @deprecated 0.9.1
+ * @deprecated 1.0.0
  */
 function hybrid_after_comment_list() {
-	_deprecated_function( __FUNCTION__, '0.9.1', "do_atomic( 'after_comment_list' )" );
+	_deprecated_function( __FUNCTION__, '1.0.0', "do_atomic( 'after_comment_list' )" );
 	do_atomic( 'after_comment_list' );
 }
 
-/* @deprecated 0.9.1. Backwards compatibility with old theme settings. */
+/* @deprecated 1.0.0. Backwards compatibility with old theme settings. */
 add_action( 'check_admin_referer', 'hybrid_back_compat_update_settings' );
 
 /**
  * Backwards compatibility function for updating child theme settings.  Do not use this function or the 
  * available hook in development.
  *
- * @since 0.9.1
+ * @since 1.0.0
  */
 function hybrid_back_compat_update_settings( $action ) {
 	$prefix = hybrid_get_prefix();

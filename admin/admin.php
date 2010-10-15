@@ -26,7 +26,7 @@ function hybrid_admin_init() {
 /**
  * Creates a settings field id attribute for use on the theme settings page.
  *
- * @since 0.9.1
+ * @since 1.0.0
  */
 function hybrid_settings_field_id( $setting ) {
 	$prefix = hybrid_get_prefix();
@@ -36,7 +36,7 @@ function hybrid_settings_field_id( $setting ) {
 /**
  * Creates a settings field name attribute for use on the theme settings page.
  *
- * @since 0.9.1
+ * @since 1.0.0
  */
 function hybrid_settings_field_name( $setting ) {
 	$prefix = hybrid_get_prefix();
@@ -46,7 +46,7 @@ function hybrid_settings_field_name( $setting ) {
 /**
  * Loads the admin.css stylesheet for admin-related features.
  *
- * @since 0.9.1
+ * @since 1.0.0
  */
 function hybrid_admin_enqueue_style() {
 	wp_enqueue_style( hybrid_get_prefix() . '-admin', HYBRID_CSS . '/admin.css', false, 0.7, 'screen' );
