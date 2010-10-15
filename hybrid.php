@@ -181,8 +181,8 @@ class Hybrid {
 		/* Load media-related functions. */
 		require_once( HYBRID_FUNCTIONS . '/media.php' );
 
-		/* Load the template functions. */
-		require_once( HYBRID_FUNCTIONS . '/template.php' );
+		/* Load the utility functions. */
+		require_once( HYBRID_FUNCTIONS . '/utility.php' );
 
 		/* Load the widget functions. */
 		require_once( HYBRID_FUNCTIONS . '/widgets.php' );
