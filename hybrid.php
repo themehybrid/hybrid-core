@@ -7,6 +7,10 @@
  * The framework was built to make it easy for developers to include (or not include) specific, pre-coded 
  * features.  Themes handle all the markup, style, and scripts while the framework handles the logic.
  *
+ * Hybrid Core is a modular system, which means that developers can pick and choose the features they 
+ * want to include within their themes.  Most files are only loaded if the theme registers support for the 
+ * feature using the add_theme_support( $feature ) function within their theme.
+ *
  * @copyright 2008 - 2010
  * @version 1.0.0
  * @author Justin Tadlock
@@ -59,49 +63,37 @@ class Hybrid {
 	}
 
 	/**
-	 * Constructor method for the Hybrid class.  Initializes the theme framework, loads the 
-	 * required files, and calls the functions needed to run the framework.
+	 * Constructor method for the Hybrid class.  This method adds other methods of the class to 
+	 * specific hooks within WordPress.  It controls the load order of the required files for running 
+	 * the framework.
 	 *
 	 * @since 1.0.0
 	 */
 	function __construct() {
 
-		/* Define theme constants. */
-		$this->constants();
+		/* Define framework, parent theme, and child theme constants. */
+		add_action( 'after_setup_theme', array( &$this, 'constants' ), 1 );
 
-		/* Load the core theme functions. */
-		$this->core();
+		/* Load the core theme functions required by the rest of the framework. */
+		add_action( 'after_setup_theme', array( &$this, 'core' ), 2 );
 
-		/* Theme prefix for creating things such as filter hooks (i.e., "$prefix_hook_name"). */
-		$this->prefix = hybrid_get_prefix();
+		/* Language functions and translations setup. */
+		add_action( 'after_setup_theme', array( &$this, 'locale' ), 3 );
 
-		/* Initialize the theme's default actions. */
-		$this->actions();
+		/* Initialize the framework's default actions. */
+		add_action( 'after_setup_theme', array( &$this, 'actions' ), 4 );
 
-		/* Initialize the theme's default filters. */
-		$this->filters();
+		/* Initialize the framework's default filters. */
+		add_action( 'after_setup_theme', array( &$this, 'filters' ), 4 );
 
-		/* Load theme framework functions. */
+		/* Load the framework functions. */
 		add_action( 'after_setup_theme', array( &$this, 'functions' ), 12 );
 
-		/* Load theme extensions later since we need to check if they're supported. */
-		add_action( 'after_setup_theme', array( &$this, 'extensions' ), 12 );
+		/* Load the framework extensions. */
+		add_action( 'after_setup_theme', array( &$this, 'extensions' ), 13 );
 
 		/* Load admin files. */
 		add_action( 'wp_loaded', array( &$this, 'admin' ) );
-
-		/* Load theme textdomain. */
-		$domain = hybrid_get_textdomain();
-		$locale = get_locale();
-		load_theme_textdomain( $domain );
-
-		/* Load locale-specific functions file. */
-		$locale_functions = locate_template( array( "languages/{$locale}.php", "{$locale}.php" ) );
-		if ( !empty( $locale_functions ) && is_readable( $locale_functions ) )
-			require_once( $locale_functions );
-
-		/* Theme init hook. */
-		do_action( "{$this->prefix}_init" );
 	}
 
 	/**
@@ -112,6 +104,7 @@ class Hybrid {
 	 * @since 0.7.0
 	 */
 	function constants() {
+
 		/* Sets the path to the parent theme directory. */
 		define( 'THEME_DIR', get_template_directory() );
 
@@ -165,6 +158,30 @@ class Hybrid {
 
 		/* Load the context-based functions. */
 		require_once( HYBRID_FUNCTIONS . '/context.php' );
+
+		/* Theme prefix for creating things such as filter hooks (i.e., "$prefix_hook_name"). */
+		$this->prefix = hybrid_get_prefix();
+	}
+
+	/**
+	 * Handles the locale functions file and translations.
+	 *
+	 * @since 1.0.0
+	 */
+	function locale() {
+
+		/* Load theme textdomain. */
+		load_theme_textdomain( hybrid_get_textdomain() );
+
+		/* Get the user's locale. */
+		$locale = get_locale();
+
+		/* Locate a locale-specific functions file. */
+		$locale_functions = locate_template( array( "languages/{$locale}.php", "{$locale}.php" ) );
+
+		/* If the locale file exists and is readable, load it. */
+		if ( !empty( $locale_functions ) && is_readable( $locale_functions ) )
+			require_once( $locale_functions );
 	}
 
 	/**
@@ -190,7 +207,7 @@ class Hybrid {
 		/* Load the menus functions if supported. */
 		require_if_theme_supports( 'hybrid-core-menus', HYBRID_FUNCTIONS . '/menus.php' );
 
-		/* Load the temporary core SEO component. */
+		/* Load the core SEO component. */
 		require_if_theme_supports( 'hybrid-core-seo', HYBRID_FUNCTIONS . '/core-seo.php' );
 
 		/* Load the shortcodes if supported. */
@@ -284,13 +301,9 @@ class Hybrid {
 	 * @since 0.7.0
 	 */
 	function filters() {
+
 		/* Filter the textdomain mofile to allow child themes to load the parent theme translation. */
 		add_filter( 'load_textdomain_mofile', 'hybrid_load_textdomain', 10, 2 );
-
-		/* Add same filters to user description as term descriptions. */
-		add_filter( 'get_the_author_description', 'wptexturize' );
-		add_filter( 'get_the_author_description', 'convert_chars' );
-		add_filter( 'get_the_author_description', 'wpautop' );
 
 		/* Make text widgets and term descriptions shortcode aware. */
 		add_filter( 'widget_text', 'do_shortcode' );
