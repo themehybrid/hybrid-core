@@ -8,6 +8,9 @@
  * @subpackage Admin
  */
 
+/* Add the post meta box creation function to the 'admin_menu' hook. */
+add_action( 'admin_menu', 'hybrid_create_post_meta_box' );
+
 /**
  * Creates a meta box on the post (page, other post types) editing screen for allowing
  * the easy input of commonly-used post metadata.  The function uses the get_post_types()

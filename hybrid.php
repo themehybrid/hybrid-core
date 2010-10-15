@@ -72,9 +72,6 @@ class Hybrid {
 		/* Load the core theme functions. */
 		$this->core();
 
-		/* Load admin files. */
-		$this->admin();
-
 		/* Theme prefix for creating things such as filter hooks (i.e., "$prefix_hook_name"). */
 		$this->prefix = hybrid_get_prefix();
 
@@ -89,6 +86,9 @@ class Hybrid {
 
 		/* Load theme extensions later since we need to check if they're supported. */
 		add_action( 'after_setup_theme', array( &$this, 'extensions' ), 12 );
+
+		/* Load admin files. */
+		add_action( 'wp_loaded', array( &$this, 'admin' ) );
 
 		/* Load theme textdomain. */
 		$domain = hybrid_get_textdomain();
@@ -251,11 +251,11 @@ class Hybrid {
 			/* Load the main admin file. */
 			require_once( HYBRID_ADMIN . '/admin.php' );
 
-			/* Load the post meta box file. */
-			require_once( HYBRID_ADMIN . '/meta-box.php' );
+			/* Load the theme settings feature if supported. */
+			require_if_theme_supports( 'hybrid-core-theme-settings', HYBRID_ADMIN . '/theme-settings.php' );
 
-			/* Load the settings page file. */
-			require_once( HYBRID_ADMIN . '/settings-page.php' );
+			/* Load the post meta box if supported. */
+			require_if_theme_supports( 'hybrid-core-post-meta-box', HYBRID_ADMIN . '/meta-box.php' );
 		}
 	}
 

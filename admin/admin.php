@@ -8,33 +8,48 @@
  * @subpackage Admin
  */
 
-/* Initialize the theme admin functionality. */
-add_action( 'init', 'hybrid_admin_init' );
+/* Add the admin init function to the 'admin_init' hook. */
+add_action( 'admin_init', 'hybrid_admin_init' );
 
 /**
- * Initializes the theme administration functions. Makes sure we have a theme settings
- * page and a meta box on the edit post/page screen.
+ * Initializes any admin-related features needed for the framework.
  *
  * @since 0.7
  */
 function hybrid_admin_init() {
-	$prefix = hybrid_get_prefix();
-
-	if ( current_theme_supports( 'hybrid-core-theme-settings' ) ) {
-
-		/* Initialize the theme settings page. */
-		add_action( 'admin_menu', 'hybrid_settings_page_init' );
-
-		/* Save settings page meta boxes. */
-		add_action( "{$prefix}_update_settings_page", 'hybrid_save_theme_settings' );
-	}
-
-	/* Add a new meta box to the post editor. */
-	if ( current_theme_supports( 'hybrid-core-post-meta-box' ) )
-		add_action( 'admin_menu', 'hybrid_create_post_meta_box' );
 
 	/* Load the admin stylesheet for the widgets screen. */
-	add_action( 'load-widgets.php', 'hybrid_settings_page_enqueue_style' );
+	if ( current_theme_supports( 'hybrid-core-widgets' ) )
+		add_action( 'load-widgets.php', 'hybrid_admin_enqueue_style' );
+}
+
+/**
+ * Creates a settings field id attribute for use on the theme settings page.
+ *
+ * @since 0.9.1
+ */
+function hybrid_settings_field_id( $setting ) {
+	$prefix = hybrid_get_prefix();
+	return "{$prefix}_theme_settings-{$setting}";
+}
+
+/**
+ * Creates a settings field name attribute for use on the theme settings page.
+ *
+ * @since 0.9.1
+ */
+function hybrid_settings_field_name( $setting ) {
+	$prefix = hybrid_get_prefix();
+	return "{$prefix}_theme_settings[{$setting}]";
+}
+
+/**
+ * Loads the admin.css stylesheet for admin-related features.
+ *
+ * @since 0.9.1
+ */
+function hybrid_admin_enqueue_style() {
+	wp_enqueue_style( hybrid_get_prefix() . '-admin', HYBRID_CSS . '/admin.css', false, 0.7, 'screen' );
 }
 
 /**

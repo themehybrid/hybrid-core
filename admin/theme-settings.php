@@ -12,6 +12,9 @@
  * @subpackage Admin
  */
 
+/* Hook the settings page function to 'admin_menu'. */
+add_action( 'admin_menu', 'hybrid_settings_page_init' );
+
 /**
  * Initializes all the theme settings page functions. This function is used to create the theme 
  * settings page, then use that as a launchpad for specific actions that need to be tied to the
@@ -31,6 +34,9 @@ function hybrid_settings_page_init() {
 	$prefix = hybrid_get_prefix();
 	$domain = hybrid_get_textdomain();
 
+	/* Register theme settings. */
+	register_setting( "{$prefix}_theme_settings", "{$prefix}_theme_settings", 'hybrid_save_theme_settings' );
+
 	/* Create the theme settings page. */
 	$hybrid->settings_page = add_theme_page( sprintf( __( '%1$s Theme Settings', $domain ), $theme_data['Name'] ), sprintf( __( '%1$s Settings', $domain ), $theme_data['Name'] ), apply_filters( "{$prefix}_settings_capability", 'edit_theme_options' ), 'theme-settings', 'hybrid_settings_page' );
 
@@ -42,36 +48,58 @@ function hybrid_settings_page_init() {
 
 	/* Load the JavaScript and stylehsheets needed for the theme settings. */
 	add_action( "load-{$hybrid->settings_page}", 'hybrid_settings_page_enqueue_script' );
-	add_action( "load-{$hybrid->settings_page}", 'hybrid_settings_page_enqueue_style' );
+	add_action( "load-{$hybrid->settings_page}", 'hybrid_admin_enqueue_style' );
 	add_action( "admin_head-{$hybrid->settings_page}", 'hybrid_settings_page_load_scripts' );
 }
 
 /**
- * This function creates all of the default theme settings and adds them to a single array. By saving 
- * them in one array, the function only creates one setting in the {$wpdb->prefix}_options table.
+ * Validation/Sanitization callback function for theme settings.  This just returns the data passed to it.  Theme
+ * developers should validate/sanitize their theme settings on the "sanitize_option_{$prefix}_theme_settings" 
+ * hook.  This function merely exists for backwards compatibility.
  *
- * @since 0.4
- * @return array All options for theme settings.
+ * @since 0.7
  */
-function hybrid_theme_settings() {
+function hybrid_save_theme_settings( $settings ) {
+	$prefix = hybrid_get_prefix();
+
+	/* Allow developers to futher validate/sanitize the data. */
+	/* @deprecated 0.9.1. Developers should filter "sanitize_option_{$prefix}_theme_settings" instead. */
+	$settings = apply_filters( "{$prefix}_validate_theme_settings", $settings );
+
+	/* Return the validated settings. */
+	return $settings;
+}
+
+/**
+ * Creates an empty array of the default theme settings.  If the theme adds support for the 
+ * 'hybrid-core-meta-box-footer' feature, it'll automatically add that setting to the $settings array.
+ *
+ * @since 0.9.1
+ */
+function hybrid_get_default_theme_settings() {
+
+	/* Set up some default variables. */
+	$settings = array();
 	$domain = hybrid_get_textdomain();
+	$prefix = hybrid_get_prefix();
 
-	/* Add the default data to the theme settings array. */
-	$settings = array(
-		'feed_url' => false,
-		'feeds_redirect' => false,
-		'print_style' => false,
-		'superfish_js' => true,
-		'seo_plugin' => false,
-		'use_menus' => true,
-		'footer_insert' => '<p class="copyright">' . __( 'Copyright &#169; [the-year] [site-link].', $domain ) . '</p>' . "\n\n" . '<p class="credit">' . __( 'Powered by [wp-link] and [theme-link].', $domain ) . '</p>',
-	);
+	/* If the current theme supports the footer meta box and shortcodes, add default footer settings. */
+	if ( current_theme_supports( 'hybrid-core-meta-box-footer' ) && current_theme_supports( 'hybrid-core-shortcodes' ) ) {
 
-	/* If there is a child theme active, add the [child-link] shortcode to the $footer_insert. */
-	if ( STYLESHEETPATH !== TEMPLATEPATH )
-		$settings['footer_insert'] = '<p class="copyright">' . __( 'Copyright &#169; [the-year] [site-link].', $domain ) . '</p>' . "\n\n" . '<p class="credit">' . __( 'Powered by [wp-link], [theme-link], and [child-link].', $domain ) . '</p>';
+		/* If there is a child theme active, add the [child-link] shortcode to the $footer_insert. */
+		if ( STYLESHEETPATH !== TEMPLATEPATH )
+			$settings['footer_insert'] = '<p class="copyright">' . __( 'Copyright &#169; [the-year] [site-link].', $domain ) . '</p>' . "\n\n" . '<p class="credit">' . __( 'Powered by [wp-link], [theme-link], and [child-link].', $domain ) . '</p>';
 
-	return apply_filters( hybrid_get_prefix() . '_settings_args', $settings );
+		/* If no child theme is active, leave out the [child-link] shortcode. */
+		else
+			$settings['footer_insert'] = '<p class="copyright">' . __( 'Copyright &#169; [the-year] [site-link].', $domain ) . '</p>' . "\n\n" . '<p class="credit">' . __( 'Powered by [wp-link] and [theme-link].', $domain ) . '</p>';
+	}
+
+	/* Backwards compatibility hook. @deprecated 0.9.1. */
+	$settings = apply_filters( "{$prefix}_settings_args", $settings );
+
+	/* Return the $settings array and provide a hook for overwriting the default settings. */
+	return apply_filters( "{$prefix}_default_theme_settings", $settings );
 }
 
 /**
@@ -90,7 +118,7 @@ function hybrid_load_settings_page() {
 
 	/* If no settings are available, add the default settings to the database. */
 	if ( empty( $settings ) ) {
-		$settings = hybrid_theme_settings();
+		$settings = hybrid_get_default_theme_settings();
 		add_option( "{$prefix}_theme_settings", $settings, '', 'yes' );
 
 		/* Redirect the page so that the settings are reflected on the settings page. */
@@ -98,52 +126,9 @@ function hybrid_load_settings_page() {
 		exit;
 	}
 
-	/* If the form has been submitted, check the referer and execute available actions. */
-	elseif ( isset( $_POST["{$prefix}-settings-submit"] ) && 'Y' == $_POST["{$prefix}-settings-submit"] ) {
-
-		/* Make sure the form is valid. */
-		check_admin_referer( "{$prefix}-settings-page" );
-
-		/* Available hook for saving settings. */
+	/* Available hook fired when the theme settings have been updated. */
+	if ( isset( $_GET['updated'] ) && 'true' == esc_attr( $_GET['updated'] ) )
 		do_action( "{$prefix}_update_settings_page" );
-
-		/* Redirect the page so that the new settings are reflected on the settings page. */
-		wp_redirect( admin_url( 'themes.php?page=theme-settings&updated=true' ) );
-		exit;
-	}
-}
-
-/**
- * Updates the default theme settings if the settings page has been updated. It validates the values
- * added through the default theme settings page meta boxes.  Only settings returned by the 
- * hybrid_theme_settings() function will be saved. Child themes and plugins should save their settings 
- * separately.
- *
- * @since 0.7
- */
-function hybrid_save_theme_settings() {
-	$prefix = hybrid_get_prefix();
-
-	/* Get the current theme settings. */
-	$settings = get_option( "{$prefix}_theme_settings" );
-
-	/* Loop through each of the default settings and match them with the posted settings. */
-	foreach ( hybrid_theme_settings() as $key => $value )
-		$settings[$key] = ( isset( $_POST[$key] ) ? $_POST[$key] : '' );
-
-	/* Make sure users without the 'unfiltered_html' capability can't add HTML to the footer insert. */
-	if ( $settings['footer_insert'] && !current_user_can( 'unfiltered_html' ) )
-		$settings['footer_insert'] = stripslashes( wp_filter_post_kses( $settings['footer_insert'] ) );
-
-	/* Escape the entered feed URL. */
-	if ( $settings['feed_url'] )
-		$settings['feed_url'] = esc_url( $settings['feed_url'] );
-
-	/* Allow developers to futher validate/sanitize the data. */
-	$settings = apply_filters( "{$prefix}_validate_theme_settings", $settings );
-
-	/* Update the theme settings. */
-	$updated = update_option( "{$prefix}_theme_settings", $settings );
 }
 
 /**
@@ -224,13 +209,14 @@ function hybrid_footer_settings_meta_box() {
 
 	<table class="form-table">
 		<tr>
-			<th><label for="footer_insert"><?php _e( 'Footer Insert:', $domain ); ?></label></th>
+			<th><label for="<?php echo hybrid_settings_field_id( 'footer_insert' ); ?>"><?php _e( 'Footer Insert:', $domain ); ?></label></th>
 			<td>
-				<?php _e( 'You can add custom <acronym title="Hypertext Markup Language">HTML</acronym> and/or shortcodes, which will be automatically inserted into your theme.', $domain ); ?><br />
-				<textarea id="footer_insert" name="footer_insert" cols="60" rows="5" style="width: 98%;"><?php echo wp_htmledit_pre( stripslashes( hybrid_get_setting( 'footer_insert' ) ) ); ?></textarea>
+				<p><span class="description"><?php _e( 'You can add custom <acronym title="Hypertext Markup Language">HTML</acronym> and/or shortcodes, which will be automatically inserted into your theme.', $domain ); ?></span></p>
+
+				<p><textarea id="<?php echo hybrid_settings_field_id( 'footer_insert' ); ?>" name="<?php echo hybrid_settings_field_name( 'footer_insert' ); ?>" cols="60" rows="5" style="width: 98%;"><?php echo wp_htmledit_pre( stripslashes( hybrid_get_setting( 'footer_insert' ) ) ); ?></textarea></p>
+
 				<?php if ( current_theme_supports( 'hybrid-core-shortcodes' ) ) { ?>
-					<br />
-					<?php _e( 'Shortcodes:', $domain ); ?> <code>[the-year]</code>, <code>[site-link]</code>, <code>[wp-link]</code>, <code>[theme-link]</code>, <code>[child-link]</code>, <code>[loginout-link]</code>, <code>[query-counter]</code>.
+					<p><?php _e( 'Shortcodes:', $domain ); ?> <code>[the-year]</code>, <code>[site-link]</code>, <code>[wp-link]</code>, <code>[theme-link]</code>, <code>[child-link]</code>, <code>[loginout-link]</code>, <code>[query-counter]</code>.</p>
 				<?php } ?>
 			</td>
 		</tr>
@@ -262,25 +248,21 @@ function hybrid_settings_page() {
 
 		<div id="poststuff">
 
-			<form method="post" action="<?php echo admin_url( 'themes.php?page=theme-settings' ); ?>">
+			<form method="post" action="options.php">
 
-				<?php wp_nonce_field( "{$prefix}-settings-page" ); ?>
+				<?php settings_fields( "{$prefix}_theme_settings" ); ?>
 				<?php wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false ); ?>
 				<?php wp_nonce_field( 'meta-box-order', 'meta-box-order-nonce', false ); ?>
 
 				<div class="metabox-holder">
-					<div class="post-box-container column-1 normal"><?php do_meta_boxes( $hybrid->settings_page, 'normal', $theme_data ); ?></div>
-					<div class="post-box-container column-2 advanced"><?php do_meta_boxes( $hybrid->settings_page, 'advanced', $theme_data ); ?></div>
-					<div class="post-box-container column-3 side"><?php do_meta_boxes( $hybrid->settings_page, 'side', $theme_data ); ?></div>
+					<div class="post-box-container column-1 normal"><?php do_meta_boxes( $hybrid->settings_page, 'normal', null ); ?></div>
+					<div class="post-box-container column-2 advanced"><?php do_meta_boxes( $hybrid->settings_page, 'advanced', null ); ?></div>
+					<div class="post-box-container column-3 side"><?php do_meta_boxes( $hybrid->settings_page, 'side', null ); ?></div>
 				</div>
 
 				<p class="submit" style="clear: both;">
-					<input type="submit" name="Submit"  class="button-primary" value="<?php _e( 'Update Settings', $domain ); ?>" />
-					<input type="hidden" name="<?php echo "{$prefix}-settings-submit"; ?>" value="Y" />
-					<!-- deprecated --><input type="hidden" name="<?php echo "hybrid_submit_hidden"; ?>" value="Y" />
+					<input type="submit" name="Submit"  class="button-primary" value="<?php esc_attr_e( 'Update Settings', $domain ); ?>" />
 				</p><!-- .submit -->
-
-				<?php do_action( "{$prefix}_child_settings" ); // Hook for child settings (deprecated). ?>
 
 			</form>
 
@@ -299,15 +281,6 @@ function hybrid_settings_page_enqueue_script() {
 	wp_enqueue_script( 'common' );
 	wp_enqueue_script( 'wp-lists' );
 	wp_enqueue_script( 'postbox' );
-}
-
-/**
- * Loads the admin.css stylesheet for the theme settings page.
- *
- * @since 0.7
- */
-function hybrid_settings_page_enqueue_style() {
-	wp_enqueue_style( hybrid_get_prefix() . '-admin', HYBRID_CSS . '/admin.css', false, 0.7, 'screen' );
 }
 
 /**

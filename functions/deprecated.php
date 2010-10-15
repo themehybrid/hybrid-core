@@ -236,13 +236,36 @@ function hybrid_comment_author() {
 }
 
 /**
+ * This function creates all of the default theme settings and adds them to a single array.
+ *
+ * @since 0.4
+ * @deprecated 0.9.1
+ */
+function hybrid_theme_settings() {
+	_deprecated_function( __FUNCTION__, '0.9.1', 'hybrid_get_default_theme_settings()' );
+	$prefix = hybrid_get_prefix();
+	return apply_filters( hybrid_get_prefix() . '_settings_args', hybrid_get_default_theme_settings() );
+}
+
+/**
+ * Loads the admin.css stylesheet for the theme settings page.
+ *
+ * @since 0.7
+ * @deprecated 0.9.1
+ */
+function hybrid_settings_page_enqueue_style() {
+	_deprecated_function( __FUNCTION__, '0.9.1', 'hybrid_admin_enqueue_style()' );
+	hybrid_admin_enqueue_style();
+}
+
+/**
  * This function is for adding extra support for theme features to the theme.
  *
  * @since 0.8
  * @deprecated 0.9.1
  */
 function hybrid_add_theme_support() {
-	_deprecated_function( __FUNCTION__, '0.9.1' );
+	_deprecated_function( __FUNCTION__, '0.9.1', 'add_theme_support()' );
 	add_theme_support( 'automatic-feed-links' );
 	add_theme_support( 'hybrid-core-theme-settings' );
 }
