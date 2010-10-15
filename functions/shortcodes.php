@@ -1,22 +1,22 @@
 <?php
 /**
- * Shortcodes bundled for use with the theme. These shortcodes can be used in any shortcode-ready
- * area, which includes posts, pages, and various Hybrid theme areas.
+ * Shortcodes bundled for use with themes.  These shortcodes can be used in any shortcode-ready area, which 
+ * includes the post content area.  Themes may optionally make alternate shortcode-aware areas where these 
+ * shortcodes may be used.  Note that some shortcodes are specific to posts and comments and would be useless
+ * outside of the post and comment loops.
  *
  * @package HybridCore
  * @subpackage Functions
  */
 
-/**
- * Register shortcodes.
- * @since 0.8
- */
+/* Register shortcodes. */
 add_action( 'init', 'hybrid_add_shortcodes' );
 
 /**
- * Creates new shortcodes for use in any shortcode-ready area.
+ * Creates new shortcodes for use in any shortcode-ready area.  This function uses the add_shortcode() 
+ * function to register new shortcodes with WordPress.
  *
- * @since 0.8
+ * @since 0.8.0
  * @uses add_shortcode() to create new shortcodes.
  * @link http://codex.wordpress.org/Shortcode_API
  */
@@ -52,7 +52,7 @@ function hybrid_add_shortcodes() {
 /**
  * Shortcode to display the current year.
  *
- * @since 0.6
+ * @since 0.6.0
  * @uses date() Gets the current year.
  */
 function hybrid_the_year_shortcode() {
@@ -62,7 +62,7 @@ function hybrid_the_year_shortcode() {
 /**
  * Shortcode to display a link back to the site.
  *
- * @since 0.6
+ * @since 0.6.0
  * @uses get_bloginfo() Gets information about the install.
  */
 function hybrid_site_link_shortcode() {
@@ -71,7 +71,7 @@ function hybrid_site_link_shortcode() {
 
 /**
  * Shortcode to display a link to WordPress.org.
- * @since 0.6
+ * @since 0.6.0
  */
 function hybrid_wp_link_shortcode() {
 	return '<a class="wp-link" href="http://wordpress.org" title="' . __( 'Powered by WordPress, state-of-the-art semantic personal publishing platform', hybrid_get_textdomain() ) . '"><span>' . __( 'WordPress', hybrid_get_textdomain() ) . '</span></a>';
@@ -80,7 +80,7 @@ function hybrid_wp_link_shortcode() {
 /**
  * Shortcode to display a link to the Hybrid theme page.
  *
- * @since 0.6
+ * @since 0.6.0
  * @uses get_theme_data() Gets theme (parent theme) information.
  */
 function hybrid_theme_link_shortcode() {
@@ -91,7 +91,7 @@ function hybrid_theme_link_shortcode() {
 /**
  * Shortcode to display a link to the child theme's page.
  *
- * @since 0.6
+ * @since 0.6.0
  * @uses get_theme_data() Gets theme (child theme) information.
  */
 function hybrid_child_link_shortcode() {
@@ -102,7 +102,7 @@ function hybrid_child_link_shortcode() {
 /**
  * Shortcode to display a login link or logout link.
  *
- * @since 0.6
+ * @since 0.6.0
  * @uses is_user_logged_in() Checks if the current user is logged into the site.
  * @uses wp_logout_url() Creates a logout URL.
  * @uses wp_login_url() Creates a login URL.
@@ -120,7 +120,7 @@ function hybrid_loginout_link_shortcode() {
 /**
  * Displays query count and load time if the current user can edit themes.
  *
- * @since 0.6
+ * @since 0.6.0
  * @uses current_user_can() Checks if the current user can edit themes.
  */
 function hybrid_query_counter_shortcode() {
@@ -132,7 +132,7 @@ function hybrid_query_counter_shortcode() {
 /**
  * Displays a nav menu that has been created from the Menus screen in the admin.
  *
- * @since 0.8
+ * @since 0.8.0
  * @uses wp_nav_menu() Displays the nav menu.
  */
 function hybrid_nav_menu_shortcode( $attr ) {
@@ -162,7 +162,7 @@ function hybrid_nav_menu_shortcode( $attr ) {
 /**
  * Displays the edit link for an individual post.
  *
- * @since 0.7
+ * @since 0.7.0
  * @param array $attr
  */
 function hybrid_entry_edit_link_shortcode( $attr ) {
@@ -182,7 +182,7 @@ function hybrid_entry_edit_link_shortcode( $attr ) {
 /**
  * Displays the published date of an individual post.
  *
- * @since 0.7
+ * @since 0.7.0
  * @param array $attr
  */
 function hybrid_entry_published_shortcode( $attr ) {
@@ -196,7 +196,7 @@ function hybrid_entry_published_shortcode( $attr ) {
 /**
  * Displays a post's number of comments wrapped in a link to the comments area.
  *
- * @since 0.7
+ * @since 0.7.0
  * @param array $attr
  */
 function hybrid_entry_comments_link_shortcode( $attr ) {
@@ -226,7 +226,7 @@ function hybrid_entry_comments_link_shortcode( $attr ) {
 /**
  * Displays an individual post's author with a link to his or her archive.
  *
- * @since 0.7
+ * @since 0.7.0
  * @param array $attr
  */
 function hybrid_entry_author_shortcode( $attr ) {
@@ -238,7 +238,7 @@ function hybrid_entry_author_shortcode( $attr ) {
 /**
  * Displays a list of terms for a specific taxonomy.
  *
- * @since 0.7
+ * @since 0.7.0
  * @param array $attr
  */
 function hybrid_entry_terms_shortcode( $attr ) {
@@ -255,7 +255,7 @@ function hybrid_entry_terms_shortcode( $attr ) {
 /**
  * Displays a post's title with a link to the post.
  *
- * @since 0.7
+ * @since 0.7.0
  */
 function hybrid_entry_title_shortcode() {
 	global $post;
@@ -278,7 +278,7 @@ function hybrid_entry_title_shortcode() {
 /**
  * Displays the shortlinke of an individual entry.
  *
- * @since 0.8
+ * @since 0.8.0
  */
 function hybrid_entry_shortlink_shortcode( $attr ) {
 	global $post;
@@ -303,7 +303,7 @@ function hybrid_entry_shortlink_shortcode( $attr ) {
 /**
  * Displays the published date and time of an individual comment.
  *
- * @since 0.7
+ * @since 0.7.0
  */
 function hybrid_comment_published_shortcode() {
 	$domain = hybrid_get_textdomain();
@@ -314,7 +314,7 @@ function hybrid_comment_published_shortcode() {
 /**
  * Displays the comment author of an individual comment.
  *
- * @since 0.8
+ * @since 0.8.0
  * @global $comment The current comment's DB object.
  * @return string
  */
@@ -341,7 +341,7 @@ function hybrid_comment_author_shortcode( $attr ) {
 /**
  * Displays the permalink to an individual comment.
  *
- * @since 0.7
+ * @since 0.7.0
  */
 function hybrid_comment_permalink_shortcode( $attr ) {
 	global $comment;
@@ -355,7 +355,7 @@ function hybrid_comment_permalink_shortcode( $attr ) {
 /**
  * Displays a comment's edit link to users that have the capability to edit the comment.
  *
- * @since 0.7
+ * @since 0.7.0
  */
 function hybrid_comment_edit_link_shortcode( $attr ) {
 	global $comment;
@@ -377,7 +377,7 @@ function hybrid_comment_edit_link_shortcode( $attr ) {
 /**
  * Displays a reply link for the 'comment' comment_type if threaded comments are enabled.
  *
- * @since 0.7
+ * @since 0.7.0
  */
 function hybrid_comment_reply_link_shortcode( $attr ) {
 	$domain = hybrid_get_textdomain();

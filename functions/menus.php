@@ -1,40 +1,40 @@
 <?php
 /**
- * Functions for dealing with menus and menu items within the theme. WP menu items must be 
- * unregistered. Hybrid menu items must be registered in their place. All menus are loaded 
- * and registered with WP.
+ * The menus functions deal with registering nav menus within WordPress for the core framework.  Theme 
+ * developers may use the default menu(s) provided by the framework within their own themes, decide not
+ * to use them, or register additional menus.
  *
  * @package HybridCore
  * @subpackage Functions
  */
 
-/**
- * Register menus.
- * @since 0.8
- */
+/* Register nav menus. */
 add_action( 'init', 'hybrid_register_menus' );
 
 /**
- * Registers the theme's menus.
+ * Registers the the framework's default menus.  By default, the framework registers the 'primary' menu, 
+ * which is technically a location within the theme for a user-created menu to be shown.
  *
- * @since 0.8
- * @uses is_nav_menu() Checks if a menu exists.
- * @uses locate_template() Checks for template in child and parent theme.
+ * @since 0.8.0
+ * @uses register_nav_menu() Registers a nav menu with WordPress.
+ * @link http://codex.wordpress.org/Function_Reference/register_nav_menu
  */
 function hybrid_register_menus() {
-	if ( current_theme_supports( 'hybrid-core-menus' ) )
-		register_nav_menu( 'primary', __( 'Primary Menu', hybrid_get_textdomain() ) );
+
+	/* Register the 'primary' menu. */
+	register_nav_menu( 'primary', __( 'Primary Menu', hybrid_get_textdomain() ) );
 }
 
 /**
  * Loads the 'Primary Menu' template file.  Users can overwrite menu-primary.php in their child
  * theme folder.
  *
- * @since 0.8
- * @uses locate_template() Checks for template in child and parent theme.
+ * @since 0.8.0
+ * @uses get_template_part() Checks for template in child and parent theme.
+ * @link http://codex.wordpress.org/Function_Reference/get_template_part
  */
 function hybrid_get_primary_menu() {
-	locate_template( array( 'menu-primary.php', 'menu.php' ), true );
+	get_template_part( 'menu', 'primary' );
 }
 
 ?>

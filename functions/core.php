@@ -4,7 +4,7 @@
  * used across the entire framework to make various tasks faster. This file should be loaded
  * prior to any other files because its functions are needed to run the framework.
  *
- * @package Hybrid
+ * @package HybridCore
  * @subpackage Functions
  */
 
@@ -14,7 +14,7 @@
  * plugin to make it easier to use hooks across multiple themes without having to figure out
  * each theme's hooks (assuming other themes used the same system).
  *
- * @since 0.7
+ * @since 0.7.0
  * @uses get_template() Defines the theme prefix, which is generally 'hybrid'.
  * @global object $hybrid The global Hybrid object.
  * @return string $hybrid->prefix The prefix of the theme.
@@ -34,7 +34,7 @@ function hybrid_get_prefix() {
  * of the theme. Theme developers building from the framework should use their template name 
  * (i.e., directory name) as their textdomain within template files.
  *
- * @since 0.7
+ * @since 0.7.0
  * @uses get_template() Defines the theme textdomain, which is generally 'hybrid'.
  * @global object $hybrid The global Hybrid object.
  * @return string $hybrid->textdomain The textdomain of the theme.
@@ -54,7 +54,7 @@ function hybrid_get_textdomain() {
  * of the mofile for translations.  This allows child themes to have a folder called /languages with translations
  * of their parent theme so that the translations aren't lost on a parent theme upgrade.
  *
- * @since 0.9
+ * @since 0.9.0
  * @param string $mofile File name of the .mo file.
  * @param string $domain The textdomain currently being filtered.
  */
@@ -79,7 +79,7 @@ function hybrid_load_textdomain( $mofile, $domain ) {
  * Major props to Ptah Dunbar for the do_atomic() function.
  * @link http://ptahdunbar.com/wordpress/smarter-hooks-context-sensitive-hooks
  *
- * @since 0.7
+ * @since 0.7.0
  * @uses hybrid_get_prefix() Gets the theme prefix.
  * @uses hybrid_get_context() Gets the context of the current page.
  * @param string $tag Usually the location of the hook but defines what the base hook is.
@@ -112,7 +112,7 @@ function do_atomic( $tag = '', $arg = '' ) {
  * that to give extra hooks such as 'hybrid_singular_entry_meta', 'hybrid_singular-post_entry_meta', 
  * and 'hybrid_singular-post-ID_entry_meta'.
  *
- * @since 0.7
+ * @since 0.7.0
  * @uses hybrid_get_prefix() Gets the theme prefix.
  * @uses hybrid_get_context() Gets the context of the current page.
  * @param string $tag Usually the location of the hook but defines what the base hook is.
@@ -147,7 +147,7 @@ function apply_atomic( $tag = '', $value = '' ) {
  * context-aware functionality alongside shortcodes. Rather than adding a lot of code to the 
  * function itself, developers can create individual functions to handle shortcodes.
  *
- * @since 0.7
+ * @since 0.7.0
  * @param string $tag Usually the location of the hook but defines what the base hook is.
  * @param mixed $value The value to be filtered.
  * @return mixed $value The value after it has been filtered.
@@ -161,7 +161,7 @@ function apply_atomic_shortcode( $tag = '', $value = '' ) {
  * like to show.  Hybrid theme settings are added with 'autoload' set to 'yes', so the settings are 
  * only loaded once on each page load.
  *
- * @since 0.7
+ * @since 0.7.0
  * @uses get_option() Gets an option from the database.
  * @uses hybrid_get_prefix() Gets the prefix of the theme.
  * @global object $hybrid The global Hybrid object.
@@ -191,7 +191,7 @@ function hybrid_get_setting( $option = '' ) {
  * The theme can save multiple things in a transient to help speed up page load times. We're
  * setting a default of 12 hours or 43,200 seconds (60 * 60 * 12).
  *
- * @since 0.8
+ * @since 0.8.0
  * @return int Transient expiration time in seconds.
  */
 function hybrid_get_transient_expiration() {
@@ -202,7 +202,7 @@ function hybrid_get_transient_expiration() {
  * Function for formatting a hook name if needed. It automatically adds the theme's prefix to 
  * the hook, and it will add a context (or any variable) if it's given.
  *
- * @since 0.7
+ * @since 0.7.0
  * @param string $tag The basic name of the hook (e.g., 'before_header').
  * @param string $context A specific context/value to be added to the hook.
  */

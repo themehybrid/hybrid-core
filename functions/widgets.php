@@ -1,43 +1,34 @@
 <?php
 /**
- * Functions for dealing with widgets and sidebars within the theme. WP widgets must be 
- * unregistered. Hybrid widgets must be registered in their place. All sidebars are loaded 
- * and registered with WP.
+ * Widgets and sidebars functions file.  The functions here register default sidebars and widgets for the 
+ * core framework.  It also unregisters default WordPress widgets if being replaced by the framework 
+ * widgets.  The framework's widgets are meant to extend the functionality of the base WordPress widgets 
+ * by offering additional options to the end user.  The framework sidebars provide a starting point for theme
+ * developers when developing themes off the framework.
  *
  * @package HybridCore
  * @subpackage Functions
  */
 
-/**
- * Register widget areas
- * @since 0.7
- */
+/* Register widget areas. */
 add_action( 'init', 'hybrid_register_sidebars' );
 
-/**
- * Unregister WP widgets
- * @since 0.3.2
- */
+/* Unregister WP widgets. */
 add_action( 'widgets_init', 'hybrid_unregister_widgets' );
 
-/**
- * Register Hybrid Widgets
- * @since 0.6
- */
+/* Register Hybrid widgets. */
 add_action( 'widgets_init', 'hybrid_register_widgets' );
 
-/**
- * Disables widget areas
- * @since 0.5
- */
+/* Disables widget areas. */
 add_filter( 'sidebars_widgets', 'remove_sidebars' );
 
 /**
- * Registers each widget area for the theme. This includes all of the asides
- * and the utility widget areas throughout the theme.
+ * Registers the default framework dynamic sidebars.  Theme developers may optionally choose to support 
+ * these sidebars within their themes or add more custom sidebars to the mix.
  *
- * @since 0.7
- * @uses register_sidebar() Registers a widget area.
+ * @since 0.7.0
+ * @uses register_sidebar() Registers a sidebar with WordPress.
+ * @link http://codex.wordpress.org/Function_Reference/register_sidebar
  */
 function hybrid_register_sidebars() {
 
@@ -54,18 +45,18 @@ function hybrid_register_sidebars() {
 	register_sidebar( array( 'name' => __( 'Subsidiary', $domain ), 'id' => 'subsidiary', 'description' => __( 'A widget area loaded in the footer of the site.', $domain ), 'before_widget' => '<div id="%1$s" class="widget %2$s widget-%2$s"><div class="widget-inside">', 'after_widget' => '</div></div>', 'before_title' => '<h3 class="widget-title">', 'after_title' => '</h3>' ) );
 
 	/* Register utility widget areas. */
-	register_sidebar( array( 'name' => __( 'Utility: Before Content', $domain ), 'id' => 'before-content', 'description' => __( 'Loaded before the page\'s main content area.', $domain ), 'before_widget' => '<div id="%1$s" class="widget %2$s widget-%2$s"><div class="widget-inside">', 'after_widget' => '</div></div>', 'before_title' => '<h3 class="widget-title">', 'after_title' => '</h3>' ) );
-	register_sidebar( array( 'name' => __( 'Utility: After Content', $domain ), 'id' => 'after-content', 'description' => __( 'Loaded after the page\'s main content area.', $domain ), 'before_widget' => '<div id="%1$s" class="widget %2$s widget-%2$s"><div class="widget-inside">', 'after_widget' => '</div></div>', 'before_title' => '<h3 class="widget-title">', 'after_title' => '</h3>' ) );
-	register_sidebar( array( 'name' => __( 'Utility: After Singular', $domain ), 'id' => 'after-singular', 'description' => __( 'Loaded on singular post (page, attachment, etc.) views before the comments area.', $domain ), 'before_widget' => '<div id="%1$s" class="widget %2$s widget-%2$s"><div class="widget-inside">', 'after_widget' => '</div></div>', 'before_title' => '<h3 class="widget-title">', 'after_title' => '</h3>' ) );
+	register_sidebar( array( 'name' => __( 'Before Content', $domain ), 'id' => 'before-content', 'description' => __( 'Loaded before the page\'s main content area.', $domain ), 'before_widget' => '<div id="%1$s" class="widget %2$s widget-%2$s"><div class="widget-inside">', 'after_widget' => '</div></div>', 'before_title' => '<h3 class="widget-title">', 'after_title' => '</h3>' ) );
+	register_sidebar( array( 'name' => __( 'After Content', $domain ), 'id' => 'after-content', 'description' => __( 'Loaded after the page\'s main content area.', $domain ), 'before_widget' => '<div id="%1$s" class="widget %2$s widget-%2$s"><div class="widget-inside">', 'after_widget' => '</div></div>', 'before_title' => '<h3 class="widget-title">', 'after_title' => '</h3>' ) );
+	register_sidebar( array( 'name' => __( 'After Singular', $domain ), 'id' => 'after-singular', 'description' => __( 'Loaded on singular post (page, attachment, etc.) views before the comments area.', $domain ), 'before_widget' => '<div id="%1$s" class="widget %2$s widget-%2$s"><div class="widget-inside">', 'after_widget' => '</div></div>', 'before_title' => '<h3 class="widget-title">', 'after_title' => '</h3>' ) );
 }
 
 /**
- * Register Hybrid's extra widgets. Each widget is meant to replace or extend the 
- * current default WordPress widgets.
+ * Registers the core frameworks widgets.  These widgets typically overwrite the equivalent default WordPress
+ * widget by extending the available options of the widget.
  *
- * @since 0.6
- * @uses register_widget() Registers individual widgets.
- * @link http://codex.wordpress.org/WordPress_Widgets_Api
+ * @since 0.6.0
+ * @uses register_widget() Registers individual widgets with WordPress
+ * @link http://codex.wordpress.org/Function_Reference/register_widget
  */
 function hybrid_register_widgets() {
 
@@ -97,12 +88,12 @@ function hybrid_register_widgets() {
 }
 
 /**
- * Unregister default WordPress widgets we don't need. The theme adds its own 
- * versions of these widgets.
+ * Unregister default WordPress widgets that are replaced by the framework's widgets.  Widgets that
+ * aren't replaced are not unregistered.
  *
  * @since 0.3.2
- * @uses unregister_widget() Removes individual widgets.
- * @link http://codex.wordpress.org/WordPress_Widgets_Api
+ * @uses unregister_widget() Unregisters a preexisting widget.
+ * @link http://codex.wordpress.org/Function_Reference/unregister_widget
  */
 function hybrid_unregister_widgets() {
 
@@ -155,7 +146,7 @@ function hybrid_get_subsidiary() {
  * Loads the Utility: Before Content widget area. Users can overwrite 
  * 'sidebar-before-content.php' in child themes.
  *
- * @since 0.4
+ * @since 0.4.0
  * @uses get_sidebar() Checks for the template in the child and parent theme.
  */
 function hybrid_get_utility_before_content() {
@@ -166,7 +157,7 @@ function hybrid_get_utility_before_content() {
  * Loads the Utility: After Content widget area. Users can overwrite 
  * 'sidebar-after-content.php' in child themes.
  *
- * @since 0.4
+ * @since 0.4.0
  * @uses get_sidebar() Checks for the template in the child and parent theme.
  */
 function hybrid_get_utility_after_content() {
@@ -177,7 +168,7 @@ function hybrid_get_utility_after_content() {
  * Loads the Utility: After Singular widget area. Users can overwrite 
  * 'sidebar-after-singular.php' in child themes.
  *
- * @since 0.7
+ * @since 0.7.0
  * @uses get_sidebar() Checks for the template in the child and parent theme.
  */
 function hybrid_get_utility_after_singular() {
@@ -189,7 +180,7 @@ function hybrid_get_utility_after_singular() {
  * it on the No Widgets template. Users that need additional templates without widgets 
  * should create a simliar function in their child theme.
  *
- * @since 0.5
+ * @since 0.5.0
  * @uses sidebars_widgets Filter to remove all widget areas
  */
 function remove_sidebars( $sidebars_widgets ) {

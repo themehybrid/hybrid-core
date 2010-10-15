@@ -14,7 +14,7 @@ add_action( 'admin_init', 'hybrid_admin_init' );
 /**
  * Initializes any admin-related features needed for the framework.
  *
- * @since 0.7
+ * @since 0.7.0
  */
 function hybrid_admin_init() {
 
@@ -56,7 +56,7 @@ function hybrid_admin_enqueue_style() {
  * Function for getting an array of available custom templates with a specific header. Ideally,
  * this function would be used to grab custom singular post (any post type) templates.
  *
- * @since 0.7
+ * @since 0.7.0
  * @param array $args Arguments to check the templates against.
  * @return array $post_templates The array of templates.
  */

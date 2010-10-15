@@ -1,11 +1,14 @@
 <?php
 /**
- * Temporary file to hold SEO/<head> stuff until a permanent home is found.
+ * SEO and header functions.  Not all things in this file are strictly for search engine optimization.  Many 
+ * of the functions handle basic <meta> elements for the <head> area of the site.  This file is a catchall file 
+ * for adding these types of things to themes.
  *
  * @package HybridCore
  * @subpackage Functions
  */
 
+/* Add <meta> elements to the <head> area. */
 add_action( 'wp_head', 'hybrid_meta_robots', 1 );
 add_action( 'wp_head', 'hybrid_meta_author', 1 );
 add_action( 'wp_head', 'hybrid_meta_copyright', 1 );
@@ -14,8 +17,8 @@ add_action( 'wp_head', 'hybrid_meta_description', 1 );
 add_action( 'wp_head', 'hybrid_meta_keywords', 1 );
 
 /**
- * Sets the default meta robots setting.  If private, don't send meta info to the 
- * header.  Runs the hybrid_meta_robots filter hook at the end.
+ * Sets the default meta robots setting.  If private, don't send meta info to the header.  Runs the 
+ * hybrid_meta_robots filter hook at the end.
  *
  * @since 0.2.3
  */
@@ -28,8 +31,8 @@ function hybrid_meta_robots() {
 }
 
 /**
- * Generates the meta author.  On single posts and pages, use the author's name.
- * On the home page, use all authors.  The hybrid_meta_author filter added in 0.6.
+ * Generates the meta author.  On single posts and pages, use the author's name.  On the home page, use 
+ * all authors.  The hybrid_meta_author filter added in 0.6.
  *
  * @since 0.3.3
  */
@@ -48,11 +51,10 @@ function hybrid_meta_author() {
 }
 
 /**
- * Add the meta tag for copyright information to the header.  Single 
- * posts and pages should display the date written.  All other pages will 
- * show the current year.  The hybrid_meta_copyright filter added in 0.6.
+ * Add the meta tag for copyright information to the header.  Single posts and pages should display the 
+ * date written.  All other pages will show the current year. 
  *
- * @since 0.4
+ * @since 0.4.0
  */
 function hybrid_meta_copyright() {
 	$domain = hybrid_get_textdomain();
@@ -67,11 +69,10 @@ function hybrid_meta_copyright() {
 }
 
 /**
- * Add the revised meta tag on single posts and pages.  This shows the
- * last time the post/page was modified. The hybrid_meta_revised filter
- * added in 0.6.
+ * Add the revised meta tag on single posts and pages (or any post type).  This shows the last time the post 
+ * was modified. 
  *
- * @since 0.4
+ * @since 0.4.0
  */
 function hybrid_meta_revised() {
 	$revised = '';
@@ -83,8 +84,8 @@ function hybrid_meta_revised() {
 }
 
 /**
- * Generates the meta description. Checks theme settings for indexing, title,
- * and meta settings. Customize this with the hybrid_meta_description filter.
+ * Generates the meta description. Checks theme settings for indexing, title, and meta settings. Customize 
+ * this with the hybrid_meta_description filter.
  *
  * @since 0.2.3
  */
@@ -129,8 +130,7 @@ function hybrid_meta_description() {
 }
 
 /**
- * Generates meta keywords/tags for the site.  Checks theme settings. 
- * Checks indexing settings.  Customize with the hybrid_meta_keywords filter.
+ * Generates meta keywords/tags for the site.
  *
  * @since 0.2.3
  */

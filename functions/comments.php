@@ -4,13 +4,13 @@
  * precise control over their display and makes more filter and action hooks available to developers
  * to use in their customizations.
  *
- * @package Hybrid
+ * @package HybridCore
  * @subpackage Functions
  */
 
 /**
  * Filter the comment form defaults.
- * @since 0.8
+ * @since 0.8.0
  */
 add_filter( 'comment_form_defaults', 'hybrid_comment_form_args' );
 
@@ -20,7 +20,7 @@ add_filter( 'comment_form_defaults', 'hybrid_comment_form_args' );
  * $style should remain 'ol' since this is hardcoded into the theme and is the semantically correct
  * element to use for listing comments.
  *
- * @since 0.7
+ * @since 0.7.0
  * @return array $args Arguments for listing comments.
  */
 function hybrid_list_comments_args() {
@@ -80,7 +80,7 @@ function hybrid_comments_end_callback() {
  * available.  Adds a call to HYBRID_IMAGES . "/{$comment_type}.png" for the default avatars for
  * trackbacks and pingbacks.
  *
- * @since 0.2
+ * @since 0.2.0
  * @global $comment The current comment's DB object.
  * @global $hybrid The global Hybrid object.
  */
@@ -114,7 +114,7 @@ function hybrid_avatar() {
 /**
  * Function for displaying a comment's metadata.
  *
- * @since 0.7
+ * @since 0.7.0
  * @param string $metadata Custom metadata to use.
  * @global $comment The global comment object.
  * @global $post The global post object.
@@ -135,7 +135,7 @@ function hybrid_comment_meta( $metadata = '' ) {
  * the theme to preserve some backwards compatibility with its old comment form.  It also allows 
  * users to build custom comment forms by filtering 'comment_form_defaults' in their child theme.
  *
- * @since 0.8
+ * @since 0.8.0
  * @param array $args The default comment form arguments.
  * @return array $args The filtered comment form arguments.
  */

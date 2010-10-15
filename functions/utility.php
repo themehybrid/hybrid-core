@@ -1,19 +1,13 @@
 <?php
 /**
- * Functions for loading the correct template in the Hybrid system. Many of the default
- * WordPress templates are overridden to allow for a better template hierarchy, which
- * allows for more customizations and better structure.
- *
- * Other functions in this file are for template-specific outputs, such as the page menu.
+ * Additional helper functions that the framework or themes may use.  The functions in this file are functions
+ * that don't really have a home within any other parts of the framework.
  *
  * @package HybridCore
  * @subpackage Functions
  */
 
-/**
- * Add extra support for post types.
- * @since 0.8
- */
+/* Add extra support for post types. */
 add_action( 'init', 'hybrid_add_post_type_support' );
 
 /**
@@ -22,7 +16,7 @@ add_action( 'init', 'hybrid_add_post_type_support' );
  * 'attachment' post type.  Technically, these are already used for attachments in core, but 
  * they're not registered.
  *
- * @since 0.8
+ * @since 0.8.0
  */
 function hybrid_add_post_type_support() {
 	add_post_type_support( 'post', array( hybrid_get_prefix() . '-post-settings', 'entry-views' ) );
@@ -36,7 +30,7 @@ function hybrid_add_post_type_support() {
  * template name prefix.  The function looks for templates based on the context of the current page
  * being viewed by the user.
  *
- * @since 0.8
+ * @since 0.8.0
  * @param string $template The slug of the template whose context we're searching for.
  * @return string $template The full path of the located template.
  */
@@ -66,7 +60,7 @@ function get_atomic_template( $template ) {
  * Adds the correct DOCTYPE to the theme. Defaults to XHTML 1.0 Strict.
  * Child themes can overwrite this with the hybrid_doctype filter.
  *
- * @since 0.4
+ * @since 0.4.0
  */
 function hybrid_doctype() {
 	if ( !preg_match( "/MSIE 6.0/", esc_attr( $_SERVER['HTTP_USER_AGENT'] ) ) )
@@ -80,7 +74,7 @@ function hybrid_doctype() {
  * Shows the content type in the header.  Gets the site's defined HTML type 
  * and charset.  Can be overwritten with the hybrid_meta_content_type filter.
  *
- * @since 0.4
+ * @since 0.4.0
  */
 function hybrid_meta_content_type() {
 	$content_type = '<meta http-equiv="Content-Type" content="' . get_bloginfo( 'html_type' ) . '; charset=' . get_bloginfo( 'charset' ) . '" />' . "\n";
@@ -92,7 +86,7 @@ function hybrid_meta_content_type() {
  * Uses the theme name and version from style.css.  In 0.6, added the hybrid_meta_template 
  * filter hook.
  *
- * @since 0.4
+ * @since 0.4.0
  */
 function hybrid_meta_template() {
 	$data = get_theme_data( TEMPLATEPATH . '/style.css' );
@@ -103,7 +97,7 @@ function hybrid_meta_template() {
 /**
  * Displays the pinkback URL.
  *
- * @since 0.4
+ * @since 0.4.0
  */
 function hybrid_head_pingback() {
 	$pingback = '<link rel="pingback" href="' . get_bloginfo( 'pingback_url' ) . '" />' . "\n";
@@ -116,7 +110,7 @@ function hybrid_head_pingback() {
  * once the theme moves from XHTML to HTML 5 because HTML 5 allows for
  * multiple <h1> elements in a single document.
  *
- * @since 0.1
+ * @since 0.1.0
  */
 function hybrid_site_title() {
 	$tag = ( is_front_page() ) ? 'h1' : 'div';
@@ -133,7 +127,7 @@ function hybrid_site_title() {
  * change once the theme moves from XHTML to HTML 5 because HTML 5 has the 
  * <hgroup> element.
  *
- * @since 0.1
+ * @since 0.1.0
  */
 function hybrid_site_description() {
 	$tag = ( is_front_page() ) ? 'h2' : 'div';
@@ -148,7 +142,7 @@ function hybrid_site_description() {
  * Displays the page's profile URI.
  * @link http://microformats.org/wiki/profile-uris
  *
- * @since 0.6
+ * @since 0.6.0
  */
 function hybrid_profile_uri() {
 	echo apply_atomic( 'profile_uri', 'http://gmpg.org/xfn/11' );

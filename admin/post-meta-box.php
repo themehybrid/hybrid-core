@@ -17,7 +17,7 @@ add_action( 'admin_menu', 'hybrid_create_post_meta_box' );
  * function for grabbing a list of available post types and adding a new meta box for 
  * each post type.
  *
- * @since 0.7
+ * @since 0.7.0
  * @uses get_post_types() Gets an array of post type objects.
  * @uses add_meta_box() Adds a meta box to the post editing screen.
  */
@@ -48,7 +48,7 @@ function hybrid_create_post_meta_box() {
  * Creates the settings for the post meta box depending on some things in how the theme is
  * set up.
  *
- * @since 0.7
+ * @since 0.7.0
  * @param string $type The post_type of the current post in the post editor.
  */
 function hybrid_post_meta_box_args( $type = '' ) {
@@ -107,7 +107,7 @@ function hybrid_post_meta_box_args( $type = '' ) {
  * from the hybrid_post_meta_box_args() function. It then loops through each item in the array and
  * displays a form element based on the type of setting it should be.
  *
- * @since 0.7
+ * @since 0.7.0
  * @parameter object $object Post object that holds all the post information.
  * @parameter array $box The particular meta box being shown and its information.
  */
@@ -132,7 +132,7 @@ function hybrid_post_meta_box( $object, $box ) {
 /**
  * Outputs a text input box with the given arguments for use with the post meta box.
  *
- * @since 0.7
+ * @since 0.7.0
  * @param array $args 
  * @param string|bool $value Custom field value.
  */
@@ -148,7 +148,7 @@ function hybrid_post_meta_box_text( $args = array(), $value = false ) {
 /**
  * Outputs a select box with the given arguments for use with the post meta box.
  *
- * @since 0.7
+ * @since 0.7.0
  * @param array $args
  * @param string|bool $value Custom field value.
  */
@@ -171,7 +171,7 @@ function hybrid_post_meta_box_select( $args = array(), $value = false ) {
 /**
  * Outputs a textarea with the given arguments for use with the post meta box.
  *
- * @since 0.7
+ * @since 0.7.0
  * @param array $args
  * @param string|bool $value Custom field value.
  */
@@ -187,7 +187,7 @@ function hybrid_post_meta_box_textarea( $args = array(), $value = false ) {
 /**
  * Outputs radio inputs with the given arguments for use with the post meta box.
  *
- * @since 0.8
+ * @since 0.8.0
  * @param array $args
  * @param string|bool $value Custom field value.
  */
@@ -208,7 +208,7 @@ function hybrid_post_meta_box_radio( $args = array(), $value = false ) {
  * The function for saving the theme's post meta box settings. It loops through each of the meta
  * box arguments for that particular post type and adds, updates, or deletes the metadata.
  *
- * @since 0.7
+ * @since 0.7.0
  * @param int $post_id
  */
 function hybrid_save_post_meta_box( $post_id, $post ) {

@@ -23,7 +23,7 @@ add_action( 'admin_menu', 'hybrid_settings_page_init' );
  * Users or developers can set a custom capability (default is 'edit_themes') for access to the
  * settings page using the "$prefix_settings_capability" filter hook.
  *
- * @since 0.7
+ * @since 0.7.0
  * @global string $hybrid The global theme object.
  */
 function hybrid_settings_page_init() {
@@ -57,7 +57,7 @@ function hybrid_settings_page_init() {
  * developers should validate/sanitize their theme settings on the "sanitize_option_{$prefix}_theme_settings" 
  * hook.  This function merely exists for backwards compatibility.
  *
- * @since 0.7
+ * @since 0.7.0
  */
 function hybrid_save_theme_settings( $settings ) {
 	$prefix = hybrid_get_prefix();
@@ -108,7 +108,7 @@ function hybrid_get_default_theme_settings() {
  * {$prefix}_theme_settings in the database. It also fires the {$prefix}_update_settings_page 
  * hook for saving custom settings.
  *
- * @since 0.7
+ * @since 0.7.0
  */
 function hybrid_load_settings_page() {
 	$prefix = hybrid_get_prefix();
@@ -131,7 +131,7 @@ function hybrid_load_settings_page() {
  * Creates the default meta boxes for the theme settings page. Child theme and plugin developers
  * should use add_meta_box() to create additional meta boxes.
  *
- * @since 0.7
+ * @since 0.7.0
  * @global string $hybrid The global theme object.
  */
 function hybrid_create_settings_meta_boxes() {
@@ -161,7 +161,7 @@ function hybrid_create_settings_meta_boxes() {
  * information about both the parent theme and child theme. If a child theme is active, this function
  * will be called a second time.
  *
- * @since 0.7
+ * @since 0.7.0
  * @param $object Variable passed through the do_meta_boxes() call.
  * @param array $box Specific information about the meta box being loaded.
  */
@@ -198,7 +198,7 @@ function hybrid_about_theme_meta_box( $object, $box ) {
  * Creates a settings box that allows users to customize their footer. A basic textarea is given that
  * allows HTML and shortcodes to be input.
  *
- * @since 0.7
+ * @since 0.7.0
  */
 function hybrid_footer_settings_meta_box() {
 	$domain = hybrid_get_textdomain(); ?>
@@ -223,7 +223,7 @@ function hybrid_footer_settings_meta_box() {
  * Displays the theme settings page and calls do_meta_boxes() to allow additional settings
  * meta boxes to be added to the page.
  *
- * @since 0.7
+ * @since 0.7.0
  * @global string $hybrid The global theme object.
  */
 function hybrid_settings_page() {
@@ -271,7 +271,7 @@ function hybrid_settings_page() {
  * Loads the JavaScript files required for managing the meta boxes on the theme settings
  * page, which allows users to arrange the boxes to their liking.
  *
- * @since 0.7
+ * @since 0.7.0
  */
 function hybrid_settings_page_enqueue_script() {
 	wp_enqueue_script( 'common' );
@@ -282,7 +282,7 @@ function hybrid_settings_page_enqueue_script() {
 /**
  * Loads the JavaScript required for toggling the meta boxes on the theme settings page.
  *
- * @since 0.7
+ * @since 0.7.0
  * @global string $hybrid The global theme object.
  */
 function hybrid_settings_page_load_scripts() {

@@ -13,7 +13,7 @@
  * SCRIPT_DEBUG must be set to 'true' in the 'wp-config.php' file.  This will check if a 'style.dev.css'
  * file is present within the theme folder and use it if it exists.  Else, it defaults to 'style.css'.
  *
- * @since 0.9
+ * @since 0.9.0
  */
 function hybrid_debug_stylesheet( $stylesheet_uri, $stylesheet_dir_uri ) {
 
@@ -36,7 +36,7 @@ function hybrid_debug_stylesheet( $stylesheet_uri, $stylesheet_dir_uri ) {
  * If selected, the drop-downs.js file will be loaded, which is a bundled version of the
  * Superfish jQuery plugin.
  *
- * @since 0.1
+ * @since 0.1.0
  * @link http://codex.wordpress.org/Function_Reference/wp_enqueue_script
  * @link http://users.tpg.com.au/j_birch/plugins/superfish
  */
@@ -64,7 +64,7 @@ function hybrid_enqueue_script() {
  * this could lead to messy template files. For now, we'll use separate functions for handling 
  * attachment content. The biggest issue here is with handling different video types.
  *
- * @since 0.5
+ * @since 0.5.0
  * @uses get_post_mime_type() Gets the mime type of the attachment.
  * @uses wp_get_attachment_url() Gets the URL of the attachment file.
  */
@@ -91,7 +91,7 @@ function hybrid_attachment() {
  * @todo Run a battery of tests on many different applications.
  * @todo Figure out what to do with FLV files outside of the current functionality.
  *
- * @since 0.3
+ * @since 0.3.0
  * @param string $mime attachment mime type
  * @param string $file attachment file URL
  * @return string
@@ -108,7 +108,7 @@ function hybrid_application_attachment( $mime = '', $file = '' ) {
  * Handles text attachments on their attachment pages.
  * Uses the <object> element to embed media in the pages.
  *
- * @since 0.3
+ * @since 0.3.0
  * @param string $mime attachment mime type
  * @param string $file attachment file URL
  * @return string

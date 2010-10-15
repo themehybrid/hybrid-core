@@ -21,7 +21,7 @@
  * based archives depending on several factors.  For example, one could load an archive for a specific
  * second during a specific minute within a specific hour on a specific day and so on.
  *
- * @since 0.7
+ * @since 0.7.0
  * @global $wp_query The current page's query object.
  * @global $hybrid The global Hybrid object.
  * @return array $hybrid->context Several contexts based on the current page.
@@ -116,7 +116,7 @@ function hybrid_get_context() {
  * 'hentry'. Posts are given category, tag, and author classes. Alternate post classes of odd, 
  * even, and alt are added.
  *
- * @since 0.5
+ * @since 0.5.0
  * @global $post The current post's DB object.
  * @param string|array $class Additional classes for more control.
  * @return string $class
@@ -188,7 +188,7 @@ function hybrid_entry_class( $class = '', $post_id = null ) {
  * and reader classes. Needs more work because WP, by default, assigns even/odd backwards 
  * (Odd should come first, even second).
  *
- * @since 0.2
+ * @since 0.2.0
  * @global $wpdb WordPress DB access object.
  * @global $comment The current comment's DB object.
  */
@@ -237,7 +237,7 @@ function hybrid_comment_class( $class = '' ) {
 /**
  * Provides classes for the <body> element depending on page context.
  *
- * @since 0.1
+ * @since 0.1.0
  * @uses $wp_query
  * @param string|array $class Additional classes for more control.
  * @return string
@@ -303,7 +303,7 @@ function hybrid_body_class( $class = '' ) {
  * Function for handling what the browser/search engine title should be. Tries to handle every 
  * situation to make for the best SEO.
  *
- * @since 0.1
+ * @since 0.1.0
  * @global $wp_query
  */
 function hybrid_document_title() {
