@@ -119,7 +119,7 @@ function hybrid_head_pingback() {
  * @since 0.1
  */
 function hybrid_site_title() {
-	$tag = ( is_home() || is_front_page() ) ? 'h1' : 'div';
+	$tag = ( is_front_page() ) ? 'h1' : 'div';
 
 	if ( $title = get_bloginfo( 'name' ) )
 		$title = '<' . $tag . ' id="site-title"><a href="' . home_url() . '" title="' . $title . '" rel="home"><span>' . $title . '</span></a></' . $tag . '>';
@@ -136,7 +136,7 @@ function hybrid_site_title() {
  * @since 0.1
  */
 function hybrid_site_description() {
-	$tag = ( is_home() || is_front_page() ) ? 'h2' : 'div';
+	$tag = ( is_front_page() ) ? 'h2' : 'div';
 
 	if ( $desc = get_bloginfo( 'description' ) )
 		$desc = "\n\t\t\t" . '<' . $tag . ' id="site-description"><span>' . $desc . '</span></' . $tag . '>' . "\n";
