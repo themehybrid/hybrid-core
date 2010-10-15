@@ -63,6 +63,12 @@ function hybrid_get_context() {
 			$hybrid->context[] = "taxonomy-{$term->taxonomy}-" . sanitize_html_class( $term->slug, $term->term_id );
 		}
 
+		/* Post type archives. */
+		elseif ( get_query_var( 'post_type' ) ) {
+			$post_type = get_post_type_object( get_query_var( 'post_type' ) );
+			$hybrid->context[] = "archive-{$post_type->name}";
+		}
+
 		/* User/author archives. */
 		elseif ( is_author() ) {
 			$hybrid->context[] = 'user';
@@ -305,6 +311,7 @@ function hybrid_document_title() {
 
 	$domain = hybrid_get_textdomain();
 
+	$doctitle = '';
 	$separator = ':';
 
 	if ( is_front_page() && is_home() )
@@ -326,6 +333,11 @@ function hybrid_document_title() {
 		if ( is_category() || is_tag() || is_tax() ) {
 			$term = $wp_query->get_queried_object();
 			$doctitle = $term->name;
+		}
+
+		elseif ( get_query_var( 'post_type' ) ) {
+			$post_type = get_post_type_object( get_query_var( 'post_type' ) );
+			$doctitle = $post_type->labels->name;
 		}
 
 		elseif ( is_author() )
