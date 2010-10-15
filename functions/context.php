@@ -64,7 +64,7 @@ function hybrid_get_context() {
 		}
 
 		/* Post type archives. */
-		elseif ( get_query_var( 'post_type' ) ) {
+		elseif ( function_exists( 'is_post_type_archive' ) && is_post_type_archive() ) {
 			$post_type = get_post_type_object( get_query_var( 'post_type' ) );
 			$hybrid->context[] = "archive-{$post_type->name}";
 		}
@@ -335,7 +335,7 @@ function hybrid_document_title() {
 			$doctitle = $term->name;
 		}
 
-		elseif ( get_query_var( 'post_type' ) ) {
+		elseif ( function_exists( 'is_post_type_archive' ) && is_post_type_archive() ) {
 			$post_type = get_post_type_object( get_query_var( 'post_type' ) );
 			$doctitle = $post_type->labels->name;
 		}

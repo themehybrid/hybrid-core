@@ -112,8 +112,8 @@ function breadcrumb_trail( $args = array() ) {
 				$trail = array_merge( $trail, breadcrumb_trail_get_parents( '', $path ) );
 
 			/* If there's an archive page, add it to the trail. */
-			if ( !empty( $post_type_object->rewrite['archive'] ) )
-				$trail[] = '<a href="' . home_url( $post_type_object->rewrite['archive'] ) . '" title="' . esc_attr( $post_type_object->labels->name ) . '">' . $post_type_object->labels->name . '</a>';
+			if ( !empty( $post_type_object->rewrite['archive'] ) && function_exists( 'get_post_type_archive_link' ) )
+				$trail[] = '<a href="' . get_post_type_archive_link( $post_type ) . '" title="' . esc_attr( $post_type_object->labels->name ) . '">' . $post_type_object->labels->name . '</a>';
 		}
 
 		/* If the post type path returns nothing and there is a parent, get its parents. */
@@ -164,7 +164,7 @@ function breadcrumb_trail( $args = array() ) {
 		}
 
 		/* If viewing a post type archive. */
-		elseif ( get_query_var( 'post_type' ) ) {
+		elseif ( function_exists( 'is_post_type_archive' ) && is_post_type_archive() ) {
 
 			/* Get the post type object. */
 			$post_type_object = get_post_type_object( get_query_var( 'post_type' ) );

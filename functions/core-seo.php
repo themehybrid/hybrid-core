@@ -116,7 +116,7 @@ function hybrid_meta_description() {
 		elseif ( is_category() || is_tag() || is_tax() )
 			$description = term_description( '', get_query_var( 'taxonomy' ) );
 
-		elseif ( is_archive() && get_query_var( 'post_type' ) ) {
+		elseif ( function_exists( 'is_post_type_archive' ) && is_post_type_archive() ) {
 			$post_type = get_post_type_object( get_query_var( 'post_type' ) );
 			$description = $post_type->description;
 		}
