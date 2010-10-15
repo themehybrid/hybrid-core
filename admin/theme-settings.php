@@ -125,10 +125,6 @@ function hybrid_load_settings_page() {
 		wp_redirect( admin_url( 'themes.php?page=theme-settings' ) );
 		exit;
 	}
-
-	/* Available hook fired when the theme settings have been updated. */
-	if ( isset( $_GET['updated'] ) && 'true' == esc_attr( $_GET['updated'] ) )
-		do_action( "{$prefix}_update_settings_page" );
 }
 
 /**

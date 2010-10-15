@@ -567,6 +567,22 @@ function hybrid_after_comment_list() {
 	do_atomic( 'after_comment_list' );
 }
 
+/* @deprecated 0.9.1. Backwards compatibility with old theme settings. */
+add_action( 'check_admin_referer', 'hybrid_back_compat_update_settings' );
+
+/**
+ * Backwards compatibility function for updating child theme settings.  Do not use this function or the 
+ * available hook in development.
+ *
+ * @since 0.9.1
+ */
+function hybrid_back_compat_update_settings( $action ) {
+	$prefix = hybrid_get_prefix();
+
+	if ( "{$prefix}_theme_settings-options" == $action )
+		do_action( "{$prefix}_update_settings_page" );
+}
+
 /* === Removed Functions === */
 
 /* Functions removed in the 0.5 branch. */
