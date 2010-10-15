@@ -274,8 +274,7 @@ class Hybrid {
 		add_action( 'wp_head', 'hybrid_meta_template', 1 );
 		add_action( 'wp_head', 'hybrid_head_pingback' );
 
-		/* WP print scripts and styles. */
-		add_action( 'template_redirect', 'hybrid_enqueue_style' );
+		/* WP print scripts. */
 		add_action( 'template_redirect', 'hybrid_enqueue_script' );
 	}
 

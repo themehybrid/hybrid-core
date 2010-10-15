@@ -29,29 +29,6 @@ function hybrid_debug_stylesheet( $stylesheet_uri, $stylesheet_dir_uri ) {
 }
 
 /**
- * Function to load CSS at an appropriate time. Adds print.css if user chooses to use it. 
- * Users should load their own CSS using wp_enqueue_style() in their child theme's 
- * functions.php file.
- *
- * @since 0.1
- * @link http://codex.wordpress.org/Function_Reference/wp_enqueue_style
- */
-function hybrid_enqueue_style() {
-	global $wp_query;
-
-	/* If is admin, don't load styles. */
-	if ( is_admin() )
-		return;
-
-	/* Get the theme prefix. */
-	$prefix = hybrid_get_prefix();
-
-	/* Load the print stylesheet. */
-	if ( current_theme_supports( 'hybrid-core-print-style' ) )
-		wp_enqueue_style( "{$prefix}-print", esc_url( apply_atomic( 'print_style', HYBRID_CSS . '/print.css' ) ), false, 0.7, 'print' );
-}
-
-/**
  * Function to load JavaScript at appropriate time. Loads comment reply script only if 
  * users choose to use nested comments. Users should load custom JavaScript with 
  * wp_enqueue_script() in their child theme's functions.php file.

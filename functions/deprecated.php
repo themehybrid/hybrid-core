@@ -236,6 +236,16 @@ function hybrid_comment_author() {
 }
 
 /**
+ * Simply not used anymore.  But, the function name may come in handy later.
+ *
+ * @since 0.1
+ * @deprecated 0.9.1
+ */
+function hybrid_enqueue_style() {
+	_deprecated_function( __FUNCTION__, '0.9.1', '' );
+}
+
+/**
  * This function creates all of the default theme settings and adds them to a single array.
  *
  * @since 0.4
