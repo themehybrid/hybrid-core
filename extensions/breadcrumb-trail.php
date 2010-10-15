@@ -110,6 +110,10 @@ function breadcrumb_trail( $args = array() ) {
 			/* If there's a path, check for parents. */
 			if ( !empty( $path ) )
 				$trail = array_merge( $trail, breadcrumb_trail_get_parents( '', $path ) );
+
+			/* If there's an archive page, add it to the trail. */
+			if ( !empty( $post_type_object->rewrite['archive'] ) )
+				$trail[] = '<a href="' . home_url( $post_type_object->rewrite['archive'] ) . '" title="' . esc_attr( $post_type_object->labels->name ) . '">' . $post_type_object->labels->name . '</a>';
 		}
 
 		/* If the post type path returns nothing and there is a parent, get its parents. */
