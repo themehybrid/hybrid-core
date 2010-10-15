@@ -255,7 +255,7 @@ class Hybrid {
 			require_if_theme_supports( 'hybrid-core-theme-settings', HYBRID_ADMIN . '/theme-settings.php' );
 
 			/* Load the post meta box if supported. */
-			require_if_theme_supports( 'hybrid-core-post-meta-box', HYBRID_ADMIN . '/meta-box.php' );
+			require_if_theme_supports( 'hybrid-core-post-meta-box', HYBRID_ADMIN . '/post-meta-box.php' );
 		}
 	}
 
