@@ -178,7 +178,7 @@ function hybrid_get_setting( $option = '' ) {
 	if ( !isset( $hybrid->settings ) )
 		$hybrid->settings = $hybrid_settings = get_option( hybrid_get_prefix() . '_theme_settings' );
 
-	if ( !is_array( $hybrid->settings ) )
+	if ( !is_array( $hybrid->settings ) || empty( $hybrid->settings[$option] ) )
 		return false;
 
 	if ( is_array( $hybrid->settings[$option] ) )
