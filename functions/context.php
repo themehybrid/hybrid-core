@@ -142,7 +142,7 @@ function hybrid_entry_class( $class = '', $post_id = null ) {
 		$classes[] = 'author-' . sanitize_html_class( get_the_author_meta( 'user_nicename' ), get_the_author_meta( 'ID' ) );
 
 		/* Sticky class (only on home/blog page). */
-		if ( is_home() && is_sticky() )
+		if ( is_home() && is_sticky() && !is_paged() )
 			$classes[] = 'sticky';
 
 		/* Password-protected posts. */
