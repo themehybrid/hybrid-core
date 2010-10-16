@@ -81,11 +81,8 @@ class Hybrid {
 		/* Language functions and translations setup. */
 		add_action( 'after_setup_theme', array( &$this, 'locale' ), 3 );
 
-		/* Initialize the framework's default actions. */
-		add_action( 'after_setup_theme', array( &$this, 'actions' ), 4 );
-
-		/* Initialize the framework's default filters. */
-		add_action( 'after_setup_theme', array( &$this, 'filters' ), 4 );
+		/* Initialize the framework's default actions and filters. */
+		add_action( 'after_setup_theme', array( &$this, 'default_filters' ), 4 );
 
 		/* Load the framework functions. */
 		add_action( 'after_setup_theme', array( &$this, 'functions' ), 12 );
@@ -278,29 +275,18 @@ class Hybrid {
 	}
 
 	/**
-	 * Adds the default theme actions.
+	 * Adds the default framework actions and filters.
 	 *
-	 * @since 0.7.0
+	 * @since 1.0.0
 	 */
-	function actions() {
+	function default_filters() {
 
-		/* Remove WP and plugin functions. */
+		/* Move the WordPress generator to a better priority. */
 		remove_action( 'wp_head', 'wp_generator' );
-
-		/* Head actions. */
 		add_action( 'wp_head', 'wp_generator', 1 );
+
+		/* Add the theme info to the header (lets theme developers give better support). */
 		add_action( 'wp_head', 'hybrid_meta_template', 1 );
-
-		/* WP print scripts. */
-		add_action( 'template_redirect', 'hybrid_enqueue_script' );
-	}
-
-	/**
-	 * Adds the default theme filters.
-	 *
-	 * @since 0.7.0
-	 */
-	function filters() {
 
 		/* Filter the textdomain mofile to allow child themes to load the parent theme translation. */
 		add_filter( 'load_textdomain_mofile', 'hybrid_load_textdomain', 10, 2 );
@@ -308,9 +294,6 @@ class Hybrid {
 		/* Make text widgets and term descriptions shortcode aware. */
 		add_filter( 'widget_text', 'do_shortcode' );
 		add_filter( 'term_description', 'do_shortcode' );
-
-		/* Stylesheet filters. */
-		add_filter( 'stylesheet_uri', 'hybrid_debug_stylesheet', 10, 2 );
 	}
 }
 

@@ -8,6 +8,12 @@
  * @subpackage Functions
  */
 
+/* Load specific scripts for the framework. */
+add_action( 'template_redirect', 'hybrid_enqueue_script' );
+
+/* Load the development stylsheet in script debug mode. */
+add_filter( 'stylesheet_uri', 'hybrid_debug_stylesheet', 10, 2 );
+
 /**
  * Function for using a debug stylesheet when developing.  To develop with the debug stylesheet, 
  * SCRIPT_DEBUG must be set to 'true' in the 'wp-config.php' file.  This will check if a 'style.dev.css'
