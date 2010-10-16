@@ -22,7 +22,7 @@ function hybrid_post_class( $deprecated = '' ) {
 }
 
 /**
- * Displays the category navigation menu and wraps it in a <div> element.
+ * Displays the category navigation menu.
  *
  * @deprecated 0.6 Child themes should manually add a category menu using wp_list_categories().
  * @internal This function needs to stay for the long haul (post-1.0).
@@ -44,7 +44,7 @@ function hybrid_cat_nav() {
 }
 
 /**
- * Menu listing for categories. Much like WP's wp_page_menu() functionality.
+ * Menu listing for categories.
  *
  * @deprecated 0.6 Themes should add menus with the wp_nav_menu() function.
  * @internal This function needs to stay for the long haul (post-1.0).
@@ -134,8 +134,7 @@ function hybrid_get_utility_after_page() {
 }
 
 /**
- * Displays the page navigation menu.  Also adds some extra classes and IDs for 
- * better CSS styling.  To customize, filter wp_page_menu  or wp_page_menu_args.
+ * Displays the page navigation menu.
  *
  * @deprecated 0.8 Theme now supports the WordPress 3.0+ menu system.  Since this
  * function and its accompanying hooks have been such a huge part of the theme, this 
@@ -148,34 +147,18 @@ function hybrid_get_utility_after_page() {
 function hybrid_page_nav() {
 	_deprecated_function( __FUNCTION__, '0.8', 'wp_nav_menu()' );
 
-	/* Opening wrapper for the navigation area. */
-	echo '<div id="navigation">' . "\n\t\t\t";
+	echo '<div id="navigation">';
 
-	/* Before page nav hook. */
 	do_atomic( 'before_page_nav' );
 
-	/* Arguments for wp_page_menu().  Users should filter 'wp_page_menu_args' to change. */
-	$args = array(
-		'show_home' => __( 'Home', hybrid_get_textdomain() ),
-		'menu_class' => 'page-nav',
-		'sort_column' => 'menu_order',
-		'depth' => 4,
-		'echo' => 0
-	);
-
-	/* Strips formatting and spacing to make the code less messy on display. */
+	$args = array( 'show_home' => __( 'Home', hybrid_get_textdomain() ), 'menu_class' => 'page-nav', 'sort_column' => 'menu_order', 'depth' => 4, 'echo' => 0 );
 	$nav = str_replace( array( "\r", "\n", "\t" ), '', wp_page_menu( $args ) );
 
-	/* Adds the #page-nav ID to the wrapping element. */
 	$nav = str_replace( '<div class="', '<div id="page-nav" class="', $nav );
-
-	/* Adds the .menu and .sf-menu classes for use with the drop-down JavaScript. */
 	echo preg_replace( '/<ul>/', '<ul class="menu sf-menu">', $nav, 1 );
 
-	/* After page nav hook. */
 	do_atomic( 'after_page_nav' );
 
-	/* Closes the navigation area wrapper. */
 	echo "\n\t</div><!-- #navigation -->\n";
 }
 

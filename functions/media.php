@@ -1,8 +1,7 @@
 <?php
 /**
- * Functions file for loading scripts and styles. It also handles attachment files by 
- * displaying appropriate HTML element. Other media is handled through the theme 
- * extensions: get-the-image.php, get-the-object.php.
+ * Functions file for loading scripts and stylesheets.  This file also handles the output of attachment files 
+ * by displaying appropriate HTML elements for the attachments.
  *
  * @package HybridCore
  * @subpackage Functions
@@ -35,12 +34,12 @@ function hybrid_debug_stylesheet( $stylesheet_uri, $stylesheet_dir_uri ) {
 }
 
 /**
- * Function to load JavaScript at appropriate time. Loads comment reply script only if 
- * users choose to use nested comments. Users should load custom JavaScript with 
- * wp_enqueue_script() in their child theme's functions.php file.
+ * Function to load JavaScript at appropriate time.  Loads comment reply script only if users choose to 
+ * use nested comments. Developers should load custom JavaScript with wp_enqueue_script() in their 
+ * theme's functions.php file.
  *
- * If selected, the drop-downs.js file will be loaded, which is a bundled version of the
- * Superfish jQuery plugin.
+ * A drop-downs.js file will be loaded if the theme supports 'hybrid-core-drop-downs'.  This is a version 
+ * of the Superfish jQuery plugin.
  *
  * @since 0.1.0
  * @link http://codex.wordpress.org/Function_Reference/wp_enqueue_script
@@ -62,13 +61,12 @@ function hybrid_enqueue_script() {
 }
 
 /**
- * Loads the correct function for handling attachments. Checks the attachment mime 
- * type to call correct function. Image attachments are not loaded with this function.
- * The functionality for them resides in image.php.
+ * Loads the correct function for handling attachments.  Checks the attachment mime type to call 
+ * correct function. Image attachments are not loaded with this function.  The functionality for them 
+ * should be handled by the theme's attachment or image attachment file.
  *
- * Ideally, all attachments would be appropriately handled within their templates. However, 
- * this could lead to messy template files. For now, we'll use separate functions for handling 
- * attachment content. The biggest issue here is with handling different video types.
+ * Ideally, all attachments would be appropriately handled within their templates. However, this could 
+ * lead to messy template files.
  *
  * @since 0.5.0
  * @uses get_post_mime_type() Gets the mime type of the attachment.
@@ -91,11 +89,8 @@ function hybrid_attachment() {
 }
 
 /**
- * Handles application attachments on their attachment pages.
- * Uses the <object> tag to embed media on those pages.
- *
- * @todo Run a battery of tests on many different applications.
- * @todo Figure out what to do with FLV files outside of the current functionality.
+ * Handles application attachments on their attachment pages.  Uses the <object> tag to embed media 
+ * on those pages.
  *
  * @since 0.3.0
  * @param string $mime attachment mime type
@@ -111,8 +106,8 @@ function hybrid_application_attachment( $mime = '', $file = '' ) {
 }
 
 /**
- * Handles text attachments on their attachment pages.
- * Uses the <object> element to embed media in the pages.
+ * Handles text attachments on their attachment pages.  Uses the <object> element to embed media 
+ * in the pages.
  *
  * @since 0.3.0
  * @param string $mime attachment mime type
@@ -128,8 +123,8 @@ function hybrid_text_attachment( $mime = '', $file = '' ) {
 }
 
 /**
- * Handles audio attachments on their attachment pages.
- * Puts audio/mpeg and audio/wma files into an <object> element.
+ * Handles audio attachments on their attachment pages.  Puts audio/mpeg and audio/wma files into 
+ * an <object> element.
  *
  * @todo Test out and support more audio types.
  *
@@ -149,12 +144,7 @@ function hybrid_audio_attachment( $mime = '', $file = '' ) {
 }
 
 /**
- * Handles video attachments on attachment pages.
- * Add other video types to the <object> element.
- *
- * In 0.6, FLV files were moved to using hybrid_application_attachment.
- *
- * @todo Test out and support more video types.
+ * Handles video attachments on attachment pages.  Add other video types to the <object> element.
  *
  * @since 0.2.2
  * @param string $mime attachment mime type

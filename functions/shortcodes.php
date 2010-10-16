@@ -1,9 +1,9 @@
 <?php
 /**
- * Shortcodes bundled for use with themes.  These shortcodes can be used in any shortcode-ready area, which 
- * includes the post content area.  Themes may optionally make alternate shortcode-aware areas where these 
- * shortcodes may be used.  Note that some shortcodes are specific to posts and comments and would be useless
- * outside of the post and comment loops.
+ * Shortcodes bundled for use with themes.  These shortcodes can be used in any shortcode-ready area, 
+ * which includes the post content area.  Themes may optionally make alternate shortcode-aware areas 
+ * where these shortcodes may be used.  Note that some shortcodes are specific to posts and comments 
+ * and would be useless outside of the post and comment loops.
  *
  * @package HybridCore
  * @subpackage Functions
