@@ -1,5 +1,7 @@
 <?php
 /**
+ * Hybrid Core - A WordPress theme development framework.
+ *
  * Hybrid Core is a framework for developing WordPress themes.  The framework allows theme developers
  * to quickly build themes without having to handle all of the "logic" behind the theme or having to code 
  * complex functionality for features that are often needed in themes.  The framework does these things 
@@ -10,12 +12,6 @@
  * Hybrid Core is a modular system, which means that developers can pick and choose the features they 
  * want to include within their themes.  Most files are only loaded if the theme registers support for the 
  * feature using the add_theme_support( $feature ) function within their theme.
- *
- * @copyright 2008 - 2010
- * @version 1.0.0
- * @author Justin Tadlock
- * @link http://themehybrid.com
- * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the GNU 
  * General Public License version 2, as published by the Free Software Foundation.  You may NOT assume 
@@ -28,6 +24,11 @@
  * to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  *
  * @package HybridCore
+ * @version 1.0.0
+ * @author Justin Tadlock <justin@justintadlock.com>
+ * @copyright Copyright (c) 2008 - 2010, Justin Tadlock
+ * @link http://themehybrid.com
+ * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 /**
@@ -74,7 +75,7 @@ class Hybrid {
 		/* Define framework, parent theme, and child theme constants. */
 		add_action( 'after_setup_theme', array( &$this, 'constants' ), 1 );
 
-		/* Load the core theme functions required by the rest of the framework. */
+		/* Load the core functions required by the rest of the framework. */
 		add_action( 'after_setup_theme', array( &$this, 'core' ), 2 );
 
 		/* Language functions and translations setup. */
@@ -99,7 +100,7 @@ class Hybrid {
 	/**
 	 * Defines the constant paths for use within the core framework, parent theme, and
 	 * child theme.  Constants prefixed with 'HYBRID_' are for use only within the core
-	 * framework and don't reference other areas of the theme.
+	 * framework and don't reference other areas of the parent or child theme.
 	 *
 	 * @since 0.7.0
 	 */
