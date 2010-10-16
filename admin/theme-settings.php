@@ -212,7 +212,7 @@ function hybrid_footer_settings_meta_box() {
 				<p><textarea id="<?php echo hybrid_settings_field_id( 'footer_insert' ); ?>" name="<?php echo hybrid_settings_field_name( 'footer_insert' ); ?>" cols="60" rows="5" style="width: 98%;"><?php echo wp_htmledit_pre( stripslashes( hybrid_get_setting( 'footer_insert' ) ) ); ?></textarea></p>
 
 				<?php if ( current_theme_supports( 'hybrid-core-shortcodes' ) ) { ?>
-					<p><?php _e( 'Shortcodes:', $domain ); ?> <code>[the-year]</code>, <code>[site-link]</code>, <code>[wp-link]</code>, <code>[theme-link]</code>, <code>[child-link]</code>, <code>[loginout-link]</code>, <code>[query-counter]</code>.</p>
+					<p><?php printf( __( 'Shortcodes: %s', $domain ), '<code>[the-year]</code>, <code>[site-link]</code>, <code>[wp-link]</code>, <code>[theme-link]</code>, <code>[child-link]</code>, <code>[loginout-link]</code>, <code>[query-counter]</code>' ); ?></p>
 				<?php } ?>
 			</td>
 		</tr>
