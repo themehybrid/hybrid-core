@@ -40,8 +40,14 @@ function post_stylesheets_stylesheet_uri( $stylesheet_uri, $stylesheet_dir_uri )
 		$stylesheet = get_post_meta( $wp_query->post->ID, $meta_key, true );
 
 		/* If a meta value was given and the file exists, set $stylesheet_uri to the new file. */
-		if ( !empty( $stylesheet ) && file_exists( get_stylesheet_directory() . "/css/{$stylesheet}" ) )
-			$stylesheet_uri = $stylesheet_dir_uri . "/css/{$stylesheet}";
+		if ( !empty( $stylesheet ) ) {
+
+			if ( file_exists( get_stylesheet_directory() . "/css/{$stylesheet}" ) )
+				$stylesheet_uri = "{$stylesheet_dir_uri}/css/{$stylesheet}";
+
+			elseif ( file_exists( get_template_directory() . "/css/{$stylesheet}" ) )
+				$stylesheet_uri = get_template_directory_uri() . "/css/{$stylesheet}";
+		}
 	}
 
 	/* Return the stylesheet URI. */
