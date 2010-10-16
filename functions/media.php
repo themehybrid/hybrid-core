@@ -98,8 +98,8 @@ function hybrid_attachment() {
  * @return string
  */
 function hybrid_application_attachment( $mime = '', $file = '' ) {
-	$application = '<object class="text" type="' . $mime . '" data="' . $file . '" width="400">';
-	$application .= '<param name="src" value="' . $file . '" />';
+	$application = '<object class="text" type="' . esc_attr( $mime ) . '" data="' . esc_url( $file ) . '" width="400">';
+	$application .= '<param name="src" value="' . esc_url( $file ) . '" />';
 	$application .= '</object>';
 
 	return $application;
@@ -115,8 +115,8 @@ function hybrid_application_attachment( $mime = '', $file = '' ) {
  * @return string
  */
 function hybrid_text_attachment( $mime = '', $file = '' ) {
-	$text = '<object class="text" type="' . $mime . '" data="' . $file . '" width="400">';
-	$text .= '<param name="src" value="' . $file . '" />';
+	$text = '<object class="text" type="' . esc_attr( $mime ) . '" data="' . esc_url( $file ) . '" width="400">';
+	$text .= '<param name="src" value="' . esc_url( $file ) . '" />';
 	$text .= '</object>';
 
 	return $text;
@@ -134,8 +134,8 @@ function hybrid_text_attachment( $mime = '', $file = '' ) {
  * @return string
  */
 function hybrid_audio_attachment( $mime = '', $file = '' ) {
-	$audio = '<object type="' . $mime . '" class="player audio" data="' . $file . '" width="400" height="50">';
-		$audio .= '<param name="src" value="' . $file . '" />';
+	$audio = '<object type="' . esc_attr( $mime ) . '" class="player audio" data="' . esc_url( $file ) . '" width="400" height="50">';
+		$audio .= '<param name="src" value="' . esc_url( $file ) . '" />';
 		$audio .= '<param name="autostart" value="false" />';
 		$audio .= '<param name="controller" value="true" />';
 	$audio .= '</object>';
@@ -155,8 +155,8 @@ function hybrid_video_attachment( $mime = false, $file = false ) {
 	if ( $mime == 'video/asf' )
 		$mime = 'video/x-ms-wmv';
 
-	$video = '<object type="' . $mime . '" class="player video" data="' . $file . '" width="400" height="320">';
-		$video .= '<param name="src" value="' . $file . '" />';
+	$video = '<object type="' . esc_attr( $mime ) . '" class="player video" data="' . esc_url( $file ) . '" width="400" height="320">';
+		$video .= '<param name="src" value="' . esc_url( $file ) . '" />';
 		$video .= '<param name="autoplay" value="false" />';
 		$video .= '<param name="allowfullscreen" value="true" />';
 		$video .= '<param name="controller" value="true" />';

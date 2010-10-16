@@ -66,7 +66,7 @@ function hybrid_the_year_shortcode() {
  * @uses get_bloginfo() Gets information about the install.
  */
 function hybrid_site_link_shortcode() {
-	return '<a class="site-link" href="' . home_url() . '" title="' . get_bloginfo( 'name' ) . '" rel="home"><span>' . get_bloginfo( 'name' ) . '</span></a>';
+	return '<a class="site-link" href="' . home_url() . '" title="' . esc_attr( get_bloginfo( 'name' ) ) . '" rel="home"><span>' . get_bloginfo( 'name' ) . '</span></a>';
 }
 
 /**
@@ -110,9 +110,9 @@ function hybrid_child_link_shortcode() {
 function hybrid_loginout_link_shortcode() {
 	$domain = hybrid_get_textdomain();
 	if ( is_user_logged_in() )
-		$out = '<a class="logout-link" href="' . wp_logout_url( esc_url( $_SERVER['HTTP_REFERER'] ) ) . '" title="' . __( 'Log out of this account', $domain ) . '">' . __( 'Log out', $domain ) . '</a>';
+		$out = '<a class="logout-link" href="' . wp_logout_url( esc_url( $_SERVER['HTTP_REFERER'] ) ) . '" title="' . esc_attr__( 'Log out of this account', $domain ) . '">' . __( 'Log out', $domain ) . '</a>';
 	else
-		$out = '<a class="login-link" href="' . wp_login_url( esc_url( $_SERVER['HTTP_REFERER'] ) ) . '" title="' . __( 'Log into this account', $domain ) . '">' . __( 'Log in', $domain ) . '</a>';
+		$out = '<a class="login-link" href="' . wp_login_url( esc_url( $_SERVER['HTTP_REFERER'] ) ) . '" title="' . esc_attr__( 'Log into this account', $domain ) . '">' . __( 'Log in', $domain ) . '</a>';
 
 	return $out;
 }
@@ -176,7 +176,7 @@ function hybrid_entry_edit_link_shortcode( $attr ) {
 
 	$attr = shortcode_atts( array( 'before' => '', 'after' => '' ), $attr );
 
-	return $attr['before'] . '<span class="edit"><a class="post-edit-link" href="' . get_edit_post_link( $post->ID ) . '" title="' . sprintf( __( 'Edit %1$s', $domain ), $post->post_type ) . '">' . __( 'Edit', $domain ) . '</a></span>' . $attr['after'];
+	return $attr['before'] . '<span class="edit"><a class="post-edit-link" href="' . get_edit_post_link( $post->ID ) . '" title="' . sprintf( esc_attr__( 'Edit %1$s', $domain ), $post->post_type ) . '">' . __( 'Edit', $domain ) . '</a></span>' . $attr['after'];
 }
 
 /**
@@ -189,7 +189,7 @@ function hybrid_entry_published_shortcode( $attr ) {
 	$domain = hybrid_get_textdomain();
 	$attr = shortcode_atts( array( 'before' => '', 'after' => '', 'format' => get_option( 'date_format' ) ), $attr );
 
-	$published = '<abbr class="published" title="' . sprintf( get_the_time( __( 'l, F jS, Y, g:i a', $domain ) ) ) . '">' . sprintf( get_the_time( $attr['format'] ) ) . '</abbr>';
+	$published = '<abbr class="published" title="' . sprintf( get_the_time( esc_attr__( 'l, F jS, Y, g:i a', $domain ) ) ) . '">' . sprintf( get_the_time( $attr['format'] ) ) . '</abbr>';
 	return $attr['before'] . $published . $attr['after'];
 }
 
@@ -211,11 +211,11 @@ function hybrid_entry_comments_link_shortcode( $attr ) {
 			$comments_link = '<span class="' . esc_attr( $attr['css_class'] ) . '">' . $attr['none'] . '</span>';
 	}
 	elseif ( $number == 0 )
-		$comments_link = '<a class="' . esc_attr( $attr['css_class'] ) . '" href="' . get_permalink() . '#respond" title="' . sprintf( __( 'Comment on %1$s', $domain ), the_title_attribute( 'echo=0' ) ) . '">' . $attr['zero'] . '</a>';
+		$comments_link = '<a class="' . esc_attr( $attr['css_class'] ) . '" href="' . get_permalink() . '#respond" title="' . sprintf( esc_attr__( 'Comment on %1$s', $domain ), the_title_attribute( 'echo=0' ) ) . '">' . $attr['zero'] . '</a>';
 	elseif ( $number == 1 )
-		$comments_link = '<a class="' . esc_attr( $attr['css_class'] ) . '" href="' . get_comments_link() . '" title="' . sprintf( __( 'Comment on %1$s', $domain ), the_title_attribute( 'echo=0' ) ) . '">' . $attr['one'] . '</a>';
+		$comments_link = '<a class="' . esc_attr( $attr['css_class'] ) . '" href="' . get_comments_link() . '" title="' . sprintf( esc_attr__( 'Comment on %1$s', $domain ), the_title_attribute( 'echo=0' ) ) . '">' . $attr['one'] . '</a>';
 	elseif ( $number > 1 )
-		$comments_link = '<a class="' . esc_attr( $attr['css_class'] ) . '" href="' . get_comments_link() . '" title="' . sprintf( __( 'Comment on %1$s', $domain ), the_title_attribute( 'echo=0' ) ) . '">' . sprintf( $attr['more'], $number ) . '</a>';
+		$comments_link = '<a class="' . esc_attr( $attr['css_class'] ) . '" href="' . get_comments_link() . '" title="' . sprintf( esc_attr__( 'Comment on %1$s', $domain ), the_title_attribute( 'echo=0' ) ) . '">' . sprintf( $attr['more'], $number ) . '</a>';
 
 	if ( $comments_link )
 		$comments_link = $attr['before'] . $comments_link . $attr['after'];
@@ -231,7 +231,7 @@ function hybrid_entry_comments_link_shortcode( $attr ) {
  */
 function hybrid_entry_author_shortcode( $attr ) {
 	$attr = shortcode_atts( array( 'before' => '', 'after' => '' ), $attr );
-	$author = '<span class="author vcard"><a class="url fn n" href="' . get_author_posts_url( get_the_author_meta( 'ID' ) ) . '" title="' . get_the_author_meta( 'display_name' ) . '">' . get_the_author_meta( 'display_name' ) . '</a></span>';
+	$author = '<span class="author vcard"><a class="url fn n" href="' . get_author_posts_url( get_the_author_meta( 'ID' ) ) . '" title="' . esc_attr( get_the_author_meta( 'display_name' ) ) . '">' . get_the_author_meta( 'display_name' ) . '</a></span>';
 	return $attr['before'] . $author . $attr['after'];
 }
 
@@ -297,7 +297,7 @@ function hybrid_entry_shortlink_shortcode( $attr ) {
 
 	$shortlink = wp_get_shortlink( $post->ID );
 
-	return "{$attr['before']}<a class='shortlink' href='{$shortlink}' title='{$attr['title']}' rel='shortlink'>{$attr['text']}</a>{$attr['after']}";
+	return "{$attr['before']}<a class='shortlink' href='{$shortlink}' title='" . esc_attr( $attr['title'] ) . "' rel='shortlink'>{$attr['text']}</a>{$attr['after']}";
 }
 
 /**
@@ -307,7 +307,7 @@ function hybrid_entry_shortlink_shortcode( $attr ) {
  */
 function hybrid_comment_published_shortcode() {
 	$domain = hybrid_get_textdomain();
-	$link = '<span class="published">' . sprintf( __( '%1$s at %2$s', $domain ), '<abbr class="comment-date" title="' . get_comment_date( __( 'l, F jS, Y, g:i a', $domain ) ) . '">' . get_comment_date() . '</abbr>', '<abbr class="comment-time" title="' . get_comment_date( __( 'l, F jS, Y, g:i a', $domain ) ) . '">' . get_comment_time() . '</abbr>' ) . '</span>';
+	$link = '<span class="published">' . sprintf( __( '%1$s at %2$s', $domain ), '<abbr class="comment-date" title="' . get_comment_date( esc_attr__( 'l, F jS, Y, g:i a', $domain ) ) . '">' . get_comment_date() . '</abbr>', '<abbr class="comment-time" title="' . get_comment_date( esc_attr__( 'l, F jS, Y, g:i a', $domain ) ) . '">' . get_comment_time() . '</abbr>' ) . '</span>';
 	return $link;
 }
 
@@ -348,7 +348,7 @@ function hybrid_comment_permalink_shortcode( $attr ) {
 
 	$attr = shortcode_atts( array( 'before' => '', 'after' => '' ), $attr );
 	$domain = hybrid_get_textdomain();
-	$link = '<a class="permalink" href="' . get_comment_link( $comment->comment_ID ) . '" title="' . sprintf( __( 'Permalink to comment %1$s', $domain ), $comment->comment_ID ) . '">' . __( 'Permalink', $domain ) . '</a>';
+	$link = '<a class="permalink" href="' . get_comment_link( $comment->comment_ID ) . '" title="' . sprintf( esc_attr__( 'Permalink to comment %1$s', $domain ), $comment->comment_ID ) . '">' . __( 'Permalink', $domain ) . '</a>';
 	return $attr['before'] . $link . $attr['after'];
 }
 
@@ -368,7 +368,7 @@ function hybrid_comment_edit_link_shortcode( $attr ) {
 	$attr = shortcode_atts( array( 'before' => '', 'after' => '' ), $attr );
 	$domain = hybrid_get_textdomain();
 
-	$link = '<a class="comment-edit-link" href="' . $edit_link . '" title="' . sprintf( __( 'Edit %1$s', $domain ), $comment->comment_type ) . '"><span class="edit">' . __( 'Edit', $domain ) . '</span></a>';
+	$link = '<a class="comment-edit-link" href="' . $edit_link . '" title="' . sprintf( esc_attr__( 'Edit %1$s', $domain ), $comment->comment_type ) . '"><span class="edit">' . __( 'Edit', $domain ) . '</span></a>';
 	$link = apply_filters( 'edit_comment_link', $link, $comment->comment_ID );
 
 	return $attr['before'] . $link . $attr['after'];
