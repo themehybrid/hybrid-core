@@ -290,7 +290,6 @@ class Hybrid {
 		/* Head actions. */
 		add_action( 'wp_head', 'wp_generator', 1 );
 		add_action( 'wp_head', 'hybrid_meta_template', 1 );
-		add_action( 'wp_head', 'hybrid_head_pingback' );
 
 		/* WP print scripts. */
 		add_action( 'template_redirect', 'hybrid_enqueue_script' );
