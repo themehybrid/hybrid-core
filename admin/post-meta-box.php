@@ -1,8 +1,8 @@
 <?php
 /**
- * Creates the theme post meta box functionality, which can be extended, changed, or 
- * removed through child themes or plugins. The goal is to make it easier for the average end
- * user to update post metadata without having to understand how custom fields work.
+ * Creates the theme post meta box functionality, which can be extended, changed, or removed through 
+ * themes or plugins. The goal is to make it easier for the average end user to update post metadata without 
+ * having to understand how custom fields work.
  *
  * @package HybridCore
  * @subpackage Admin
@@ -12,10 +12,9 @@
 add_action( 'admin_menu', 'hybrid_create_post_meta_box' );
 
 /**
- * Creates a meta box on the post (page, other post types) editing screen for allowing
- * the easy input of commonly-used post metadata.  The function uses the get_post_types()
- * function for grabbing a list of available post types and adding a new meta box for 
- * each post type.
+ * Creates a meta box on the post (page, other post types) editing screen for allowing the easy input of 
+ * commonly-used post metadata.  The function uses the get_post_types() function for grabbing a list of 
+ * available post types and adding a new meta box for each post type.
  *
  * @since 0.7.0
  * @uses get_post_types() Gets an array of post type objects.
@@ -37,68 +36,76 @@ function hybrid_create_post_meta_box() {
 
 			/* Add the meta box. */
 			add_meta_box( "{$prefix}-{$type->name}-meta-box", sprintf( __( '%1$s Settings', $domain ), $type->labels->singular_name ), 'hybrid_post_meta_box', $type->name, 'normal', 'high' );
-
-			/* Saves the post meta box data. */
-			add_action( 'save_post', 'hybrid_save_post_meta_box', 10, 2 );
 		}
 	}
+
+	/* Saves the post meta box data. */
+	add_action( 'save_post', 'hybrid_save_post_meta_box', 10, 2 );
 }
 
 /**
- * Creates the settings for the post meta box depending on some things in how the theme is
- * set up.
+ * Creates the settings for the post meta box depending on some things in how the theme are set up.  Most
+ * of the available options depend on theme-supported features of the framework.
  *
  * @since 0.7.0
- * @param string $type The post_type of the current post in the post editor.
+ * @param string $type The post type of the current post in the post editor.
  */
 function hybrid_post_meta_box_args( $type = '' ) {
 
-	/* Get theme information. */
+	/* Set up some default variables. */
 	$prefix = hybrid_get_prefix();
 	$domain = hybrid_get_textdomain();
+	$meta = array();
 
 	/* If no post type is given, default to 'post'. */
 	if ( empty( $type ) )
 		$type = 'post';
 
-	/* If the disable SEO plugin setting is not selected, allow the input of custom meta. */
+	/* If the current theme supports 'hybrid-core-seo', allow the input of custom meta. */
 	if ( current_theme_supports( 'hybrid-core-seo' ) ) {
 		$meta['title'] = array( 'name' => 'Title', 'title' => __( 'Title:', $domain ), 'type' => 'text' );
 		$meta['description'] = array( 'name' => 'Description', 'title' => __( 'Description:', $domain ), 'type' => 'textarea' );
 		$meta['keywords'] = array( 'name' => 'Keywords', 'title' => __( 'Keywords:', $domain ), 'type' => 'text' );
 	}
 
-	/* Integrates with the custom field series extension. */
+	/* If the current theme supports the 'custom-field-series' extension. */
 	if ( current_theme_supports( 'custom-field-series' ) )
 		$meta['series'] = array( 'name' => 'Series', 'title' => __( 'Series:', $domain ), 'type' => 'text' );
 
-	/* Input box for a custom thumbnail. */
+	/* If the current theme supports the 'get-the-image' extension. */
 	if ( current_theme_supports( 'get-the-image' ) )
 		$meta['thumbnail'] = array( 'name' => 'Thumbnail', 'title' => __( 'Thumbnail:', $domain ), 'type' => 'text' );
 
-	/* Input box for a custom stylesheet. */
+	/* If the current theme supports the 'post-stylesheets' extension. */
 	if ( current_theme_supports( 'post-stylesheets' ) )
 		$meta['stylesheet'] = array( 'name' => 'Stylesheet', 'title' => __( 'Stylesheet:', $domain ), 'type' => 'text' );
 
-	/* If there are any custom post templates, allow the user to select one. */
-	if ( 'page' != $type && 'attachment' != $type ) {
+	/* If the current theme supports the 'hybrid-core-template-hierarchy' and is not a page or attachment. */
+	if ( current_theme_supports( 'hybrid-core-template-hierarchy' ) && 'page' != $type && 'attachment' != $type ) {
+
+		/* Get the post type object. */
 		$post_type_object = get_post_type_object( $type );
 
-		if ( $post_type_object->labels->singular_name || $post_type_object->name ) {
+		/* If the post type object returns a singular name or name. */
+		if ( !empty( $post_type_object->labels->singular_name ) || !empty( $post_type_object->name ) ) {
+
+			/* Get a list of available custom templates for the post type. */
 			$templates = hybrid_get_post_templates( array( 'label' => array( "{$post_type_object->labels->singular_name} Template", "{$post_type_object->name} Template" ) ) );
 
+			/* If templates found, allow user to select one. */
 			if ( 0 != count( $templates ) )
 				$meta['template'] = array( 'name' => "_wp_{$type}_template", 'title' => __( 'Template:', $domain ), 'type' => 'select', 'options' => $templates, 'use_key_and_value' => true );
 		}
 	}
 
-	/* Add post layouts option if current theme supports them. */
+	/* If the current theme supports the 'post-layouts' extension. */
 	if ( current_theme_supports( 'post-layouts' ) )
-		$meta['post_layout'] = array( 'name' => 'Layout', 'title' => __( 'Layout:', $domain ), 'type' => 'select', 'options' => array( '1c', '2c-l', '2c-r', '3c-l', '3c-r', '3c-c' ) );
+		$meta['post_layout'] = array( 'name' => 'Layout', 'title' => __( 'Layout:', $domain ), 'type' => 'select', 'options' => post_layouts_available() );
 
 	/* $prefix_$type_meta_boxes filter is deprecated. Use $prefix_$type_meta_box_args instead. */
 	$meta = apply_filters( "{$prefix}_{$type}_meta_boxes", $meta );
 
+	/* Allow per-post_type filtering of the meta box arguments. */
 	return apply_filters( "{$prefix}_{$type}_meta_box_args", $meta );
 }
 
@@ -140,7 +147,7 @@ function hybrid_post_meta_box_text( $args = array(), $value = false ) {
 	$name = preg_replace( "/[^A-Za-z_-]/", '-', $args['name'] ); ?>
 	<tr>
 		<th style="width:10%;"><label for="<?php echo $name; ?>"><?php echo $args['title']; ?></label></th>
-		<td><input type="text" name="<?php echo $name; ?>" id="<?php echo $name; ?>" value="<?php echo esc_html( $value ); ?>" size="30" tabindex="30" style="width: 97%;" /></td>
+		<td><input type="text" name="<?php echo $name; ?>" id="<?php echo $name; ?>" value="<?php echo esc_attr( $value ); ?>" size="30" tabindex="30" style="width: 97%;" /></td>
 	</tr>
 	<?php
 }
@@ -159,9 +166,9 @@ function hybrid_post_meta_box_select( $args = array(), $value = false ) {
 		<td>
 			<select name="<?php echo $name; ?>" id="<?php echo $name; ?>">
 				<option value=""></option>
-				<?php foreach ( $args['options'] as $option => $val ) : ?>
-					<option <?php if ( htmlentities( $value, ENT_QUOTES ) == $val ) echo ' selected="selected"'; ?> value="<?php echo $val; ?>"><?php if ( !empty( $args['use_key_and_value'] ) ) echo $option; else echo $val; ?></option>
-				<?php endforeach; ?>
+				<?php foreach ( $args['options'] as $option => $val ) { ?>
+					<option value="<?php echo esc_attr( $val ); ?>" <?php selected( esc_attr( $value ), esc_attr( $val ) ); ?>><?php echo ( !empty( $args['use_key_and_value'] ) ? $option : $val ); ?></option>
+				<?php } ?>
 			</select>
 		</td>
 	</tr>
@@ -197,7 +204,7 @@ function hybrid_post_meta_box_radio( $args = array(), $value = false ) {
 		<th style="width:10%;"><label for="<?php echo $name; ?>"><?php echo $args['title']; ?></label></th>
 		<td>
 			<?php foreach ( $args['options'] as $option => $val ) { ?>
-				<input <?php if ( htmlentities( $value, ENT_QUOTES ) == $val ) echo ' checked="checked"'; ?>type="radio" name="<?php echo $name; ?>" value="<?php echo $val; ?>" /> <?php echo $val; ?> 
+				<input type="radio" name="<?php echo $name; ?>" value="<?php echo esc_attr( $val ); ?> <?php checked( esc_attr( $value ), esc_attr( $val ) ); ?> />
 			<?php } ?>
 		</td>
 	</tr>
@@ -205,8 +212,8 @@ function hybrid_post_meta_box_radio( $args = array(), $value = false ) {
 }
 
 /**
- * The function for saving the theme's post meta box settings. It loops through each of the meta
- * box arguments for that particular post type and adds, updates, or deletes the metadata.
+ * The function for saving the theme's post meta box settings. It loops through each of the meta box 
+ * arguments for that particular post type and adds, updates, or deletes the metadata.
  *
  * @since 0.7.0
  * @param int $post_id
@@ -215,16 +222,12 @@ function hybrid_save_post_meta_box( $post_id, $post ) {
 
 	$prefix = hybrid_get_prefix();
 
-	/* Verify the nonce before preceding. */
+	/* Verify that the post type supports the meta box and the nonce before preceding. */
 	if ( !post_type_supports( $post->post_type, "{$prefix}-post-settings" ) || !isset( $_POST["{$prefix}_{$post->post_type}_meta_box_nonce"] ) || !wp_verify_nonce( $_POST["{$prefix}_{$post->post_type}_meta_box_nonce"], basename( __FILE__ ) ) )
 		return $post_id;
 
 	/* Get the post type object. */
 	$post_type = get_post_type_object( $post->post_type );
-
-	/* Make sure the post type supports the post settings meta box. */
-	if ( !post_type_supports( $post_type->name, "{$prefix}-post-settings" ) )
-		return $post_id;
 
 	/* Check if the current user has permission to edit the post. */
 	if ( !current_user_can( $post_type->cap->edit_post, $post_id ) )
