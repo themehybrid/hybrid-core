@@ -11,7 +11,7 @@
  */
 
 /* Register widget areas. */
-add_action( 'init', 'hybrid_register_sidebars' );
+add_action( 'widgets_init', 'hybrid_register_sidebars' );
 
 /* Unregister WP widgets. */
 add_action( 'widgets_init', 'hybrid_unregister_widgets' );
