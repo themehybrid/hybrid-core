@@ -66,7 +66,7 @@ function get_the_image( $args = array() ) {
 		'meta_key_save' => false,
 		'callback' => null,
 		'cache' => true,
-		'echo' => true
+		'echo' => true,
 		'custom_key' => null, // @deprecated 0.6. Use 'meta_key'.
 		'default_size' => null, // @deprecated 0.5.  Use 'size'.
 	);
