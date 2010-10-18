@@ -1,27 +1,31 @@
 <?php
 /**
- * The Pagination extension was designed to give theme authors a quick way to paginate archive-type (archive, 
- * search, and blog) pages without having to worry about which plugin a user might be using.  Instead, they 
- * can simply build pagination right into their themes.
+ * Loop Pagination - A WordPress script for creating paginated links on archive-type pages.
  *
- * @copyright 2010
- * @version 0.1
- * @author Justin Tadlock
- * @link http://devpress.com/blog/loop-pagination-for-theme-developers
- * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * The Loop Pagination script was designed to give theme authors a quick way to paginate archive-type 
+ * (archive, search, and blog) pages without having to worry about which of the many plugins a user might 
+ * possibly be using.  Instead, they can simply build pagination right into their themes.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * This program is free software; you can redistribute it and/or modify it under the terms of the GNU 
+ * General Public License version 2, as published by the Free Software Foundation.  You may NOT assume 
+ * that you can use any other version of the GPL.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * @package LoopPagination
+ * @version 0.1.1
+ * @author Justin Tadlock <justin@justintadlock.com>
+ * @copyright Copyright (c) 2010, Justin Tadlock
+ * @link http://devpress.com/blog/loop-pagination-for-theme-developers
+ * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 /**
  * Loop pagination function for paginating loops with multiple posts.  This should be used on archive, blog, and 
  * search pages.  It is not for singular views.
  *
- * @since 0.1
+ * @since 0.1.0
  * @uses paginate_links() Creates a string of paginated links based on the arguments given.
  * @param array $args Arguments to customize how the page links are output.
  */
