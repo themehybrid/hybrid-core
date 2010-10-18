@@ -46,14 +46,6 @@
 class Hybrid {
 
 	/**
-	 * Theme prefix (mostly used for hooks).
-	 *
-	 * @since 0.7.0
-	 * @var string
-	 */
-	var $prefix;
-
-	/**
 	 * PHP4 constructor method.  This simply provides backwards compatibility for users with setups
 	 * on older versions of PHP.  Once WordPress no longer supports PHP4, this method will be removed.
 	 *
@@ -156,9 +148,6 @@ class Hybrid {
 
 		/* Load the context-based functions. */
 		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'context.php' );
-
-		/* Theme prefix for creating things such as filter hooks (i.e., "$prefix_hook_name"). */
-		$this->prefix = hybrid_get_prefix();
 	}
 
 	/**
