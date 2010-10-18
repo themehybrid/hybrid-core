@@ -112,25 +112,6 @@ function hybrid_avatar() {
 }
 
 /**
- * Function for displaying a comment's metadata.
- *
- * @since 0.7.0
- * @param string $metadata Custom metadata to use.
- * @global $comment The global comment object.
- * @global $post The global post object.
- */
-function hybrid_comment_meta( $metadata = '' ) {
-	global $comment, $post;
-
-	if ( !$metadata )
-		$metadata = '[comment-author] [comment-published] [comment-permalink before="| "] [comment-edit-link before="| "] [comment-reply-link before="| "]';
-
-	$metadata = '<div class="comment-meta comment-meta-data">' . $metadata . '</div>';
-
-	echo do_shortcode( apply_filters( hybrid_get_prefix() . '_comment_meta', $metadata ) );
-}
-
-/**
  * Filters the WordPress comment_form() function that was added in WordPress 3.0.  This allows
  * the theme to preserve some backwards compatibility with its old comment form.  It also allows 
  * users to build custom comment forms by filtering 'comment_form_defaults' in their child theme.
