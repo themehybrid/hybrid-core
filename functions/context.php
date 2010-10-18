@@ -253,7 +253,7 @@ function hybrid_body_class( $class = '' ) {
 	$classes[] = strtolower( gmdate( '\yY \mm \dd \hH l', $time ) );
 
 	/* Is the current user logged in. */
-	$classes[] = ( is_user_logged_in() ) ? 'logged-in' : 'not-logged-in';
+	$classes[] = ( is_user_logged_in() ) ? 'logged-in' : 'logged-out';
 
 	/* Merge base contextual classes with $classes. */
 	$classes = array_merge( $classes, hybrid_get_context() );
@@ -265,9 +265,6 @@ function hybrid_body_class( $class = '' ) {
 		$template = str_replace( array ( "{$wp_query->post->post_type}-template-", "{$wp_query->post->post_type}-", '.php' ), '', get_post_meta( $wp_query->post->ID, "_wp_{$wp_query->post->post_type}_template", true ) );
 		if ( !empty( $template ) )
 			$classes[] = "{$wp_query->post->post_type}-template-{$template}";
-
-		/* Comments class. */
-		$classes[] = ( ( comments_open() ) ? 'comments-open' : 'comments-closed' );
 
 		/* Attachment mime types. */
 		if ( is_attachment() ) {
