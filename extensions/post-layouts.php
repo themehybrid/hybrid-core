@@ -1,5 +1,7 @@
 <?php
 /**
+ * Post Layouts - A WordPress script for creating post-specific layouts.
+ *
  * Post Layouts was created to allow theme developers to easily style themes with post-specific layout 
  * structures.  It gives users the ability to control how each post (or any post type) is displayed on the 
  * front end of the site.  This script is called "post layouts," but developers aren't limited to only creating 
