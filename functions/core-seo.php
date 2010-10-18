@@ -60,9 +60,9 @@ function hybrid_meta_copyright() {
 	$domain = hybrid_get_textdomain();
 
 	if ( is_singular() )
-		$date = get_the_time( __( 'F Y', $domain ) );
+		$date = get_the_time( esc_attr__( 'F Y', $domain ) );
 	else
-		$date = date( __( 'Y', $domain ) );
+		$date = date( esc_attr__( 'Y', $domain ) );
 
 	$copyright = '<meta name="copyright" content="' . sprintf( esc_attr__( 'Copyright (c) %1$s', $domain ), $date ) . '" />' . "\n";
 	echo apply_atomic( 'meta_copyright', $copyright );

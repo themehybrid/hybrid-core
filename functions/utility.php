@@ -57,31 +57,6 @@ function get_atomic_template( $template ) {
 }
 
 /**
- * Adds the correct DOCTYPE to the theme. Defaults to XHTML 1.0 Strict.
- * Child themes can overwrite this with the hybrid_doctype filter.
- *
- * @since 0.4.0
- */
-function hybrid_doctype() {
-	if ( !preg_match( "/MSIE 6.0/", esc_attr( $_SERVER['HTTP_USER_AGENT'] ) ) )
-		$doctype = '<' . '?xml version="1.0" encoding="' . get_bloginfo( 'charset' ) . '"?>' . "\n";
-
-	$doctype .= '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">' . "\n";
-	echo apply_atomic( 'doctype', $doctype );
-}
-
-/**
- * Shows the content type in the header.  Gets the site's defined HTML type 
- * and charset.  Can be overwritten with the hybrid_meta_content_type filter.
- *
- * @since 0.4.0
- */
-function hybrid_meta_content_type() {
-	$content_type = '<meta http-equiv="Content-Type" content="' . get_bloginfo( 'html_type' ) . '; charset=' . get_bloginfo( 'charset' ) . '" />' . "\n";
-	echo apply_atomic( 'meta_content_type', $content_type );
-}
-
-/**
  * Generates the relevant template info.  Adds template meta with theme version.  
  * Uses the theme name and version from style.css.  In 0.6, added the hybrid_meta_template 
  * filter hook.
@@ -89,19 +64,9 @@ function hybrid_meta_content_type() {
  * @since 0.4.0
  */
 function hybrid_meta_template() {
-	$data = get_theme_data( TEMPLATEPATH . '/style.css' );
+	$data = get_theme_data( trailingslashit( TEMPLATEPATH ) . 'style.css' );
 	$template = '<meta name="template" content="' . esc_attr( "{$data['Title']} {$data['Version']}" ) . '" />' . "\n";
 	echo apply_atomic( 'meta_template', $template );
-}
-
-/**
- * Displays the pinkback URL.
- *
- * @since 0.4.0
- */
-function hybrid_head_pingback() {
-	$pingback = '<link rel="pingback" href="' . get_bloginfo( 'pingback_url' ) . '" />' . "\n";
-	echo apply_atomic( 'head_pingback', $pingback );
 }
 
 /**
@@ -136,16 +101,6 @@ function hybrid_site_description() {
 		$desc = "\n\t\t\t" . '<' . $tag . ' id="site-description"><span>' . $desc . '</span></' . $tag . '>' . "\n";
 
 	echo apply_atomic( 'site_description', $desc );
-}
-
-/**
- * Displays the page's profile URI.
- * @link http://microformats.org/wiki/profile-uris
- *
- * @since 0.6.0
- */
-function hybrid_profile_uri() {
-	echo apply_atomic( 'profile_uri', 'http://gmpg.org/xfn/11' );
 }
 
 /**

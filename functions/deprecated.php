@@ -275,6 +275,59 @@ function hybrid_post_stylesheets( $deprecated_1 = '', $deprecated_2 = '') {
 }
 
 /**
+ * Adds the correct DOCTYPE to the theme. Defaults to XHTML 1.0 Strict.
+ * Child themes can overwrite this with the hybrid_doctype filter.
+ *
+ * @since 0.4.0
+ * @deprecated 1.0.0
+ */
+function hybrid_doctype() {
+	_deprecated_function( __FUNCTION__, '1.0.0', '' );
+	if ( !preg_match( "/MSIE 6.0/", esc_attr( $_SERVER['HTTP_USER_AGENT'] ) ) )
+		$doctype = '<' . '?xml version="1.0" encoding="' . get_bloginfo( 'charset' ) . '"?>' . "\n";
+
+	$doctype .= '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">' . "\n";
+	echo apply_atomic( 'doctype', $doctype );
+}
+
+/**
+ * Shows the content type in the header.  Gets the site's defined HTML type 
+ * and charset.  Can be overwritten with the hybrid_meta_content_type filter.
+ *
+ * @since 0.4.0
+ * @deprecated 1.0.0
+ */
+function hybrid_meta_content_type() {
+	_deprecated_function( __FUNCTION__, '1.0.0', '' );
+	$content_type = '<meta http-equiv="Content-Type" content="' . get_bloginfo( 'html_type' ) . '; charset=' . get_bloginfo( 'charset' ) . '" />' . "\n";
+	echo apply_atomic( 'meta_content_type', $content_type );
+}
+
+/**
+ * Displays the pinkback URL.
+ *
+ * @since 0.4.0
+ * @deprecated 1.0.0
+ */
+function hybrid_head_pingback() {
+	_deprecated_function( __FUNCTION__, '1.0.0', '' );
+	$pingback = '<link rel="pingback" href="' . get_bloginfo( 'pingback_url' ) . '" />' . "\n";
+	echo apply_atomic( 'head_pingback', $pingback );
+}
+
+/**
+ * Displays the page's profile URI.
+ * @link http://microformats.org/wiki/profile-uris
+ *
+ * @since 0.6.0
+ * @deprecated 1.0.0
+ */
+function hybrid_profile_uri() {
+	_deprecated_function( __FUNCTION__, '1.0.0', '' );
+	echo apply_atomic( 'profile_uri', 'http://gmpg.org/xfn/11' );
+}
+
+/**
  * Before HTML.  Loaded just after <body> but before any content is displayed.
  * @since 0.3.2
  * @deprecated 1.0.0
