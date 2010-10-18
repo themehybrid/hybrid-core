@@ -60,11 +60,19 @@ function hybrid_get_textdomain() {
  */
 function hybrid_load_textdomain( $mofile, $domain ) {
 
+	/* If the $domain is for the parent theme, search for a $domain-$locale.mo file. */
 	if ( $domain == hybrid_get_textdomain() ) {
+
+		/* Check for a $domain-$locale.mo file in the parent and child theme root and /languages folder. */
 		$locale = get_locale();
-		$mofile = locate_template( array( "languages/{$domain}-{$locale}.mo", "{$domain}-{$locale}.mo" ) );
+		$locate_mofile = locate_template( array( "languages/{$domain}-{$locale}.mo", "{$domain}-{$locale}.mo" ) );
+
+		/* If a mofile was found based on the given format, set $mofile to that file name. */
+		if ( !empty( $locate_mofile ) )
+			$mofile = $locate_mofile;
 	}
 
+	/* Return the $mofile string. */
 	return $mofile;
 }
 
