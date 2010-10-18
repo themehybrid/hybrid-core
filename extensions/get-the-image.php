@@ -1,21 +1,26 @@
 <?php
 /**
- * Get the Image was created to solve a problem in the WordPress community about how to handle
- * post-specific images. It was created to be a highly-intuitive image script that loads images that are 
- * related to specific posts in some way.  It creates an image-based representation of a WordPress 
- * post (or any post type).
+ * Get the Image - An advanced post image script for WordPress.
  *
- * @copyright 2008 - 2010
- * @version 0.6.1
- * @author Justin Tadlock
- * @link http://justintadlock.com/archives/2008/05/27/get-the-image-wordpress-plugin
- * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * Get the Image was created to be a highly-intuitive image script that displays post-specific images (an 
+ * image-based representation of a post).  The script handles old-style post images via custom fields for 
+ * backwards compatibility.  It also supports WordPress' built-in featured image functionality.  On top of 
+ * those things, it can automatically set attachment images as the post image or scan the post content for 
+ * the first image element used.  It can also fall back to a given default image.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * This program is free software; you can redistribute it and/or modify it under the terms of the GNU 
+ * General Public License version 2, as published by the Free Software Foundation.  You may NOT assume 
+ * that you can use any other version of the GPL.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * @package GetTheImage
+ * @version 0.6.1
+ * @author Justin Tadlock <justin@justintadlock.com>
+ * @copyright Copyright (c) 2008 - 2010, Justin Tadlock
+ * @link http://justintadlock.com/archives/2008/05/27/get-the-image-wordpress-plugin
+ * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 /* Adds theme support for post images. */
@@ -28,15 +33,16 @@ add_action( 'updated_post_meta', 'get_the_image_delete_cache' );
 add_action( 'added_post_meta', 'get_the_image_delete_cache' );
 
 /**
- * This is a highly intuitive function that gets images.  It first calls for custom field keys. If no 
- * custom field key is set, check for the_post_thumbnail().  If no post image, check for images 
- * attached to post. Check for image order if looking for attached images.  Scan the post for 
- * images if $image_scan = true.  Check for default image if $default_image = true. If an image 
- * is found, call display_the_image() to format it.
+ * The main image function for displaying an image.  It supports several arguments that allow developers to
+ * customize how the script outputs the image.
  *
- * @since 0.1
+ * The image check order is important to note here.  If an image is found by any specific check, the script
+ * will no longer look for images.  The check order is 'meta_key', 'the_post_thumbnail', 'attachment', 
+ * 'image_scan', 'callback', and 'default_image'.
+ *
+ * @since 0.1.0
  * @global $post The current post's DB object.
- * @param array $args Parameters for what image to get.
+ * @param array $args Arguments for how to load and display the image.
  * @return string|array The HTML for the image. | Image attributes in an array.
  */
 function get_the_image( $args = array() ) {
@@ -61,6 +67,8 @@ function get_the_image( $args = array() ) {
 		'callback' => null,
 		'cache' => true,
 		'echo' => true
+		'custom_key' => null, // @deprecated 0.6. Use 'meta_key'.
+		'default_size' => null, // @deprecated 0.5.  Use 'size'.
 	);
 
 	/* Allow plugins/themes to filter the arguments. */
@@ -70,11 +78,11 @@ function get_the_image( $args = array() ) {
 	$args = wp_parse_args( $args, $defaults );
 
 	/* If $default_size is given, overwrite $size. */
-	if ( isset( $args['default_size'] ) )
+	if ( !is_null( $args['default_size'] ) )
 		$args['size'] = $args['default_size']; // Deprecated 0.5 in favor of $size
 
 	/* If $custom_key is set, overwrite $meta_key. */
-	if ( isset( $args['custom_key'] ) )
+	if ( !is_null( $args['custom_key'] ) )
 		$args['meta_key'] = $args['custom_key']; // Deprecated 0.6 in favor of $meta_key
 
 	/* If $format is set to 'array', don't link to the post. */
@@ -154,11 +162,10 @@ function get_the_image( $args = array() ) {
 /* Internal Functions */
 
 /**
- * Calls images by custom field key.  Script loops through multiple custom field keys.
- * If that particular key is found, $image is set and the loop breaks.  If an image is 
- * found, it is returned.
+ * Calls images by custom field key.  Script loops through multiple custom field keys.  If that particular key 
+ * is found, $image is set and the loop breaks.  If an image is found, it is returned.
  *
- * @since 0.3
+ * @since 0.3.0
  * @param array $args
  * @return array|bool
  */
@@ -185,11 +192,11 @@ function image_by_custom_field( $args = array() ) {
 }
 
 /**
- * Checks for images using a custom version of the WordPress 2.9+ get_the_post_thumbnail()
- * function.  If an image is found, return it and the $post_thumbnail_id.  The WordPress function's
- * other filters are later added in the display_the_image() function.
+ * Checks for images using a custom version of the WordPress 2.9+ get_the_post_thumbnail() function.  
+ * If an image is found, return it and the $post_thumbnail_id.  The WordPress function's other filters are 
+ * later added in the display_the_image() function.
  *
- * @since 0.4
+ * @since 0.4.0
  * @param array $args
  * @return array|bool
  */
@@ -216,11 +223,10 @@ function image_by_the_post_thumbnail( $args = array() ) {
 }
 
 /**
- * Check for attachment images.  Uses get_children() to check if the post has images 
- * attached.  If image attachments are found, loop through each.  The loop only breaks 
- * once $order_of_image is reached.
+ * Check for attachment images.  Uses get_children() to check if the post has images attached.  If image 
+ * attachments are found, loop through each.  The loop only breaks once $order_of_image is reached.
  *
- * @since 0.3
+ * @since 0.3.0
  * @param array $args
  * @return array|bool
  */
@@ -258,10 +264,10 @@ function image_by_attachment( $args = array() ) {
 }
 
 /**
- * Scans the post for images within the content.  Not called by default with get_the_image().
- * Shouldn't use if using large images within posts, better to use the other options.
+ * Scans the post for images within the content.  Not called by default with get_the_image().  Shouldn't use 
+ * if using large images within posts, better to use the other options.
  *
- * @since 0.3
+ * @since 0.3.0
  * @global $post The current post's DB object.
  * @param array $args
  * @return array|bool
@@ -279,10 +285,10 @@ function image_by_scan( $args = array() ) {
 }
 
 /**
- * Used for setting a default image.  The function simply returns the image URL it was
- * given in an array.  Not used with get_the_image() by default.
+ * Used for setting a default image.  The function simply returns the image URL it was given in an array.  
+ * Not used with get_the_image() by default.
  *
- * @since 0.3
+ * @since 0.3.0
  * @param array $args
  * @return array
  */
@@ -291,10 +297,10 @@ function image_by_default( $args = array() ) {
 }
 
 /**
- * Formats an image with appropriate alt text and class.  Adds a link to the post if argument 
- * is set.  Should only be called if there is an image to display, but will handle it if not.
+ * Formats an image with appropriate alt text and class.  Adds a link to the post if argument is set.  Should 
+ * only be called if there is an image to display, but will handle it if not.
  *
- * @since 0.1
+ * @since 0.1.0
  * @param array $args
  * @param array $image Array of image info ($image, $classes, $alt, $caption).
  * @return string $image Formatted image (w/link to post if the option is set).
@@ -351,12 +357,11 @@ function display_the_image( $args = array(), $image = false ) {
 }
 
 /**
- * Saves the image URL as the value of the meta key provided.  This allows users to set a 
- * custom meta key for their image.  By doing this, users can trim off database queries when 
- * grabbing attachments or get rid of expensive scans of the content when using the image
- * scan feature.
+ * Saves the image URL as the value of the meta key provided.  This allows users to set a custom meta key 
+ * for their image.  By doing this, users can trim off database queries when grabbing attachments or get rid 
+ * of expensive scans of the content when using the image scan feature.
  *
- * @since 0.1
+ * @since 0.6.0
  * @param array $args Parameters for what image to get.
  * @param array $image Array of image info ($image, $classes, $alt, $caption).
  */
@@ -381,7 +386,7 @@ function get_the_image_meta_key_save( $args = array(), $image = array() ) {
 /**
  * Deletes the image cache for users that are using a persistent-caching plugin.
  *
- * @since 0.5
+ * @since 0.5.0
  */
 function get_the_image_delete_cache() {
 	wp_cache_delete( 'get_the_image' );
@@ -390,8 +395,8 @@ function get_the_image_delete_cache() {
 /**
  * Get the image with a link to the post.  Use get_the_image() instead.
  *
- * @since 0.1
- * @deprecated 0.3
+ * @since 0.1.0
+ * @deprecated 0.3.0
  */
 function get_the_image_link( $deprecated = '', $deprecated_2 = '', $deprecated_3 = '' ) {
 	get_the_image();
