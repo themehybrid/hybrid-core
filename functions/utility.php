@@ -38,8 +38,8 @@ function get_atomic_template( $template ) {
 
 	$templates = array();
 
-	$theme_dir = THEME_DIR . '/' . $template;
-	$child_dir = CHILD_THEME_DIR . '/' . $template;
+	$theme_dir = trailingslashit( THEME_DIR ) . $template;
+	$child_dir = trailingslashit( CHILD_THEME_DIR ) . $template;
 
 	if ( is_dir( $child_dir ) || is_dir( $theme_dir ) ) {
 		$dir = true;

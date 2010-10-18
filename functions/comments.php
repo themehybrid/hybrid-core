@@ -95,7 +95,7 @@ function hybrid_avatar() {
 	$author = esc_html( get_comment_author( $comment->comment_ID ) );
 	$url = esc_url( get_comment_author_url( $comment->comment_ID ) );
 
-	$default_avatar = ( ( 'pingback' == $comment_type || 'trackback' == $comment_type ) ? HYBRID_IMAGES . "/{$comment_type}.png" : '' );
+	$default_avatar = ( ( 'pingback' == $comment_type || 'trackback' == $comment_type ) ? trailingslashit( HYBRID_IMAGES ) . "{$comment_type}.png" : '' );
 
 	$default_avatar = apply_filters( "{$hybrid->prefix}_{$comment_type}_avatar", $default_avatar );
 

@@ -152,10 +152,10 @@ class Hybrid {
 	function core() {
 
 		/* Load the core framework functions. */
-		require_once( HYBRID_FUNCTIONS . '/core.php' );
+		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'core.php' );
 
 		/* Load the context-based functions. */
-		require_once( HYBRID_FUNCTIONS . '/context.php' );
+		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'context.php' );
 
 		/* Theme prefix for creating things such as filter hooks (i.e., "$prefix_hook_name"). */
 		$this->prefix = hybrid_get_prefix();
@@ -191,31 +191,31 @@ class Hybrid {
 	function functions() {
 
 		/* Load the comments functions. */
-		require_once( HYBRID_FUNCTIONS . '/comments.php' );
+		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'comments.php' );
 
 		/* Load media-related functions. */
-		require_once( HYBRID_FUNCTIONS . '/media.php' );
+		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'media.php' );
 
 		/* Load the utility functions. */
-		require_once( HYBRID_FUNCTIONS . '/utility.php' );
+		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'utility.php' );
 
 		/* Load the widget functions. */
-		require_once( HYBRID_FUNCTIONS . '/widgets.php' );
+		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'widgets.php' );
 
 		/* Load the menus functions if supported. */
-		require_if_theme_supports( 'hybrid-core-menus', HYBRID_FUNCTIONS . '/menus.php' );
+		require_if_theme_supports( 'hybrid-core-menus', trailingslashit( HYBRID_FUNCTIONS ) . 'menus.php' );
 
 		/* Load the core SEO component. */
-		require_if_theme_supports( 'hybrid-core-seo', HYBRID_FUNCTIONS . '/core-seo.php' );
+		require_if_theme_supports( 'hybrid-core-seo', trailingslashit( HYBRID_FUNCTIONS ) . 'core-seo.php' );
 
 		/* Load the shortcodes if supported. */
-		require_if_theme_supports( 'hybrid-core-shortcodes', HYBRID_FUNCTIONS . '/shortcodes.php' );
+		require_if_theme_supports( 'hybrid-core-shortcodes', trailingslashit( HYBRID_FUNCTIONS ) . 'shortcodes.php' );
 
 		/* Load the template hierarchy if supported. */
-		require_if_theme_supports( 'hybrid-core-template-hierarchy', HYBRID_FUNCTIONS . '/template-hierarchy.php' );
+		require_if_theme_supports( 'hybrid-core-template-hierarchy', trailingslashit( HYBRID_FUNCTIONS ) . 'template-hierarchy.php' );
 
 		/* Load the deprecated functions if supported. */
-		require_if_theme_supports( 'hybrid-core-deprecated', HYBRID_FUNCTIONS . '/deprecated.php' );
+		require_if_theme_supports( 'hybrid-core-deprecated', trailingslashit( HYBRID_FUNCTIONS ) . 'deprecated.php' );
 	}
 
 	/**
@@ -229,28 +229,28 @@ class Hybrid {
 	function extensions() {
 
 		/* Load the Breadcrumb Trail extension if supported. */
-		require_if_theme_supports( 'breadcrumb-trail', HYBRID_EXTENSIONS . '/breadcrumb-trail.php' );
+		require_if_theme_supports( 'breadcrumb-trail', trailingslashit( HYBRID_EXTENSIONS ) . 'breadcrumb-trail.php' );
 
 		/* Load the Custom Field Series extension if supported. */
-		require_if_theme_supports( 'custom-field-series', HYBRID_EXTENSIONS . '/custom-field-series.php' );
+		require_if_theme_supports( 'custom-field-series', trailingslashit( HYBRID_EXTENSIONS ) . 'custom-field-series.php' );
 
 		/* Load the Get the Image extension if supported. */
-		require_if_theme_supports( 'get-the-image', HYBRID_EXTENSIONS . '/get-the-image.php' );
+		require_if_theme_supports( 'get-the-image', trailingslashit( HYBRID_EXTENSIONS ) . 'get-the-image.php' );
 
 		/* Load the Get the Object extension if supported. */
-		require_if_theme_supports( 'get-the-object', HYBRID_EXTENSIONS . '/get-the-object.php' );
+		require_if_theme_supports( 'get-the-object', trailingslashit( HYBRID_EXTENSIONS ) . 'get-the-object.php' );
 
 		/* Load the Pagination extension if supported. */
-		require_if_theme_supports( 'loop-pagination', HYBRID_EXTENSIONS . '/loop-pagination.php' );
+		require_if_theme_supports( 'loop-pagination', trailingslashit( HYBRID_EXTENSIONS ) . 'loop-pagination.php' );
 
 		/* Load the Entry Views extension if supported. */
-		require_if_theme_supports( 'entry-views', HYBRID_EXTENSIONS . '/entry-views.php' );
+		require_if_theme_supports( 'entry-views', trailingslashit( HYBRID_EXTENSIONS ) . 'entry-views.php' );
 
 		/* Load the Post Layouts extension if supported. */
-		require_if_theme_supports( 'post-layouts', HYBRID_EXTENSIONS . '/post-layouts.php' );
+		require_if_theme_supports( 'post-layouts', trailingslashit( HYBRID_EXTENSIONS ) . 'post-layouts.php' );
 
 		/* Load the Post Stylesheets extension if supported. */
-		require_if_theme_supports( 'post-stylesheets', HYBRID_EXTENSIONS . '/post-stylesheets.php' );
+		require_if_theme_supports( 'post-stylesheets', trailingslashit( HYBRID_EXTENSIONS ) . 'post-stylesheets.php' );
 	}
 
 	/**
@@ -264,13 +264,13 @@ class Hybrid {
 		if ( is_admin() ) {
 
 			/* Load the main admin file. */
-			require_once( HYBRID_ADMIN . '/admin.php' );
+			require_once( trailingslashit( HYBRID_ADMIN ) . 'admin.php' );
 
 			/* Load the theme settings feature if supported. */
-			require_if_theme_supports( 'hybrid-core-theme-settings', HYBRID_ADMIN . '/theme-settings.php' );
+			require_if_theme_supports( 'hybrid-core-theme-settings', trailingslashit( HYBRID_ADMIN ) . 'theme-settings.php' );
 
 			/* Load the post meta box if supported. */
-			require_if_theme_supports( 'hybrid-core-post-meta-box', HYBRID_ADMIN . '/post-meta-box.php' );
+			require_if_theme_supports( 'hybrid-core-post-meta-box', trailingslashit( HYBRID_ADMIN ) . 'post-meta-box.php' );
 		}
 	}
 
