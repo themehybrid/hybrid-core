@@ -1,5 +1,7 @@
 <?php
 /**
+ * Entry Views - A WordPress script for counting post views.
+ *
  * Entry views is a script for calculating the number of views a post gets.  It is meant to be basic and 
  * not a full-featured solution.  The idea is to allow theme/plugin authors to quickly load this file and 
  * build functions on top of it to suit their project needs.  This is an AJAX-based solution, so only visitors 
@@ -16,17 +18,19 @@
  * as it cannot control links it doesn't know about.
  * @link http://core.trac.wordpress.org/ticket/14568
  *
- * @copyright 2010
- * @version 0.1
- * @author Justin Tadlock
- * @link http://justintadlock.com
- * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * This program is free software; you can redistribute it and/or modify it under the terms of the GNU 
+ * General Public License version 2, as published by the Free Software Foundation.  You may NOT assume 
+ * that you can use any other version of the GPL.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * @package EntryViews
+ * @version 0.1.1
+ * @author Justin Tadlock <justin@justintadlock.com>
+ * @copyright Copyright (c) 2010, Justin Tadlock
+ * @link http://justintadlock.com
+ * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 /* Add the [entry-views] shortcode. */
