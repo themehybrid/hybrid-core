@@ -65,15 +65,15 @@ function hybrid_register_widgets() {
 		return;
 
 	/* Load each widget file. */
-	require_once( HYBRID_CLASSES . '/widget-archives.php' );
-	require_once( HYBRID_CLASSES . '/widget-authors.php' );
-	require_once( HYBRID_CLASSES . '/widget-bookmarks.php' );
-	require_once( HYBRID_CLASSES . '/widget-calendar.php' );
-	require_once( HYBRID_CLASSES . '/widget-categories.php' );
-	require_once( HYBRID_CLASSES . '/widget-nav-menu.php' );
-	require_once( HYBRID_CLASSES . '/widget-pages.php' );
-	require_once( HYBRID_CLASSES . '/widget-search.php' );
-	require_once( HYBRID_CLASSES . '/widget-tags.php' );
+	require_once( trailingslashit( HYBRID_CLASSES ) . 'widget-archives.php' );
+	require_once( trailingslashit( HYBRID_CLASSES ) . 'widget-authors.php' );
+	require_once( trailingslashit( HYBRID_CLASSES ) . 'widget-bookmarks.php' );
+	require_once( trailingslashit( HYBRID_CLASSES ) . 'widget-calendar.php' );
+	require_once( trailingslashit( HYBRID_CLASSES ) . 'widget-categories.php' );
+	require_once( trailingslashit( HYBRID_CLASSES ) . 'widget-nav-menu.php' );
+	require_once( trailingslashit( HYBRID_CLASSES ) . 'widget-pages.php' );
+	require_once( trailingslashit( HYBRID_CLASSES ) . 'widget-search.php' );
+	require_once( trailingslashit( HYBRID_CLASSES ) . 'widget-tags.php' );
 
 	/* Register each widget. */
 	register_widget( 'Hybrid_Widget_Archives' );

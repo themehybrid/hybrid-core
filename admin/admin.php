@@ -49,7 +49,7 @@ function hybrid_settings_field_name( $setting ) {
  * @since 1.0.0
  */
 function hybrid_admin_enqueue_style() {
-	wp_enqueue_style( hybrid_get_prefix() . '-admin', HYBRID_CSS . '/admin.css', false, 0.7, 'screen' );
+	wp_enqueue_style( hybrid_get_prefix() . '-admin', trailingslashit( HYBRID_CSS ) . 'admin.css', false, 0.7, 'screen' );
 }
 
 /**

@@ -57,7 +57,7 @@ function hybrid_enqueue_script() {
 
 	/* Superfish drop-down menus. */
 	if ( current_theme_supports( 'hybrid-core-drop-downs' ) )
-		wp_enqueue_script( 'drop-downs', esc_url( apply_atomic( 'drop_downs_script', HYBRID_JS . '/drop-downs.js' ) ), array( 'jquery' ), 1.4, true );
+		wp_enqueue_script( 'drop-downs', esc_url( apply_atomic( 'drop_downs_script', trailingslashit( HYBRID_JS ) . 'drop-downs.js' ) ), array( 'jquery' ), 1.4, true );
 }
 
 /**
