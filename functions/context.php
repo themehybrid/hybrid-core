@@ -1,11 +1,9 @@
 <?php
 /**
- * Functions for making various theme elements context-aware.  This controls things such as the <body> 
- * and entry CSS classes as well as contextual hooks.  By using a context, developers and users can create 
- * page-specific code.
- *
- * Many of the ideas behind context-aware functions originated with the great Sandbox theme.
- * @link http://www.plaintxt.org/themes/sandbox
+ * Functions for making various theme elements context-aware.  Controls things such as the smart 
+ * and logical body, post, and comment CSS classes as well as context-based action and filter hooks.  
+ * The functions also integrate with WordPress' implementations of body_class, post_class, and 
+ * comment_class, so your theme won't have any trouble with plugin integration.
  *
  * @package HybridCore
  * @subpackage Functions
@@ -108,7 +106,7 @@ function hybrid_get_context() {
 		$hybrid->context[] = 'error-404';
 	}
 
-	return $hybrid->context;
+	return array_map( 'esc_attr', $hybrid->context );
 }
 
 /**
