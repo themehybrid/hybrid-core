@@ -27,7 +27,7 @@
  * @version 1.0.0
  * @author Justin Tadlock <justin@justintadlock.com>
  * @copyright Copyright (c) 2008 - 2010, Justin Tadlock
- * @link http://themehybrid.com
+ * @link http://themehybrid.com/hybrid-core
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
