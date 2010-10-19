@@ -188,9 +188,6 @@ class Hybrid {
 		/* Load the utility functions. */
 		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'utility.php' );
 
-		/* Load the widget functions. */
-		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'widgets.php' );
-
 		/* Load the menus functions if supported. */
 		require_if_theme_supports( 'hybrid-core-menus', trailingslashit( HYBRID_FUNCTIONS ) . 'menus.php' );
 
@@ -199,6 +196,12 @@ class Hybrid {
 
 		/* Load the shortcodes if supported. */
 		require_if_theme_supports( 'hybrid-core-shortcodes', trailingslashit( HYBRID_FUNCTIONS ) . 'shortcodes.php' );
+
+		/* Load the sidebars if supported. */
+		require_if_theme_supports( 'hybrid-core-sidebars', trailingslashit( HYBRID_FUNCTIONS ) . 'sidebars.php' );
+
+		/* Load the widgets if supported. */
+		require_if_theme_supports( 'hybrid-core-widgets', trailingslashit( HYBRID_FUNCTIONS ) . 'widgets.php' );
 
 		/* Load the template hierarchy if supported. */
 		require_if_theme_supports( 'hybrid-core-template-hierarchy', trailingslashit( HYBRID_FUNCTIONS ) . 'template-hierarchy.php' );
@@ -229,7 +232,7 @@ class Hybrid {
 		/* Load the Get the Object extension if supported. */
 		require_if_theme_supports( 'get-the-object', trailingslashit( HYBRID_EXTENSIONS ) . 'get-the-object.php' );
 
-		/* Load the Pagination extension if supported. */
+		/* Load the Loop Pagination extension if supported. */
 		require_if_theme_supports( 'loop-pagination', trailingslashit( HYBRID_EXTENSIONS ) . 'loop-pagination.php' );
 
 		/* Load the Entry Views extension if supported. */

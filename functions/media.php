@@ -22,7 +22,7 @@ add_filter( 'stylesheet_uri', 'hybrid_debug_stylesheet', 10, 2 );
  */
 function hybrid_debug_stylesheet( $stylesheet_uri, $stylesheet_dir_uri ) {
 
-	/* If SCRIP_DEBUG is set to true and the theme supports 'dev-stylesheet'. */
+	/* If SCRIPT_DEBUG is set to true and the theme supports 'dev-stylesheet'. */
 	if ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG && current_theme_supports( 'dev-stylesheet' ) ) {
 
 		/* Remove the stylesheet directory URI from the file name. */

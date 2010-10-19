@@ -25,16 +25,4 @@ function hybrid_register_menus() {
 	register_nav_menu( 'primary', __( 'Primary Menu', hybrid_get_textdomain() ) );
 }
 
-/**
- * Loads the 'Primary Menu' template file.  Users can overwrite menu-primary.php in their child
- * theme folder.
- *
- * @since 0.8.0
- * @uses get_template_part() Checks for template in child and parent theme.
- * @link http://codex.wordpress.org/Function_Reference/get_template_part
- */
-function hybrid_get_primary_menu() {
-	get_template_part( 'menu', 'primary' );
-}
-
 ?>
