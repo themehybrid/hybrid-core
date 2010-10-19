@@ -171,21 +171,30 @@ function get_the_image( $args = array() ) {
  */
 function image_by_custom_field( $args = array() ) {
 
-	/* If $meta_key is a string, we want to split it by spaces into an array. */
-	if ( !is_array( $args['meta_key'] ) )
-		$args['meta_key'] = preg_split( '#\s+#', $args['meta_key'] );
+	/* If $meta_key is not an array. */
+	if ( !is_array( $args['meta_key'] ) ) {
 
-	/* If $meta_key is set, loop through each custom field key, searching for values. */
-	if ( is_array( $args['meta_key'] ) ) {
-		foreach ( $args['meta_key'] as $custom ) {
-			$image = get_metadata( 'post', $args['post_id'], $custom, true );
-			if ( $image )
+		/* Get the image URL by the single meta key. */
+		$image = get_post_meta( $args['post_id'], $args['meta_key'], true );
+	}
+
+	/* If $meta_key is an array. */
+	elseif ( is_array( $args['meta_key'] ) ) {
+
+		/* Loop through each of the given meta keys. */
+		foreach ( $args['meta_key'] as $meta_key ) {
+
+			/* Get the image URL by the current meta key in the loop. */
+			$image = get_post_meta( $args['post_id'], $meta_key, true );
+
+			/* If an image was found, break out of the loop. */
+			if ( !empty( $image ) )
 				break;
 		}
 	}
 
 	/* If a custom key value has been given for one of the keys, return the image URL. */
-	if ( $image )
+	if ( !empty( $image ) )
 		return array( 'url' => $image );
 
 	return false;
