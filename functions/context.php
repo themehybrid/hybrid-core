@@ -1,8 +1,8 @@
 <?php
 /**
- * Functions for making various theme elements context-aware. This controls things such as the
- * <body> and entry CSS classes as well as contextual hooks. By using a context, developers and
- * users can create page-specific code.
+ * Functions for making various theme elements context-aware.  This controls things such as the <body> 
+ * and entry CSS classes as well as contextual hooks.  By using a context, developers and users can create 
+ * page-specific code.
  *
  * Many of the ideas behind context-aware functions originated with the great Sandbox theme.
  * @link http://www.plaintxt.org/themes/sandbox
@@ -297,8 +297,8 @@ function hybrid_body_class( $class = '' ) {
 }
 
 /**
- * Function for handling what the browser/search engine title should be. Tries to handle every 
- * situation to make for the best SEO.
+ * Function for handling what the browser/search engine title should be. Attempts to handle every 
+ * possible situation WordPress throws at it for the best optimization.
  *
  * @since 0.1.0
  * @global $wp_query
@@ -306,40 +306,48 @@ function hybrid_body_class( $class = '' ) {
 function hybrid_document_title() {
 	global $wp_query;
 
+	/* Set up some default variables. */
 	$domain = hybrid_get_textdomain();
-
 	$doctitle = '';
 	$separator = ':';
 
+	/* If viewing the front page and posts page of the site. */
 	if ( is_front_page() && is_home() )
 		$doctitle = get_bloginfo( 'name' ) . $separator . ' ' . get_bloginfo( 'description' );
 
+	/* If viewing the posts page or a singular post. */
 	elseif ( is_home() || is_singular() ) {
-		$id = $wp_query->get_queried_object_id();
+		$post_id = $wp_query->get_queried_object_id();
 
-		$doctitle = get_post_meta( $id, 'Title', true );
+		$doctitle = get_post_meta( $post_id, 'Title', true );
 
-		if ( !$doctitle && is_front_page() )
+		if ( empty( $doctitle ) && is_front_page() )
 			$doctitle = get_bloginfo( 'name' ) . $separator . ' ' . get_bloginfo( 'description' );
-		elseif ( !$doctitle )
-			$doctitle = get_post_field( 'post_title', $id );
+
+		elseif ( empty( $doctitle ) )
+			$doctitle = get_post_field( 'post_title', $post_id );
 	}
 
+	/* If viewing any type of archive page. */
 	elseif ( is_archive() ) {
 
+		/* If viewing a taxonomy term archive. */
 		if ( is_category() || is_tag() || is_tax() ) {
 			$term = $wp_query->get_queried_object();
 			$doctitle = $term->name;
 		}
 
+		/* If viewing a post type archive. */
 		elseif ( function_exists( 'is_post_type_archive' ) && is_post_type_archive() ) {
 			$post_type = get_post_type_object( get_query_var( 'post_type' ) );
 			$doctitle = $post_type->labels->name;
 		}
 
+		/* If viewing an author/user archive. */
 		elseif ( is_author() )
 			$doctitle = get_the_author_meta( 'display_name', get_query_var( 'author' ) );
 
+		/* If viewing a date-/time-based archive. */
 		elseif ( is_date () ) {
 			if ( get_query_var( 'minute' ) && get_query_var( 'hour' ) )
 				$doctitle = sprintf( __( 'Archive for %1$s', $domain ), get_the_time( __( 'g:i a', $domain ) ) );
@@ -364,19 +372,22 @@ function hybrid_document_title() {
 		}
 	}
 
+	/* If viewing a search results page. */
 	elseif ( is_search() )
 		$doctitle = sprintf( __( 'Search results for &quot;%1$s&quot;', $domain ), esc_attr( get_search_query() ) );
 
+	/* If viewing a 404 not found page. */
 	elseif ( is_404() )
 		$doctitle = __( '404 Not Found', $domain );
 
-	/* If paged. */
+	/* If the current page is a paged page. */
 	if ( ( ( $page = $wp_query->get( 'paged' ) ) || ( $page = $wp_query->get( 'page' ) ) ) && $page > 1 )
 		$doctitle = sprintf( __( '%1$s Page %2$s', $domain ), $doctitle . $separator, $page );
 
 	/* Apply the wp_title filters so we're compatible with plugins. */
 	$doctitle = apply_filters( 'wp_title', $doctitle, $separator, '' );
 
+	/* Print the title to the screen. */
 	echo apply_atomic( 'document_title', esc_attr( $doctitle ) );
 }
 

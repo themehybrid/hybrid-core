@@ -1,10 +1,10 @@
 <?php
 /**
- * Deprecated functions that should be avoided in favor of newer functions. Also handles 
- * removed functions to avoid errors. Users should not use these functions in their child 
- * themes.  The functions below will all be removed at some point in a future release.  If your 
- * child theme is using one of these, you should use the listed alternative or remove it from 
- * your child theme if necessary.
+ * Deprecated functions that should be avoided in favor of newer functions. Also handles removed 
+ * functions to avoid errors. Developers should not use these functions in their parent themes and users 
+ * should not use these functions in their child themes.  The functions below will all be removed at some 
+ * point in a future release.  If your theme is using one of these, you should use the listed alternative or 
+ * remove it from your theme if necessary.
  *
  * @package HybridCore
  * @subpackage Functions
@@ -94,7 +94,7 @@ function hybrid_search_form() {
 /**
  * After single posts but before the comments template.
  * @since 0.2
- * @deprecated 0.7 Use hybrid_after_singular().
+ * @deprecated 0.7
  */
 function hybrid_after_single() {
 	_deprecated_function( __FUNCTION__, '0.7', "apply_atomic( 'after_singular' )" );
@@ -104,7 +104,7 @@ function hybrid_after_single() {
 /**
  * After page content but before the comments template.
  * @since 0.2
- * @deprecated 0.7 Use hybrid_after_singular().
+ * @deprecated 0.7
  */
 function hybrid_after_page() {
 	_deprecated_function( __FUNCTION__, '0.7', "apply_atomic( 'after_singular' )" );
@@ -113,9 +113,8 @@ function hybrid_after_page() {
 
 /**
  * Loads the Utility: After Single widget area.
- *
  * @since 0.4
- * @deprecated 0.7 Use hybrid_get_utility_after_singular().
+ * @deprecated 0.7
  */
 function hybrid_get_utility_after_single() {
 	_deprecated_function( __FUNCTION__, '0.7', 'get_sidebar()' );
@@ -124,9 +123,8 @@ function hybrid_get_utility_after_single() {
 
 /**
  * Loads the Utility: After Page widget area.
- *
  * @since 0.4
- * @deprecated 0.7 Use hybrid_get_utility_after_singular().
+ * @deprecated 0.7
  */
 function hybrid_get_utility_after_page() {
 	_deprecated_function( __FUNCTION__, '0.7', 'get_sidebar()' );
@@ -135,14 +133,8 @@ function hybrid_get_utility_after_page() {
 
 /**
  * Displays the page navigation menu.
- *
- * @deprecated 0.8 Theme now supports the WordPress 3.0+ menu system.  Since this
- * function and its accompanying hooks have been such a huge part of the theme, this 
- * needs to stay for a while.  Maybe remove around v.2.0. ;)
- *
  * @since 0.1
- * @uses wp_page_menu() Creates a menu of pages
- * @link http://codex.wordpress.org/Template_Tags/wp_page_menu
+ * @deprecated 0.8
  */
 function hybrid_page_nav() {
 	_deprecated_function( __FUNCTION__, '0.8', 'wp_nav_menu()' );
@@ -164,11 +156,8 @@ function hybrid_page_nav() {
 
 /**
  * Check for widgets in widget-ready areas.
- *
  * @since 0.2
- * @deprecated 0.6.1 Use WP's is_active_sidebar() instead.
- * @param string|int $index name|ID of widget area.
- * @return bool
+ * @deprecated 0.6.1
  */
 function is_sidebar_active( $index = 1 ) {
 	_deprecated_function( __FUNCTION__, '0.6.1', 'is_active_sidebar()' );
@@ -177,9 +166,8 @@ function is_sidebar_active( $index = 1 ) {
 
 /**
  * Loads the comment form.
- *
  * @since 0.7
- * @deprecated 0.8 Theme now uses the comment_form() WordPress 3.0+ function.
+ * @deprecated 0.8
  */
 function hybrid_get_comment_form() {
 	_deprecated_function( __FUNCTION__, '0.8', 'comment_form()' );
@@ -188,9 +176,8 @@ function hybrid_get_comment_form() {
 
 /**
  * Fires before the comment form.
- *
  * @since 0.6
- * @deprecated 0.8 Theme now uses the comment_form() WordPress 3.0+ function.
+ * @deprecated 0.8
  */
 function hybrid_before_comment_form() {
 	_deprecated_function( __FUNCTION__, '0.8' );
@@ -199,9 +186,8 @@ function hybrid_before_comment_form() {
 
 /**
  * Fires after the comment form.
- *
  * @since 0.6
- * @deprecated 0.8 Theme now uses the comment_form() WordPress 3.0+ function.
+ * @deprecated 0.8
  */
 function hybrid_after_comment_form() {
 	_deprecated_function( __FUNCTION__, '0.8' );
@@ -209,9 +195,8 @@ function hybrid_after_comment_form() {
 }
 /**
  * Displays an individual comment author.
- *
  * @since 0.2.2
- * @deprecated 0.8 Use hybrid_comment_author_shortcode() instead.
+ * @deprecated 0.8
  */
 function hybrid_comment_author() {
 	_deprecated_function( __FUNCTION__, '0.8', 'hybrid_comment_author_shortcode()' );
@@ -220,7 +205,6 @@ function hybrid_comment_author() {
 
 /**
  * Simply not used anymore.  But, the function name may come in handy later.
- *
  * @since 0.1
  * @deprecated 1.0.0
  */
@@ -230,7 +214,6 @@ function hybrid_enqueue_style() {
 
 /**
  * This function creates all of the default theme settings and adds them to a single array.
- *
  * @since 0.4
  * @deprecated 1.0.0
  */
@@ -242,7 +225,6 @@ function hybrid_theme_settings() {
 
 /**
  * Loads the admin.css stylesheet for the theme settings page.
- *
  * @since 0.7
  * @deprecated 1.0.0
  */
@@ -253,7 +235,6 @@ function hybrid_settings_page_enqueue_style() {
 
 /**
  * This function is for adding extra support for theme features to the theme.
- *
  * @since 0.8
  * @deprecated 1.0.0
  */
@@ -265,7 +246,6 @@ function hybrid_add_theme_support() {
 
 /**
  * Per-post stylesheets.  Moved to the post-stylesheets.php extension.
- *
  * @since 0.9
  * @deprecated 1.0.0
  */
@@ -275,9 +255,7 @@ function hybrid_post_stylesheets( $deprecated_1 = '', $deprecated_2 = '') {
 }
 
 /**
- * Adds the correct DOCTYPE to the theme. Defaults to XHTML 1.0 Strict.
- * Child themes can overwrite this with the hybrid_doctype filter.
- *
+ * Adds the correct DOCTYPE to the theme.
  * @since 0.4.0
  * @deprecated 1.0.0
  */
@@ -291,9 +269,7 @@ function hybrid_doctype() {
 }
 
 /**
- * Shows the content type in the header.  Gets the site's defined HTML type 
- * and charset.  Can be overwritten with the hybrid_meta_content_type filter.
- *
+ * Shows the content type in the header.
  * @since 0.4.0
  * @deprecated 1.0.0
  */
@@ -305,7 +281,6 @@ function hybrid_meta_content_type() {
 
 /**
  * Displays the pinkback URL.
- *
  * @since 0.4.0
  * @deprecated 1.0.0
  */
@@ -317,8 +292,6 @@ function hybrid_head_pingback() {
 
 /**
  * Displays the page's profile URI.
- * @link http://microformats.org/wiki/profile-uris
- *
  * @since 0.6.0
  * @deprecated 1.0.0
  */
@@ -328,7 +301,7 @@ function hybrid_profile_uri() {
 }
 
 /**
- * Before HTML.  Loaded just after <body> but before any content is displayed.
+ * Before HTML.
  * @since 0.3.2
  * @deprecated 1.0.0
  */
@@ -338,7 +311,7 @@ function hybrid_before_html() {
 }
 
 /**
- * After HTML. Loaded just before </body> and after all content.
+ * After HTML.
  * @since 0.3.2
  * @deprecated 1.0.0
  */
@@ -353,7 +326,7 @@ function hybrid_after_html() {
  * @deprecated 1.0.0
  */
 function hybrid_head() {
-	_deprecated_function( __FUNCTION__, '1.0.0', "do_atomic( 'head' )" );
+	_deprecated_function( __FUNCTION__, '1.0.0', 'wp_head' );
 	do_atomic( 'head' );
 }
 
@@ -466,15 +439,15 @@ function hybrid_after_singular() {
 	_deprecated_function( __FUNCTION__, '1.0.0', "do_atomic( 'after_singular' )" );
 
 	if ( is_singular( 'post' ) && !is_attachment() )
-		do_action( 'hybrid_after_single' ); // Deprecated
+		do_action( 'hybrid_after_single' );
 	elseif ( is_page() )
-		do_action( 'hybrid_after_page' ); // Deprecated
+		do_action( 'hybrid_after_page' );
 
 	do_atomic( 'after_singular' );
 }
 
 /**
- * Before the primary widget area content.  Only called if Primary is active.
+ * Before the primary widget area content.
  * @since 0.1
  * @deprecated 1.0.0
  */
@@ -484,7 +457,7 @@ function hybrid_before_primary() {
 }
 
 /**
- * After the primary widget area content.  Only called if Primary is active.
+ * After the primary widget area content.
  * @since 0.1
  * @deprecated 1.0.0
  */
@@ -494,7 +467,7 @@ function hybrid_after_primary() {
 }
 
 /**
- * Before the secondary widget area.  Only called if Secondary is active.
+ * Before the secondary widget area.
  * @since 0.2
  * @deprecated 1.0.0
  */
@@ -504,7 +477,7 @@ function hybrid_before_secondary() {
 }
 
 /**
- * After the secondary widget area.  Only called if Secondary is active.
+ * After the secondary widget area.
  * @since 0.2
  * @deprecated 1.0.0
  */
@@ -514,7 +487,7 @@ function hybrid_after_secondary() {
 }
 
 /**
- * Before the subsidiary widget area.  Only called if Subsidiary is active.
+ * Before the subsidiary widget area.
  * @since 0.3.1
  * @deprecated 1.0.0
  */
@@ -524,7 +497,7 @@ function hybrid_before_subsidiary() {
 }
 
 /**
- * After the subsidiary widget area.  Only called if Subsidiary is active.
+ * After the subsidiary widget area.
  * @since 0.3.1
  * @deprecated 1.0.0
  */

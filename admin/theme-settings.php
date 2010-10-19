@@ -16,11 +16,10 @@
 add_action( 'admin_menu', 'hybrid_settings_page_init' );
 
 /**
- * Initializes all the theme settings page functions. This function is used to create the theme 
- * settings page, then use that as a launchpad for specific actions that need to be tied to the
- * settings page.
+ * Initializes all the theme settings page functions. This function is used to create the theme settings 
+ * page, then use that as a launchpad for specific actions that need to be tied to the settings page.
  *
- * Users or developers can set a custom capability (default is 'edit_themes') for access to the
+ * Users or developers can set a custom capability (default is 'edit_theme_options') for access to the
  * settings page using the "$prefix_settings_capability" filter hook.
  *
  * @since 0.7.0
@@ -30,7 +29,7 @@ function hybrid_settings_page_init() {
 	global $hybrid;
 
 	/* Get theme information. */
-	$theme_data = get_theme_data( TEMPLATEPATH . '/style.css' );
+	$theme_data = get_theme_data( trailingslashit( TEMPLATEPATH ) . 'style.css' );
 	$prefix = hybrid_get_prefix();
 	$domain = hybrid_get_textdomain();
 
@@ -103,10 +102,9 @@ function hybrid_get_default_theme_settings() {
 }
 
 /**
- * Saves the default theme settings in the {$wpdb->prefix}_options if none have been added. The 
- * settings are given a unique name depending on the theme directory. They are always saved as 
- * {$prefix}_theme_settings in the database. It also fires the {$prefix}_update_settings_page 
- * hook for saving custom settings.
+ * Saves the default theme settings in the {$wpdb->prefix}_options if none have been added.  The 
+ * settings are given a unique name depending on the theme directory.  They are always saved as 
+ * {$prefix}_theme_settings in the database. 
  *
  * @since 0.7.0
  */
@@ -128,7 +126,7 @@ function hybrid_load_settings_page() {
 }
 
 /**
- * Creates the default meta boxes for the theme settings page. Child theme and plugin developers
+ * Creates the default meta boxes for the theme settings page. Parent/child theme and plugin developers
  * should use add_meta_box() to create additional meta boxes.
  *
  * @since 0.7.0
@@ -140,14 +138,14 @@ function hybrid_create_settings_meta_boxes() {
 	/* Get theme information. */
 	$prefix = hybrid_get_prefix();
 	$domain = hybrid_get_textdomain();
-	$theme_data = get_theme_data( TEMPLATEPATH . '/style.css' );
+	$theme_data = get_theme_data( trailingslashit( TEMPLATEPATH ) . 'style.css' );
 
 	/* Adds the About box for the parent theme. */
 	add_meta_box( "{$prefix}-about-theme-meta-box", sprintf( __( 'About %1$s', $domain ), $theme_data['Title'] ), 'hybrid_about_theme_meta_box', $hybrid->settings_page, 'normal', 'high' );
  
 	/* If the user is using a child theme, add an About box for it. */
 	if ( TEMPLATEPATH != STYLESHEETPATH ) {
-		$child_data = get_theme_data( STYLESHEETPATH . '/style.css' );
+		$child_data = get_theme_data( trailingslashit( STYLESHEETPATH ) . 'style.css' );
 		add_meta_box( "{$prefix}-about-child-meta-box", sprintf( __( 'About %1$s', $domain ), $child_data['Title'] ), 'hybrid_about_theme_meta_box', $hybrid->settings_page, 'normal', 'high' );
 	}
 
@@ -171,12 +169,13 @@ function hybrid_about_theme_meta_box( $object, $box ) {
 	$prefix = hybrid_get_prefix();
 	$domain = hybrid_get_textdomain();
 
-	/* Grab theme information based on the meta box being shown (parent or child theme). */
+	/* Grab theme information for the parent theme. */
 	if ( "{$prefix}-about-theme-meta-box" == $box['id'] )
-		$theme_data = get_theme_data( TEMPLATEPATH . '/style.css' );
+		$theme_data = get_theme_data( trailingslashit( TEMPLATEPATH ) . 'style.css' );
 
+	/* Grab theme information for the child theme. */
 	elseif ( "{$prefix}-about-child-meta-box" == $box['id'] )
-		$theme_data = get_theme_data( STYLESHEETPATH . '/style.css' ); ?>
+		$theme_data = get_theme_data( trailingslashit( STYLESHEETPATH ) . 'style.css' ); ?>
 
 	<table class="form-table">
 		<tr>
@@ -232,7 +231,7 @@ function hybrid_settings_page() {
 	/* Get the theme information. */
 	$prefix = hybrid_get_prefix();
 	$domain = hybrid_get_textdomain();
-	$theme_data = get_theme_data( TEMPLATEPATH . '/style.css' ); ?>
+	$theme_data = get_theme_data( trailingslashit( TEMPLATEPATH ) . 'style.css' ); ?>
 
 	<div class="wrap">
 

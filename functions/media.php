@@ -22,14 +22,21 @@ add_filter( 'stylesheet_uri', 'hybrid_debug_stylesheet', 10, 2 );
  */
 function hybrid_debug_stylesheet( $stylesheet_uri, $stylesheet_dir_uri ) {
 
+	/* If SCRIP_DEBUG is set to true and the theme supports 'dev-stylesheet'. */
 	if ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG && current_theme_supports( 'dev-stylesheet' ) ) {
+
+		/* Remove the stylesheet directory URI from the file name. */
 		$stylesheet = str_replace( trailingslashit( $stylesheet_dir_uri ), '', $stylesheet_uri );
+
+		/* Change the stylesheet name to 'style.dev.css'. */
 		$stylesheet = str_replace( '.css', '.dev.css', $stylesheet );
 
+		/* If the stylesheet exists in the stylesheet directory, set the stylesheet URI to the dev stylesheet. */
 		if ( file_exists( trailingslashit( STYLESHEETPATH ) . $stylesheet ) )
 			$stylesheet_uri = trailingslashit( $stylesheet_dir_uri ) . $stylesheet;
 	}
 
+	/* Return the theme stylesheet. */
 	return $stylesheet_uri;
 }
 

@@ -74,7 +74,7 @@ function hybrid_site_link_shortcode() {
  * @since 0.6.0
  */
 function hybrid_wp_link_shortcode() {
-	return '<a class="wp-link" href="http://wordpress.org" title="' . __( 'Powered by WordPress, state-of-the-art semantic personal publishing platform', hybrid_get_textdomain() ) . '"><span>' . __( 'WordPress', hybrid_get_textdomain() ) . '</span></a>';
+	return '<a class="wp-link" href="http://wordpress.org" title="' . esc_attr__( 'Powered by WordPress, state-of-the-art semantic personal publishing platform', hybrid_get_textdomain() ) . '"><span>' . __( 'WordPress', hybrid_get_textdomain() ) . '</span></a>';
 }
 
 /**
@@ -84,7 +84,7 @@ function hybrid_wp_link_shortcode() {
  * @uses get_theme_data() Gets theme (parent theme) information.
  */
 function hybrid_theme_link_shortcode() {
-	$data = get_theme_data( TEMPLATEPATH . '/style.css' );
+	$data = get_theme_data( trailingslashit( TEMPLATEPATH ) . 'style.css' );
 	return '<a class="theme-link" href="' . esc_url( $data['URI'] ) . '" title="' . esc_attr( $data['Name'] ) . '"><span>' . esc_attr( $data['Name'] ) . '</span></a>';
 }
 
@@ -95,7 +95,7 @@ function hybrid_theme_link_shortcode() {
  * @uses get_theme_data() Gets theme (child theme) information.
  */
 function hybrid_child_link_shortcode() {
-	$data = get_theme_data( STYLESHEETPATH . '/style.css' );
+	$data = get_theme_data( trailingslashit( STYLESHEETPATH ) . 'style.css' );
 	return '<a class="child-link" href="' . esc_url( $data['URI'] ) . '" title="' . esc_attr( $data['Name'] ) . '"><span>' . esc_attr( $data['Name'] ) . '</span></a>';
 }
 
@@ -171,12 +171,12 @@ function hybrid_entry_edit_link_shortcode( $attr ) {
 	$domain = hybrid_get_textdomain();
 	$post_type = get_post_type_object( $post->post_type );
 
-	if ( !current_user_can( "edit_{$post_type->capability_type}", $post->ID ) )
+	if ( !current_user_can( $post_type->cap->edit_post, $post->ID ) )
 		return '';
 
 	$attr = shortcode_atts( array( 'before' => '', 'after' => '' ), $attr );
 
-	return $attr['before'] . '<span class="edit"><a class="post-edit-link" href="' . get_edit_post_link( $post->ID ) . '" title="' . sprintf( esc_attr__( 'Edit %1$s', $domain ), $post->post_type ) . '">' . __( 'Edit', $domain ) . '</a></span>' . $attr['after'];
+	return $attr['before'] . '<span class="edit"><a class="post-edit-link" href="' . get_edit_post_link( $post->ID ) . '" title="' . sprintf( esc_attr__( 'Edit %1$s', $domain ), $post_type->labels->singular_name ) . '">' . __( 'Edit', $domain ) . '</a></span>' . $attr['after'];
 }
 
 /**
@@ -261,10 +261,10 @@ function hybrid_entry_title_shortcode() {
 	global $post;
 
 	if ( is_front_page() && !is_home() )
-		$title = the_title( '<h2 class="' . $post->post_type . '-title entry-title"><a href="' . get_permalink() . '" title="' . the_title_attribute( 'echo=0' ) . '" rel="bookmark">', '</a></h2>', false );
+		$title = the_title( '<h2 class="' . esc_attr( $post->post_type ) . '-title entry-title"><a href="' . get_permalink() . '" title="' . the_title_attribute( 'echo=0' ) . '" rel="bookmark">', '</a></h2>', false );
 
 	elseif ( is_singular() )
-		$title = the_title( '<h1 class="' . $post->post_type . '-title entry-title"><a href="' . get_permalink() . '" title="' . the_title_attribute( 'echo=0' ) . '" rel="bookmark">', '</a></h1>', false );
+		$title = the_title( '<h1 class="' . esc_attr( $post->post_type ) . '-title entry-title"><a href="' . get_permalink() . '" title="' . the_title_attribute( 'echo=0' ) . '" rel="bookmark">', '</a></h1>', false );
 
 	elseif ( 'link_category' == get_query_var( 'taxonomy' ) )
 		$title = false;

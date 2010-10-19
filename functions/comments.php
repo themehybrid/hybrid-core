@@ -1,8 +1,8 @@
 <?php
 /**
- * Functions for handling how comments are displayed and used on the site. This allows more
- * precise control over their display and makes more filter and action hooks available to developers
- * to use in their customizations.
+ * Functions for handling how comments are displayed and used on the site. This allows more precise 
+ * control over their display and makes more filter and action hooks available to developers to use in their 
+ * customizations.
  *
  * @package HybridCore
  * @subpackage Functions
@@ -87,6 +87,7 @@ function hybrid_comments_end_callback() {
 function hybrid_avatar() {
 	global $comment, $hybrid;
 
+	/* Make sure avatars are allowed before proceeding. */
 	if ( !get_option( 'show_avatars' ) )
 		return false;
 
@@ -95,19 +96,24 @@ function hybrid_avatar() {
 	$author = esc_html( get_comment_author( $comment->comment_ID ) );
 	$url = esc_url( get_comment_author_url( $comment->comment_ID ) );
 
+	/* Set a default avatar for pingbacks and trackbacks. */
 	$default_avatar = ( ( 'pingback' == $comment_type || 'trackback' == $comment_type ) ? trailingslashit( HYBRID_IMAGES ) . "{$comment_type}.png" : '' );
 
+	/* Allow the default avatar to be filtered by comment type. */
 	$default_avatar = apply_filters( "{$hybrid->prefix}_{$comment_type}_avatar", $default_avatar );
 
+	/* Set up the avatar size. */
 	$comment_list_args = hybrid_list_comments_args();
 	$size = ( ( $comment_list_args['avatar_size'] ) ? $comment_list_args['avatar_size'] : 80 );
 
+	/* Get the avatar provided by the get_avatar() function. */
 	$avatar = get_avatar( get_comment_author_email( $comment->comment_ID ), absint( $size ), $default_avatar, $author );
 
 	/* If URL input, wrap avatar in hyperlink. */
-	if ( $url )
+	if ( !empty( $url ) )
 		$avatar = '<a href="' . $url . '" rel="external nofollow" title="' . $author . '">' . $avatar . '</a>';
 
+	/* Display the avatar and allow it to be filtered. Note: Use the get_avatar filter hook where possible. */
 	echo apply_filters( "{$hybrid->prefix}_avatar", $avatar );
 }
 

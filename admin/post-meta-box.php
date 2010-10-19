@@ -2,7 +2,8 @@
 /**
  * Creates the theme post meta box functionality, which can be extended, changed, or removed through 
  * themes or plugins. The goal is to make it easier for the average end user to update post metadata without 
- * having to understand how custom fields work.
+ * having to understand how custom fields work.  The framework adds some default fields based on which
+ * framework features the theme uses.
  *
  * @package HybridCore
  * @subpackage Admin
@@ -27,8 +28,8 @@ function hybrid_create_post_meta_box() {
 	$domain = hybrid_get_textdomain();
 	$theme_data = get_theme_data( TEMPLATEPATH . '/style.css' );
 
-	/* Gets available post types. */
-	$post_types = get_post_types( array( 'public' => true, 'exclude_from_search' => false ), 'objects' );
+	/* Gets available public post types. */
+	$post_types = get_post_types( array( 'public' => true ), 'objects' );
 
 	/* For each available post type, create a meta box on its edit page if it supports '$prefix-post-settings'. */
 	foreach ( $post_types as $type ) {
@@ -61,7 +62,7 @@ function hybrid_post_meta_box_args( $type = '' ) {
 	if ( empty( $type ) )
 		$type = 'post';
 
-	/* If the current theme supports 'hybrid-core-seo', allow the input of custom meta. */
+	/* If the current theme supports the 'hybrid-core-seo' feature. */
 	if ( current_theme_supports( 'hybrid-core-seo' ) ) {
 		$meta['title'] = array( 'name' => 'Title', 'title' => __( 'Title:', $domain ), 'type' => 'text' );
 		$meta['description'] = array( 'name' => 'Description', 'title' => __( 'Description:', $domain ), 'type' => 'textarea' );

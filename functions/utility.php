@@ -57,8 +57,8 @@ function get_atomic_template( $template ) {
 }
 
 /**
- * Generates the relevant template info.  Adds template meta with theme version.  
- * Uses the theme name and version from style.css.  In 0.6, added the hybrid_meta_template 
+ * Generates the relevant template info.  Adds template meta with theme version.  Uses the theme 
+ * name and version from style.css.  In 0.6, added the hybrid_meta_template 
  * filter hook.
  *
  * @since 0.4.0
@@ -70,10 +70,8 @@ function hybrid_meta_template() {
 }
 
 /**
- * Dynamic element to wrap the site title in.  If it is the home or front page, wrap
- * it in an <h1> element.  One other pages, wrap it in a <div> element.  This may change
- * once the theme moves from XHTML to HTML 5 because HTML 5 allows for
- * multiple <h1> elements in a single document.
+ * Dynamic element to wrap the site title in.  If it is the front page, wrap it in an <h1> element.  One other 
+ * pages, wrap it in a <div> element. 
  *
  * @since 0.1.0
  */
@@ -87,10 +85,8 @@ function hybrid_site_title() {
 }
 
 /**
- * Dynamic element to wrap the site description in.  If it is the home or front page,
- * wrap it in an <h2> element.  One other pages, wrap it in a <div> element.  This may
- * change once the theme moves from XHTML to HTML 5 because HTML 5 has the 
- * <hgroup> element.
+ * Dynamic element to wrap the site description in.  If it is the front page, wrap it in an <h2> element.  
+ * On other pages, wrap it in a <div> element.
  *
  * @since 0.1.0
  */
@@ -101,22 +97,6 @@ function hybrid_site_description() {
 		$desc = "\n\t\t\t" . '<' . $tag . ' id="site-description"><span>' . $desc . '</span></' . $tag . '>' . "\n";
 
 	echo apply_atomic( 'site_description', $desc );
-}
-
-/**
- * Displays the footer insert from the theme settings page. Users can also use 
- * shortcodes in their footer area, which will be displayed with this function.
- *
- * @since 0.2.1
- * @uses do_shortcode() Allows users to add shortcodes to their footer.
- * @uses stripslashes() Strips any slashes added from the admin form.
- * @uses hybrid_get_setting() Grabs the 'footer_insert' theme setting.
- */
-function hybrid_footer_insert() {
-	$footer_insert = do_shortcode( hybrid_get_setting( 'footer_insert' ) );
-
-	if ( !empty( $footer_insert ) )
-		echo '<div class="footer-insert">' . $footer_insert . '</div>';
 }
 
 ?>
