@@ -24,7 +24,7 @@
  * to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  *
  * @package HybridCore
- * @version 1.0.0
+ * @version 1.0.1
  * @author Justin Tadlock <justin@justintadlock.com>
  * @copyright Copyright (c) 2008 - 2010, Justin Tadlock
  * @link http://themehybrid.com/hybrid-core
@@ -70,11 +70,11 @@ class Hybrid {
 		/* Load the core functions required by the rest of the framework. */
 		add_action( 'after_setup_theme', array( &$this, 'core' ), 2 );
 
-		/* Language functions and translations setup. */
-		add_action( 'after_setup_theme', array( &$this, 'locale' ), 3 );
-
 		/* Initialize the framework's default actions and filters. */
-		add_action( 'after_setup_theme', array( &$this, 'default_filters' ), 4 );
+		add_action( 'after_setup_theme', array( &$this, 'default_filters' ), 3 );
+
+		/* Language functions and translations setup. */
+		add_action( 'after_setup_theme', array( &$this, 'locale' ), 4 );
 
 		/* Load the framework functions. */
 		add_action( 'after_setup_theme', array( &$this, 'functions' ), 12 );
