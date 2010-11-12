@@ -150,8 +150,7 @@ function hybrid_entry_class( $class = '', $post_id = null ) {
 		/* Post format. */
 		if ( function_exists( 'get_post_format' ) ) { // 3.1 compat
 			$post_format = get_post_format( $post_id );
-			if ( !empty( $post_format ) )
-				$classes[] = "post-format-{$post_format}";
+			$classes[] = ( ( empty( $post_format ) ) ? 'post-format-default' : "post-format-{$post_format}" );
 		}
 
 		/* Add category and post tag terms as classes. */
