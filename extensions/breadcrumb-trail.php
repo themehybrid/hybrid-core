@@ -161,7 +161,10 @@ function breadcrumb_trail( $args = array() ) {
 				$trail = array_merge( $trail, breadcrumb_trail_get_term_parents( $term->parent, $term->taxonomy ) );
 
 			/* Add the term name to the trail end. */
-			$trail['trail_end'] = $term->name;
+			if ( function_exists( 'single_term_title' ) )
+				$trail['trail_end'] = single_term_title( '', false );
+			else
+				$trail['trail_end'] = $term->name;
 		}
 
 		/* If viewing a post type archive. */
