@@ -1,0 +1,165 @@
+<?php
+/**
+ * Cleaner Gallery - A valid image gallery script for WordPress.
+ *
+ * Cleaner Gallery was created to clean up the invalid HTML and remove the inline styles of the default 
+ * implementation of the WordPress [gallery] shortcode.  This has the obvious benefits of creating 
+ * sites with clean, valid code.  But, it also allows developers to more easily create custom styles for 
+ * galleries within their themes.
+ *
+ * This program is free software; you can redistribute it and/or modify it under the terms of the GNU 
+ * General Public License version 2, as published by the Free Software Foundation.  You may NOT assume 
+ * that you can use any other version of the GPL.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ * @package CleanerGallery
+ * @version 0.9
+ * @author Justin Tadlock <justin@justintadlock.com>
+ * @copyright Copyright (c) 2008 - 2010, Justin Tadlock
+ * @link http://justintadlock.com/archives/2008/04/13/cleaner-wordpress-gallery-plugin
+ * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ */
+
+/* Filter the post gallery shortcode output. */
+add_filter( 'post_gallery', 'cleaner_gallery', 10, 2 );
+
+/**
+ * Overwrites the default WordPress [gallery] shortcode's output.  This function removes the invalid 
+ * HTML and inline styles.  It adds the number of columns used as a class attribute, which allows 
+ * developers to style the gallery more easily.
+ *
+ * @since 0.9
+ * @param string $output
+ * @param array $attr
+ * @return string $output
+ */
+function cleaner_gallery( $output, $attr ) {
+	global $post;
+
+	static $cleaner_gallery_instance = 0;
+	$cleaner_gallery_instance++;
+
+	/* We're not worried abut galleries in feeds, so just return the output here. */
+	if ( is_feed() )
+		return $output;
+
+	/* Orderby. */
+	if ( isset( $attr['orderby'] ) ) {
+		$attr['orderby'] = sanitize_sql_orderby( $attr['orderby'] );
+		if ( !$attr['orderby'] )
+			unset( $attr['orderby'] );
+	}
+
+	/* Default gallery settings. */
+	$defaults = array(
+		'order' => 'ASC',
+		'orderby' => 'menu_order ID',
+		'id' => $post->ID,
+		'link' => '',
+		'itemtag' => 'dl',
+		'icontag' => 'dt',
+		'captiontag' => 'dd',
+		'columns' => 3,
+		'size' => 'thumbnail',
+		'include' => '',
+		'exclude' => '',
+		'numberposts' => -1,
+		'offset' => ''
+	);
+
+	/* Apply filters to the default arguments. */
+	$defaults = apply_filters( 'cleaner_gallery_defaults', $defaults );
+
+	/* Merge the defaults with user input. Make sure $id is an integer. */
+	extract( shortcode_atts( $defaults, $attr ) );
+	$id = intval( $id );
+
+	/* Arguments for get_children(). */
+	$children = array(
+		'post_parent' => $id,
+		'post_status' => 'inherit',
+		'post_type' => 'attachment',
+		'post_mime_type' => 'image',
+		'order' => $order,
+		'orderby' => $orderby,
+		'exclude' => $exclude,
+		'include' => $include,
+		'numberposts' => $numberposts,
+		'offset' => $offset,
+	);
+
+	/* Get image attachments. If none, return. */
+	$attachments = get_children( $children );
+
+	if ( empty( $attachments ) )
+		return '';
+
+	/* Properly escape the gallery tags. */
+	$itemtag = tag_escape( $itemtag );
+	$icontag = tag_escape( $icontag );
+	$captiontag = tag_escape( $captiontag );
+	$i = 0;
+
+	/* Count the number of attachments returned. */
+	$attachment_count = count( $attachments );
+
+	/* If there are fewer attachments than columns, set $columns to $attachment_count. */
+	$columns = ( ( $columns <= $attachment_count ) ? intval( $columns ) : intval( $attachment_count ) );
+
+	/* Open the gallery <div>. */
+	$output = "\n\t\t\t<div id='gallery-{$id}-{$cleaner_gallery_instance}' class='gallery gallery-{$id}'>";
+
+	/* Loop through each attachment. */
+	foreach ( $attachments as $id => $attachment ) {
+
+		/* Open each gallery row. */
+		if ( $columns > 0 && $i % $columns == 0 )
+			$output .= "\n\t\t\t\t<div class='gallery-row clear'>";
+
+		/* Open each gallery item. */
+		$output .= "\n\t\t\t\t\t<{$itemtag} class='gallery-item col-{$columns}'>";
+
+		/* Open the element to wrap the image. */
+		$output .= "\n\t\t\t\t\t\t<{$icontag} class='gallery-icon'>";
+
+		/* Add the image. */
+		$image = ( ( isset( $attr['link'] ) && 'file' == $attr['link'] ) ? wp_get_attachment_link( $id, $size, false, false ) : wp_get_attachment_link( $id, $size, true, false ) );
+		$output .= apply_filters( 'cleaner_gallery_image', $image, $id, $attr );
+
+		/* Close the image wrapper. */
+		$output .= "</{$icontag}>";
+
+		/* Get the caption and title. */
+		$caption = esc_html( $attachment->post_excerpt );
+
+		/* If image caption is set. */
+		if ( !empty( $caption ) ) {
+			$output .= "\n\t\t\t\t\t\t<{$captiontag} class='gallery-caption'>";
+
+			$output .= apply_filters( 'cleaner_gallery_caption', wptexturize( $caption ), $id, $attr );
+
+			$output .= "</{$captiontag}>";
+		}
+
+		/* Close individual gallery item. */
+		$output .= "\n\t\t\t\t\t</{$itemtag}>";
+
+		/* Close gallery row. */
+		if ( $columns > 0 && ++$i % $columns == 0 )
+			$output .= "\n\t\t\t\t</div>";
+	}
+
+	/* Close gallery row. */
+	if ( $columns > 0 && $i % $columns !== 0 )
+		$output .= "\n\t\t\t</div>";
+
+	/* Close the gallery <div>. */
+	$output .= "\n\t\t\t</div><!-- .gallery -->\n";
+
+	/* Return out very nice, valid HTML gallery. */
+	return $output;
+}
+
+?>

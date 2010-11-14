@@ -223,6 +223,10 @@ class Hybrid {
 		/* Load the Breadcrumb Trail extension if supported. */
 		require_if_theme_supports( 'breadcrumb-trail', trailingslashit( HYBRID_EXTENSIONS ) . 'breadcrumb-trail.php' );
 
+		/* Load the Cleaner Gallery extension if supported and the plugin isn't active. */
+		if ( !function_exists( 'cleaner_gallery' ) )
+			require_if_theme_supports( 'cleaner-gallery', trailingslashit( HYBRID_EXTENSIONS ) . 'cleaner-gallery.php' );
+
 		/* Load the Custom Field Series extension if supported. */
 		require_if_theme_supports( 'custom-field-series', trailingslashit( HYBRID_EXTENSIONS ) . 'custom-field-series.php' );
 
