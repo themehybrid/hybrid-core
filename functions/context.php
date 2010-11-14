@@ -337,8 +337,13 @@ function hybrid_document_title() {
 
 		/* If viewing a taxonomy term archive. */
 		if ( is_category() || is_tag() || is_tax() ) {
-			$term = $wp_query->get_queried_object();
-			$doctitle = $term->name;
+
+			if ( function_exists( 'single_term_title' ) ) {
+				$doctitle = single_term_title( '', false );
+			} else { // 3.0 compat
+				$term = $wp_query->get_queried_object();
+				$doctitle = $term->name;
+			}
 		}
 
 		/* If viewing a post type archive. */
