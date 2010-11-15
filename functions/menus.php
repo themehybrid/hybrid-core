@@ -21,8 +21,24 @@ add_action( 'init', 'hybrid_register_menus' );
  */
 function hybrid_register_menus() {
 
+	/* Get theme-supported sidebars. */
+	$menus = get_theme_support( 'hybrid-core-menus' );
+
+	/* If there is no array of sidebars IDs, return. */
+	if ( !is_array( $menus[0] ) )
+		return;
+
 	/* Register the 'primary' menu. */
-	register_nav_menu( 'primary', __( 'Primary Menu', hybrid_get_textdomain() ) );
+	if ( in_array( 'primary', $menus[0] ) )
+		register_nav_menu( 'primary', __( 'Primary Menu', hybrid_get_textdomain() ) );
+
+	/* Register the 'secondary' menu. */
+	if ( in_array( 'secondary', $menus[0] ) )
+		register_nav_menu( 'secondary', __( 'Secondary Menu', hybrid_get_textdomain() ) );
+
+	/* Register the 'subsidiary' menu. */
+	if ( in_array( 'subsidiary', $menus[0] ) )
+		register_nav_menu( 'subsidiary', __( 'Subsidiary Menu', hybrid_get_textdomain() ) );
 }
 
 ?>
