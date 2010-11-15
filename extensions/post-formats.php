@@ -36,9 +36,6 @@ add_action( 'admin_menu', 'custom_post_formats_admin_setup' );
 /* Add the post format to the post states list. */
 add_filter( 'display_post_states', 'custom_post_formats_display_post_states' );
 
-/* Add some minor formatting CSS to the post editor. */
-add_action( 'admin_head-post.php', 'custom_post_formats_admin_css' );
-
 /**
  * This function switches theme-supported 'post-formats' to 'custom-post-formats'.  What this does
  * is take the supported 'post-formats' array and creates an array of 'custom-post-formats'.  It then
@@ -119,13 +116,13 @@ function custom_post_formats_meta_box( $post, $box ) {
 			elseif ( !in_array( $post_format, $post_formats[0] ) )
 				$post_formats[0][] = $post_format; ?>
 
-			<div class="post-format">
+			<div class="custom-post-format">
 
 				<p><?php _e( 'Post formats are theme-defined formatting for specific types of posts.' ); ?></p>
 
 				<input type="hidden" name="custom_post_formats_meta_box_nonce" value="<?php echo wp_create_nonce( basename( __FILE__ ) ); ?>" />
 
-				<div class="post-format-wrap">
+				<div class="custom-post-format-wrap">
 				<ul>
 					<li><input type="radio" name="post_format" id="post_format_default" value="0" <?php checked( $post_format, '0' );?>> <label for="post_format_default"><?php echo esc_html( get_custom_post_format_string( '0' ) ); ?></label></li>
 
@@ -226,19 +223,5 @@ function custom_post_formats_display_post_states( $states ) {
 
 	return $states;
 }
-
-/**
- * Some minor CSS so that themes with many formats have a scrollbar to avoid an overly large meta box.
- *
- * @since 0.1.0
- */
-function custom_post_formats_admin_css() {
-
-	/* Return if 'custom-post-formats' is not supported. */
-	if ( !current_theme_supports( 'custom-post-formats' ) )
-		return; ?>
-
-	<style type="text/css">.post-format-wrap { padding: 0 5px; max-height: 170px; overflow-y: auto; }</style>
-<?php }
 
 ?>
