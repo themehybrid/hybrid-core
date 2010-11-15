@@ -20,6 +20,10 @@ function hybrid_admin_init() {
 	/* Load the admin stylesheet for the widgets screen. */
 	if ( current_theme_supports( 'hybrid-core-widgets' ) )
 		add_action( 'load-widgets.php', 'hybrid_admin_enqueue_style' );
+
+	/* Load the admin stylesheet for the post editor screen. */
+	if ( current_theme_supports( 'custom-post-formats' ) || current_theme_supports( 'post-layouts' ) )
+		add_action( 'load-post.php', 'hybrid_admin_enqueue_style' );
 }
 
 /**
