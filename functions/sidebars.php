@@ -21,6 +21,13 @@ add_action( 'widgets_init', 'hybrid_register_sidebars' );
  */
 function hybrid_register_sidebars() {
 
+	/* Get theme-supported sidebars. */
+	$sidebars = get_theme_support( 'hybrid-core-sidebars' );
+
+	/* If there is no array of sidebars IDs, return. */
+	if ( !is_array( $sidebars[0] ) )
+		return;
+
 	/* Get the theme textdomain. */
 	$domain = hybrid_get_textdomain();
 
@@ -91,22 +98,28 @@ function hybrid_register_sidebars() {
 	);
 
 	/* Register the primary sidebar. */
-	register_sidebar( $primary );
+	if ( in_array( 'primary', $sidebars[0] ) )
+		register_sidebar( $primary );
 
 	/* Register the secondary sidebar. */
-	register_sidebar( $secondary );
+	if ( in_array( 'secondary', $sidebars[0] ) )
+		register_sidebar( $secondary );
 
 	/* Register the subsidiary sidebar. */
-	register_sidebar( $subsidiary );
+	if ( in_array( 'subsidiary', $sidebars[0] ) )
+		register_sidebar( $subsidiary );
 
 	/* Register the before content sidebar. */
-	register_sidebar( $before_content );
+	if ( in_array( 'before-content', $sidebars[0] ) )
+		register_sidebar( $before_content );
 
 	/* Register the after content sidebar. */
-	register_sidebar( $after_content );
+	if ( in_array( 'after-content', $sidebars[0] ) )
+		register_sidebar( $after_content );
 
 	/* Register the after singular sidebar. */
-	register_sidebar( $after_singular );
+	if ( in_array( 'after-singular', $sidebars[0] ) )
+		register_sidebar( $after_singular );
 }
 
 ?>
