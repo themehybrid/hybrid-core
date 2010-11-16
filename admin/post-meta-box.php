@@ -99,10 +99,6 @@ function hybrid_post_meta_box_args( $type = '' ) {
 		}
 	}
 
-	/* If the current theme supports the 'post-layouts' extension. */
-	if ( current_theme_supports( 'post-layouts' ) )
-		$meta['post_layout'] = array( 'name' => 'Layout', 'title' => __( 'Layout:', $domain ), 'type' => 'select', 'options' => post_layouts_available() );
-
 	/* $prefix_$type_meta_boxes filter is deprecated. Use $prefix_$type_meta_box_args instead. */
 	$meta = apply_filters( "{$prefix}_{$type}_meta_boxes", $meta );
 

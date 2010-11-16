@@ -20,7 +20,7 @@
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * @package PostLayouts
- * @version 0.1.0
+ * @version 0.2.0
  * @author Justin Tadlock <justin@justintadlock.com>
  * @copyright Copyright (c) 2010, Justin Tadlock
  * @link http://justintadlock.com
@@ -30,19 +30,21 @@
 /* Filters the body_class hook to add a custom class. */
 add_filter( 'body_class', 'post_layouts_body_class' );
 
+/* Set up the custom post layouts. */
+add_action( 'admin_menu', 'post_layouts_admin_setup' );
+
 /**
  * Gets the layout for the current post based off the 'Layout' custom field key if viewing a singular post 
  * entry.  All other pages are given a default layout of 'layout-default'.
  *
  * @since 0.1.0
- * @uses is_singular() Checks if viewing a singular post.
- * @link http://codex.wordpress.org/Function_Reference/is_singular
- * @uses get_post_meta() Gets the post layout metadata for the given post.
- * @link http://codex.wordpress.org/Function_Reference/get_post_meta
  * @return string The layout for the given page.
  */
 function post_layouts_get_layout() {
 	global $wp_query;
+
+	/* Get the available post layouts. */
+	$post_layouts = get_theme_support( 'post-layouts' );
 
 	/* Set the layout to an empty string. */
 	$layout = '';
@@ -53,24 +55,36 @@ function post_layouts_get_layout() {
 		/* Get the current post ID. */
 		$post_id = $wp_query->get_queried_object_id();
 
-		/* Allow plugin/theme developers to override the default meta key used. */
-		$meta_key = apply_filters( 'post_layouts_meta_key', 'Layout' );
-
-		/* Check the post metadata for the layout. */
-		$post_layout = get_post_meta( $post_id, $meta_key, true );
-
-		/* If a layout was found, assign it to the $layout variable. */
-		if ( !empty( $post_layout ) )
-			$layout = esc_attr( $post_layout );
+		/* Get the post layout. */
+		$layout = get_post_layout( $post_id );
 	}
 
 	/* Make sure the given layout is in the array of available post layouts for the theme. */
-	if ( empty( $layout ) || !in_array( $layout, post_layouts_available() ) )
+	if ( empty( $layout ) || !in_array( $layout, $post_layouts[0] ) )
 		$layout = 'default';
 
 	/* Return the layout and allow plugin/theme developers to override it. */
-	return apply_filters( 'get_post_layout', "layout-{$layout}" );
+	return esc_attr( apply_filters( 'get_post_layout', "layout-{$layout}" ) );
 }
+
+/**
+ * Get the post layout based on the given post ID.
+ *
+ * @since 0.2.0
+ */
+function get_post_layout( $post_id ) {
+	$post_layout = get_post_meta( $post_id, apply_filters( 'post_layouts_meta_key', 'Layout' ), true );
+	return ( !empty( $post_layout ) ? $post_layout : 'default' );
+}
+
+/**
+ * Update/set the post layout based on the given post ID and layout.
+ *
+ * @since 0.2.0
+ */
+function set_post_layout( $post_id, $layout ) {
+	update_post_meta( $post_id, apply_filters( 'post_layouts_meta_key', 'Layout' ), $layout );
+}	
 
 /**
  * Adds the post layout class to the WordPress body class in the form of "layout-$layout".  This allows 
@@ -78,7 +92,6 @@ function post_layouts_get_layout() {
  * this extension, the theme should make sure to handle all possible layout classes.
  *
  * @since 0.1.0
- * @uses post_layouts_get_layout() Gets the layout of the current page.
  * @param array $classes
  * @param array $classes
  */
@@ -92,31 +105,115 @@ function post_layouts_body_class( $classes ) {
 }
 
 /**
- * Provides a list of available layouts.  Theme developers may overwrite this to create unique layouts or 
- * remove some of the default layouts.  When filtering, always return an array.  If you want to return 
- * an array of no layouts, this extension should not be used.  You should not prefix any new layouts with
- * the 'layout-' prefix.  This will automatically be added when needed.
+ * Creates default text strings based on the default post layouts.  Theme developers that add custom 
+ * layouts should filter 'post_layouts_strings' to add strings to match the custom layouts, but it's not 
+ * required.  The layout name will be used if no text string is found.
  *
- * While not in the array of layouts, layout functions will always default to 'layout-default' if no specific
- * layout is specified for the page.
- *
- * @since 0.1.0
- * @return array $layouts Array of layouts available for use within the theme.
+ * @since 0.2.0
  */
-function post_layouts_available() {
+function post_layouts_strings() {
 
-	/* Creates an array of default layouts. */
-	$layouts = array(
-		'1c',	// One column
-		'2c-l',	// Two columns, content left
-		'2c-r',	// Two columns, content right
-		'3c-l',	// Three columns, content left
-		'3c-r',	// Three columns, content right
-		'3c-c'	// Three columns, content centered
+	/* Set up the default layout strings. */
+	$strings = array(
+		'default' => __( 'Default' ),
+		'1c' => __( 'One Column' ),
+		'2c-l' => __( 'Two Columns, Left' ),
+		'2c-r' => __( 'Two Columns, Right' ),
+		'3c-l' => __( 'Three Columns, Left' ),
+		'3c-r' => __( 'Three Columns, Right' ),
+		'3c-c' => __( 'Three Columns, Center' )
 	);
 
-	/* Allow developers to overwrite the available layouts. */
-	return apply_filters( 'post_layouts_available', $layouts );
+	/* Allow devs to filter the strings for custom layouts. */
+	return apply_filters( 'post_layouts_strings', $strings );
+}
+
+/**
+ * Get a specific layout's text string.
+ *
+ * @since 0.2.0
+ */
+function post_layouts_get_string( $layout ) {
+
+	/* Get an array of post layout strings. */
+	$strings = post_layouts_strings();
+
+	/* Return the layout's string if it exists. Else, return the layout slug. */
+	return ( ( isset( $strings[$layout] ) ) ? $strings[$layout] : $layout );
+}
+
+/**
+ * Post layouts admin setup.  Registers the post layouts meta box for the post editing screen.  Adds the 
+ * metadata save function to the 'save_post' hook.
+ *
+ * @since 0.2.0
+ */
+function post_layouts_admin_setup() {
+
+	/* Gets available public post types. */
+	$post_types = get_post_types( array( 'public' => true ), 'objects' );
+
+	/* For each available post type, create a meta box on its edit page if it supports '$prefix-post-settings'. */
+	foreach ( $post_types as $type )
+		add_meta_box( 'post-layouts-meta-box', __( 'Layout' ), 'post_layouts_meta_box', $type->name, 'side', 'default' );
+
+	/* Saves the post format on the post editing page. */
+	add_action( 'save_post', 'post_layouts_save_post', 10, 2 );
+}
+
+/**
+ * Displays a meta box of radio selectors on the post editing screen, which allows theme users to select 
+ * the layout they wish to use for the specific post.
+ *
+ * @since 0.2.0
+ */
+function post_layouts_meta_box( $post, $box ) {
+
+	/* Get theme-supported post layouts. */
+	$layouts = get_theme_support( 'post-layouts' );
+	$post_layouts = $layouts[0];
+
+	/* Get the current post's layout. */
+	$post_layout = get_post_layout( $post->ID ); ?>
+
+	<div class="post-layout">
+
+		<input type="hidden" name="post_layouts_meta_box_nonce" value="<?php echo wp_create_nonce( basename( __FILE__ ) ); ?>" />
+
+		<p><?php _e( 'Post layouts allow you to select a specific theme layout structure for the post.' ); ?></p>
+
+		<div class="post-layout-wrap">
+			<ul>
+				<li><input type="radio" name="post_layout" id="post_layout_default" value="default" <?php checked( $post_layout, 'default' );?> /> <label for="post_layout_default"><?php echo esc_html( post_layouts_get_string( 'default' ) ); ?></label></li>
+
+				<?php foreach ( $post_layouts as $layout ) { ?>
+					<li><input type="radio" name="post_layout" id="post_layout_<?php echo esc_attr( $layout ); ?>" value="<?php echo esc_attr( $layout ); ?>" <?php checked( $post_layout, $layout ); ?> /> <label for="post_layout_<?php echo esc_attr( $layout ); ?>"><?php echo esc_html( post_layouts_get_string( $layout ) ); ?></label></li>
+				<?php } ?>
+			</ul>
+		</div>
+	</div><?php
+}
+
+/**
+ * Saves the post layout metadata if on the post editing screen in the admin.
+ *
+ * @since 0.2.0
+ */
+function post_layouts_save_post( $post_id, $post ) {
+
+	/* Verify the nonce for the post formats meta box. */
+	if ( !isset( $_POST['post_layouts_meta_box_nonce'] ) || !wp_verify_nonce( $_POST['post_layouts_meta_box_nonce'], basename( __FILE__ ) ) )
+		return $post_id;
+
+	/* Get the previous post layout. */
+	$old_layout = get_post_layout( $post_id );
+
+	/* Get the submitted post layout. */
+	$new_layout = esc_attr( $_POST['post_layout'] );
+
+	/* If the old layout doesn't match the new layout, update the post layout meta. */
+	if ( $old_layout !== $new_layout )
+		set_post_layout( $post_id, $new_layout );
 }
 
 ?>
