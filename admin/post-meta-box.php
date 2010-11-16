@@ -64,9 +64,9 @@ function hybrid_post_meta_box_args( $type = '' ) {
 
 	/* If the current theme supports the 'hybrid-core-seo' feature. */
 	if ( current_theme_supports( 'hybrid-core-seo' ) ) {
-		$meta['title'] = array( 'name' => 'Title', 'title' => __( 'Title:', $domain ), 'type' => 'text' );
-		$meta['description'] = array( 'name' => 'Description', 'title' => __( 'Description:', $domain ), 'type' => 'textarea' );
-		$meta['keywords'] = array( 'name' => 'Keywords', 'title' => __( 'Keywords:', $domain ), 'type' => 'text' );
+		$meta['title'] = array( 'name' => 'Title', 'title' => sprintf( __( 'Document Title: %s', $domain ), '<code>&lt;title>Example&lt;/title></code>' ), 'type' => 'text' );
+		$meta['description'] = array( 'name' => 'Description', 'title' => sprintf( __( 'Meta Description: %s', $domain ), '<code>&lt;meta name="description" content="Example" /></code>' ), 'type' => 'textarea' );
+		$meta['keywords'] = array( 'name' => 'Keywords', 'title' => sprintf( __( 'Meta Keywords: %s', $domain ), '<code>&lt;meta name="keywords" content="Example" /></code>' ), 'type' => 'text' );
 	}
 
 	/* If the current theme supports the 'custom-field-series' extension. */
@@ -123,14 +123,14 @@ function hybrid_post_meta_box( $object, $box ) {
 
 	<input type="hidden" name="<?php echo "{$prefix}_{$object->post_type}_meta_box_nonce"; ?>" value="<?php echo wp_create_nonce( basename( __FILE__ ) ); ?>" />
 
-	<table class="form-table">
+	<div class="hybrid-post-settings">
 
 		<?php foreach ( $meta_box_options as $option ) {
 			if ( function_exists( "hybrid_post_meta_box_{$option['type']}" ) )
 				call_user_func( "hybrid_post_meta_box_{$option['type']}", $option, get_post_meta( $object->ID, $option['name'], true ) );
 		} ?>
 
-	</table><!-- .form-table --><?php
+	</div><!-- .form-table --><?php
 }
 
 /**
@@ -142,10 +142,12 @@ function hybrid_post_meta_box( $object, $box ) {
  */
 function hybrid_post_meta_box_text( $args = array(), $value = false ) {
 	$name = preg_replace( "/[^A-Za-z_-]/", '-', $args['name'] ); ?>
-	<tr>
-		<th style="width:10%;"><label for="<?php echo $name; ?>"><?php echo $args['title']; ?></label></th>
-		<td><input type="text" name="<?php echo $name; ?>" id="<?php echo $name; ?>" value="<?php echo esc_attr( $value ); ?>" size="30" tabindex="30" style="width: 97%;" /></td>
-	</tr>
+	<p>
+		<label for="<?php echo $name; ?>"><?php echo $args['title']; ?></label>
+		<br />
+		<input type="text" name="<?php echo $name; ?>" id="<?php echo $name; ?>" value="<?php echo esc_attr( $value ); ?>" size="30" tabindex="30" style="width: 99%;" />
+		<?php if ( !empty( $args['description'] ) ) echo '<br /><span class="howto">' . $args['description'] . '</span>'; ?>
+	</p>
 	<?php
 }
 
@@ -158,17 +160,17 @@ function hybrid_post_meta_box_text( $args = array(), $value = false ) {
  */
 function hybrid_post_meta_box_select( $args = array(), $value = false ) {
 	$name = preg_replace( "/[^A-Za-z_-]/", '-', $args['name'] ); ?>
-	<tr>
-		<th style="width:10%;"><label for="<?php echo $name; ?>"><?php echo $args['title']; ?></label></th>
-		<td>
-			<select name="<?php echo $name; ?>" id="<?php echo $name; ?>">
-				<option value=""></option>
-				<?php foreach ( $args['options'] as $option => $val ) { ?>
-					<option value="<?php echo esc_attr( $val ); ?>" <?php selected( esc_attr( $value ), esc_attr( $val ) ); ?>><?php echo ( !empty( $args['use_key_and_value'] ) ? $option : $val ); ?></option>
-				<?php } ?>
-			</select>
-		</td>
-	</tr>
+	<p>
+		<label for="<?php echo $name; ?>"><?php echo $args['title']; ?></label>
+		<br />
+		<select name="<?php echo $name; ?>" id="<?php echo $name; ?>">
+			<option value=""></option>
+			<?php foreach ( $args['options'] as $option => $val ) { ?>
+				<option value="<?php echo esc_attr( $val ); ?>" <?php selected( esc_attr( $value ), esc_attr( $val ) ); ?>><?php echo ( !empty( $args['use_key_and_value'] ) ? $option : $val ); ?></option>
+			<?php } ?>
+		</select>
+		<?php if ( !empty( $args['description'] ) ) echo '<br /><span class="howto">' . $args['description'] . '</span>'; ?>
+	</p>
 	<?php
 }
 
@@ -181,10 +183,12 @@ function hybrid_post_meta_box_select( $args = array(), $value = false ) {
  */
 function hybrid_post_meta_box_textarea( $args = array(), $value = false ) {
 	$name = preg_replace( "/[^A-Za-z_-]/", '-', $args['name'] ); ?>
-	<tr>
-		<th style="width:10%;"><label for="<?php echo $name; ?>"><?php echo $args['title']; ?></label></th>
-		<td><textarea name="<?php echo $name; ?>" id="<?php echo $name; ?>" cols="60" rows="4" tabindex="30" style="width: 97%;"><?php echo esc_html( $value ); ?></textarea></td>
-	</tr>
+	<p>
+		<label for="<?php echo $name; ?>"><?php echo $args['title']; ?></label>
+		<br />
+		<textarea name="<?php echo $name; ?>" id="<?php echo $name; ?>" cols="60" rows="2" tabindex="30" style="width: 99%;"><?php echo esc_html( $value ); ?></textarea>
+		<?php if ( !empty( $args['description'] ) ) echo '<br /><span class="howto">' . $args['description'] . '</span>'; ?>
+	</p>
 	<?php
 }
 
@@ -197,14 +201,14 @@ function hybrid_post_meta_box_textarea( $args = array(), $value = false ) {
  */
 function hybrid_post_meta_box_radio( $args = array(), $value = false ) {
 	$name = preg_replace( "/[^A-Za-z_-]/", '-', $args['name'] ); ?>
-	<tr>
-		<th style="width:10%;"><label for="<?php echo $name; ?>"><?php echo $args['title']; ?></label></th>
-		<td>
-			<?php foreach ( $args['options'] as $option => $val ) { ?>
-				<input type="radio" name="<?php echo $name; ?>" value="<?php echo esc_attr( $val ); ?> <?php checked( esc_attr( $value ), esc_attr( $val ) ); ?> />
-			<?php } ?>
-		</td>
-	</tr>
+	<p>
+		<?php echo $args['title']; ?>
+		<?php foreach ( $args['options'] as $option => $val ) { ?>
+			<br />
+			<input type="radio" name="<?php echo $name; ?>" value="<?php echo esc_attr( $val ); ?> <?php checked( esc_attr( $value ), esc_attr( $val ) ); ?> />
+		<?php } ?>
+		<?php if ( !empty( $args['description'] ) ) echo '<br /><span class="howto">' . $args['description'] . '</span>'; ?>
+	</p>
 	<?php
 }
 

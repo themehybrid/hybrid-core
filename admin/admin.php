@@ -22,7 +22,7 @@ function hybrid_admin_init() {
 		add_action( 'load-widgets.php', 'hybrid_admin_enqueue_style' );
 
 	/* Load the admin stylesheet for the post editor screen. */
-	if ( current_theme_supports( 'custom-post-formats' ) || current_theme_supports( 'post-layouts' ) )
+	if ( current_theme_supports( 'custom-post-formats' ) || current_theme_supports( 'post-layouts' ) || current_theme_supports( 'hybrid-core-post-meta-box' ) )
 		add_action( 'load-post.php', 'hybrid_admin_enqueue_style' );
 }
 

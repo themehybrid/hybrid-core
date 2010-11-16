@@ -21,6 +21,12 @@
 	max-height: 170px;
 	overflow-y: auto;
 	}
+.hybrid-post-settings {
+	padding-top: 5px;
+	}
+.hybrid-post-settings p {
+	margin-bottom: 15px !important;
+	}
 
 /* Widgets page. */
 .widgets-php .columns-1 {
