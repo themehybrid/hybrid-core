@@ -116,7 +116,7 @@ function set_post_style( $post, $style ) {
 	if ( function_exists( 'get_post_format_strings' ) ) {
 		$format_strings = get_post_format_strings();
 
-		if ( array_key_exists( $style, $format_strings ) )
+		if ( !empty( $style ) && array_key_exists( $style, $format_strings ) )
 			set_post_format( $post, $style );
 		else
 			set_post_format( $post, false );
