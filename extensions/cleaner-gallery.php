@@ -106,7 +106,7 @@ function cleaner_gallery( $output, $attr ) {
 	$attachment_count = count( $attachments );
 
 	/* If there are fewer attachments than columns, set $columns to $attachment_count. */
-	$columns = ( ( $columns <= $attachment_count ) ? intval( $columns ) : intval( $attachment_count ) );
+	$columns = intval( $columns );//$columns = ( ( $columns <= $attachment_count ) ? intval( $columns ) : intval( $attachment_count ) );
 
 	/* Open the gallery <div>. */
 	$output = "\n\t\t\t<div id='gallery-{$id}-{$cleaner_gallery_instance}' class='gallery gallery-{$id}'>";
