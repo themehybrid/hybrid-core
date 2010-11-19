@@ -64,6 +64,17 @@ function hybrid_register_sidebars() {
 		'after_title' => '</h3>'
 	);
 
+	/* Set up the header sidebar arguments. */
+	$header = array(
+		'id' => 'before-content',
+		'name' => __( 'Header', $domain ),
+		'description' => __( 'Displayed within the site\'s header area.', $domain ),
+		'before_widget' => '<div id="%1$s" class="widget %2$s widget-%2$s"><div class="widget-wrap widget-inside">',
+		'after_widget' => '</div></div>',
+		'before_title' => '<h3 class="widget-title">',
+		'after_title' => '</h3>'
+	);
+
 	/* Set up the before content sidebar arguments. */
 	$before_content = array(
 		'id' => 'before-content',
@@ -108,6 +119,10 @@ function hybrid_register_sidebars() {
 	/* Register the subsidiary sidebar. */
 	if ( in_array( 'subsidiary', $sidebars[0] ) )
 		register_sidebar( $subsidiary );
+
+	/* Register the header sidebar. */
+	if ( in_array( 'header', $sidebars[0] ) )
+		register_sidebar( $header );
 
 	/* Register the before content sidebar. */
 	if ( in_array( 'before-content', $sidebars[0] ) )
