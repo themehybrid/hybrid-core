@@ -66,7 +66,7 @@ function hybrid_register_sidebars() {
 
 	/* Set up the header sidebar arguments. */
 	$header = array(
-		'id' => 'before-content',
+		'id' => 'header',
 		'name' => __( 'Header', $domain ),
 		'description' => __( 'Displayed within the site\'s header area.', $domain ),
 		'before_widget' => '<div id="%1$s" class="widget %2$s widget-%2$s"><div class="widget-wrap widget-inside">',
