@@ -1,87 +1,120 @@
 <?php
 /**
- * Categories Widget Class
- *
  * The Categories widget replaces the default WordPress Categories widget. This version gives total
  * control over the output to the user by allowing the input of all the arguments typically seen
  * in the wp_list_categories() function.
- *
- * @since 0.6
- * @link http://codex.wordpress.org/Template_Tags/wp_list_categories
- * @link http://themehybrid.com/themes/hybrid/widgets
  *
  * @package Hybrid
  * @subpackage Classes
  */
 
+/**
+ * Categories Widget Class
+ *
+ * @since 0.6
+ * @link http://codex.wordpress.org/Template_Tags/wp_list_categories
+ * @link http://themehybrid.com/themes/hybrid/widgets
+ */
 class Hybrid_Widget_Categories extends WP_Widget {
 
+	/**
+	 * Prefix for the widget.
+	 * @since 0.7.0
+	 */
 	var $prefix;
+
+	/**
+	 * Textdomain for the widget.
+	 * @since 0.7.0
+	 */
 	var $textdomain;
 
 	/**
 	 * Set up the widget's unique name, ID, class, description, and other options.
-	 * @since 0.6
+	 * @since 0.6.0
 	 */
 	function Hybrid_Widget_Categories() {
+
+		/* Set the widget prefix. */
 		$this->prefix = hybrid_get_prefix();
+
+		/* Set the widget textdomain. */
 		$this->textdomain = hybrid_get_textdomain();
 
-		$widget_ops = array( 'classname' => 'categories', 'description' => __( 'An advanced widget that gives you total control over the output of your category links.', $this->textdomain ) );
-		$control_ops = array( 'width' => 800, 'height' => 350, 'id_base' => "{$this->prefix}-categories" );
-		$this->WP_Widget( "{$this->prefix}-categories", __( 'Categories', $this->textdomain ), $widget_ops, $control_ops );
+		/* Set up the widget options. */
+		$widget_options = array(
+			'classname' => 'categories',
+			'description' => esc_html__( 'An advanced widget that gives you total control over the output of your category links.', $this->textdomain )
+		);
+
+		/* Set up the widget control options. */
+		$control_options = array(
+			'width' => 800,
+			'height' => 350,
+			'id_base' => "{$this->prefix}-categories"
+		);
+
+		/* Create the widget. */
+		$this->WP_Widget( "{$this->prefix}-categories", esc_attr__( 'Categories', $this->textdomain ), $widget_options, $control_options );
 	}
 
 	/**
 	 * Outputs the widget based on the arguments input through the widget controls.
-	 * @since 0.6
+	 * @since 0.6.0
 	 */
 	function widget( $args, $instance ) {
 		extract( $args );
 
-		$args = array();
+		/* Set up the arguments for wp_list_categories(). */
+		$args = array(
+			'taxonomy' =>		$instance['taxonomy'],
+			'style' =>			$instance['style'],
+			'orderby' =>		$instance['orderby'],
+			'order' =>		$instance['order'],
+			'include' =>		isset( $instance['include'] ) ? join( ', ', $instance['include'] ) : '',
+			'exclude' =>		isset( $instance['exclude'] ) ? join( ', ', $instance['exclude'] ) : '',
+			'exclude_tree' =>		$instance['exclude_tree'],
+			'depth' =>		intval( $instance['depth'] ),
+			'number' =>		intval( $instance['number'] ),
+			'child_of' =>		intval( $instance['child_of'] ),
+			'current_category' =>	intval( $instance['current_category'] ),
+			'feed' =>			$instance['feed'],
+			'feed_type' =>		$instance['feed_type'],
+			'feed_image' =>		esc_url( $instance['feed_image'] ),
+			'search' =>		$instance['search'],
+			'hierarchical' =>		isset( $instance['hierarchical'] ) ? true : false,
+			'use_desc_for_title' =>	isset( $instance['use_desc_for_title'] ) ? true : false,
+			'show_last_update' =>	isset( $instance['show_last_update'] ) ? true : false,
+			'show_count' =>		isset( $instance['show_count'] ) ? true : false,
+			'hide_empty' =>		isset( $instance['hide_empty'] ) ? true : false,
+			'title_li' =>		false,
+			'echo' =>			false
+		);
 
-		$args['taxonomy'] = $instance['taxonomy'];
-		$args['style'] = $instance['style'];
-		$args['orderby'] = $instance['orderby'];
-		$args['order'] = $instance['order'];
-		$args['include'] = ( isset( $instance['include'] ) ? join( ', ', $instance['include'] ) : '' );
-		$args['exclude'] = ( isset( $instance['exclude'] ) ? join( ', ', $instance['exclude'] ) : '' );
-		$args['exclude_tree'] = $instance['exclude_tree'];
-		$args['depth'] = intval( $instance['depth'] );
-		$args['number'] = intval( $instance['number'] );
-		$args['child_of'] = intval( $instance['child_of'] );
-		$args['current_category'] = intval( $instance['current_category'] );
-		$args['feed'] = $instance['feed'];
-		$args['feed_type'] = $instance['feed_type'];
-		$args['feed_image'] = esc_url( $instance['feed_image'] );
-		$args['search'] = $instance['search'];
-		$args['hierarchical'] = isset( $instance['hierarchical'] ) ? $instance['hierarchical'] : false;
-		$args['use_desc_for_title'] = isset( $instance['use_desc_for_title'] ) ? $instance['use_desc_for_title'] : false;
-		$args['show_last_update'] = isset( $instance['show_last_update'] ) ? $instance['show_last_update'] : false;
-		$args['show_count'] = isset( $instance['show_count'] ) ? $instance['show_count'] : false;
-		$args['hide_empty'] = isset( $instance['hide_empty'] ) ? $instance['hide_empty'] : false;
-		$args['title_li'] = false;
-		$args['echo'] = false;
-
+		/* Output the theme's widget wrapper. */
 		echo $before_widget;
 
+		/* If a title was input by the user, display it. */
 		if ( $instance['title'] )
 			echo $before_title . apply_filters( 'widget_title',  $instance['title'], $instance, $this->id_base ) . $after_title;
 
+		/* Get the categories list. */
 		$categories = str_replace( array( "\r", "\n", "\t" ), '', wp_list_categories( $args ) );
 
+		/* If 'list' is the user-selected style, wrap the categories in an unordered list. */
 		if ( 'list' == $args['style'] )
 			$categories = '<ul class="xoxo categories">' . $categories . '</ul><!-- .xoxo .categories -->';
 
+		/* Output the categories list. */
 		echo $categories;
 
+		/* Close the theme's widget wrapper. */
 		echo $after_widget;
 	}
 
 	/**
 	 * Updates the widget control options for the particular instance of the widget.
-	 * @since 0.6
+	 * @since 0.6.0
 	 */
 	function update( $new_instance, $old_instance ) {
 		$instance = $old_instance;
@@ -117,13 +150,13 @@ class Hybrid_Widget_Categories extends WP_Widget {
 
 	/**
 	 * Displays the widget control options in the Widgets admin screen.
-	 * @since 0.6
+	 * @since 0.6.0
 	 */
 	function form( $instance ) {
 
-		// Defaults
+		/* Set up the default form values. */
 		$defaults = array(
-			'title' => __( 'Categories', $this->textdomain ),
+			'title' => esc_attr__( 'Categories', $this->textdomain ),
 			'taxonomy' => 'category',
 			'style' => 'list',
 			'include' => array(),
@@ -145,15 +178,17 @@ class Hybrid_Widget_Categories extends WP_Widget {
 			'show_last_update' => false,
 			'show_count' => false,
 		);
+
+		/* Merge the user-selected arguments with the defaults. */
 		$instance = wp_parse_args( (array) $instance, $defaults );
 
 		/* <select> element options. */
 		$taxonomies = get_taxonomies( array( 'show_tagcloud' => true ), 'objects' );
 		$terms = get_terms( $instance['taxonomy'] );
-		$style = array( 'list' => __( 'List', $this->textdomain ), 'none' => __( 'None', $this->textdomain ) );
-		$order = array( 'ASC' => __( 'Ascending', $this->textdomain ), 'DESC' => __( 'Descending', $this->textdomain ) );
-		$orderby = array( 'count' => __( 'Count', $this->textdomain ), 'ID' => __( 'ID', $this->textdomain ), 'name' => __( 'Name', $this->textdomain ), 'slug' => __( 'Slug', $this->textdomain ), 'term_group' => __( 'Term Group', $this->textdomain ) );
-		$feed_type = array( '' => '', 'atom' => __( 'Atom', $this->textdomain ), 'rdf' => __( 'RDF', $this->textdomain ), 'rss' => __( 'RSS', $this->textdomain ), 'rss2' => __( 'RSS 2.0', $this->textdomain ) );
+		$style = array( 'list' => esc_attr__( 'List', $this->textdomain ), 'none' => esc_attr__( 'None', $this->textdomain ) );
+		$order = array( 'ASC' => esc_attr__( 'Ascending', $this->textdomain ), 'DESC' => esc_attr__( 'Descending', $this->textdomain ) );
+		$orderby = array( 'count' => esc_attr__( 'Count', $this->textdomain ), 'ID' => esc_attr__( 'ID', $this->textdomain ), 'name' => esc_attr__( 'Name', $this->textdomain ), 'slug' => esc_attr__( 'Slug', $this->textdomain ), 'term_group' => esc_attr__( 'Term Group', $this->textdomain ) );
+		$feed_type = array( '' => '', 'atom' => esc_attr__( 'Atom', $this->textdomain ), 'rdf' => esc_attr__( 'RDF', $this->textdomain ), 'rss' => esc_attr__( 'RSS', $this->textdomain ), 'rss2' => esc_attr__( 'RSS 2.0', $this->textdomain ) );
 
 		?>
 
@@ -166,7 +201,7 @@ class Hybrid_Widget_Categories extends WP_Widget {
 			<label for="<?php echo $this->get_field_id( 'taxonomy' ); ?>"><code>taxonomy</code></label> 
 			<select class="widefat" id="<?php echo $this->get_field_id( 'taxonomy' ); ?>" name="<?php echo $this->get_field_name( 'taxonomy' ); ?>">
 				<?php foreach ( $taxonomies as $taxonomy ) { ?>
-					<option value="<?php echo $taxonomy->name; ?>" <?php selected( $instance['taxonomy'], $taxonomy->name ); ?>><?php echo $taxonomy->labels->singular_name; ?></option>
+					<option value="<?php echo esc_attr( $taxonomy->name ); ?>" <?php selected( $instance['taxonomy'], $taxonomy->name ); ?>><?php echo esc_html( $taxonomy->labels->singular_name ); ?></option>
 				<?php } ?>
 			</select>
 		</p>
@@ -174,7 +209,7 @@ class Hybrid_Widget_Categories extends WP_Widget {
 			<label for="<?php echo $this->get_field_id( 'style' ); ?>"><code>style</code></label> 
 			<select class="widefat" id="<?php echo $this->get_field_id( 'style' ); ?>" name="<?php echo $this->get_field_name( 'style' ); ?>">
 				<?php foreach ( $style as $option_value => $option_label ) { ?>
-					<option value="<?php echo $option_value; ?>" <?php selected( $instance['style'], $option_value ); ?>><?php echo $option_label; ?></option>
+					<option value="<?php echo esc_attr( $option_value ); ?>" <?php selected( $instance['style'], $option_value ); ?>><?php echo esc_html( $option_label ); ?></option>
 				<?php } ?>
 			</select>
 		</p>
@@ -182,7 +217,7 @@ class Hybrid_Widget_Categories extends WP_Widget {
 			<label for="<?php echo $this->get_field_id( 'order' ); ?>"><code>order</code></label> 
 			<select class="widefat" id="<?php echo $this->get_field_id( 'order' ); ?>" name="<?php echo $this->get_field_name( 'order' ); ?>">
 				<?php foreach ( $order as $option_value => $option_label ) { ?>
-					<option value="<?php echo $option_value; ?>" <?php selected( $instance['order'], $option_value ); ?>><?php echo $option_label; ?></option>
+					<option value="<?php echo esc_attr( $option_value ); ?>" <?php selected( $instance['order'], $option_value ); ?>><?php echo esc_html( $option_label ); ?></option>
 				<?php } ?>
 			</select>
 		</p>
@@ -190,7 +225,7 @@ class Hybrid_Widget_Categories extends WP_Widget {
 			<label for="<?php echo $this->get_field_id( 'orderby' ); ?>"><code>orderby</code></label> 
 			<select class="widefat" id="<?php echo $this->get_field_id( 'orderby' ); ?>" name="<?php echo $this->get_field_name( 'orderby' ); ?>">
 				<?php foreach ( $orderby as $option_value => $option_label ) { ?>
-					<option value="<?php echo $option_value; ?>" <?php selected( $instance['orderby'], $option_value ); ?>><?php echo $option_label; ?></option>
+					<option value="<?php echo esc_attr( $option_value ); ?>" <?php selected( $instance['orderby'], $option_value ); ?>><?php echo esc_html( $option_label ); ?></option>
 				<?php } ?>
 			</select>
 		</p>
@@ -209,7 +244,7 @@ class Hybrid_Widget_Categories extends WP_Widget {
 			<label for="<?php echo $this->get_field_id( 'include' ); ?>"><code>include</code></label> 
 			<select class="widefat" id="<?php echo $this->get_field_id( 'include' ); ?>" name="<?php echo $this->get_field_name( 'include' ); ?>[]" size="4" multiple="multiple">
 				<?php foreach ( $terms as $term ) { ?>
-					<option value="<?php echo $term->term_id; ?>" <?php echo ( in_array( $term->term_id, (array) $instance['include'] ) ? 'selected="selected"' : '' ); ?>><?php echo $term->name; ?></option>
+					<option value="<?php echo esc_attr( $term->term_id ); ?>" <?php echo ( in_array( $term->term_id, (array) $instance['include'] ) ? 'selected="selected"' : '' ); ?>><?php echo esc_html( $term->name ); ?></option>
 				<?php } ?>
 			</select>
 		</p>
@@ -217,7 +252,7 @@ class Hybrid_Widget_Categories extends WP_Widget {
 			<label for="<?php echo $this->get_field_id( 'exclude' ); ?>"><code>exclude</code></label> 
 			<select class="widefat" id="<?php echo $this->get_field_id( 'exclude' ); ?>" name="<?php echo $this->get_field_name( 'exclude' ); ?>[]" size="4" multiple="multiple">
 				<?php foreach ( $terms as $term ) { ?>
-					<option value="<?php echo $term->term_id; ?>" <?php echo ( in_array( $term->term_id, (array) $instance['exclude'] ) ? 'selected="selected"' : '' ); ?>><?php echo $term->name; ?></option>
+					<option value="<?php echo esc_attr( $term->term_id ); ?>" <?php echo ( in_array( $term->term_id, (array) $instance['exclude'] ) ? 'selected="selected"' : '' ); ?>><?php echo esc_html( $term->name ); ?></option>
 				<?php } ?>
 			</select>
 		</p>
@@ -248,7 +283,7 @@ class Hybrid_Widget_Categories extends WP_Widget {
 			<label for="<?php echo $this->get_field_id( 'feed_type' ); ?>"><code>feed_type</code></label> 
 			<select class="widefat" id="<?php echo $this->get_field_id( 'feed_type' ); ?>" name="<?php echo $this->get_field_name( 'feed_type' ); ?>">
 				<?php foreach ( $feed_type as $option_value => $option_label ) { ?>
-					<option value="<?php echo $option_value; ?>" <?php selected( $instance['feed_type'], $option_value ); ?>><?php echo $option_label; ?></option>
+					<option value="<?php echo esc_attr( $option_value ); ?>" <?php selected( $instance['feed_type'], $option_value ); ?>><?php echo esc_html( $option_label ); ?></option>
 				<?php } ?>
 			</select>
 		</p>
