@@ -1,91 +1,107 @@
 <?php
 /**
- * Authors Widget Class
- *
  * The authors widget was created to give users the ability to list the authors of their blog because
  * there was no equivalent WordPress widget that offered the functionality. This widget allows full
  * control over its output by giving access to the parameters of wp_list_authors().
- *
- * @since 0.6
- * @link http://codex.wordpress.org/Template_Tags/wp_list_authors
- * @link http://themehybrid.com/themes/hybrid/widgets
  *
  * @package Hybrid
  * @subpackage Classes
  */
 
+/**
+ * Authors Widget Class
+ *
+ * @since 0.6.0
+ * @link http://codex.wordpress.org/Template_Tags/wp_list_authors
+ * @link http://themehybrid.com/themes/hybrid/widgets
+ */
 class Hybrid_Widget_Authors extends WP_Widget {
 
+	/**
+	 * Prefix for the widget.
+	 * @since 0.7.0
+	 */
 	var $prefix;
+
+	/**
+	 * Textdomain for the widget.
+	 * @since 0.7.0
+	 */
 	var $textdomain;
 
 	/**
 	 * Set up the widget's unique name, ID, class, description, and other options.
-	 * @since 0.6
+	 * @since 0.6.0
 	 */
 	function Hybrid_Widget_Authors() {
+
+		/* Set the widget prefix. */
 		$this->prefix = hybrid_get_prefix();
+
+		/* Set the widget textdomain. */
 		$this->textdomain = hybrid_get_textdomain();
 
-		$widget_ops = array( 'classname' => 'authors', 'description' => __( 'An advanced widget that gives you total control over the output of your author lists.',$this->textdomain ) );
-		$control_ops = array( 'width' => 525, 'height' => 350, 'id_base' => "{$this->prefix}-authors" );
-		$this->WP_Widget( "{$this->prefix}-authors", __( 'Authors', $this->textdomain ), $widget_ops, $control_ops );
+		/* Set up the widget options. */
+		$widget_options = array(
+			'classname' => 'authors',
+			'description' => esc_html__( 'An advanced widget that gives you total control over the output of your author lists.', $this->textdomain )
+		);
 
-		add_action( 'delete_user', array( &$this, 'delete_transient' ) );
-		add_action( 'user_register', array( &$this, 'delete_transient' ) );
-		add_action( 'profile_update', array( &$this, 'delete_transient' ) );
-		add_action( 'save_post', array( &$this, 'delete_transient' ) );
-		add_action( 'deleted_post', array( &$this, 'delete_transient' ) );
+		/* Set up the widget control options. */
+		$control_options = array(
+			'width' => 525,
+			'height' => 350,
+			'id_base' => "{$this->prefix}-authors"
+		);
+
+		/* Create the widget. */
+		$this->WP_Widget( "{$this->prefix}-authors", esc_attr__( 'Authors', $this->textdomain ), $widget_options, $control_options );
 	}
 
 	/**
 	 * Outputs the widget based on the arguments input through the widget controls.
-	 * @since 0.6
+	 * @since 0.6.0
 	 */
 	function widget( $args, $instance ) {
-
-		/* If a transient has been saved with the widget information, use it. */
-		$transient = get_transient( "{$this->prefix}_widget_{$args['widget_id']}" );
-		if ( $transient ) {
-			echo $transient;
-			return;
-		}
-
 		extract( $args, EXTR_SKIP );
 
-		$args = array();
+		/* Set up the arguments for wp_list_authors(). */
+		$args = array(
+			'style' => 		$instance['style'],
+			'feed' => 		$instance['feed'],
+			'feed_image' => 		$instance['feed_image'],
+			'optioncount' => 		isset( $instance['optioncount'] ) ? true : false,
+			'exclude_admin' => 	isset( $instance['exclude_admin'] ) ? true : false,
+			'show_fullname' => 	isset( $instance['show_fullname'] ) ? true : false,
+			'hide_empty' => 		isset( $instance['hide_empty'] ) ? true : false,
+			'html' => 			isset( $instance['html'] ) ? true : false,
+			'echo' => 		false
+		);
 
-		$args['style'] = $instance['style'];
-		$args['feed'] = $instance['feed']; 
-		$args['feed_image'] = $instance['feed_image'];
-		$args['optioncount'] = isset( $instance['optioncount'] ) ? $instance['optioncount'] : false;
-		$args['exclude_admin'] = isset( $instance['exclude_admin'] ) ? $instance['exclude_admin'] : false;
-		$args['show_fullname'] = isset( $instance['show_fullname'] ) ? $instance['show_fullname'] : false;
-		$args['hide_empty'] = isset( $instance['hide_empty'] ) ? $instance['hide_empty'] : false;
-		$args['html'] = isset( $instance['html'] ) ? $instance['html'] : false;
-		$args['echo'] = false;
+		/* Output the theme's $before_widget wrapper. */
+		echo $before_widget;
 
-		$authors_widget = $before_widget;
-
+		/* If a title was input by the user, display it. */
 		if ( $instance['title'] )
-			$authors_widget .= $before_title . apply_filters( 'widget_title',  $instance['title'], $instance, $this->id_base ) . $after_title;
+			echo $before_title . apply_filters( 'widget_title',  $instance['title'], $instance, $this->id_base ) . $after_title;
 
+		/* Get the authors list. */
 		$authors = str_replace( array( "\r", "\n", "\t" ), '', wp_list_authors( $args ) );
 
+		/* If 'list' is the style and the output should be HTML, wrap the authors in a <ul>. */
 		if ( 'list' == $args['style'] && $args['html'] )
 			$authors = '<ul class="xoxo authors">' . $authors . '</ul><!-- .xoxo .authors -->';
 
-		$authors_widget .= $authors;
+		/* Display the authors list. */
+		echo $authors;
 
-		$authors_widget .= $after_widget;
-
-		set_transient( "{$this->prefix}_widget_{$widget_id}", $authors_widget, hybrid_get_transient_expiration() ); 
-		echo $authors_widget;
+		/* Close the theme's widget wrapper. */
+		echo $after_widget;
 	}
 
 	/**
 	 * Updates the widget control options for the particular instance of the widget.
-	 * @since 0.6
+	 * @since 0.6.0
 	 */
 	function update( $new_instance, $old_instance ) {
 		$instance = $old_instance;
@@ -102,24 +118,18 @@ class Hybrid_Widget_Authors extends WP_Widget {
 		$instance['show_fullname'] = ( isset( $new_instance['show_fullname'] ) ? 1 : 0 );
 		$instance['hide_empty'] = ( isset( $new_instance['hide_empty'] ) ? 1 : 0 );
 
-		$this->delete_transient();
-
 		return $instance;
-	}
-
-	function delete_transient() {
-		delete_transient( "{$this->prefix}_widget_{$this->id}" );
 	}
 
 	/**
 	 * Displays the widget control options in the Widgets admin screen.
-	 * @since 0.6
+	 * @since 0.6.0
 	 */
 	function form( $instance ) {
 
-		//Defaults
+		/* Set up the default form values. */
 		$defaults = array(
-			'title' => __( 'Authors', $this->textdomain ),
+			'title' => esc_attr__( 'Authors', $this->textdomain ),
 			'optioncount' => false,
 			'exclude_admin' => false,
 			'show_fullname' => true,
@@ -129,6 +139,8 @@ class Hybrid_Widget_Authors extends WP_Widget {
 			'feed' => '',
 			'feed_image' => ''
 		);
+
+		/* Merge the user-selected arguments with the defaults. */
 		$instance = wp_parse_args( (array) $instance, $defaults ); ?>
 
 		<div class="hybrid-widget-controls columns-2">
@@ -147,8 +159,8 @@ class Hybrid_Widget_Authors extends WP_Widget {
 		<p>
 			<label for="<?php echo $this->get_field_id( 'style' ); ?>"><code>style</code></label> 
 			<select class="widefat" id="<?php echo $this->get_field_id( 'style' ); ?>" name="<?php echo $this->get_field_name( 'style' ); ?>">
-				<?php foreach ( array( 'list' => __( 'List', $this->textdomain), 'none' => __( 'None', $this->textdomain ) ) as $option_value => $option_label ) { ?>
-					<option value="<?php echo $option_value; ?>" <?php selected( $instance['style'], $option_value ); ?>><?php echo $option_label; ?></option>
+				<?php foreach ( array( 'list' => esc_attr__( 'List', $this->textdomain), 'none' => esc_attr__( 'None', $this->textdomain ) ) as $option_value => $option_label ) { ?>
+					<option value="<?php echo esc_attr( $option_value ); ?>" <?php selected( $instance['style'], $option_value ); ?>><?php echo esc_html( $option_label ); ?></option>
 				<?php } ?>
 			</select>
 		</p>
