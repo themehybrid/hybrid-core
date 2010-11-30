@@ -1,87 +1,117 @@
 <?php
 /**
- * Bookmarks Widget Class
- *
  * The Bookmarks widget replaces the default WordPress Links widget. This version gives total
  * control over the output to the user by allowing the input of all the arguments typically seen
  * in the wp_list_bookmarks() function.
- *
- * @since 0.6
- * @link http://codex.wordpress.org/Template_Tags/wp_list_bookmarks
- * @link http://themehybrid.com/themes/hybrid/widgets
  *
  * @package Hybrid
  * @subpackage Classes
  */
 
+/**
+ * Bookmarks Widget Class
+ *
+ * @since 0.6.0
+ * @link http://codex.wordpress.org/Template_Tags/wp_list_bookmarks
+ * @link http://themehybrid.com/themes/hybrid/widgets
+ */
 class Hybrid_Widget_Bookmarks extends WP_Widget {
 
+	/**
+	 * Prefix for the widget.
+	 * @since 0.7.0
+	 */
 	var $prefix;
+
+	/**
+	 * Textdomain for the widget.
+	 * @since 0.7.0
+	 */
 	var $textdomain;
 
 	/**
 	 * Set up the widget's unique name, ID, class, description, and other options.
-	 * @since 0.6
+	 * @since 0.6.0
 	 */
 	function Hybrid_Widget_Bookmarks() {
+
+		/* Set the widget prefix. */
 		$this->prefix = hybrid_get_prefix();
+
+		/* Set the widget textdomain. */
 		$this->textdomain = hybrid_get_textdomain();
 
-		$widget_ops = array( 'classname' => 'bookmarks', 'description' => __( 'An advanced widget that gives you total control over the output of your bookmarks (links).', $this->textdomain ) );
-		$control_ops = array( 'width' => 800, 'height' => 350, 'id_base' => "{$this->prefix}-bookmarks" );
-		$this->WP_Widget( "{$this->prefix}-bookmarks", __( 'Bookmarks', $this->textdomain ), $widget_ops, $control_ops );
+		/* Set up the widget options. */
+		$widget_options = array(
+			'classname' => 'bookmarks',
+			'description' => esc_html__( 'An advanced widget that gives you total control over the output of your bookmarks (links).', $this->textdomain )
+		);
+
+		/* Set up the widget control options. */
+		$control_options = array(
+			'width' => 800,
+			'height' => 350,
+			'id_base' => "{$this->prefix}-bookmarks"
+		);
+
+		/* Create the widget. */
+		$this->WP_Widget( "{$this->prefix}-bookmarks", esc_attr__( 'Bookmarks', $this->textdomain ), $widget_options, $control_options );
 	}
 
 	/**
 	 * Outputs the widget based on the arguments input through the widget controls.
-	 * @since 0.6
+	 * @since 0.6.0
 	 */
 	function widget( $args, $instance ) {
 		extract( $args );
 
-		$args = array();
-
-		$args['title_li'] = apply_filters( 'widget_title',  $instance['title_li'], $instance, $this->id_base );
-		$args['category'] = ( isset( $instance['category'] ) ? join( ', ', $instance['category'] ) : '' );
-		$args['exclude_category'] = ( isset( $instance['exclude_category'] ) ? join( ', ', $instance['exclude_category'] ) : '' );
-		$args['category_order'] = $instance['category_order'];
-		$args['category_orderby'] = $instance['category_orderby'];
-		$args['include'] = ( isset( $instance['include'] ) ? join( ', ', $instance['include'] ) : '' );
-		$args['exclude'] = ( isset( $instance['exclude'] ) ? join( ', ', $instance['exclude'] ) : '' );
-		$args['order'] = $instance['order'];
-		$args['orderby'] = $instance['orderby'];
-		$args['limit'] = ( ( $instance['limit'] ) ? intval( $instance['limit'] ) : -1 );
-		$args['between'] = $instance['between'];
-		$args['link_before'] = $instance['link_before'];
-		$args['link_after'] = $instance['link_after'];
-		$args['search'] = $instance['search'];
-		$args['categorize'] = isset( $instance['categorize'] ) ? $instance['categorize'] : false;
-		$args['show_description'] = isset( $instance['show_description'] ) ? $instance['show_description'] : false;
-		$args['hide_invisible'] = isset( $instance['hide_invisible'] ) ? $instance['hide_invisible'] : false;
-		$args['show_rating'] = isset( $instance['show_rating'] ) ? $instance['show_rating'] : false;
-		$args['show_updated'] = isset( $instance['show_updated'] ) ? $instance['show_updated'] : false;
-		$args['show_images'] = isset( $instance['show_images'] ) ? $instance['show_images'] : false;
-		$args['show_name'] = isset( $instance['show_name'] ) ? $instance['show_name'] : false;
-		$args['show_private'] = isset( $instance['show_private'] ) ? $instance['show_private'] : false;
-
-		if ( $args['categorize'] )
+		/* Set up the $before_widget ID for multiple widgets created by the bookmarks widget. */
+		if ( $instance['categorize'] )
 			$before_widget = preg_replace( '/id="[^"]*"/','id="%id"', $before_widget );
+
+		/* Add a class to $before_widget if one is set. */
 		if ( $instance['class'] )
 			$before_widget = str_replace( 'class="', 'class="' . esc_attr( $instance['class'] ) . ' ', $before_widget );
 
-		$args['title_before'] = $before_title;
-		$args['title_after'] = $after_title;
-		$args['category_before'] = $before_widget;
-		$args['category_after'] = $after_widget;
-		$args['category_name'] = false;
-		$args['echo'] = false;
+		/* Set up the arguments for wp_list_bookmarks(). */
+		$args = array(
+			'title_li' =>		apply_filters( 'widget_title', $instance['title_li'], $instance, $this->id_base ),
+			'category' =>		isset( $instance['category'] ) ? join( ', ', $instance['category'] ) : '',
+			'exclude_category' =>	isset( $instance['exclude_category'] ) ? join( ', ', $instance['exclude_category'] ) : '',
+			'category_order' =>	$instance['category_order'],
+			'category_orderby' => 	$instance['category_orderby'],
+			'include' =>		isset( $instance['include'] ) ? join( ', ', $instance['include'] ) : '',
+			'exclude' =>		isset( $instance['exclude'] ) ? join( ', ', $instance['exclude'] ) : '',
+			'order' =>		$instance['order'],
+			'orderby' =>		$instance['orderby'],
+			'limit' =>			$instance['limit'] ? intval( $instance['limit'] ) : -1,
+			'between' =>		$instance['between'],
+			'link_before' =>		$instance['link_before'],
+			'link_after' =>		$instance['link_after'],
+			'search' =>		$instance['search'],
+			'categorize' =>		isset( $instance['categorize'] ) ? true : false,
+			'show_description' =>	isset( $instance['show_description'] ) ? true : false,
+			'hide_invisible' =>		isset( $instance['hide_invisible'] ) ? true : false,
+			'show_rating' =>		isset( $instance['show_rating'] ) ? true : false,
+			'show_updated' =>		isset( $instance['show_updated'] ) ? true : false,
+			'show_images' =>		isset( $instance['show_images'] ) ? true : false,
+			'show_name' =>		isset( $instance['show_name'] ) ? true : false,
+			'show_private' =>		isset( $instance['show_private'] ) ? true : false,
+			'title_before' => 		$before_title,
+			'title_after' => 		$after_title,
+			'category_before' =>	$before_widget,
+			'category_after' =>	$after_widget,
+			'category_name' =>	false,
+			'echo' =>			false
+		);
 
+		/* Output the bookmarks widget. */
 		echo str_replace( array( "\r", "\n", "\t" ), '', wp_list_bookmarks( $args ) );
 	}
 
 	/**
 	 * Updates the widget control options for the particular instance of the widget.
-	 * @since 0.6
+	 * @since 0.6.0
 	 */
 	function update( $new_instance, $old_instance ) {
 		$instance = $old_instance;
@@ -115,13 +145,13 @@ class Hybrid_Widget_Bookmarks extends WP_Widget {
 
 	/**
 	 * Displays the widget control options in the Widgets admin screen.
-	 * @since 0.6
+	 * @since 0.6.0
 	 */
 	function form( $instance ) {
 
-		//Defaults
+		/* Set up the default form values. */
 		$defaults = array(
-			'title_li' => __( 'Bookmarks', $this->textdomain ),
+			'title_li' => esc_attr__( 'Bookmarks', $this->textdomain ),
 			'categorize' => true,
 			'category_order' => 'ASC',
 			'category_orderby' => 'name',
@@ -145,14 +175,16 @@ class Hybrid_Widget_Bookmarks extends WP_Widget {
 			'link_after' => '</span>',
 			'between' => '<br />',
 		);
+
+		/* Merge the user-selected arguments with the defaults. */
 		$instance = wp_parse_args( (array) $instance, $defaults );
 
 		$terms = get_terms( 'link_category' );
 		$bookmarks = get_bookmarks( array( 'hide_invisible' => false ) );
-		$category_order = array( 'ASC' => __( 'Ascending', $this->textdomain ), 'DESC' => __( 'Descending', $this->textdomain ) );
-		$category_orderby = array( 'count' => __( 'Count', $this->textdomain ), 'ID' => __( 'ID', $this->textdomain ), 'name' => __( 'Name', $this->textdomain ), 'slug' => __( 'Slug', $this->textdomain ) );
-		$order = array( 'ASC' => __( 'Ascending', $this->textdomain ), 'DESC' => __( 'Descending', $this->textdomain ) );
-		$orderby = array( 'id' => __( 'ID', $this->textdomain ), 'description' => __( 'Description',  $this->textdomain ), 'length' => __( 'Length',  $this->textdomain ), 'name' => __( 'Name',  $this->textdomain ), 'notes' => __( 'Notes',  $this->textdomain ), 'owner' => __( 'Owner',  $this->textdomain ), 'rand' => __( 'Random',  $this->textdomain ), 'rating' => __( 'Rating',  $this->textdomain ), 'rel' => __( 'Rel',  $this->textdomain ), 'rss' => __( 'RSS',  $this->textdomain ), 'target' => __( 'Target',  $this->textdomain ), 'updated' => __( 'Updated',  $this->textdomain ), 'url' => __( 'URL',  $this->textdomain ) );
+		$category_order = array( 'ASC' => esc_attr__( 'Ascending', $this->textdomain ), 'DESC' => esc_attr__( 'Descending', $this->textdomain ) );
+		$category_orderby = array( 'count' => esc_attr__( 'Count', $this->textdomain ), 'ID' => esc_attr__( 'ID', $this->textdomain ), 'name' => esc_attr__( 'Name', $this->textdomain ), 'slug' => esc_attr__( 'Slug', $this->textdomain ) );
+		$order = array( 'ASC' => esc_attr__( 'Ascending', $this->textdomain ), 'DESC' => esc_attr__( 'Descending', $this->textdomain ) );
+		$orderby = array( 'id' => esc_attr__( 'ID', $this->textdomain ), 'description' => esc_attr__( 'Description',  $this->textdomain ), 'length' => esc_attr__( 'Length',  $this->textdomain ), 'name' => esc_attr__( 'Name',  $this->textdomain ), 'notes' => esc_attr__( 'Notes',  $this->textdomain ), 'owner' => esc_attr__( 'Owner',  $this->textdomain ), 'rand' => esc_attr__( 'Random',  $this->textdomain ), 'rating' => esc_attr__( 'Rating',  $this->textdomain ), 'rel' => esc_attr__( 'Rel',  $this->textdomain ), 'rss' => esc_attr__( 'RSS',  $this->textdomain ), 'target' => esc_attr__( 'Target',  $this->textdomain ), 'updated' => esc_attr__( 'Updated',  $this->textdomain ), 'url' => esc_attr__( 'URL',  $this->textdomain ) );
 
 		?>
 
@@ -165,7 +197,7 @@ class Hybrid_Widget_Bookmarks extends WP_Widget {
 			<label for="<?php echo $this->get_field_id( 'category_order' ); ?>"><code>category_order</code></label> 
 			<select class="widefat" id="<?php echo $this->get_field_id( 'category_order' ); ?>" name="<?php echo $this->get_field_name( 'category_order' ); ?>">
 				<?php foreach ( $category_order as $option_value => $option_label ) { ?>
-					<option value="<?php echo $option_value; ?>" <?php selected( $instance['category_order'], $option_value ); ?>><?php echo $option_label; ?></option>
+					<option value="<?php echo esc_attr( $option_value ); ?>" <?php selected( $instance['category_order'], $option_value ); ?>><?php echo esc_html( $option_label ); ?></option>
 				<?php } ?>
 			</select>
 		</p>
@@ -173,7 +205,7 @@ class Hybrid_Widget_Bookmarks extends WP_Widget {
 			<label for="<?php echo $this->get_field_id( 'category_orderby' ); ?>"><code>category_orderby</code></label> 
 			<select class="widefat" id="<?php echo $this->get_field_id( 'category_orderby' ); ?>" name="<?php echo $this->get_field_name( 'category_orderby' ); ?>">
 				<?php foreach ( $category_orderby as $option_value => $option_label ) { ?>
-					<option value="<?php echo $option_value; ?>" <?php selected( $instance['category_orderby'], $option_value ); ?>><?php echo $option_label; ?></option>
+					<option value="<?php echo esc_attr( $option_value ); ?>" <?php selected( $instance['category_orderby'], $option_value ); ?>><?php echo esc_html( $option_label ); ?></option>
 				<?php } ?>
 			</select>
 		</p>
@@ -181,7 +213,7 @@ class Hybrid_Widget_Bookmarks extends WP_Widget {
 			<label for="<?php echo $this->get_field_id( 'category' ); ?>"><code>category</code></label> 
 			<select class="widefat" id="<?php echo $this->get_field_id( 'category' ); ?>" name="<?php echo $this->get_field_name( 'category' ); ?>[]" size="4" multiple="multiple">
 				<?php foreach ( $terms as $term ) { ?>
-					<option value="<?php echo $term->term_id; ?>" <?php echo ( in_array( $term->term_id, (array) $instance['category'] ) ? 'selected="selected"' : '' ); ?>><?php echo $term->name; ?></option>
+					<option value="<?php echo esc_attr( $term->term_id ); ?>" <?php echo ( in_array( $term->term_id, (array) $instance['category'] ) ? 'selected="selected"' : '' ); ?>><?php echo esc_html( $term->name ); ?></option>
 				<?php } ?>
 			</select>
 		</p>
@@ -189,7 +221,7 @@ class Hybrid_Widget_Bookmarks extends WP_Widget {
 			<label for="<?php echo $this->get_field_id( 'exclude_category' ); ?>"><code>exclude_category</code></label> 
 			<select class="widefat" id="<?php echo $this->get_field_id( 'exclude_category' ); ?>" name="<?php echo $this->get_field_name( 'exclude_category' ); ?>[]" size="4" multiple="multiple">
 				<?php foreach ( $terms as $term ) { ?>
-					<option value="<?php echo $term->term_id; ?>" <?php echo ( in_array( $term->term_id, (array) $instance['exclude_category'] ) ? 'selected="selected"' : '' ); ?>><?php echo $term->name; ?></option>
+					<option value="<?php echo esc_attr( $term->term_id ); ?>" <?php echo ( in_array( $term->term_id, (array) $instance['exclude_category'] ) ? 'selected="selected"' : '' ); ?>><?php echo esc_html( $term->name ); ?></option>
 				<?php } ?>
 			</select>
 		</p>
@@ -210,7 +242,7 @@ class Hybrid_Widget_Bookmarks extends WP_Widget {
 			<label for="<?php echo $this->get_field_id( 'order' ); ?>"><code>order</code></label> 
 			<select class="widefat" id="<?php echo $this->get_field_id( 'order' ); ?>" name="<?php echo $this->get_field_name( 'order' ); ?>">
 				<?php foreach ( $order as $option_value => $option_label ) { ?>
-					<option value="<?php echo $option_value; ?>" <?php selected( $instance['order'], $option_value ); ?>><?php echo $option_label; ?></option>
+					<option value="<?php echo esc_attr( $option_value ); ?>" <?php selected( $instance['order'], $option_value ); ?>><?php echo esc_html( $option_label ); ?></option>
 				<?php } ?>
 			</select>
 		</p>
@@ -218,7 +250,7 @@ class Hybrid_Widget_Bookmarks extends WP_Widget {
 			<label for="<?php echo $this->get_field_id( 'orderby' ); ?>"><code>orderby</code></label> 
 			<select class="widefat" id="<?php echo $this->get_field_id( 'orderby' ); ?>" name="<?php echo $this->get_field_name( 'orderby' ); ?>">
 				<?php foreach ( $orderby as $option_value => $option_label ) { ?>
-					<option value="<?php echo $option_value; ?>" <?php selected( $instance['orderby'], $option_value ); ?>><?php echo $option_label; ?></option>
+					<option value="<?php echo esc_attr( $option_value ); ?>" <?php selected( $instance['orderby'], $option_value ); ?>><?php echo esc_html( $option_label ); ?></option>
 				<?php } ?>
 			</select>
 		</p>
@@ -226,7 +258,7 @@ class Hybrid_Widget_Bookmarks extends WP_Widget {
 			<label for="<?php echo $this->get_field_id( 'include' ); ?>"><code>include</code></label> 
 			<select class="widefat" id="<?php echo $this->get_field_id( 'include' ); ?>" name="<?php echo $this->get_field_name( 'include' ); ?>[]" size="4" multiple="multiple">
 				<?php foreach ( $bookmarks as $bookmark ) { ?>
-					<option value="<?php echo $bookmark->link_id; ?>" <?php echo ( in_array( $bookmark->link_id, (array) $instance['include'] ) ? 'selected="selected"' : '' ); ?>><?php echo $bookmark->link_name; ?></option>
+					<option value="<?php echo esc_attr( $bookmark->link_id ); ?>" <?php echo ( in_array( $bookmark->link_id, (array) $instance['include'] ) ? 'selected="selected"' : '' ); ?>><?php echo esc_html( $bookmark->link_name ); ?></option>
 				<?php } ?>
 			</select>
 		</p>
@@ -234,7 +266,7 @@ class Hybrid_Widget_Bookmarks extends WP_Widget {
 			<label for="<?php echo $this->get_field_id( 'exclude' ); ?>"><code>exclude</code></label> 
 			<select class="widefat" id="<?php echo $this->get_field_id( 'exclude' ); ?>" name="<?php echo $this->get_field_name( 'exclude' ); ?>[]" size="4" multiple="multiple">
 				<?php foreach ( $bookmarks as $bookmark ) { ?>
-					<option value="<?php echo $bookmark->link_id; ?>" <?php echo ( in_array( $bookmark->link_id, (array) $instance['exclude'] ) ? 'selected="selected"' : '' ); ?>><?php echo $bookmark->link_name; ?></option>
+					<option value="<?php echo esc_attr( $bookmark->link_id ); ?>" <?php echo ( in_array( $bookmark->link_id, (array) $instance['exclude'] ) ? 'selected="selected"' : '' ); ?>><?php echo esc_html( $bookmark->link_name ); ?></option>
 				<?php } ?>
 			</select>
 		</p>
