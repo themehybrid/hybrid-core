@@ -245,8 +245,8 @@ class Hybrid {
 		/* Load the Post Styles extension if supported. */
 		require_if_theme_supports( 'post-formats', trailingslashit( HYBRID_EXTENSIONS ) . 'post-formats.php' );
 
-		/* Load the Post Layouts extension if supported. */
-		require_if_theme_supports( 'post-layouts', trailingslashit( HYBRID_EXTENSIONS ) . 'post-layouts.php' );
+		/* Load the Theme Layouts extension if supported. */
+		require_if_theme_supports( 'theme-layouts', trailingslashit( HYBRID_EXTENSIONS ) . 'theme-layouts.php' );
 
 		/* Load the Post Stylesheets extension if supported. */
 		require_if_theme_supports( 'post-stylesheets', trailingslashit( HYBRID_EXTENSIONS ) . 'post-stylesheets.php' );
