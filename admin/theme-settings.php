@@ -115,7 +115,7 @@ function hybrid_load_settings_page() {
 	$settings = get_option( "{$prefix}_theme_settings" );
 
 	/* If no settings are available, add the default settings to the database. */
-	if ( empty( $settings ) ) {
+	if ( false === $settings ) {
 		$settings = hybrid_get_default_theme_settings();
 		add_option( "{$prefix}_theme_settings", $settings, '', 'yes' );
 
