@@ -124,7 +124,7 @@ function custom_post_formats_meta_box( $post, $box ) {
 
 				<div class="custom-post-format-wrap">
 				<ul>
-					<li><input type="radio" name="post_format" id="post_format_default" value="0" <?php checked( $post_format, '0' );?> /> <label for="post_format_default"><?php echo esc_html( get_custom_post_format_string( '0' ) ); ?></label></li>
+					<li><input type="radio" name="post_format" id="post_format_default" value="0" <?php checked( $post_format, '0' );?> /> <label for="post_format_default"><?php echo esc_html( get_custom_post_format_string( 'standard' ) ); ?></label></li>
 
 					<?php foreach ( $post_formats[0] as $format ) { ?>
 						<li><input type="radio" name="post_format" id="post_format_<?php echo esc_attr( $format ); ?>" value="<?php echo esc_attr( $format ); ?>" <?php checked( $post_format, $format ); ?> /> <label for="post_format_<?php echo esc_attr( $format ); ?>"><?php echo esc_html( get_custom_post_format_string( $format ) ); ?></label></li>
