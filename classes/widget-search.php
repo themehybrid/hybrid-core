@@ -1,35 +1,61 @@
 <?php
 /**
- * Search Widget Class
- *
  * The Search widget replaces the default WordPress Search widget. This version gives total
  * control over the output to the user by allowing the input of various arguments that typically
  * represent a search form. It also gives the user the option of using the theme's search form
  * through the use of the get_search_form() function.
  *
- * @since 0.6
- * @link http://themehybrid.com/themes/hybrid/widgets
- *
  * @package Hybrid
  * @subpackage Classes
  */
 
+/**
+ * Search Widget Class
+ *
+ * @since 0.6.0
+ * @link http://themehybrid.com/themes/hybrid/widgets
+ */
 class Hybrid_Widget_Search extends WP_Widget {
 
+	/**
+	 * Prefix for the widget.
+	 * @since 0.7.0
+	 */
 	var $prefix;
+
+	/**
+	 * Textdomain for the widget.
+	 * @since 0.7.0
+	 */
 	var $textdomain;
 
 	/**
 	 * Set up the widget's unique name, ID, class, description, and other options.
-	 * @since 0.6
+	 * @since 0.6.0
 	 */
 	function Hybrid_Widget_Search() {
+
+		/* Set the widget prefix. */
 		$this->prefix = hybrid_get_prefix();
+
+		/* Set the widget textdomain. */
 		$this->textdomain = hybrid_get_textdomain();
 
-		$widget_ops = array( 'classname' => 'search', 'description' => __( 'An advanced widget that gives you total control over the output of your search form.', $this->textdomain ) );
-		$control_ops = array( 'width' => 525, 'height' => 350, 'id_base' => "{$this->prefix}-search" );
-		$this->WP_Widget( "{$this->prefix}-search", __( 'Search', $this->textdomain ), $widget_ops, $control_ops );
+		/* Set up the widget options. */
+		$widget_options = array(
+			'classname' => 'search',
+			'description' => esc_html__( 'An advanced widget that gives you total control over the output of your search form.', $this->textdomain )
+		);
+
+		/* Set up the widget control options. */
+		$control_options = array(
+			'width' => 525,
+			'height' => 350,
+			'id_base' => "{$this->prefix}-search"
+		);
+
+		/* Create the widget. */
+		$this->WP_Widget( "{$this->prefix}-search", esc_attr__( 'Search', $this->textdomain ), $widget_ops, $control_ops );
 	}
 
 	/**
@@ -39,40 +65,50 @@ class Hybrid_Widget_Search extends WP_Widget {
 	function widget( $args, $instance ) {
 		extract( $args );
 
-		$theme_search = isset( $instance['theme_search'] ) ? $instance['theme_search'] : false;
-
+		/* Output the theme's $before_widget wrapper. */
 		echo $before_widget;
 
-		/* If there is a title given, add it along with the $before_title and $after_title variables. */
+		/* If a title was input by the user, display it. */
 		if ( $instance['title'] )
 			echo $before_title . apply_filters( 'widget_title',  $instance['title'], $instance, $this->id_base ) . $after_title;
 
-		if ( $theme_search )
+		/* If the user chose to use the theme's search form, load it. */
+		if ( isset( $instance['theme_search'] ) ) {
 			get_search_form();
+		}
 
+		/* Else, create the form based on the user-selected arguments. */
 		else {
-			global $search_form_num;
 
-			$search_num = ( ( $search_form_num ) ? "-{$search_form_num}" : '' );
+			/* Set up some variables for the search form. */
+			global $search_form_num;
+			$search_num = ( ( $search_form_num ) ? '-' . esc_attr( $search_form_num ) : '' );
 			$search_text = ( ( is_search() ) ? esc_attr( get_search_query() ) : esc_attr( $instance['search_text'] ) );
 
+			/* Open the form. */
 			$search = '<form method="get" class="search-form" id="search-form' . $search_num . '" action="' . home_url() . '/"><div>';
 
-			if ( $instance['search_label'] )
+			/* If a search label was set, add it. */
+			if ( !empty( $instance['search_label'] ) )
 				$search .= '<label for="search-text' . $search_num . '">' . $instance['search_label'] . '</label>';
 
-			$search .= '<input class="search-text" type="text" name="s" id="search-text' . $search_num . '" value="' . esc_attr( $search_text ) . '" onfocus="if(this.value==this.defaultValue)this.value=\'\';" onblur="if(this.value==\'\')this.value=this.defaultValue;" />';
+			/* Search form text input. */
+			$search .= '<input class="search-text" type="text" name="s" id="search-text' . $search_num . '" value="' . $search_text . '" onfocus="if(this.value==this.defaultValue)this.value=\'\';" onblur="if(this.value==\'\')this.value=this.defaultValue;" />';
 
+			/* Search form submit button. */
 			if ( $instance['search_submit'] )
 				$search .= '<input class="search-submit button" name="submit" type="submit" id="search-submit' . $search_num . '" value="' . esc_attr( $instance['search_submit'] ) . '" />';
 
+			/* Close the form. */
 			$search .= '</div></form><!-- .search-form -->';
 
+			/* Display the form. */
 			echo $search;
 
 			$search_form_num++;
 		}
 
+		/* Close the theme's widget wrapper. */
 		echo $after_widget;
 	}
 
@@ -97,14 +133,16 @@ class Hybrid_Widget_Search extends WP_Widget {
 	 */
 	function form( $instance ) {
 
-		//Defaults
+		/* Set up the default form values. */
 		$defaults = array(
-			'title' => __( 'Search', $this->textdomain ),
+			'title' => esc_attr__( 'Search', $this->textdomain ),
 			'theme_search' => false,
 			'search_label' => '',
 			'search_text' => '',
 			'search_submit' => ''
 		);
+
+		/* Merge the user-selected arguments with the defaults. */
 		$instance = wp_parse_args( (array) $instance, $defaults ); ?>
 
 		<div class="hybrid-widget-controls columns-2">
