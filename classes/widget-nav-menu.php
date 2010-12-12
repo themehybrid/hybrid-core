@@ -86,6 +86,7 @@ class Hybrid_Widget_Nav_Menu extends WP_Widget {
 		echo $before_widget;
 
 		/* If a title was input by the user, display it. */
+		if ( !empty( $instance['title'] ) )
 			echo $before_title . apply_filters( 'widget_title',  $instance['title'], $instance, $this->id_base ) . $after_title;
 
 		/* Output the nav menu. */

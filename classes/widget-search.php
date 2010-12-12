@@ -55,7 +55,7 @@ class Hybrid_Widget_Search extends WP_Widget {
 		);
 
 		/* Create the widget. */
-		$this->WP_Widget( "{$this->prefix}-search", esc_attr__( 'Search', $this->textdomain ), $widget_ops, $control_ops );
+		$this->WP_Widget( "{$this->prefix}-search", esc_attr__( 'Search', $this->textdomain ), $widget_options, $control_options );
 	}
 
 	/**
@@ -69,7 +69,7 @@ class Hybrid_Widget_Search extends WP_Widget {
 		echo $before_widget;
 
 		/* If a title was input by the user, display it. */
-		if ( $instance['title'] )
+		if ( !empty( $instance['title'] ) )
 			echo $before_title . apply_filters( 'widget_title',  $instance['title'], $instance, $this->id_base ) . $after_title;
 
 		/* If the user chose to use the theme's search form, load it. */

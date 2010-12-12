@@ -66,20 +66,21 @@ class Hybrid_Widget_Archives extends WP_Widget {
 		extract( $args );
 
 		/* Set up the arguments for wp_get_archives(). */
-		$args = array();
-		$args['type'] = $instance['type']; 
-		$args['format'] = $instance['format'];
-		$args['before'] = $instance['before'];
-		$args['after'] = $instance['after'];
-		$args['show_post_count'] = isset( $instance['show_post_count'] ) ? $instance['show_post_count'] : false;
-		$args['limit'] = !empty( $instance['limit'] ) ? intval( $instance['limit'] ) : '';
-		$args['echo'] = false;
+		$args = array(
+			'type' =>			$instance['type'],
+			'format' =>		$instance['format'],
+			'before' =>		$instance['before'],
+			'after' =>		$instance['after'],
+			'show_post_count' =>	isset( $instance['show_post_count'] ) ? true : false,
+			'limit' =>			!empty( $instance['limit'] ) ? intval( $instance['limit'] ) : '',
+			'echo' =>			false
+		);
 
 		/* Output the theme's $before_widget wrapper. */
 		echo $before_widget;
 
 		/* If a title was input by the user, display it. */
-		if ( $instance['title'] )
+		if ( !empty( $instance['title'] ) )
 			echo $before_title . apply_filters( 'widget_title',  $instance['title'], $instance, $this->id_base ) . $after_title;
 
 		/* Get the archives list. */

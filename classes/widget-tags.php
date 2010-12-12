@@ -92,7 +92,7 @@ class Hybrid_Widget_Tags extends WP_Widget {
 		echo $before_widget;
 
 		/* If a title was input by the user, display it. */
-		if ( $instance['title'] )
+		if ( !empty( $instance['title'] ) )
 			echo $before_title . apply_filters( 'widget_title',  $instance['title'], $instance, $this->id_base ) . $after_title;
 
 		/* Get the tag cloud. */
