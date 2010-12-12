@@ -1,22 +1,32 @@
 <?php
 /**
- * Tags Widget Class
- *
  * The Tags widget replaces the default WordPress Tag Cloud widget. This version gives total
  * control over the output to the user by allowing the input of all the arguments typically seen
  * in the wp_tag_cloud() function.
  *
+ * @package Hybrid
+ * @subpackage Classes
+ */
+
+/**
+ * Tags Widget Class
+ *
  * @since 0.6
  * @link http://codex.wordpress.org/Template_Tags/wp_tag_cloud
  * @link http://themehybrid.com/themes/hybrid/widgets
- *
- * @package Hybrid
- * @subpackage Widgets
  */
-
 class Hybrid_Widget_Tags extends WP_Widget {
 
+	/**
+	 * Prefix for the widget.
+	 * @since 0.7.0
+	 */
 	var $prefix;
+
+	/**
+	 * Textdomain for the widget.
+	 * @since 0.7.0
+	 */
 	var $textdomain;
 
 	/**
@@ -24,12 +34,28 @@ class Hybrid_Widget_Tags extends WP_Widget {
 	 * @since 0.6
 	 */
 	function Hybrid_Widget_Tags() {
+
+		/* Set the widget prefix. */
 		$this->prefix = hybrid_get_prefix();
+
+		/* Set the widget textdomain. */
 		$this->textdomain = hybrid_get_textdomain();
 
-		$widget_ops = array( 'classname' => 'tags', 'description' => __( 'An advanced widget that gives you total control over the output of your tags.',$this->textdomain ) );
-		$control_ops = array( 'width' => 800, 'height' => 350, 'id_base' => "{$this->prefix}-tags" );
-		$this->WP_Widget( "{$this->prefix}-tags", __( 'Tags', $this->textdomain ), $widget_ops, $control_ops );
+		/* Set up the widget options. */
+		$widget_options = array(
+			'classname' => 'tags',
+			'description' => esc_html__( 'An advanced widget that gives you total control over the output of your tags.', $this->textdomain )
+		);
+
+		/* Set up the widget control options. */
+		$control_options = array(
+			'width' => 800,
+			'height' => 350,
+			'id_base' => "{$this->prefix}-tags"
+		);
+
+		/* Create the widget. */
+		$this->WP_Widget( "{$this->prefix}-tags", esc_attr__( 'Tags', $this->textdomain ), $widget_options, $control_options );
 	}
 
 	/**
@@ -39,32 +65,33 @@ class Hybrid_Widget_Tags extends WP_Widget {
 	function widget( $args, $instance ) {
 		extract( $args );
 
-		$args = array();
+		/* Set up the arguments for wp_tag_cloud(). */
+		$args = array(
+			'taxonomy' => 	$instance['taxonomy'],
+			'largest' => 	!empty( $instance['largest'] ) ? absint( $instance['largest'] ) : 22,
+			'smallest' =>	!empty( $instance['smallest'] ) ? absint( $instance['smallest'] ) : 8,
+			'number' =>	intval( $instance['number'] ),
+			'child_of' =>	intval( $instance['child_of'] ),
+			'parent' =>	!empty( $instance['parent'] ) ? intval( $instance['parent'] ) : '',
+			'separator' =>	!empty( $instance['separator'] ) ? $instance['separator'] : "\n",
+			'pad_counts' =>	isset( $instance['pad_counts'] ) ? true : false,
+			'hide_empty' =>	isset( $instance['hide_empty'] ) ? true : false,
+			'unit' =>		$instance['unit'],
+			'format' =>	$instance['format'],
+			'include' =>	isset( $instance['include'] ) ? join( ', ', $instance['include'] ) : '',
+			'exclude' =>	isset( $instance['exclude'] ) ? join( ', ', $instance['exclude'] ) : '',
+			'order' =>	$instance['order'],
+			'orderby' =>	$instance['orderby'],
+			'link' =>		$instance['link'],
+			'search' =>	$instance['search'],
+			'name__like' =>	$instance['name__like'],
+			'echo' =>		false
+		);
 
-		$args['taxonomy'] = $instance['taxonomy'];
-		$args['largest'] = ( ( $instance['largest'] ) ? absint( $instance['largest'] ) : 22 );
-		$args['smallest'] = ( ( $instance['smallest'] ) ? absint( $instance['smallest'] ) : 8 );
-		$args['number'] = intval( $instance['number'] );
-		$args['child_of'] = intval( $instance['child_of'] );
-		$args['parent'] = ( $instance['parent'] ) ? intval( $instance['parent'] ) : '';
-		$args['separator'] = ( $instance['separator'] ) ? $instance['separator'] : "\n";
-		$args['pad_counts'] = isset( $instance['pad_counts'] ) ? $instance['pad_counts'] : false;
-		$args['hide_empty'] = isset( $instance['hide_empty'] ) ? $instance['hide_empty'] : false;
-		$args['unit'] = $instance['unit'];
-		$args['format'] = $instance['format'];
-		$args['include'] = ( isset( $instance['include'] ) ? join( ', ', $instance['include'] ) : '' );
-		$args['exclude'] = ( isset( $instance['exclude'] ) ? join( ', ', $instance['exclude'] ) : '' );
-		$args['order'] = $instance['order'];
-		$args['orderby'] = $instance['orderby'];
-		$args['link'] = $instance['link'];
-		$args['search'] = $instance['search'];
-		$args['name__like'] = $instance['name__like'];
-		$args['echo'] = false;
-
-		/* Open the output of the widget. */
+		/* Output the theme's $before_widget wrapper. */
 		echo $before_widget;
 
-		/* If there is a title given, add it along with the $before_title and $after_title variables. */
+		/* If a title was input by the user, display it. */
 		if ( $instance['title'] )
 			echo $before_title . apply_filters( 'widget_title',  $instance['title'], $instance, $this->id_base ) . $after_title;
 
@@ -78,7 +105,7 @@ class Hybrid_Widget_Tags extends WP_Widget {
 		/* Output the tag cloud. */
 		echo $tags;
 
-		/* Close the output of the widget. */
+		/* Close the theme's widget wrapper. */
 		echo $after_widget;
 	}
 
@@ -125,9 +152,9 @@ class Hybrid_Widget_Tags extends WP_Widget {
 	 */
 	function form( $instance ) {
 
-		/* Set up some defaults for the widget. */
+		/* Set up the default form values. */
 		$defaults = array(
-			'title' => __( 'Tags', $this->textdomain ),
+			'title' => esc_attr__( 'Tags', $this->textdomain ),
 			'order' => 'ASC',
 			'orderby' => 'name',
 			'format' => 'flat',
@@ -147,15 +174,17 @@ class Hybrid_Widget_Tags extends WP_Widget {
 			'search' => '',
 			'name__like' => ''
 		);
+
+		/* Merge the user-selected arguments with the defaults. */
 		$instance = wp_parse_args( (array) $instance, $defaults );
 
 		/* <select> element options. */
 		$taxonomies = get_taxonomies( array( 'show_tagcloud' => true ), 'objects' );
 		$terms = get_terms( $instance['taxonomy'] );
-		$link = array( 'view' => __( 'View', $this->textdomain ), 'edit' => __( 'Edit', $this->textdomain ) );
-		$format = array( 'flat' => __( 'Flat', $this->textdomain ), 'list' => __( 'List', $this->textdomain ) );
-		$order = array( 'ASC' => __( 'Ascending', $this->textdomain ), 'DESC' => __( 'Descending', $this->textdomain ), 'RAND' => __( 'Random', $this->textdomain ) );
-		$orderby = array( 'count' => __( 'Count', $this->textdomain ), 'name' => __( 'Name', $this->textdomain ) );
+		$link = array( 'view' => esc_attr__( 'View', $this->textdomain ), 'edit' => esc_attr__( 'Edit', $this->textdomain ) );
+		$format = array( 'flat' => esc_attr__( 'Flat', $this->textdomain ), 'list' => esc_attr__( 'List', $this->textdomain ) );
+		$order = array( 'ASC' => esc_attr__( 'Ascending', $this->textdomain ), 'DESC' => esc_attr__( 'Descending', $this->textdomain ), 'RAND' => esc_attr__( 'Random', $this->textdomain ) );
+		$orderby = array( 'count' => esc_attr__( 'Count', $this->textdomain ), 'name' => esc_attr__( 'Name', $this->textdomain ) );
 		$unit = array( 'pt' => 'pt', 'px' => 'px', 'em' => 'em', '%' => '%' );
 
 		?>
