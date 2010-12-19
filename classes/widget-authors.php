@@ -67,6 +67,9 @@ class Hybrid_Widget_Authors extends WP_Widget {
 
 		/* Set up the arguments for wp_list_authors(). */
 		$args = array(
+			'order' =>		$instance['order'],
+			'orderby' =>		$instance['orderby'],
+			'number' =>		isset( $instance['number'] ) ? intval( $instance['number'] ) : '',
 			'style' => 		$instance['style'],
 			'feed' => 		$instance['feed'],
 			'feed_image' => 		$instance['feed_image'],
@@ -110,7 +113,9 @@ class Hybrid_Widget_Authors extends WP_Widget {
 
 		$instance['title'] = strip_tags( $new_instance['title'] );
 		$instance['feed'] = strip_tags( $new_instance['feed'] );
-		$instance['feed_image'] = strip_tags( $new_instance['feed_image'] );
+		$instance['order'] = strip_tags( $new_instance['order'] );
+		$instance['orderby'] = strip_tags( $new_instance['orderby'] );
+		$instance['number'] = strip_tags( $new_instance['number'] );
 
 		$instance['html'] = ( isset( $new_instance['html'] ) ? 1 : 0 );
 		$instance['optioncount'] = ( isset( $new_instance['optioncount'] ) ? 1 : 0 );
@@ -130,6 +135,9 @@ class Hybrid_Widget_Authors extends WP_Widget {
 		/* Set up the default form values. */
 		$defaults = array(
 			'title' => esc_attr__( 'Authors', $this->textdomain ),
+			'order' => 'ASC',
+			'orderby' => 'display_name',
+			'number' => '',
 			'optioncount' => false,
 			'exclude_admin' => false,
 			'show_fullname' => true,
@@ -141,7 +149,12 @@ class Hybrid_Widget_Authors extends WP_Widget {
 		);
 
 		/* Merge the user-selected arguments with the defaults. */
-		$instance = wp_parse_args( (array) $instance, $defaults ); ?>
+		$instance = wp_parse_args( (array) $instance, $defaults );
+
+		$order = array( 'ASC' => esc_attr__( 'Ascending', $this->textdomain ), 'DESC' => esc_attr__( 'Descending', $this->textdomain ) );
+		$orderby = array( 'display_name' => esc_attr__( 'Display Name', $this->textdomain ), 'email' => esc_attr__( 'Email', $this->textdomain ), 'ID' => esc_attr__( 'ID', $this->textdomain ), 'nicename' => esc_attr__( 'Nice Name', $this->textdomain ), 'post_count' => esc_attr__( 'Post Count', $this->textdomain ), 'registered' => esc_attr__( 'Registered', $this->textdomain ), 'url' => esc_attr__( 'URL', $this->textdomain ), 'user_login' => esc_attr__( 'Login', $this->textdomain ) );
+
+		?>
 
 		<div class="hybrid-widget-controls columns-2">
 		<p>
@@ -149,12 +162,24 @@ class Hybrid_Widget_Authors extends WP_Widget {
 			<input type="text" class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" value="<?php echo esc_attr( $instance['title'] ); ?>" />
 		</p>
 		<p>
-			<label for="<?php echo $this->get_field_id( 'feed' ); ?>"><code>feed</code></label>
-			<input type="text" class="widefat code" id="<?php echo $this->get_field_id( 'feed' ); ?>" name="<?php echo $this->get_field_name( 'feed' ); ?>" value="<?php echo esc_attr( $instance['feed'] ); ?>" />
+			<label for="<?php echo $this->get_field_id( 'order' ); ?>"><code>order</code></label> 
+			<select class="widefat" id="<?php echo $this->get_field_id( 'order' ); ?>" name="<?php echo $this->get_field_name( 'order' ); ?>">
+				<?php foreach ( $order as $option_value => $option_label ) { ?>
+					<option value="<?php echo esc_attr( $option_value ); ?>" <?php selected( $instance['order'], $option_value ); ?>><?php echo esc_html( $option_label ); ?></option>
+				<?php } ?>
+			</select>
 		</p>
 		<p>
-			<label for="<?php echo $this->get_field_id( 'feed_image' ); ?>"><code>feed_image</code></label>
-			<input type="text" class="widefat code" id="<?php echo $this->get_field_id( 'feed_image' ); ?>" name="<?php echo $this->get_field_name( 'feed_image' ); ?>" value="<?php echo esc_attr( $instance['feed_image'] ); ?>" />
+			<label for="<?php echo $this->get_field_id( 'orderby' ); ?>"><code>orderby</code></label> 
+			<select class="widefat" id="<?php echo $this->get_field_id( 'orderby' ); ?>" name="<?php echo $this->get_field_name( 'orderby' ); ?>">
+				<?php foreach ( $orderby as $option_value => $option_label ) { ?>
+					<option value="<?php echo esc_attr( $option_value ); ?>" <?php selected( $instance['orderby'], $option_value ); ?>><?php echo esc_html( $option_label ); ?></option>
+				<?php } ?>
+			</select>
+		</p>
+		<p>
+			<label for="<?php echo $this->get_field_id( 'number' ); ?>"><code>number</code></label>
+			<input type="text" class="smallfat code" id="<?php echo $this->get_field_id( 'number' ); ?>" name="<?php echo $this->get_field_name( 'number' ); ?>" value="<?php echo esc_attr( $instance['number'] ); ?>" />
 		</p>
 		<p>
 			<label for="<?php echo $this->get_field_id( 'style' ); ?>"><code>style</code></label> 
@@ -167,6 +192,14 @@ class Hybrid_Widget_Authors extends WP_Widget {
 		</div>
 
 		<div class="hybrid-widget-controls columns-2 column-last">
+		<p>
+			<label for="<?php echo $this->get_field_id( 'feed' ); ?>"><code>feed</code></label>
+			<input type="text" class="widefat code" id="<?php echo $this->get_field_id( 'feed' ); ?>" name="<?php echo $this->get_field_name( 'feed' ); ?>" value="<?php echo esc_attr( $instance['feed'] ); ?>" />
+		</p>
+		<p>
+			<label for="<?php echo $this->get_field_id( 'feed_image' ); ?>"><code>feed_image</code></label>
+			<input type="text" class="widefat code" id="<?php echo $this->get_field_id( 'feed_image' ); ?>" name="<?php echo $this->get_field_name( 'feed_image' ); ?>" value="<?php echo esc_attr( $instance['feed_image'] ); ?>" />
+		</p>
 		<p>
 			<label for="<?php echo $this->get_field_id( 'html' ); ?>">
 			<input class="checkbox" type="checkbox" <?php checked( $instance['html'], true ); ?> id="<?php echo $this->get_field_id( 'html' ); ?>" name="<?php echo $this->get_field_name( 'html' ); ?>" /> <?php _e( '<acronym title="Hypertext Markup Language">HTML</acronym>?', $this->textdomain ); ?> <code>html</code></label>
