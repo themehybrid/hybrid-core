@@ -258,6 +258,9 @@ function breadcrumb_trail( $args = array() ) {
 	elseif ( is_404() )
 		$trail['trail_end'] = __( '404 Not Found', $textdomain );
 
+	/* Allow devs to step in and filter the $trail array. */
+	$trail = apply_filters( 'breadcrumb_trail_items', $trail );
+
 	/* Connect the breadcrumb trail if there are items in the trail. */
 	if ( is_array( $trail ) ) {
 
