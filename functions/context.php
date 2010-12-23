@@ -148,9 +148,9 @@ function hybrid_entry_class( $class = '', $post_id = null ) {
 			$classes[] = 'protected';
 
 		/* Post format. */
-		if ( function_exists( 'get_post_format' ) ) { // 3.1 compat
+		if ( current_theme_supports( 'post-formats' ) ) {
 			$post_format = get_post_format( $post_id );
-			$classes[] = ( ( empty( $post_format ) ) ? 'post-format-default' : "post-format-{$post_format}" );
+			$classes[] = ( ( empty( $post_format ) || is_wp_error( $post_format ) ) ? 'format-standard' : "format-{$post_format}" );
 		}
 
 		/* Add category and post tag terms as classes. */
@@ -259,6 +259,10 @@ function hybrid_body_class( $class = '' ) {
 	/* Is the current user logged in. */
 	$classes[] = ( is_user_logged_in() ) ? 'logged-in' : 'logged-out';
 
+	/* WP admin bar. */
+	if ( function_exists( 'is_admin_bar_showing' ) && is_admin_bar_showing() )
+		$classes[] = 'admin-bar';
+
 	/* Merge base contextual classes with $classes. */
 	$classes = array_merge( $classes, hybrid_get_context() );
 
@@ -269,6 +273,12 @@ function hybrid_body_class( $class = '' ) {
 		$template = str_replace( array ( "{$wp_query->post->post_type}-template-", "{$wp_query->post->post_type}-", '.php' ), '', get_post_meta( $wp_query->post->ID, "_wp_{$wp_query->post->post_type}_template", true ) );
 		if ( !empty( $template ) )
 			$classes[] = "{$wp_query->post->post_type}-template-{$template}";
+
+		/* Post format. */
+		if ( current_theme_supports( 'post-formats' ) ) {
+			$post_format = get_post_format( $wp_query->post->ID );
+			$classes[] = ( ( empty( $post_format ) || is_wp_error( $post_format ) ) ? "{$wp_query->post->post_type}-format-standard" : "{$wp_query->post->post_type}-format-{$post_format}" );
+		}
 
 		/* Attachment mime types. */
 		if ( is_attachment() ) {
