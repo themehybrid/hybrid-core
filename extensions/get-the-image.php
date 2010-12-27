@@ -92,14 +92,17 @@ function get_the_image( $args = array() ) {
 	/* Extract the array to allow easy use of variables. */
 	extract( $args );
 
+	/* Get cache key based on $args. */
+	$key = md5( serialize( compact( array_keys( $args ) ) ) );
+
 	/* Check for a cached image. */
-	$image_cache = wp_cache_get( 'get_the_image' );
+	$image_cache = wp_cache_get( $post_id, 'get_the_image' );
 
 	if ( !is_array( $image_cache ) )
 		$image_cache = array();
 
 	/* If there is no cached image, let's see if one exists. */
-	if ( !isset( $image_cache[$post_id][$size] ) || empty( $cache ) ) {
+	if ( !isset( $image_cache[$key] ) || empty( $cache ) ) {
 
 		/* If a custom field key (array) is defined, check for images by custom field. */
 		if ( !empty( $meta_key ) )
@@ -141,11 +144,11 @@ function get_the_image( $args = array() ) {
 				$image = display_the_image( $args, $image );
 		}
 
-		$image_cache[$post_id][$size] = $image;
-		wp_cache_set( 'get_the_image', $image_cache );
+		$image_cache[$key] = $image;
+		wp_cache_set( $post_id, $image_cache, 'get_the_image' );
 	}
 	else {
-		$image = $image_cache[$post_id][$size];
+		$image = $image_cache[$key];
 	}
 
 	/* Allow plugins/theme to override the final output. */
