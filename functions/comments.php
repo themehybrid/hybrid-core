@@ -152,7 +152,7 @@ function hybrid_comment_form_args( $args ) {
 		'title_reply' => __( 'Leave a Reply', $domain ),
 		'title_reply_to' => __( 'Leave a Reply to %s', $domain ),
 		'cancel_reply_link' => __( 'Click here to cancel reply.', $domain ),
-		'label_submit' => __( 'Submit', $domain ),
+		'label_submit' => __( 'Post Comment', $domain ),
 	);
 
 	return $args;
