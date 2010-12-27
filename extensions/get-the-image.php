@@ -16,7 +16,7 @@
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * @package GetTheImage
- * @version 0.6.1
+ * @version 0.6.2
  * @author Justin Tadlock <justin@justintadlock.com>
  * @copyright Copyright (c) 2008 - 2010, Justin Tadlock
  * @link http://justintadlock.com/archives/2008/05/27/get-the-image-wordpress-plugin
@@ -125,13 +125,21 @@ function get_the_image( $args = array() ) {
 		if ( empty( $image ) && !empty( $default_image ) )
 			$image = image_by_default( $args );
 
-		/* If $meta_key_save was set, save the image to a custom field. */
-		if ( !empty( $image ) && !empty( $meta_key_save ) )
-			get_the_image_meta_key_save( $args, $image );
+		/* If an image was found. */
+		if ( !empty( $image ) ) {
 
-		/* If an image is returned, run it through the display function. */
-		if ( !empty( $image ) )
-			$image = display_the_image( $args, $image );
+			/* Change $image['url'] to $image['src']. */
+			if ( isset( $image['url'] ) ) // 'url' key deprecated 0.6.2
+				$image['src'] = $image['url'];
+
+			/* If $meta_key_save was set, save the image to a custom field. */
+			if ( !empty( $meta_key_save ) )
+				get_the_image_meta_key_save( $args, $image );
+
+			/* If an image is returned, run it through the display function. */
+			if ( !empty( $image ) )
+				$image = display_the_image( $args, $image );
+		}
 
 		$image_cache[$post_id][$size] = $image;
 		wp_cache_set( 'get_the_image', $image_cache );
@@ -317,7 +325,7 @@ function image_by_default( $args = array() ) {
 function display_the_image( $args = array(), $image = false ) {
 
 	/* If there is no image URL, return false. */
-	if ( empty( $image['url'] ) )
+	if ( empty( $image['src'] ) )
 		return false;
 
 	/* Extract the arguments for easy-to-use variables. */
@@ -348,7 +356,7 @@ function display_the_image( $args = array(), $image = false ) {
 		do_action( 'begin_fetch_post_thumbnail_html', $post_id, $image['post_thumbnail_id'], $size );
 
 	/* Add the image attributes to the <img /> element. */
-	$html = '<img src="' . $image['url'] . '" alt="' . esc_attr( strip_tags( $image_alt ) ) . '" class="' . esc_attr( $class ) . '"' . $width . $height . ' />';
+	$html = '<img src="' . $image['src'] . '" alt="' . esc_attr( strip_tags( $image_alt ) ) . '" class="' . esc_attr( $class ) . '"' . $width . $height . ' />';
 
 	/* If $link_to_post is set to true, link the image to its post. */
 	if ( $link_to_post )
@@ -377,7 +385,7 @@ function display_the_image( $args = array(), $image = false ) {
 function get_the_image_meta_key_save( $args = array(), $image = array() ) {
 
 	/* If the $meta_key_save argument is empty or there is no image $url given, return. */
-	if ( empty( $args['meta_key_save'] ) || empty( $image['url'] ) )
+	if ( empty( $args['meta_key_save'] ) || empty( $image['src'] ) )
 		return;
 
 	/* Get the current value of the meta key. */
@@ -385,11 +393,11 @@ function get_the_image_meta_key_save( $args = array(), $image = array() ) {
 
 	/* If there is no value for the meta key, set a new value with the image $url. */
 	if ( empty( $meta ) )
-		add_post_meta( $args['post_id'], $args['meta_key_save'], $image['url'] );
+		add_post_meta( $args['post_id'], $args['meta_key_save'], $image['src'] );
 
 	/* If the current value doesn't match the image $url, update it. */
-	elseif ( $meta !== $image['url'] )
-		update_post_meta( $args['post_id'], $args['meta_key_save'], $image['url'], $meta );
+	elseif ( $meta !== $image['src'] )
+		update_post_meta( $args['post_id'], $args['meta_key_save'], $image['src'], $meta );
 }
 
 /**
