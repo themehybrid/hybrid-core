@@ -154,7 +154,7 @@ function get_the_image( $args = array() ) {
 	/* Allow plugins/theme to override the final output. */
 	$image = apply_filters( 'get_the_image', $image );
 
-	/* Display the image if $echo is set to true and the $format isn't an array. Else, return the image. */
+	/* If $format is set to 'array', return an array of image attributes. */
 	if ( 'array' == $format ) {
 		$atts = wp_kses_hair( $image, array( 'http' ) );
 
@@ -164,10 +164,14 @@ function get_the_image( $args = array() ) {
 		$out['url'] = $out['src']; // @deprecated 0.5 Use 'src' instead of 'url'.
 		return $out;
 	}
-	elseif ( !empty( $echo ) )
-		echo $image;
-	else
+
+	/* Or, if $echo is set to false, return the formatted image. */
+	elseif ( empty( $echo ) ) {
 		return $image;
+	}
+
+	/* Display the image if we get to this point. */
+	echo $image;
 }
 
 /* Internal Functions */
