@@ -106,10 +106,10 @@ class Hybrid_Widget_Archives extends WP_Widget {
 				$option_title = esc_html__( 'Select Post', $this->textdomain );
 
 			/* Output the <select> element and each <option>. */
-			echo '<select name="archive-dropdown" onchange=\'document.location.href=this.options[this.selectedIndex].value;\'>';
+			echo '<p><select name="archive-dropdown" onchange=\'document.location.href=this.options[this.selectedIndex].value;\'>';
 				echo '<option value="">' . $option_title . '</option>';
 				echo $archives;
-			echo '</select>';
+			echo '</select></p>';
 		}
 
 		/* If the format should be an unordered list. */
