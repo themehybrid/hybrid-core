@@ -14,7 +14,7 @@
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * @package BreadcrumbTrail
- * @version 0.3.2
+ * @version 0.4.0
  * @author Justin Tadlock <justin@justintadlock.com>
  * @copyright Copyright (c) 2008 - 2010, Justin Tadlock
  * @link http://justintadlock.com/archives/2009/04/05/breadcrumb-trail-wordpress-plugin
@@ -25,7 +25,7 @@
  * Shows a breadcrumb for all types of pages.  Themes and plugins can filter $args or input directly.  
  * Allow filtering of only the $args using get_the_breadcrumb_args.
  *
- * @since 0.1
+ * @since 0.1.0
  * @param array $args Mixed arguments for the menu.
  * @return string Output of the breadcrumb menu.
  */
@@ -93,15 +93,44 @@ function breadcrumb_trail( $args = array() ) {
 		$post = $wp_query->get_queried_object();
 		$post_id = absint( $wp_query->get_queried_object_id() );
 		$post_type = $post->post_type;
-		$parent = $post->post_parent;
+		$parent = absint( $post->post_parent );
 
-		/* If a custom post type, check if there are any pages in its hierarchy based on the slug. */
-		if ( 'page' !== $post_type ) {
+		/* Get the post type object. */
+		$post_type_object = get_post_type_object( $post_type );
 
-			$post_type_object = get_post_type_object( $post_type );
+		/* If viewing a singular 'post'. */
+		if ( 'post' == $post_type ) {
 
 			/* If $front has been set, add it to the $path. */
-			if ( 'post' == $post_type || 'attachment' == $post_type || ( $post_type_object->rewrite['with_front'] && $wp_rewrite->front ) )
+			$path .= trailingslashit( $wp_rewrite->front );
+
+			/* If there's a path, check for parents. */
+			if ( !empty( $path ) )
+				$trail = array_merge( $trail, breadcrumb_trail_get_parents( '', $path ) );
+
+			/* Map the permalink structure tags to actual links. */
+			$trail = array_merge( $trail, breadcrumb_trail_map_rewrite_tags( $post_id, get_option( 'permalink_structure' ) ) );
+		}
+
+		/* If viewing a singular 'attachment'. */
+		elseif ( 'attachment' == $post_type ) {
+
+			/* If $front has been set, add it to the $path. */
+			$path .= trailingslashit( $wp_rewrite->front );
+
+			/* If there's a path, check for parents. */
+			if ( !empty( $path ) )
+				$trail = array_merge( $trail, breadcrumb_trail_get_parents( '', $path ) );
+
+			/* Map the post (parent) permalink structure tags to actual links. */
+			$trail = array_merge( $trail, breadcrumb_trail_map_rewrite_tags( $post->post_parent, get_option( 'permalink_structure' ) ) );
+		}
+
+		/* If a custom post type, check if there are any pages in its hierarchy based on the slug. */
+		elseif ( 'page' !== $post_type ) {
+
+			/* If $front has been set, add it to the $path. */
+			if ( $post_type_object->rewrite['with_front'] && $wp_rewrite->front )
 				$path .= trailingslashit( $wp_rewrite->front );
 
 			/* If there's a slug, add it to the $path. */
@@ -231,7 +260,7 @@ function breadcrumb_trail( $args = array() ) {
 			if ( is_day() ) {
 				$trail[] = '<a href="' . get_year_link( get_the_time( 'Y' ) ) . '" title="' . get_the_time( esc_attr__( 'Y', $textdomain ) ) . '">' . get_the_time( __( 'Y', $textdomain ) ) . '</a>';
 				$trail[] = '<a href="' . get_month_link( get_the_time( 'Y' ), get_the_time( 'm' ) ) . '" title="' . get_the_time( esc_attr__( 'F', $textdomain ) ) . '">' . get_the_time( __( 'F', $textdomain ) ) . '</a>';
-				$trail['trail_end'] = get_the_time( __( 'j', $textdomain ) );
+				$trail['trail_end'] = get_the_time( __( 'd', $textdomain ) );
 			}
 
 			elseif ( get_query_var( 'w' ) ) {
@@ -301,11 +330,77 @@ function breadcrumb_trail( $args = array() ) {
 }
 
 /**
+ * Turns %tag% from permalink structures into usable links for the breadcrumb trail.  This feels kind of
+ * hackish for now because we're checking for specific %tag% examples and only doing it for the 'post' 
+ * post type.  In the future, maybe it'll handle a wider variety of possibilities, especially for custom post
+ * types.
+ *
+ * @since 0.4.0
+ * @param int $post_id ID of the post whose parents we want.
+ * @param string $path Path of a potential parent page.
+ * @return array $trail Array of links to the post breadcrumb.
+ */
+function breadcrumb_trail_map_rewrite_tags( $post_id = '', $path = '' ) {
+
+	/* Set up an empty $trail array. */
+	$trail = array();
+
+	/* Make sure there's a $path and $post_id before continuing. */
+	if ( empty( $path ) || empty( $post_id ) )
+		return $trail;
+
+	/* Get the post based on the post ID. */
+	$post = get_post( $post_id );
+
+	/* If no post is returned, an error is returned, or the post does not have a 'post' post type, return. */
+	if ( empty( $post ) || is_wp_error( $post ) || 'post' !== $post->post_type )
+		return $trail;
+
+	/* Get the textdomain. */
+	$textdomain = hybrid_get_textdomain();
+
+	/* Trim '/' from both sides of the $path. */
+	$path = trim( $path, '/' );
+
+	/* Split the $path into an array of strings. */
+	$matches = explode( '/', $path );
+
+	/* If matches are found for the path. */
+	if ( is_array( $matches ) ) {
+
+		/* Loop through each of the matches, adding each to the $trail array. */
+		foreach ( $matches as $match ) {
+
+			/* Trim any '/' from the $match. */
+			$tag = trim( $match, '/' );
+
+			if ( '%year%' == $tag )
+				$trail[] = '<a href="' . get_year_link( get_the_time( 'Y', $post_id ) ) . '" title="' . get_the_time( esc_attr__( 'Y', $textdomain ), $post_id ) . '">' . get_the_time( __( 'Y', $textdomain ), $post_id ) . '</a>';
+
+			elseif ( '%monthnum%' == $tag )
+				$trail[] = '<a href="' . get_month_link( get_the_time( 'Y', $post_id ), get_the_time( 'm', $post_id ) ) . '" title="' . get_the_time( esc_attr__( 'F Y', $textdomain ), $post_id ) . '">' . get_the_time( __( 'F', $textdomain ), $post_id ) . '</a>';
+
+			elseif ( '%day%' == $tag )
+				$trail[] = '<a href="' . get_day_link( get_the_time( 'Y', $post_id ), get_the_time( 'm', $post_id ), get_the_time( 'd', $post_id ) ) . '" title="' . get_the_time( esc_attr__( 'F j, Y', $textdomain ), $post_id ) . '">' . get_the_time( __( 'd', $textdomain ), $post_id ) . '</a>';
+
+			elseif ( '%category%' == $tag )
+				$trail[] = get_the_term_list( $post_id, 'category', '', ', ', '' );
+
+			elseif ( '%author%' == $tag )
+				$trail[] = '<a href="' . get_author_posts_url( $post->post_author ) . '" title="' . esc_attr( get_the_author_meta( 'display_name', $post->post_author ) ) . '">' . get_the_author_meta( 'display_name', $post->post_author ) . '</a>';
+		}
+	}
+
+	/* Return the $trail array. */
+	return $trail;
+}
+
+/**
  * Gets parent pages of any post type or taxonomy by the ID or Path.  The goal of this function is to create 
  * a clear path back to home given what would normally be a "ghost" directory.  If any page matches the given 
  * path, it'll be added.  But, it's also just a way to check for a hierarchy with hierarchical post types.
  *
- * @since 0.3
+ * @since 0.3.0
  * @param int $post_id ID of the post whose parents we want.
  * @param string $path Path of a potential parent page.
  * @return array $trail Array of parent page links.
@@ -388,7 +483,7 @@ function breadcrumb_trail_get_parents( $post_id = '', $path = '' ) {
  * Searches for term parents of hierarchical taxonomies.  This function is similar to the WordPress 
  * function get_category_parents() but handles any type of taxonomy.
  *
- * @since 0.3
+ * @since 0.3.0
  * @param int $parent_id The ID of the first parent.
  * @param object|string $taxonomy The taxonomy of the term whose parents we want.
  * @return array $trail Array of links to parent terms.
