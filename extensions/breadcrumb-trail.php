@@ -30,17 +30,13 @@
  * @return string Output of the breadcrumb menu.
  */
 function breadcrumb_trail( $args = array() ) {
-	global $wp_query, $wp_rewrite;
+	global $wp_query;
 
 	/* Get the textdomain. */
 	$textdomain = hybrid_get_textdomain();
 
 	/* Create an empty variable for the breadcrumb. */
 	$breadcrumb = '';
-
-	/* Create an empty array for the trail. */
-	$trail = array();
-	$path = '';
 
 	/* Set up the default arguments for the breadcrumb. */
 	$defaults = array(
@@ -49,7 +45,6 @@ function breadcrumb_trail( $args = array() ) {
 		'after' => false,
 		'front_page' => true,
 		'show_home' => __( 'Home', $textdomain ),
-		'single_tax' => null, // @deprecated 0.3 Use singular_{$post_type}_taxonomy.
 		'echo' => true
 	);
 
@@ -61,22 +56,65 @@ function breadcrumb_trail( $args = array() ) {
 	$args = apply_filters( 'breadcrumb_trail_args', $args );
 
 	/* Parse the arguments and extract them for easy variable naming. */
-	extract( wp_parse_args( $args, $defaults ) );
+	$args = wp_parse_args( $args, $defaults );
 
-	/* For backwards compatibility, set $single_tax if it's explicitly given. */
-	if ( !is_null( $single_tax ) )
-		$args['singular_post_taxonomy'] = $single_tax;
+	/* Get the trail items. */
+	$trail = breadcrumb_trail_get_items( $args );
+
+	/* Connect the breadcrumb trail if there are items in the trail. */
+	if ( !empty( $trail ) && is_array( $trail ) ) {
+
+		/* Open the breadcrumb trail containers. */
+		$breadcrumb = '<div class="breadcrumb breadcrumbs"><div class="breadcrumb-trail">';
+
+		/* If $before was set, wrap it in a container. */
+		$breadcrumb .= ( !empty( $args['before'] ) ? '<span class="trail-before">' . $args['before'] . '</span> ' : '' );
+
+		/* Wrap the $trail['trail_end'] value in a container. */
+		if ( !empty( $trail['trail_end'] ) )
+			$trail['trail_end'] = '<span class="trail-end">' . $trail['trail_end'] . '</span>';
+
+		/* Format the separator. */
+		$separator = ( !empty( $args['separator'] ) ? '<span class="sep">' . $args['separator'] . '</span>' : '<span class="sep">/</span>' );
+
+		/* Join the individual trail items into a single string. */
+		$breadcrumb .= join( " {$separator} ", $trail );
+
+		/* If $after was set, wrap it in a container. */
+		$breadcrumb .= ( !empty( $args['after'] ) ? ' <span class="trail-after">' . $args['after'] . '</span>' : '' );
+
+		/* Close the breadcrumb trail containers. */
+		$breadcrumb .= '</div></div>';
+	}
+
+	/* Allow developers to filter the breadcrumb trail HTML. */
+	$breadcrumb = apply_filters( 'breadcrumb_trail', $breadcrumb );
+
+	/* Output the breadcrumb. */
+	if ( $args['echo'] )
+		echo $breadcrumb;
+	else
+		return $breadcrumb;
+}
+
+function breadcrumb_trail_get_items( $args = array() ) {
+	global $wp_query, $wp_rewrite;
+
+	/* Get the textdomain. */
+	$textdomain = hybrid_get_textdomain();
+
+	/* Set up an empty trail array and empty path. */
+	$trail = array();
+	$path = '';
 
 	/* If $show_home is set and we're not on the front page of the site, link to the home page. */
-	if ( !is_front_page() && $show_home )
-		$trail[] = '<a href="' . home_url() . '" title="' . esc_attr( get_bloginfo( 'name' ) ) . '" rel="home" class="trail-begin">' . $show_home . '</a>';
+	if ( !is_front_page() && $args['show_home'] )
+		$trail[] = '<a href="' . home_url() . '" title="' . esc_attr( get_bloginfo( 'name' ) ) . '" rel="home" class="trail-begin">' . $args['show_home'] . '</a>';
 
 	/* If viewing the front page of the site. */
 	if ( is_front_page() ) {
-		if ( !$front_page )
-			$trail = false;
-		elseif ( $show_home )
-			$trail['trail_end'] = "{$show_home}";
+		if ( $args['show_home'] && $args['front_page'] )
+			$trail['trail_end'] = "{$args['show_home']}";
 	}
 
 	/* If viewing the "home"/posts page. */
@@ -151,7 +189,7 @@ function breadcrumb_trail( $args = array() ) {
 			$trail = array_merge( $trail, breadcrumb_trail_get_parents( $parent, '' ) );
 
 		/* Display terms for specific post type taxonomy if requested. */
-		if ( isset( $args["singular_{$post_type}_taxonomy"] ) && $terms = get_the_term_list( $post_id, $args["singular_{$post_type}_taxonomy"], '', ', ', '' ) )
+		if ( !empty( $args["singular_{$post_type}_taxonomy"] ) && $terms = get_the_term_list( $post_id, $args["singular_{$post_type}_taxonomy"], '', ', ', '' ) )
 			$trail[] = $terms;
 
 		/* End with the post title. */
@@ -288,45 +326,7 @@ function breadcrumb_trail( $args = array() ) {
 		$trail['trail_end'] = __( '404 Not Found', $textdomain );
 
 	/* Allow devs to step in and filter the $trail array. */
-	$trail = apply_filters( 'breadcrumb_trail_items', $trail );
-
-	/* Connect the breadcrumb trail if there are items in the trail. */
-	if ( is_array( $trail ) ) {
-
-		/* Open the breadcrumb trail containers. */
-		$breadcrumb = '<div class="breadcrumb breadcrumbs"><div class="breadcrumb-trail">';
-
-		/* If $before was set, wrap it in a container. */
-		if ( !empty( $before ) )
-			$breadcrumb .= '<span class="trail-before">' . $before . '</span> ';
-
-		/* Wrap the $trail['trail_end'] value in a container. */
-		if ( !empty( $trail['trail_end'] ) )
-			$trail['trail_end'] = '<span class="trail-end">' . $trail['trail_end'] . '</span>';
-
-		/* Format the separator. */
-		if ( !empty( $separator ) )
-			$separator = '<span class="sep">' . $separator . '</span>';
-
-		/* Join the individual trail items into a single string. */
-		$breadcrumb .= join( " {$separator} ", $trail );
-
-		/* If $after was set, wrap it in a container. */
-		if ( !empty( $after ) )
-			$breadcrumb .= ' <span class="trail-after">' . $after . '</span>';
-
-		/* Close the breadcrumb trail containers. */
-		$breadcrumb .= '</div></div>';
-	}
-
-	/* Allow developers to filter the breadcrumb trail HTML. */
-	$breadcrumb = apply_filters( 'breadcrumb_trail', $breadcrumb );
-
-	/* Output the breadcrumb. */
-	if ( $echo )
-		echo $breadcrumb;
-	else
-		return $breadcrumb;
+	return apply_filters( 'breadcrumb_trail_items', $trail );
 }
 
 /**
@@ -383,11 +383,23 @@ function breadcrumb_trail_map_rewrite_tags( $post_id = '', $path = '' ) {
 			elseif ( '%day%' == $tag )
 				$trail[] = '<a href="' . get_day_link( get_the_time( 'Y', $post_id ), get_the_time( 'm', $post_id ), get_the_time( 'd', $post_id ) ) . '" title="' . get_the_time( esc_attr__( 'F j, Y', $textdomain ), $post_id ) . '">' . get_the_time( __( 'd', $textdomain ), $post_id ) . '</a>';
 
-			elseif ( '%category%' == $tag )
-				$trail[] = get_the_term_list( $post_id, 'category', '', ', ', '' );
-
 			elseif ( '%author%' == $tag )
 				$trail[] = '<a href="' . get_author_posts_url( $post->post_author ) . '" title="' . esc_attr( get_the_author_meta( 'display_name', $post->post_author ) ) . '">' . get_the_author_meta( 'display_name', $post->post_author ) . '</a>';
+
+			elseif ( '%category%' == $tag ) {
+
+				$terms = get_the_category( $post_id );
+
+				if ( $terms ) {
+					usort( $terms, '_usort_terms_by_ID' );
+					$term = get_term( $terms[0], 'category' );
+
+					if ( 0 !== $term->parent )
+						$trail = array_merge( $trail, breadcrumb_trail_get_term_parents( $term->parent, 'category' ) );
+
+					$trail[] = '<a href="' . get_term_link( $term, 'category' ) . '" title="' . esc_attr( $term->name ) . '">' . $term->name . '</a>';
+				}
+			}
 		}
 	}
 
