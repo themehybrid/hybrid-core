@@ -105,7 +105,8 @@ function hybrid_attachment() {
  * @return string
  */
 function hybrid_application_attachment( $mime = '', $file = '' ) {
-	$application = '<object class="text" type="' . esc_attr( $mime ) . '" data="' . esc_url( $file ) . '" width="400">';
+	$embed_defaults = wp_embed_defaults();
+	$application = '<object class="text" type="' . esc_attr( $mime ) . '" data="' . esc_url( $file ) . '" width="' . esc_attr( $embed_defaults['width'] ) . '" height="' . esc_attr( $embed_defaults['height'] ) . '">';
 	$application .= '<param name="src" value="' . esc_url( $file ) . '" />';
 	$application .= '</object>';
 
@@ -122,7 +123,8 @@ function hybrid_application_attachment( $mime = '', $file = '' ) {
  * @return string
  */
 function hybrid_text_attachment( $mime = '', $file = '' ) {
-	$text = '<object class="text" type="' . esc_attr( $mime ) . '" data="' . esc_url( $file ) . '" width="400">';
+	$embed_defaults = wp_embed_defaults();
+	$text = '<object class="text" type="' . esc_attr( $mime ) . '" data="' . esc_url( $file ) . '" width="' . esc_attr( $embed_defaults['width'] ) . '" height="' . esc_attr( $embed_defaults['height'] ) . '">';
 	$text .= '<param name="src" value="' . esc_url( $file ) . '" />';
 	$text .= '</object>';
 
@@ -141,7 +143,8 @@ function hybrid_text_attachment( $mime = '', $file = '' ) {
  * @return string
  */
 function hybrid_audio_attachment( $mime = '', $file = '' ) {
-	$audio = '<object type="' . esc_attr( $mime ) . '" class="player audio" data="' . esc_url( $file ) . '" width="400" height="50">';
+	$embed_defaults = wp_embed_defaults();
+	$audio = '<object type="' . esc_attr( $mime ) . '" class="player audio" data="' . esc_url( $file ) . '" width="' . esc_attr( $embed_defaults['width'] ) . '" height="' . esc_attr( $embed_defaults['height'] ) . '">';
 		$audio .= '<param name="src" value="' . esc_url( $file ) . '" />';
 		$audio .= '<param name="autostart" value="false" />';
 		$audio .= '<param name="controller" value="true" />';
@@ -159,10 +162,12 @@ function hybrid_audio_attachment( $mime = '', $file = '' ) {
  * @return string
  */
 function hybrid_video_attachment( $mime = false, $file = false ) {
+	$embed_defaults = wp_embed_defaults();
+
 	if ( $mime == 'video/asf' )
 		$mime = 'video/x-ms-wmv';
 
-	$video = '<object type="' . esc_attr( $mime ) . '" class="player video" data="' . esc_url( $file ) . '" width="400" height="320">';
+	$video = '<object type="' . esc_attr( $mime ) . '" class="player video" data="' . esc_url( $file ) . '" width="' . esc_attr( $embed_defaults['width'] ) . '" height="' . esc_attr( $embed_defaults['height'] ) . '">';
 		$video .= '<param name="src" value="' . esc_url( $file ) . '" />';
 		$video .= '<param name="autoplay" value="false" />';
 		$video .= '<param name="allowfullscreen" value="true" />';
