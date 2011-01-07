@@ -22,8 +22,9 @@
  */
 
 /**
- * Shows a breadcrumb for all types of pages.  Themes and plugins can filter $args or input directly.  
- * Allow filtering of only the $args using get_the_breadcrumb_args.
+ * Shows a breadcrumb for all types of pages.  This function is formatting the final output of the 
+ * breadcrumb trail.  The breadcrumb_trail_get_items() function returns the items and this function 
+ * formats those items.
  *
  * @since 0.1.0
  * @param array $args Mixed arguments for the menu.
@@ -33,7 +34,7 @@ function breadcrumb_trail( $args = array() ) {
 	global $wp_query;
 
 	/* Get the textdomain. */
-	$textdomain = hybrid_get_textdomain();
+	$textdomain = breadcrumb_trail_textdomain();
 
 	/* Create an empty variable for the breadcrumb. */
 	$breadcrumb = '';
@@ -97,11 +98,21 @@ function breadcrumb_trail( $args = array() ) {
 		return $breadcrumb;
 }
 
+/**
+ * Gets the items for the breadcrumb trail.  This is the heart of the script.  It checks the current page 
+ * being viewed and decided based on the information provided by WordPress what items should be
+ * added to the breadcrumb trail.
+ *
+ * @since 0.4.0
+ * @todo Build in caching based on the queried object ID.
+ * @param array $args Mixed arguments for the menu.
+ * @return array List of items to be shown in the trail.
+ */
 function breadcrumb_trail_get_items( $args = array() ) {
 	global $wp_query, $wp_rewrite;
 
 	/* Get the textdomain. */
-	$textdomain = hybrid_get_textdomain();
+	$textdomain = breadcrumb_trail_textdomain();
 
 	/* Set up an empty trail array and empty path. */
 	$trail = array();
@@ -357,7 +368,7 @@ function breadcrumb_trail_map_rewrite_tags( $post_id = '', $path = '' ) {
 		return $trail;
 
 	/* Get the textdomain. */
-	$textdomain = hybrid_get_textdomain();
+	$textdomain = breadcrumb_trail_textdomain();
 
 	/* Trim '/' from both sides of the $path. */
 	$path = trim( $path, '/' );
@@ -374,29 +385,40 @@ function breadcrumb_trail_map_rewrite_tags( $post_id = '', $path = '' ) {
 			/* Trim any '/' from the $match. */
 			$tag = trim( $match, '/' );
 
+			/* If using the %year% tag, add a link to the yearly archive. */
 			if ( '%year%' == $tag )
 				$trail[] = '<a href="' . get_year_link( get_the_time( 'Y', $post_id ) ) . '" title="' . get_the_time( esc_attr__( 'Y', $textdomain ), $post_id ) . '">' . get_the_time( __( 'Y', $textdomain ), $post_id ) . '</a>';
 
+			/* If using the %monthnum% tag, add a link to the monthly archive. */
 			elseif ( '%monthnum%' == $tag )
 				$trail[] = '<a href="' . get_month_link( get_the_time( 'Y', $post_id ), get_the_time( 'm', $post_id ) ) . '" title="' . get_the_time( esc_attr__( 'F Y', $textdomain ), $post_id ) . '">' . get_the_time( __( 'F', $textdomain ), $post_id ) . '</a>';
 
+			/* If using the %day% tag, add a link to the daily archive. */
 			elseif ( '%day%' == $tag )
 				$trail[] = '<a href="' . get_day_link( get_the_time( 'Y', $post_id ), get_the_time( 'm', $post_id ), get_the_time( 'd', $post_id ) ) . '" title="' . get_the_time( esc_attr__( 'F j, Y', $textdomain ), $post_id ) . '">' . get_the_time( __( 'd', $textdomain ), $post_id ) . '</a>';
 
+			/* If using the %author% tag, add a link to the post author archive. */
 			elseif ( '%author%' == $tag )
 				$trail[] = '<a href="' . get_author_posts_url( $post->post_author ) . '" title="' . esc_attr( get_the_author_meta( 'display_name', $post->post_author ) ) . '">' . get_the_author_meta( 'display_name', $post->post_author ) . '</a>';
 
+			/* If using the %category% tag, add a link to the first category archive to match permalinks. */
 			elseif ( '%category%' == $tag ) {
 
+				/* Get the post categories. */
 				$terms = get_the_category( $post_id );
 
+				/* Check that categories were returned. */
 				if ( $terms ) {
+
+					/* Sort the terms by ID and get the first category. */
 					usort( $terms, '_usort_terms_by_ID' );
 					$term = get_term( $terms[0], 'category' );
 
+					/* If the category has a parent, add the hierarchy to the trail. */
 					if ( 0 !== $term->parent )
 						$trail = array_merge( $trail, breadcrumb_trail_get_term_parents( $term->parent, 'category' ) );
 
+					/* Add the category archive link to the trail. */
 					$trail[] = '<a href="' . get_term_link( $term, 'category' ) . '" title="' . esc_attr( $term->name ) . '">' . $term->name . '</a>';
 				}
 			}
@@ -529,6 +551,16 @@ function breadcrumb_trail_get_term_parents( $parent_id = '', $taxonomy = '' ) {
 
 	/* Return the trail of parent terms. */
 	return $trail;
+}
+
+/**
+ * Returns the textdomain used by the script and allows it to be filtered by plugins/themes.
+ *
+ * @since 0.4.0
+ * @returns string The textdomain for the script.
+ */
+function breadcrumb_trail_textdomain() {
+	return apply_filters( 'breadcrumb_trail_textdomain', 'breadcrumb-trail' );
 }
 
 ?>
