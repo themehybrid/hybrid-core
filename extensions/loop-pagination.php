@@ -14,7 +14,7 @@
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * @package LoopPagination
- * @version 0.1.1
+ * @version 0.1.2
  * @author Justin Tadlock <justin@justintadlock.com>
  * @copyright Copyright (c) 2010, Justin Tadlock
  * @link http://devpress.com/blog/loop-pagination-for-theme-developers
@@ -86,7 +86,7 @@ function loop_pagination( $args = array() ) {
 	$page_links = paginate_links( $args );
 
 	/* Remove 'page/1' from the entire output since it's not needed. */
-	$page_links = str_replace( array( '&#038;paged=1\'', '/page/1\'' ), '\'', $page_links );
+	$page_links = str_replace( array( '&#038;paged=1\'', '/page/1\'', '/page/1/\'' ), '\'', $page_links );
 
 	/* Wrap the paginated links with the $before and $after elements. */
 	$page_links = $args['before'] . $page_links . $args['after'];
