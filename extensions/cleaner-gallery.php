@@ -15,7 +15,7 @@
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * @package CleanerGallery
- * @version 0.9
+ * @version 0.9.1
  * @author Justin Tadlock <justin@justintadlock.com>
  * @copyright Copyright (c) 2008 - 2010, Justin Tadlock
  * @link http://justintadlock.com/archives/2008/04/13/cleaner-wordpress-gallery-plugin
@@ -30,7 +30,7 @@ add_filter( 'post_gallery', 'cleaner_gallery', 10, 2 );
  * HTML and inline styles.  It adds the number of columns used as a class attribute, which allows 
  * developers to style the gallery more easily.
  *
- * @since 0.9
+ * @since 0.9.0
  * @param string $output
  * @param array $attr
  * @return string $output
@@ -73,7 +73,8 @@ function cleaner_gallery( $output, $attr ) {
 	$defaults = apply_filters( 'cleaner_gallery_defaults', $defaults );
 
 	/* Merge the defaults with user input. Make sure $id is an integer. */
-	extract( shortcode_atts( $defaults, $attr ) );
+	$attr = shortcode_atts( $defaults, $attr );
+	extract( $attr );
 	$id = intval( $id );
 
 	/* Arguments for get_children(). */
@@ -105,8 +106,9 @@ function cleaner_gallery( $output, $attr ) {
 	/* Count the number of attachments returned. */
 	$attachment_count = count( $attachments );
 
-	/* If there are fewer attachments than columns, set $columns to $attachment_count. */
-	$columns = intval( $columns );//$columns = ( ( $columns <= $attachment_count ) ? intval( $columns ) : intval( $attachment_count ) );
+	/* Allow developers to overwrite the number of columns. This can be useful for reducing columns with with fewer images than number of columns. */
+	//$columns = ( ( $columns <= $attachment_count ) ? intval( $columns ) : intval( $attachment_count ) );
+	$columns = apply_filters( 'cleaner_gallery_columns', intval( $columns ), $attachment_count, $attr );
 
 	/* Open the gallery <div>. */
 	$output = "\n\t\t\t<div id='gallery-{$id}-{$cleaner_gallery_instance}' class='gallery gallery-{$id}'>";
@@ -126,22 +128,17 @@ function cleaner_gallery( $output, $attr ) {
 
 		/* Add the image. */
 		$image = ( ( isset( $attr['link'] ) && 'file' == $attr['link'] ) ? wp_get_attachment_link( $id, $size, false, false ) : wp_get_attachment_link( $id, $size, true, false ) );
-		$output .= apply_filters( 'cleaner_gallery_image', $image, $id, $attr );
+		$output .= apply_filters( 'cleaner_gallery_image', $image, $id, $attr, $cleaner_gallery_instance );
 
 		/* Close the image wrapper. */
 		$output .= "</{$icontag}>";
 
-		/* Get the caption and title. */
-		$caption = esc_html( $attachment->post_excerpt );
+		/* Get the caption. */
+		$caption = apply_filters( 'cleaner_gallery_caption', wptexturize( esc_html( $attachment->post_excerpt ) ), $id, $attr, $cleaner_gallery_instance );
 
 		/* If image caption is set. */
-		if ( !empty( $caption ) ) {
-			$output .= "\n\t\t\t\t\t\t<{$captiontag} class='gallery-caption'>";
-
-			$output .= apply_filters( 'cleaner_gallery_caption', wptexturize( $caption ), $id, $attr );
-
-			$output .= "</{$captiontag}>";
-		}
+		if ( !empty( $caption ) )
+			$output .= "\n\t\t\t\t\t\t<{$captiontag} class='gallery-caption'>{$caption}</{$captiontag}>";
 
 		/* Close individual gallery item. */
 		$output .= "\n\t\t\t\t\t</{$itemtag}>";
