@@ -97,7 +97,7 @@ function set_post_layout( $post_id, $layout ) {
 function theme_layouts_body_class( $classes ) {
 
 	/* Adds the layout to array of body classes. */
-	$classes[] = post_layouts_get_layout();
+	$classes[] = sanitize_html_class( theme_layouts_get_layout() );
 
 	/* Return the $classes array. */
 	return $classes;
@@ -114,17 +114,17 @@ function theme_layouts_strings() {
 
 	/* Set up the default layout strings. */
 	$strings = array(
-		'default' => __( 'Default' ),
-		'1c' => __( 'One Column' ),
-		'2c-l' => __( 'Two Columns, Left' ),
-		'2c-r' => __( 'Two Columns, Right' ),
-		'3c-l' => __( 'Three Columns, Left' ),
-		'3c-r' => __( 'Three Columns, Right' ),
-		'3c-c' => __( 'Three Columns, Center' )
+		'default' => __( 'Default', theme_layouts_textdomain() ),
+		'1c' => __( 'One Column', theme_layouts_textdomain() ),
+		'2c-l' => __( 'Two Columns, Left', theme_layouts_textdomain() ),
+		'2c-r' => __( 'Two Columns, Right', theme_layouts_textdomain() ),
+		'3c-l' => __( 'Three Columns, Left', theme_layouts_textdomain() ),
+		'3c-r' => __( 'Three Columns, Right', theme_layouts_textdomain() ),
+		'3c-c' => __( 'Three Columns, Center', theme_layouts_textdomain() )
 	);
 
 	/* Allow devs to filter the strings for custom layouts. */
-	return apply_filters( 'post_layouts_strings', $strings );
+	return apply_filters( 'theme_layouts_strings', $strings );
 }
 
 /**
@@ -154,7 +154,7 @@ function theme_layouts_admin_setup() {
 
 	/* For each available post type, create a meta box on its edit page if it supports '$prefix-post-settings'. */
 	foreach ( $post_types as $type )
-		add_meta_box( 'post-layouts-meta-box', __( 'Layout' ), 'theme_layouts_meta_box', $type->name, 'side', 'default' );
+		add_meta_box( 'theme-layouts-post-meta-box', __( 'Layout', theme_layouts_textdomain() ), 'theme_layouts_post_meta_box', $type->name, 'side', 'default' );
 
 	/* Saves the post format on the post editing page. */
 	add_action( 'save_post', 'theme_layouts_save_post', 10, 2 );
@@ -166,7 +166,7 @@ function theme_layouts_admin_setup() {
  *
  * @since 0.2.0
  */
-function theme_layouts_meta_box( $post, $box ) {
+function theme_layouts_post_meta_box( $post, $box ) {
 
 	/* Get theme-supported theme layouts. */
 	$layouts = get_theme_support( 'theme-layouts' );
@@ -177,9 +177,9 @@ function theme_layouts_meta_box( $post, $box ) {
 
 	<div class="post-layout">
 
-		<input type="hidden" name="theme_layouts_meta_box_nonce" value="<?php echo wp_create_nonce( basename( __FILE__ ) ); ?>" />
+		<input type="hidden" name="theme_layouts_post_meta_box_nonce" value="<?php echo wp_create_nonce( basename( __FILE__ ) ); ?>" />
 
-		<p><?php _e( 'Post layouts allow you to select a specific theme layout structure for the post.' ); ?></p>
+		<p><?php _e( 'Layout is a theme-specific structure for the single view of the post.', theme_layouts_textdomain() ); ?></p>
 
 		<div class="post-layout-wrap">
 			<ul>
@@ -201,7 +201,7 @@ function theme_layouts_meta_box( $post, $box ) {
 function theme_layouts_save_post( $post_id, $post ) {
 
 	/* Verify the nonce for the post formats meta box. */
-	if ( !isset( $_POST['theme_layouts_meta_box_nonce'] ) || !wp_verify_nonce( $_POST['theme_layouts_meta_box_nonce'], basename( __FILE__ ) ) )
+	if ( !isset( $_POST['theme_layouts_post_meta_box_nonce'] ) || !wp_verify_nonce( $_POST['theme_layouts_post_meta_box_nonce'], basename( __FILE__ ) ) )
 		return $post_id;
 
 	/* Get the previous post layout. */
@@ -213,6 +213,16 @@ function theme_layouts_save_post( $post_id, $post ) {
 	/* If the old layout doesn't match the new layout, update the post layout meta. */
 	if ( $old_layout !== $new_layout )
 		set_post_layout( $post_id, $new_layout );
+}
+
+/**
+ * Returns the textdomain used by the script and allows it to be filtered by plugins/themes.
+ *
+ * @since 0.2.0
+ * @returns string The textdomain for the script.
+ */
+function theme_layouts_textdomain() {
+	return apply_filters( 'theme_layouts_textdomain', 'theme-layouts' );
 }
 
 /**
