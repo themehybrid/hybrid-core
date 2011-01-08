@@ -284,6 +284,10 @@ class Hybrid {
 		/* Filter the textdomain mofile to allow child themes to load the parent theme translation. */
 		add_filter( 'load_textdomain_mofile', 'hybrid_load_textdomain', 10, 2 );
 
+		/* Filter textdomain for extensions. */
+		add_filter( 'breadcrumb_trail_textdomain', 'hybrid_get_textdomain' );
+		add_filter( 'theme_layouts_textdomain', 'hybrid_get_textdomain' );
+
 		/* Make text widgets and term descriptions shortcode aware. */
 		add_filter( 'widget_text', 'do_shortcode' );
 		add_filter( 'term_description', 'do_shortcode' );
