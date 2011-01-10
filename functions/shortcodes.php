@@ -110,9 +110,9 @@ function hybrid_child_link_shortcode() {
 function hybrid_loginout_link_shortcode() {
 	$domain = hybrid_get_textdomain();
 	if ( is_user_logged_in() )
-		$out = '<a class="logout-link" href="' . wp_logout_url( esc_url( $_SERVER['HTTP_REFERER'] ) ) . '" title="' . esc_attr__( 'Log out of this account', $domain ) . '">' . __( 'Log out', $domain ) . '</a>';
+		$out = '<a class="logout-link" href="' . esc_url( wp_logout_url( site_url( $_SERVER['REQUEST_URI'] ) ) ) . '" title="' . esc_attr__( 'Log out of this account', $domain ) . '">' . __( 'Log out', $domain ) . '</a>';
 	else
-		$out = '<a class="login-link" href="' . wp_login_url( esc_url( $_SERVER['HTTP_REFERER'] ) ) . '" title="' . esc_attr__( 'Log into this account', $domain ) . '">' . __( 'Log in', $domain ) . '</a>';
+		$out = '<a class="login-link" href="' . esc_url( wp_login_url( site_url( $_SERVER['REQUEST_URI'] ) ) ) . '" title="' . esc_attr__( 'Log into this account', $domain ) . '">' . __( 'Log in', $domain ) . '</a>';
 
 	return $out;
 }
