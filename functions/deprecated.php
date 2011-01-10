@@ -219,7 +219,6 @@ function hybrid_enqueue_style() {
  */
 function hybrid_theme_settings() {
 	_deprecated_function( __FUNCTION__, '1.0.0', 'hybrid_get_default_theme_settings()' );
-	$prefix = hybrid_get_prefix();
 	return apply_filters( hybrid_get_prefix() . '_settings_args', hybrid_get_default_theme_settings() );
 }
 
@@ -876,7 +875,7 @@ function hybrid_pings_end_callback() {
 	hybrid_function_removed( 'hybrid_pings_end_callback' );
 }
 
-/**
+/** c
  * Message to display for removed functions.
  * @since 0.5
  */
