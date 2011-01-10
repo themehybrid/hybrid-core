@@ -61,6 +61,10 @@ function hybrid_settings_page_init() {
 function hybrid_save_theme_settings( $settings ) {
 	$prefix = hybrid_get_prefix();
 
+	/* Make sure we kill evil scripts from users without the 'unfiltered_html' cap. */
+	if ( current_theme_supports( 'hybrid-core-meta-box-footer' ) && isset( $settings['footer_insert'] ) && !current_user_can( 'unfiltered_html' ) )
+		$settings['footer_insert'] = stripslashes( wp_filter_post_kses( addslashes( $settings['footer_insert'] ) ) );
+
 	/* Allow developers to futher validate/sanitize the data. */
 	/* @deprecated 1.0.0. Developers should filter "sanitize_option_{$prefix}_theme_settings" instead. */
 	$settings = apply_filters( "{$prefix}_validate_theme_settings", $settings );
