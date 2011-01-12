@@ -66,7 +66,7 @@ class Hybrid_Widget_Calendar extends WP_Widget {
 		extract( $args );
 
 		/* Get the $initial argument. */
-		$initial = isset( $instance['initial'] ) ? true : false;
+		$initial = !empty( $instance['initial'] ) ? true : false;
 
 		/* Output the theme's widget wrapper. */
 		echo $before_widget;
@@ -77,7 +77,7 @@ class Hybrid_Widget_Calendar extends WP_Widget {
 
 		/* Display the calendar. */
 		echo '<div class="calendar-wrap">';
-			get_calendar( $initial );
+			echo str_replace( array( "\r", "\n", "\t" ), '', get_calendar( $initial, false ) );
 		echo '</div><!-- .calendar-wrap -->';
 
 		/* Close the theme's widget wrapper. */

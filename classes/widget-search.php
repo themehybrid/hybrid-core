@@ -73,7 +73,7 @@ class Hybrid_Widget_Search extends WP_Widget {
 			echo $before_title . apply_filters( 'widget_title',  $instance['title'], $instance, $this->id_base ) . $after_title;
 
 		/* If the user chose to use the theme's search form, load it. */
-		if ( isset( $instance['theme_search'] ) ) {
+		if ( !empty( $instance['theme_search'] ) ) {
 			get_search_form();
 		}
 

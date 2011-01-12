@@ -69,15 +69,15 @@ class Hybrid_Widget_Authors extends WP_Widget {
 		$args = array(
 			'order' =>		$instance['order'],
 			'orderby' =>		$instance['orderby'],
-			'number' =>		isset( $instance['number'] ) ? intval( $instance['number'] ) : '',
+			'number' =>		!empty( $instance['number'] ) ? intval( $instance['number'] ) : '',
 			'style' => 		$instance['style'],
 			'feed' => 		$instance['feed'],
 			'feed_image' => 		$instance['feed_image'],
-			'optioncount' => 		isset( $instance['optioncount'] ) ? true : false,
-			'exclude_admin' => 	isset( $instance['exclude_admin'] ) ? true : false,
-			'show_fullname' => 	isset( $instance['show_fullname'] ) ? true : false,
-			'hide_empty' => 		isset( $instance['hide_empty'] ) ? true : false,
-			'html' => 			isset( $instance['html'] ) ? true : false,
+			'optioncount' => 		!empty( $instance['optioncount'] ) ? true : false,
+			'exclude_admin' => 	!empty( $instance['exclude_admin'] ) ? true : false,
+			'show_fullname' => 	!empty( $instance['show_fullname'] ) ? true : false,
+			'hide_empty' => 		!empty( $instance['hide_empty'] ) ? true : false,
+			'html' => 			!empty( $instance['html'] ) ? true : false,
 			'echo' => 		false
 		);
 

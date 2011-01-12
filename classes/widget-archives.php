@@ -71,7 +71,7 @@ class Hybrid_Widget_Archives extends WP_Widget {
 			'format' =>		$instance['format'],
 			'before' =>		$instance['before'],
 			'after' =>		$instance['after'],
-			'show_post_count' =>	isset( $instance['show_post_count'] ) ? true : false,
+			'show_post_count' =>	!empty( $instance['show_post_count'] ) ? true : false,
 			'limit' =>			!empty( $instance['limit'] ) ? intval( $instance['limit'] ) : '',
 			'echo' =>			false
 		);

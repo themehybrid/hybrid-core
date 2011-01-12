@@ -69,9 +69,9 @@ class Hybrid_Widget_Pages extends WP_Widget {
 			'child_of' =>		intval( $instance['child_of'] ),
 			'meta_key' =>		$instance['meta_key'],
 			'meta_value' =>		$instance['meta_value'],
-			'authors' =>		isset( $instance['authors'] ) ? join( ', ', $instance['authors'] ) : '',
-			'include' =>		isset( $instance['include'] ) ? join( ', ', $instance['include'] ) : '',
-			'exclude' =>		isset( $instance['exclude'] ) ? join( ', ', $instance['exclude'] ) : '',
+			'authors' =>		!empty( $instance['authors'] ) ? join( ', ', $instance['authors'] ) : '',
+			'include' =>		!empty( $instance['include'] ) ? join( ', ', $instance['include'] ) : '',
+			'exclude' =>		!empty( $instance['exclude'] ) ? join( ', ', $instance['exclude'] ) : '',
 			'exclude_tree' =>		$instance['exclude_tree'],
 			'link_before' =>		$instance['link_before'],
 			'link_after' =>		$instance['link_after'],
@@ -79,7 +79,7 @@ class Hybrid_Widget_Pages extends WP_Widget {
 			'show_date' =>		$instance['show_date'],
 			'number' =>		intval( $instance['number'] ),
 			'offset' =>		intval( $instance['offset'] ),
-			'hierarchical' =>		isset( $instance['hierarchical'] ) ? true : false,
+			'hierarchical' =>		!empty( $instance['hierarchical'] ) ? true : false,
 			'title_li' =>		false,
 			'echo' =>			false
 		);
