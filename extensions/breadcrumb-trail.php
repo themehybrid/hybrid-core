@@ -196,7 +196,11 @@ function breadcrumb_trail_get_items( $args = array() ) {
 		}
 
 		/* If the post type path returns nothing and there is a parent, get its parents. */
-		if ( empty( $path ) && 0 !== $parent || 'attachment' == $post_type )
+		if ( ( empty( $path ) && 0 !== $parent ) || ( 'attachment' == $post_type ) )
+			$trail = array_merge( $trail, breadcrumb_trail_get_parents( $parent, '' ) );
+
+		/* Or, if the post type is hierarchical and there's a parent, get its parents. */
+		elseif ( 0 !== $parent && is_post_type_hierarchical( $post_type ) )
 			$trail = array_merge( $trail, breadcrumb_trail_get_parents( $parent, '' ) );
 
 		/* Display terms for specific post type taxonomy if requested. */
