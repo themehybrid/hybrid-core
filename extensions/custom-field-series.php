@@ -16,7 +16,7 @@
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * @package CustomFieldSeries
- * @version 0.2.2
+ * @version 0.2.3
  * @author Justin Tadlock <justin@justintadlock.com>
  * @copyright Copyright (c) 2007 - 2010, Justin Tadlock
  * @link http://justintadlock.com/archives/2007/11/01/wordpress-custom-fields-listing-a-series-of-posts
@@ -35,7 +35,7 @@ function custom_field_series( $args = array() ) {
 	global $post;
 
 	/* Set up a default textdomain. */
-	$textdomain = hybrid_get_textdomain();
+	$textdomain = apply_filters( 'custom_field_series_textdomain', 'custom-field-series' );
 
 	/* Set $series to an empty string. */
 	$series = '';
