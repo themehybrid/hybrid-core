@@ -306,6 +306,6 @@ img.alignleft, img.alignright {
 	display: inline;
 	}
 
-blockquote.alignleft, blockquote .alignright {
+blockquote.alignleft, blockquote.alignright {
 	width: 33%;
 	}
