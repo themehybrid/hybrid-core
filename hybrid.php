@@ -287,6 +287,7 @@ class Hybrid {
 		/* Filter textdomain for extensions. */
 		add_filter( 'breadcrumb_trail_textdomain', 'hybrid_get_textdomain' );
 		add_filter( 'theme_layouts_textdomain', 'hybrid_get_textdomain' );
+		add_filter( 'custom_field_series_textdomain', 'hybrid_get_textdomain' );
 
 		/* Make text widgets and term descriptions shortcode aware. */
 		add_filter( 'widget_text', 'do_shortcode' );
