@@ -64,9 +64,9 @@ function hybrid_post_meta_box_args( $type = '' ) {
 
 	/* If the current theme supports the 'hybrid-core-seo' feature. */
 	if ( current_theme_supports( 'hybrid-core-seo' ) ) {
-		$meta['title'] = array( 'name' => 'Title', 'title' => sprintf( __( 'Document Title: %s', $domain ), '<code>&lt;title>Example&lt;/title></code>' ), 'type' => 'text' );
-		$meta['description'] = array( 'name' => 'Description', 'title' => sprintf( __( 'Meta Description: %s', $domain ), '<code>&lt;meta name="description" content="Example" /></code>' ), 'type' => 'textarea' );
-		$meta['keywords'] = array( 'name' => 'Keywords', 'title' => sprintf( __( 'Meta Keywords: %s', $domain ), '<code>&lt;meta name="keywords" content="Example" /></code>' ), 'type' => 'text' );
+		$meta['title'] = array( 'name' => 'Title', 'title' => sprintf( __( 'Document Title: %s', $domain ), '<code>&lt;title></code>' ), 'type' => 'text' );
+		$meta['description'] = array( 'name' => 'Description', 'title' => sprintf( __( 'Meta Description: %s', $domain ), '<code>&lt;meta></code>' ), 'type' => 'textarea' );
+		$meta['keywords'] = array( 'name' => 'Keywords', 'title' => sprintf( __( 'Meta Keywords: %s', $domain ), '<code>&lt;meta></code>' ), 'type' => 'text' );
 	}
 
 	/* If the current theme supports the 'custom-field-series' extension. */
