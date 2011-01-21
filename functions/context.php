@@ -147,6 +147,10 @@ function hybrid_entry_class( $class = '', $post_id = null ) {
 		if ( post_password_required() )
 			$classes[] = 'protected';
 
+		/* Has excerpt. */
+		if ( has_excerpt() )
+			$classes[] = 'has-excerpt';
+
 		/* Post format. */
 		if ( current_theme_supports( 'post-formats' ) ) {
 			$post_format = get_post_format( $post_id );
