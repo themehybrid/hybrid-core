@@ -22,7 +22,7 @@
 	list-style: none;
 	padding: 0;
 	}
-.gallery .gallery-item img, .gallery .gallery-item img.thumbnail {
+.gallery .gallery-item .gallery-icon img {
 	max-width: 89%;
 	height: auto;
 	padding: 1%;
