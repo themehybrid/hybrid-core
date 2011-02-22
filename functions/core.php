@@ -24,7 +24,7 @@ function hybrid_get_prefix() {
 
 	/* If the global prefix isn't set, define it. Plugin/theme authors may also define a custom prefix. */
 	if ( empty( $hybrid->prefix ) )
-		$hybrid->prefix = apply_filters( 'hybrid_prefix', get_template() );
+		$hybrid->prefix = sanitize_key( apply_filters( 'hybrid_prefix', get_template() ) );
 
 	return $hybrid->prefix;
 }
@@ -44,7 +44,7 @@ function hybrid_get_textdomain() {
 
 	/* If the global textdomain isn't set, define it. Plugin/theme authors may also define a custom textdomain. */
 	if ( empty( $hybrid->textdomain ) )
-		$hybrid->textdomain = apply_filters( hybrid_get_prefix() . '_textdomain', get_template() );
+		$hybrid->textdomain = sanitize_key( apply_filters( hybrid_get_prefix() . '_textdomain', get_template() ) );
 
 	return $hybrid->textdomain;
 }
