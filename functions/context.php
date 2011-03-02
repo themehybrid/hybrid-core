@@ -256,6 +256,12 @@ function hybrid_body_class( $class = '' ) {
 	/* Text direction (which direction does the text flow). */
 	$classes = array( 'wordpress', get_bloginfo( 'text_direction' ), get_locale() );
 
+	/* Multisite check adds the 'multisite' class and the blog ID. */
+	if ( is_multisite() ) {
+		$classes[] = 'multisite';
+		$classes[] = 'blog-' . get_current_blog_id();
+	}
+
 	/* Date classes. */
 	$time = time() + ( get_option( 'gmt_offset' ) * 3600 );
 	$classes[] = strtolower( gmdate( '\yY \mm \dd \hH l', $time ) );
