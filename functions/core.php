@@ -15,7 +15,7 @@
  * each theme's hooks (assuming other themes used the same system).
  *
  * @since 0.7.0
- * @uses get_template() Defines the theme prefix, which is generally 'hybrid'.
+ * @uses get_template() Defines the theme prefix based on the theme directory.
  * @global object $hybrid The global Hybrid object.
  * @return string $hybrid->prefix The prefix of the theme.
  */
@@ -35,7 +35,7 @@ function hybrid_get_prefix() {
  * (i.e., directory name) as their textdomain within template files.
  *
  * @since 0.7.0
- * @uses get_template() Defines the theme textdomain, which is generally 'hybrid'.
+ * @uses get_template() Defines the theme textdomain based on the theme directory.
  * @global object $hybrid The global Hybrid object.
  * @return string $hybrid->textdomain The textdomain of the theme.
  */
