@@ -24,9 +24,9 @@
  * to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  *
  * @package HybridCore
- * @version 1.1.0 Alpha
+ * @version 1.1.0
  * @author Justin Tadlock <justin@justintadlock.com>
- * @copyright Copyright (c) 2008 - 2010, Justin Tadlock
+ * @copyright Copyright (c) 2008 - 2011, Justin Tadlock
  * @link http://themehybrid.com/hybrid-core
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
