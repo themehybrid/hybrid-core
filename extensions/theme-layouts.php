@@ -19,9 +19,9 @@
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * @package ThemeLayouts
- * @version 0.2.0
+ * @version 0.2.1
  * @author Justin Tadlock <justin@justintadlock.com>
- * @copyright Copyright (c) 2010, Justin Tadlock
+ * @copyright Copyright (c) 2010 - 2011, Justin Tadlock
  * @link http://justintadlock.com
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
@@ -62,8 +62,11 @@ function theme_layouts_get_layout() {
 	if ( empty( $layout ) || !in_array( $layout, $post_layouts[0] ) )
 		$layout = 'default';
 
+	/* @deprecated 0.2.0. Use the 'get_theme_layout' hook. */
+	$layout = apply_filters( 'get_post_layout', "layout-{$layout}" );
+
 	/* Return the layout and allow plugin/theme developers to override it. */
-	return esc_attr( apply_filters( 'get_theme_layout', "layout-{$layout}" ) );
+	return esc_attr( apply_filters( 'get_theme_layout', $layout ) );
 }
 
 /**
