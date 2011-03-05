@@ -8,7 +8,7 @@
  */
 
 /* Load specific scripts for the framework. */
-add_action( 'template_redirect', 'hybrid_enqueue_script' );
+add_action( 'wp_enqueue_scripts', 'hybrid_enqueue_script' );
 
 /* Load the development stylsheet in script debug mode. */
 add_filter( 'stylesheet_uri', 'hybrid_debug_stylesheet', 10, 2 );
