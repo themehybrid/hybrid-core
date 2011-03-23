@@ -273,14 +273,8 @@ function hybrid_entry_title_shortcode() {
 		$title = the_title( '<h2 class="entry-title"><a href="' . get_permalink() . '" title="' . the_title_attribute( 'echo=0' ) . '" rel="bookmark">', '</a></h2>', false );
 
 	/* If there's no post title, return a clickable '(No title)'. */
-	if ( empty( $title ) && 'link_category' !== get_query_var( 'taxonomy' ) ) {
-
-		if ( is_singular() )
-			$title = '<h1 class="' . esc_attr( $post->post_type ) . '-title entry-title no-entry-title"><a href="' . get_permalink() . '" rel="bookmark">' . __( '(Untitled)', hybrid_get_textdomain() ) . '</a></h1>';
-
-		else
-			$title = '<h2 class="entry-title no-entry-title"><a href="' . get_permalink() . '" rel="bookmark">' . __( '(Untitled)', hybrid_get_textdomain() ) . '</a></h2>';
-	}
+	if ( empty( $title ) && !is_singular() && 'link_category' !== get_query_var( 'taxonomy' ) )
+		$title = '<h2 class="entry-title no-entry-title"><a href="' . get_permalink() . '" rel="bookmark">' . __( '(Untitled)', hybrid_get_textdomain() ) . '</a></h2>';
 
 	return $title;
 }
