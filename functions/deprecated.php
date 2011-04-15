@@ -112,26 +112,6 @@ function hybrid_after_page() {
 }
 
 /**
- * Loads the Utility: After Single widget area.
- * @since 0.4
- * @deprecated 0.7
- */
-function hybrid_get_utility_after_single() {
-	_deprecated_function( __FUNCTION__, '0.7', 'get_sidebar()' );
-	hybrid_get_utility_after_singular();
-}
-
-/**
- * Loads the Utility: After Page widget area.
- * @since 0.4
- * @deprecated 0.7
- */
-function hybrid_get_utility_after_page() {
-	_deprecated_function( __FUNCTION__, '0.7', 'get_sidebar()' );
-	hybrid_get_utility_after_singular();
-}
-
-/**
  * Displays the page navigation menu.
  * @since 0.1
  * @deprecated 0.8
@@ -164,35 +144,6 @@ function is_sidebar_active( $index = 1 ) {
 	return is_active_sidebar( $index );
 }
 
-/**
- * Loads the comment form.
- * @since 0.7
- * @deprecated 0.8
- */
-function hybrid_get_comment_form() {
-	_deprecated_function( __FUNCTION__, '0.8', 'comment_form()' );
-	comment_form();
-}
-
-/**
- * Fires before the comment form.
- * @since 0.6
- * @deprecated 0.8
- */
-function hybrid_before_comment_form() {
-	_deprecated_function( __FUNCTION__, '0.8' );
-	do_atomic( 'before_comment_form' );
-}
-
-/**
- * Fires after the comment form.
- * @since 0.6
- * @deprecated 0.8
- */
-function hybrid_after_comment_form() {
-	_deprecated_function( __FUNCTION__, '0.8' );
-	do_atomic( 'after_comment_form' );
-}
 /**
  * Displays an individual comment author.
  * @since 0.2.2
@@ -300,7 +251,6 @@ function hybrid_profile_uri() {
 }
 
 /**
- * Before HTML.
  * @since 0.3.2
  * @deprecated 1.0.0
  */
@@ -310,7 +260,6 @@ function hybrid_before_html() {
 }
 
 /**
- * After HTML.
  * @since 0.3.2
  * @deprecated 1.0.0
  */
@@ -320,7 +269,6 @@ function hybrid_after_html() {
 }
 
 /**
- * Added to the header before wp_head().
  * @since 0.1
  * @deprecated 1.0.0
  */
@@ -330,7 +278,6 @@ function hybrid_head() {
 }
 
 /**
- * Before the header.
  * @since 0.1
  * @deprecated 1.0.0
  */
@@ -340,7 +287,6 @@ function hybrid_before_header() {
 }
 
 /**
- * Header.
  * @since 0.1
  * @deprecated 1.0.0
  */
@@ -350,7 +296,6 @@ function hybrid_header() {
 }
 
 /**
- * After the header.
  * @since 0.1
  * @deprecated 1.0.0
  */
@@ -360,7 +305,6 @@ function hybrid_after_header() {
 }
 
 /**
- * Before primary menu.
  * @since 0.8
  * @deprecated 1.0.0
  */
@@ -370,7 +314,6 @@ function hybrid_before_primary_menu() {
 }
 
 /**
- * After primary menu.
  * @since 0.8
  * @deprecated 1.0.0
  */
@@ -380,7 +323,6 @@ function hybrid_after_primary_menu() {
 }
 
 /**
- * Before the container.
  * @since 0.1
  * @deprecated 1.0.0
  */
@@ -390,7 +332,6 @@ function hybrid_before_container() {
 }
 
 /**
- * Before the content.
  * @since 0.1
  * @deprecated 1.0.0
  */
@@ -400,7 +341,6 @@ function hybrid_before_content() {
 }
 
 /**
- * After the content.
  * @since 0.1
  * @deprecated 1.0.0
  */
@@ -410,7 +350,6 @@ function hybrid_after_content() {
 }
 
 /**
- * Before each entry.
  * @since 0.5
  * @deprecated 1.0.0
  */
@@ -420,7 +359,6 @@ function hybrid_before_entry() {
 }
 
 /**
- * After each entry.
  * @since 0.5
  * @deprecated 1.0.0
  */
@@ -430,7 +368,6 @@ function hybrid_after_entry() {
 }
 
 /**
- * After singular views but before the comments template.
  * @since 0.7
  * @deprecated 1.0.0
  */
@@ -446,7 +383,6 @@ function hybrid_after_singular() {
 }
 
 /**
- * Before the primary widget area content.
  * @since 0.1
  * @deprecated 1.0.0
  */
@@ -456,7 +392,6 @@ function hybrid_before_primary() {
 }
 
 /**
- * After the primary widget area content.
  * @since 0.1
  * @deprecated 1.0.0
  */
@@ -466,7 +401,6 @@ function hybrid_after_primary() {
 }
 
 /**
- * Before the secondary widget area.
  * @since 0.2
  * @deprecated 1.0.0
  */
@@ -476,7 +410,6 @@ function hybrid_before_secondary() {
 }
 
 /**
- * After the secondary widget area.
  * @since 0.2
  * @deprecated 1.0.0
  */
@@ -486,7 +419,6 @@ function hybrid_after_secondary() {
 }
 
 /**
- * Before the subsidiary widget area.
  * @since 0.3.1
  * @deprecated 1.0.0
  */
@@ -496,7 +428,6 @@ function hybrid_before_subsidiary() {
 }
 
 /**
- * After the subsidiary widget area.
  * @since 0.3.1
  * @deprecated 1.0.0
  */
@@ -506,7 +437,6 @@ function hybrid_after_subsidiary() {
 }
 
 /**
- * After the container area.
  * @since 0.1
  * @deprecated 1.0.0
  */
@@ -516,7 +446,6 @@ function hybrid_after_container() {
 }
 
 /**
- * Before the footer.
  * @since 0.1
  * @deprecated 1.0.0
  */
@@ -526,7 +455,6 @@ function hybrid_before_footer() {
 }
 
 /**
- * The footer.
  * @since 0.1
  * @deprecated 1.0.0
  */
@@ -536,7 +464,6 @@ function hybrid_footer() {
 }
 
 /**
- * After the footer.
  * @since 0.1
  * @deprecated 1.0.0
  */
@@ -546,7 +473,6 @@ function hybrid_after_footer() {
 }
 
 /**
- * Fires before each comment's information.
  * @since 0.5
  * @deprecated 1.0.0
  */
@@ -556,7 +482,6 @@ function hybrid_before_comment() {
 }
 
 /**
- * Fires after each comment's information.
  * @since 0.5
  * @deprecated 1.0.0
  */
@@ -566,7 +491,6 @@ function hybrid_after_comment() {
 }
 
 /**
- * Fires before the comment list.
  * @since 0.6
  * @deprecated 1.0.0
  */
@@ -576,7 +500,6 @@ function hybrid_before_comment_list() {
 }
 
 /**
- * Fires after the comment list.
  * @since 0.6
  * @deprecated 1.0.0
  */
@@ -593,6 +516,7 @@ add_action( 'check_admin_referer', 'hybrid_back_compat_update_settings' );
  * available hook in development.
  *
  * @since 1.0.0
+ * @deprecated 1.0.0
  */
 function hybrid_back_compat_update_settings( $action ) {
 	$prefix = hybrid_get_prefix();
@@ -603,310 +527,88 @@ function hybrid_back_compat_update_settings( $action ) {
 
 /* === Removed Functions === */
 
-/* Functions removed in the 0.5 branch. */
-
-function hybrid_all_tags() {
-	hybrid_function_removed( 'hybrid_all_tags' );
-}
-
-function hybrid_get_users() {
-	hybrid_function_removed( 'hybrid_get_users' );
-}
-
-function hybrid_footnote() {
-	hybrid_function_removed( 'hybrid_footnote' );
-}
-
-function hybrid_related_posts() {
-	hybrid_function_removed( 'hybrid_related_posts' );
-}
-
-function hybrid_insert() {
-	hybrid_function_removed( 'hybrid_insert' );
-}
-
-/* Functions removed in the 0.6 branch. */
-
-function hybrid_get_authors() {
-	hybrid_function_removed( 'hybrid_get_authors' );
-}
-
-function hybrid_credit() {
-	hybrid_function_removed( 'hybrid_credit' );
-}
-
-function hybrid_query_counter() {
-	hybrid_function_removed( 'hybrid_query_counter' );
-}
-
-function hybrid_copyright() {
-	hybrid_function_removed( 'hybrid_copyright' );
-}
-
-function hybrid_series() {
-	hybrid_function_removed( 'hybrid_series' );
-}
-
-/* Functions removed in the 0.7 branch. */
-
-function hybrid_all_cats() {
-	hybrid_function_removed( 'hybrid_all_cats' );
-}
-
-function hybrid_all_cat_slugs() {
-	hybrid_function_removed( 'hybrid_all_cat_slugs' );
-}
-
-function hybrid_all_tag_slugs() {
-	hybrid_function_removed( 'hybrid_all_tag_slugs' );
-}
-
-function hybrid_mime_type_icon() {
-	hybrid_function_removed( 'hybrid_mime_type_icon' );
-}
-
-function hybrid_attachment_icon() {
-	hybrid_function_removed( 'hybrid_attachment_icon' );
-}
-
-function hybrid_widow() {
-	hybrid_function_removed( 'hybrid_widow' );
-}
-
-function hybrid_dash() {
-	hybrid_function_removed( 'hybrid_dash' );
-}
-
-function hybrid_text_filter() {
-	hybrid_function_removed( 'hybrid_text_filter' );
-}
-
-function hybrid_allowed_tags() {
-	hybrid_function_removed( 'hybrid_allowed_tags' );
-}
-
-function hybrid_typography() {
-	hybrid_function_removed( 'hybrid_typography' );
-}
-
-function hybrid_before_cat_nav() {
-	hybrid_function_removed( 'hybrid_before_cat_nav' );
-}
-
-function hybrid_after_cat_nav() {
-	hybrid_function_removed( 'hybrid_after_cat_nav' );
-}
-
-function hybrid_first_paragraph() {
-	hybrid_function_removed( 'hybrid_first_paragraph' );
-}
-
-function hybrid_category_term_link() {
-	hybrid_function_removed( 'hybrid_category_term_link' );
-}
-
-function hybrid_post_tag_term_link() {
-	hybrid_function_removed( 'hybrid_post_tag_term_link' );
-}
-
-function hybrid_search_highlight() {
-	hybrid_function_removed( 'hybrid_search_highlight' );
-}
-
-function hybrid_primary_inserts() {
-	hybrid_function_removed( 'hybrid_primary_inserts' );
-}
-
-function hybrid_secondary_inserts() {
-	hybrid_function_removed( 'hybrid_secondary_inserts' );
-}
-
-function hybrid_subsidiary_inserts() {
-	hybrid_function_removed( 'hybrid_subsidiary_inserts' );
-}
-
-function hybrid_utility_inserts() {
-	hybrid_function_removed( 'hybrid_utility_inserts' );
-}
-
-function hybrid_widget_init() {
-	hybrid_function_removed( 'hybrid_widget_init' );
-}
-
-function hybrid_primary_var() {
-	hybrid_function_removed( 'hybrid_primary_var' );
-}
-
-function hybrid_secondary_var() {
-	hybrid_function_removed( 'hybrid_secondary_var' );
-}
-
-function hybrid_subsidiary_var() {
-	hybrid_function_removed( 'hybrid_subsidiary_var' );
-}
-
-function hybrid_legacy_comments() {
-	hybrid_function_removed( 'hybrid_legacy_comments' );
-}
-
-function hybrid_head_feeds() {
-	hybrid_function_removed( 'hybrid_head_feeds' );
-}
-
-function hybrid_legacy_functions() {
-	hybrid_function_removed( 'hybrid_legacy_functions' );
-}
-
-function hybrid_capability_check() {
-	hybrid_function_removed( 'hybrid_capability_check' );
-}
-
-function hybrid_template_in_use() {
-	hybrid_function_removed( 'hybrid_template_in_use' );
-}
-
-function hybrid_get_utility_404() {
-	hybrid_function_removed( 'hybrid_get_utility_404' );
-}
-
-function hybrid_before_comments() {
-	hybrid_function_removed( 'hybrid_before_comments' );
-}
-
-function hybrid_meta_abstract() {
-	hybrid_function_removed( 'hybrid_meta_abstract' );
-}
-
-function hybrid_child_settings() {
-	hybrid_function_removed( 'hybrid_child_settings' );
-}
-
-function hybrid_post_meta_boxes() {
-	hybrid_function_removed( 'hybrid_post_meta_boxes' );
-}
-
-function hybrid_page_meta_boxes() {
-	hybrid_function_removed( 'hybrid_page_meta_boxes' );
-}
-
-function post_meta_boxes() {
-	hybrid_function_removed( 'post_meta_boxes' );
-}
-
-function page_meta_boxes() {
-	hybrid_function_removed( 'page_meta_boxes' );
-}
-
-function hybrid_create_meta_box() {
-	hybrid_function_removed( 'hybrid_create_meta_box' );
-}
-
-function hybrid_save_meta_data() {
-	hybrid_function_removed( 'hybrid_save_meta_data' );
-}
-
-function get_meta_text_input() {
-	hybrid_function_removed( 'get_meta_text_input' );
-}
-
-function get_meta_select() {
-	hybrid_function_removed( 'get_meta_select' );
-}
-
-function get_meta_textarea() {
-	hybrid_function_removed( 'get_meta_textarea' );
-}
-
-function hybrid_error() {
-	hybrid_function_removed( 'hybrid_error' );
-}
-
-function hybrid_head_canonical() {
-	hybrid_function_removed( 'hybrid_head_canonical' );
-}
-
-function hybrid_disable_pagenavi_style() {
-	hybrid_function_removed( 'hybrid_disable_pagenavi_style' );
-}
-
-function hybrid_comments_feed() {
-	hybrid_function_removed( 'hybrid_comments_feed' );
-}
-
-function hybrid_before_page_nav() {
-	hybrid_function_removed( 'hybrid_before_page_nav' );
-}
-
-function hybrid_after_page_nav() {
-	hybrid_function_removed( 'hybrid_after_page_nav' );
-}
-
-function hybrid_comment_published_link_shortcode() {
-	hybrid_function_removed( 'hybrid_comment_published_link_shortcode' );
-}
-
 /* Functions removed in the 0.8 branch. */
 
 function hybrid_content_wrapper() {
-	hybrid_function_removed( 'hybrid_content_wrapper' );
+	hybrid_function_removed( __FUNCTION__ );
 }
 
 function hybrid_handle_attachment() {
-	hybrid_function_removed( 'hybrid_handle_attachment' );
+	hybrid_function_removed( __FUNCTION__ );
 }
 
 function hybrid_widget_class() {
-	hybrid_function_removed( 'hybrid_widget_class' );
+	hybrid_function_removed( __FUNCTION__ );
 }
 
 function hybrid_before_ping_list() {
-	hybrid_function_removed( 'hybrid_before_ping_list' );
+	hybrid_function_removed( __FUNCTION__ );
 }
 
 function hybrid_after_ping_list() {
-	hybrid_function_removed( 'hybrid_after_ping_list' );
+	hybrid_function_removed( __FUNCTION__ );
 }
 
 function hybrid_pings_callback() {
-	hybrid_function_removed( 'hybrid_pings_callback' );
+	hybrid_function_removed( __FUNCTION__ );
 }
 
 function hybrid_pings_end_callback() {
-	hybrid_function_removed( 'hybrid_pings_end_callback' );
+	hybrid_function_removed( __FUNCTION__ );
 }
 
 /* Functions removed in the 1.2 branch. */
 
+function hybrid_get_comment_form() {
+	hybrid_function_removed( __FUNCTION__ );
+}
+
+function hybrid_before_comment_form() {
+	hybrid_function_removed( __FUNCTION__ );
+}
+
+function hybrid_after_comment_form() {
+	hybrid_function_removed( __FUNCTION__ );
+}
+
+function hybrid_get_utility_after_single() {
+	hybrid_function_removed( __FUNCTION__ );
+}
+
+function hybrid_get_utility_after_page() {
+	hybrid_function_removed( __FUNCTION__ );
+}
+
 function hybrid_create_post_meta_box() {
-	hybrid_function_removed( 'hybrid_create_post_meta_box' );
+	hybrid_function_removed( __FUNCTION__ );
 }
 
 function hybrid_post_meta_box_args() {
-	hybrid_function_removed( 'hybrid_post_meta_box_args' );
+	hybrid_function_removed( __FUNCTION__ );
 }
 
 function hybrid_post_meta_box() {
-	hybrid_function_removed( 'hybrid_post_meta_box' );
+	hybrid_function_removed( __FUNCTION__ );
 }
 
 function hybrid_post_meta_box_text() {
-	hybrid_function_removed( 'hybrid_post_meta_box_text' );
+	hybrid_function_removed( __FUNCTION__ );
 }
 
 function hybrid_post_meta_box_select() {
-	hybrid_function_removed( 'hybrid_post_meta_box_select' );
+	hybrid_function_removed( __FUNCTION__ );
 }
 
 function hybrid_post_meta_box_textarea() {
-	hybrid_function_removed( 'hybrid_post_meta_box_textarea' );
+	hybrid_function_removed( __FUNCTION__ );
 }
 
 function hybrid_post_meta_box_radio() {
-	hybrid_function_removed( 'hybrid_post_meta_box_radio' );
+	hybrid_function_removed( __FUNCTION__ );
 }
 
 function hybrid_save_post_meta_box() {
-	hybrid_function_removed( 'hybrid_save_post_meta_box' );
+	hybrid_function_removed( __FUNCTION__ );
 }
 
 /**
