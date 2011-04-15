@@ -24,7 +24,7 @@
  * to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  *
  * @package HybridCore
- * @version 1.1.1
+ * @version 1.2
  * @author Justin Tadlock <justin@justintadlock.com>
  * @copyright Copyright (c) 2008 - 2011, Justin Tadlock
  * @link http://themehybrid.com/hybrid-core
@@ -262,8 +262,17 @@ class Hybrid {
 			/* Load the theme settings feature if supported. */
 			require_if_theme_supports( 'hybrid-core-theme-settings', trailingslashit( HYBRID_ADMIN ) . 'theme-settings.php' );
 
-			/* Load the post meta box if supported. */
-			require_if_theme_supports( 'hybrid-core-post-meta-box', trailingslashit( HYBRID_ADMIN ) . 'post-meta-box.php' );
+			/* Load the core SEO post meta box if supported. */
+			require_if_theme_supports( 'hybrid-core-seo', trailingslashit( HYBRID_ADMIN ) . 'meta-box-post-seo.php' );
+
+			/* Load the post template meta box if supported. */
+			require_if_theme_supports( 'hybrid-core-template-hierarchy', trailingslashit( HYBRID_ADMIN ) . 'meta-box-post-template.php' );
+
+			/* Load the post stylesheets meta box if supported. */
+			require_if_theme_supports( 'post-stylesheets', trailingslashit( HYBRID_ADMIN ) . 'meta-box-post-stylesheets.php' );
+
+			/* Load the custom field series post meta box if supported. */
+			require_if_theme_supports( 'custom-field-series', trailingslashit( HYBRID_ADMIN ) . 'meta-box-custom-field-series.php' );
 		}
 	}
 

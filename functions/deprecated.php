@@ -875,7 +875,41 @@ function hybrid_pings_end_callback() {
 	hybrid_function_removed( 'hybrid_pings_end_callback' );
 }
 
-/** c
+/* Functions removed in the 1.2 branch. */
+
+function hybrid_create_post_meta_box() {
+	hybrid_function_removed( 'hybrid_create_post_meta_box' );
+}
+
+function hybrid_post_meta_box_args() {
+	hybrid_function_removed( 'hybrid_post_meta_box_args' );
+}
+
+function hybrid_post_meta_box() {
+	hybrid_function_removed( 'hybrid_post_meta_box' );
+}
+
+function hybrid_post_meta_box_text() {
+	hybrid_function_removed( 'hybrid_post_meta_box_text' );
+}
+
+function hybrid_post_meta_box_select() {
+	hybrid_function_removed( 'hybrid_post_meta_box_select' );
+}
+
+function hybrid_post_meta_box_textarea() {
+	hybrid_function_removed( 'hybrid_post_meta_box_textarea' );
+}
+
+function hybrid_post_meta_box_radio() {
+	hybrid_function_removed( 'hybrid_post_meta_box_radio' );
+}
+
+function hybrid_save_post_meta_box() {
+	hybrid_function_removed( 'hybrid_save_post_meta_box' );
+}
+
+/**
  * Message to display for removed functions.
  * @since 0.5
  */
