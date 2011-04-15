@@ -16,9 +16,9 @@
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * @package CustomFieldSeries
- * @version 0.2.3
+ * @version 0.2.4
  * @author Justin Tadlock <justin@justintadlock.com>
- * @copyright Copyright (c) 2007 - 2010, Justin Tadlock
+ * @copyright Copyright (c) 2007 - 2011, Justin Tadlock
  * @link http://justintadlock.com/archives/2007/11/01/wordpress-custom-fields-listing-a-series-of-posts
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
@@ -73,9 +73,7 @@ function custom_field_series( $args = array() ) {
 		if ( !empty( $series_posts ) ) {
 
 			/* Format the series class with the name of the series. */
-			$class = str_replace( array( '_', ' ', '&nbsp;' ) , '-', $series_meta );
-			$class = preg_replace('/[^A-Za-z0-9-]/', '', $class );
-			$class = strtolower( $class );
+			$class = sanitize_html_class( sanitize_title_with_dashes( $meta_value ) );
 
 			/* Create the opening wrapper div, title, and list element. */
 			$series = '<div class="series series-' . esc_attr( $class ) . '">';
