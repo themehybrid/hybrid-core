@@ -14,15 +14,18 @@
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * @package PostStylesheets
- * @version 0.1.0
+ * @version 0.2.0
  * @author Justin Tadlock <justin@justintadlock.com>
- * @copyright Copyright (c) 2010, Justin Tadlock
+ * @copyright Copyright (c) 2010 - 2011, Justin Tadlock
  * @link http://justintadlock.com
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 /* Filters stylesheet_uri with a function for adding a new style. */
 add_filter( 'stylesheet_uri', 'post_stylesheets_stylesheet_uri', 10, 2 );
+
+/* Create the post stylesheets meta box on the 'admin_menu' hook. */
+add_action( 'admin_menu', 'post_stylesheets_create_meta_box' );
 
 /**
  * Checks if a post (or any post type) has the given meta key of 'Stylesheet' when on the singular view of 
@@ -62,6 +65,81 @@ function post_stylesheets_stylesheet_uri( $stylesheet_uri, $stylesheet_dir_uri )
 
 	/* Return the stylesheet URI. */
 	return $stylesheet_uri;
+}
+
+/**
+ * Creates the post stylesheets meta box.
+ *
+ * @since 0.2.0
+ */
+function post_stylesheets_create_meta_box() {
+
+	/* Set up a default textdomain. */
+	$textdomain = apply_filters( 'post_stylesheets_textdomain', 'post-stylesheets' );
+
+	/* Get all available 'public' post types. */
+	$post_types = get_post_types( array( 'public' => true ), 'objects' );
+
+	/* Loop through each of the public post types and add the meta box to it. */
+	foreach ( $post_types as $type )
+		add_meta_box( "post-stylesheets", sprintf( __( '%s Stylesheet', $textdomain ), $type->labels->singular_name ), 'post_stylesheets_meta_box', $type->name, 'side', 'default' );
+
+	/* Saves the post meta box data. */
+	add_action( 'save_post', 'post_stylesheets_meta_box_save', 10, 2 );
+}
+
+/**
+ * Displays the input field for entering a custom stylesheet.
+ *
+ * @since 0.2.0
+ */
+function post_stylesheets_meta_box( $object, $box ) { ?>
+
+	<p>
+		<input type="hidden" name="post_stylesheets_meta_box_nonce" value="<?php echo wp_create_nonce( basename( __FILE__ ) ); ?>" />
+		<input type="text" name="post-stylesheets" id="post-stylesheets" value="<?php echo esc_attr( get_post_meta( $object->ID, 'Stylesheet', true ) ); ?>" size="30" tabindex="30" style="width: 99%;" />
+	</p>
+<?php
+}
+
+/**
+ * Saves the user-selected post stylesheet on the 'save_post' hook.
+ *
+ * @since 0.2.0
+ */
+function post_stylesheets_meta_box_save( $post_id, $post ) {
+
+	/* Verify that the post type supports the meta box and the nonce before preceding. */
+	if ( !isset( $_POST["post_stylesheets_meta_box_nonce"] ) || !wp_verify_nonce( $_POST["post_stylesheets_meta_box_nonce"], basename( __FILE__ ) ) )
+		return $post_id;
+
+	/* Get the post type object. */
+	$post_type = get_post_type_object( $post->post_type );
+
+	/* Check if the current user has permission to edit the post. */
+	if ( !current_user_can( $post_type->cap->edit_post, $post_id ) )
+		return $post_id;
+
+	/* Get the posted stylesheet name and strip any tags from it. */
+	$new_meta_value = ( isset( $_POST['post-stylesheets'] ) ? strip_tags( $_POST['post-stylesheets'] ) : '' );
+
+	/* Get the meta key. */
+	$meta_key = apply_filters( 'post_stylesheets_meta_key', 'Stylesheet' );
+
+	/* Get the meta value of the custom field key. */
+	$meta_value = get_post_meta( $post_id, $meta_key, true );
+
+	/* If a new meta value was added and there was no previous value, add it. */
+	if ( $new_meta_value && '' == $meta_value )
+		add_post_meta( $post_id, $meta_key, $new_meta_value, true );
+
+	/* If the new meta value does not match the old value, update it. */
+	elseif ( $new_meta_value && $new_meta_value != $meta_value )
+		update_post_meta( $post_id, $meta_key, $new_meta_value );
+
+	/* If there is no new meta value but an old value exists, delete it. */
+	elseif ( '' == $new_meta_value && $meta_value )
+		delete_post_meta( $post_id, $meta_key, $meta_value );
 }
 
 ?>

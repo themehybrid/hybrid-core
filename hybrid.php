@@ -267,12 +267,6 @@ class Hybrid {
 
 			/* Load the post template meta box if supported. */
 			require_if_theme_supports( 'hybrid-core-template-hierarchy', trailingslashit( HYBRID_ADMIN ) . 'meta-box-post-template.php' );
-
-			/* Load the post stylesheets meta box if supported. */
-			require_if_theme_supports( 'post-stylesheets', trailingslashit( HYBRID_ADMIN ) . 'meta-box-post-stylesheets.php' );
-
-			/* Load the custom field series post meta box if supported. */
-			require_if_theme_supports( 'custom-field-series', trailingslashit( HYBRID_ADMIN ) . 'meta-box-custom-field-series.php' );
 		}
 	}
 
@@ -297,6 +291,7 @@ class Hybrid {
 		add_filter( 'breadcrumb_trail_textdomain', 'hybrid_get_textdomain' );
 		add_filter( 'theme_layouts_textdomain', 'hybrid_get_textdomain' );
 		add_filter( 'custom_field_series_textdomain', 'hybrid_get_textdomain' );
+		add_filter( 'post_stylesheets_textdomain', 'hybrid_get_textdomain' );
 
 		/* Make text widgets and term descriptions shortcode aware. */
 		add_filter( 'widget_text', 'do_shortcode' );
