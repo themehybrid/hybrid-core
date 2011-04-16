@@ -137,7 +137,7 @@ function custom_field_series_meta_box( $object, $box ) { ?>
 
 	<p>
 		<input type="hidden" name="custom_field_series_meta_box_nonce" value="<?php echo wp_create_nonce( basename( __FILE__ ) ); ?>" />
-		<input type="text" name="custom-field-series" id="custom-field-series" value="<?php echo esc_attr( get_post_meta( $object->ID, 'Series', true ) ); ?>" size="30" tabindex="30" style="width: 99%;" />
+		<input type="text" name="custom-field-series" id="custom-field-series" value="<?php echo esc_attr( get_post_meta( $object->ID, apply_filters( 'post_stylesheets_meta_key', 'Series' ), true ) ); ?>" size="30" tabindex="30" style="width: 99%;" />
 	</p>
 <?php
 }
