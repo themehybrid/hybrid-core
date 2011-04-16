@@ -64,6 +64,9 @@ function hybrid_save_post_meta_box_template( $post_id, $post ) {
 	if ( !current_user_can( $post_type->cap->edit_post, $post_id ) )
 		return $post_id;
 
+	if ( !isset( $_POST['hybrid-post-template'] ) )
+		return $post_id;
+
 	$new_meta_value = strip_tags( $_POST['hybrid-post-template'] );
 	$meta_key = "_wp_{$post->post_type}_template";
 
