@@ -14,9 +14,9 @@
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * @package BreadcrumbTrail
- * @version 0.4.0
+ * @version 0.4.1
  * @author Justin Tadlock <justin@justintadlock.com>
- * @copyright Copyright (c) 2008 - 2010, Justin Tadlock
+ * @copyright Copyright (c) 2008 - 2011, Justin Tadlock
  * @link http://justintadlock.com/archives/2009/04/05/breadcrumb-trail-wordpress-plugin
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
@@ -191,7 +191,7 @@ function breadcrumb_trail_get_items( $args = array() ) {
 				$trail = array_merge( $trail, breadcrumb_trail_get_parents( '', $path ) );
 
 			/* If there's an archive page, add it to the trail. */
-			if ( !empty( $post_type_object->rewrite['archive'] ) && function_exists( 'get_post_type_archive_link' ) )
+			if ( !empty( $post_type_object->has_archive ) && function_exists( 'get_post_type_archive_link' ) )
 				$trail[] = '<a href="' . get_post_type_archive_link( $post_type ) . '" title="' . esc_attr( $post_type_object->labels->name ) . '">' . $post_type_object->labels->name . '</a>';
 		}
 
