@@ -260,8 +260,8 @@ function breadcrumb_trail_get_items( $args = array() ) {
 				$path .= trailingslashit( $wp_rewrite->front );
 
 			/* If there's a slug, add it to the $path. */
-			if ( !empty( $post_type_object->rewrite['archive'] ) )
-				$path .= $post_type_object->rewrite['archive'];
+			if ( !empty( $post_type_object->rewrite['slug'] ) )
+				$path .= $post_type_object->rewrite['slug'];
 
 			/* If there's a path, check for parents. */
 			if ( !empty( $path ) )
