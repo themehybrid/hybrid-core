@@ -1,0 +1,79 @@
+<?php
+/**
+ * Cleaner Caption - Cleans up the WP [caption] shortcode.
+ *
+ * WordPress adds an inline style to its [caption] shortcode which specifically adds 10px of extra width to 
+ * captions, making theme authors jump through hoops to design captioned elements to their liking.  Inline 
+ * styles like this stifle creativity.  In particular, this inline style makes the assumption that all captions should 
+ * have 10px of extra padding to account for a box that wraps the element.  This script removes this inline 
+ * styling, allowing themes to better handle how their captions are designed.
+ *
+ * This program is free software; you can redistribute it and/or modify it under the terms of the GNU 
+ * General Public License version 2, as published by the Free Software Foundation.  You may NOT assume 
+ * that you can use any other version of the GPL.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ * @package CleanerCaption
+ * @version 0.1.0
+ * @author Justin Tadlock <justin@justintadlock.com>
+ * @copyright Copyright (c) 2011, Justin Tadlock
+ * @link http://justintadlock.com
+ * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ */
+
+/* Filter the caption shortcode output. */
+add_filter( 'img_caption_shortcode', 'cleaner_caption', 10, 3 );
+
+/**
+ * Cleans up the default WordPress [caption] shortcode.  The main purpose of this function is to remove the 
+ * inline styling WP adds, which creates 10px of padding around captioned elements.
+ *
+ * @since 0.1.0
+ * @param string $output The output of the default caption (empty string at this point).
+ * @param array $attr Array of arguments for the [caption] shortcode.
+ * @param string $content The content placed after the opening [caption] tag and before the closing [/caption] tag.
+ * @return string $output The formatted HTML for the caption.
+ */
+function cleaner_caption( $output, $attr, $content ) {
+
+	/* We're not worried abut captions in feeds, so just return the output here. */
+	if ( is_feed() )
+		return $output;
+
+	/* Set up the default arguments. */
+	$defaults = array(
+		'id' => '',
+		'align' => 'alignnone',
+		'caption' => '',
+		//'width' => '' /* 'width' is disabled because this is the problem we're trying to fix. */
+	);
+
+	/* Allow developers to override the default arguments. */
+	$defaults = apply_filters( 'cleaner_caption_defaults', $defaults );
+
+	/* Merge the defaults with user input. */
+	$attr = shortcode_atts( $defaults, $attr );
+
+	/* If there is no caption, return the content wrapped between the [caption] tags. */
+	if ( empty( $attr['caption'] ) )
+		return $content;
+
+	/* Open the caption <div>. */
+	$output = '<div ' . ( !empty( $attr['id'] ) ? 'id="' . esc_attr( $attr['id'] ) . '" ' : '' ) . 'class="wp-caption ' . esc_attr( $attr['align'] ) . '">';
+
+	/* Allow shortcodes for the content the caption was created for. */
+	$output .= do_shortcode( $content );
+
+	/* Append the caption text. */
+	$output .= '<p class="wp-caption-text">' . $attr['caption'] . '</p>';
+
+	/* Close the caption </div>. */
+	$output .= '</div>';
+
+	/* Return the formatted, clean caption. */
+	return apply_filters( 'cleaner_caption', $output );
+}
+
+?>

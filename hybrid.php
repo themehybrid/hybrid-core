@@ -223,6 +223,9 @@ class Hybrid {
 		/* Load the Breadcrumb Trail extension if supported. */
 		require_if_theme_supports( 'breadcrumb-trail', trailingslashit( HYBRID_EXTENSIONS ) . 'breadcrumb-trail.php' );
 
+		/* Load the Cleaner Caption extension if supported. */
+		require_if_theme_supports( 'cleaner-caption', trailingslashit( HYBRID_EXTENSIONS ) . 'cleaner-caption.php' );
+
 		/* Load the Cleaner Gallery extension if supported and the plugin isn't active. */
 		if ( !function_exists( 'cleaner_gallery' ) )
 			require_if_theme_supports( 'cleaner-gallery', trailingslashit( HYBRID_EXTENSIONS ) . 'cleaner-gallery.php' );
