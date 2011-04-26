@@ -90,7 +90,7 @@ function hybrid_get_default_theme_settings() {
 	if ( current_theme_supports( 'hybrid-core-meta-box-footer' ) && current_theme_supports( 'hybrid-core-shortcodes' ) ) {
 
 		/* If there is a child theme active, add the [child-link] shortcode to the $footer_insert. */
-		if ( STYLESHEETPATH !== TEMPLATEPATH )
+		if ( is_child_theme() )
 			$settings['footer_insert'] = '<p class="copyright">' . __( 'Copyright &#169; [the-year] [site-link].', $domain ) . '</p>' . "\n\n" . '<p class="credit">' . __( 'Powered by [wp-link], [theme-link], and [child-link].', $domain ) . '</p>';
 
 		/* If no child theme is active, leave out the [child-link] shortcode. */
@@ -146,9 +146,9 @@ function hybrid_create_settings_meta_boxes() {
 
 	/* Adds the About box for the parent theme. */
 	add_meta_box( "{$prefix}-about-theme-meta-box", sprintf( __( 'About %1$s', $domain ), $theme_data['Title'] ), 'hybrid_about_theme_meta_box', $hybrid->settings_page, 'normal', 'high' );
- 
+
 	/* If the user is using a child theme, add an About box for it. */
-	if ( TEMPLATEPATH != STYLESHEETPATH ) {
+	if ( is_child_theme() ) {
 		$child_data = get_theme_data( trailingslashit( STYLESHEETPATH ) . 'style.css' );
 		add_meta_box( "{$prefix}-about-child-meta-box", sprintf( __( 'About %1$s', $domain ), $child_data['Title'] ), 'hybrid_about_theme_meta_box', $hybrid->settings_page, 'normal', 'high' );
 	}
