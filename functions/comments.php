@@ -8,11 +8,11 @@
  * @subpackage Functions
  */
 
-/**
- * Filter the comment form defaults.
- * @since 0.8.0
- */
+/* Filter the comment form defaults. */
 add_filter( 'comment_form_defaults', 'hybrid_comment_form_args' );
+
+/* Add a few comment types to the allowed avatar comment types list. */
+add_filter( 'get_avatar_comment_types', 'hybrid_avatar_comment_types' );
 
 /**
  * Arguments for the wp_list_comments_function() used in comments.php. Users can set up a 
@@ -94,19 +94,28 @@ function hybrid_avatar() {
 	$comment_type = get_comment_type( $comment->comment_ID );
 	$author = esc_html( get_comment_author( $comment->comment_ID ) );
 	$url = esc_url( get_comment_author_url( $comment->comment_ID ) );
+	$avatar = '';
+	$default_avatar = '';
 
-	/* Set a default avatar for pingbacks and trackbacks. */
-	$default_avatar = ( ( 'pingback' == $comment_type || 'trackback' == $comment_type ) ? trailingslashit( HYBRID_IMAGES ) . "{$comment_type}.png" : '' );
+	/* Get comment types that are allowed to have an avatar. */
+	$avatar_comment_types = apply_filters( 'get_avatar_comment_types', array( 'comment' ) );
 
-	/* Allow the default avatar to be filtered by comment type. */
-	$default_avatar = apply_filters( "{$hybrid->prefix}_{$comment_type}_avatar", $default_avatar );
+	/* If comment type is in the allowed list, check if it's a pingback or trackback. */
+	if ( in_array( $comment_type, $avatar_comment_types ) ) {
+
+		/* Set a default avatar for pingbacks and trackbacks. */
+		$default_avatar = ( ( 'pingback' == $comment_type || 'trackback' == $comment_type ) ? trailingslashit( HYBRID_IMAGES ) . "{$comment_type}.png" : '' );
+
+		/* Allow the default avatar to be filtered by comment type. */
+		$default_avatar = apply_filters( "{$hybrid->prefix}_{$comment_type}_avatar", $default_avatar );
+	}
 
 	/* Set up the avatar size. */
 	$comment_list_args = hybrid_list_comments_args();
 	$size = ( ( $comment_list_args['avatar_size'] ) ? $comment_list_args['avatar_size'] : 80 );
 
 	/* Get the avatar provided by the get_avatar() function. */
-	$avatar = get_avatar( get_comment_author_email( $comment->comment_ID ), absint( $size ), $default_avatar, $author );
+	$avatar = get_avatar( $comment, absint( $size ), $default_avatar, $author );
 
 	/* If URL input, wrap avatar in hyperlink. */
 	if ( !empty( $url ) )
@@ -155,6 +164,26 @@ function hybrid_comment_form_args( $args ) {
 	);
 
 	return $args;
+}
+
+/**
+ * Adds the 'pingback' and 'trackback' comment types to the allowed list of avatar comment types.  By
+ * default, WordPress only allows the 'comment' comment type to have an avatar.
+ *
+ * @since 1.2.0
+ * @param array $types List of all comment types allowed to have avatars.
+ * @return array $types
+ */
+function hybrid_avatar_comment_types( $types ) {
+
+	/* Add the 'pingback' comment type. */
+	$types[] = 'pingback';
+
+	/* Add the 'trackback' comment type. */
+	$types[] = 'trackback';
+
+	/* Return the array of comment types. */
+	return $types;
 }
 
 ?>

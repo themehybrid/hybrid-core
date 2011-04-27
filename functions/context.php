@@ -236,6 +236,13 @@ function hybrid_comment_class( $class = '' ) {
 			$classes[] = 'entry-author';
 	}
 
+	/* Get comment types that are allowed to have an avatar. */
+	$avatar_comment_types = apply_filters( 'get_avatar_comment_types', array( 'comment' ) );
+
+	/* If avatars are enabled and the comment types can display avatars, add the 'has-avatar' class. */
+	if ( get_option( 'show_avatars' ) && in_array( $comment->comment_type, $avatar_comment_types ) )
+		$classes[] = 'has-avatar';
+
 	/* Join all the classes into one string and echo them. */
 	$class = join( ' ', $classes );
 
