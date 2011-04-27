@@ -373,8 +373,12 @@ function hybrid_document_title() {
 		}
 
 		/* If viewing an author/user archive. */
-		elseif ( is_author() )
-			$doctitle = get_the_author_meta( 'display_name', get_query_var( 'author' ) );
+		elseif ( is_author() ) {
+			$doctitle = get_user_meta( get_query_var( 'author' ), 'Title', true );
+
+			if ( empty( $doctitle ) )
+				$doctitle = get_the_author_meta( 'display_name', get_query_var( 'author' ) );
+		}
 
 		/* If viewing a date-/time-based archive. */
 		elseif ( is_date () ) {
