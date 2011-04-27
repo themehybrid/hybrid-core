@@ -44,6 +44,9 @@ function hybrid_meta_author() {
 	if ( is_singular() )
 		$author = get_the_author_meta( 'display_name', $wp_query->post->post_author );
 
+	elseif ( is_author() )
+		$author = get_the_author_meta( 'display_name', $wp_query->get_queried_object_id() );
+
 	if ( !empty( $author ) )
 		$author = '<meta name="author" content="' . esc_attr( $author ) . '" />' . "\n";
 
@@ -110,8 +113,12 @@ function hybrid_meta_description() {
 
 	elseif ( is_archive() ) {
 
-		if ( is_author() )
-			$description = get_the_author_meta( 'description', get_query_var( 'author' ) );
+		if ( is_author() ) {
+			$description = get_user_meta( get_query_var( 'author' ), 'Description', true );
+
+			if ( empty( $description ) )
+				$description = get_the_author_meta( 'description', get_query_var( 'author' ) );
+		}
 
 		elseif ( is_category() || is_tag() || is_tax() )
 			$description = term_description( '', get_query_var( 'taxonomy' ) );
@@ -156,6 +163,12 @@ function hybrid_meta_keywords() {
 			if ( !empty( $keywords ) )
 				$keywords = join( ', ', $keywords );
 		}
+	}
+
+	/* If on a user/author archive page, check for user meta. */
+	elseif ( is_author() ) {
+
+		$keywords = get_user_meta( get_query_var( 'author' ), 'Keywords', true );
 	}
 
 	/* If we have keywords, join them together into one string and format for output. */
