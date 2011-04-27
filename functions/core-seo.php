@@ -102,7 +102,7 @@ function hybrid_meta_description() {
 	}
 
 	elseif ( is_singular() ) {
-		$description = get_metadata( 'post', $wp_query->post->ID, 'Description', true );
+		$description = get_post_meta( $wp_query->post->ID, 'Description', true );
 
 		if ( empty( $description ) && is_front_page() )
 			$description = get_bloginfo( 'description' );
@@ -125,7 +125,9 @@ function hybrid_meta_description() {
 
 		elseif ( function_exists( 'is_post_type_archive' ) && is_post_type_archive() ) {
 			$post_type = get_post_type_object( get_query_var( 'post_type' ) );
-			$description = $post_type->description;
+
+			if ( isset( $post_type->description ) )
+				$description = $post_type->description;
 		}
 	}
 
