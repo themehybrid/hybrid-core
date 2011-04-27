@@ -19,8 +19,8 @@ add_action( 'init', 'hybrid_add_post_type_support' );
  * @since 0.8.0
  */
 function hybrid_add_post_type_support() {
-	add_post_type_support( 'post', array( hybrid_get_prefix() . '-post-settings', 'entry-views' ) );
-	add_post_type_support( 'page', array( 'excerpt', hybrid_get_prefix() . '-post-settings', 'entry-views' ) );
+	add_post_type_support( 'post', array( 'entry-views' ) );
+	add_post_type_support( 'page', array( 'excerpt', 'entry-views' ) );
 	add_post_type_support( 'attachment', array( 'comments', 'trackbacks', 'entry-views' ) );
 }
 
