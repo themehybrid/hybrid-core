@@ -19,8 +19,14 @@ add_action( 'init', 'hybrid_add_post_type_support' );
  * @since 0.8.0
  */
 function hybrid_add_post_type_support() {
+
+	/* Add support for entry-views to the 'post' post type. */
 	add_post_type_support( 'post', array( 'entry-views' ) );
+
+	/* Add support for excerpts and entry-views to the 'page' post type. */
 	add_post_type_support( 'page', array( 'excerpt', 'entry-views' ) );
+
+	/* Add support for comments, trackbacks, and entry-views to the 'attachment' post type. */
 	add_post_type_support( 'attachment', array( 'comments', 'trackbacks', 'entry-views' ) );
 }
 
@@ -76,11 +82,15 @@ function hybrid_meta_template() {
  * @since 0.1.0
  */
 function hybrid_site_title() {
+
+	/* If viewing the front page of the site, use an <h1> tag.  Otherwise, use a <div> tag. */
 	$tag = ( is_front_page() ) ? 'h1' : 'div';
 
+	/* Get the site title.  If it's not empty, wrap it with the appropriate HTML. */
 	if ( $title = get_bloginfo( 'name' ) )
 		$title = '<' . $tag . ' id="site-title"><a href="' . home_url() . '" title="' . esc_attr( $title ) . '" rel="home"><span>' . $title . '</span></a></' . $tag . '>';
 
+	/* Display the site title and apply filters for developers to overwrite. */
 	echo apply_atomic( 'site_title', $title );
 }
 
@@ -91,11 +101,15 @@ function hybrid_site_title() {
  * @since 0.1.0
  */
 function hybrid_site_description() {
+
+	/* If viewing the front page of the site, use an <h2> tag.  Otherwise, use a <div> tag. */
 	$tag = ( is_front_page() ) ? 'h2' : 'div';
 
+	/* Get the site description.  If it's not empty, wrap it with the appropriate HTML. */
 	if ( $desc = get_bloginfo( 'description' ) )
 		$desc = "\n\t\t\t" . '<' . $tag . ' id="site-description"><span>' . $desc . '</span></' . $tag . '>' . "\n";
 
+	/* Display the site description and apply filters for developers to overwrite. */
 	echo apply_atomic( 'site_description', $desc );
 }
 

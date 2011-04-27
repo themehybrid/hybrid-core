@@ -24,7 +24,17 @@ add_filter( 'get_avatar_comment_types', 'hybrid_avatar_comment_types' );
  * @return array $args Arguments for listing comments.
  */
 function hybrid_list_comments_args() {
-	$args = array( 'style' => 'ol', 'type' => 'all', 'avatar_size' => 80, 'callback' => 'hybrid_comments_callback', 'end-callback' => 'hybrid_comments_end_callback' );
+
+	/* Set the default arguments for listing comments. */
+	$args = array(
+		'style' => 'ol',
+		'type' => 'all',
+		'avatar_size' => 80,
+		'callback' => 'hybrid_comments_callback',
+		'end-callback' => 'hybrid_comments_end_callback'
+	);
+
+	/* Return the arguments and allow devs to overwrite them. */
 	return apply_atomic( 'list_comments_args', $args );
 }
 
@@ -38,27 +48,33 @@ function hybrid_list_comments_args() {
  * is only located once if it is needed. Following comments will use the saved template.
  *
  * @since 0.2.3
- * @param $comment The comment variable
+ * @param $comment The comment object.
  * @param $args Array of arguments passed from wp_list_comments()
  * @param $depth What level the particular comment is
  */
 function hybrid_comments_callback( $comment, $args, $depth ) {
 	global $hybrid;
-
 	$GLOBALS['comment'] = $comment;
 	$GLOBALS['comment_depth'] = $depth;
 
+	/* Get the comment type of the current comment. */
 	$comment_type = get_comment_type( $comment->comment_ID );
 
+	/* Create an empty array of the comment template array is not set. */
 	if ( !isset( $hybrid->comment_template) || !is_array( $hybrid->comment_template ) )
 		$hybrid->comment_template = array();
 
+	/* Check if a template has been provided for the specific comment type.  If not, get the template. */
 	if ( !isset( $hybrid->comment_template[$comment_type] ) ) {
+
+		/* Locate the template based on the comment type.  Default to 'comment.php'. */
 		$template = locate_template( array( "comment-{$comment_type}.php", 'comment.php' ) );
 
+		/* Set the template in the comment template array. */
 		$hybrid->comment_template[$comment_type] = $template;
 	}
 
+	/* If a template was found, load the template. */
 	if ( !empty( $hybrid->comment_template[$comment_type] ) )
 		require( $hybrid->comment_template[$comment_type] );
 }
@@ -137,17 +153,24 @@ function hybrid_avatar() {
 function hybrid_comment_form_args( $args ) {
 	global $user_identity;
 
+	/* Get the theme textdomain. */
 	$domain = hybrid_get_textdomain();
+
+	/* Get the current commenter. */
 	$commenter = wp_get_current_commenter();
+
+	/* Create the required <span> and <input> element class. */
 	$req = ( ( get_option( 'require_name_email' ) ) ? ' <span class="required">' . __( '*', $domain ) . '</span> ' : '' );
 	$input_class = ( ( get_option( 'require_name_email' ) ) ? ' req' : '' );
 
+	/* Sets up the default comment form fields. */
 	$fields = array(
 		'author' => '<p class="form-author' . $input_class . '"><label for="author">' . __( 'Name', $domain ) . $req . '</label> <input type="text" class="text-input" name="author" id="author" value="' . esc_attr( $commenter['comment_author'] ) . '" size="40" /></p>',
 		'email' => '<p class="form-email' . $input_class . '"><label for="email">' . __( 'Email', $domain ) . $req . '</label> <input type="text" class="text-input" name="email" id="email" value="' . esc_attr( $commenter['comment_author_email'] ) . '" size="40" /></p>',
 		'url' => '<p class="form-url"><label for="url">' . __( 'Website', $domain ) . '</label><input type="text" class="text-input" name="url" id="url" value="' . esc_attr( $commenter['comment_author_url'] ) . '" size="40" /></p>'
 	);
 
+	/* Sets the default arguments for displaying the comment form. */
 	$args = array(
 		'fields' => apply_filters( 'comment_form_default_fields', $fields ),
 		'comment_field' => '<p class="form-textarea req"><label for="comment">' . __( 'Comment', $domain ) . '</label><textarea name="comment" id="comment" cols="60" rows="10"></textarea></p>',
@@ -163,6 +186,7 @@ function hybrid_comment_form_args( $args ) {
 		'label_submit' => __( 'Post Comment', $domain ),
 	);
 
+	/* Return the arguments for displaying the comment form. */
 	return $args;
 }
 

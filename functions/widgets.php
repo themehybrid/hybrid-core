@@ -25,26 +25,58 @@ add_action( 'widgets_init', 'hybrid_register_widgets' );
  */
 function hybrid_register_widgets() {
 
-	/* Load the core framework widget files. */
+	/* Load the archives widget class. */
 	require_once( trailingslashit( HYBRID_CLASSES ) . 'widget-archives.php' );
+
+	/* Load the authors widget class. */
 	require_once( trailingslashit( HYBRID_CLASSES ) . 'widget-authors.php' );
+
+	/* Load the bookmarks widget class. */
 	require_once( trailingslashit( HYBRID_CLASSES ) . 'widget-bookmarks.php' );
+
+	/* Load the calendar widget class. */
 	require_once( trailingslashit( HYBRID_CLASSES ) . 'widget-calendar.php' );
+
+	/* Load the categories widget class. */
 	require_once( trailingslashit( HYBRID_CLASSES ) . 'widget-categories.php' );
+
+	/* Load the nav menu widget class. */
 	require_once( trailingslashit( HYBRID_CLASSES ) . 'widget-nav-menu.php' );
+
+	/* Load the pages widget class. */
 	require_once( trailingslashit( HYBRID_CLASSES ) . 'widget-pages.php' );
+
+	/* Load the search widget class. */
 	require_once( trailingslashit( HYBRID_CLASSES ) . 'widget-search.php' );
+
+	/* Load the tags widget class. */
 	require_once( trailingslashit( HYBRID_CLASSES ) . 'widget-tags.php' );
 
-	/* Register each of the core framework widgets. */
+	/* Register the archives widget. */
 	register_widget( 'Hybrid_Widget_Archives' );
+
+	/* Register the authors widget. */
 	register_widget( 'Hybrid_Widget_Authors' );
+
+	/* Register the bookmarks widget. */
 	register_widget( 'Hybrid_Widget_Bookmarks' );
+
+	/* Register the calendar widget. */
 	register_widget( 'Hybrid_Widget_Calendar' );
+
+	/* Register the categories widget. */
 	register_widget( 'Hybrid_Widget_Categories' );
+
+	/* Register the nav menu widget. */
 	register_widget( 'Hybrid_Widget_Nav_Menu' );
+
+	/* Register the pages widget. */
 	register_widget( 'Hybrid_Widget_Pages' );
+
+	/* Register the search widget. */
 	register_widget( 'Hybrid_Widget_Search' );
+
+	/* Register the tags widget. */
 	register_widget( 'Hybrid_Widget_Tags' );
 }
 
