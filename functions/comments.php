@@ -43,25 +43,24 @@ function hybrid_list_comments_args() {
  * @param $depth What level the particular comment is
  */
 function hybrid_comments_callback( $comment, $args, $depth ) {
+	global $hybrid;
+
 	$GLOBALS['comment'] = $comment;
 	$GLOBALS['comment_depth'] = $depth;
 
 	$comment_type = get_comment_type( $comment->comment_ID );
 
-	$cache = wp_cache_get( 'comment_template' );
+	if ( !isset( $hybrid->comment_template) || !is_array( $hybrid->comment_template ) )
+		$hybrid->comment_template = array();
 
-	if ( !is_array( $cache ) )
-		$cache = array();
-
-	if ( !isset( $cache[$comment_type] ) ) {
+	if ( !isset( $hybrid->comment_template[$comment_type] ) ) {
 		$template = locate_template( array( "comment-{$comment_type}.php", 'comment.php' ) );
 
-		$cache[$comment_type] = $template;
-		wp_cache_set( 'comment_template', $cache );
+		$hybrid->comment_template[$comment_type] = $template;
 	}
 
-	if ( !empty( $cache[$comment_type] ) )
-		require( $cache[$comment_type] );
+	if ( !empty( $hybrid->comment_template[$comment_type] ) )
+		require( $hybrid->comment_template[$comment_type] );
 }
 
 /**
