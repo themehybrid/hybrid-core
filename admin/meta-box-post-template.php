@@ -1,24 +1,43 @@
 <?php
+/**
+ * Adds the template meta box to the post editing screen for public post types.  This feature allows users and 
+ * devs to create custom templates for any post type, not just pages as default in WordPress core.  The 
+ * functions in this file create the template meta box and save the template chosen by the user when the 
+ * post is saved.
+ *
+ * @package HybridCore
+ * @subpackage Admin
+ */
 
-add_action( 'admin_menu', 'hybrid_create_post_meta_box_template' );
+/* Add the post template meta box on the 'add_meta_boxes' hook. */
+add_action( 'add_meta_boxes', 'hybrid_meta_box_post_add_template' );
 
-function hybrid_create_post_meta_box_template() {
+/* Save the post template meta box data on the 'save_post' hook. */
+add_action( 'save_post', 'hybrid_meta_box_post_save_template', 10, 2 );
 
-	$prefix = hybrid_get_prefix();
-	$domain = hybrid_get_textdomain();
+/**
+ * Adds the post template meta box for all public post types, excluding the 'page' post type since WordPress 
+ * core already handles page templates.
+ *
+ * @since 1.2.0
+ */
+function hybrid_meta_box_post_add_template() {
+
 	$post_types = get_post_types( array( 'public' => true ), 'objects' );
 
 	foreach ( $post_types as $type ) {
 
 		if ( 'page' !== $type->name )
-			add_meta_box( 'hybrid-core-post-template', sprintf( __( '%s Template', $domain ), $type->labels->singular_name ), 'hybrid_post_meta_box_template', $type->name, 'side', 'default' );
+			add_meta_box( 'hybrid-core-post-template', sprintf( __( '%s Template', hybrid_get_textdomain() ), $type->labels->singular_name ), 'hybrid_meta_box_post_display_template', $type->name, 'side', 'default' );
 	}
-
-	/* Saves the post meta box data. */
-	add_action( 'save_post', 'hybrid_save_post_meta_box_template', 10, 2 );
 }
 
-function hybrid_post_meta_box_template( $object, $box ) {
+/**
+ * Displays the post template meta box.
+ *
+ * @since 1.2.0
+ */
+function hybrid_meta_box_post_display_template( $object, $box ) {
 
 	$post_type_object = get_post_type_object( $object->post_type );
 
@@ -32,7 +51,7 @@ function hybrid_post_meta_box_template( $object, $box ) {
 	$prefix = hybrid_get_prefix();
 	$domain = hybrid_get_textdomain(); ?>
 
-	<input type="hidden" name="<?php echo "{$prefix}_template_meta_box_nonce"; ?>" value="<?php echo wp_create_nonce( basename( __FILE__ ) ); ?>" />
+	<input type="hidden" name="hybrid-core-post-meta-box-template" value="<?php echo wp_create_nonce( basename( __FILE__ ) ); ?>" />
 
 	<p>
 		<?php if ( 0 != count( $templates ) ) { ?>
@@ -49,12 +68,19 @@ function hybrid_post_meta_box_template( $object, $box ) {
 <?php
 }
 
-function hybrid_save_post_meta_box_template( $post_id, $post ) {
+/**
+ * Saves the post template meta box settings as post metadata.
+ *
+ * @since 1.2.0
+ * @param int $post_id The ID of the current post being saved.
+ * @param int $post The post object currently being saved.
+ */
+function hybrid_meta_box_post_save_template( $post_id, $post ) {
 
 	$prefix = hybrid_get_prefix();
 
 	/* Verify that the post type supports the meta box and the nonce before preceding. */
-	if ( !isset( $_POST["{$prefix}_template_meta_box_nonce"] ) || !wp_verify_nonce( $_POST["{$prefix}_template_meta_box_nonce"], basename( __FILE__ ) ) )
+	if ( !isset( $_POST['hybrid-core-post-meta-box-template'] ) || !wp_verify_nonce( $_POST['hybrid-core-post-meta-box-template'], basename( __FILE__ ) ) )
 		return $post_id;
 
 	/* Get the post type object. */

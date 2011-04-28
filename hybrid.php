@@ -264,12 +264,6 @@ class Hybrid {
 
 			/* Load the theme settings feature if supported. */
 			require_if_theme_supports( 'hybrid-core-theme-settings', trailingslashit( HYBRID_ADMIN ) . 'theme-settings.php' );
-
-			/* Load the core SEO post meta box if supported. */
-			require_if_theme_supports( 'hybrid-core-seo', trailingslashit( HYBRID_ADMIN ) . 'meta-box-post-seo.php' );
-
-			/* Load the post template meta box if supported. */
-			require_if_theme_supports( 'hybrid-core-template-hierarchy', trailingslashit( HYBRID_ADMIN ) . 'meta-box-post-template.php' );
 		}
 	}
 

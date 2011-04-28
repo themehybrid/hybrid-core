@@ -17,33 +17,31 @@ add_action( 'admin_init', 'hybrid_admin_init' );
  */
 function hybrid_admin_init() {
 
+	/* Load the post meta boxes. */
+	add_action( 'load-post.php', 'hybrid_admin_load_post_meta_boxes' );
+
 	/* Load the admin stylesheet for the widgets screen. */
 	if ( current_theme_supports( 'hybrid-core-widgets' ) )
 		add_action( 'load-widgets.php', 'hybrid_admin_enqueue_style' );
 
 	/* Load the admin stylesheet for the post editor screen. */
-	if ( current_theme_supports( 'custom-post-formats' ) || current_theme_supports( 'post-layouts' ) || current_theme_supports( 'hybrid-core-post-meta-box' ) )
+	if ( current_theme_supports( 'theme-layouts' ) )
 		add_action( 'load-post.php', 'hybrid_admin_enqueue_style' );
 }
 
 /**
- * Creates a settings field id attribute for use on the theme settings page.  This is a helper function for use
- * with the WordPress settings API.
+ * Loads the core post meta box files on the 'load-post.php' action hook.  Each meta box file is only loaded if 
+ * the theme declares support for the feature.
  *
- * @since 1.0.0
+ * @since 1.2.0
  */
-function hybrid_settings_field_id( $setting ) {
-	return hybrid_get_prefix() . "_theme_settings-{$setting}";
-}
+function hybrid_admin_load_post_meta_boxes() {
 
-/**
- * Creates a settings field name attribute for use on the theme settings page.  This is a helper function for 
- * use with the WordPress settings API.
- *
- * @since 1.0.0
- */
-function hybrid_settings_field_name( $setting ) {
-	return hybrid_get_prefix() . "_theme_settings[{$setting}]";
+	/* Load the SEO post meta box. */
+	require_if_theme_supports( 'hybrid-core-seo', trailingslashit( HYBRID_ADMIN ) . 'meta-box-post-seo.php' );
+
+	/* Load the post template meta box. */
+	require_if_theme_supports( 'hybrid-core-template-hierarchy', trailingslashit( HYBRID_ADMIN ) . 'meta-box-post-template.php' );
 }
 
 /**
@@ -52,7 +50,7 @@ function hybrid_settings_field_name( $setting ) {
  * @since 1.0.0
  */
 function hybrid_admin_enqueue_style() {
-	wp_enqueue_style( hybrid_get_prefix() . '-admin', trailingslashit( HYBRID_CSS ) . 'admin.css', false, 0.7, 'screen' );
+	wp_enqueue_style( 'hybrid-core-admin', trailingslashit( HYBRID_CSS ) . 'admin.css', false, 1.2, 'screen' );
 }
 
 /**

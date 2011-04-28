@@ -218,4 +218,33 @@ function hybrid_format_hook( $tag, $context = '' ) {
 	return hybrid_get_prefix() . ( ( !empty( $context ) ) ? "_{$context}" : "" ). "_{$tag}";
 }
 
+/**
+ * Gets theme data and stores it in the global $hybrid variable.  By storing it, it can be accessed quickly without 
+ * having to run through the get_theme_data() function again.
+ *
+ * @since 1.2.0
+ * @param string $path Whether to use the template (parent theme) or stylesheet (child theme) path.
+ */
+function hybrid_get_theme_data( $path = 'template' ) {
+	global $hybrid;
+
+	if ( 'template' == $path ) {
+
+		if ( empty( $hybrid->theme_data ) )
+			$hybrid->theme_data = get_theme_data( trailingslashit( TEMPLATEPATH ) . 'style.css' );
+
+		return $hybrid->theme_data;
+	}
+
+	elseif ( 'stylesheet' == $path ) {
+
+		if ( empty( $hybrid->child_theme_data ) )
+			$hybrid->child_theme_data = get_theme_data( trailingslashit( STYLESHEETPATH ) . 'style.css' );
+
+		return $hybrid->child_theme_data;
+	}
+
+	return false;
+}
+
 ?>

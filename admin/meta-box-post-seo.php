@@ -1,26 +1,44 @@
 <?php
+/**
+ * Adds the SEO meta box to the post editing screen for public post types.  This feature allows the post author 
+ * to set a custom title, description, and keywords for the post, which will be viewed on the singular post page.  
+ * To use this feature, the theme must support the 'hybrid-core-seo' feature.  The functions in this file create
+ * the SEO meta box and save the settings chosen by the user when the post is saved.
+ *
+ * @package HybridCore
+ * @subpackage Admin
+ */
 
-add_action( 'admin_menu', 'hybrid_create_post_meta_box_seo' );
+/* Add the post SEO meta box on the 'add_meta_boxes' hook. */
+add_action( 'add_meta_boxes', 'hybrid_meta_box_post_add_seo' );
 
-function hybrid_create_post_meta_box_seo() {
+/* Save the post SEP meta box data on the 'save_post' hook. */
+add_action( 'save_post', 'hybrid_meta_box_post_save_seo', 10, 2 );
 
-	$prefix = hybrid_get_prefix();
-	$domain = hybrid_get_textdomain();
+/**
+ * Adds the post SEO meta box for all public post types.
+ *
+ * @since 1.2.0
+ */
+function hybrid_meta_box_post_add_seo() {
+
 	$post_types = get_post_types( array( 'public' => true ), 'objects' );
 
 	foreach ( $post_types as $type )
-		add_meta_box( 'hybrid-core-post-seo', sprintf( __( '%s SEO', $domain ), $type->labels->singular_name ), 'hybrid_post_meta_box_seo', $type->name, 'normal', 'high' );
-
-	/* Saves the post meta box data. */
-	add_action( 'save_post', 'hybrid_save_post_meta_box_seo', 10, 2 );
+		add_meta_box( 'hybrid-core-post-seo', sprintf( __( '%s SEO', hybrid_get_textdomain() ), $type->labels->singular_name ), 'hybrid_meta_box_post_display_seo', $type->name, 'normal', 'high' );
 }
 
-function hybrid_post_meta_box_seo( $object, $box ) {
+/**
+ * Displays the post SEO meta box.
+ *
+ * @since 1.2.0
+ */
+function hybrid_meta_box_post_display_seo( $object, $box ) {
 
 	$prefix = hybrid_get_prefix();
 	$domain = hybrid_get_textdomain(); ?>
 
-	<input type="hidden" name="<?php echo "{$prefix}_seo_meta_box_nonce"; ?>" value="<?php echo wp_create_nonce( basename( __FILE__ ) ); ?>" />
+	<input type="hidden" name="hybrid-core-post-meta-box-seo" value="<?php echo wp_create_nonce( basename( __FILE__ ) ); ?>" />
 
 	<div class="hybrid-post-settings">
 
@@ -45,12 +63,19 @@ function hybrid_post_meta_box_seo( $object, $box ) {
 	</div><!-- .form-table --><?php
 }
 
-function hybrid_save_post_meta_box_seo( $post_id, $post ) {
+/**
+ * Saves the post SEO meta box settings as post metadata.
+ *
+ * @since 1.2.0
+ * @param int $post_id The ID of the current post being saved.
+ * @param int $post The post object currently being saved.
+ */
+function hybrid_meta_box_post_save_seo( $post_id, $post ) {
 
 	$prefix = hybrid_get_prefix();
 
 	/* Verify that the post type supports the meta box and the nonce before preceding. */
-	if ( !isset( $_POST["{$prefix}_seo_meta_box_nonce"] ) || !wp_verify_nonce( $_POST["{$prefix}_seo_meta_box_nonce"], basename( __FILE__ ) ) )
+	if ( !isset( $_POST['hybrid-core-post-meta-box-seo'] ) || !wp_verify_nonce( $_POST['hybrid-core-post-meta-box-seo'], basename( __FILE__ ) ) )
 		return $post_id;
 
 	/* Get the post type object. */
