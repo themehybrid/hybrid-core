@@ -191,7 +191,7 @@ function breadcrumb_trail_get_items( $args = array() ) {
 				$trail = array_merge( $trail, breadcrumb_trail_get_parents( '', $path ) );
 
 			/* If there's an archive page, add it to the trail. */
-			if ( !empty( $post_type_object->has_archive ) && function_exists( 'get_post_type_archive_link' ) )
+			if ( !empty( $post_type_object->has_archive ) )
 				$trail[] = '<a href="' . get_post_type_archive_link( $post_type ) . '" title="' . esc_attr( $post_type_object->labels->name ) . '">' . $post_type_object->labels->name . '</a>';
 		}
 
@@ -243,14 +243,11 @@ function breadcrumb_trail_get_items( $args = array() ) {
 				$trail = array_merge( $trail, breadcrumb_trail_get_term_parents( $term->parent, $term->taxonomy ) );
 
 			/* Add the term name to the trail end. */
-			if ( function_exists( 'single_term_title' ) )
-				$trail['trail_end'] = single_term_title( '', false );
-			else
-				$trail['trail_end'] = $term->name;
+			$trail['trail_end'] = single_term_title( '', false );
 		}
 
 		/* If viewing a post type archive. */
-		elseif ( function_exists( 'is_post_type_archive' ) && is_post_type_archive() ) {
+		elseif ( is_post_type_archive() ) {
 
 			/* Get the post type object. */
 			$post_type_object = get_post_type_object( get_query_var( 'post_type' ) );
