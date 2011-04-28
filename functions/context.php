@@ -62,7 +62,7 @@ function hybrid_get_context() {
 		}
 
 		/* Post type archives. */
-		elseif ( function_exists( 'is_post_type_archive' ) && is_post_type_archive() ) {
+		elseif ( is_post_type_archive() ) {
 			$post_type = get_post_type_object( get_query_var( 'post_type' ) );
 			$hybrid->context[] = "archive-{$post_type->name}";
 		}
@@ -277,7 +277,7 @@ function hybrid_body_class( $class = '' ) {
 	$classes[] = ( is_user_logged_in() ) ? 'logged-in' : 'logged-out';
 
 	/* WP admin bar. */
-	if ( function_exists( 'is_admin_bar_showing' ) && is_admin_bar_showing() )
+	if ( is_admin_bar_showing() )
 		$classes[] = 'admin-bar';
 
 	/* Merge base contextual classes with $classes. */
@@ -356,7 +356,7 @@ function hybrid_document_title() {
 			$doctitle = get_bloginfo( 'name' ) . $separator . ' ' . get_bloginfo( 'description' );
 
 		elseif ( empty( $doctitle ) )
-			$doctitle = get_post_field( 'post_title', $post_id );
+			$doctitle = single_post_title( '', false );
 	}
 
 	/* If viewing any type of archive page. */
@@ -364,17 +364,11 @@ function hybrid_document_title() {
 
 		/* If viewing a taxonomy term archive. */
 		if ( is_category() || is_tag() || is_tax() ) {
-
-			if ( function_exists( 'single_term_title' ) ) {
-				$doctitle = single_term_title( '', false );
-			} else { // 3.0 compat
-				$term = $wp_query->get_queried_object();
-				$doctitle = $term->name;
-			}
+			$doctitle = single_term_title( '', false );
 		}
 
 		/* If viewing a post type archive. */
-		elseif ( function_exists( 'is_post_type_archive' ) && is_post_type_archive() ) {
+		elseif ( is_post_type_archive() ) {
 			$post_type = get_post_type_object( get_query_var( 'post_type' ) );
 			$doctitle = $post_type->labels->name;
 		}
@@ -409,6 +403,11 @@ function hybrid_document_title() {
 
 			elseif ( is_year() )
 				$doctitle = sprintf( __( 'Archive for %1$s', $domain ), get_the_time( __( 'Y', $domain ) ) );
+		}
+
+		/* For any other archives. */
+		else {
+			$doctitle = __( 'Archives', $domain );
 		}
 	}
 
