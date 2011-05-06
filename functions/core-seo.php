@@ -35,8 +35,8 @@ function hybrid_meta_robots() {
 }
 
 /**
- * Generates the meta author.  On single posts and pages, use the author's name.  On the home page, use 
- * all authors.  The hybrid_meta_author filter added in 0.6.
+ * Generates the meta author.  For singular posts, it uses the post author's display name.  For user/author 
+ * archives, it uses the user's display name.
  *
  * @since 0.3.3
  */
@@ -62,8 +62,8 @@ function hybrid_meta_author() {
 }
 
 /**
- * Add the meta tag for copyright information to the header.  Single posts and pages should display the 
- * date written.  All other pages will show the current year. 
+ * Add the meta tag for copyright information to the header.  Singular posts display the date the post was 
+ * published.  All other pages will show the current year. 
  *
  * @since 0.4.0
  */
@@ -87,8 +87,7 @@ function hybrid_meta_copyright() {
 }
 
 /**
- * Add the revised meta tag on single posts and pages (or any post type).  This shows the last time the post 
- * was modified. 
+ * Add the revised meta tag on the singular view of posts.  This shows the last time the post was modified. 
  *
  * @since 0.4.0
  */
@@ -105,8 +104,7 @@ function hybrid_meta_revised() {
 }
 
 /**
- * Generates the meta description. Checks theme settings for indexing, title, and meta settings. Customize 
- * this with the hybrid_meta_description filter.
+ * Generates the meta description based on either metadata or the description for the object.
  *
  * @since 0.2.3
  */
