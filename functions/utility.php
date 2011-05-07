@@ -124,7 +124,7 @@ function hybrid_site_description() {
 function hybrid_set_content_width( $width = '' ) {
 	global $content_width;
 
-	$content_width = $width;
+	$content_width = absint( $width );
 }
 
 /**
