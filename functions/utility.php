@@ -113,4 +113,31 @@ function hybrid_site_description() {
 	echo apply_atomic( 'site_description', $desc );
 }
 
+/**
+ * Function for setting the content width of a theme.  This does not check if a content width has been set; it 
+ * simply overwrites whatever the content width is.
+ *
+ * @since 1.2.0
+ * @global int $content_width The width for the theme's content area.
+ * @param int $width Numeric value of the width to set.
+ */
+function hybrid_set_content_width( $width = '' ) {
+	global $content_width;
+
+	$content_width = $width;
+}
+
+/**
+ * Function for getting the theme's content width.
+ *
+ * @since 1.2.0
+ * @global int $content_width The width for the theme's content area.
+ * @return int $content_width
+ */
+function hybrid_get_content_width() {
+	global $content_width;
+
+	return $content_width;
+}
+
 ?>
