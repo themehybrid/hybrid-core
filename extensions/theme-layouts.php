@@ -19,7 +19,7 @@
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * @package ThemeLayouts
- * @version 0.2.1
+ * @version 0.3.0
  * @author Justin Tadlock <justin@justintadlock.com>
  * @copyright Copyright (c) 2010 - 2011, Justin Tadlock
  * @link http://justintadlock.com
@@ -58,6 +58,16 @@ function theme_layouts_get_layout() {
 		$layout = get_post_layout( $post_id );
 	}
 
+	/* If viewing a user/author archive, check if a layout has been specified. */
+	elseif ( is_author() ) {
+
+		/* Get the current user ID. */
+		$user_id = $wp_query->get_queried_object_id();
+
+		/* Get the user layout. */
+		$layout = get_user_layout( $user_id );
+	}
+
 	/* Make sure the given layout is in the array of available post layouts for the theme. */
 	if ( empty( $layout ) || !in_array( $layout, $post_layouts[0] ) )
 		$layout = 'default';
@@ -73,20 +83,45 @@ function theme_layouts_get_layout() {
  * Get the post layout based on the given post ID.
  *
  * @since 0.2.0
+ * @param int $post_id The ID of the post to get the layout for.
  */
 function get_post_layout( $post_id ) {
-	$post_layout = get_post_meta( $post_id, apply_filters( 'theme_layouts_meta_key', 'Layout' ), true );
-	return ( !empty( $post_layout ) ? $post_layout : 'default' );
+	$layout = get_post_meta( $post_id, apply_filters( 'theme_layouts_meta_key', 'Layout' ), true );
+	return ( !empty( $layout ) ? $layout : 'default' );
 }
 
 /**
  * Update/set the post layout based on the given post ID and layout.
  *
  * @since 0.2.0
+ * @param int $post_id The ID of the post to set the layout for.
+ * @param string $layout The name of the layout to set.
  */
 function set_post_layout( $post_id, $layout ) {
 	update_post_meta( $post_id, apply_filters( 'theme_layouts_meta_key', 'Layout' ), $layout );
-}	
+}
+
+/**
+ * Get the layout for a user/author archive page based on a specific user ID.
+ *
+ * @since 0.3.0
+ * @param int $user_id The ID of the user to get the layout for.
+ */
+function get_user_layout( $user_id ) {
+	$layout = get_user_meta( $user_id, apply_filters( 'theme_layouts_meta_key', 'Layout' ), true );
+	return ( !empty( $layout ) ? $layout : 'default' );
+}
+
+/**
+ * Update/set the layout for a user/author archive paged based on the user ID.
+ *
+ * @since 0.3.0
+ * @param int $user_id The ID of the user to set the layout for.
+ * @param string $layout The name of the layout to set.
+ */
+function set_user_layout( $user_id, $layout ) {
+	update_user_meta( $user_id, apply_filters( 'theme_layouts_meta_key', 'Layout' ), $layout );
+}
 
 /**
  * Adds the post layout class to the WordPress body class in the form of "layout-$layout".  This allows 
