@@ -95,8 +95,8 @@ class Hybrid {
 	 */
 	function constants() {
 
-		/* Sets the Hybrid Core framework version number. */
-		define( 'HYBRID_CORE_VERSION', '1.2.0' );
+		/* Sets the framework version number. */
+		define( 'HYBRID_VERSION', '1.2.0' );
 
 		/* Sets the path to the parent theme directory. */
 		define( 'THEME_DIR', get_template_directory() );
