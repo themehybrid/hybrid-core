@@ -439,7 +439,7 @@ function image_by_custom_field( $args = array() ) {
 
 /**
  * @since 0.4.0
- * @since 0.7.0
+ * @deprecated 0.7.0
  */
 function image_by_the_post_thumbnail( $args = array() ) {
 	return get_the_image_by_post_thumbnail( $args );
@@ -447,7 +447,7 @@ function image_by_the_post_thumbnail( $args = array() ) {
 
 /**
  * @since 0.3.0
- * @since 0.7.0
+ * @deprecated 0.7.0
  */
 function image_by_attachment( $args = array() ) {
 	return get_the_image_by_attachment( $args );
@@ -463,7 +463,7 @@ function image_by_scan( $args = array() ) {
 
 /**
  * @since 0.3.0
- * @since 0.7.0
+ * @deprecated 0.7.0
  */
 function image_by_default( $args = array() ) {
 	return get_the_image_by_default( $args );
