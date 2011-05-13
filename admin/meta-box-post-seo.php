@@ -12,7 +12,7 @@
 /* Add the post SEO meta box on the 'add_meta_boxes' hook. */
 add_action( 'add_meta_boxes', 'hybrid_meta_box_post_add_seo' );
 
-/* Save the post SEP meta box data on the 'save_post' hook. */
+/* Save the post SEO meta box data on the 'save_post' hook. */
 add_action( 'save_post', 'hybrid_meta_box_post_save_seo', 10, 2 );
 
 /**
