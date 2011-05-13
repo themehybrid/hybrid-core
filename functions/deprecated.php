@@ -615,6 +615,18 @@ function hybrid_create_settings_meta_boxes() {
 	hybrid_function_removed( __FUNCTION__ );
 }
 
+function hybrid_footer_settings_meta_box() {
+	hybrid_function_removed( __FUNCTION__ );
+}
+
+function hybrid_about_theme_meta_box() {
+	hybrid_function_removed( __FUNCTION__ );
+}
+
+function hybrid_load_settings_page() {
+	hybrid_function_removed( __FUNCTION__ );
+}
+
 /**
  * Message to display for removed functions.
  * @since 0.5

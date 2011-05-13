@@ -1,18 +1,24 @@
 /* Theme settings page. */
-.appearance_page_theme-settings .form-table th {
+.appearance_page_theme-settings .side .form-table th {
 	width: 20%;
 	font-weight: bold;
+	text-align: left;
+	padding-left: 0;
 	}
 .appearance_page_theme-settings .metabox-holder .column-1 {
-	width: 100%;
+	float: left;
+	width: 66%;
 	}
 .appearance_page_theme-settings .metabox-holder .column-2 {
-	float: left;
-	width: 49%;
+	float: right;
+	width: 32%;
 	}
 .appearance_page_theme-settings .metabox-holder .column-3 {
-	float: right;
-	width: 49%;
+	clear: both;
+	width: 100%;
+	}
+.appearance_page_theme-settings .metabox-holder textarea {
+	width: 100%;
 	}
 
 /* Post edit screen. */

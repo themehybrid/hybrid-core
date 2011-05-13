@@ -24,20 +24,13 @@ function hybrid_meta_box_theme_add_about() {
 	$theme_data = hybrid_get_theme_data();
 
 	/* Adds the About box for the parent theme. */
-	add_meta_box( 'hybrid-core-about-theme', sprintf( __( 'About %1$s', $domain ), $theme_data['Title'] ), 'hybrid_meta_box_theme_display_about', hybrid_get_settings_page_name(), 'normal', 'high' );
+	add_meta_box( 'hybrid-core-about-theme', sprintf( __( 'About %1$s', $domain ), $theme_data['Title'] ), 'hybrid_meta_box_theme_display_about', hybrid_get_settings_page_name(), 'side', 'high' );
 
 	/* If the user is using a child theme, add an About box for it. */
 	if ( is_child_theme() ) {
 		$child_data = hybrid_get_theme_data( 'stylesheet' );
-		add_meta_box( 'hybrid-core-about-child', sprintf( __( 'About %1$s', $domain ), $child_data['Title'] ), 'hybrid_meta_box_theme_display_about', hybrid_get_settings_page_name(), 'normal', 'high' );
+		add_meta_box( 'hybrid-core-about-child', sprintf( __( 'About %1$s', $domain ), $child_data['Title'] ), 'hybrid_meta_box_theme_display_about', hybrid_get_settings_page_name(), 'side', 'high' );
 	}
-}
-
-/**
- * @since 0.7.0
- * @deprecated 1.2.0
- */
-function hybrid_about_theme_meta_box() {
 }
 
 /**
@@ -65,16 +58,36 @@ function hybrid_meta_box_theme_display_about( $object, $box ) {
 
 	<table class="form-table">
 		<tr>
-			<th><?php _e( 'Theme:', $domain ); ?></th>
-			<td><a href="<?php echo $theme_data['URI']; ?>" title="<?php echo $theme_data['Title']; ?>"><?php echo $theme_data['Title']; ?> <?php echo $theme_data['Version']; ?></a></td>
+			<th>
+				<?php _e( 'Theme:', $domain ); ?>
+			</th>
+			<td>
+				<a href="<?php echo $theme_data['URI']; ?>" title="<?php echo $theme_data['Title']; ?>"><?php echo $theme_data['Title']; ?></a>
+			</td>
 		</tr>
 		<tr>
-			<th><?php _e( 'Author:', $domain ); ?></th>
-			<td><?php echo $theme_data['Author']; ?></td>
+			<th>
+				<?php _e( 'Version:', $domain ); ?>
+			</th>
+			<td>
+				<?php echo $theme_data['Version']; ?>
+			</td>
 		</tr>
 		<tr>
-			<th><?php _e( 'Description:', $domain ); ?></th>
-			<td><?php echo $theme_data['Description']; ?></td>
+			<th>
+				<?php _e( 'Author:', $domain ); ?>
+			</th>
+			<td>
+				<?php echo $theme_data['Author']; ?>
+			</td>
+		</tr>
+		<tr>
+			<th>
+				<?php _e( 'Description:', $domain ); ?>
+			</th>
+			<td>
+				<?php echo $theme_data['Description']; ?>
+			</td>
 		</tr>
 	</table><!-- .form-table --><?php
 }

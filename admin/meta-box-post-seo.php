@@ -22,8 +22,10 @@ add_action( 'save_post', 'hybrid_meta_box_post_save_seo', 10, 2 );
  */
 function hybrid_meta_box_post_add_seo() {
 
+	/* Get all available public post types. */
 	$post_types = get_post_types( array( 'public' => true ), 'objects' );
 
+	/* Loop through each post type, adding the meta box for each type's post editor screen. */
 	foreach ( $post_types as $type )
 		add_meta_box( 'hybrid-core-post-seo', sprintf( __( '%s SEO', hybrid_get_textdomain() ), $type->labels->singular_name ), 'hybrid_meta_box_post_display_seo', $type->name, 'normal', 'high' );
 }
@@ -35,7 +37,6 @@ function hybrid_meta_box_post_add_seo() {
  */
 function hybrid_meta_box_post_display_seo( $object, $box ) {
 
-	$prefix = hybrid_get_prefix();
 	$domain = hybrid_get_textdomain(); ?>
 
 	<input type="hidden" name="hybrid-core-post-meta-box-seo" value="<?php echo wp_create_nonce( basename( __FILE__ ) ); ?>" />

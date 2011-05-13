@@ -1,12 +1,13 @@
 <?php
 /**
  * Handles the display and functionality of the theme settings page. This provides the needed hooks and
- * meta box calls for developers to create any number of theme settings needed.
+ * meta box calls for developers to create any number of theme settings needed. This file is only loaded if 
+ * the theme supports the 'hybrid-core-theme-settings' feature.
  *
  * Provides the ability for developers to add custom meta boxes to the theme settings page by using the 
- * add_meta_box() function.  Developers should hook their meta box registration function to 'admin_menu' 
- * and register the meta box for 'appearance_page-theme-settings'. If data needs to be saved, devs can 
- * use the '$prefix_update_settings_page' action hook to save their data.
+ * add_meta_box() function.  Developers should register their meta boxes on the 'add_meta_boxes' hook 
+ * and register the meta box for 'appearance_page-theme-settings'.  To validate/sanitize data from 
+ * custom settings, devs should use the 'sanitize_option_{$prefix}_theme_settings' filter hook.
  *
  * @package HybridCore
  * @subpackage Admin
@@ -33,24 +34,29 @@ function hybrid_settings_page_init() {
 	$prefix = hybrid_get_prefix();
 	$domain = hybrid_get_textdomain();
 
+	/* If no settings are available, add the default settings to the database. */
+	if ( false === get_option( "{$prefix}_theme_settings" ) )
+		add_option( "{$prefix}_theme_settings", hybrid_get_default_theme_settings(), '', 'yes' );
+
 	/* Register theme settings. */
-	register_setting( "{$prefix}_theme_settings", "{$prefix}_theme_settings", 'hybrid_save_theme_settings' );
+	register_setting(
+		"{$prefix}_theme_settings", // Options group.
+		"{$prefix}_theme_settings", // Database option.
+		'hybrid_save_theme_settings' // Validation callback function.
+	);
 
 	/* Create the theme settings page. */
 	$hybrid->settings_page = add_theme_page( sprintf( __( '%1$s Theme Settings', $domain ), $theme_data['Name'] ), sprintf( __( '%1$s Settings', $domain ), $theme_data['Name'] ), apply_filters( "{$prefix}_settings_capability", 'edit_theme_options' ), 'theme-settings', 'hybrid_settings_page' );
 
-	/* Make sure the settings are saved. */
-	add_action( "load-{$hybrid->settings_page}", 'hybrid_load_settings_page' );
-
 	/* Load the theme settings meta boxes. */
-	add_action( "load-{$hybrid->settings_page}", 'hybrid_load_theme_settings_meta_boxes' );
+	add_action( "load-{$hybrid->settings_page}", 'hybrid_load_settings_page_meta_boxes' );
 
 	/* Create a hook for adding meta boxes. */
-	add_action( "load-{$hybrid->settings_page}", 'hybrid_add_meta_boxes' );
+	add_action( "load-{$hybrid->settings_page}", 'hybrid_settings_page_add_meta_boxes' );
 
-	/* Load the JavaScript and stylehsheets needed for the theme settings. */
+	/* Load the JavaScript and stylesheets needed for the theme settings. */
 	add_action( 'admin_enqueue_scripts', 'hybrid_settings_page_enqueue_script' );
-	add_action( "load-{$hybrid->settings_page}", 'hybrid_admin_enqueue_style' );
+	add_action( 'admin_enqueue_scripts', 'hybrid_settings_page_enqueue_style' );
 	add_action( "admin_head-{$hybrid->settings_page}", 'hybrid_settings_page_load_scripts' );
 }
 
@@ -73,7 +79,7 @@ function hybrid_get_settings_page_name() {
  *
  * @since 1.2.0
  */
-function hybrid_add_meta_boxes() {
+function hybrid_settings_page_add_meta_boxes() {
 
 	do_action( 'add_meta_boxes', hybrid_get_settings_page_name(), hybrid_get_theme_data() );
 }
@@ -84,7 +90,7 @@ function hybrid_add_meta_boxes() {
  *
  * @since 1.2.0
  */
-function hybrid_load_theme_settings_meta_boxes() {
+function hybrid_load_settings_page_meta_boxes() {
 
 	/* Load the 'About' meta box. */
 	require_once( trailingslashit( HYBRID_ADMIN ) . 'meta-box-theme-about.php' );
@@ -100,6 +106,7 @@ function hybrid_load_theme_settings_meta_boxes() {
  *
  * @since 0.7.0
  * @param array $settings An array of the theme settings passed by the Settings API for validation.
+ * @return array $settings The array of theme settings.
  */
 function hybrid_save_theme_settings( $settings ) {
 
@@ -141,30 +148,6 @@ function hybrid_get_default_theme_settings() {
 }
 
 /**
- * Saves the default theme settings in the {$wpdb->prefix}_options if none have been added.  The 
- * settings are given a unique name depending on the theme directory.  They are always saved as 
- * {$prefix}_theme_settings in the database. 
- *
- * @since 0.7.0
- */
-function hybrid_load_settings_page() {
-	$prefix = hybrid_get_prefix();
-
-	/* Get theme settings from the database. */
-	$settings = get_option( "{$prefix}_theme_settings" );
-
-	/* If no settings are available, add the default settings to the database. */
-	if ( false === $settings ) {
-		$settings = hybrid_get_default_theme_settings();
-		add_option( "{$prefix}_theme_settings", $settings, '', 'yes' );
-
-		/* Redirect the page so that the settings are reflected on the settings page. */
-		wp_redirect( admin_url( 'themes.php?page=theme-settings' ) );
-		exit;
-	}
-}
-
-/**
  * Displays the theme settings page and calls do_meta_boxes() to allow additional settings
  * meta boxes to be added to the page.
  *
@@ -196,13 +179,11 @@ function hybrid_settings_page() {
 
 				<div class="metabox-holder">
 					<div class="post-box-container column-1 normal"><?php do_meta_boxes( hybrid_get_settings_page_name(), 'normal', null ); ?></div>
-					<div class="post-box-container column-2 advanced"><?php do_meta_boxes( hybrid_get_settings_page_name(), 'advanced', null ); ?></div>
-					<div class="post-box-container column-3 side"><?php do_meta_boxes( hybrid_get_settings_page_name(), 'side', null ); ?></div>
+					<div class="post-box-container column-2 side"><?php do_meta_boxes( hybrid_get_settings_page_name(), 'side', null ); ?></div>
+					<div class="post-box-container column-3 advanced"><?php do_meta_boxes( hybrid_get_settings_page_name(), 'advanced', null ); ?></div>
 				</div>
 
-				<p class="submit" style="clear: both;">
-					<input type="submit" name="Submit"  class="button-primary" value="<?php esc_attr_e( 'Update Settings', $domain ); ?>" />
-				</p><!-- .submit -->
+				<?php submit_button( esc_attr__( 'Update Settings', $domain ) ); ?>
 
 			</form>
 
@@ -218,7 +199,7 @@ function hybrid_settings_page() {
  * @since 1.0.0
  */
 function hybrid_settings_field_id( $setting ) {
-	return hybrid_get_prefix() . "_theme_settings-{$setting}";
+	return hybrid_get_prefix() . '_theme_settings-' . sanitize_html_class( $setting );
 }
 
 /**
@@ -229,6 +210,17 @@ function hybrid_settings_field_id( $setting ) {
  */
 function hybrid_settings_field_name( $setting ) {
 	return hybrid_get_prefix() . "_theme_settings[{$setting}]";
+}
+
+/**
+ * Loads the Stylesheet files required for the theme settings page.
+ *
+ * @since 1.2.0
+ */
+function hybrid_settings_page_enqueue_style( $hook_suffix ) {
+
+	if ( $hook_suffix == hybrid_get_settings_page_name() )
+		wp_enqueue_style( 'hybrid-core-admin', trailingslashit( HYBRID_CSS ) . 'admin.css', false, 1.2, 'screen' );
 }
 
 /**

@@ -25,13 +25,6 @@ function hybrid_meta_box_theme_add_footer() {
 }
 
 /**
- * @since 0.7.0
- * @deprecated 1.2.0
- */
-function hybrid_footer_settings_meta_box() {
-}
-
-/**
  * Creates a settings box that allows users to customize their footer. A basic textarea is given that
  * allows HTML and shortcodes to be input.
  *
@@ -40,20 +33,19 @@ function hybrid_footer_settings_meta_box() {
 function hybrid_meta_box_theme_display_footer() {
 	$domain = hybrid_get_textdomain(); ?>
 
-	<table class="form-table">
-		<tr>
-			<th><label for="<?php echo hybrid_settings_field_id( 'footer_insert' ); ?>"><?php _e( 'Footer Insert:', $domain ); ?></label></th>
-			<td>
-				<p><span class="description"><?php _e( 'You can add custom <acronym title="Hypertext Markup Language">HTML</acronym> and/or shortcodes, which will be automatically inserted into your theme.', $domain ); ?></span></p>
+	<p>
+		<span class="description"><?php _e( 'You can add custom <acronym title="Hypertext Markup Language">HTML</acronym> and/or shortcodes, which will be automatically inserted into your theme.', $domain ); ?></span>
+	</p>
 
-				<p><textarea id="<?php echo hybrid_settings_field_id( 'footer_insert' ); ?>" name="<?php echo hybrid_settings_field_name( 'footer_insert' ); ?>" cols="60" rows="5" style="width: 98%;"><?php echo wp_htmledit_pre( stripslashes( hybrid_get_setting( 'footer_insert' ) ) ); ?></textarea></p>
+	<p>
+		<textarea id="<?php echo hybrid_settings_field_id( 'footer_insert' ); ?>" name="<?php echo hybrid_settings_field_name( 'footer_insert' ); ?>" cols="60" rows="5"><?php echo wp_htmledit_pre( stripslashes( hybrid_get_setting( 'footer_insert' ) ) ); ?></textarea>
+	</p>
 
-				<?php if ( current_theme_supports( 'hybrid-core-shortcodes' ) ) { ?>
-					<p><?php printf( __( 'Shortcodes: %s', $domain ), '<code>[the-year]</code>, <code>[site-link]</code>, <code>[wp-link]</code>, <code>[theme-link]</code>, <code>[child-link]</code>, <code>[loginout-link]</code>, <code>[query-counter]</code>' ); ?></p>
-				<?php } ?>
-			</td>
-		</tr>
-	</table><!-- .form-table --><?php
+	<?php if ( current_theme_supports( 'hybrid-core-shortcodes' ) ) { ?>
+		<p>
+			<?php printf( __( 'Shortcodes: %s', $domain ), '<code>[the-year]</code>, <code>[site-link]</code>, <code>[wp-link]</code>, <code>[theme-link]</code>, <code>[child-link]</code>, <code>[loginout-link]</code>, <code>[query-counter]</code>' ); ?>
+		</p>
+	<?php }
 }
 
 /**
