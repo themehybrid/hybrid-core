@@ -16,14 +16,14 @@
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * @package GetTheImage
- * @version 0.7
+ * @version 0.7.0
  * @author Justin Tadlock <justin@justintadlock.com>
  * @copyright Copyright (c) 2008 - 2011, Justin Tadlock
  * @link http://justintadlock.com/archives/2008/05/27/get-the-image-wordpress-plugin
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
-/* Adds theme support for post images. */
+/* Adds theme support for WordPress 'featured images'. */
 add_theme_support( 'post-thumbnails' );
 
 /* Delete the cache when a post or post metadata is updated. */
@@ -41,7 +41,7 @@ add_action( 'added_post_meta', 'get_the_image_delete_cache_by_meta', 10, 2 );
  * 'image_scan', 'callback', and 'default_image'.
  *
  * @since 0.1.0
- * @global $post The current post's DB object.
+ * @global $post The current post's database object.
  * @param array $args Arguments for how to load and display the image.
  * @return string|array The HTML for the image. | Image attributes in an array.
  */
@@ -120,7 +120,7 @@ function get_the_image( $args = array() ) {
 		if ( empty( $image ) && !empty( $image_scan ) )
 			$image = get_the_image_by_scan( $args );
 
-		/* If no image found and a callback function was given. */
+		/* If no image found and a callback function was given. Callback function must pass back array of <img> attributes. */
 		if ( empty( $image ) && !is_null( $callback ) && function_exists( $callback ) )
 			$image = call_user_func( $callback, $args );
 
@@ -135,12 +135,16 @@ function get_the_image( $args = array() ) {
 			if ( !empty( $meta_key_save ) )
 				get_the_image_meta_key_save( $args, $image['src'] );
 
+			/* Format the image HTML. */
 			$image = get_the_image_format( $args, $image );
 
+			/* Set the image cache for the specific post. */
 			$image_cache[$key] = $image;
 			wp_cache_set( $post_id, $image_cache, 'get_the_image' );
 		}
 	}
+
+	/* If an image was already cached for the post and arguments, use it. */
 	else {
 		$image = $image_cache[$key];
 	}
@@ -150,12 +154,17 @@ function get_the_image( $args = array() ) {
 
 	/* If $format is set to 'array', return an array of image attributes. */
 	if ( 'array' == $format ) {
+
+		/* Get the image attributes. */
 		$atts = wp_kses_hair( $image, array( 'http' ) );
 
+		/* Loop through the image attributes and add them in key/value pairs for the return array. */
 		foreach ( $atts as $att )
 			$out[$att['name']] = $att['value'];
 
 		$out['url'] = $out['src']; // @deprecated 0.5 Use 'src' instead of 'url'.
+
+		/* Return the array of attributes. */
 		return $out;
 	}
 
@@ -175,8 +184,8 @@ function get_the_image( $args = array() ) {
  * is found, $image is set and the loop breaks.  If an image is found, it is returned.
  *
  * @since 0.7.0
- * @param array $args
- * @return array|bool
+ * @param array $args Arguments for how to load and display the image.
+ * @return array|bool Array of image attributes. | False if no image is found.
  */
 function get_the_image_by_meta_key( $args = array() ) {
 
@@ -215,8 +224,8 @@ function get_the_image_by_meta_key( $args = array() ) {
  * later added in the display_the_image() function.
  *
  * @since 0.7.0
- * @param array $args
- * @return array|bool
+ * @param array $args Arguments for how to load and display the image.
+ * @return array|bool Array of image attributes. | False if no image is found.
  */
 function get_the_image_by_post_thumbnail( $args = array() ) {
 
@@ -245,8 +254,8 @@ function get_the_image_by_post_thumbnail( $args = array() ) {
  * attachments are found, loop through each.  The loop only breaks once $order_of_image is reached.
  *
  * @since 0.7.0
- * @param array $args
- * @return array|bool
+ * @param array $args Arguments for how to load and display the image.
+ * @return array|bool Array of image attributes. | False if no image is found.
  */
 function get_the_image_by_attachment( $args = array() ) {
 
@@ -286,8 +295,8 @@ function get_the_image_by_attachment( $args = array() ) {
  * if using large images within posts, better to use the other options.
  *
  * @since 0.7.0
- * @param array $args
- * @return array|bool
+ * @param array $args Arguments for how to load and display the image.
+ * @return array|bool Array of image attributes. | False if no image is found.
  */
 function get_the_image_by_scan( $args = array() ) {
 
@@ -306,8 +315,8 @@ function get_the_image_by_scan( $args = array() ) {
  * Not used with get_the_image() by default.
  *
  * @since 0.7.0
- * @param array $args
- * @return array
+ * @param array $args Arguments for how to load and display the image.
+ * @return array|bool Array of image attributes. | False if no image is found.
  */
 function get_the_image_by_default( $args = array() ) {
 	return array( 'src' => $args['default_image'] );
@@ -318,8 +327,8 @@ function get_the_image_by_default( $args = array() ) {
  * only be called if there is an image to display, but will handle it if not.
  *
  * @since 0.7.0
- * @param array $args
- * @param array $image Array of image info ($image, $classes, $alt, $caption).
+ * @param array $args Arguments for how to load and display the image.
+ * @param array $image Array of image attributes ($image, $classes, $alt, $caption).
  * @return string $image Formatted image (w/link to post if the option is set).
  */
 function get_the_image_format( $args = array(), $image = false ) {
@@ -379,8 +388,8 @@ function get_the_image_format( $args = array(), $image = false ) {
  * of expensive scans of the content when using the image scan feature.
  *
  * @since 0.6.0
- * @param array $args Parameters for what image to get.
- * @param array $image Array of image info ($image, $classes, $alt, $caption).
+ * @param array $args Arguments for how to load and display the image.
+ * @param array $image Array of image attributes ($image, $classes, $alt, $caption).
  */
 function get_the_image_meta_key_save( $args = array(), $image = array() ) {
 
@@ -420,8 +429,6 @@ function get_the_image_delete_cache_by_meta( $meta_id, $post_id ) {
 }
 
 /**
- * Get the image with a link to the post.  Use get_the_image() instead.
- *
  * @since 0.1.0
  * @deprecated 0.3.0
  */
