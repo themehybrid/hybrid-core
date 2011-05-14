@@ -89,7 +89,7 @@ function breadcrumb_trail( $args = array() ) {
 	}
 
 	/* Allow developers to filter the breadcrumb trail HTML. */
-	$breadcrumb = apply_filters( 'breadcrumb_trail', $breadcrumb );
+	$breadcrumb = apply_filters( 'breadcrumb_trail', $breadcrumb, $args );
 
 	/* Output the breadcrumb. */
 	if ( $args['echo'] )
@@ -338,7 +338,7 @@ function breadcrumb_trail_get_items( $args = array() ) {
 		$trail['trail_end'] = __( '404 Not Found', $textdomain );
 
 	/* Allow devs to step in and filter the $trail array. */
-	return apply_filters( 'breadcrumb_trail_items', $trail );
+	return apply_filters( 'breadcrumb_trail_items', $trail, $args );
 }
 
 /**
