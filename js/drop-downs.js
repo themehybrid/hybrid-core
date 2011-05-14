@@ -49,29 +49,5 @@ $j(document).ready(
 			dropShadows: false
 			}
 		);
-
-		/* @deprecated 0.8 Page and cat nav drop-downs. */
-		$j('#page-nav ul.menu').supersubs( {
-			minWidth: 12,
-			maxWidth: 27,
-			extraWidth: 1
-			}
-		).superfish( {
-			delay: 100,
-			animation: { opacity: 'show', height: 'show' },
-			dropShadows: false
-			}
-		);
-		$j('#cat-nav ul.menu').supersubs( {
-			minWidth: 12,
-			maxWidth: 27,
-			extraWidth: 1
-			}
-		).superfish( {
-			delay: 100,
-			animation: { opacity: 'show', height: 'show' },
-			dropShadows: false
-			}
-		);
 	}
 );
