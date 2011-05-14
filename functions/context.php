@@ -152,7 +152,7 @@ function hybrid_entry_class( $class = '', $post_id = null ) {
 			$classes[] = 'has-excerpt';
 
 		/* Post format. */
-		if ( current_theme_supports( 'post-formats' ) ) {
+		if ( current_theme_supports( 'post-formats' ) && post_type_supports( $post->post_type, 'post-formats' ) ) {
 			$post_format = get_post_format( $post_id );
 			$classes[] = ( ( empty( $post_format ) || is_wp_error( $post_format ) ) ? 'format-standard' : "format-{$post_format}" );
 		}
@@ -292,7 +292,7 @@ function hybrid_body_class( $class = '' ) {
 			$classes[] = "{$wp_query->post->post_type}-template-{$template}";
 
 		/* Post format. */
-		if ( current_theme_supports( 'post-formats' ) ) {
+		if ( current_theme_supports( 'post-formats' ) && post_type_supports( $wp_query->post->post_type, 'post-formats' ) ) {
 			$post_format = get_post_format( $wp_query->post->ID );
 			$classes[] = ( ( empty( $post_format ) || is_wp_error( $post_format ) ) ? "{$wp_query->post->post_type}-format-standard" : "{$wp_query->post->post_type}-format-{$post_format}" );
 		}
