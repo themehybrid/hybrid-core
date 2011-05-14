@@ -1,0 +1,55 @@
+/**
+ * Dropdowns Stylesheet
+ * Sets up some default dropdown menu styles
+ * Style rules for both the page and category menus
+ *
+ * @since 0.5
+ * @package Hybrid
+ * @subpackage CSS
+ */
+
+/* Drop-down styles. */
+div.menu ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	line-height: 1.0;
+	}
+div.menu ul ul {
+	position: absolute;
+	top: -999em;
+	width: 10em;
+	}
+div.menu ul ul li {
+	width: 100%;
+	}
+div.menu li:hover {
+	visibility: inherit;
+	}
+div.menu li {
+	float: left;
+	position: relative;
+	}
+div.menu a {
+	display: block;
+	position: relative;
+	}
+div.menu li:hover ul, li.sfHover ul {
+	left: 0;
+	top: 2em;
+	z-index: 99;
+	}
+div.menu li:hover li ul, li.sfHover li ul {
+	top: -999em;
+	}
+div.menu li li:hover ul, li li.sfHover ul {
+	left: 10em;
+	top: 0;
+	}
+div.menu li li:hover li ul, li li.sfHover li ul {
+	top: -999em;
+	}
+div.menu li li li:hover ul, li li li.sfHover ul {
+	left: 10em;
+	top: 0;
+	}

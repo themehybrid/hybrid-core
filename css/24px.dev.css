@@ -221,7 +221,7 @@ ins, dfn {
 	border-bottom: 1px solid #666;
 	}
 
-del {
+del, s, strike {
 	text-decoration: line-through;
 	}
 
@@ -231,7 +231,6 @@ object {
 
 input, textarea {
 	font-size: 1em;
-	font-family: Georgia, Times, "Times New Roman", serif;
 	padding: 3px;
 	}
 
@@ -262,7 +261,9 @@ th, td {
 	}
 
 hr {
+	height: 1px;
 	margin-bottom: 24px;
+	background: #333;
 	}
 
 img.wp-smiley {
