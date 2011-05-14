@@ -11,87 +11,6 @@
  */
 
 /**
- * Old equivalent of hybrid_entry_class().
- *
- * @since 0.2
- * @deprecated 0.5 Use hybrid_entry_class() instead.
- */
-function hybrid_post_class( $deprecated = '' ) {
-	_deprecated_function( __FUNCTION__, '0.5', 'hybrid_entry_class()' );
-	hybrid_entry_class( $deprecated );
-}
-
-/**
- * Displays the category navigation menu.
- *
- * @deprecated 0.6 Child themes should manually add a category menu using wp_list_categories().
- * @internal This function needs to stay for the long haul (post-1.0).
- *
- * @since 0.1
- */
-function hybrid_cat_nav() {
-	_deprecated_function( __FUNCTION__, '0.6', 'wp_nav_menu()' );
-
-	echo "<div id='cat-navigation'>";
-
-	do_action( 'hybrid_before_cat_nav' );
-
-	echo apply_filters( 'hybrid_cat_nav', hybrid_category_menu( 'echo=0' ) );
-
-	do_action( 'hybrid_after_cat_nav' );
-
-	echo '</div>';
-}
-
-/**
- * Menu listing for categories.
- *
- * @deprecated 0.6 Themes should add menus with the wp_nav_menu() function.
- * @internal This function needs to stay for the long haul (post-1.0).
- *
- * @since 0.2.3
- * @uses wp_list_categories() Creates a list of the site's categories
- * @link http://codex.wordpress.org/Template_Tags/wp_list_categories
- * @param array $args
- */
-function hybrid_category_menu( $args = array() ) {
-	_deprecated_function( __FUNCTION__, '0.6', 'wp_nav_menu()' );
-
-	$defaults = array( 'menu_class' => 'cat-nav', 'style' => 'list', 'hide_empty' => 1, 'use_desc_for_title' => 0, 'depth' => 4, 'hierarchical' => true, 'echo' => 1 );
-	$args = wp_parse_args( apply_filters( 'hybrid_category_menu_args', $args ), $defaults );
-	extract( $args );
-
-	$args['title_li'] = false;
-	$args['echo'] = false;
-
-	$menu = str_replace( array( "\t", "\n", "\r" ), '', wp_list_categories( $args ) );
-	$menu = '<div id="' . $menu_class . '" class="' . $menu_class . '"><ul class="menu sf-menu">' . $menu . '</ul></div>';
-	$menu = apply_filters( 'hybrid_category_menu', $menu );
-
-	if ( $echo )
-		echo $menu;
-	else
-		return $menu;
-}
-
-/**
- * Loads the theme search form.
- *
- * @deprecated 0.6 Users should add get_search_form() whenever needed.
- * @since 0.1
- */
-function hybrid_search_form() {
-	_deprecated_function( __FUNCTION__, '0.6', 'get_search_form()' );
-
-	$search = apply_filters( 'hybrid_search_form', false );
-
-	if ( empty( $search ) )
-		get_search_form();
-	else
-		echo $search;
-}
-
-/**
  * After single posts but before the comments template.
  * @since 0.2
  * @deprecated 0.7
@@ -109,39 +28,6 @@ function hybrid_after_single() {
 function hybrid_after_page() {
 	_deprecated_function( __FUNCTION__, '0.7', "apply_atomic( 'after_singular' )" );
 	hybrid_after_singular();
-}
-
-/**
- * Displays the page navigation menu.
- * @since 0.1
- * @deprecated 0.8
- */
-function hybrid_page_nav() {
-	_deprecated_function( __FUNCTION__, '0.8', 'wp_nav_menu()' );
-
-	echo '<div id="navigation">';
-
-	do_atomic( 'before_page_nav' );
-
-	$args = array( 'show_home' => __( 'Home', hybrid_get_textdomain() ), 'menu_class' => 'page-nav', 'sort_column' => 'menu_order', 'depth' => 4, 'echo' => 0 );
-	$nav = str_replace( array( "\r", "\n", "\t" ), '', wp_page_menu( $args ) );
-
-	$nav = str_replace( '<div class="', '<div id="page-nav" class="', $nav );
-	echo preg_replace( '/<ul>/', '<ul class="menu sf-menu">', $nav, 1 );
-
-	do_atomic( 'after_page_nav' );
-
-	echo "\n\t</div><!-- #navigation -->\n";
-}
-
-/**
- * Check for widgets in widget-ready areas.
- * @since 0.2
- * @deprecated 0.6.1
- */
-function is_sidebar_active( $index = 1 ) {
-	_deprecated_function( __FUNCTION__, '0.6.1', 'is_active_sidebar()' );
-	return is_active_sidebar( $index );
 }
 
 /**
@@ -624,6 +510,30 @@ function hybrid_about_theme_meta_box() {
 }
 
 function hybrid_load_settings_page() {
+	hybrid_function_removed( __FUNCTION__ );
+}
+
+function hybrid_page_nav() {
+	hybrid_function_removed( __FUNCTION__ );
+}
+
+function hybrid_cat_nav() {
+	hybrid_function_removed( __FUNCTION__ );
+}
+
+function hybrid_category_menu() {
+	hybrid_function_removed( __FUNCTION__ );
+}
+
+function hybrid_search_form() {
+	hybrid_function_removed( __FUNCTION__ );
+}
+
+function hybrid_post_class() {
+	hybrid_function_removed( __FUNCTION__ );
+}
+
+function is_sidebar_active( $index = 1 ) {
 	hybrid_function_removed( __FUNCTION__ );
 }
 
