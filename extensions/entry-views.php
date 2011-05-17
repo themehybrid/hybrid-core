@@ -50,19 +50,19 @@ add_action( 'wp_ajax_nopriv_entry_views', 'entry_views_update_ajax' );
  * @since 0.1
  */
 function entry_views_load() {
-	global $wp_query, $entry_views;
+	global $entry_views;
 
 	/* Check if we're on a singular post view. */
 	if ( is_singular() ) {
 
 		/* Get the post object. */
-		$post = $wp_query->get_queried_object();
+		$post = get_queried_object();
 
 		/* Check if the post type supports the 'entry-views' feature. */
 		if ( post_type_supports( $post->post_type, 'entry-views' ) ) {
 
 			/* Set the post ID for later use because we wouldn't want a custom query to change this. */
-			$entry_views->post_id = $post->ID;
+			$entry_views->post_id = get_queried_object_id();
 
 			/* Enqueue the jQuery library. */
 			wp_enqueue_script( 'jquery' );
@@ -81,7 +81,6 @@ function entry_views_load() {
  * @since 0.1
  */
 function entry_views_update( $post_id = '' ) {
-	global $wp_query;
 
 	/* If we're on a singular view of a post, calculate the number of views. */
 	if ( !empty( $post_id ) ) {
@@ -108,10 +107,9 @@ function entry_views_update( $post_id = '' ) {
  * @param array $attr Attributes for use in the shortcode.
  */
 function entry_views_get( $attr = '' ) {
-	global $post;
 
 	/* Merge the defaults and the given attributes. */
-	$attr = shortcode_atts( array( 'before' => '', 'after' => '', 'post_id' => $post->ID ), $attr );
+	$attr = shortcode_atts( array( 'before' => '', 'after' => '', 'post_id' => get_the_ID() ), $attr );
 
 	/* Allow devs to override the meta key used. */
 	$meta_key = apply_filters( 'entry_views_meta_key', 'Views' );
