@@ -86,7 +86,11 @@ function theme_layouts_get_layout() {
  * @param int $post_id The ID of the post to get the layout for.
  */
 function get_post_layout( $post_id ) {
+
+	/* Get the post layout. */
 	$layout = get_post_meta( $post_id, apply_filters( 'theme_layouts_meta_key', 'Layout' ), true );
+
+	/* Return the layout if one is found.  Otherwise, return 'default'. */
 	return ( !empty( $layout ) ? $layout : 'default' );
 }
 
@@ -96,9 +100,28 @@ function get_post_layout( $post_id ) {
  * @since 0.2.0
  * @param int $post_id The ID of the post to set the layout for.
  * @param string $layout The name of the layout to set.
+ * @return book The return value of the update_post_meta() function.
  */
 function set_post_layout( $post_id, $layout ) {
-	update_post_meta( $post_id, apply_filters( 'theme_layouts_meta_key', 'Layout' ), $layout );
+	return update_post_meta( $post_id, apply_filters( 'theme_layouts_meta_key', 'Layout' ), $layout );
+}
+
+/**
+ * Checks if a specific post's layout matches that of the given layout.
+ *
+ * @since 0.3.0
+ * @param string $layout The name of the layout to check if the post has.
+ * @param int $post_id The ID of the post to check the layout for.
+ * @return bool Whether the given layout matches the post's layout.
+ */
+function has_post_layout( $layout, $post_id = '' ) {
+
+	/* If no post ID is given, use WP's get_the_ID() to get it and assume we're in the post loop. */
+	if ( empty( $post_id ) )
+		$post_id = get_the_ID();
+
+	/* Return true/false based on whether the layout matches. */
+	return ( $layout == get_post_layout( $post_id ) ? true : false );
 }
 
 /**
@@ -108,7 +131,11 @@ function set_post_layout( $post_id, $layout ) {
  * @param int $user_id The ID of the user to get the layout for.
  */
 function get_user_layout( $user_id ) {
+
+	/* Get the user layout. */
 	$layout = get_user_meta( $user_id, apply_filters( 'theme_layouts_meta_key', 'Layout' ), true );
+
+	/* Return the layout if one is found.  Otherwise, return 'default'. */
 	return ( !empty( $layout ) ? $layout : 'default' );
 }
 
@@ -118,9 +145,28 @@ function get_user_layout( $user_id ) {
  * @since 0.3.0
  * @param int $user_id The ID of the user to set the layout for.
  * @param string $layout The name of the layout to set.
+ * @return bool The return value of update_user_meta() function.
  */
 function set_user_layout( $user_id, $layout ) {
-	update_user_meta( $user_id, apply_filters( 'theme_layouts_meta_key', 'Layout' ), $layout );
+	return update_user_meta( $user_id, apply_filters( 'theme_layouts_meta_key', 'Layout' ), $layout );
+}
+
+/**
+ * Checks if a specific user's layout matches that of the given layout.
+ *
+ * @since 0.3.0
+ * @param string $layout The name of the layout to check if the user has.
+ * @param int $user_id The ID of the user to check the layout for.
+ * @return bool Whether the given layout matches the user's layout.
+ */
+function has_user_layout( $layout, $user_id = '' ) {
+
+	/* If no user ID is given, assume we're viewing an author archive page and get the user ID. */
+	if ( empty( $user_id ) )
+		$user_id = get_query_var( 'author' );
+
+	/* Return true/false based on whether the layout matches. */
+	return ( $layout == get_user_layout( $user_id ) ? true : false );
 }
 
 /**
