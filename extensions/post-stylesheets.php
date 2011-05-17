@@ -14,7 +14,7 @@
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * @package PostStylesheets
- * @version 0.2.0
+ * @version 0.2.1
  * @author Justin Tadlock <justin@justintadlock.com>
  * @copyright Copyright (c) 2010 - 2011, Justin Tadlock
  * @link http://justintadlock.com
@@ -36,7 +36,6 @@ add_action( 'admin_menu', 'post_stylesheets_create_meta_box' );
  * @since 0.1.0
  */
 function post_stylesheets_stylesheet_uri( $stylesheet_uri, $stylesheet_dir_uri ) {
-	global $wp_query;
 
 	/* Check if viewing a singular post. */
 	if ( is_singular() ) {
@@ -45,7 +44,7 @@ function post_stylesheets_stylesheet_uri( $stylesheet_uri, $stylesheet_dir_uri )
 		$meta_key = apply_filters( 'post_stylesheets_meta_key', 'Stylesheet' );
 
 		/* Get the post ID. */
-		$post_id = $wp_query->get_queried_object_id();
+		$post_id = get_queried_object_id();
 
 		/* Check if the user has set a value for the post stylesheet. */
 		$stylesheet = get_post_meta( $post_id, $meta_key, true );
