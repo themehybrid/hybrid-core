@@ -31,7 +31,6 @@
  * @return string Output of the breadcrumb menu.
  */
 function breadcrumb_trail( $args = array() ) {
-	global $wp_query;
 
 	/* Get the textdomain. */
 	$textdomain = breadcrumb_trail_textdomain();
@@ -50,8 +49,10 @@ function breadcrumb_trail( $args = array() ) {
 	);
 
 	/* Allow singular post views to have a taxonomy's terms prefixing the trail. */
-	if ( is_singular() )
-		$defaults["singular_{$wp_query->post->post_type}_taxonomy"] = false;
+	if ( is_singular() ) {
+		$post = get_queried_object();
+		$defaults["singular_{$post->post_type}_taxonomy"] = false;
+	}
 
 	/* Apply filters to the arguments. */
 	$args = apply_filters( 'breadcrumb_trail_args', $args );
@@ -109,7 +110,7 @@ function breadcrumb_trail( $args = array() ) {
  * @return array List of items to be shown in the trail.
  */
 function breadcrumb_trail_get_items( $args = array() ) {
-	global $wp_query, $wp_rewrite;
+	global $wp_rewrite;
 
 	/* Get the textdomain. */
 	$textdomain = breadcrumb_trail_textdomain();
@@ -130,7 +131,7 @@ function breadcrumb_trail_get_items( $args = array() ) {
 
 	/* If viewing the "home"/posts page. */
 	elseif ( is_home() ) {
-		$home_page = get_page( $wp_query->get_queried_object_id() );
+		$home_page = get_page( get_queried_object_id() );
 		$trail = array_merge( $trail, breadcrumb_trail_get_parents( $home_page->post_parent, '' ) );
 		$trail['trail_end'] = get_the_title( $home_page->ID );
 	}
@@ -139,8 +140,8 @@ function breadcrumb_trail_get_items( $args = array() ) {
 	elseif ( is_singular() ) {
 
 		/* Get singular post variables needed. */
-		$post = $wp_query->get_queried_object();
-		$post_id = absint( $wp_query->get_queried_object_id() );
+		$post = get_queried_object();
+		$post_id = absint( get_queried_object_id() );
 		$post_type = $post->post_type;
 		$parent = absint( $post->post_parent );
 
@@ -220,7 +221,7 @@ function breadcrumb_trail_get_items( $args = array() ) {
 		if ( is_tax() || is_category() || is_tag() ) {
 
 			/* Get some taxonomy and term variables. */
-			$term = $wp_query->get_queried_object();
+			$term = get_queried_object();
 			$taxonomy = get_taxonomy( $term->taxonomy );
 
 			/* Get the path to the term archive. Use this to determine if a page is present with it. */
