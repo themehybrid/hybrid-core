@@ -41,18 +41,20 @@ function hybrid_meta_robots() {
  * @since 0.3.3
  */
 function hybrid_meta_author() {
-	global $wp_query;
 
 	/* Set an empty $author variable. */
 	$author = '';
 
+	/* Get the queried object. */
+	$object = get_queried_object();
+
 	/* If viewing a singular post, get the post author's display name. */
 	if ( is_singular() )
-		$author = get_the_author_meta( 'display_name', $wp_query->post->post_author );
+		$author = get_the_author_meta( 'display_name', $object->post_author );
 
 	/* If viewing a user/author archive, get the user's display name. */
 	elseif ( is_author() )
-		$author = get_the_author_meta( 'display_name', $wp_query->get_queried_object_id() );
+		$author = get_the_author_meta( 'display_name', get_queried_object_id() );
 
 	/* If an author was found, wrap it in the proper HTML and escape the author name. */
 	if ( !empty( $author ) )
@@ -109,7 +111,6 @@ function hybrid_meta_revised() {
  * @since 0.2.3
  */
 function hybrid_meta_description() {
-	global $wp_query;
 
 	/* Set an empty $description variable. */
 	$description = '';
@@ -123,7 +124,7 @@ function hybrid_meta_description() {
 	elseif ( is_singular() ) {
 
 		/* Get the meta value for the 'Description' meta key. */
-		$description = get_post_meta( $wp_query->post->ID, 'Description', true );
+		$description = get_post_meta( get_queried_object_id(), 'Description', true );
 
 		/* If no description was found and viewing the site's front page, use the site's description. */
 		if ( empty( $description ) && is_front_page() )
@@ -131,7 +132,7 @@ function hybrid_meta_description() {
 
 		/* For all other singular views, get the post excerpt. */
 		elseif ( empty( $description ) )
-			$description = get_post_field( 'post_excerpt', $wp_query->post->ID );
+			$description = get_post_field( 'post_excerpt', get_queried_object_id() );
 	}
 
 	/* If viewing an archive page. */
@@ -177,7 +178,6 @@ function hybrid_meta_description() {
  * @since 0.2.3
  */
 function hybrid_meta_keywords() {
-	global $wp_query;
 
 	/* Set an empty $keywords variable. */
 	$keywords = '';
@@ -185,14 +185,17 @@ function hybrid_meta_keywords() {
 	/* If on a singular post and not a preview. */
 	if ( is_singular() && !is_preview() ) {
 
+		/* Get the queried post. */
+		$post = get_queried_object();
+
 		/* Get the meta value for the 'Keywords' meta key. */
-		$keywords = get_post_meta( $wp_query->post->ID, 'Keywords', true );
+		$keywords = get_post_meta( get_queried_object_id(), 'Keywords', true );
 
 		/* If no keywords were found. */
 		if ( empty( $keywords ) ) {
 
 			/* Get all taxonomies for the current post type. */
-			$taxonomies = get_object_taxonomies( $wp_query->post->post_type );
+			$taxonomies = get_object_taxonomies( $post->post_type );
 
 			/* If taxonomies wer found for the post type. */
 			if ( is_array( $taxonomies ) ) {
@@ -200,7 +203,7 @@ function hybrid_meta_keywords() {
 				/* Loop through the taxonomies, getting the terms for the current post. */
 				foreach ( $taxonomies as $tax ) {
 
-					if ( $terms = get_the_term_list( $wp_query->post->ID, $tax, '', ', ', '' ) )
+					if ( $terms = get_the_term_list( get_queried_object_id(), $tax, '', ', ', '' ) )
 						$keywords[] = $terms;
 				}
 

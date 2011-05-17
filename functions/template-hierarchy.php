@@ -130,10 +130,9 @@ function hybrid_user_template( $template ) {
  * @return string Full path to file.
  */
 function hybrid_taxonomy_template( $template ) {
-	global $wp_query;
 
 	/* Get the queried term object. */
-	$term = $wp_query->get_queried_object();
+	$term = get_queried_object();
 
 	/* Return the available templates. */
 	return locate_template( array( "taxonomy-{$term->taxonomy}-{$term->slug}.php", "taxonomy-{$term->taxonomy}.php", 'taxonomy.php', 'archive.php' ) );
@@ -152,12 +151,14 @@ function hybrid_taxonomy_template( $template ) {
  * @return string $template The theme post template after all templates have been checked for.
  */
 function hybrid_singular_template( $template ) {
-	global $wp_query;
 
 	$templates = array();
 
+	/* Get the queried post. */
+	$post = get_queried_object();
+
 	/* Check for a custom post template by custom field key '_wp_post_template'. */
-	$custom = get_post_meta( $wp_query->post->ID, "_wp_{$wp_query->post->post_type}_template", true );
+	$custom = get_post_meta( get_queried_object_id(), "_wp_{$post->post_type}_template", true );
 	if ( $custom )
 		$templates[] = $custom;
 
@@ -175,14 +176,14 @@ function hybrid_singular_template( $template ) {
 	else {
 
 		/* Add a post name (slug) template. */
-		$templates[] = "{$wp_query->post->post_type}-{$wp_query->post->post_name}.php";
+		$templates[] = "{$post->post_type}-{$post->post_name}.php";
 
 		/* Add a post ID template. */
-		$templates[] = "{$wp_query->post->post_type}-{$wp_query->post->ID}.php";
+		$templates[] = "{$post->post_type}-{$post->ID}.php";
 	}
 
 	/* Add a template based off the post type name. */
-	$templates[] = "{$wp_query->post->post_type}.php";
+	$templates[] = "{$post->post_type}.php";
 
 	/* Add a general template of singular.php. */
 	$templates[] = "singular.php";

@@ -25,13 +25,16 @@
  * @return array $hybrid->context Several contexts based on the current page.
  */
 function hybrid_get_context() {
-	global $wp_query, $hybrid;
+	global $hybrid;
 
 	/* If $hybrid->context has been set, don't run through the conditionals again. Just return the variable. */
 	if ( isset( $hybrid->context ) )
 		return $hybrid->context;
 
+	/* Set some variables for use within the function. */
 	$hybrid->context = array();
+	$object = get_queried_object();
+	$object_id = get_queried_object_id();
 
 	/* Front page of the site. */
 	if ( is_front_page() )
@@ -45,8 +48,8 @@ function hybrid_get_context() {
 	/* Singular views. */
 	elseif ( is_singular() ) {
 		$hybrid->context[] = 'singular';
-		$hybrid->context[] = "singular-{$wp_query->post->post_type}";
-		$hybrid->context[] = "singular-{$wp_query->post->post_type}-{$wp_query->post->ID}";
+		$hybrid->context[] = "singular-{$object->post_type}";
+		$hybrid->context[] = "singular-{$object->post_type}-{$object_id}";
 	}
 
 	/* Archive views. */
@@ -55,10 +58,9 @@ function hybrid_get_context() {
 
 		/* Taxonomy archives. */
 		if ( is_tax() || is_category() || is_tag() ) {
-			$term = $wp_query->get_queried_object();
 			$hybrid->context[] = 'taxonomy';
-			$hybrid->context[] = "taxonomy-{$term->taxonomy}";
-			$hybrid->context[] = "taxonomy-{$term->taxonomy}-" . sanitize_html_class( $term->slug, $term->term_id );
+			$hybrid->context[] = "taxonomy-{$object->taxonomy}";
+			$hybrid->context[] = "taxonomy-{$object->taxonomy}-" . sanitize_html_class( $object->slug, $object->term_id );
 		}
 
 		/* Post type archives. */
@@ -70,7 +72,7 @@ function hybrid_get_context() {
 		/* User/author archives. */
 		elseif ( is_author() ) {
 			$hybrid->context[] = 'user';
-			$hybrid->context[] = 'user-' . sanitize_html_class( get_the_author_meta( 'user_nicename', get_query_var( 'author' ) ), $wp_query->get_queried_object_id() );
+			$hybrid->context[] = 'user-' . sanitize_html_class( get_the_author_meta( 'user_nicename', $object_id ), $object_id );
 		}
 
 		/* Time/Date archives. */
@@ -286,15 +288,18 @@ function hybrid_body_class( $class = '' ) {
 	/* Singular post (post_type) classes. */
 	if ( is_singular() ) {
 
+		/* Get the queried post object. */
+		$post = get_queried_object();
+
 		/* Checks for custom template. */
-		$template = str_replace( array ( "{$wp_query->post->post_type}-template-", "{$wp_query->post->post_type}-", '.php' ), '', get_post_meta( $wp_query->post->ID, "_wp_{$wp_query->post->post_type}_template", true ) );
+		$template = str_replace( array ( "{$post->post_type}-template-", "{$post->post_type}-", '.php' ), '', get_post_meta( get_queried_object_id(), "_wp_{$post->post_type}_template", true ) );
 		if ( !empty( $template ) )
-			$classes[] = "{$wp_query->post->post_type}-template-{$template}";
+			$classes[] = "{$post->post_type}-template-{$template}";
 
 		/* Post format. */
-		if ( current_theme_supports( 'post-formats' ) && post_type_supports( $wp_query->post->post_type, 'post-formats' ) ) {
-			$post_format = get_post_format( $wp_query->post->ID );
-			$classes[] = ( ( empty( $post_format ) || is_wp_error( $post_format ) ) ? "{$wp_query->post->post_type}-format-standard" : "{$wp_query->post->post_type}-format-{$post_format}" );
+		if ( current_theme_supports( 'post-formats' ) && post_type_supports( $post->post_type, 'post-formats' ) ) {
+			$post_format = get_post_format( get_queried_object_id() );
+			$classes[] = ( ( empty( $post_format ) || is_wp_error( $post_format ) ) ? "{$post->post_type}-format-standard" : "{$post->post_type}-format-{$post_format}" );
 		}
 
 		/* Attachment mime types. */
@@ -348,9 +353,8 @@ function hybrid_document_title() {
 
 	/* If viewing the posts page or a singular post. */
 	elseif ( is_home() || is_singular() ) {
-		$post_id = $wp_query->get_queried_object_id();
 
-		$doctitle = get_post_meta( $post_id, 'Title', true );
+		$doctitle = get_post_meta( get_queried_object_id(), 'Title', true );
 
 		if ( empty( $doctitle ) && is_front_page() )
 			$doctitle = get_bloginfo( 'name' ) . $separator . ' ' . get_bloginfo( 'description' );
