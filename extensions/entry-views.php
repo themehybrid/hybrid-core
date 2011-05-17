@@ -26,7 +26,7 @@
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * @package EntryViews
- * @version 0.1.1
+ * @version 0.1.2
  * @author Justin Tadlock <justin@justintadlock.com>
  * @copyright Copyright (c) 2010, Justin Tadlock
  * @link http://justintadlock.com
