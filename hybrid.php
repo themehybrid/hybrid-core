@@ -250,6 +250,9 @@ class Hybrid {
 
 		/* Load the Post Stylesheets extension if supported. */
 		require_if_theme_supports( 'post-stylesheets', trailingslashit( HYBRID_EXTENSIONS ) . 'post-stylesheets.php' );
+
+		/* Load the "Lowercase p, Dangit!" extension if supported. */
+		require_if_theme_supports( 'lowercase-p-dangit', trailingslashit( HYBRID_EXTENSIONS ) . 'lowercase-p-dangit.php' );
 	}
 
 	/**
