@@ -3,8 +3,9 @@
  * Lowercase p, Dangit! - Fixes the capital_P_dangit() WordPress function.
  *
  * In WordPress 3.0, the capital_P_dangit() function was added to the WordPress core source code, effectively 
- * breaking blogs and published content.  This script removes this filter completely and gives control of content 
- * back to the users of the WordPress software.
+ * breaking published content.  The WordPress core developers do not intend to fix this issue.  All attempts to do 
+ * so and patches have been thrown to the side.  This script removes this filter completely and gives control of 
+ * content back to the users of the WordPress software.
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the GNU 
  * General Public License version 2, as published by the Free Software Foundation.  You may NOT assume 
