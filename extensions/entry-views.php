@@ -26,12 +26,15 @@
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * @package EntryViews
- * @version 0.1.2
+ * @version 0.2.0
  * @author Justin Tadlock <justin@justintadlock.com>
- * @copyright Copyright (c) 2010, Justin Tadlock
+ * @copyright Copyright (c) 2010 - 2011, Justin Tadlock
  * @link http://justintadlock.com
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
+
+/* Add post type support for 'entry-views'. */
+add_action( 'init', 'entry_views_post_type_support' );
 
 /* Add the [entry-views] shortcode. */
 add_shortcode( 'entry-views', 'entry_views_get' );
@@ -44,10 +47,28 @@ add_action( 'wp_ajax_entry_views', 'entry_views_update_ajax' );
 add_action( 'wp_ajax_nopriv_entry_views', 'entry_views_update_ajax' );
 
 /**
+ * Adds support for 'entry-views' to the 'post', 'page', and 'attachment' post types (default WordPress 
+ * post types).  For all other post types, the theme should explicitly register support for this feature.
+ *
+ * @since 0.2.0
+ */
+function entry_views_post_type_support() {
+
+	/* Add support for entry-views to the 'post' post type. */
+	add_post_type_support( 'post', array( 'entry-views' ) );
+
+	/* Add support for entry-views to the 'page' post type. */
+	add_post_type_support( 'page', array( 'entry-views' ) );
+
+	/* Add support for entry-views to the 'attachment' post type. */
+	add_post_type_support( 'attachment', array( 'entry-views' ) );
+}
+
+/**
  * Checks if we're on a singular post view and if the current post type supports the 'entry-views'
  * extension.  If so, set the $post_id variable and load the needed JavaScript.
  *
- * @since 0.1
+ * @since 0.1.0
  */
 function entry_views_load() {
 	global $entry_views;
@@ -78,7 +99,7 @@ function entry_views_load() {
  * the number of views per post.  By default, the meta key is 'Views', but you can filter this with the 
  * 'entry_views_meta_key' hook.
  *
- * @since 0.1
+ * @since 0.1.0
  */
 function entry_views_update( $post_id = '' ) {
 
@@ -103,7 +124,7 @@ function entry_views_update( $post_id = '' ) {
  * Gets the number of views a specific post has.  It also doubles as a shortcode, which is called with the 
  * [entry-views] format.
  *
- * @since 0.1
+ * @since 0.1.0
  * @param array $attr Attributes for use in the shortcode.
  */
 function entry_views_get( $attr = '' ) {
@@ -125,7 +146,7 @@ function entry_views_get( $attr = '' ) {
  * Callback function hooked to 'wp_ajax_entry_views' and 'wp_ajax_nopriv_entry_views'.  It checks the
  * AJAX nonce and passes the given $post_id to the entry views update function.
  *
- * @since 0.1
+ * @since 0.1.0
  */
 function entry_views_update_ajax() {
 
@@ -145,7 +166,7 @@ function entry_views_update_ajax() {
  * Displays a small script that sends an AJAX request for the page.  It passes the $post_id to the AJAX 
  * callback function for updating the meta.
  *
- * @since 0.1
+ * @since 0.1.0
  */
 function entry_views_load_scripts() {
 	global $entry_views;

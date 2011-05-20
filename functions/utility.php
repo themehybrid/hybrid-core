@@ -20,14 +20,11 @@ add_action( 'init', 'hybrid_add_post_type_support' );
  */
 function hybrid_add_post_type_support() {
 
-	/* Add support for entry-views to the 'post' post type. */
-	add_post_type_support( 'post', array( 'entry-views' ) );
-
 	/* Add support for excerpts and entry-views to the 'page' post type. */
-	add_post_type_support( 'page', array( 'excerpt', 'entry-views' ) );
+	add_post_type_support( 'page', array( 'excerpt' ) );
 
 	/* Add support for comments, trackbacks, and entry-views to the 'attachment' post type. */
-	add_post_type_support( 'attachment', array( 'comments', 'trackbacks', 'entry-views' ) );
+	add_post_type_support( 'attachment', array( 'comments', 'trackbacks' ) );
 }
 
 /**
