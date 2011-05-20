@@ -151,6 +151,9 @@ class Hybrid {
 
 		/* Load the context-based functions. */
 		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'context.php' );
+
+		/* Load the bbPress functions. */
+		if ( class_exists( 'bbPress' ) ) require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'bbpress.php' );
 	}
 
 	/**

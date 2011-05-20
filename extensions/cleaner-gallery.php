@@ -15,9 +15,9 @@
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * @package CleanerGallery
- * @version 0.9.1
+ * @version 0.9.2
  * @author Justin Tadlock <justin@justintadlock.com>
- * @copyright Copyright (c) 2008 - 2010, Justin Tadlock
+ * @copyright Copyright (c) 2008 - 2011, Justin Tadlock
  * @link http://justintadlock.com/archives/2008/04/13/cleaner-wordpress-gallery-plugin
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */

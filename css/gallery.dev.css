@@ -1,5 +1,6 @@
 /**
  * Cleaner Gallery Stylesheet
+ * @version 0.9.2
  */
 
 .gallery {
@@ -23,6 +24,7 @@
 	padding: 0;
 	}
 .gallery .gallery-item .gallery-icon img {
+	width: auto;
 	max-width: 89%;
 	height: auto;
 	padding: 1%;
