@@ -215,7 +215,7 @@ function hybrid_settings_field_name( $setting ) {
 /**
  * Loads the Stylesheet files required for the theme settings page.
  *
- * @since 1.2.0
+ * @since 0.7.0
  */
 function hybrid_settings_page_enqueue_style( $hook_suffix ) {
 

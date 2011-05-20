@@ -41,15 +41,6 @@ function hybrid_comment_author() {
 }
 
 /**
- * Simply not used anymore.  But, the function name may come in handy later.
- * @since 0.1
- * @deprecated 1.0.0
- */
-function hybrid_enqueue_style() {
-	_deprecated_function( __FUNCTION__, '1.0.0', '' );
-}
-
-/**
  * This function creates all of the default theme settings and adds them to a single array.
  * @since 0.4
  * @deprecated 1.0.0
@@ -57,37 +48,6 @@ function hybrid_enqueue_style() {
 function hybrid_theme_settings() {
 	_deprecated_function( __FUNCTION__, '1.0.0', 'hybrid_get_default_theme_settings()' );
 	return apply_filters( hybrid_get_prefix() . '_settings_args', hybrid_get_default_theme_settings() );
-}
-
-/**
- * Loads the admin.css stylesheet for the theme settings page.
- * @since 0.7
- * @deprecated 1.0.0
- */
-function hybrid_settings_page_enqueue_style() {
-	_deprecated_function( __FUNCTION__, '1.0.0', 'hybrid_admin_enqueue_style()' );
-	hybrid_admin_enqueue_style();
-}
-
-/**
- * This function is for adding extra support for theme features to the theme.
- * @since 0.8
- * @deprecated 1.0.0
- */
-function hybrid_add_theme_support() {
-	_deprecated_function( __FUNCTION__, '1.0.0', 'add_theme_support()' );
-	add_theme_support( 'automatic-feed-links' );
-	add_theme_support( 'hybrid-core-theme-settings' );
-}
-
-/**
- * Per-post stylesheets.  Moved to the post-stylesheets.php extension.
- * @since 0.9
- * @deprecated 1.0.0
- */
-function hybrid_post_stylesheets( $deprecated_1 = '', $deprecated_2 = '') {
-	_deprecated_function( __FUNCTION__, '1.0.0', 'post_stylesheets_stylesheet_uri()' );
-	return post_stylesheets_stylesheet_uri( $deprecated_1, $deprecated_2 );
 }
 
 /**
@@ -405,6 +365,8 @@ add_action( 'check_admin_referer', 'hybrid_back_compat_update_settings' );
  * @deprecated 1.0.0
  */
 function hybrid_back_compat_update_settings( $action ) {
+	_deprecated_function( __FUNCTION__, '1.0.0' );
+
 	$prefix = hybrid_get_prefix();
 
 	if ( "{$prefix}_theme_settings-options" == $action )
@@ -533,7 +495,19 @@ function hybrid_post_class() {
 	hybrid_function_removed( __FUNCTION__ );
 }
 
-function is_sidebar_active( $index = 1 ) {
+function is_sidebar_active() {
+	hybrid_function_removed( __FUNCTION__ );
+}
+
+function hybrid_enqueue_style() {
+	hybrid_function_removed( __FUNCTION__ );
+}
+
+function hybrid_add_theme_support() {
+	hybrid_function_removed( __FUNCTION__ );
+}
+
+function hybrid_post_stylesheets() {
 	hybrid_function_removed( __FUNCTION__ );
 }
 
