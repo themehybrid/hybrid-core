@@ -219,6 +219,33 @@ function hybrid_format_hook( $tag, $context = '' ) {
 }
 
 /**
+ * Function for setting the content width of a theme.  This does not check if a content width has been set; it 
+ * simply overwrites whatever the content width is.
+ *
+ * @since 1.2.0
+ * @global int $content_width The width for the theme's content area.
+ * @param int $width Numeric value of the width to set.
+ */
+function hybrid_set_content_width( $width = '' ) {
+	global $content_width;
+
+	$content_width = absint( $width );
+}
+
+/**
+ * Function for getting the theme's content width.
+ *
+ * @since 1.2.0
+ * @global int $content_width The width for the theme's content area.
+ * @return int $content_width
+ */
+function hybrid_get_content_width() {
+	global $content_width;
+
+	return $content_width;
+}
+
+/**
  * Gets theme data and stores it in the global $hybrid variable.  By storing it, it can be accessed quickly without 
  * having to run through the get_theme_data() function again.
  *
