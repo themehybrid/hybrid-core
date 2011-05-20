@@ -203,7 +203,7 @@ function hybrid_entry_comments_link_shortcode( $attr ) {
 
 	$domain = hybrid_get_textdomain();
 	$comments_link = '';
-	$number = get_comments_number();
+	$number = doubleval( get_comments_number() );
 	$attr = shortcode_atts( array( 'zero' => __( 'Leave a response', $domain ), 'one' => __( '%1$s Response', $domain ), 'more' => __( '%1$s Responses', $domain ), 'css_class' => 'comments-link', 'none' => '', 'before' => '', 'after' => '' ), $attr );
 
 	if ( 0 == $number && !comments_open() && !pings_open() ) {
