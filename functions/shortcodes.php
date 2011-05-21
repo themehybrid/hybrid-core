@@ -336,7 +336,7 @@ function hybrid_comment_author_shortcode( $attr ) {
 	else
 		$output = '<cite class="fn">' . $author . '</cite>';
 
-	$output = '<div class="comment-author vcard">' . $attr['before'] . apply_filters( 'get_comment_author_link', $output ) . $attr['after'] . '</div><!-- .comment-author .vcard -->';
+	$output = '<span class="comment-author vcard">' . $attr['before'] . apply_filters( 'get_comment_author_link', $output ) . $attr['after'] . '</span><!-- .comment-author .vcard -->';
 
 	/* @deprecated 0.8. Create a custom shortcode instead of filtering hybrid_comment_author. */
 	return apply_filters( hybrid_get_prefix() . '_comment_author', $output );
