@@ -124,7 +124,7 @@ function hybrid_loginout_link_shortcode() {
  * @uses current_user_can() Checks if the current user can edit themes.
  */
 function hybrid_query_counter_shortcode() {
-	if ( current_user_can( 'edit_themes' ) )
+	if ( current_user_can( 'edit_theme_options' ) )
 		$out = sprintf( __( 'This page loaded in %1$s seconds with %2$s database queries.', hybrid_get_textdomain() ), timer_stop( 0, 3 ), get_num_queries() );
 	return $out;
 }
