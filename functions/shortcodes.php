@@ -325,7 +325,14 @@ function hybrid_comment_published_shortcode() {
 function hybrid_comment_author_shortcode( $attr ) {
 	global $comment;
 
-	$attr = shortcode_atts( array( 'before' => '', 'after' => '' ), $attr );
+	$attr = shortcode_atts(
+		array(
+			'before' => '',
+			'after' => '',
+			'tag' => 'span' // @deprecated 1.2.0 Back-compatibility. Please don't use this argument.
+		),
+		$attr
+	);
 
 	$author = esc_html( get_comment_author( $comment->comment_ID ) );
 	$url = esc_url( get_comment_author_url( $comment->comment_ID ) );
@@ -336,7 +343,7 @@ function hybrid_comment_author_shortcode( $attr ) {
 	else
 		$output = '<cite class="fn">' . $author . '</cite>';
 
-	$output = '<span class="comment-author vcard">' . $attr['before'] . apply_filters( 'get_comment_author_link', $output ) . $attr['after'] . '</span><!-- .comment-author .vcard -->';
+	$output = '<' . tag_escape( $attr['tag'] ) . ' class="comment-author vcard">' . $attr['before'] . apply_filters( 'get_comment_author_link', $output ) . $attr['after'] . '</' . tag_escape( $attr['tag'] ) . '><!-- .comment-author .vcard -->';
 
 	/* @deprecated 0.8. Create a custom shortcode instead of filtering hybrid_comment_author. */
 	return apply_filters( hybrid_get_prefix() . '_comment_author', $output );
