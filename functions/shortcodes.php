@@ -84,7 +84,7 @@ function hybrid_wp_link_shortcode() {
  * @uses get_theme_data() Gets theme (parent theme) information.
  */
 function hybrid_theme_link_shortcode() {
-	$data = get_theme_data( trailingslashit( TEMPLATEPATH ) . 'style.css' );
+	$data = hybrid_get_theme_data();
 	return '<a class="theme-link" href="' . esc_url( $data['URI'] ) . '" title="' . esc_attr( $data['Name'] ) . '"><span>' . esc_attr( $data['Name'] ) . '</span></a>';
 }
 
@@ -95,7 +95,7 @@ function hybrid_theme_link_shortcode() {
  * @uses get_theme_data() Gets theme (child theme) information.
  */
 function hybrid_child_link_shortcode() {
-	$data = get_theme_data( trailingslashit( STYLESHEETPATH ) . 'style.css' );
+	$data = hybrid_get_theme_data( 'stylesheet' );
 	return '<a class="child-link" href="' . esc_url( $data['URI'] ) . '" title="' . esc_attr( $data['Name'] ) . '"><span>' . esc_attr( $data['Name'] ) . '</span></a>';
 }
 
