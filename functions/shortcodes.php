@@ -345,8 +345,7 @@ function hybrid_comment_author_shortcode( $attr ) {
 
 	$output = '<' . tag_escape( $attr['tag'] ) . ' class="comment-author vcard">' . $attr['before'] . apply_filters( 'get_comment_author_link', $output ) . $attr['after'] . '</' . tag_escape( $attr['tag'] ) . '><!-- .comment-author .vcard -->';
 
-	/* @deprecated 0.8. Create a custom shortcode instead of filtering hybrid_comment_author. */
-	return apply_filters( hybrid_get_prefix() . '_comment_author', $output );
+	return $output;
 }
 
 /**
