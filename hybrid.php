@@ -226,21 +226,23 @@ class Hybrid {
 	 */
 	function extensions() {
 
-		/* Load the Breadcrumb Trail extension if supported. */
-		require_if_theme_supports( 'breadcrumb-trail', trailingslashit( HYBRID_EXTENSIONS ) . 'breadcrumb-trail.php' );
-
-		/* Load the Cleaner Caption extension if supported. */
-		require_if_theme_supports( 'cleaner-caption', trailingslashit( HYBRID_EXTENSIONS ) . 'cleaner-caption.php' );
+		/* Load the Breadcrumb Trail extension if supported and the plugin isn't active. */
+		if ( !function_exists( 'breadcrumb_trail' ) )
+			require_if_theme_supports( 'breadcrumb-trail', trailingslashit( HYBRID_EXTENSIONS ) . 'breadcrumb-trail.php' );
 
 		/* Load the Cleaner Gallery extension if supported and the plugin isn't active. */
 		if ( !function_exists( 'cleaner_gallery' ) )
 			require_if_theme_supports( 'cleaner-gallery', trailingslashit( HYBRID_EXTENSIONS ) . 'cleaner-gallery.php' );
 
+		/* Load the Get the Image extension if supported and the plugin isn't active. */
+		if ( !function_exists( 'get_the_image' ) )
+			require_if_theme_supports( 'get-the-image', trailingslashit( HYBRID_EXTENSIONS ) . 'get-the-image.php' );
+
+		/* Load the Cleaner Caption extension if supported. */
+		require_if_theme_supports( 'cleaner-caption', trailingslashit( HYBRID_EXTENSIONS ) . 'cleaner-caption.php' );
+
 		/* Load the Custom Field Series extension if supported. */
 		require_if_theme_supports( 'custom-field-series', trailingslashit( HYBRID_EXTENSIONS ) . 'custom-field-series.php' );
-
-		/* Load the Get the Image extension if supported. */
-		require_if_theme_supports( 'get-the-image', trailingslashit( HYBRID_EXTENSIONS ) . 'get-the-image.php' );
 
 		/* Load the Loop Pagination extension if supported. */
 		require_if_theme_supports( 'loop-pagination', trailingslashit( HYBRID_EXTENSIONS ) . 'loop-pagination.php' );
