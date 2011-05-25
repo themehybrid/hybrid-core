@@ -30,12 +30,12 @@ function hybrid_get_prefix() {
 }
 
 /**
- * Defines the theme textdomain. This allows the framework to recognize the proper textdomain 
- * of the theme. Theme developers building from the framework should use their template name 
- * (i.e., directory name) as their textdomain within template files.
+ * Defines the theme textdomain. This allows the framework to recognize the proper textdomain of the 
+ * parent theme. Theme developers building from the framework should use this function in their templates 
+ * to easily define the correct textdomain.
  *
  * @since 0.7.0
- * @uses get_template() Defines the theme textdomain based on the theme directory.
+ * @uses get_template() Defines the theme textdomain based on the template directory.
  * @global object $hybrid The global Hybrid object.
  * @return string $hybrid->textdomain The textdomain of the theme.
  */
@@ -50,6 +50,28 @@ function hybrid_get_textdomain() {
 }
 
 /**
+ * Returns the textdomain for the child theme.
+ *
+ * @since 1.2.0
+ * @uses get_stylesheet() Defines the child theme textdomain based on the stylesheet directory.
+ * @global object $hybrid The global Hybrid object.
+ * @return string $hybrid->child_theme_textdomain The textdomain of the child theme.
+ */
+function hybrid_get_child_theme_textdomain() {
+	global $hybrid;
+
+	/* If a child theme isn't active, return an empty string. */
+	if ( !is_child_theme() )
+		return '';
+
+	/* If the global textdomain isn't set, define it. Plugin/theme authors may also define a custom textdomain. */
+	if ( empty( $hybrid->child_theme_textdomain ) )
+		$hybrid->child_theme_textdomain = sanitize_key( apply_filters( hybrid_get_prefix() . '_child_theme_textdomain', get_stylesheet() ) );
+
+	return $hybrid->child_theme_textdomain;
+}
+
+/**
  * Filters the 'load_textdomain_mofile' filter hook so that we can change the directory and file name 
  * of the mofile for translations.  This allows child themes to have a folder called /languages with translations
  * of their parent theme so that the translations aren't lost on a parent theme upgrade.
@@ -60,8 +82,8 @@ function hybrid_get_textdomain() {
  */
 function hybrid_load_textdomain( $mofile, $domain ) {
 
-	/* If the $domain is for the parent theme, search for a $domain-$locale.mo file. */
-	if ( $domain == hybrid_get_textdomain() ) {
+	/* If the $domain is for the parent or child theme, search for a $domain-$locale.mo file. */
+	if ( $domain == hybrid_get_textdomain() || $domain == hybrid_get_child_theme_textdomain() ) {
 
 		/* Check for a $domain-$locale.mo file in the parent and child theme root and /languages folder. */
 		$locale = get_locale();

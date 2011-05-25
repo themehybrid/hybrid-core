@@ -151,9 +151,6 @@ class Hybrid {
 
 		/* Load the context-based functions. */
 		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'context.php' );
-
-		/* Load the bbPress functions. */
-		if ( class_exists( 'bbPress' ) ) require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'bbpress.php' );
 	}
 
 	/**
@@ -165,6 +162,10 @@ class Hybrid {
 
 		/* Load theme textdomain. */
 		load_theme_textdomain( hybrid_get_textdomain() );
+
+		/* Load child theme textdomain. */
+		if ( is_child_theme() )
+			load_child_theme_textdomain( hybrid_get_child_theme_textdomain() );
 
 		/* Get the user's locale. */
 		$locale = get_locale();
