@@ -19,14 +19,17 @@ function hybrid_admin_init() {
 
 	/* Load the post meta boxes. */
 	add_action( 'load-post.php', 'hybrid_admin_load_post_meta_boxes' );
+	add_action( 'load-post-new.php', 'hybrid_admin_load_post_meta_boxes' );
 
 	/* Load the admin stylesheet for the widgets screen. */
 	if ( current_theme_supports( 'hybrid-core-widgets' ) )
 		add_action( 'load-widgets.php', 'hybrid_admin_enqueue_style' );
 
 	/* Load the admin stylesheet for the post editor screen. */
-	if ( current_theme_supports( 'theme-layouts' ) )
+	if ( current_theme_supports( 'theme-layouts' ) ) {
 		add_action( 'load-post.php', 'hybrid_admin_enqueue_style' );
+		add_action( 'load-post-new.php', 'hybrid_admin_enqueue_style' );
+	}
 }
 
 /**
