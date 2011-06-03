@@ -10,6 +10,9 @@
 /* Add extra support for post types. */
 add_action( 'init', 'hybrid_add_post_type_support' );
 
+/* Add extra file headers for themes. */
+add_filter( 'extra_theme_headers', 'hybrid_extra_theme_headers' );
+
 /**
  * This function is for adding extra support for features not default to the core post types.
  * Excerpts are added to the 'page' post type.  Comments and trackbacks are added for the
@@ -25,6 +28,42 @@ function hybrid_add_post_type_support() {
 
 	/* Add support for comments, trackbacks, and entry-views to the 'attachment' post type. */
 	add_post_type_support( 'attachment', array( 'comments', 'trackbacks' ) );
+}
+
+/**
+ * Creates custom theme headers.  This is the information shown in the header block of a theme's 'style.css' 
+ * file.  Themes are not required to use this information, but the framework does make use of the data for 
+ * displaying additional information to the theme user.
+ *
+ * @since 1.2.0
+ * @link http://codex.wordpress.org/Theme_Review#Licensing
+ * @param array $headers Array of extra headers added by plugins/themes.
+ * @return array $headers
+ */
+function hybrid_extra_theme_headers( $headers ) {
+
+	/* Add support for 'Template Version'. This is for use in child themes to note the version of the parent theme. */
+	if ( !in_array( 'Template Version', $headers ) )
+		$headers[] = 'Template Version';
+
+	/* Add support for 'License'.  Proposed in the guidelines for the WordPress.org theme review. */
+	if ( !in_array( 'License', $headers ) )
+		$headers[] = 'License';
+
+	/* Add support for 'License URI'. Proposed in the guidelines for the WordPress.org theme review. */
+	if ( !in_array( 'License URI', $headers ) )
+		$headers[] = 'License URI';
+
+	/* Add support for 'Support URI'.  This should be a link to the theme's support forums. */
+	if ( !in_array( 'Support URI', $headers ) )
+		$headers[] = 'Support URI';
+
+	/* Add support for 'Documentation URI'.  This should be a link to the theme's documentation. */
+	if ( !in_array( 'Documentation URI', $headers ) )
+		$headers[] = 'Documentation URI';
+
+	/* Return the array of custom theme headers. */
+	return $headers;
 }
 
 /**

@@ -40,13 +40,19 @@ function hybrid_settings_page_init() {
 
 	/* Register theme settings. */
 	register_setting(
-		"{$prefix}_theme_settings", // Options group.
-		"{$prefix}_theme_settings", // Database option.
-		'hybrid_save_theme_settings' // Validation callback function.
+		"{$prefix}_theme_settings",		// Options group.
+		"{$prefix}_theme_settings",		// Database option.
+		'hybrid_save_theme_settings'	// Validation callback function.
 	);
 
 	/* Create the theme settings page. */
-	$hybrid->settings_page = add_theme_page( sprintf( __( '%1$s Theme Settings', $domain ), $theme_data['Name'] ), sprintf( __( '%1$s Settings', $domain ), $theme_data['Name'] ), apply_filters( "{$prefix}_settings_capability", 'edit_theme_options' ), 'theme-settings', 'hybrid_settings_page' );
+	$hybrid->settings_page = add_theme_page(
+		sprintf( __( '%1$s Theme Settings', $domain ), $theme_data['Name'] ),	// Settings page name.
+		sprintf( __( '%1$s Settings', $domain ), $theme_data['Name'] ),		// Menu item name.
+		apply_filters( "{$prefix}_settings_capability", 'edit_theme_options' ),	// Required capability.
+		'theme-settings',							// Screen name.
+		'hybrid_settings_page'						// Callback function.
+	);
 
 	/* Add contextual help to the theme settings page. */
 	add_contextual_help( $hybrid->settings_page, hybrid_settings_page_contextual_help() );
@@ -216,25 +222,36 @@ function hybrid_settings_field_name( $setting ) {
 }
 
 /**
- * Returns text for the contextual help tab on the theme settings page in the admin.  Theme authors can add a 
- * filter to the 'contextual_help hook if they want to change the output of the help text.
+ * Returns text for the contextual help tab on the theme settings page in the admin.  Theme authors can add 
+ * a filter to the 'contextual_help' hook if they want to change the output of the help text.
  *
  * @since 1.2.0
+ * @return string $help The contextual help text used on the theme settings page.
  */
 function hybrid_settings_page_contextual_help() {
 
+	/* Get the parent theme data. */
 	$theme = hybrid_get_theme_data();
 
+	/* Check for a Documentation URI in the style.css.  If it doesn't exist, use the Hybrid Core URI. */
+	$documentation_uri = ( !empty( $theme['Documentation URI'] ) ? $theme['Documentation URI'] : 'http://themehybrid.com/hybrid-core' );
+
+	/* Check for a Support URI in the style.css.  If it doesn't exist, use the Hybrid Core Support URI. */
+	$support_uri = ( !empty( $theme['Support URI'] ) ? $theme['Support URI'] : 'http://themehybrid.com/support' );
+
+	/* Open an unordered list for the help text. */
 	$help = '<ul>';
-	$help .= '<li><a href="' . esc_url( $theme['URI'] ) . '">' . $theme['Name'] . '</a></li>';
 
-	if ( is_child_theme() ) {
-		$child_theme = hybrid_get_theme_data( 'stylesheet' );
-		$help .= '<li><a href="' . esc_url( $child_theme['URI'] ) . '">' . $child_theme['Name'] . '</a></li>';
-	}
+	/* Add the Documentation URI. */
+	$help .= '<li><a href="' . esc_url( $documentation_uri ) . '">' . __( 'Documentation', hybrid_get_textdomain() ) . '</a></li>';
 
+	/* Add the Support URI. */
+	$help .= '<li><a href="' . esc_url( $support_uri ) . '">' . __( 'Support', hybrid_get_textdomain() ) . '</a></li>';
+
+	/* Close the unordered list for the help text. */
 	$help .= '</ul>';
 
+	/* Return the contextual help text for this screen. */
 	return $help;
 }
 
