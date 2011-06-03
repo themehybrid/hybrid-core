@@ -48,6 +48,9 @@ function hybrid_settings_page_init() {
 	/* Create the theme settings page. */
 	$hybrid->settings_page = add_theme_page( sprintf( __( '%1$s Theme Settings', $domain ), $theme_data['Name'] ), sprintf( __( '%1$s Settings', $domain ), $theme_data['Name'] ), apply_filters( "{$prefix}_settings_capability", 'edit_theme_options' ), 'theme-settings', 'hybrid_settings_page' );
 
+	/* Add contextual help to the theme settings page. */
+	add_contextual_help( $hybrid->settings_page, hybrid_settings_page_contextual_help() );
+
 	/* Load the theme settings meta boxes. */
 	add_action( "load-{$hybrid->settings_page}", 'hybrid_load_settings_page_meta_boxes' );
 
@@ -210,6 +213,29 @@ function hybrid_settings_field_id( $setting ) {
  */
 function hybrid_settings_field_name( $setting ) {
 	return hybrid_get_prefix() . "_theme_settings[{$setting}]";
+}
+
+/**
+ * Returns text for the contextual help tab on the theme settings page in the admin.  Theme authors can add a 
+ * filter to the 'contextual_help hook if they want to change the output of the help text.
+ *
+ * @since 1.2.0
+ */
+function hybrid_settings_page_contextual_help() {
+
+	$theme = hybrid_get_theme_data();
+
+	$help = '<ul>';
+	$help .= '<li><a href="' . esc_url( $theme['URI'] ) . '">' . $theme['Name'] . '</a></li>';
+
+	if ( is_child_theme() ) {
+		$child_theme = hybrid_get_theme_data( 'stylesheet' );
+		$help .= '<li><a href="' . esc_url( $child_theme['URI'] ) . '">' . $child_theme['Name'] . '</a></li>';
+	}
+
+	$help .= '</ul>';
+
+	return $help;
 }
 
 /**
