@@ -54,19 +54,23 @@ function hybrid_settings_page_init() {
 		'hybrid_settings_page'						// Callback function.
 	);
 
-	/* Add contextual help to the theme settings page. */
-	add_contextual_help( $hybrid->settings_page, hybrid_settings_page_contextual_help() );
+	/* Check if the settings page is being shown before running any functions for it. */
+	if ( !empty( $hybrid->settings_page ) ) {
 
-	/* Load the theme settings meta boxes. */
-	add_action( "load-{$hybrid->settings_page}", 'hybrid_load_settings_page_meta_boxes' );
+		/* Add contextual help to the theme settings page. */
+		add_contextual_help( $hybrid->settings_page, hybrid_settings_page_contextual_help() );
 
-	/* Create a hook for adding meta boxes. */
-	add_action( "load-{$hybrid->settings_page}", 'hybrid_settings_page_add_meta_boxes' );
+		/* Load the theme settings meta boxes. */
+		add_action( "load-{$hybrid->settings_page}", 'hybrid_load_settings_page_meta_boxes' );
 
-	/* Load the JavaScript and stylesheets needed for the theme settings. */
-	add_action( 'admin_enqueue_scripts', 'hybrid_settings_page_enqueue_script' );
-	add_action( 'admin_enqueue_scripts', 'hybrid_settings_page_enqueue_style' );
-	add_action( "admin_head-{$hybrid->settings_page}", 'hybrid_settings_page_load_scripts' );
+		/* Create a hook for adding meta boxes. */
+		add_action( "load-{$hybrid->settings_page}", 'hybrid_settings_page_add_meta_boxes' );
+
+		/* Load the JavaScript and stylesheets needed for the theme settings. */
+		add_action( 'admin_enqueue_scripts', 'hybrid_settings_page_enqueue_script' );
+		add_action( 'admin_enqueue_scripts', 'hybrid_settings_page_enqueue_style' );
+		add_action( "admin_head-{$hybrid->settings_page}", 'hybrid_settings_page_load_scripts' );
+	}
 }
 
 /**
