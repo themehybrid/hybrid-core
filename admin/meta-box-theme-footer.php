@@ -38,7 +38,7 @@ function hybrid_meta_box_theme_display_footer() {
 	</p>
 
 	<p>
-		<textarea id="<?php echo hybrid_settings_field_id( 'footer_insert' ); ?>" name="<?php echo hybrid_settings_field_name( 'footer_insert' ); ?>" cols="60" rows="5"><?php echo wp_htmledit_pre( stripslashes( hybrid_get_setting( 'footer_insert' ) ) ); ?></textarea>
+		<textarea id="<?php echo hybrid_settings_field_id( 'footer_insert' ); ?>" name="<?php echo hybrid_settings_field_name( 'footer_insert' ); ?>" cols="60" rows="5"><?php echo esc_textarea( hybrid_get_setting( 'footer_insert' ) ); ?></textarea>
 	</p>
 
 	<?php if ( current_theme_supports( 'hybrid-core-shortcodes' ) ) { ?>
