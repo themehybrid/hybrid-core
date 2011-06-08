@@ -72,7 +72,10 @@ function cleaner_gallery( $output, $attr ) {
 	/* Apply filters to the default arguments. */
 	$defaults = apply_filters( 'cleaner_gallery_defaults', $defaults );
 
-	/* Merge the defaults with user input. Make sure $id is an integer. */
+	/* Apply filters to the arguments. */
+	$attr = apply_filters( 'cleaner_gallery_args', $attr );
+
+	/* Merge the defaults with user input.  */
 	$attr = shortcode_atts( $defaults, $attr );
 	extract( $attr );
 	$id = intval( $id );
