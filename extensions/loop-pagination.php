@@ -14,9 +14,9 @@
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * @package LoopPagination
- * @version 0.1.2
+ * @version 0.1.3
  * @author Justin Tadlock <justin@justintadlock.com>
- * @copyright Copyright (c) 2010, Justin Tadlock
+ * @copyright Copyright (c) 2010 - 2011, Justin Tadlock
  * @link http://devpress.com/blog/loop-pagination-for-theme-developers
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
@@ -72,11 +72,11 @@ function loop_pagination( $args = array() ) {
 			$defaults['base'] = user_trailingslashit( trailingslashit( get_search_link() ) . 'page/%#%' );
 	}
 
-	/* Merge the arguments input with the defaults. */
-	$args = wp_parse_args( $args, $defaults );
-
 	/* Allow developers to overwrite the arguments with a filter. */
 	$args = apply_filters( 'loop_pagination_args', $args );
+
+	/* Merge the arguments input with the defaults. */
+	$args = wp_parse_args( $args, $defaults );
 
 	/* Don't allow the user to set this to an array. */
 	if ( 'array' == $args['type'] )
