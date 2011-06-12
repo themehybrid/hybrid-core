@@ -40,7 +40,6 @@ add_action( 'admin_menu', 'theme_layouts_admin_setup' );
  * @return string The layout for the given page.
  */
 function theme_layouts_get_layout() {
-	global $wp_query;
 
 	/* Get the available post layouts. */
 	$post_layouts = get_theme_support( 'theme-layouts' );
@@ -52,7 +51,7 @@ function theme_layouts_get_layout() {
 	if ( is_singular() ) {
 
 		/* Get the current post ID. */
-		$post_id = $wp_query->get_queried_object_id();
+		$post_id = get_queried_object_id();
 
 		/* Get the post layout. */
 		$layout = get_post_layout( $post_id );
@@ -62,7 +61,7 @@ function theme_layouts_get_layout() {
 	elseif ( is_author() ) {
 
 		/* Get the current user ID. */
-		$user_id = $wp_query->get_queried_object_id();
+		$user_id = get_queried_object_id();
 
 		/* Get the user layout. */
 		$layout = get_user_layout( $user_id );
