@@ -137,7 +137,7 @@ function custom_field_series_meta_box( $object, $box ) { ?>
 
 	<p>
 		<input type="hidden" name="custom_field_series_meta_box_nonce" value="<?php echo wp_create_nonce( basename( __FILE__ ) ); ?>" />
-		<input type="text" name="custom-field-series" id="custom-field-series" value="<?php echo esc_attr( get_post_meta( $object->ID, apply_filters( 'post_stylesheets_meta_key', 'Series' ), true ) ); ?>" size="30" tabindex="30" style="width: 99%;" />
+		<input type="text" name="custom-field-series" id="custom-field-series" value="<?php echo esc_attr( get_post_meta( $object->ID, apply_filters( 'custom_field_series_meta_key', 'Series' ), true ) ); ?>" size="30" tabindex="30" style="width: 99%;" />
 	</p>
 <?php
 }
@@ -164,7 +164,7 @@ function custom_field_series_meta_box_save( $post_id, $post ) {
 	$new_meta_value = ( isset( $_POST['custom-field-series'] ) ? strip_tags( $_POST['custom-field-series'] ) : '' );
 
 	/* Get the meta key. */
-	$meta_key = apply_filters( 'post_stylesheets_meta_key', 'Series' );
+	$meta_key = apply_filters( 'custom_field_series_meta_key', 'Series' );
 
 	/* Get the meta value of the custom field key. */
 	$meta_value = get_post_meta( $post_id, $meta_key, true );
