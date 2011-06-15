@@ -159,7 +159,7 @@ function breadcrumb_trail_get_items( $args = array() ) {
 				$trail = array_merge( $trail, breadcrumb_trail_get_parents( '', $path ) );
 
 			/* Map the permalink structure tags to actual links. */
-			$trail = array_merge( $trail, breadcrumb_trail_map_rewrite_tags( $post_id, get_option( 'permalink_structure' ) ) );
+			$trail = array_merge( $trail, breadcrumb_trail_map_rewrite_tags( $post_id, get_option( 'permalink_structure' ), $args ) );
 		}
 
 		/* If viewing a singular 'attachment'. */
@@ -173,7 +173,7 @@ function breadcrumb_trail_get_items( $args = array() ) {
 				$trail = array_merge( $trail, breadcrumb_trail_get_parents( '', $path ) );
 
 			/* Map the post (parent) permalink structure tags to actual links. */
-			$trail = array_merge( $trail, breadcrumb_trail_map_rewrite_tags( $post->post_parent, get_option( 'permalink_structure' ) ) );
+			$trail = array_merge( $trail, breadcrumb_trail_map_rewrite_tags( $post->post_parent, get_option( 'permalink_structure' ), $args ) );
 		}
 
 		/* If a custom post type, check if there are any pages in its hierarchy based on the slug. */
@@ -351,9 +351,10 @@ function breadcrumb_trail_get_items( $args = array() ) {
  * @since 0.4.0
  * @param int $post_id ID of the post whose parents we want.
  * @param string $path Path of a potential parent page.
+ * @param array $args Mixed arguments for the menu.
  * @return array $trail Array of links to the post breadcrumb.
  */
-function breadcrumb_trail_map_rewrite_tags( $post_id = '', $path = '' ) {
+function breadcrumb_trail_map_rewrite_tags( $post_id = '', $path = '', $args = array() ) {
 
 	/* Set up an empty $trail array. */
 	$trail = array();
@@ -404,7 +405,7 @@ function breadcrumb_trail_map_rewrite_tags( $post_id = '', $path = '' ) {
 				$trail[] = '<a href="' . get_author_posts_url( $post->post_author ) . '" title="' . esc_attr( get_the_author_meta( 'display_name', $post->post_author ) ) . '">' . get_the_author_meta( 'display_name', $post->post_author ) . '</a>';
 
 			/* If using the %category% tag, add a link to the first category archive to match permalinks. */
-			elseif ( '%category%' == $tag ) {
+			elseif ( '%category%' == $tag && 'category' !== $args["singular_{$post->post_type}_taxonomy"] ) {
 
 				/* Get the post categories. */
 				$terms = get_the_category( $post_id );
