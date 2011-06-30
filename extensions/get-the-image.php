@@ -155,6 +155,9 @@ function get_the_image( $args = array() ) {
 	/* If $format is set to 'array', return an array of image attributes. */
 	if ( 'array' == $format ) {
 
+		/* Set up a default empty array. */
+		$out = array();
+
 		/* Get the image attributes. */
 		$atts = wp_kses_hair( $image, array( 'http' ) );
 
