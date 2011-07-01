@@ -49,13 +49,16 @@ function hybrid_settings_page_init() {
 	$hybrid->settings_page = add_theme_page(
 		sprintf( __( '%1$s Theme Settings', $domain ), $theme_data['Name'] ),	// Settings page name.
 		sprintf( __( '%1$s Settings', $domain ), $theme_data['Name'] ),		// Menu item name.
-		apply_filters( "{$prefix}_settings_capability", 'edit_theme_options' ),	// Required capability.
+		hybrid_settings_page_capability(),					// Required capability.
 		'theme-settings',							// Screen name.
 		'hybrid_settings_page'						// Callback function.
 	);
 
 	/* Check if the settings page is being shown before running any functions for it. */
 	if ( !empty( $hybrid->settings_page ) ) {
+
+		/* Filter the settings page capability so that it recognizes the 'edit_theme_options' cap. */
+		add_filter( "option_page_capability_{$prefix}_theme_settings", 'hybrid_settings_page_capability' );
 
 		/* Add contextual help to the theme settings page. */
 		add_contextual_help( $hybrid->settings_page, hybrid_settings_page_contextual_help() );
@@ -71,6 +74,15 @@ function hybrid_settings_page_init() {
 		add_action( 'admin_enqueue_scripts', 'hybrid_settings_page_enqueue_style' );
 		add_action( "admin_head-{$hybrid->settings_page}", 'hybrid_settings_page_load_scripts' );
 	}
+}
+
+/**
+ * Returns the required capability for viewing and saving theme settings.
+ *
+ * @since 1.2.0
+ */
+function hybrid_settings_page_capability() {
+	return apply_filters( hybrid_get_prefix() . '_settings_capability', 'edit_theme_options' );
 }
 
 /**
