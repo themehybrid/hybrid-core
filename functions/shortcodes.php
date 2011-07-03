@@ -125,8 +125,8 @@ function hybrid_loginout_link_shortcode() {
  */
 function hybrid_query_counter_shortcode() {
 	if ( current_user_can( 'edit_theme_options' ) )
-		$out = sprintf( __( 'This page loaded in %1$s seconds with %2$s database queries.', hybrid_get_textdomain() ), timer_stop( 0, 3 ), get_num_queries() );
-	return $out;
+		return sprintf( __( 'This page loaded in %1$s seconds with %2$s database queries.', hybrid_get_textdomain() ), timer_stop( 0, 3 ), get_num_queries() );
+	return '';
 }
 
 /**
