@@ -373,6 +373,15 @@ function hybrid_back_compat_update_settings( $action ) {
 		do_action( "{$prefix}_update_settings_page" );
 }
 
+/**
+ * @since 0.1.0
+ * @deprecated 1.2.0
+ */
+function hybrid_enqueue_script() {
+	_deprecated_function( __FUNCTION__, '1.0.0', 'hybrid_enqueue_scripts' );
+	return;
+}
+
 /* === Removed Functions === */
 
 /* Functions removed in the 0.8 branch. */

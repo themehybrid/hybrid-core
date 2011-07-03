@@ -7,11 +7,44 @@
  * @subpackage Functions
  */
 
-/* Load specific scripts for the framework. */
-add_action( 'wp_enqueue_scripts', 'hybrid_enqueue_script' );
+/* Register Hybrid Core scripts. */
+add_action( 'wp_enqueue_scripts', 'hybrid_register_scripts', 1 );
+
+/* Load Hybrid Core scripts. */
+add_action( 'wp_enqueue_scripts', 'hybrid_enqueue_scripts' );
 
 /* Load the development stylsheet in script debug mode. */
 add_filter( 'stylesheet_uri', 'hybrid_debug_stylesheet', 10, 2 );
+
+/**
+ * Registers JavaScript files for the framework.  This function merely registers scripts with WordPress using
+ * the wp_register_script() function.  It does not load any script files on the site.  If a theme wants to register 
+ * its own custom scripts, it should do so on the 'wp_enqueue_scripts' hook.
+ *
+ * @since 1.2.0
+ */
+function hybrid_register_scripts() {
+
+	/* Register the 'drop-downs' script if the current theme supports 'hybrid-core-drop-downs'. */
+	if ( current_theme_supports( 'hybrid-core-drop-downs' ) )
+		wp_register_script( 'drop-downs', esc_url( apply_atomic( 'drop_downs_script', trailingslashit( HYBRID_JS ) . 'drop-downs.js' ) ), array( 'jquery' ), '20110514', true );
+}
+
+/**
+ * Tells WordPress to load the scripts needed for the framework using the wp_enqueue_scripts() function.
+ *
+ * @since 1.2.0
+ */
+function hybrid_enqueue_scripts() {
+
+	/* Load the comment reply script on singular posts with open comments if threaded comments are supported. */
+	if ( is_singular() && get_option( 'thread_comments' ) && comments_open() )
+		wp_enqueue_script( 'comment-reply' );
+
+	/* Load the 'drop-downs' script if the current theme supports 'hybrid-core-drop-downs'. */
+	if ( current_theme_supports( 'hybrid-core-drop-downs' ) )
+		wp_enqueue_script( 'drop-downs' );
+}
 
 /**
  * Function for using a debug stylesheet when developing.  To develop with the debug stylesheet, 
@@ -38,33 +71,6 @@ function hybrid_debug_stylesheet( $stylesheet_uri, $stylesheet_dir_uri ) {
 
 	/* Return the theme stylesheet. */
 	return $stylesheet_uri;
-}
-
-/**
- * Function to load JavaScript at appropriate time.  Loads comment reply script only if users choose to 
- * use nested comments. Developers should load custom JavaScript with wp_enqueue_script() in their 
- * theme's functions.php file.
- *
- * A drop-downs.js file will be loaded if the theme supports 'hybrid-core-drop-downs'.  This is a version 
- * of the Superfish jQuery plugin.
- *
- * @since 0.1.0
- * @link http://codex.wordpress.org/Function_Reference/wp_enqueue_script
- * @link http://users.tpg.com.au/j_birch/plugins/superfish
- */
-function hybrid_enqueue_script() {
-
-	/* Don't load any scripts in the admin. */
-	if ( is_admin() )
-		return;
-
-	/* Comment reply. */
-	if ( is_singular() && get_option( 'thread_comments' ) && comments_open() )
-		wp_enqueue_script( 'comment-reply' );
-
-	/* Superfish drop-down menus. */
-	if ( current_theme_supports( 'hybrid-core-drop-downs' ) )
-		wp_enqueue_script( 'drop-downs', esc_url( apply_atomic( 'drop_downs_script', trailingslashit( HYBRID_JS ) . 'drop-downs.js' ) ), array( 'jquery' ), '20110514', true );
 }
 
 /**
