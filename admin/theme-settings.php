@@ -117,11 +117,20 @@ function hybrid_settings_page_add_meta_boxes() {
  */
 function hybrid_load_settings_page_meta_boxes() {
 
+	/* Get theme-supported meta boxes for the settings page. */
+	$supports = get_theme_support( 'hybrid-core-theme-settings' );
+
+	/* If there are no supported meta boxes, return. */
+	if ( !is_array( $supports[0] ) )
+		return;
+
 	/* Load the 'About' meta box. */
-	require_once( trailingslashit( HYBRID_ADMIN ) . 'meta-box-theme-about.php' );
+	if ( in_array( 'about', $supports[0] ) )
+		require_once( trailingslashit( HYBRID_ADMIN ) . 'meta-box-theme-about.php' );
 
 	/* Load the 'Footer' meta box if it is supported. */
-	require_if_theme_supports( 'hybrid-core-meta-box-footer', trailingslashit( HYBRID_ADMIN ) . 'meta-box-theme-footer.php' );
+	if ( in_array( 'footer', $supports[0] ) )
+		require_once( trailingslashit( HYBRID_ADMIN ) . 'meta-box-theme-footer.php' );
 }
 
 /**
@@ -153,8 +162,11 @@ function hybrid_get_default_theme_settings() {
 	$domain = hybrid_get_textdomain();
 	$prefix = hybrid_get_prefix();
 
+	/* Get theme-supported meta boxes for the settings page. */
+	$supports = get_theme_support( 'hybrid-core-theme-settings' );
+
 	/* If the current theme supports the footer meta box and shortcodes, add default footer settings. */
-	if ( current_theme_supports( 'hybrid-core-meta-box-footer' ) && current_theme_supports( 'hybrid-core-shortcodes' ) ) {
+	if ( is_array( $supports[0] ) && in_array( 'footer', $supports[0] ) && current_theme_supports( 'hybrid-core-shortcodes' ) ) {
 
 		/* If there is a child theme active, add the [child-link] shortcode to the $footer_insert. */
 		if ( is_child_theme() )

@@ -1,8 +1,8 @@
 <?php
 /**
  * Creates a meta box for the theme settings page, which holds a textarea for custom footer text within 
- * the theme.  To use this feature, the theme must support both the 'hybrid-core-theme-settings' and the 
- * 'hybrid-core-meta-box-footer' features.
+ * the theme.  To use this feature, the theme must support both the 'footer' meta box argument for the 
+ * 'hybrid-core-theme-settings' feature.
  *
  * @package HybridCore
  * @subpackage Admin

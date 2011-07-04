@@ -2,7 +2,7 @@
 /**
  * Creates a meta box for the theme settings page, which displays information about the theme.  If a child theme 
  * is in use, an additional meta box will be added with its information.  To use this feature, the theme must 
- * support the 'hybrid-core-theme-settings' feature.
+ * support the 'about' argument for 'hybrid-core-theme-settings' feature.
  *
  * @package HybridCore
  * @subpackage Admin
