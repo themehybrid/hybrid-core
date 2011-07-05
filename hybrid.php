@@ -46,16 +46,6 @@
 class Hybrid {
 
 	/**
-	 * PHP4 constructor method.  This simply provides backwards compatibility for users with setups
-	 * on older versions of PHP.  Once WordPress no longer supports PHP4, this method will be removed.
-	 *
-	 * @since 0.9.0
-	 */
-	function Hybrid() {
-		$this->__construct();
-	}
-
-	/**
 	 * Constructor method for the Hybrid class.  This method adds other methods of the class to 
 	 * specific hooks within WordPress.  It controls the load order of the required files for running 
 	 * the framework.
