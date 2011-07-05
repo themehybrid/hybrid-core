@@ -17,19 +17,16 @@ add_action( 'admin_init', 'hybrid_admin_init' );
  */
 function hybrid_admin_init() {
 
+	/* Registers admin stylesheets for the framework. */
+	add_action( 'admin_enqueue_scripts', 'hybrid_admin_register_styles', 1 );
+
 	/* Load the post meta boxes. */
 	add_action( 'load-post.php', 'hybrid_admin_load_post_meta_boxes' );
 	add_action( 'load-post-new.php', 'hybrid_admin_load_post_meta_boxes' );
 
 	/* Load the admin stylesheet for the widgets screen. */
 	if ( current_theme_supports( 'hybrid-core-widgets' ) )
-		add_action( 'load-widgets.php', 'hybrid_admin_enqueue_style' );
-
-	/* Load the admin stylesheet for the post editor screen. */
-	if ( current_theme_supports( 'theme-layouts' ) ) {
-		add_action( 'load-post.php', 'hybrid_admin_enqueue_style' );
-		add_action( 'load-post-new.php', 'hybrid_admin_enqueue_style' );
-	}
+		add_action( 'admin_enqueue_scripts', 'hybrid_admin_enqueue_styles' );
 }
 
 /**
@@ -48,12 +45,24 @@ function hybrid_admin_load_post_meta_boxes() {
 }
 
 /**
+ * Registers the framework's 'admin.css' stylesheet file.  The function does not load the stylesheet.  It merely
+ * registers it with WordPress.
+ *
+ * @since 1.2.0
+ */
+function hybrid_admin_register_styles() {
+	wp_register_style( 'hybrid-core-admin', trailingslashit( HYBRID_CSS ) . 'admin.css', false, '20110512', 'screen' );
+}
+
+/**
  * Loads the admin.css stylesheet for admin-related features.
  *
- * @since 1.0.0
+ * @since 1.2.0
  */
-function hybrid_admin_enqueue_style() {
-	wp_enqueue_style( 'hybrid-core-admin', trailingslashit( HYBRID_CSS ) . 'admin.css', false, '20110512', 'screen' );
+function hybrid_admin_enqueue_styles( $hook_suffix ) {
+
+	if ( 'widgets.php' == $hook_suffix )
+		wp_enqueue_style( 'hybrid-core-admin' );
 }
 
 /**

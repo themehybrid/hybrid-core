@@ -378,7 +378,16 @@ function hybrid_back_compat_update_settings( $action ) {
  * @deprecated 1.2.0
  */
 function hybrid_enqueue_script() {
-	_deprecated_function( __FUNCTION__, '1.0.0', 'hybrid_enqueue_scripts' );
+	_deprecated_function( __FUNCTION__, '1.2.0', 'hybrid_enqueue_scripts' );
+	return;
+}
+
+/**
+ * @since 1.0.0
+ * @deprecated 1.2.0
+ */
+function hybrid_admin_enqueue_style() {
+	_deprecated_function( __FUNCTION__, '1.2.0', 'hybrid_admin_enqueue_styles' );
 	return;
 }
 
