@@ -53,7 +53,7 @@ function hybrid_admin_load_post_meta_boxes() {
  * @since 1.0.0
  */
 function hybrid_admin_enqueue_style() {
-	wp_enqueue_style( 'hybrid-core-admin', trailingslashit( HYBRID_CSS ) . 'admin.css', false, 1.2, 'screen' );
+	wp_enqueue_style( 'hybrid-core-admin', trailingslashit( HYBRID_CSS ) . 'admin.css', false, '20110512', 'screen' );
 }
 
 /**

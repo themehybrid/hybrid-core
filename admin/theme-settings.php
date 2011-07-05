@@ -291,7 +291,7 @@ function hybrid_settings_page_contextual_help() {
 function hybrid_settings_page_enqueue_style( $hook_suffix ) {
 
 	if ( $hook_suffix == hybrid_get_settings_page_name() )
-		wp_enqueue_style( 'hybrid-core-admin', trailingslashit( HYBRID_CSS ) . 'admin.css', false, 1.2, 'screen' );
+		wp_enqueue_style( 'hybrid-core-admin', trailingslashit( HYBRID_CSS ) . 'admin.css', false, '20110512', 'screen' );
 }
 
 /**
