@@ -64,7 +64,7 @@ class Hybrid {
 		add_action( 'after_setup_theme', array( &$this, 'default_filters' ), 3 );
 
 		/* Language functions and translations setup. */
-		add_action( 'after_setup_theme', array( &$this, 'locale' ), 4 );
+		add_action( 'after_setup_theme', array( &$this, 'i18n' ), 4 );
 
 		/* Load the framework functions. */
 		add_action( 'after_setup_theme', array( &$this, 'functions' ), 12 );
@@ -77,9 +77,9 @@ class Hybrid {
 	}
 
 	/**
-	 * Defines the constant paths for use within the core framework, parent theme, and
-	 * child theme.  Constants prefixed with 'HYBRID_' are for use only within the core
-	 * framework and don't reference other areas of the parent or child theme.
+	 * Defines the constant paths for use within the core framework, parent theme, and child theme.  
+	 * Constants prefixed with 'HYBRID_' are for use only within the core framework and don't 
+	 * reference other areas of the parent or child theme.
 	 *
 	 * @since 0.7.0
 	 */
@@ -144,11 +144,15 @@ class Hybrid {
 	}
 
 	/**
-	 * Handles the locale functions file and translations.
+	 * Loads both the parent and child theme translation files.  If a locale-based functions file exists
+	 * in either the parent or child theme (child overrides parent), it will also be loaded.  All translation 
+	 * and locale functions files are expected to be within the theme's '/languages' folder, but the 
+	 * framework will fall back on the theme root folder if necessary.  Translation files are expected 
+	 * to be prefixed with the template or stylesheet path (example: 'templatename-en_US.mo').
 	 *
-	 * @since 1.0.0
+	 * @since 1.2.0
 	 */
-	function locale() {
+	function i18n() {
 
 		/* Load theme textdomain. */
 		load_theme_textdomain( hybrid_get_textdomain() );
