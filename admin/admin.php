@@ -17,16 +17,15 @@ add_action( 'admin_init', 'hybrid_admin_init' );
  */
 function hybrid_admin_init() {
 
-	/* Registers admin stylesheets for the framework. */
-	add_action( 'admin_enqueue_scripts', 'hybrid_admin_register_styles', 1 );
-
-	/* Load the post meta boxes. */
+	/* Load the post meta boxes on the new post and edit post screens. */
 	add_action( 'load-post.php', 'hybrid_admin_load_post_meta_boxes' );
 	add_action( 'load-post-new.php', 'hybrid_admin_load_post_meta_boxes' );
 
-	/* Load the admin stylesheet for the widgets screen. */
-	if ( current_theme_supports( 'hybrid-core-widgets' ) )
-		add_action( 'admin_enqueue_scripts', 'hybrid_admin_enqueue_styles' );
+	/* Registers admin stylesheets for the framework. */
+	add_action( 'admin_enqueue_scripts', 'hybrid_admin_register_styles', 1 );
+
+	/* Loads admin stylesheets for the framework. */
+	add_action( 'admin_enqueue_scripts', 'hybrid_admin_enqueue_styles' );
 }
 
 /**
@@ -61,7 +60,8 @@ function hybrid_admin_register_styles() {
  */
 function hybrid_admin_enqueue_styles( $hook_suffix ) {
 
-	if ( 'widgets.php' == $hook_suffix )
+	/* Load admin styles if on the widgets screen and the current theme supports 'hybrid-core-widgets'. */
+	if ( current_theme_supports( 'hybrid-core-widgets' ) && 'widgets.php' == $hook_suffix )
 		wp_enqueue_style( 'hybrid-core-admin' );
 }
 

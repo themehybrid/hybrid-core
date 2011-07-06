@@ -391,6 +391,24 @@ function hybrid_admin_enqueue_style() {
 	return;
 }
 
+/**
+ * @since 0.7.0
+ * @deprecated 1.2.0
+ */
+function hybrid_settings_page_enqueue_style() {
+	_deprecated_function( __FUNCTION__, '1.2.0', 'hybrid_settings_page_enqueue_styles' );
+	return;
+}
+
+/**
+ * @since 0.7.0
+ * @deprecated 1.2.0
+ */
+function hybrid_settings_page_enqueue_script() {
+	_deprecated_function( __FUNCTION__, '1.2.0', 'hybrid_settings_page_enqueue_scripts' );
+	return;
+}
+
 /* === Removed Functions === */
 
 /* Functions removed in the 0.8 branch. */

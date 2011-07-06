@@ -6,7 +6,7 @@
  *
  * Provides the ability for developers to add custom meta boxes to the theme settings page by using the 
  * add_meta_box() function.  Developers should register their meta boxes on the 'add_meta_boxes' hook 
- * and register the meta box for 'appearance_page-theme-settings'.  To validate/sanitize data from 
+ * and register the meta box for 'appearance_page_theme-settings'.  To validate/sanitize data from 
  * custom settings, devs should use the 'sanitize_option_{$prefix}_theme_settings' filter hook.
  *
  * @package HybridCore
@@ -17,11 +17,8 @@
 add_action( 'admin_menu', 'hybrid_settings_page_init' );
 
 /**
- * Initializes all the theme settings page functions. This function is used to create the theme settings 
+ * Initializes all the theme settings page functionality. This function is used to create the theme settings 
  * page, then use that as a launchpad for specific actions that need to be tied to the settings page.
- *
- * Users or developers can set a custom capability (default is 'edit_theme_options') for access to the
- * settings page using the "$prefix_settings_capability" filter hook.
  *
  * @since 0.7.0
  * @global string $hybrid The global theme object.
@@ -30,7 +27,7 @@ function hybrid_settings_page_init() {
 	global $hybrid;
 
 	/* Get theme information. */
-	$theme_data = hybrid_get_theme_data();
+	$theme = hybrid_get_theme_data();
 	$prefix = hybrid_get_prefix();
 	$domain = hybrid_get_textdomain();
 
@@ -47,8 +44,8 @@ function hybrid_settings_page_init() {
 
 	/* Create the theme settings page. */
 	$hybrid->settings_page = add_theme_page(
-		sprintf( __( '%1$s Theme Settings', $domain ), $theme_data['Name'] ),	// Settings page name.
-		sprintf( __( '%1$s Settings', $domain ), $theme_data['Name'] ),		// Menu item name.
+		sprintf( esc_html__( '%1$s Theme Settings', $domain ), $theme['Name'] ),	// Settings page name.
+		esc_html__( 'Theme Settings', $domain ),				// Menu item name.
 		hybrid_settings_page_capability(),					// Required capability.
 		'theme-settings',							// Screen name.
 		'hybrid_settings_page'						// Callback function.
@@ -69,9 +66,9 @@ function hybrid_settings_page_init() {
 		/* Create a hook for adding meta boxes. */
 		add_action( "load-{$hybrid->settings_page}", 'hybrid_settings_page_add_meta_boxes' );
 
-		/* Load the JavaScript and stylesheets needed for the theme settings. */
-		add_action( 'admin_enqueue_scripts', 'hybrid_settings_page_enqueue_script' );
-		add_action( 'admin_enqueue_scripts', 'hybrid_settings_page_enqueue_style' );
+		/* Load the JavaScript and stylesheets needed for the theme settings screen. */
+		add_action( 'admin_enqueue_scripts', 'hybrid_settings_page_enqueue_scripts' );
+		add_action( 'admin_enqueue_scripts', 'hybrid_settings_page_enqueue_styles' );
 		add_action( "admin_head-{$hybrid->settings_page}", 'hybrid_settings_page_load_scripts' );
 	}
 }
@@ -120,17 +117,17 @@ function hybrid_load_settings_page_meta_boxes() {
 	/* Get theme-supported meta boxes for the settings page. */
 	$supports = get_theme_support( 'hybrid-core-theme-settings' );
 
-	/* If there are no supported meta boxes, return. */
-	if ( !is_array( $supports[0] ) )
-		return;
+	/* If there are any supported meta boxes, load them. */
+	if ( is_array( $supports[0] ) ) {
 
-	/* Load the 'About' meta box. */
-	if ( in_array( 'about', $supports[0] ) )
-		require_once( trailingslashit( HYBRID_ADMIN ) . 'meta-box-theme-about.php' );
+		/* Load the 'About' meta box if it is supported. */
+		if ( in_array( 'about', $supports[0] ) )
+			require_once( trailingslashit( HYBRID_ADMIN ) . 'meta-box-theme-about.php' );
 
-	/* Load the 'Footer' meta box if it is supported. */
-	if ( in_array( 'footer', $supports[0] ) )
-		require_once( trailingslashit( HYBRID_ADMIN ) . 'meta-box-theme-footer.php' );
+		/* Load the 'Footer' meta box if it is supported. */
+		if ( in_array( 'footer', $supports[0] ) )
+			require_once( trailingslashit( HYBRID_ADMIN ) . 'meta-box-theme-footer.php' );
+	}
 }
 
 /**
@@ -144,7 +141,6 @@ function hybrid_load_settings_page_meta_boxes() {
  */
 function hybrid_save_theme_settings( $settings ) {
 
-	/* Allow developers to futher validate/sanitize the data. */
 	/* @deprecated 1.0.0. Developers should filter "sanitize_option_{$prefix}_theme_settings" instead. */
 	return apply_filters( hybrid_get_prefix() . '_validate_theme_settings', $settings );
 }
@@ -284,12 +280,13 @@ function hybrid_settings_page_contextual_help() {
 }
 
 /**
- * Loads the Stylesheet files required for the theme settings page.
+ * Loads the required stylesheets for displaying the theme settings page in the WordPress admin.
  *
- * @since 0.7.0
+ * @since 1.2.0
  */
-function hybrid_settings_page_enqueue_style( $hook_suffix ) {
+function hybrid_settings_page_enqueue_styles( $hook_suffix ) {
 
+	/* Load admin stylesheet if on the theme settings screen. */
 	if ( $hook_suffix == hybrid_get_settings_page_name() )
 		wp_enqueue_style( 'hybrid-core-admin' );
 }
@@ -298,10 +295,10 @@ function hybrid_settings_page_enqueue_style( $hook_suffix ) {
  * Loads the JavaScript files required for managing the meta boxes on the theme settings
  * page, which allows users to arrange the boxes to their liking.
  *
- * @since 0.7.0
+ * @since 1.2.0
  * @param string $hook_suffix The current page being viewed.
  */
-function hybrid_settings_page_enqueue_script( $hook_suffix ) {
+function hybrid_settings_page_enqueue_scripts( $hook_suffix ) {
 
 	if ( $hook_suffix == hybrid_get_settings_page_name() ) {
 		wp_enqueue_script( 'common' );
@@ -314,7 +311,6 @@ function hybrid_settings_page_enqueue_script( $hook_suffix ) {
  * Loads the JavaScript required for toggling the meta boxes on the theme settings page.
  *
  * @since 0.7.0
- * @global string $hybrid The global theme object.
  */
 function hybrid_settings_page_load_scripts() { ?>
 	<script type="text/javascript">
