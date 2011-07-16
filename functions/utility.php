@@ -106,7 +106,7 @@ function get_atomic_template( $template ) {
  * @since 0.4.0
  */
 function hybrid_meta_template() {
-	$data = get_theme_data( trailingslashit( TEMPLATEPATH ) . 'style.css' );
+	$data = hybrid_get_theme_data();
 	$template = '<meta name="template" content="' . esc_attr( "{$data['Title']} {$data['Version']}" ) . '" />' . "\n";
 	echo apply_atomic( 'meta_template', $template );
 }
