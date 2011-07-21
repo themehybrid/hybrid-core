@@ -57,7 +57,7 @@ function hybrid_get_textdomain() {
  * @global object $hybrid The global Hybrid object.
  * @return string $hybrid->child_theme_textdomain The textdomain of the child theme.
  */
-function hybrid_get_child_theme_textdomain() {
+function hybrid_get_child_textdomain() {
 	global $hybrid;
 
 	/* If a child theme isn't active, return an empty string. */
@@ -65,10 +65,10 @@ function hybrid_get_child_theme_textdomain() {
 		return '';
 
 	/* If the global textdomain isn't set, define it. Plugin/theme authors may also define a custom textdomain. */
-	if ( empty( $hybrid->child_theme_textdomain ) )
-		$hybrid->child_theme_textdomain = sanitize_key( apply_filters( hybrid_get_prefix() . '_child_theme_textdomain', get_stylesheet() ) );
+	if ( empty( $hybrid->child_textdomain ) )
+		$hybrid->child_textdomain = sanitize_key( apply_filters( hybrid_get_prefix() . '_child_textdomain', get_stylesheet() ) );
 
-	return $hybrid->child_theme_textdomain;
+	return $hybrid->child_textdomain;
 }
 
 /**
@@ -83,7 +83,7 @@ function hybrid_get_child_theme_textdomain() {
 function hybrid_load_textdomain( $mofile, $domain ) {
 
 	/* If the $domain is for the parent or child theme, search for a $domain-$locale.mo file. */
-	if ( $domain == hybrid_get_textdomain() || $domain == hybrid_get_child_theme_textdomain() ) {
+	if ( $domain == hybrid_get_textdomain() || $domain == hybrid_get_child_textdomain() ) {
 
 		/* Check for a $domain-$locale.mo file in the parent and child theme root and /languages folder. */
 		$locale = get_locale();

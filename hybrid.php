@@ -159,7 +159,7 @@ class Hybrid {
 
 		/* Load child theme textdomain. */
 		if ( is_child_theme() )
-			load_child_theme_textdomain( hybrid_get_child_theme_textdomain() );
+			load_child_theme_textdomain( hybrid_get_child_textdomain() );
 
 		/* Get the user's locale. */
 		$locale = get_locale();
