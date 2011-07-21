@@ -134,7 +134,7 @@ function hybrid_avatar() {
 	$avatar = get_avatar( $comment, absint( $size ), $default_avatar, $author );
 
 	/* If URL input, wrap avatar in hyperlink. */
-	if ( !empty( $url ) )
+	if ( !empty( $url ) && !empty( $avatar ) )
 		$avatar = '<a href="' . $url . '" rel="external nofollow" title="' . $author . '">' . $avatar . '</a>';
 
 	/* Display the avatar and allow it to be filtered. Note: Use the get_avatar filter hook where possible. */
