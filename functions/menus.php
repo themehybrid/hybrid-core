@@ -12,8 +12,7 @@
 add_action( 'init', 'hybrid_register_menus' );
 
 /**
- * Registers the the framework's default menus.  By default, the framework registers the 'primary' menu, 
- * which is technically a location within the theme for a user-created menu to be shown.
+ * Registers the the framework's default menus based on the menus the theme has registered support for.
  *
  * @since 0.8.0
  * @uses register_nav_menu() Registers a nav menu with WordPress.
@@ -21,10 +20,10 @@ add_action( 'init', 'hybrid_register_menus' );
  */
 function hybrid_register_menus() {
 
-	/* Get theme-supported sidebars. */
+	/* Get theme-supported menus. */
 	$menus = get_theme_support( 'hybrid-core-menus' );
 
-	/* If there is no array of sidebars IDs, return. */
+	/* If there is no array of menus IDs, return. */
 	if ( !is_array( $menus[0] ) )
 		return;
 
