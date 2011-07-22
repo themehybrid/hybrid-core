@@ -31,7 +31,7 @@ function hybrid_register_scripts() {
 }
 
 /**
- * Tells WordPress to load the scripts needed for the framework using the wp_enqueue_scripts() function.
+ * Tells WordPress to load the scripts needed for the framework using the wp_enqueue_script() function.
  *
  * @since 1.2.0
  */
