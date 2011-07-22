@@ -197,7 +197,7 @@ function hybrid_meta_keywords() {
 			/* Get all taxonomies for the current post type. */
 			$taxonomies = get_object_taxonomies( $post->post_type );
 
-			/* If taxonomies wer found for the post type. */
+			/* If taxonomies were found for the post type. */
 			if ( is_array( $taxonomies ) ) {
 
 				/* Loop through the taxonomies, getting the terms for the current post. */
