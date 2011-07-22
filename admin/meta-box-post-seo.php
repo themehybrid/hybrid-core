@@ -75,7 +75,7 @@ function hybrid_meta_box_post_save_seo( $post_id, $post ) {
 
 	$prefix = hybrid_get_prefix();
 
-	/* Verify that the post type supports the meta box and the nonce before proceeding. */
+	/* Verify the nonce before proceeding. */
 	if ( !isset( $_POST['hybrid-core-post-meta-box-seo'] ) || !wp_verify_nonce( $_POST['hybrid-core-post-meta-box-seo'], basename( __FILE__ ) ) )
 		return $post_id;
 
