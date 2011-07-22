@@ -108,7 +108,7 @@ function post_stylesheets_meta_box( $object, $box ) { ?>
  */
 function post_stylesheets_meta_box_save( $post_id, $post ) {
 
-	/* Verify that the post type supports the meta box and the nonce before preceding. */
+	/* Verify the nonce before proceeding. */
 	if ( !isset( $_POST["post_stylesheets_meta_box_nonce"] ) || !wp_verify_nonce( $_POST["post_stylesheets_meta_box_nonce"], basename( __FILE__ ) ) )
 		return $post_id;
 

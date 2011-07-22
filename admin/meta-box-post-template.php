@@ -78,7 +78,7 @@ function hybrid_meta_box_post_display_template( $object, $box ) {
  */
 function hybrid_meta_box_post_save_template( $post_id, $post ) {
 
-	/* Verify that the post type supports the meta box and the nonce before proceeding. */
+	/* Verify the nonce before proceeding. */
 	if ( !isset( $_POST['hybrid-core-post-meta-box-template'] ) || !wp_verify_nonce( $_POST['hybrid-core-post-meta-box-template'], basename( __FILE__ ) ) )
 		return $post_id;
 
