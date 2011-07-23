@@ -265,6 +265,9 @@ function hybrid_body_class( $class = '' ) {
 	/* Text direction (which direction does the text flow). */
 	$classes = array( 'wordpress', get_bloginfo( 'text_direction' ), get_locale() );
 
+	/* Check if the current theme is a parent or child theme. */
+	$classes[] = ( is_child_theme() ? 'child-theme' : 'parent-theme' );
+
 	/* Multisite check adds the 'multisite' class and the blog ID. */
 	if ( is_multisite() ) {
 		$classes[] = 'multisite';
