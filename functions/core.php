@@ -106,9 +106,6 @@ function hybrid_load_textdomain( $mofile, $domain ) {
  * give extra hooks such as 'hybrid_singular_header', 'hybrid_singular-post_header', and 
  * 'hybrid_singular-post-ID_header'.
  *
- * Major props to Ptah Dunbar for the do_atomic() function.
- * @link http://ptahdunbar.com/wordpress/smarter-hooks-context-sensitive-hooks
- *
  * @since 0.7.0
  * @uses hybrid_get_prefix() Gets the theme prefix.
  * @uses hybrid_get_context() Gets the context of the current page.
@@ -202,17 +199,23 @@ function apply_atomic_shortcode( $tag = '', $value = '' ) {
 function hybrid_get_setting( $option = '' ) {
 	global $hybrid, $hybrid_settings;
 
+	/* If no specific option was requested, return false. */
 	if ( !$option )
 		return false;
 
+	/* If the settings array hasn't been set, call get_option() to get an array of theme settings. */
 	if ( !isset( $hybrid->settings ) )
 		$hybrid->settings = $hybrid_settings = get_option( hybrid_get_prefix() . '_theme_settings' );
 
+	/* If the settings isn't an array or the specific option isn't in the array, return false. */
 	if ( !is_array( $hybrid->settings ) || empty( $hybrid->settings[$option] ) )
 		return false;
 
+	/* If the specific option is an array, return it. */
 	if ( is_array( $hybrid->settings[$option] ) )
 		return $hybrid->settings[$option];
+
+	/* Strip slashes from the setting and return. */
 	else
 		return wp_kses_stripslashes( $hybrid->settings[$option] );
 }
@@ -277,22 +280,29 @@ function hybrid_get_content_width() {
 function hybrid_get_theme_data( $path = 'template' ) {
 	global $hybrid;
 
+	/* If 'template' is requested, get the parent theme data. */
 	if ( 'template' == $path ) {
 
+		/* If the parent theme data isn't set, grab it with the get_theme_data() function. */
 		if ( empty( $hybrid->theme_data ) )
 			$hybrid->theme_data = get_theme_data( trailingslashit( TEMPLATEPATH ) . 'style.css' );
 
+		/* Return the parent theme data. */
 		return $hybrid->theme_data;
 	}
 
+	/* If 'stylesheet' is requested, get the child theme data. */
 	elseif ( 'stylesheet' == $path ) {
 
+		/* If the child theme data isn't set, grab it with the get_theme_data() function. */
 		if ( empty( $hybrid->child_theme_data ) )
 			$hybrid->child_theme_data = get_theme_data( trailingslashit( STYLESHEETPATH ) . 'style.css' );
 
+		/* Return the child theme data. */
 		return $hybrid->child_theme_data;
 	}
 
+	/* Return false for everything else. */
 	return false;
 }
 

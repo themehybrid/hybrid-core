@@ -44,7 +44,7 @@ function hybrid_list_comments_args() {
  * the $comment_type. The comment template hierarchy is comment-$comment_type.php, 
  * comment.php.
  *
- * The templates are saved in $hybrid->templates[comment_template], so each comment template
+ * The templates are saved in $hybrid->comment_template[$comment_type], so each comment template
  * is only located once if it is needed. Following comments will use the saved template.
  *
  * @since 0.2.3

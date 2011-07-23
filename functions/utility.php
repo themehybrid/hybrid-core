@@ -177,7 +177,7 @@ function hybrid_has_post_template( $template = '' ) {
 			return true;
 	}
 
-	/* Return fals for everything else. */
+	/* Return false for everything else. */
 	return false;
 }
 

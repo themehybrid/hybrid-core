@@ -12,8 +12,8 @@
 
 /**
  * After single posts but before the comments template.
- * @since 0.2
- * @deprecated 0.7
+ * @since 0.2.0
+ * @deprecated 0.7.0
  */
 function hybrid_after_single() {
 	_deprecated_function( __FUNCTION__, '0.7', "apply_atomic( 'after_singular' )" );
@@ -22,8 +22,8 @@ function hybrid_after_single() {
 
 /**
  * After page content but before the comments template.
- * @since 0.2
- * @deprecated 0.7
+ * @since 0.2.0
+ * @deprecated 0.7.0
  */
 function hybrid_after_page() {
 	_deprecated_function( __FUNCTION__, '0.7', "apply_atomic( 'after_singular' )" );
@@ -33,7 +33,7 @@ function hybrid_after_page() {
 /**
  * Displays an individual comment author.
  * @since 0.2.2
- * @deprecated 0.8
+ * @deprecated 0.8.0
  */
 function hybrid_comment_author() {
 	_deprecated_function( __FUNCTION__, '0.8', 'hybrid_comment_author_shortcode()' );
@@ -42,7 +42,7 @@ function hybrid_comment_author() {
 
 /**
  * This function creates all of the default theme settings and adds them to a single array.
- * @since 0.4
+ * @since 0.4.0
  * @deprecated 1.0.0
  */
 function hybrid_theme_settings() {
@@ -115,7 +115,7 @@ function hybrid_after_html() {
 }
 
 /**
- * @since 0.1
+ * @since 0.1.0
  * @deprecated 1.0.0
  */
 function hybrid_head() {
@@ -124,7 +124,7 @@ function hybrid_head() {
 }
 
 /**
- * @since 0.1
+ * @since 0.1.0
  * @deprecated 1.0.0
  */
 function hybrid_before_header() {
@@ -133,7 +133,7 @@ function hybrid_before_header() {
 }
 
 /**
- * @since 0.1
+ * @since 0.1.0
  * @deprecated 1.0.0
  */
 function hybrid_header() {
@@ -142,7 +142,7 @@ function hybrid_header() {
 }
 
 /**
- * @since 0.1
+ * @since 0.1.0
  * @deprecated 1.0.0
  */
 function hybrid_after_header() {
@@ -151,7 +151,7 @@ function hybrid_after_header() {
 }
 
 /**
- * @since 0.8
+ * @since 0.8.0
  * @deprecated 1.0.0
  */
 function hybrid_before_primary_menu() {
@@ -160,7 +160,7 @@ function hybrid_before_primary_menu() {
 }
 
 /**
- * @since 0.8
+ * @since 0.8.0
  * @deprecated 1.0.0
  */
 function hybrid_after_primary_menu() {
@@ -169,7 +169,7 @@ function hybrid_after_primary_menu() {
 }
 
 /**
- * @since 0.1
+ * @since 0.1.0
  * @deprecated 1.0.0
  */
 function hybrid_before_container() {
@@ -178,7 +178,7 @@ function hybrid_before_container() {
 }
 
 /**
- * @since 0.1
+ * @since 0.1.0
  * @deprecated 1.0.0
  */
 function hybrid_before_content() {
@@ -187,7 +187,7 @@ function hybrid_before_content() {
 }
 
 /**
- * @since 0.1
+ * @since 0.1.0
  * @deprecated 1.0.0
  */
 function hybrid_after_content() {
@@ -196,7 +196,7 @@ function hybrid_after_content() {
 }
 
 /**
- * @since 0.5
+ * @since 0.5.0
  * @deprecated 1.0.0
  */
 function hybrid_before_entry() {
@@ -205,7 +205,7 @@ function hybrid_before_entry() {
 }
 
 /**
- * @since 0.5
+ * @since 0.5.0
  * @deprecated 1.0.0
  */
 function hybrid_after_entry() {
@@ -214,7 +214,7 @@ function hybrid_after_entry() {
 }
 
 /**
- * @since 0.7
+ * @since 0.7.0
  * @deprecated 1.0.0
  */
 function hybrid_after_singular() {
@@ -229,7 +229,7 @@ function hybrid_after_singular() {
 }
 
 /**
- * @since 0.1
+ * @since 0.1.0
  * @deprecated 1.0.0
  */
 function hybrid_before_primary() {
@@ -238,7 +238,7 @@ function hybrid_before_primary() {
 }
 
 /**
- * @since 0.1
+ * @since 0.1.0
  * @deprecated 1.0.0
  */
 function hybrid_after_primary() {
@@ -247,7 +247,7 @@ function hybrid_after_primary() {
 }
 
 /**
- * @since 0.2
+ * @since 0.2.0
  * @deprecated 1.0.0
  */
 function hybrid_before_secondary() {
@@ -256,7 +256,7 @@ function hybrid_before_secondary() {
 }
 
 /**
- * @since 0.2
+ * @since 0.2.0
  * @deprecated 1.0.0
  */
 function hybrid_after_secondary() {
@@ -283,7 +283,7 @@ function hybrid_after_subsidiary() {
 }
 
 /**
- * @since 0.1
+ * @since 0.1.0
  * @deprecated 1.0.0
  */
 function hybrid_after_container() {
@@ -292,7 +292,7 @@ function hybrid_after_container() {
 }
 
 /**
- * @since 0.1
+ * @since 0.1.0
  * @deprecated 1.0.0
  */
 function hybrid_before_footer() {
@@ -301,7 +301,7 @@ function hybrid_before_footer() {
 }
 
 /**
- * @since 0.1
+ * @since 0.1.0
  * @deprecated 1.0.0
  */
 function hybrid_footer() {
@@ -310,7 +310,7 @@ function hybrid_footer() {
 }
 
 /**
- * @since 0.1
+ * @since 0.1.0
  * @deprecated 1.0.0
  */
 function hybrid_after_footer() {
@@ -319,7 +319,7 @@ function hybrid_after_footer() {
 }
 
 /**
- * @since 0.5
+ * @since 0.5.0
  * @deprecated 1.0.0
  */
 function hybrid_before_comment() {
@@ -328,7 +328,7 @@ function hybrid_before_comment() {
 }
 
 /**
- * @since 0.5
+ * @since 0.5.0
  * @deprecated 1.0.0
  */
 function hybrid_after_comment() {
@@ -337,7 +337,7 @@ function hybrid_after_comment() {
 }
 
 /**
- * @since 0.6
+ * @since 0.6.0
  * @deprecated 1.0.0
  */
 function hybrid_before_comment_list() {
@@ -346,7 +346,7 @@ function hybrid_before_comment_list() {
 }
 
 /**
- * @since 0.6
+ * @since 0.6.0
  * @deprecated 1.0.0
  */
 function hybrid_after_comment_list() {
@@ -549,7 +549,7 @@ function hybrid_post_stylesheets() {
 
 /**
  * Message to display for removed functions.
- * @since 0.5
+ * @since 0.5.0
  */
 function hybrid_function_removed( $func = '' ) {
 	die( sprintf( __( '<code>%1$s</code> &mdash; This function has been removed or replaced by another function.', hybrid_get_textdomain() ), $func ) );

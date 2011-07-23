@@ -71,6 +71,7 @@ function hybrid_site_link_shortcode() {
 
 /**
  * Shortcode to display a link to WordPress.org.
+ *
  * @since 0.6.0
  */
 function hybrid_wp_link_shortcode() {
