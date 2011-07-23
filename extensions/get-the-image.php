@@ -172,7 +172,7 @@ function get_the_image( $args = array() ) {
 	}
 
 	/* Or, if $echo is set to false, return the formatted image. */
-	elseif ( empty( $echo ) ) {
+	elseif ( false === $echo ) {
 		return $image;
 	}
 
