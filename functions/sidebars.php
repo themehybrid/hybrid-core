@@ -72,31 +72,31 @@ function hybrid_get_sidebars() {
 	/* Set up an array of sidebars. */
 	$sidebars = array(
 		'primary' => array(
-			'name' => 	__( 'Primary', $domain ),
+			'name' => 	_x( 'Primary', 'sidebar', $domain ),
 			'description' => 	__( 'The main (primary) widget area, most often used as a sidebar.', $domain )
 		),
 		'secondary' => array(
-			'name' =>	__( 'Secondary', $domain ),
+			'name' =>	_x( 'Secondary', 'sidebar', $domain ),
 			'description' =>	__( 'The second most important widget area, most often used as a secondary sidebar.', $domain ),
 		),
 		'subsidiary' => array(
-			'name' => 	__( 'Subsidiary', $domain ),
+			'name' => 	_x( 'Subsidiary', 'sidebar', $domain ),
 			'description' =>	__( 'A widget area loaded in the footer of the site.', $domain ),
 		),
 		'header' => array(
-			'name' =>	__( 'Header', $domain ),
+			'name' =>	_x( 'Header', 'sidebar', $domain ),
 			'description' =>	__( 'Displayed within the site\'s header area.', $domain ),
 		),
 		'before-content' => array(
-			'name' =>	__( 'Before Content', $domain ),
+			'name' =>	_x( 'Before Content', 'sidebar', $domain ),
 			'description' =>	__( 'Loaded before the page\'s main content area.', $domain ),
 		),
 		'after-content' => array(
-			'name' =>	__( 'After Content', $domain ),
+			'name' =>	_x( 'After Content', 'sidebar', $domain ),
 			'description' =>	__( 'Loaded after the page\'s main content area.', $domain ),
 		),
 		'after-singular' => array(
-			'name' =>	__( 'After Singular', $domain ),
+			'name' =>	_x( 'After Singular', 'sidebar', $domain ),
 			'description' =>	__( 'Loaded on singular post (page, attachment, etc.) views before the comments area.', $domain ),
 		)
 	);

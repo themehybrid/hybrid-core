@@ -29,15 +29,15 @@ function hybrid_register_menus() {
 
 	/* Register the 'primary' menu. */
 	if ( in_array( 'primary', $menus[0] ) )
-		register_nav_menu( 'primary', __( 'Primary Menu', hybrid_get_textdomain() ) );
+		register_nav_menu( 'primary', _x( 'Primary', 'nav menu location', hybrid_get_textdomain() ) );
 
 	/* Register the 'secondary' menu. */
 	if ( in_array( 'secondary', $menus[0] ) )
-		register_nav_menu( 'secondary', __( 'Secondary Menu', hybrid_get_textdomain() ) );
+		register_nav_menu( 'secondary', _x( 'Secondary', 'nav menu location', hybrid_get_textdomain() ) );
 
 	/* Register the 'subsidiary' menu. */
 	if ( in_array( 'subsidiary', $menus[0] ) )
-		register_nav_menu( 'subsidiary', __( 'Subsidiary Menu', hybrid_get_textdomain() ) );
+		register_nav_menu( 'subsidiary', _x( 'Subsidiary', 'nav menu location', hybrid_get_textdomain() ) );
 }
 
 ?>
