@@ -205,7 +205,7 @@ function hybrid_get_setting( $option = '' ) {
 
 	/* If the settings array hasn't been set, call get_option() to get an array of theme settings. */
 	if ( !isset( $hybrid->settings ) )
-		$hybrid->settings = $hybrid_settings = get_option( hybrid_get_prefix() . '_theme_settings' );
+		$hybrid->settings = $hybrid_settings = get_option( hybrid_get_prefix() . '_theme_settings', hybrid_get_default_theme_settings() );
 
 	/* If the settings isn't an array or the specific option isn't in the array, return false. */
 	if ( !is_array( $hybrid->settings ) || empty( $hybrid->settings[$option] ) )
@@ -218,6 +218,41 @@ function hybrid_get_setting( $option = '' ) {
 	/* Strip slashes from the setting and return. */
 	else
 		return wp_kses_stripslashes( $hybrid->settings[$option] );
+}
+
+/**
+ * Creates an empty array of the default theme settings.  If the theme adds support for the 
+ * 'hybrid-core-meta-box-footer' feature, it'll automatically add that setting to the $settings array.
+ *
+ * @since 1.0.0
+ */
+function hybrid_get_default_theme_settings() {
+
+	/* Set up some default variables. */
+	$settings = array();
+	$domain = hybrid_get_textdomain();
+	$prefix = hybrid_get_prefix();
+
+	/* Get theme-supported meta boxes for the settings page. */
+	$supports = get_theme_support( 'hybrid-core-theme-settings' );
+
+	/* If the current theme supports the footer meta box and shortcodes, add default footer settings. */
+	if ( is_array( $supports[0] ) && in_array( 'footer', $supports[0] ) && current_theme_supports( 'hybrid-core-shortcodes' ) ) {
+
+		/* If there is a child theme active, add the [child-link] shortcode to the $footer_insert. */
+		if ( is_child_theme() )
+			$settings['footer_insert'] = '<p class="copyright">' . __( 'Copyright &#169; [the-year] [site-link].', $domain ) . '</p>' . "\n\n" . '<p class="credit">' . __( 'Powered by [wp-link], [theme-link], and [child-link].', $domain ) . '</p>';
+
+		/* If no child theme is active, leave out the [child-link] shortcode. */
+		else
+			$settings['footer_insert'] = '<p class="copyright">' . __( 'Copyright &#169; [the-year] [site-link].', $domain ) . '</p>' . "\n\n" . '<p class="credit">' . __( 'Powered by [wp-link] and [theme-link].', $domain ) . '</p>';
+	}
+
+	/* Backwards compatibility hook. @deprecated 1.0.0. */
+	$settings = apply_filters( "{$prefix}_settings_args", $settings );
+
+	/* Return the $settings array and provide a hook for overwriting the default settings. */
+	return apply_filters( "{$prefix}_default_theme_settings", $settings );
 }
 
 /**
