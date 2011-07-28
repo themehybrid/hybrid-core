@@ -83,6 +83,7 @@ function theme_layouts_get_layout() {
  *
  * @since 0.2.0
  * @param int $post_id The ID of the post to get the layout for.
+ * @return string $layout The name of the post's layout.
  */
 function get_post_layout( $post_id ) {
 
@@ -99,7 +100,7 @@ function get_post_layout( $post_id ) {
  * @since 0.2.0
  * @param int $post_id The ID of the post to set the layout for.
  * @param string $layout The name of the layout to set.
- * @return book The return value of the update_post_meta() function.
+ * @return bool The return value of the update_post_meta() function.
  */
 function set_post_layout( $post_id, $layout ) {
 	return update_post_meta( $post_id, apply_filters( 'theme_layouts_meta_key', 'Layout' ), $layout );
@@ -197,13 +198,13 @@ function theme_layouts_strings() {
 
 	/* Set up the default layout strings. */
 	$strings = array(
-		'default' => __( 'Default', theme_layouts_textdomain() ),
-		'1c' => __( 'One Column', theme_layouts_textdomain() ),
-		'2c-l' => __( 'Two Columns, Left', theme_layouts_textdomain() ),
-		'2c-r' => __( 'Two Columns, Right', theme_layouts_textdomain() ),
-		'3c-l' => __( 'Three Columns, Left', theme_layouts_textdomain() ),
-		'3c-r' => __( 'Three Columns, Right', theme_layouts_textdomain() ),
-		'3c-c' => __( 'Three Columns, Center', theme_layouts_textdomain() )
+		'default' => 	__( 'Default', theme_layouts_textdomain() ),
+		'1c' => 		__( 'One Column', theme_layouts_textdomain() ),
+		'2c-l' => 		__( 'Two Columns, Left', theme_layouts_textdomain() ),
+		'2c-r' => 	__( 'Two Columns, Right', theme_layouts_textdomain() ),
+		'3c-l' => 		__( 'Three Columns, Left', theme_layouts_textdomain() ),
+		'3c-r' => 	__( 'Three Columns, Right', theme_layouts_textdomain() ),
+		'3c-c' => 	__( 'Three Columns, Center', theme_layouts_textdomain() )
 	);
 
 	/* Allow devs to filter the strings for custom layouts. */
@@ -241,6 +242,12 @@ function theme_layouts_admin_setup() {
 
 	/* Saves the post format on the post editing page. */
 	add_action( 'save_post', 'theme_layouts_save_post', 10, 2 );
+
+	/* Adds a theme layout <select> element to the attachment edit form. */
+	add_filter( 'attachment_fields_to_edit', 'theme_layouts_attachment_fields_to_edit', 10, 2 );
+
+	/* Saves the theme layout for attachments. */
+	add_filter( 'attachment_fields_to_save', 'theme_layouts_attachment_fields_to_save', 10, 2 );
 }
 
 /**
@@ -296,6 +303,72 @@ function theme_layouts_save_post( $post_id, $post ) {
 	/* If the old layout doesn't match the new layout, update the post layout meta. */
 	if ( $old_layout !== $new_layout )
 		set_post_layout( $post_id, $new_layout );
+}
+
+/**
+ * Adds a select drop-down element to the attachment edit form for selecting the attachment layout.
+ *
+ * @since 0.3.0
+ * @param array $fields Array of fields for the edit attachment form.
+ * @param object $post The attachment post object.
+ * @return array $fields
+ */
+function theme_layouts_attachment_fields_to_edit( $fields, $post ) {
+
+	/* Get theme-supported theme layouts. */
+	$layouts = get_theme_support( 'theme-layouts' );
+	$post_layouts = $layouts[0];
+
+	/* Get the current post's layout. */
+	$post_layout = get_post_layout( $post->ID );
+
+	/* Set the default post layout. */
+	$select = '<option id="post_layout_default" value="default" ' . selected( $post_layout, 'default', false ) . '>' . esc_html( theme_layouts_get_string( 'default' ) ) . '</option>';
+
+	/* Loop through each theme-supported layout, adding it to the select element. */
+	foreach ( $post_layouts as $layout )
+		$select .= '<option id="post_layout_' . esc_attr( $layout ) . '" value="' . esc_attr( $layout ) . '" ' . selected( $post_layout, $layout, false ) . '>' . esc_html( theme_layouts_get_string( $layout ) ) . '</option>';
+
+	/* Set the HTML for the post layout select drop-down. */
+	$select = '<select name="attachments[' . $post->ID . '][theme-layouts-post-layout]" id="attachments[' . $post->ID . '][theme-layouts-post-layout]">' . $select . '</select>';
+
+	/* Add the attachment layout field to the $fields array. */
+	$fields['theme-layouts-post-layout'] = array(
+		'label' => __( 'Layout', theme_layouts_textdomain() ),
+		'input' => 'html',
+		'html' => $select
+	);
+
+	/* Return the $fields array back to WordPress. */
+	return $fields;
+}
+
+/**
+ * Saves the attachment layout for the attachment edit form.
+ *
+ * @since 0.3.0
+ * @param array $post The attachment post array (not the post object!).
+ * @param array $fields Array of fields for the edit attachment form.
+ * @return array $post
+ */
+function theme_layouts_attachment_fields_to_save( $post, $fields ) {
+
+	/* If the theme layouts field was submitted. */
+	if ( isset( $fields['theme-layouts-post-layout'] ) ) {
+
+		/* Get the previous post layout. */
+		$old_layout = get_post_layout( $post['ID'] );
+
+		/* Get the submitted post layout. */
+		$new_layout = esc_attr( $fields['theme-layouts-post-layout'] );
+
+		/* If the old layout doesn't match the new layout, update the post layout meta. */
+		if ( $old_layout !== $new_layout )
+			set_post_layout( $post['ID'], $new_layout );
+	}
+
+	/* Return the attachment post array. */
+	return $post;
 }
 
 /**
