@@ -14,7 +14,7 @@
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * @package PostStylesheets
- * @version 0.2.1
+ * @version 0.2.0
  * @author Justin Tadlock <justin@justintadlock.com>
  * @copyright Copyright (c) 2010 - 2011, Justin Tadlock
  * @link http://justintadlock.com
@@ -40,14 +40,8 @@ function post_stylesheets_stylesheet_uri( $stylesheet_uri, $stylesheet_dir_uri )
 	/* Check if viewing a singular post. */
 	if ( is_singular() ) {
 
-		/* Allow plugin/theme developers to override the default meta key. */
-		$meta_key = apply_filters( 'post_stylesheets_meta_key', 'Stylesheet' );
-
-		/* Get the post ID. */
-		$post_id = get_queried_object_id();
-
 		/* Check if the user has set a value for the post stylesheet. */
-		$stylesheet = get_post_meta( $post_id, $meta_key, true );
+		$stylesheet = get_post_stylesheet( get_queried_object_id() );
 
 		/* If a meta value was given and the file exists, set $stylesheet_uri to the new file. */
 		if ( !empty( $stylesheet ) ) {
@@ -67,21 +61,58 @@ function post_stylesheets_stylesheet_uri( $stylesheet_uri, $stylesheet_dir_uri )
 }
 
 /**
+ * Returns the post stylesheet if one is saved as post metadata.
+ *
+ * @since 0.3.0
+ * @param int $post_id The ID of the post to get the stylesheet for.
+ * @return string|bool Stylesheet name if given.  False for no stylesheet.
+ */
+function get_post_stylesheet( $post_id ) {
+	return get_post_meta( $post_id, apply_filters( 'post_stylesheets_meta_key', 'Stylesheet' ), true );
+}
+
+/**
+ * Adds/updates the post stylesheet for a specific post.
+ *
+ * @since 0.3.0
+ * @param int $post_id The ID of the post to set the stylesheet for.
+ * @param string $stylesheet The filename of the stylesheet.
+ */
+function set_post_stylesheet( $post_id, $stylesheet ) {
+	return update_post_meta( $post_id, apply_filters( 'post_stylesheets_meta_key', 'Stylesheet' ), $stylesheet );
+}
+
+/**
+ * Checks if a post has a specific post stylesheet.
+ *
+ * @since 0.3.0
+ * @param string $stylesheet The filename of the stylesheet.
+ * @param int $post_id The ID of the post to check.
+ * @return bool True|False depending on whether the post has the stylesheet.
+ */
+function has_post_stylesheet( $stylesheet, $post_id = '' ) {
+
+	/* If no post ID is given, use WP's get_the_ID() to get it and assume we're in the post loop. */
+	if ( empty( $post_id ) )
+		$post_id = get_the_ID();
+
+	/* Return true/false based on whether the stylesheet matches. */
+	return ( $stylesheet == get_post_stylesheet( $post_id ) ? true : false );
+}
+
+/**
  * Creates the post stylesheets meta box.
  *
  * @since 0.2.0
  */
 function post_stylesheets_create_meta_box() {
 
-	/* Set up a default textdomain. */
-	$textdomain = apply_filters( 'post_stylesheets_textdomain', 'post-stylesheets' );
-
 	/* Get all available 'public' post types. */
 	$post_types = get_post_types( array( 'public' => true ), 'objects' );
 
 	/* Loop through each of the public post types and add the meta box to it. */
 	foreach ( $post_types as $type )
-		add_meta_box( "post-stylesheets", sprintf( __( '%s Stylesheet', $textdomain ), $type->labels->singular_name ), 'post_stylesheets_meta_box', $type->name, 'side', 'default' );
+		add_meta_box( "post-stylesheets", sprintf( __( '%s Stylesheet', apply_filters( 'post_stylesheets_textdomain', 'post-stylesheets' ) ), $type->labels->singular_name ), 'post_stylesheets_meta_box', $type->name, 'side', 'default' );
 
 	/* Saves the post meta box data. */
 	add_action( 'save_post', 'post_stylesheets_meta_box_save', 10, 2 );
@@ -96,7 +127,7 @@ function post_stylesheets_meta_box( $object, $box ) { ?>
 
 	<p>
 		<input type="hidden" name="post_stylesheets_meta_box_nonce" value="<?php echo wp_create_nonce( basename( __FILE__ ) ); ?>" />
-		<input type="text" name="post-stylesheets" id="post-stylesheets" value="<?php echo esc_attr( get_post_meta( $object->ID, apply_filters( 'post_stylesheets_meta_key', 'Stylesheet' ), true ) ); ?>" size="30" tabindex="30" style="width: 99%;" />
+		<input type="text" class="widefat" name="post-stylesheets" id="post-stylesheets" value="<?php echo esc_attr( get_post_stylesheet( $object->ID ) ); ?>" />
 	</p>
 <?php
 }
@@ -119,26 +150,15 @@ function post_stylesheets_meta_box_save( $post_id, $post ) {
 	if ( !current_user_can( $post_type->cap->edit_post, $post_id ) )
 		return $post_id;
 
-	/* Get the posted stylesheet name and strip any tags from it. */
-	$new_meta_value = ( isset( $_POST['post-stylesheets'] ) ? strip_tags( $_POST['post-stylesheets'] ) : '' );
+	/* Get the previous post stylesheet. */
+	$old_stylesheet = get_post_stylesheet( $post_id );
 
-	/* Get the meta key. */
-	$meta_key = apply_filters( 'post_stylesheets_meta_key', 'Stylesheet' );
+	/* Get the submitted post stylesheet. */
+	$new_stylesheet = esc_attr( strip_tags( $_POST['post-stylesheets'] ) );
 
-	/* Get the meta value of the custom field key. */
-	$meta_value = get_post_meta( $post_id, $meta_key, true );
-
-	/* If a new meta value was added and there was no previous value, add it. */
-	if ( $new_meta_value && '' == $meta_value )
-		add_post_meta( $post_id, $meta_key, $new_meta_value, true );
-
-	/* If the new meta value does not match the old value, update it. */
-	elseif ( $new_meta_value && $new_meta_value != $meta_value )
-		update_post_meta( $post_id, $meta_key, $new_meta_value );
-
-	/* If there is no new meta value but an old value exists, delete it. */
-	elseif ( '' == $new_meta_value && $meta_value )
-		delete_post_meta( $post_id, $meta_key, $meta_value );
+	/* If the old stylesheet doesn't match the new stylesheet, update the post stylesheet meta. */
+	if ( $old_stylesheet !== $new_stylesheet )
+		set_post_stylesheet( $post_id, $new_stylesheet );
 }
 
 ?>
