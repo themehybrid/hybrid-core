@@ -215,26 +215,29 @@ function hybrid_settings_field_name( $setting ) {
  */
 function hybrid_settings_page_contextual_help() {
 
+	/* Set the $help variable to an empty string. */
+	$help = '';
+
 	/* Get the parent theme data. */
 	$theme = hybrid_get_theme_data();
 
-	/* Check for a Documentation URI in the style.css.  If it doesn't exist, use the Hybrid Core URI. */
-	$documentation_uri = ( !empty( $theme['Documentation URI'] ) ? $theme['Documentation URI'] : 'http://themehybrid.com/hybrid-core' );
+	/* If the theme has provided a documentation or support URI, add them to the help text. */
+	if ( !empty( $theme['Documentation URI'] ) || !empty( $theme['Support URI'] ) ) {
 
-	/* Check for a Support URI in the style.css.  If it doesn't exist, use the Hybrid Core Support URI. */
-	$support_uri = ( !empty( $theme['Support URI'] ) ? $theme['Support URI'] : 'http://themehybrid.com/support' );
+		/* Open an unordered list for the help text. */
+		$help = '<ul>';
 
-	/* Open an unordered list for the help text. */
-	$help = '<ul>';
+		/* Add the Documentation URI. */
+		if ( !empty( $theme['Documentation URI'] ) )
+			$help .= '<li><a href="' . esc_url( $theme['Documentation URI'] ) . '">' . __( 'Documentation', hybrid_get_textdomain() ) . '</a></li>';
 
-	/* Add the Documentation URI. */
-	$help .= '<li><a href="' . esc_url( $documentation_uri ) . '">' . __( 'Documentation', hybrid_get_textdomain() ) . '</a></li>';
+		/* Add the Support URI. */
+		if ( !empty( $theme['Support URI'] ) )
+			$help .= '<li><a href="' . esc_url( $theme['Support URI'] ) . '">' . __( 'Support', hybrid_get_textdomain() ) . '</a></li>';
 
-	/* Add the Support URI. */
-	$help .= '<li><a href="' . esc_url( $support_uri ) . '">' . __( 'Support', hybrid_get_textdomain() ) . '</a></li>';
-
-	/* Close the unordered list for the help text. */
-	$help .= '</ul>';
+		/* Close the unordered list for the help text. */
+		$help .= '</ul>';
+	}
 
 	/* Return the contextual help text for this screen. */
 	return $help;
