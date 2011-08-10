@@ -27,7 +27,7 @@ function hybrid_add_post_type_support() {
 	add_post_type_support( 'page', array( 'excerpt' ) );
 
 	/* Add support for comments, trackbacks, and entry-views to the 'attachment' post type. */
-	add_post_type_support( 'attachment', array( 'comments', 'trackbacks' ) );
+	add_post_type_support( 'attachment', array( 'trackbacks' ) );
 }
 
 /**
