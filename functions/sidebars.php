@@ -35,25 +35,26 @@ function hybrid_register_sidebars() {
 	/* Loop through the supported sidebars. */
 	foreach ( $supported_sidebars[0] as $sidebar ) {
 
-		/* Get the arguments set for the core sidebars if there are any. */
-		$sidebar_args = ( isset( $core_sidebars[$sidebar] ) ? $core_sidebars[$sidebar] : array() );
+		/* Make sure the given sidebar is one of the core sidebars. */
+		if ( isset( $core_sidebars[$sidebar] ) ) {
 
-		/* Set up some default sidebar arguments. */
-		$defaults = array(
-			'before_widget' => 	'<div id="%1$s" class="widget %2$s widget-%2$s"><div class="widget-wrap widget-inside">',
-			'after_widget' => 		'</div></div>',
-			'before_title' => 		'<h3 class="widget-title">',
-			'after_title' => 		'</h3>'
-		);
+			/* Set up some default sidebar arguments. */
+			$defaults = array(
+				'before_widget' => 	'<div id="%1$s" class="widget %2$s widget-%2$s"><div class="widget-wrap widget-inside">',
+				'after_widget' => 		'</div></div>',
+				'before_title' => 		'<h3 class="widget-title">',
+				'after_title' => 		'</h3>'
+			);
 
-		/* Parse the sidebar arguments and defaults. */
-		$args = wp_parse_args( $sidebar_args, $defaults );
+			/* Parse the sidebar arguments and defaults. */
+			$args = wp_parse_args( $core_sidebars[$sidebar], $defaults );
 
-		/* If no 'id' was given, use the $sidebar variable and sanitize it. */
-		$args['id'] = ( isset( $args['id'] ) ? sanitize_key( $args['id'] ) : sanitize_key( $sidebar ) );
+			/* If no 'id' was given, use the $sidebar variable and sanitize it. */
+			$args['id'] = ( isset( $args['id'] ) ? sanitize_key( $args['id'] ) : sanitize_key( $sidebar ) );
 
-		/* Register the sidebar. */
-		register_sidebar( $args );
+			/* Register the sidebar. */
+			register_sidebar( $args );
+		}
 	}
 }
 
