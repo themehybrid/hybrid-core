@@ -313,10 +313,8 @@ function hybrid_body_class( $class = '' ) {
 	}
 
 	/* Paged views. */
-	if ( ( ( $page = $wp_query->get( 'paged' ) ) || ( $page = $wp_query->get( 'page' ) ) ) && $page > 1 ) {
-		$page = intval( $page );
-		$classes[] = 'paged paged-' . $page;
-	}
+	if ( ( ( $page = $wp_query->get( 'paged' ) ) || ( $page = $wp_query->get( 'page' ) ) ) && $page > 1 )
+		$classes[] = 'paged paged-' . intval( $page );
 
 	/* Input class. */
 	if ( !empty( $class ) ) {
