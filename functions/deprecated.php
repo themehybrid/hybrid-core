@@ -11,27 +11,24 @@
  */
 
 /**
- * After single posts but before the comments template.
  * @since 0.2.0
  * @deprecated 0.7.0
  */
 function hybrid_after_single() {
-	_deprecated_function( __FUNCTION__, '0.7', "apply_atomic( 'after_singular' )" );
+	_deprecated_function( __FUNCTION__, '0.7', "do_atomic( 'after_singular' )" );
 	hybrid_after_singular();
 }
 
 /**
- * After page content but before the comments template.
  * @since 0.2.0
  * @deprecated 0.7.0
  */
 function hybrid_after_page() {
-	_deprecated_function( __FUNCTION__, '0.7', "apply_atomic( 'after_singular' )" );
+	_deprecated_function( __FUNCTION__, '0.7', "do_atomic( 'after_singular' )" );
 	hybrid_after_singular();
 }
 
 /**
- * Displays an individual comment author.
  * @since 0.2.2
  * @deprecated 0.8.0
  */
@@ -41,7 +38,6 @@ function hybrid_comment_author() {
 }
 
 /**
- * This function creates all of the default theme settings and adds them to a single array.
  * @since 0.4.0
  * @deprecated 1.0.0
  */
@@ -51,7 +47,6 @@ function hybrid_theme_settings() {
 }
 
 /**
- * Adds the correct DOCTYPE to the theme.
  * @since 0.4.0
  * @deprecated 1.0.0
  */
@@ -65,7 +60,6 @@ function hybrid_doctype() {
 }
 
 /**
- * Shows the content type in the header.
  * @since 0.4.0
  * @deprecated 1.0.0
  */
@@ -76,7 +70,6 @@ function hybrid_meta_content_type() {
 }
 
 /**
- * Displays the pinkback URL.
  * @since 0.4.0
  * @deprecated 1.0.0
  */
@@ -87,7 +80,6 @@ function hybrid_head_pingback() {
 }
 
 /**
- * Displays the page's profile URI.
  * @since 0.6.0
  * @deprecated 1.0.0
  */
