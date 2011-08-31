@@ -447,6 +447,9 @@ function breadcrumb_trail_get_parents( $post_id = '', $path = '' ) {
 	/* Set up an empty trail array. */
 	$trail = array();
 
+	/* Trim '/' off $path in case we just got a simple '/' instead of a real path. */
+	$path = trim( $path, '/' );
+
 	/* If neither a post ID nor path set, return an empty array. */
 	if ( empty( $post_id ) && empty( $path ) )
 		return $trail;
