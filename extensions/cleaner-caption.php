@@ -53,6 +53,9 @@ function cleaner_caption( $output, $attr, $content ) {
 	/* Allow developers to override the default arguments. */
 	$defaults = apply_filters( 'cleaner_caption_defaults', $defaults );
 
+	/* Apply filters to the arguments. */
+	$attr = apply_filters( 'cleaner_caption_args', $attr );
+
 	/* Merge the defaults with user input. */
 	$attr = shortcode_atts( $defaults, $attr );
 
