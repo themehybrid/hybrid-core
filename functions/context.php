@@ -131,7 +131,7 @@ function hybrid_entry_class( $class = '', $post_id = null ) {
 
 		$post_id = $post->ID;
 
-		/* Add hentry for microformats compliance and the post type. */
+		/* Add hentry for microformats compliance, the post type, and post status. */
 		$classes = array( 'hentry', $post->post_type, $post->post_status );
 
 		/* Post alt class. */

@@ -60,7 +60,7 @@ function hybrid_comments_callback( $comment, $args, $depth ) {
 	/* Get the comment type of the current comment. */
 	$comment_type = get_comment_type( $comment->comment_ID );
 
-	/* Create an empty array of the comment template array is not set. */
+	/* Create an empty array if the comment template array is not set. */
 	if ( !isset( $hybrid->comment_template) || !is_array( $hybrid->comment_template ) )
 		$hybrid->comment_template = array();
 
