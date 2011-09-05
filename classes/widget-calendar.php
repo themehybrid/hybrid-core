@@ -31,9 +31,9 @@ class Hybrid_Widget_Calendar extends WP_Widget {
 
 	/**
 	 * Set up the widget's unique name, ID, class, description, and other options.
-	 * @since 0.6.0
+	 * @since 1.2.0
 	 */
-	function Hybrid_Widget_Calendar() {
+	function __construct() {
 
 		/* Set the widget prefix. */
 		$this->prefix = hybrid_get_prefix();
@@ -50,12 +50,16 @@ class Hybrid_Widget_Calendar extends WP_Widget {
 		/* Set up the widget control options. */
 		$control_options = array(
 			'width' => 200,
-			'height' => 350,
-			'id_base' => "{$this->prefix}-calendar"
+			'height' => 350
 		);
 
 		/* Create the widget. */
-		$this->WP_Widget( "{$this->prefix}-calendar", esc_attr__( 'Calendar', $this->textdomain ), $widget_options, $control_options );
+		$this->WP_Widget(
+			'hybrid-calendar',			// $this->id_base
+			__( 'Calendar', $this->textdomain ),	// $this->name
+			$widget_options,			// $this->widget_options
+			$control_options			// $this->control_options
+		);
 	}
 
 	/**

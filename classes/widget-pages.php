@@ -24,12 +24,10 @@ class Hybrid_Widget_Pages extends WP_Widget {
 	var $prefix;
 
 	/**
-	 * Textdomain for the widget.
-	 * @since 0.7.0
+	 * Set up the widget's unique name, ID, class, description, and other options.
+	 * @since 1.2.0
 	 */
-	var $textdomain;
-
-	function Hybrid_Widget_Pages() {
+	function __construct() {
 
 		/* Set the widget prefix. */
 		$this->prefix = hybrid_get_prefix();
@@ -46,12 +44,16 @@ class Hybrid_Widget_Pages extends WP_Widget {
 		/* Set up the widget control options. */
 		$control_options = array(
 			'width' => 800,
-			'height' => 350,
-			'id_base' => "{$this->prefix}-pages"
+			'height' => 350
 		);
 
 		/* Create the widget. */
-		$this->WP_Widget( "{$this->prefix}-pages", esc_attr__( 'Pages', $this->textdomain), $widget_options, $control_options );
+		$this->WP_Widget(
+			'hybrid-pages',			// $this->id_base
+			__( 'Pages', $this->textdomain),	// $this->name
+			$widget_options,			// $this->widget_options
+			$control_options			// $this->control_options
+		);
 	}
 
 	/**

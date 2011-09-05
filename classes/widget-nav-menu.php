@@ -30,9 +30,9 @@ class Hybrid_Widget_Nav_Menu extends WP_Widget {
 
 	/**
 	 * Set up the widget's unique name, ID, class, description, and other options.
-	 * @since 0.8.0
+	 * @since 1.2.0
 	 */
-	function Hybrid_Widget_Nav_Menu() {
+	function __construct() {
 
 		/* Set the widget prefix. */
 		$this->prefix = hybrid_get_prefix();
@@ -49,12 +49,16 @@ class Hybrid_Widget_Nav_Menu extends WP_Widget {
 		/* Set up the widget control options. */
 		$control_options = array(
 			'width' => 525,
-			'height' => 350,
-			'id_base' => "{$this->prefix}-nav-menu"
+			'height' => 350
 		);
 
 		/* Create the widget. */
-		$this->WP_Widget( "{$this->prefix}-nav-menu", esc_attr__( 'Navigation Menu', $this->textdomain ), $widget_options, $control_options );
+		$this->WP_Widget(
+			'hybrid-nav-menu',				// $this->id_base
+			__( 'Navigation Menu', $this->textdomain ),	// $this->name
+			$widget_options,				// $this->widget_options
+			$control_options				// $this->control_options
+		);
 	}
 
 	/**
