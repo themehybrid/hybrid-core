@@ -97,7 +97,7 @@ function hybrid_theme_link_shortcode() {
  */
 function hybrid_child_link_shortcode() {
 	$data = hybrid_get_theme_data( 'stylesheet' );
-	return '<a class="child-link" href="' . esc_url( $data['URI'] ) . '" title="' . esc_attr( $data['Name'] ) . '"><span>' . esc_attr( $data['Name'] ) . '</span></a>';
+	return '<a class="child-link" href="' . esc_url( $data['URI'] ) . '" title="' . esc_attr( $data['Name'] ) . '"><span>' . esc_html( $data['Name'] ) . '</span></a>';
 }
 
 /**
@@ -177,7 +177,7 @@ function hybrid_entry_edit_link_shortcode( $attr ) {
 
 	$attr = shortcode_atts( array( 'before' => '', 'after' => '' ), $attr );
 
-	return $attr['before'] . '<span class="edit"><a class="post-edit-link" href="' . get_edit_post_link( $post->ID ) . '" title="' . sprintf( esc_attr__( 'Edit %1$s', $domain ), $post_type->labels->singular_name ) . '">' . __( 'Edit', $domain ) . '</a></span>' . $attr['after'];
+	return $attr['before'] . '<span class="edit"><a class="post-edit-link" href="' . esc_url( get_edit_post_link( $post->ID ) ) . '" title="' . sprintf( esc_attr__( 'Edit %1$s', $domain ), $post_type->labels->singular_name ) . '">' . __( 'Edit', $domain ) . '</a></span>' . $attr['after'];
 }
 
 /**
@@ -232,7 +232,7 @@ function hybrid_entry_comments_link_shortcode( $attr ) {
  */
 function hybrid_entry_author_shortcode( $attr ) {
 	$attr = shortcode_atts( array( 'before' => '', 'after' => '' ), $attr );
-	$author = '<span class="author vcard"><a class="url fn n" href="' . get_author_posts_url( get_the_author_meta( 'ID' ) ) . '" title="' . esc_attr( get_the_author_meta( 'display_name' ) ) . '">' . get_the_author_meta( 'display_name' ) . '</a></span>';
+	$author = '<span class="author vcard"><a class="url fn n" href="' . esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ) . '" title="' . esc_attr( get_the_author_meta( 'display_name' ) ) . '">' . get_the_author_meta( 'display_name' ) . '</a></span>';
 	return $attr['before'] . $author . $attr['after'];
 }
 
@@ -300,7 +300,7 @@ function hybrid_entry_shortlink_shortcode( $attr ) {
 		$attr
 	);
 
-	$shortlink = wp_get_shortlink( $post->ID );
+	$shortlink = esc_url( wp_get_shortlink( $post->ID ) );
 
 	return "{$attr['before']}<a class='shortlink' href='{$shortlink}' title='" . esc_attr( $attr['title'] ) . "' rel='shortlink'>{$attr['text']}</a>{$attr['after']}";
 }
@@ -340,7 +340,7 @@ function hybrid_comment_author_shortcode( $attr ) {
 
 	/* Display link and cite if URL is set. Also, properly cites trackbacks/pingbacks. */
 	if ( $url )
-		$output = '<cite class="fn" title="' . $url . '"><a href="' . $url . '" title="' . $author . '" class="url" rel="external nofollow">' . $author . '</a></cite>';
+		$output = '<cite class="fn" title="' . $url . '"><a href="' . $url . '" title="' . esc_attr( $author ) . '" class="url" rel="external nofollow">' . $author . '</a></cite>';
 	else
 		$output = '<cite class="fn">' . $author . '</cite>';
 
@@ -359,7 +359,7 @@ function hybrid_comment_permalink_shortcode( $attr ) {
 
 	$attr = shortcode_atts( array( 'before' => '', 'after' => '' ), $attr );
 	$domain = hybrid_get_textdomain();
-	$link = '<a class="permalink" href="' . get_comment_link( $comment->comment_ID ) . '" title="' . sprintf( esc_attr__( 'Permalink to comment %1$s', $domain ), $comment->comment_ID ) . '">' . __( 'Permalink', $domain ) . '</a>';
+	$link = '<a class="permalink" href="' . esc_url( get_comment_link( $comment->comment_ID ) ) . '" title="' . sprintf( esc_attr__( 'Permalink to comment %1$s', $domain ), $comment->comment_ID ) . '">' . __( 'Permalink', $domain ) . '</a>';
 	return $attr['before'] . $link . $attr['after'];
 }
 
@@ -379,7 +379,7 @@ function hybrid_comment_edit_link_shortcode( $attr ) {
 	$attr = shortcode_atts( array( 'before' => '', 'after' => '' ), $attr );
 	$domain = hybrid_get_textdomain();
 
-	$link = '<a class="comment-edit-link" href="' . $edit_link . '" title="' . sprintf( esc_attr__( 'Edit %1$s', $domain ), $comment->comment_type ) . '"><span class="edit">' . __( 'Edit', $domain ) . '</span></a>';
+	$link = '<a class="comment-edit-link" href="' . esc_url( $edit_link ) . '" title="' . sprintf( esc_attr__( 'Edit %1$s', $domain ), $comment->comment_type ) . '"><span class="edit">' . __( 'Edit', $domain ) . '</span></a>';
 	$link = apply_filters( 'edit_comment_link', $link, $comment->comment_ID );
 
 	return $attr['before'] . $link . $attr['after'];
@@ -399,7 +399,7 @@ function hybrid_comment_reply_link_shortcode( $attr ) {
 	$defaults = array(
 		'reply_text' => __( 'Reply', $domain ),
 		'login_text' => __( 'Log in to reply.', $domain ),
-		'depth' => $GLOBALS['comment_depth'],
+		'depth' => intval( $GLOBALS['comment_depth'] ),
 		'max_depth' => get_option( 'thread_comments_depth' ),
 		'before' => '',
 		'after' => ''

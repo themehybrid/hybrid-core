@@ -108,8 +108,8 @@ function hybrid_avatar() {
 
 	/* Get/set some comment variables. */
 	$comment_type = get_comment_type( $comment->comment_ID );
-	$author = esc_html( get_comment_author( $comment->comment_ID ) );
-	$url = esc_url( get_comment_author_url( $comment->comment_ID ) );
+	$author = get_comment_author( $comment->comment_ID );
+	$url = get_comment_author_url( $comment->comment_ID );
 	$avatar = '';
 	$default_avatar = '';
 
@@ -135,7 +135,7 @@ function hybrid_avatar() {
 
 	/* If URL input, wrap avatar in hyperlink. */
 	if ( !empty( $url ) && !empty( $avatar ) )
-		$avatar = '<a href="' . $url . '" rel="external nofollow" title="' . $author . '">' . $avatar . '</a>';
+		$avatar = '<a href="' . esc_url( $url ) . '" rel="external nofollow" title="' . esc_attr( $author ) . '">' . $avatar . '</a>';
 
 	/* Display the avatar and allow it to be filtered. Note: Use the get_avatar filter hook where possible. */
 	echo apply_filters( "{$hybrid->prefix}_avatar", $avatar );
@@ -165,8 +165,8 @@ function hybrid_comment_form_args( $args ) {
 
 	/* Sets up the default comment form fields. */
 	$fields = array(
-		'author' => '<p class="form-author' . $input_class . '"><label for="author">' . __( 'Name', $domain ) . $req . '</label> <input type="text" class="text-input" name="author" id="author" value="' . esc_attr( $commenter['comment_author'] ) . '" size="40" /></p>',
-		'email' => '<p class="form-email' . $input_class . '"><label for="email">' . __( 'Email', $domain ) . $req . '</label> <input type="text" class="text-input" name="email" id="email" value="' . esc_attr( $commenter['comment_author_email'] ) . '" size="40" /></p>',
+		'author' => '<p class="form-author' . esc_attr( $input_class ) . '"><label for="author">' . __( 'Name', $domain ) . $req . '</label> <input type="text" class="text-input" name="author" id="author" value="' . esc_attr( $commenter['comment_author'] ) . '" size="40" /></p>',
+		'email' => '<p class="form-email' . esc_attr( $input_class ) . '"><label for="email">' . __( 'Email', $domain ) . $req . '</label> <input type="text" class="text-input" name="email" id="email" value="' . esc_attr( $commenter['comment_author_email'] ) . '" size="40" /></p>',
 		'url' => '<p class="form-url"><label for="url">' . __( 'Website', $domain ) . '</label><input type="text" class="text-input" name="url" id="url" value="' . esc_attr( $commenter['comment_author_url'] ) . '" size="40" /></p>'
 	);
 
