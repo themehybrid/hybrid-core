@@ -14,18 +14,35 @@
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * @package PostStylesheets
- * @version 0.2.0
+ * @version 0.3.0
  * @author Justin Tadlock <justin@justintadlock.com>
  * @copyright Copyright (c) 2010 - 2011, Justin Tadlock
  * @link http://justintadlock.com
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
+add_action( 'init', 'post_stylesheets_add_post_type_support' );
+
 /* Filters stylesheet_uri with a function for adding a new style. */
 add_filter( 'stylesheet_uri', 'post_stylesheets_stylesheet_uri', 10, 2 );
 
 /* Create the post stylesheets meta box on the 'admin_menu' hook. */
 add_action( 'admin_menu', 'post_stylesheets_create_meta_box' );
+
+/**
+ * Adds post type support for the 'post-stylesheets' feature to all 'public' post types.
+ *
+ * @since 0.3.0
+ */
+function post_stylesheets_add_post_type_support() {
+
+	/* Get all available 'public' post types. */
+	$post_types = get_post_types( array( 'public' => true ), 'objects' );
+
+	/* Loop through each of the public post types and add support for post stylesheets. */
+	foreach ( $post_types as $type )
+		add_post_type_support( $type->name, 'post-stylesheets' );
+}
 
 /**
  * Checks if a post (or any post type) has the given meta key of 'Stylesheet' when on the singular view of 
@@ -40,19 +57,26 @@ function post_stylesheets_stylesheet_uri( $stylesheet_uri, $stylesheet_dir_uri )
 	/* Check if viewing a singular post. */
 	if ( is_singular() ) {
 
-		/* Check if the user has set a value for the post stylesheet. */
-		$stylesheet = get_post_stylesheet( get_queried_object_id() );
+		/* Get the queried object (post). */
+		$post = get_queried_object();
 
-		/* If a meta value was given and the file exists, set $stylesheet_uri to the new file. */
-		if ( !empty( $stylesheet ) ) {
+		/* Check if the post type supports 'post-stylesheets' before proceeding. */
+		if ( post_type_supports( $post->post_type, 'post-stylesheets' ) ) {
 
-			/* If the stylesheet is found in the child theme '/css' folder, use it. */
-			if ( file_exists( trailingslashit( get_stylesheet_directory() ) . "css/{$stylesheet}" ) )
-				$stylesheet_uri = trailingslashit( $stylesheet_dir_uri ) . "css/{$stylesheet}";
+			/* Check if the user has set a value for the post stylesheet. */
+			$stylesheet = get_post_stylesheet( get_queried_object_id() );
 
-			/* Else, if the stylesheet is found in the parent theme '/css' folder, use it. */
-			elseif ( file_exists( trailingslashit( get_template_directory() ) . "css/{$stylesheet}" ) )
-				$stylesheet_uri = trailingslashit( get_template_directory_uri() ) . "css/{$stylesheet}";
+			/* If a meta value was given and the file exists, set $stylesheet_uri to the new file. */
+			if ( !empty( $stylesheet ) ) {
+
+				/* If the stylesheet is found in the child theme '/css' folder, use it. */
+				if ( file_exists( trailingslashit( get_stylesheet_directory() ) . "css/{$stylesheet}" ) )
+					$stylesheet_uri = trailingslashit( $stylesheet_dir_uri ) . "css/{$stylesheet}";
+
+				/* Else, if the stylesheet is found in the parent theme '/css' folder, use it. */
+				elseif ( file_exists( trailingslashit( get_template_directory() ) . "css/{$stylesheet}" ) )
+					$stylesheet_uri = trailingslashit( get_template_directory_uri() ) . "css/{$stylesheet}";
+			}
 		}
 	}
 
@@ -110,9 +134,13 @@ function post_stylesheets_create_meta_box() {
 	/* Get all available 'public' post types. */
 	$post_types = get_post_types( array( 'public' => true ), 'objects' );
 
-	/* Loop through each of the public post types and add the meta box to it. */
-	foreach ( $post_types as $type )
-		add_meta_box( "post-stylesheets", sprintf( __( '%s Stylesheet', apply_filters( 'post_stylesheets_textdomain', 'post-stylesheets' ) ), $type->labels->singular_name ), 'post_stylesheets_meta_box', $type->name, 'side', 'default' );
+	/* Loop through each of the public post types. */
+	foreach ( $post_types as $type ) {
+
+		/* Add the meta box if the post type supports 'post-stylesheets'. */
+		if ( post_type_supports( $type->name, 'post-stylesheets' ) )
+			add_meta_box( "post-stylesheets", sprintf( __( '%s Stylesheet', apply_filters( 'post_stylesheets_textdomain', 'post-stylesheets' ) ), $type->labels->singular_name ), 'post_stylesheets_meta_box', $type->name, 'side', 'default' );
+	}
 
 	/* Saves the post meta box data. */
 	add_action( 'save_post', 'post_stylesheets_meta_box_save', 10, 2 );
@@ -141,14 +169,18 @@ function post_stylesheets_meta_box_save( $post_id, $post ) {
 
 	/* Verify the nonce before proceeding. */
 	if ( !isset( $_POST["post_stylesheets_meta_box_nonce"] ) || !wp_verify_nonce( $_POST["post_stylesheets_meta_box_nonce"], basename( __FILE__ ) ) )
-		return $post_id;
+		return;
+
+	/* Check if the post type supports 'post-stylesheets'. */
+	if ( !post_type_supports( $post->post_type, 'post-stylesheets' ) )
+		return;
 
 	/* Get the post type object. */
 	$post_type = get_post_type_object( $post->post_type );
 
 	/* Check if the current user has permission to edit the post. */
 	if ( !current_user_can( $post_type->cap->edit_post, $post_id ) )
-		return $post_id;
+		return;
 
 	/* Get the previous post stylesheet. */
 	$old_stylesheet = get_post_stylesheet( $post_id );
