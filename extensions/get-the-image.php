@@ -16,7 +16,7 @@
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * @package GetTheImage
- * @version 0.7.0
+ * @version 0.7.1
  * @author Justin Tadlock <justin@justintadlock.com>
  * @copyright Copyright (c) 2008 - 2011, Justin Tadlock
  * @link http://justintadlock.com/archives/2008/05/27/get-the-image-wordpress-plugin
@@ -64,6 +64,7 @@ function get_the_image( $args = array() ) {
 		'height' => false,
 		'format' => 'img',
 		'meta_key_save' => false,
+		'thumbnail_id_save' => false, // Set 'featured image'.
 		'callback' => null,
 		'cache' => true,
 		'echo' => true,
@@ -282,9 +283,16 @@ function get_the_image_by_attachment( $args = array() ) {
 
 	/* Loop through each attachment. Once the $order_of_image (default is '1') is reached, break the loop. */
 	foreach ( $attachments as $id => $attachment ) {
+
 		if ( ++$i == $args['order_of_image'] ) {
+
 			$image = wp_get_attachment_image_src( $id, $args['size'] );
 			$alt = trim( strip_tags( get_post_field( 'post_excerpt', $id ) ) );
+
+			/* Save the attachment as the 'featured image'. */
+			if ( true === $args['thumbnail_id_save'] )
+				set_post_thumbnail( $args['post_id'], $id );
+
 			break;
 		}
 	}
