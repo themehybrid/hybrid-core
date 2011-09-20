@@ -92,6 +92,7 @@ function cleaner_gallery( $output, $attr ) {
 		'include' => $include,
 		'numberposts' => $numberposts,
 		'offset' => $offset,
+		'suppress_filters' => true
 	);
 
 	/* Get image attachments. If none, return. */
