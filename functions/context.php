@@ -150,7 +150,7 @@ function hybrid_entry_class( $class = '', $post_id = null ) {
 			$classes[] = 'protected';
 
 		/* Has excerpt. */
-		if ( has_excerpt() )
+		if ( post_type_supports( $post->post_type, 'excerpt' ) && has_excerpt() )
 			$classes[] = 'has-excerpt';
 
 		/* Post format. */
