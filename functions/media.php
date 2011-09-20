@@ -27,7 +27,7 @@ function hybrid_register_scripts() {
 
 	/* Register the 'drop-downs' script if the current theme supports 'hybrid-core-drop-downs'. */
 	if ( current_theme_supports( 'hybrid-core-drop-downs' ) )
-		wp_register_script( 'drop-downs', esc_url( apply_atomic( 'drop_downs_script', trailingslashit( HYBRID_JS ) . 'drop-downs.js' ) ), array( 'jquery' ), '20110705', true );
+		wp_register_script( 'drop-downs', esc_url( apply_atomic( 'drop_downs_script', trailingslashit( HYBRID_JS ) . 'drop-downs.js' ) ), array( 'jquery' ), '20110920', true );
 }
 
 /**

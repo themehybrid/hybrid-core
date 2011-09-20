@@ -232,5 +232,17 @@ $j(document).ready(
 			dropShadows: false
 			}
 		);
+
+		$j( 'nav.menu ul:first-child' ).supersubs( {
+			minWidth: 12,
+			maxWidth: 27,
+			extraWidth: 1
+			}
+		).superfish( {
+			delay: 100,
+			animation: { opacity: 'show', height: 'show' },
+			dropShadows: false
+			}
+		);
 	}
 );
