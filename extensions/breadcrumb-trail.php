@@ -41,7 +41,7 @@ function breadcrumb_trail( $args = array() ) {
 	/* Set up the default arguments for the breadcrumb. */
 	$defaults = array(
 		'separator' => '/',
-		'before' => '<span class="breadcrumb-title">' . __( 'Browse:', $textdomain ) . '</span>',
+		'before' => __( 'Browse:', $textdomain ),
 		'after' => false,
 		'front_page' => true,
 		'show_home' => __( 'Home', $textdomain ),
