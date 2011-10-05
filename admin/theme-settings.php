@@ -22,6 +22,7 @@ add_action( 'admin_menu', 'hybrid_settings_page_init' );
  *
  * @since 0.7.0
  * @global string $hybrid The global theme object.
+ * @return void
  */
 function hybrid_settings_page_init() {
 	global $hybrid;
@@ -65,7 +66,7 @@ function hybrid_settings_page_init() {
 		/* Load the JavaScript and stylesheets needed for the theme settings screen. */
 		add_action( 'admin_enqueue_scripts', 'hybrid_settings_page_enqueue_scripts' );
 		add_action( 'admin_enqueue_scripts', 'hybrid_settings_page_enqueue_styles' );
-		add_action( "admin_head-{$hybrid->settings_page}", 'hybrid_settings_page_load_scripts' );
+		add_action( "admin_footer-{$hybrid->settings_page}", 'hybrid_settings_page_load_scripts' );
 	}
 }
 
@@ -73,6 +74,7 @@ function hybrid_settings_page_init() {
  * Returns the required capability for viewing and saving theme settings.
  *
  * @since 1.2.0
+ * @return string
  */
 function hybrid_settings_page_capability() {
 	return apply_filters( hybrid_get_prefix() . '_settings_capability', 'edit_theme_options' );
@@ -82,6 +84,7 @@ function hybrid_settings_page_capability() {
  * Returns the theme settings page name/hook as a string.
  *
  * @since 1.2.0
+ * @return string
  */
 function hybrid_get_settings_page_name() {
 	global $hybrid;
@@ -96,6 +99,7 @@ function hybrid_get_settings_page_name() {
  * page in the admin.  This way, they're not needlessly loading extra files.
  *
  * @since 1.2.0
+ * @return void
  */
 function hybrid_settings_page_add_meta_boxes() {
 
@@ -107,6 +111,7 @@ function hybrid_settings_page_add_meta_boxes() {
  * merely loaded with this function.  Meta boxes are only loaded if the feature is supported by the theme.
  *
  * @since 1.2.0
+ * @return void
  */
 function hybrid_load_settings_page_meta_boxes() {
 
@@ -147,6 +152,7 @@ function hybrid_save_theme_settings( $settings ) {
  *
  * @since 0.7.0
  * @global string $hybrid The global theme object.
+ * @return void
  */
 function hybrid_settings_page() {
 
@@ -163,7 +169,7 @@ function hybrid_settings_page() {
 
 		<?php if ( isset( $_GET['settings-updated'] ) && 'true' == esc_attr( $_GET['settings-updated'] ) ) echo '<div class="updated"><p><strong>' . __( 'Settings saved.', $domain ) . '</strong></p></div>'; ?>
 
-		<div id="poststuff">
+		<div class="hybrid-core-settings-wrap">
 
 			<form method="post" action="options.php">
 
@@ -181,7 +187,7 @@ function hybrid_settings_page() {
 
 			</form>
 
-		</div><!-- #poststuff -->
+		</div><!-- .hybrid-core-settings-wrap -->
 
 	</div><!-- .wrap --><?php
 }
@@ -191,6 +197,7 @@ function hybrid_settings_page() {
  * with the WordPress settings API.
  *
  * @since 1.0.0
+ * @return string
  */
 function hybrid_settings_field_id( $setting ) {
 	return hybrid_get_prefix() . '_theme_settings-' . sanitize_html_class( $setting );
@@ -201,6 +208,7 @@ function hybrid_settings_field_id( $setting ) {
  * use with the WordPress settings API.
  *
  * @since 1.0.0
+ * @return string
  */
 function hybrid_settings_field_name( $setting ) {
 	return hybrid_get_prefix() . "_theme_settings[{$setting}]";
@@ -247,6 +255,7 @@ function hybrid_settings_page_contextual_help() {
  * Loads the required stylesheets for displaying the theme settings page in the WordPress admin.
  *
  * @since 1.2.0
+ * @return void
  */
 function hybrid_settings_page_enqueue_styles( $hook_suffix ) {
 
@@ -261,20 +270,19 @@ function hybrid_settings_page_enqueue_styles( $hook_suffix ) {
  *
  * @since 1.2.0
  * @param string $hook_suffix The current page being viewed.
+ * @return void
  */
 function hybrid_settings_page_enqueue_scripts( $hook_suffix ) {
 
-	if ( $hook_suffix == hybrid_get_settings_page_name() ) {
-		wp_enqueue_script( 'common' );
-		wp_enqueue_script( 'wp-lists' );
+	if ( $hook_suffix == hybrid_get_settings_page_name() )
 		wp_enqueue_script( 'postbox' );
-	}
 }
 
 /**
  * Loads the JavaScript required for toggling the meta boxes on the theme settings page.
  *
  * @since 0.7.0
+ * @return void
  */
 function hybrid_settings_page_load_scripts() { ?>
 	<script type="text/javascript">
