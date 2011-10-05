@@ -16,7 +16,7 @@
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * @package CustomFieldSeries
- * @version 0.3.0
+ * @version 0.4.0
  * @author Justin Tadlock <justin@justintadlock.com>
  * @copyright Copyright (c) 2007 - 2011, Justin Tadlock
  * @link http://justintadlock.com/archives/2007/11/01/wordpress-custom-fields-listing-a-series-of-posts
@@ -25,6 +25,9 @@
 
 /* Create the meta box on the 'admin_menu' hook. */
 add_action( 'admin_menu', 'custom_field_series_create_meta_box' );
+
+/* Add support for the 'custom-field-series' extension to posts. */
+add_action( 'init', 'custom_field_series_post_type_support' );
 
 /**
  * Checks for a series of posts by the current post's metadata.  The function grabs the meta value for the 
@@ -113,6 +116,16 @@ function custom_field_series( $args = array() ) {
 }
 
 /**
+ * Adds post type support of 'custom-field-series' to the 'post' post type.  Developers should register support 
+ * for additional post types.
+ *
+ * @since 0.4.0
+ */
+function custom_field_series_post_type_support() {
+	add_post_type_support( 'post', 'custom-field-series' );
+}
+
+/**
  * Creates the meta box on the post editing screen for the 'post' post type.
  *
  * @since 0.3.0
@@ -122,7 +135,16 @@ function custom_field_series_create_meta_box() {
 	/* Set up a default textdomain. */
 	$textdomain = apply_filters( 'custom_field_series_textdomain', 'custom-field-series' );
 
-	add_meta_box( 'custom-field-series', __( 'Series', $textdomain ), 'custom_field_series_meta_box', 'post', 'side', 'default' );
+	/* Gets available public post types. */
+	$post_types = get_post_types();
+
+	/* Loop through each available post type. */
+	foreach ( $post_types as $type ) {
+
+		/* If the post type supports 'custom-field-series', add a meta box for it. */
+		if ( post_type_supports( $type, 'custom-field-series' ) )
+			add_meta_box( 'custom-field-series', __( 'Series', $textdomain ), 'custom_field_series_meta_box', $type, 'side', 'default' );
+	}
 
 	/* Saves the post meta box data. */
 	add_action( 'save_post', 'custom_field_series_meta_box_save', 10, 2 );
