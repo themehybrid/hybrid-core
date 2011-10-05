@@ -164,10 +164,8 @@ function hybrid_settings_page() {
 	<div class="wrap">
 
 		<?php screen_icon(); ?>
-
 		<h2><?php printf( __( '%1$s Theme Settings', $domain ), $theme_data['Name'] ); ?></h2>
-
-		<?php if ( isset( $_GET['settings-updated'] ) && 'true' == esc_attr( $_GET['settings-updated'] ) ) echo '<div class="updated"><p><strong>' . __( 'Settings saved.', $domain ) . '</strong></p></div>'; ?>
+		<?php settings_errors(); ?>
 
 		<div class="hybrid-core-settings-wrap">
 
