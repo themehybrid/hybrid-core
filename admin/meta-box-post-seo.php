@@ -41,7 +41,7 @@ function hybrid_meta_box_post_display_seo( $object, $box ) {
 
 	$domain = hybrid_get_textdomain(); ?>
 
-	<input type="hidden" name="hybrid-core-post-meta-box-seo" value="<?php echo wp_create_nonce( basename( __FILE__ ) ); ?>" />
+	<?php wp_nonce_field( basename( __FILE__ ), 'hybrid-core-post-meta-box-seo' ); ?>
 
 	<div class="hybrid-post-settings">
 
