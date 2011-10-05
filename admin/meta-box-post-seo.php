@@ -10,7 +10,7 @@
  */
 
 /* Add the post SEO meta box on the 'add_meta_boxes' hook. */
-add_action( 'add_meta_boxes', 'hybrid_meta_box_post_add_seo' );
+add_action( 'add_meta_boxes', 'hybrid_meta_box_post_add_seo', 10, 2 );
 
 /* Save the post SEO meta box data on the 'save_post' hook. */
 add_action( 'save_post', 'hybrid_meta_box_post_save_seo', 10, 2 );
@@ -21,14 +21,11 @@ add_action( 'save_post', 'hybrid_meta_box_post_save_seo', 10, 2 );
  * @since 1.2.0
  * @return void
  */
-function hybrid_meta_box_post_add_seo() {
+function hybrid_meta_box_post_add_seo( $post_type, $post ) {
 
-	/* Get all available public post types. */
-	$post_types = get_post_types( array( 'public' => true ), 'objects' );
-
-	/* Loop through each post type, adding the meta box for each type's post editor screen. */
-	foreach ( $post_types as $type )
-		add_meta_box( 'hybrid-core-post-seo', sprintf( __( '%s SEO', hybrid_get_textdomain() ), $type->labels->singular_name ), 'hybrid_meta_box_post_display_seo', $type->name, 'normal', 'high' );
+	/* Only add meta box if current user can edit, add, or delete meta for the post. */
+	if ( current_user_can( 'edit_post_meta', $post->ID ) || current_user_can( 'add_post_meta', $post->ID ) || current_user_can( 'delete_post_meta', $post->ID ) )
+		add_meta_box( 'hybrid-core-post-seo', __( 'SEO', hybrid_get_textdomain() ), 'hybrid_meta_box_post_display_seo', $post_type, 'normal', 'high' );
 }
 
 /**
@@ -41,9 +38,7 @@ function hybrid_meta_box_post_display_seo( $object, $box ) {
 
 	$domain = hybrid_get_textdomain(); ?>
 
-	<?php wp_nonce_field( basename( __FILE__ ), 'hybrid-core-post-meta-box-seo' ); ?>
-
-	<div class="hybrid-post-settings">
+	<?php wp_nonce_field( basename( __FILE__ ), 'hybrid-core-post-seo' ); ?>
 
 	<p>
 		<label for="hybrid-document-title"><?php _e( 'Document Title:', $domain ); ?></label>
@@ -62,9 +57,7 @@ function hybrid_meta_box_post_display_seo( $object, $box ) {
 		<br />
 		<input type="text" name="hybrid-meta-keywords" id="hybrid-meta-keywords" value="<?php echo esc_attr( get_post_meta( $object->ID, 'Keywords', true ) ); ?>" size="30" tabindex="30" style="width: 99%;" />
 	</p>
-
-	</div><!-- .form-table --><?php
-}
+<?php }
 
 /**
  * Saves the post SEO meta box settings as post metadata.
@@ -78,7 +71,7 @@ function hybrid_meta_box_post_save_seo( $post_id, $post ) {
 	$prefix = hybrid_get_prefix();
 
 	/* Verify the nonce before proceeding. */
-	if ( !isset( $_POST['hybrid-core-post-meta-box-seo'] ) || !wp_verify_nonce( $_POST['hybrid-core-post-meta-box-seo'], basename( __FILE__ ) ) )
+	if ( !isset( $_POST['hybrid-core-post-seo'] ) || !wp_verify_nonce( $_POST['hybrid-core-post-seo'], basename( __FILE__ ) ) )
 		return $post_id;
 
 	/* Check if the current user has permission to edit the post meta. */

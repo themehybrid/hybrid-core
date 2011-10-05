@@ -10,7 +10,7 @@
  */
 
 /* Add the post template meta box on the 'add_meta_boxes' hook. */
-add_action( 'add_meta_boxes', 'hybrid_meta_box_post_add_template' );
+add_action( 'add_meta_boxes', 'hybrid_meta_box_post_add_template', 10, 2 );
 
 /* Save the post template meta box data on the 'save_post' hook. */
 add_action( 'save_post', 'hybrid_meta_box_post_save_template', 10, 2 );
@@ -22,18 +22,11 @@ add_action( 'save_post', 'hybrid_meta_box_post_save_template', 10, 2 );
  * @since 1.2.0
  * @return void
  */
-function hybrid_meta_box_post_add_template() {
+function hybrid_meta_box_post_add_template( $post_type, $post ) {
 
-	/* Get all available public post types. */
-	$post_types = get_post_types( array( 'public' => true ), 'objects' );
-
-	/* Loop through each post type, adding the meta box for each type's post editor screen. */
-	foreach ( $post_types as $type ) {
-
-		/* Skip the 'page' post type because WordPress handles this by default. */
-		if ( 'page' !== $type->name )
-			add_meta_box( 'hybrid-core-post-template', sprintf( __( '%s Template', hybrid_get_textdomain() ), $type->labels->singular_name ), 'hybrid_meta_box_post_display_template', $type->name, 'side', 'default' );
-	}
+	/* Only add meta box if current user can edit, add, or delete meta for the post. */
+	if ( ( 'page' !== $post_type ) && ( current_user_can( 'edit_post_meta', $post->ID ) || current_user_can( 'add_post_meta', $post->ID ) || current_user_can( 'delete_post_meta', $post->ID ) ) )
+		add_meta_box( 'hybrid-core-post-template', __( 'Template', hybrid_get_textdomain() ), 'hybrid_meta_box_post_display_template', $post_type, 'side', 'default' );
 }
 
 /**
@@ -47,14 +40,10 @@ function hybrid_meta_box_post_display_template( $object, $box ) {
 	/* Get the post type object. */
 	$post_type_object = get_post_type_object( $object->post_type );
 
-	/* If the post type object returns a singular name or name. */
-	if ( !empty( $post_type_object->labels->singular_name ) || !empty( $post_type_object->name ) ) {
+	/* Get a list of available custom templates for the post type. */
+	$templates = hybrid_get_post_templates( array( 'label' => array( "{$post_type_object->labels->singular_name} Template", "{$post_type_object->name} Template" ) ) );
 
-		/* Get a list of available custom templates for the post type. */
-		$templates = hybrid_get_post_templates( array( 'label' => array( "{$post_type_object->labels->singular_name} Template", "{$post_type_object->name} Template" ) ) );
-	} ?>
-
-	<?php wp_nonce_field( basename( __FILE__ ), 'hybrid-core-post-meta-box-template' ); ?>
+	wp_nonce_field( basename( __FILE__ ), 'hybrid-core-post-meta-box-template' ); ?>
 
 	<p>
 		<?php if ( 0 != count( $templates ) ) { ?>
