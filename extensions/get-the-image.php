@@ -16,7 +16,7 @@
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * @package GetTheImage
- * @version 0.7.1
+ * @version 0.8.0
  * @author Justin Tadlock <justin@justintadlock.com>
  * @copyright Copyright (c) 2008 - 2011, Justin Tadlock
  * @link http://justintadlock.com/archives/2008/05/27/get-the-image-wordpress-plugin
@@ -263,42 +263,68 @@ function get_the_image_by_post_thumbnail( $args = array() ) {
  */
 function get_the_image_by_attachment( $args = array() ) {
 
-	/* Get attachments for the inputted $post_id. */
-	$attachments = get_children( array( 'post_parent' => $args['post_id'], 'post_status' => 'inherit', 'post_type' => 'attachment', 'post_mime_type' => 'image', 'order' => 'ASC', 'orderby' => 'menu_order ID' ) );
+	/* Get the post type of the current post. */
+	$post_type = get_post_type( $args['post_id'] );
 
-	/* If no attachments are found, check if the post itself is an attachment and grab its image. */
-	if ( empty( $attachments ) && $args['size'] ) {
-		if ( 'attachment' == get_post_type( $args['post_id'] ) ) {
-			$image = wp_get_attachment_image_src( $args['post_id'], $args['size'] );
-			$alt = trim( strip_tags( get_post_field( 'post_excerpt', $args['post_id'] ) ) );
+	/* Check if the post itself is an image attachment. */
+	if ( 'attachment' == $post_type && wp_attachment_is_image( $args['post_id'] ) ) {
+		$attachment_id = $args['post_id'];
+	}
+
+	/* If the post is not an attachment, check if it has any image attachments. */
+	elseif ( 'attachment' !== $post_type ) {
+
+		/* Get attachments for the inputted $post_id. */
+		$attachments = get_children(
+			array(
+				'post_parent' => $args['post_id'],
+				'post_status' => 'inherit',
+				'post_type' => 'attachment',
+				'post_mime_type' => 'image',
+				'order' => 'ASC',
+				'orderby' => 'menu_order ID',
+				'suppress_filters' => true
+			)
+		);
+
+		/* Check if any attachments were found. */
+		if ( !empty( $attachments ) ) {
+
+			/* Set the default iterator to 0. */
+			$i = 0;
+
+			/* Loop through each attachment. */
+			foreach ( $attachments as $id => $attachment ) {
+
+				/* Set the attachment ID as the current ID in the loop. */
+				$attachment_id = $id;
+
+				/* Break if/when we hit 'order_of_image'. */
+				if ( ++$i == $args['order_of_image'] )
+					break;
+			}
 		}
 	}
 
-	/* If no attachments or image is found, return false. */
-	if ( empty( $attachments ) && empty( $image ) )
-		return false;
+	/* Check if we have an attachment ID before proceeding. */
+	if ( !empty( $attachment_id ) ) {
 
-	/* Set the default iterator to 0. */
-	$i = 0;
+		/* Get the attachment image. */
+		$image = wp_get_attachment_image_src( $id, $args['size'] );
 
-	/* Loop through each attachment. Once the $order_of_image (default is '1') is reached, break the loop. */
-	foreach ( $attachments as $id => $attachment ) {
+		/* Get the attachment excerpt. */
+		$alt = trim( strip_tags( get_post_field( 'post_excerpt', $id ) ) );
 
-		if ( ++$i == $args['order_of_image'] ) {
+		/* Save the attachment as the 'featured image'. */
+		if ( true === $args['thumbnail_id_save'] )
+			set_post_thumbnail( $args['post_id'], $id );
 
-			$image = wp_get_attachment_image_src( $id, $args['size'] );
-			$alt = trim( strip_tags( get_post_field( 'post_excerpt', $id ) ) );
-
-			/* Save the attachment as the 'featured image'. */
-			if ( true === $args['thumbnail_id_save'] )
-				set_post_thumbnail( $args['post_id'], $id );
-
-			break;
-		}
+		/* Return the image URL. */
+		return array( 'src' => $image[0], 'alt' => $alt );
 	}
 
-	/* Return the image URL. */
-	return array( 'src' => $image[0], 'alt' => $alt );
+	/* Return false for anything else. */
+	return false;
 }
 
 /**
