@@ -18,35 +18,36 @@ add_filter( 'sanitize_option_' . hybrid_get_prefix() . '_theme_settings', 'hybri
  * Adds the core theme footer meta box to the theme settings page in the admin.
  *
  * @since 1.2.0
+ * @return void
  */
 function hybrid_meta_box_theme_add_footer() {
 
-	add_meta_box( 'hybrid-core-meta-box-footer', __( 'Footer settings', hybrid_get_textdomain() ), 'hybrid_meta_box_theme_display_footer', hybrid_get_settings_page_name(), 'normal', 'high' );
+	add_meta_box( 'hybrid-core-footer', __( 'Footer settings', hybrid_get_textdomain() ), 'hybrid_meta_box_theme_display_footer', hybrid_get_settings_page_name(), 'normal', 'high' );
 }
 
 /**
- * Creates a settings box that allows users to customize their footer. A basic textarea is given that
- * allows HTML and shortcodes to be input.
+ * Creates a meta box that allows users to customize their footer.
  *
  * @since 1.2.0
+ * @uses wp_editor() Creates an instance of the WordPress text/content editor.
+ * @return void
  */
 function hybrid_meta_box_theme_display_footer() {
-	$domain = hybrid_get_textdomain(); ?>
+
+	/* Add a textarea using the wp_editor() function to make it easier on users to add custom content. */
+	wp_editor(
+		hybrid_get_setting( 'footer_insert' ),		// Editor content.
+		hybrid_settings_field_id( 'footer_insert' ),	// Editor ID.
+		array(
+			'textarea_name' => hybrid_settings_field_name( 'footer_insert' )
+		)
+	); ?>
 
 	<p>
-		<span class="description"><?php _e( 'You can add custom <acronym title="Hypertext Markup Language">HTML</acronym> and/or shortcodes, which will be automatically inserted into your theme.', $domain ); ?></span>
+		<span class="description"><?php _e( 'You can add custom <acronym title="Hypertext Markup Language">HTML</acronym> and/or shortcodes, which will be automatically inserted into your theme.', hybrid_get_textdomain() ); ?></span>
 	</p>
 
-	<p>
-		<textarea id="<?php echo hybrid_settings_field_id( 'footer_insert' ); ?>" name="<?php echo hybrid_settings_field_name( 'footer_insert' ); ?>" cols="60" rows="5"><?php echo esc_textarea( hybrid_get_setting( 'footer_insert' ) ); ?></textarea>
-	</p>
-
-	<?php if ( current_theme_supports( 'hybrid-core-shortcodes' ) ) { ?>
-		<p>
-			<?php printf( __( 'Shortcodes: %s', $domain ), '<code>[the-year]</code>, <code>[site-link]</code>, <code>[wp-link]</code>, <code>[theme-link]</code>, <code>[child-link]</code>, <code>[loginout-link]</code>, <code>[query-counter]</code>' ); ?>
-		</p>
-	<?php }
-}
+<?php }
 
 /**
  * Saves the footer meta box settings by filtering the "sanitize_option_{$prefix}_theme_settings" hook.
