@@ -81,17 +81,14 @@ function hybrid_meta_box_post_save_seo( $post_id, $post ) {
 	if ( !isset( $_POST['hybrid-core-post-meta-box-seo'] ) || !wp_verify_nonce( $_POST['hybrid-core-post-meta-box-seo'], basename( __FILE__ ) ) )
 		return $post_id;
 
-	/* Get the post type object. */
-	$post_type = get_post_type_object( $post->post_type );
-
-	/* Check if the current user has permission to edit the post. */
-	if ( !current_user_can( $post_type->cap->edit_post, $post_id ) )
+	/* Check if the current user has permission to edit the post meta. */
+	if ( !current_user_can( 'edit_post_meta', $post_id ) )
 		return $post_id;
 
 	$meta = array(
-		'Title' => strip_tags( $_POST['hybrid-document-title'] ),
-		'Description' => strip_tags( $_POST['hybrid-meta-description'] ),
-		'Keywords' => strip_tags( $_POST['hybrid-meta-keywords'] )
+		'Title' => 	strip_tags( $_POST['hybrid-document-title'] ),
+		'Description' => 	strip_tags( $_POST['hybrid-meta-description'] ),
+		'Keywords' => 	strip_tags( $_POST['hybrid-meta-keywords'] )
 	);
 
 	foreach ( $meta as $meta_key => $new_meta_value ) {
