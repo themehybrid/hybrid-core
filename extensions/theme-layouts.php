@@ -19,18 +19,53 @@
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * @package ThemeLayouts
- * @version 0.3.0
+ * @version 0.4.0
  * @author Justin Tadlock <justin@justintadlock.com>
  * @copyright Copyright (c) 2010 - 2011, Justin Tadlock
  * @link http://justintadlock.com
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
-/* Filters the body_class hook to add a custom class. */
-add_filter( 'body_class', 'theme_layouts_body_class' );
+/* Register metadata with WordPress. */
+add_action( 'init', 'theme_layouts_register_meta' );
+
+/* Add post type support for theme layouts. */
+add_action( 'init', 'theme_layouts_add_post_type_support' );
 
 /* Set up the custom post layouts. */
 add_action( 'admin_menu', 'theme_layouts_admin_setup' );
+
+/* Filters the body_class hook to add a custom class. */
+add_filter( 'body_class', 'theme_layouts_body_class' );
+
+/**
+ * Registers the theme layouts meta key ('Layout') for specific object types and provides a function to sanitize
+ * the metadata on update.
+ *
+ * @since 0.4.0
+ * @return void
+ */
+function theme_layouts_register_meta() {
+	register_meta( 'post', theme_layouts_get_meta_key(), 'esc_attr' );
+	register_meta( 'comment', theme_layouts_get_meta_key(), 'esc_attr' );
+}
+
+/**
+ * Adds post type support to all 'public' post types.  This allows themes to remove support for the 'theme-layouts'
+ * feature with remove_post_type_support().
+ *
+ * @since 0.4.0
+ * @return void
+ */
+function theme_layouts_add_post_type_support() {
+
+	/* Gets available public post types. */
+	$post_types = get_post_types( array( 'public' => true ) );
+
+	/* For each available post type, create a meta box on its edit page if it supports '$prefix-post-settings'. */
+	foreach ( $post_types as $type )
+		add_post_type_support( $type, 'theme-layouts' );
+}
 
 /**
  * Gets the layout for the current post based off the 'Layout' custom field key if viewing a singular post 
@@ -88,7 +123,7 @@ function theme_layouts_get_layout() {
 function get_post_layout( $post_id ) {
 
 	/* Get the post layout. */
-	$layout = get_post_meta( $post_id, apply_filters( 'theme_layouts_meta_key', 'Layout' ), true );
+	$layout = get_post_meta( $post_id, theme_layouts_get_meta_key(), true );
 
 	/* Return the layout if one is found.  Otherwise, return 'default'. */
 	return ( !empty( $layout ) ? $layout : 'default' );
@@ -103,7 +138,7 @@ function get_post_layout( $post_id ) {
  * @return bool The return value of the update_post_meta() function.
  */
 function set_post_layout( $post_id, $layout ) {
-	return update_post_meta( $post_id, apply_filters( 'theme_layouts_meta_key', 'Layout' ), $layout );
+	return update_post_meta( $post_id, theme_layouts_get_meta_key(), $layout );
 }
 
 /**
@@ -133,7 +168,7 @@ function has_post_layout( $layout, $post_id = '' ) {
 function get_user_layout( $user_id ) {
 
 	/* Get the user layout. */
-	$layout = get_user_meta( $user_id, apply_filters( 'theme_layouts_meta_key', 'Layout' ), true );
+	$layout = get_user_meta( $user_id, theme_layouts_get_meta_key(), true );
 
 	/* Return the layout if one is found.  Otherwise, return 'default'. */
 	return ( !empty( $layout ) ? $layout : 'default' );
@@ -148,7 +183,7 @@ function get_user_layout( $user_id ) {
  * @return bool The return value of update_user_meta() function.
  */
 function set_user_layout( $user_id, $layout ) {
-	return update_user_meta( $user_id, apply_filters( 'theme_layouts_meta_key', 'Layout' ), $layout );
+	return update_user_meta( $user_id, theme_layouts_get_meta_key(), $layout );
 }
 
 /**
@@ -193,6 +228,7 @@ function theme_layouts_body_class( $classes ) {
  * required.  The layout name will be used if no text string is found.
  *
  * @since 0.2.0
+ * @return array $strings
  */
 function theme_layouts_strings() {
 
@@ -215,6 +251,8 @@ function theme_layouts_strings() {
  * Get a specific layout's text string.
  *
  * @since 0.2.0
+ * @param string $layout
+ * @return string
  */
 function theme_layouts_get_string( $layout ) {
 
@@ -230,24 +268,33 @@ function theme_layouts_get_string( $layout ) {
  * metadata save function to the 'save_post' hook.
  *
  * @since 0.2.0
+ * @return void
  */
 function theme_layouts_admin_setup() {
 
 	/* Gets available public post types. */
-	$post_types = get_post_types( array( 'public' => true ), 'objects' );
+	$post_types = get_post_types();
 
-	/* For each available post type, create a meta box on its edit page if it supports '$prefix-post-settings'. */
-	foreach ( $post_types as $type )
-		add_meta_box( 'theme-layouts-post-meta-box', __( 'Layout', theme_layouts_textdomain() ), 'theme_layouts_post_meta_box', $type->name, 'side', 'default' );
+	/* Loop through each available post type. */
+	foreach ( $post_types as $type ) {
+
+		/* If the post type supports 'theme-layouts', add a meta box for it. */
+		if ( post_type_supports( $type, 'theme-layouts' ) )
+			add_meta_box( 'theme-layouts-post-meta-box', __( 'Layout', theme_layouts_textdomain() ), 'theme_layouts_post_meta_box', $type, 'side', 'default' );
+	}
 
 	/* Saves the post format on the post editing page. */
 	add_action( 'save_post', 'theme_layouts_save_post', 10, 2 );
 
-	/* Adds a theme layout <select> element to the attachment edit form. */
-	add_filter( 'attachment_fields_to_edit', 'theme_layouts_attachment_fields_to_edit', 10, 2 );
+	/* If the attachment post type supports 'theme-layouts', add form fields for it. */
+	if ( post_type_supports( 'attachment', 'theme-layouts' ) ) {
 
-	/* Saves the theme layout for attachments. */
-	add_filter( 'attachment_fields_to_save', 'theme_layouts_attachment_fields_to_save', 10, 2 );
+		/* Adds a theme layout <select> element to the attachment edit form. */
+		add_filter( 'attachment_fields_to_edit', 'theme_layouts_attachment_fields_to_edit', 10, 2 );
+
+		/* Saves the theme layout for attachments. */
+		add_filter( 'attachment_fields_to_save', 'theme_layouts_attachment_fields_to_save', 10, 2 );
+	}
 }
 
 /**
@@ -255,6 +302,9 @@ function theme_layouts_admin_setup() {
  * the layout they wish to use for the specific post.
  *
  * @since 0.2.0
+ * @param object $post
+ * @param array $box
+ * @return void
  */
 function theme_layouts_post_meta_box( $post, $box ) {
 
@@ -267,7 +317,7 @@ function theme_layouts_post_meta_box( $post, $box ) {
 
 	<div class="post-layout">
 
-		<input type="hidden" name="theme_layouts_post_meta_box_nonce" value="<?php echo wp_create_nonce( basename( __FILE__ ) ); ?>" />
+		<?php wp_nonce_field( basename( __FILE__ ), 'theme_layouts_post_meta_box_nonce' ); ?>
 
 		<p><?php _e( 'Layout is a theme-specific structure for the single view of the post.', theme_layouts_textdomain() ); ?></p>
 
@@ -287,6 +337,9 @@ function theme_layouts_post_meta_box( $post, $box ) {
  * Saves the post layout metadata if on the post editing screen in the admin.
  *
  * @since 0.2.0
+ * @param int $post_id
+ * @param object $post
+ * @return void|int
  */
 function theme_layouts_save_post( $post_id, $post ) {
 
@@ -294,11 +347,8 @@ function theme_layouts_save_post( $post_id, $post ) {
 	if ( !isset( $_POST['theme_layouts_post_meta_box_nonce'] ) || !wp_verify_nonce( $_POST['theme_layouts_post_meta_box_nonce'], basename( __FILE__ ) ) )
 		return $post_id;
 
-	/* Get the post type object. */
-	$post_type = get_post_type_object( $post->post_type );
-
 	/* Check if the current user has permission to edit the post. */
-	if ( !current_user_can( $post_type->cap->edit_post, $post_id ) )
+	if ( !current_user_can( 'edit_post_meta', $post_id ) )
 		return $post_id;
 
 	/* Get the previous post layout. */
@@ -379,10 +429,20 @@ function theme_layouts_attachment_fields_to_save( $post, $fields ) {
 }
 
 /**
+ * Wrapper function for returning the metadata key used for objects that can use layouts.
+ *
+ * @since 0.3.0
+ * @return string The meta key used for theme layouts.
+ */
+function theme_layouts_get_meta_key() {
+	return apply_filters( 'theme_layouts_meta_key', 'Layout' );
+}
+
+/**
  * Returns the textdomain used by the script and allows it to be filtered by plugins/themes.
  *
  * @since 0.2.0
- * @returns string The textdomain for the script.
+ * @return string The textdomain for the script.
  */
 function theme_layouts_textdomain() {
 	return apply_filters( 'theme_layouts_textdomain', 'theme-layouts' );
