@@ -14,7 +14,7 @@
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * @package LoopPagination
- * @version 0.1.3
+ * @version 0.1.4
  * @author Justin Tadlock <justin@justintadlock.com>
  * @copyright Copyright (c) 2010 - 2011, Justin Tadlock
  * @link http://devpress.com/blog/loop-pagination-for-theme-developers
@@ -98,7 +98,7 @@ function loop_pagination( $args = array() ) {
 	if ( $args['echo'] )
 		echo $page_links;
 	else
-		return $page_liks;
+		return $page_links;
 }
 
 ?>
