@@ -14,6 +14,7 @@ add_action( 'admin_init', 'hybrid_admin_init' );
  * Initializes any admin-related features needed for the framework.
  *
  * @since 0.7.0
+ * @return void
  */
 function hybrid_admin_init() {
 
@@ -36,6 +37,7 @@ function hybrid_admin_init() {
  * the theme declares support for the feature.
  *
  * @since 1.2.0
+ * @return void
  */
 function hybrid_admin_load_post_meta_boxes() {
 
@@ -51,6 +53,7 @@ function hybrid_admin_load_post_meta_boxes() {
  * registers it with WordPress.
  *
  * @since 1.2.0
+ * @return void
  */
 function hybrid_admin_register_styles() {
 	wp_register_style( 'hybrid-core-admin', trailingslashit( HYBRID_CSS ) . 'admin.css', false, '20110512', 'screen' );
@@ -60,6 +63,7 @@ function hybrid_admin_register_styles() {
  * Loads the admin.css stylesheet for admin-related features.
  *
  * @since 1.2.0
+ * @return void
  */
 function hybrid_admin_enqueue_styles( $hook_suffix ) {
 

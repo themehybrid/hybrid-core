@@ -20,6 +20,7 @@ add_action( 'save_post', 'hybrid_meta_box_post_save_template', 10, 2 );
  * core already handles page templates.
  *
  * @since 1.2.0
+ * @return void
  */
 function hybrid_meta_box_post_add_template() {
 
@@ -39,6 +40,7 @@ function hybrid_meta_box_post_add_template() {
  * Displays the post template meta box.
  *
  * @since 1.2.0
+ * @return void
  */
 function hybrid_meta_box_post_display_template( $object, $box ) {
 

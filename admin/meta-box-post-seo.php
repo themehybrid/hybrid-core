@@ -19,6 +19,7 @@ add_action( 'save_post', 'hybrid_meta_box_post_save_seo', 10, 2 );
  * Adds the post SEO meta box for all public post types.
  *
  * @since 1.2.0
+ * @return void
  */
 function hybrid_meta_box_post_add_seo() {
 
@@ -34,6 +35,7 @@ function hybrid_meta_box_post_add_seo() {
  * Displays the post SEO meta box.
  *
  * @since 1.2.0
+ * @return void
  */
 function hybrid_meta_box_post_display_seo( $object, $box ) {
 
