@@ -1,8 +1,8 @@
 <?php
 /**
- * Creates a meta box for the theme settings page, which displays information about the theme.  If a child theme 
- * is in use, an additional meta box will be added with its information.  To use this feature, the theme must 
- * support the 'about' argument for 'hybrid-core-theme-settings' feature.
+ * Creates a meta box for the theme settings page, which displays information about the theme.  If a child 
+ * theme is in use, an additional meta box will be added with its information.  To use this feature, the theme 
+ * must support the 'about' argument for 'hybrid-core-theme-settings' feature.
  *
  * @package HybridCore
  * @subpackage Admin
@@ -15,6 +15,7 @@ add_action( 'add_meta_boxes', 'hybrid_meta_box_theme_add_about' );
  * Adds the core about theme meta box to the theme settings page.
  *
  * @since 1.2.0
+ * @return void
  */
 function hybrid_meta_box_theme_add_about() {
 
@@ -41,6 +42,7 @@ function hybrid_meta_box_theme_add_about() {
  * @since 1.2.0
  * @param $object Variable passed through the do_meta_boxes() call.
  * @param array $box Specific information about the meta box being loaded.
+ * @return void
  */
 function hybrid_meta_box_theme_display_about( $object, $box ) {
 
@@ -48,13 +50,8 @@ function hybrid_meta_box_theme_display_about( $object, $box ) {
 	$prefix = hybrid_get_prefix();
 	$domain = hybrid_get_textdomain();
 
-	/* Grab theme information for the parent theme. */
-	if ( 'hybrid-core-about-theme' == $box['id'] )
-		$theme_data = hybrid_get_theme_data();
-
-	/* Grab theme information for the child theme. */
-	elseif ( 'hybrid-core-about-child' == $box['id'] )
-		$theme_data = hybrid_get_theme_data( 'stylesheet' ); ?>
+	/* Grab theme information for the parent/child theme. */
+	$theme_data = ( ( 'hybrid-core-about-child' == $box['id'] ) ? hybrid_get_theme_data( 'stylesheet' ) : hybrid_get_theme_data() ); ?>
 
 	<table class="form-table">
 		<tr>
