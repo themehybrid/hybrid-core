@@ -24,7 +24,7 @@
  * to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  *
  * @package HybridCore
- * @version 1.2.1
+ * @version 1.3.0
  * @author Justin Tadlock <justin@justintadlock.com>
  * @copyright Copyright (c) 2008 - 2011, Justin Tadlock
  * @link http://themehybrid.com/hybrid-core
@@ -66,11 +66,14 @@ class Hybrid {
 		/* Language functions and translations setup. */
 		add_action( 'after_setup_theme', array( &$this, 'i18n' ), 4 );
 
+		/* Handle theme supported features. */
+		add_action( 'after_setup_theme', array( &$this, 'theme_support' ), 12 );
+
 		/* Load the framework functions. */
-		add_action( 'after_setup_theme', array( &$this, 'functions' ), 12 );
+		add_action( 'after_setup_theme', array( &$this, 'functions' ), 13 );
 
 		/* Load the framework extensions. */
-		add_action( 'after_setup_theme', array( &$this, 'extensions' ), 13 );
+		add_action( 'after_setup_theme', array( &$this, 'extensions' ), 14 );
 
 		/* Load admin files. */
 		add_action( 'wp_loaded', array( &$this, 'admin' ) );
@@ -182,6 +185,31 @@ class Hybrid {
 	}
 
 	/**
+	 * Removes theme supported features from themes in the case that a user has a plugin installed
+	 * that handles the functionality.
+	 *
+	 * @since 1.3.0
+	 */
+	function theme_support() {
+
+		/* Remove support for the core SEO component if the WP SEO plugin is installed. */
+		if ( defined( 'WPSEO_VERSION' ) )
+			remove_theme_support( 'hybrid-core-seo' );
+
+		/* Remove support for the the Breadcrumb Trail extension if the plugin is installed. */
+		if ( function_exists( 'breadcrumb_trail' ) )
+			remove_theme_support( 'breadcrumb-trail' );
+
+		/* Remove support for the the Cleaner Gallery extension if the plugin is installed. */
+		if ( function_exists( 'cleaner_gallery' ) )
+			remove_theme_support( 'cleaner-gallery' );
+
+		/* Remove support for the the Get the Image extension if the plugin is installed. */
+		if ( function_exists( 'get_the_image' ) )
+			remove_theme_support( 'get-the-image' );
+	}
+
+	/**
 	 * Loads the framework functions.  Many of these functions are needed to properly run the 
 	 * framework.  Some components are only loaded if the theme supports them.
 	 *
@@ -205,8 +233,7 @@ class Hybrid {
 		require_if_theme_supports( 'hybrid-core-menus', trailingslashit( HYBRID_FUNCTIONS ) . 'menus.php' );
 
 		/* Load the core SEO component if supported and WPSEO_VERSION isn't defined. */
-		if ( !defined( 'WPSEO_VERSION' ) )
-			require_if_theme_supports( 'hybrid-core-seo', trailingslashit( HYBRID_FUNCTIONS ) . 'core-seo.php' );
+		require_if_theme_supports( 'hybrid-core-seo', trailingslashit( HYBRID_FUNCTIONS ) . 'core-seo.php' );
 
 		/* Load the shortcodes if supported. */
 		require_if_theme_supports( 'hybrid-core-shortcodes', trailingslashit( HYBRID_FUNCTIONS ) . 'shortcodes.php' );
@@ -235,16 +262,13 @@ class Hybrid {
 	function extensions() {
 
 		/* Load the Breadcrumb Trail extension if supported and the plugin isn't active. */
-		if ( !function_exists( 'breadcrumb_trail' ) )
-			require_if_theme_supports( 'breadcrumb-trail', trailingslashit( HYBRID_EXTENSIONS ) . 'breadcrumb-trail.php' );
+		require_if_theme_supports( 'breadcrumb-trail', trailingslashit( HYBRID_EXTENSIONS ) . 'breadcrumb-trail.php' );
 
 		/* Load the Cleaner Gallery extension if supported and the plugin isn't active. */
-		if ( !function_exists( 'cleaner_gallery' ) )
-			require_if_theme_supports( 'cleaner-gallery', trailingslashit( HYBRID_EXTENSIONS ) . 'cleaner-gallery.php' );
+		require_if_theme_supports( 'cleaner-gallery', trailingslashit( HYBRID_EXTENSIONS ) . 'cleaner-gallery.php' );
 
 		/* Load the Get the Image extension if supported and the plugin isn't active. */
-		if ( !function_exists( 'get_the_image' ) )
-			require_if_theme_supports( 'get-the-image', trailingslashit( HYBRID_EXTENSIONS ) . 'get-the-image.php' );
+		require_if_theme_supports( 'get-the-image', trailingslashit( HYBRID_EXTENSIONS ) . 'get-the-image.php' );
 
 		/* Load the Cleaner Caption extension if supported. */
 		require_if_theme_supports( 'cleaner-caption', trailingslashit( HYBRID_EXTENSIONS ) . 'cleaner-caption.php' );
