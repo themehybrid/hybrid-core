@@ -24,12 +24,6 @@ class Hybrid_Widget_Authors extends WP_Widget {
 	var $prefix;
 
 	/**
-	 * Textdomain for the widget.
-	 * @since 0.7.0
-	 */
-	var $textdomain;
-
-	/**
 	 * Set up the widget's unique name, ID, class, description, and other options.
 	 * @since 1.2.0
 	 */
@@ -38,13 +32,10 @@ class Hybrid_Widget_Authors extends WP_Widget {
 		/* Set the widget prefix. */
 		$this->prefix = hybrid_get_prefix();
 
-		/* Set the widget textdomain. */
-		$this->textdomain = hybrid_get_textdomain();
-
 		/* Set up the widget options. */
 		$widget_options = array(
 			'classname' => 'authors',
-			'description' => esc_html__( 'An advanced widget that gives you total control over the output of your author lists.', $this->textdomain )
+			'description' => esc_html__( 'An advanced widget that gives you total control over the output of your author lists.', 'hybrid-core' )
 		);
 
 		/* Set up the widget control options. */
@@ -56,7 +47,7 @@ class Hybrid_Widget_Authors extends WP_Widget {
 		/* Create the widget. */
 		$this->WP_Widget(
 			'hybrid-authors',			// $this->id_base
-			__( 'Authors', $this->textdomain ),	// $this->name
+			__( 'Authors', 'hybrid-core' ),	// $this->name
 			$widget_options,			// $this->widget_options
 			$control_options			// $this->control_options
 		);
@@ -138,7 +129,7 @@ class Hybrid_Widget_Authors extends WP_Widget {
 
 		/* Set up the default form values. */
 		$defaults = array(
-			'title' => esc_attr__( 'Authors', $this->textdomain ),
+			'title' => esc_attr__( 'Authors', 'hybrid-core' ),
 			'order' => 'ASC',
 			'orderby' => 'display_name',
 			'number' => '',
@@ -155,14 +146,14 @@ class Hybrid_Widget_Authors extends WP_Widget {
 		/* Merge the user-selected arguments with the defaults. */
 		$instance = wp_parse_args( (array) $instance, $defaults );
 
-		$order = array( 'ASC' => esc_attr__( 'Ascending', $this->textdomain ), 'DESC' => esc_attr__( 'Descending', $this->textdomain ) );
-		$orderby = array( 'display_name' => esc_attr__( 'Display Name', $this->textdomain ), 'email' => esc_attr__( 'Email', $this->textdomain ), 'ID' => esc_attr__( 'ID', $this->textdomain ), 'nicename' => esc_attr__( 'Nice Name', $this->textdomain ), 'post_count' => esc_attr__( 'Post Count', $this->textdomain ), 'registered' => esc_attr__( 'Registered', $this->textdomain ), 'url' => esc_attr__( 'URL', $this->textdomain ), 'user_login' => esc_attr__( 'Login', $this->textdomain ) );
+		$order = array( 'ASC' => esc_attr__( 'Ascending', 'hybrid-core' ), 'DESC' => esc_attr__( 'Descending', 'hybrid-core' ) );
+		$orderby = array( 'display_name' => esc_attr__( 'Display Name', 'hybrid-core' ), 'email' => esc_attr__( 'Email', 'hybrid-core' ), 'ID' => esc_attr__( 'ID', 'hybrid-core' ), 'nicename' => esc_attr__( 'Nice Name', 'hybrid-core' ), 'post_count' => esc_attr__( 'Post Count', 'hybrid-core' ), 'registered' => esc_attr__( 'Registered', 'hybrid-core' ), 'url' => esc_attr__( 'URL', 'hybrid-core' ), 'user_login' => esc_attr__( 'Login', 'hybrid-core' ) );
 
 		?>
 
 		<div class="hybrid-widget-controls columns-2">
 		<p>
-			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:', $this->textdomain ); ?></label>
+			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:', 'hybrid-core' ); ?></label>
 			<input type="text" class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" value="<?php echo esc_attr( $instance['title'] ); ?>" />
 		</p>
 		<p>
@@ -188,7 +179,7 @@ class Hybrid_Widget_Authors extends WP_Widget {
 		<p>
 			<label for="<?php echo $this->get_field_id( 'style' ); ?>"><code>style</code></label> 
 			<select class="widefat" id="<?php echo $this->get_field_id( 'style' ); ?>" name="<?php echo $this->get_field_name( 'style' ); ?>">
-				<?php foreach ( array( 'list' => esc_attr__( 'List', $this->textdomain), 'none' => esc_attr__( 'None', $this->textdomain ) ) as $option_value => $option_label ) { ?>
+				<?php foreach ( array( 'list' => esc_attr__( 'List', 'hybrid-core'), 'none' => esc_attr__( 'None', 'hybrid-core' ) ) as $option_value => $option_label ) { ?>
 					<option value="<?php echo esc_attr( $option_value ); ?>" <?php selected( $instance['style'], $option_value ); ?>><?php echo esc_html( $option_label ); ?></option>
 				<?php } ?>
 			</select>
@@ -206,23 +197,23 @@ class Hybrid_Widget_Authors extends WP_Widget {
 		</p>
 		<p>
 			<label for="<?php echo $this->get_field_id( 'html' ); ?>">
-			<input class="checkbox" type="checkbox" <?php checked( $instance['html'], true ); ?> id="<?php echo $this->get_field_id( 'html' ); ?>" name="<?php echo $this->get_field_name( 'html' ); ?>" /> <?php _e( '<acronym title="Hypertext Markup Language">HTML</acronym>?', $this->textdomain ); ?> <code>html</code></label>
+			<input class="checkbox" type="checkbox" <?php checked( $instance['html'], true ); ?> id="<?php echo $this->get_field_id( 'html' ); ?>" name="<?php echo $this->get_field_name( 'html' ); ?>" /> <?php _e( '<acronym title="Hypertext Markup Language">HTML</acronym>?', 'hybrid-core' ); ?> <code>html</code></label>
 		</p>
 		<p>
 			<label for="<?php echo $this->get_field_id( 'optioncount' ); ?>">
-			<input class="checkbox" type="checkbox" <?php checked( $instance['optioncount'], true ); ?> id="<?php echo $this->get_field_id( 'optioncount' ); ?>" name="<?php echo $this->get_field_name( 'optioncount' ); ?>" /> <?php _e( 'Show post count?', $this->textdomain ); ?> <code>optioncount</code></label>
+			<input class="checkbox" type="checkbox" <?php checked( $instance['optioncount'], true ); ?> id="<?php echo $this->get_field_id( 'optioncount' ); ?>" name="<?php echo $this->get_field_name( 'optioncount' ); ?>" /> <?php _e( 'Show post count?', 'hybrid-core' ); ?> <code>optioncount</code></label>
 		</p>
 		<p>
 			<label for="<?php echo $this->get_field_id( 'exclude_admin' ); ?>">
-			<input class="checkbox" type="checkbox" <?php checked( $instance['exclude_admin'], true ); ?> id="<?php echo $this->get_field_id( 'exclude_admin' ); ?>" name="<?php echo $this->get_field_name( 'exclude_admin' ); ?>" /> <?php _e( 'Exclude admin?', $this->textdomain ); ?> <code>exclude_admin</code></label>
+			<input class="checkbox" type="checkbox" <?php checked( $instance['exclude_admin'], true ); ?> id="<?php echo $this->get_field_id( 'exclude_admin' ); ?>" name="<?php echo $this->get_field_name( 'exclude_admin' ); ?>" /> <?php _e( 'Exclude admin?', 'hybrid-core' ); ?> <code>exclude_admin</code></label>
 		</p>
 		<p>
 			<label for="<?php echo $this->get_field_id( 'show_fullname' ); ?>">
-			<input class="checkbox" type="checkbox" <?php checked( $instance['show_fullname'], true ); ?> id="<?php echo $this->get_field_id( 'show_fullname' ); ?>" name="<?php echo $this->get_field_name( 'show_fullname' ); ?>" /> <?php _e( 'Show full name?', $this->textdomain ); ?> <code>show_fullname</code></label>
+			<input class="checkbox" type="checkbox" <?php checked( $instance['show_fullname'], true ); ?> id="<?php echo $this->get_field_id( 'show_fullname' ); ?>" name="<?php echo $this->get_field_name( 'show_fullname' ); ?>" /> <?php _e( 'Show full name?', 'hybrid-core' ); ?> <code>show_fullname</code></label>
 		</p>
 		<p>
 			<label for="<?php echo $this->get_field_id( 'hide_empty' ); ?>">
-			<input class="checkbox" type="checkbox" <?php checked( $instance['hide_empty'], true ); ?> id="<?php echo $this->get_field_id( 'hide_empty' ); ?>" name="<?php echo $this->get_field_name( 'hide_empty' ); ?>" /> <?php _e( 'Hide empty?', $this->textdomain ); ?> <code>hide_empty</code></label>
+			<input class="checkbox" type="checkbox" <?php checked( $instance['hide_empty'], true ); ?> id="<?php echo $this->get_field_id( 'hide_empty' ); ?>" name="<?php echo $this->get_field_name( 'hide_empty' ); ?>" /> <?php _e( 'Hide empty?', 'hybrid-core' ); ?> <code>hide_empty</code></label>
 		</p>
 		</div>
 		<div style="clear:both;">&nbsp;</div>

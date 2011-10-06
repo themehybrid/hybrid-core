@@ -26,7 +26,7 @@ function hybrid_meta_box_post_add_template( $post_type, $post ) {
 
 	/* Only add meta box if current user can edit, add, or delete meta for the post. */
 	if ( ( 'page' !== $post_type ) && ( current_user_can( 'edit_post_meta', $post->ID ) || current_user_can( 'add_post_meta', $post->ID ) || current_user_can( 'delete_post_meta', $post->ID ) ) )
-		add_meta_box( 'hybrid-core-post-template', __( 'Template', hybrid_get_textdomain() ), 'hybrid_meta_box_post_display_template', $post_type, 'side', 'default' );
+		add_meta_box( 'hybrid-core-post-template', __( 'Template', 'hybrid-core' ), 'hybrid_meta_box_post_display_template', $post_type, 'side', 'default' );
 }
 
 /**
@@ -54,7 +54,7 @@ function hybrid_meta_box_post_display_template( $object, $box ) {
 				<?php } ?>
 			</select>
 		<?php } else { ?>
-			<?php _e( 'No templates exist for this post type.', hybrid_get_textdomain() ); ?>
+			<?php _e( 'No templates exist for this post type.', 'hybrid-core' ); ?>
 		<?php } ?>
 	</p>
 <?php

@@ -71,19 +71,16 @@ function hybrid_meta_author() {
  */
 function hybrid_meta_copyright() {
 
-	/* Get the theme's textdomain. */
-	$domain = hybrid_get_textdomain();
-
 	/* If viewing a singular post, get the post month and year. */
 	if ( is_singular() )
-		$date = get_the_time( esc_attr__( 'F Y', $domain ) );
+		$date = get_the_time( esc_attr__( 'F Y', 'hybrid-core' ) );
 
 	/* For all other views, get the current year. */
 	else
-		$date = date( esc_attr__( 'Y', $domain ) );
+		$date = date( esc_attr__( 'Y', 'hybrid-core' ) );
 
 	/* Create the HTML for the copyright meta tag. */
-	$copyright = '<meta name="copyright" content="' . sprintf( esc_attr__( 'Copyright (c) %1$s', $domain ), $date ) . '" />' . "\n";
+	$copyright = '<meta name="copyright" content="' . sprintf( esc_attr__( 'Copyright (c) %1$s', 'hybrid-core' ), $date ) . '" />' . "\n";
 
 	echo apply_atomic( 'meta_copyright', $copyright );
 }
@@ -100,7 +97,7 @@ function hybrid_meta_revised() {
 
 	/* If viewing a singular post, get the last modified date/time to use in the revised meta tag. */
 	if ( is_singular() )
-		$revised = '<meta name="revised" content="' . get_the_modified_time( esc_attr__( 'l, F jS, Y, g:i a', hybrid_get_textdomain() ) ) . '" />' . "\n";
+		$revised = '<meta name="revised" content="' . get_the_modified_time( esc_attr__( 'l, F jS, Y, g:i a', 'hybrid-core' ) ) . '" />' . "\n";
 
 	echo apply_atomic( 'meta_revised', $revised );
 }

@@ -172,7 +172,7 @@ function post_stylesheets_create_meta_box( $post_type, $post ) {
 
 	/* Add the meta box if the post type supports 'post-stylesheets'. */
 	if ( ( post_type_supports( $post_type, 'post-stylesheets' ) ) && ( current_user_can( 'edit_post_meta', $post->ID ) || current_user_can( 'add_post_meta', $post->ID ) || current_user_can( 'delete_post_meta', $post->ID ) ) )
-		add_meta_box( "post-stylesheets", __( 'Stylesheet', post_stylesheets_textdomain() ), 'post_stylesheets_meta_box', $post_type, 'side', 'default' );
+		add_meta_box( "post-stylesheets", __( 'Stylesheet', 'post-stylesheets' ), 'post_stylesheets_meta_box', $post_type, 'side', 'default' );
 }
 
 /**

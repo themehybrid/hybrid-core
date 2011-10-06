@@ -30,7 +30,6 @@ function hybrid_settings_page_init() {
 	/* Get theme information. */
 	$theme = hybrid_get_theme_data();
 	$prefix = hybrid_get_prefix();
-	$domain = hybrid_get_textdomain();
 
 	/* Register theme settings. */
 	register_setting(
@@ -41,8 +40,8 @@ function hybrid_settings_page_init() {
 
 	/* Create the theme settings page. */
 	$hybrid->settings_page = add_theme_page(
-		sprintf( esc_html__( '%1$s Theme Settings', $domain ), $theme['Name'] ),	// Settings page name.
-		esc_html__( 'Theme Settings', $domain ),				// Menu item name.
+		sprintf( esc_html__( '%1$s Theme Settings', 'hybrid-core' ), $theme['Name'] ),	// Settings page name.
+		esc_html__( 'Theme Settings', 'hybrid-core' ),				// Menu item name.
 		hybrid_settings_page_capability(),					// Required capability.
 		'theme-settings',							// Screen name.
 		'hybrid_settings_page'						// Callback function.
@@ -158,13 +157,12 @@ function hybrid_settings_page() {
 
 	/* Get the theme information. */
 	$prefix = hybrid_get_prefix();
-	$domain = hybrid_get_textdomain();
 	$theme_data = hybrid_get_theme_data(); ?>
 
 	<div class="wrap">
 
 		<?php screen_icon(); ?>
-		<h2><?php printf( __( '%1$s Theme Settings', $domain ), $theme_data['Name'] ); ?></h2>
+		<h2><?php printf( __( '%1$s Theme Settings', 'hybrid-core' ), $theme_data['Name'] ); ?></h2>
 		<?php settings_errors(); ?>
 
 		<div class="hybrid-core-settings-wrap">
@@ -181,7 +179,7 @@ function hybrid_settings_page() {
 					<div class="post-box-container column-3 advanced"><?php do_meta_boxes( hybrid_get_settings_page_name(), 'advanced', null ); ?></div>
 				</div>
 
-				<?php submit_button( esc_attr__( 'Update Settings', $domain ) ); ?>
+				<?php submit_button( esc_attr__( 'Update Settings', 'hybrid-core' ) ); ?>
 
 			</form>
 
@@ -235,11 +233,11 @@ function hybrid_settings_page_contextual_help() {
 
 		/* Add the Documentation URI. */
 		if ( !empty( $theme['Documentation URI'] ) )
-			$help .= '<li><a href="' . esc_url( $theme['Documentation URI'] ) . '">' . __( 'Documentation', hybrid_get_textdomain() ) . '</a></li>';
+			$help .= '<li><a href="' . esc_url( $theme['Documentation URI'] ) . '">' . __( 'Documentation', 'hybrid-core' ) . '</a></li>';
 
 		/* Add the Support URI. */
 		if ( !empty( $theme['Support URI'] ) )
-			$help .= '<li><a href="' . esc_url( $theme['Support URI'] ) . '">' . __( 'Support', hybrid_get_textdomain() ) . '</a></li>';
+			$help .= '<li><a href="' . esc_url( $theme['Support URI'] ) . '">' . __( 'Support', 'hybrid-core' ) . '</a></li>';
 
 		/* Close the unordered list for the help text. */
 		$help .= '</ul>';

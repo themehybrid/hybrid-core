@@ -22,7 +22,7 @@ add_filter( 'sanitize_option_' . hybrid_get_prefix() . '_theme_settings', 'hybri
  */
 function hybrid_meta_box_theme_add_footer() {
 
-	add_meta_box( 'hybrid-core-footer', __( 'Footer settings', hybrid_get_textdomain() ), 'hybrid_meta_box_theme_display_footer', hybrid_get_settings_page_name(), 'normal', 'high' );
+	add_meta_box( 'hybrid-core-footer', __( 'Footer settings', 'hybrid-core' ), 'hybrid_meta_box_theme_display_footer', hybrid_get_settings_page_name(), 'normal', 'high' );
 }
 
 /**
@@ -44,7 +44,7 @@ function hybrid_meta_box_theme_display_footer() {
 	); ?>
 
 	<p>
-		<span class="description"><?php _e( 'You can add custom <acronym title="Hypertext Markup Language">HTML</acronym> and/or shortcodes, which will be automatically inserted into your theme.', hybrid_get_textdomain() ); ?></span>
+		<span class="description"><?php _e( 'You can add custom <acronym title="Hypertext Markup Language">HTML</acronym> and/or shortcodes, which will be automatically inserted into your theme.', 'hybrid-core' ); ?></span>
 	</p>
 
 <?php }

@@ -118,6 +118,9 @@ class Hybrid {
 		/* Sets the path to the core framework functions directory. */
 		define( 'HYBRID_FUNCTIONS', trailingslashit( HYBRID_DIR ) . 'functions' );
 
+		/* Sets the path to the core framework languages directory. */
+		define( 'HYBRID_LANGUAGES', trailingslashit( HYBRID_DIR ) . 'languages' );
+
 		/* Sets the path to the core framework images directory URI. */
 		define( 'HYBRID_IMAGES', trailingslashit( HYBRID_URI ) . 'images' );
 
@@ -141,6 +144,9 @@ class Hybrid {
 
 		/* Load the context-based functions. */
 		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'context.php' );
+
+		/* Load the core framework internationalization functions. */
+		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'i18n.php' );
 	}
 
 	/**
@@ -153,6 +159,9 @@ class Hybrid {
 	 * @since 1.2.0
 	 */
 	function i18n() {
+
+		/* Load the framework textdomain. */
+		hybrid_load_framework_textdomain( 'hybrid-core' );
 
 		/* Load theme textdomain. */
 		load_theme_textdomain( hybrid_get_textdomain() );
@@ -291,11 +300,8 @@ class Hybrid {
 		/* Filter the textdomain mofile to allow child themes to load the parent theme translation. */
 		add_filter( 'load_textdomain_mofile', 'hybrid_load_textdomain', 10, 2 );
 
-		/* Filter textdomain for extensions. */
-		add_filter( 'breadcrumb_trail_textdomain', 'hybrid_get_textdomain' );
-		add_filter( 'theme_layouts_textdomain', 'hybrid_get_textdomain' );
-		add_filter( 'custom_field_series_textdomain', 'hybrid_get_textdomain' );
-		add_filter( 'post_stylesheets_textdomain', 'hybrid_get_textdomain' );
+		/* Filter text strings for Hybrid Core and extensions so themes can serve up translations. */
+		add_filter( 'gettext', 'hybrid_gettext', 1, 3 );
 
 		/* Make text widgets and term descriptions shortcode aware. */
 		add_filter( 'widget_text', 'do_shortcode' );

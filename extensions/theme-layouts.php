@@ -234,13 +234,13 @@ function theme_layouts_strings() {
 
 	/* Set up the default layout strings. */
 	$strings = array(
-		'default' => 	__( 'Default', theme_layouts_textdomain() ),
-		'1c' => 		__( 'One Column', theme_layouts_textdomain() ),
-		'2c-l' => 		__( 'Two Columns, Left', theme_layouts_textdomain() ),
-		'2c-r' => 	__( 'Two Columns, Right', theme_layouts_textdomain() ),
-		'3c-l' => 		__( 'Three Columns, Left', theme_layouts_textdomain() ),
-		'3c-r' => 	__( 'Three Columns, Right', theme_layouts_textdomain() ),
-		'3c-c' => 	__( 'Three Columns, Center', theme_layouts_textdomain() )
+		'default' => 	__( 'Default', 'theme-layouts' ),
+		'1c' => 		__( 'One Column', 'theme-layouts' ),
+		'2c-l' => 		__( 'Two Columns, Left', 'theme-layouts' ),
+		'2c-r' => 	__( 'Two Columns, Right', 'theme-layouts' ),
+		'3c-l' => 		__( 'Three Columns, Left', 'theme-layouts' ),
+		'3c-r' => 	__( 'Three Columns, Right', 'theme-layouts' ),
+		'3c-c' => 	__( 'Three Columns, Center', 'theme-layouts' )
 	);
 
 	/* Allow devs to filter the strings for custom layouts. */
@@ -297,7 +297,7 @@ function theme_layouts_admin_setup() {
 function theme_layouts_load_meta_boxes() {
 
 	/* Add the layout meta box on the 'add_meta_boxes' hook. */
-	add_action( 'add_meta_boxes', 'post_stylesheets_create_meta_box', 10, 2 );
+	add_action( 'add_meta_boxes', 'theme_layouts_add_meta_boxes', 10, 2 );
 
 	/* Saves the post format on the post editing page. */
 	add_action( 'save_post', 'theme_layouts_save_post', 10, 2 );
@@ -316,7 +316,7 @@ function theme_layouts_add_meta_boxes( $post_type, $post ) {
 
 	/* Add the meta box if the post type supports 'post-stylesheets'. */
 	if ( ( post_type_supports( $post_type, 'theme-layouts' ) ) && ( current_user_can( 'edit_post_meta', $post->ID ) || current_user_can( 'add_post_meta', $post->ID ) || current_user_can( 'delete_post_meta', $post->ID ) ) )
-		add_meta_box( 'theme-layouts-post-meta-box', __( 'Layout', theme_layouts_textdomain() ), 'theme_layouts_post_meta_box', $post_typetype, 'side', 'default' );
+		add_meta_box( 'theme-layouts-post-meta-box', __( 'Layout', 'theme-layouts' ), 'theme_layouts_post_meta_box', $post_type, 'side', 'default' );
 }
 
 /**
@@ -341,7 +341,7 @@ function theme_layouts_post_meta_box( $post, $box ) {
 
 		<?php wp_nonce_field( basename( __FILE__ ), 'theme-layouts-nonce' ); ?>
 
-		<p><?php _e( 'Layout is a theme-specific structure for the single view of the post.', theme_layouts_textdomain() ); ?></p>
+		<p><?php _e( 'Layout is a theme-specific structure for the single view of the post.', 'theme-layouts' ); ?></p>
 
 		<div class="post-layout-wrap">
 			<ul>
@@ -413,7 +413,7 @@ function theme_layouts_attachment_fields_to_edit( $fields, $post ) {
 
 	/* Add the attachment layout field to the $fields array. */
 	$fields['theme-layouts-post-layout'] = array(
-		'label' => __( 'Layout', theme_layouts_textdomain() ),
+		'label' => __( 'Layout', 'theme-layouts' ),
 		'input' => 'html',
 		'html' => $select
 	);

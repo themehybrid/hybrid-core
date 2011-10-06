@@ -40,9 +40,6 @@ add_action( 'init', 'custom_field_series_post_type_support' );
 function custom_field_series( $args = array() ) {
 	global $post;
 
-	/* Set up a default textdomain. */
-	$textdomain = apply_filters( 'custom_field_series_textdomain', 'custom-field-series' );
-
 	/* Set $series to an empty string. */
 	$series = '';
 
@@ -83,7 +80,7 @@ function custom_field_series( $args = array() ) {
 
 			/* Create the opening wrapper div, title, and list element. */
 			$series = '<div class="series series-' . esc_attr( $class ) . '">';
-			$series .= '<h4 class="series-title">' . apply_filters( 'custom_field_series_title', __( 'Articles in this series', $textdomain ) ) . '</h4>';
+			$series .= '<h4 class="series-title">' . apply_filters( 'custom_field_series_title', __( 'Articles in this series', 'custom-field-series' ) ) . '</h4>';
 			$series .= '<ul>';
 
 			/* Loop through the posts. */
@@ -132,9 +129,6 @@ function custom_field_series_post_type_support() {
  */
 function custom_field_series_create_meta_box() {
 
-	/* Set up a default textdomain. */
-	$textdomain = apply_filters( 'custom_field_series_textdomain', 'custom-field-series' );
-
 	/* Gets available public post types. */
 	$post_types = get_post_types();
 
@@ -143,7 +137,7 @@ function custom_field_series_create_meta_box() {
 
 		/* If the post type supports 'custom-field-series', add a meta box for it. */
 		if ( post_type_supports( $type, 'custom-field-series' ) )
-			add_meta_box( 'custom-field-series', __( 'Series', $textdomain ), 'custom_field_series_meta_box', $type, 'side', 'default' );
+			add_meta_box( 'custom-field-series', __( 'Series', 'custom-field-series' ), 'custom_field_series_meta_box', $type, 'side', 'default' );
 	}
 
 	/* Saves the post meta box data. */

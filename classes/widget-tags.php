@@ -24,12 +24,6 @@ class Hybrid_Widget_Tags extends WP_Widget {
 	var $prefix;
 
 	/**
-	 * Textdomain for the widget.
-	 * @since 0.7.0
-	 */
-	var $textdomain;
-
-	/**
 	 * Set up the widget's unique name, ID, class, description, and other options.
 	 * @since 1.2.0
 	 */
@@ -38,13 +32,10 @@ class Hybrid_Widget_Tags extends WP_Widget {
 		/* Set the widget prefix. */
 		$this->prefix = hybrid_get_prefix();
 
-		/* Set the widget textdomain. */
-		$this->textdomain = hybrid_get_textdomain();
-
 		/* Set up the widget options. */
 		$widget_options = array(
 			'classname' => 'tags',
-			'description' => esc_html__( 'An advanced widget that gives you total control over the output of your tags.', $this->textdomain )
+			'description' => esc_html__( 'An advanced widget that gives you total control over the output of your tags.', 'hybrid-core' )
 		);
 
 		/* Set up the widget control options. */
@@ -56,7 +47,7 @@ class Hybrid_Widget_Tags extends WP_Widget {
 		/* Create the widget. */
 		$this->WP_Widget(
 			'hybrid-tags',			// $this->id_base
-			__( 'Tags', $this->textdomain ),	// $this->name
+			__( 'Tags', 'hybrid-core' ),	// $this->name
 			$widget_options,			// $this->widget_options
 			$control_options			// $this->control_options
 		);
@@ -158,7 +149,7 @@ class Hybrid_Widget_Tags extends WP_Widget {
 
 		/* Set up the default form values. */
 		$defaults = array(
-			'title' => esc_attr__( 'Tags', $this->textdomain ),
+			'title' => esc_attr__( 'Tags', 'hybrid-core' ),
 			'order' => 'ASC',
 			'orderby' => 'name',
 			'format' => 'flat',
@@ -185,17 +176,17 @@ class Hybrid_Widget_Tags extends WP_Widget {
 		/* <select> element options. */
 		$taxonomies = get_taxonomies( array( 'show_tagcloud' => true ), 'objects' );
 		$terms = get_terms( $instance['taxonomy'] );
-		$link = array( 'view' => esc_attr__( 'View', $this->textdomain ), 'edit' => esc_attr__( 'Edit', $this->textdomain ) );
-		$format = array( 'flat' => esc_attr__( 'Flat', $this->textdomain ), 'list' => esc_attr__( 'List', $this->textdomain ) );
-		$order = array( 'ASC' => esc_attr__( 'Ascending', $this->textdomain ), 'DESC' => esc_attr__( 'Descending', $this->textdomain ), 'RAND' => esc_attr__( 'Random', $this->textdomain ) );
-		$orderby = array( 'count' => esc_attr__( 'Count', $this->textdomain ), 'name' => esc_attr__( 'Name', $this->textdomain ) );
+		$link = array( 'view' => esc_attr__( 'View', 'hybrid-core' ), 'edit' => esc_attr__( 'Edit', 'hybrid-core' ) );
+		$format = array( 'flat' => esc_attr__( 'Flat', 'hybrid-core' ), 'list' => esc_attr__( 'List', 'hybrid-core' ) );
+		$order = array( 'ASC' => esc_attr__( 'Ascending', 'hybrid-core' ), 'DESC' => esc_attr__( 'Descending', 'hybrid-core' ), 'RAND' => esc_attr__( 'Random', 'hybrid-core' ) );
+		$orderby = array( 'count' => esc_attr__( 'Count', 'hybrid-core' ), 'name' => esc_attr__( 'Name', 'hybrid-core' ) );
 		$unit = array( 'pt' => 'pt', 'px' => 'px', 'em' => 'em', '%' => '%' );
 
 		?>
 
 		<div class="hybrid-widget-controls columns-3">
 		<p>
-			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:', $this->textdomain ); ?></label>
+			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:', 'hybrid-core' ); ?></label>
 			<input type="text" class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" value="<?php echo esc_attr( $instance['title'] ); ?>" />
 		</p>
 		<p>
@@ -302,11 +293,11 @@ class Hybrid_Widget_Tags extends WP_Widget {
 		</p>
 		<p>
 			<label for="<?php echo $this->get_field_id( 'pad_counts' ); ?>">
-			<input class="checkbox" type="checkbox" <?php checked( $instance['pad_counts'], true ); ?> id="<?php echo $this->get_field_id( 'pad_counts' ); ?>" name="<?php echo $this->get_field_name( 'pad_counts' ); ?>" /> <?php _e( 'Pad counts?', $this->textdomain ); ?> <code>pad_counts</code></label>
+			<input class="checkbox" type="checkbox" <?php checked( $instance['pad_counts'], true ); ?> id="<?php echo $this->get_field_id( 'pad_counts' ); ?>" name="<?php echo $this->get_field_name( 'pad_counts' ); ?>" /> <?php _e( 'Pad counts?', 'hybrid-core' ); ?> <code>pad_counts</code></label>
 		</p>
 		<p>
 			<label for="<?php echo $this->get_field_id( 'hide_empty' ); ?>">
-			<input class="checkbox" type="checkbox" <?php checked( $instance['hide_empty'], true ); ?> id="<?php echo $this->get_field_id( 'hide_empty' ); ?>" name="<?php echo $this->get_field_name( 'hide_empty' ); ?>" /> <?php _e( 'Hide empty?', $this->textdomain ); ?> <code>hide_empty</code></label>
+			<input class="checkbox" type="checkbox" <?php checked( $instance['hide_empty'], true ); ?> id="<?php echo $this->get_field_id( 'hide_empty' ); ?>" name="<?php echo $this->get_field_name( 'hide_empty' ); ?>" /> <?php _e( 'Hide empty?', 'hybrid-core' ); ?> <code>hide_empty</code></label>
 		</p>
 		</div>
 		<div style="clear:both;">&nbsp;</div>

@@ -21,16 +21,15 @@ function hybrid_meta_box_theme_add_about() {
 
 	/* Get theme information. */
 	$prefix = hybrid_get_prefix();
-	$domain = hybrid_get_textdomain();
 	$theme_data = hybrid_get_theme_data();
 
 	/* Adds the About box for the parent theme. */
-	add_meta_box( 'hybrid-core-about-theme', sprintf( __( 'About %1$s', $domain ), $theme_data['Title'] ), 'hybrid_meta_box_theme_display_about', hybrid_get_settings_page_name(), 'side', 'high' );
+	add_meta_box( 'hybrid-core-about-theme', sprintf( __( 'About %1$s', 'hybrid-core' ), $theme_data['Title'] ), 'hybrid_meta_box_theme_display_about', hybrid_get_settings_page_name(), 'side', 'high' );
 
 	/* If the user is using a child theme, add an About box for it. */
 	if ( is_child_theme() ) {
 		$child_data = hybrid_get_theme_data( 'stylesheet' );
-		add_meta_box( 'hybrid-core-about-child', sprintf( __( 'About %1$s', $domain ), $child_data['Title'] ), 'hybrid_meta_box_theme_display_about', hybrid_get_settings_page_name(), 'side', 'high' );
+		add_meta_box( 'hybrid-core-about-child', sprintf( __( 'About %1$s', 'hybrid-core' ), $child_data['Title'] ), 'hybrid_meta_box_theme_display_about', hybrid_get_settings_page_name(), 'side', 'high' );
 	}
 }
 
@@ -48,7 +47,6 @@ function hybrid_meta_box_theme_display_about( $object, $box ) {
 
 	/* Get theme information. */
 	$prefix = hybrid_get_prefix();
-	$domain = hybrid_get_textdomain();
 
 	/* Grab theme information for the parent/child theme. */
 	$theme_data = ( ( 'hybrid-core-about-child' == $box['id'] ) ? hybrid_get_theme_data( 'stylesheet' ) : hybrid_get_theme_data() ); ?>
@@ -56,7 +54,7 @@ function hybrid_meta_box_theme_display_about( $object, $box ) {
 	<table class="form-table">
 		<tr>
 			<th>
-				<?php _e( 'Theme:', $domain ); ?>
+				<?php _e( 'Theme:', 'hybrid-core' ); ?>
 			</th>
 			<td>
 				<a href="<?php echo $theme_data['URI']; ?>" title="<?php echo $theme_data['Title']; ?>"><?php echo $theme_data['Title']; ?></a>
@@ -64,7 +62,7 @@ function hybrid_meta_box_theme_display_about( $object, $box ) {
 		</tr>
 		<tr>
 			<th>
-				<?php _e( 'Version:', $domain ); ?>
+				<?php _e( 'Version:', 'hybrid-core' ); ?>
 			</th>
 			<td>
 				<?php echo $theme_data['Version']; ?>
@@ -72,7 +70,7 @@ function hybrid_meta_box_theme_display_about( $object, $box ) {
 		</tr>
 		<tr>
 			<th>
-				<?php _e( 'Author:', $domain ); ?>
+				<?php _e( 'Author:', 'hybrid-core' ); ?>
 			</th>
 			<td>
 				<?php echo $theme_data['Author']; ?>
@@ -80,7 +78,7 @@ function hybrid_meta_box_theme_display_about( $object, $box ) {
 		</tr>
 		<tr>
 			<th>
-				<?php _e( 'Description:', $domain ); ?>
+				<?php _e( 'Description:', 'hybrid-core' ); ?>
 			</th>
 			<td>
 				<?php echo $theme_data['Description']; ?>
