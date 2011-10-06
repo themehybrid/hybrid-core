@@ -272,19 +272,9 @@ function theme_layouts_get_string( $layout ) {
  */
 function theme_layouts_admin_setup() {
 
-	/* Gets available public post types. */
-	$post_types = get_post_types();
-
-	/* Loop through each available post type. */
-	foreach ( $post_types as $type ) {
-
-		/* If the post type supports 'theme-layouts', add a meta box for it. */
-		if ( post_type_supports( $type, 'theme-layouts' ) )
-			add_meta_box( 'theme-layouts-post-meta-box', __( 'Layout', theme_layouts_textdomain() ), 'theme_layouts_post_meta_box', $type, 'side', 'default' );
-	}
-
-	/* Saves the post format on the post editing page. */
-	add_action( 'save_post', 'theme_layouts_save_post', 10, 2 );
+	/* Load the post meta boxes on the new post and edit post screens. */
+	add_action( 'load-post.php', 'theme_layouts_load_meta_boxes' );
+	add_action( 'load-post-new.php', 'theme_layouts_load_meta_boxes' );
 
 	/* If the attachment post type supports 'theme-layouts', add form fields for it. */
 	if ( post_type_supports( 'attachment', 'theme-layouts' ) ) {
@@ -295,6 +285,38 @@ function theme_layouts_admin_setup() {
 		/* Saves the theme layout for attachments. */
 		add_filter( 'attachment_fields_to_save', 'theme_layouts_attachment_fields_to_save', 10, 2 );
 	}
+}
+
+/**
+ * Hooks into the 'add_meta_boxes' hook to add the theme layouts meta box and the 'save_post' hook 
+ * to save the metadata.
+ *
+ * @since 0.4.0
+ * @return void
+ */
+function theme_layouts_load_meta_boxes() {
+
+	/* Add the layout meta box on the 'add_meta_boxes' hook. */
+	add_action( 'add_meta_boxes', 'post_stylesheets_create_meta_box', 10, 2 );
+
+	/* Saves the post format on the post editing page. */
+	add_action( 'save_post', 'theme_layouts_save_post', 10, 2 );
+}
+
+/**
+ * Adds the theme layouts meta box if the post type supports 'theme-layouts' and the current user has 
+ * permission to edit post meta.
+ *
+ * @since 0.4.0
+ * @param string $post_type The post type of the current post being edited.
+ * @param object $post The current post object.
+ * @return void
+ */
+function theme_layouts_add_meta_boxes( $post_type, $post ) {
+
+	/* Add the meta box if the post type supports 'post-stylesheets'. */
+	if ( ( post_type_supports( $post_type, 'theme-layouts' ) ) && ( current_user_can( 'edit_post_meta', $post->ID ) || current_user_can( 'add_post_meta', $post->ID ) || current_user_can( 'delete_post_meta', $post->ID ) ) )
+		add_meta_box( 'theme-layouts-post-meta-box', __( 'Layout', theme_layouts_textdomain() ), 'theme_layouts_post_meta_box', $post_typetype, 'side', 'default' );
 }
 
 /**
@@ -317,16 +339,16 @@ function theme_layouts_post_meta_box( $post, $box ) {
 
 	<div class="post-layout">
 
-		<?php wp_nonce_field( basename( __FILE__ ), 'theme_layouts_post_meta_box_nonce' ); ?>
+		<?php wp_nonce_field( basename( __FILE__ ), 'theme-layouts-nonce' ); ?>
 
 		<p><?php _e( 'Layout is a theme-specific structure for the single view of the post.', theme_layouts_textdomain() ); ?></p>
 
 		<div class="post-layout-wrap">
 			<ul>
-				<li><input type="radio" name="post_layout" id="post_layout_default" value="default" <?php checked( $post_layout, 'default' );?> /> <label for="post_layout_default"><?php echo esc_html( theme_layouts_get_string( 'default' ) ); ?></label></li>
+				<li><input type="radio" name="post-layout" id="post-layout-default" value="default" <?php checked( $post_layout, 'default' );?> /> <label for="post-layout-default"><?php echo esc_html( theme_layouts_get_string( 'default' ) ); ?></label></li>
 
 				<?php foreach ( $post_layouts as $layout ) { ?>
-					<li><input type="radio" name="post_layout" id="post_layout_<?php echo esc_attr( $layout ); ?>" value="<?php echo esc_attr( $layout ); ?>" <?php checked( $post_layout, $layout ); ?> /> <label for="post_layout_<?php echo esc_attr( $layout ); ?>"><?php echo esc_html( theme_layouts_get_string( $layout ) ); ?></label></li>
+					<li><input type="radio" name="post-layout" id="post-layout-<?php echo esc_attr( $layout ); ?>" value="<?php echo esc_attr( $layout ); ?>" <?php checked( $post_layout, $layout ); ?> /> <label for="post-layout-<?php echo esc_attr( $layout ); ?>"><?php echo esc_html( theme_layouts_get_string( $layout ) ); ?></label></li>
 				<?php } ?>
 			</ul>
 		</div>
@@ -344,7 +366,7 @@ function theme_layouts_post_meta_box( $post, $box ) {
 function theme_layouts_save_post( $post_id, $post ) {
 
 	/* Verify the nonce for the post formats meta box. */
-	if ( !isset( $_POST['theme_layouts_post_meta_box_nonce'] ) || !wp_verify_nonce( $_POST['theme_layouts_post_meta_box_nonce'], basename( __FILE__ ) ) )
+	if ( !isset( $_POST['theme-layouts-nonce'] ) || !wp_verify_nonce( $_POST['theme-layouts-nonce'], basename( __FILE__ ) ) )
 		return $post_id;
 
 	/* Check if the current user has permission to edit the post. */
@@ -355,7 +377,7 @@ function theme_layouts_save_post( $post_id, $post ) {
 	$old_layout = get_post_layout( $post_id );
 
 	/* Get the submitted post layout. */
-	$new_layout = esc_attr( $_POST['post_layout'] );
+	$new_layout = esc_attr( $_POST['post-layout'] );
 
 	/* If the old layout doesn't match the new layout, update the post layout meta. */
 	if ( $old_layout !== $new_layout )
@@ -380,11 +402,11 @@ function theme_layouts_attachment_fields_to_edit( $fields, $post ) {
 	$post_layout = get_post_layout( $post->ID );
 
 	/* Set the default post layout. */
-	$select = '<option id="post_layout_default" value="default" ' . selected( $post_layout, 'default', false ) . '>' . esc_html( theme_layouts_get_string( 'default' ) ) . '</option>';
+	$select = '<option id="post-layout-default" value="default" ' . selected( $post_layout, 'default', false ) . '>' . esc_html( theme_layouts_get_string( 'default' ) ) . '</option>';
 
 	/* Loop through each theme-supported layout, adding it to the select element. */
 	foreach ( $post_layouts as $layout )
-		$select .= '<option id="post_layout_' . esc_attr( $layout ) . '" value="' . esc_attr( $layout ) . '" ' . selected( $post_layout, $layout, false ) . '>' . esc_html( theme_layouts_get_string( $layout ) ) . '</option>';
+		$select .= '<option id="post-layout-' . esc_attr( $layout ) . '" value="' . esc_attr( $layout ) . '" ' . selected( $post_layout, $layout, false ) . '>' . esc_html( theme_layouts_get_string( $layout ) ) . '</option>';
 
 	/* Set the HTML for the post layout select drop-down. */
 	$select = '<select name="attachments[' . $post->ID . '][theme-layouts-post-layout]" id="attachments[' . $post->ID . '][theme-layouts-post-layout]">' . $select . '</select>';
