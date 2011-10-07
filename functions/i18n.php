@@ -9,54 +9,29 @@
  */
 
 /**
+ * Loads the framework's translation files.  The function first checks if the parent theme or child theme 
+ * has the translation files housed in their '/languages' folder.  If not, it sets the translation file the the 
+ * framework '/languages' folder.
+ *
  * @since 1.3.0
+ * @access private
+ * @uses load_textdomain() Loads an MO file into the domain for the framework.
+ * @param string $domain The name of the framework's textdomain.
+ * @return true|false Whether the MO file was loaded.
  */
 function hybrid_load_framework_textdomain( $domain ) {
-	global $hybrid;
 
+	/* Get the WordPress installations locale set by the user. */
 	$locale = get_locale();
 
+	/* Check if the mofile is located in parent/child theme /languages folder. */
 	$mofile = locate_template( array( "languages/{$domain}-{$locale}.mo" ) );
 
-	if ( !empty( $mofile ) )
-		return load_textdomain( $domain, $mofile );
+	/* If no mofile was found in the parent/child theme, set set it to the framework's mofile. */
+	if ( empty( $mofile ) )
+		$mofile = trailingslashit( HYBRID_LANGUAGES ) . "{$domain}-{$locale}.mo";
 
-	$mofile = trailingslashit( HYBRID_LANGUAGES ) . "{$domain}-{$locale}.mo";
-
-	if ( file_exists( $mofile ) )
-		return load_textdomain( $domain, $mofile );
-
-	return false;
-}
-
-/**
- * @since 1.3.0
- */
-function hybrid_gettext( $translated, $text, $domain ) {
-
-	/**
-	 * @todo Don't use this array here. We need to check current_theme_supports() b/c some extensions
-	 * are plugins. We don't want to muck with their translations.
-	 *
-	 * @todo Somewhat related. The framework should remove_theme_support() if it's checking against a
-	 * function b/c the theme would still support something even if it's running the plugin and not the extension.
-	 */
-	$domains = array( 'breadcrumb-trail', 'custom-field-series', 'post-stylesheets', 'theme-layouts' );
-
-	if ( !is_textdomain_loaded( 'hybrid-core' ) ) {
-		$domains[] = 'hybrid-core';
-		$use_domain = hybrid_get_parent_textdomain();
-	} else {
-		$use_domain = 'hybrid-core';
-	}
-
-	if ( in_array( $domain, $domains ) ) {
-		$translations = &get_translations_for_domain( $use_domain );
-
-		$translated = $translations->translate( $text );
-	}
-
-	return $translated;
+	return load_textdomain( $domain, $mofile );
 }
 
 /**
@@ -85,10 +60,11 @@ function hybrid_get_parent_textdomain() {
 	global $hybrid;
 
 	/* If the global textdomain isn't set, define it. Plugin/theme authors may also define a custom textdomain. */
-	if ( empty( $hybrid->textdomain ) )
-		$hybrid->textdomain = sanitize_key( apply_filters( hybrid_get_prefix() . '_textdomain', get_template() ) );
+	if ( empty( $hybrid->parent_textdomain ) )
+		$hybrid->parent_textdomain = sanitize_key( apply_filters( hybrid_get_prefix() . '_parent_textdomain', get_template() ) );
 
-	return $hybrid->textdomain;
+	/* Return the expected textdomain of the parent theme. */
+	return $hybrid->parent_textdomain;
 }
 
 /**
@@ -115,7 +91,16 @@ function hybrid_get_child_textdomain() {
 	if ( empty( $hybrid->child_textdomain ) )
 		$hybrid->child_textdomain = sanitize_key( apply_filters( hybrid_get_prefix() . '_child_textdomain', get_stylesheet() ) );
 
+	/* Return the expected textdomain of the child theme. */
 	return $hybrid->child_textdomain;
+}
+
+/**
+ * @since 0.9.0
+ * @deprecated 1.3.0
+ */
+function hybrid_load_textdomain( $mofile, $domain ) {
+	return hybrid_load_textdomain_mofile( $mofile, $domain );
 }
 
 /**
@@ -123,14 +108,15 @@ function hybrid_get_child_textdomain() {
  * of the mofile for translations.  This allows child themes to have a folder called /languages with translations
  * of their parent theme so that the translations aren't lost on a parent theme upgrade.
  *
- * @since 0.9.0
+ * @since 1.3.0
+ * @access private
  * @param string $mofile File name of the .mo file.
- * @param string 'hybrid-core' The textdomain currently being filtered.
+ * @param string $domain The textdomain currently being filtered.
  */
-function hybrid_load_textdomain( $mofile, $domain ) {
+function hybrid_load_textdomain_mofile( $mofile, $domain ) {
 
-	/* If the 'hybrid-core' is for the parent or child theme, search for a $domain-$locale.mo file. */
-	if ( $domain == hybrid_get_textdomain() || $domain == hybrid_get_child_textdomain() ) {
+	/* If the $domain is for the parent or child theme, search for a $domain-$locale.mo file. */
+	if ( $domain == hybrid_get_parent_textdomain() || $domain == hybrid_get_child_textdomain() ) {
 
 		/* Check for a $domain-$locale.mo file in the parent and child theme root and /languages folder. */
 		$locale = get_locale();
@@ -143,6 +129,68 @@ function hybrid_load_textdomain( $mofile, $domain ) {
 
 	/* Return the $mofile string. */
 	return $mofile;
+}
+
+/**
+ * Filters 'gettext' to change the translations used for the 'hybrid-core' textdomain.  This filter makes it possible 
+ * for the theme's MO file to translate the framework's text strings.
+ *
+ * @since 1.3.0
+ * @access private
+ * @param string $translated The translated text.
+ * @param string $text The original, untranslated text.
+ * @param string $domain The textdomain for the text.
+ * @return string $translated
+ */
+function hybrid_gettext( $translated, $text, $domain ) {
+
+	/* Check if 'hybrid-core' is the current textdomain, there's no mofile for it, and the theme has a mofile. */
+	if ( 'hybrid-core' == $domain && !is_textdomain_loaded( 'hybrid-core' ) && is_textdomain_loaded( hybrid_get_parent_textdomain() ) ) {
+
+		/* Get the translations for the theme. */
+		$translations = &get_translations_for_domain( hybrid_get_parent_textdomain() );
+
+		/* Translate the text using the theme's translation. */
+		$translated = $translations->translate( $text );
+	}
+
+	return $translated;
+}
+
+/**
+ * Filters 'gettext' to change the translations used for the each of the extensions' textdomains.  This filter 
+ * makes it possible for the theme's MO file to translate the framework's extensions.
+ *
+ * @since 1.3.0
+ * @access private
+ * @param string $translated The translated text.
+ * @param string $text The original, untranslated text.
+ * @param string $domain The textdomain for the text.
+ * @return string $translated
+ */
+function hybrid_extensions_gettext( $translated, $text, $domain ) {
+
+	/* Check if the current textdomain matches one of the framework extensions. */
+	if ( in_array( $domain, array( 'breadcrumb-trail', 'custom-field-series', 'post-stylesheets', 'theme-layouts' ) ) ) {
+
+		/* If the theme supports the extension, switch the translations. */
+		if ( current_theme_supports( $domain ) ) {
+
+			/* If the framework mofile is loaded, use its translations. */
+			if ( is_textdomain_loaded( 'hybrid-core' ) )
+				$translations = &get_translations_for_domain( 'hybrid-core' );
+
+			/* If the theme mofile is loaded, use its translations. */
+			elseif ( is_textdomain_loaded( hybrid_get_parent_textdomain() ) )
+				$translations = &get_translations_for_domain( hybrid_get_parent_textdomain() );
+
+			/* If translations were found, translate the text. */
+			if ( !empty( $translations ) )
+				$translated = $translations->translate( $text );
+		}
+	}
+
+	return $translated;
 }
 
 ?>
