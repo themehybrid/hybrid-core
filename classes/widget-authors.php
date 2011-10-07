@@ -18,19 +18,10 @@
 class Hybrid_Widget_Authors extends WP_Widget {
 
 	/**
-	 * Prefix for the widget.
-	 * @since 0.7.0
-	 */
-	var $prefix;
-
-	/**
 	 * Set up the widget's unique name, ID, class, description, and other options.
 	 * @since 1.2.0
 	 */
 	function __construct() {
-
-		/* Set the widget prefix. */
-		$this->prefix = hybrid_get_prefix();
 
 		/* Set up the widget options. */
 		$widget_options = array(
