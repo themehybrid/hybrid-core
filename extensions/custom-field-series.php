@@ -23,11 +23,11 @@
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
-/* Create the meta box on the 'admin_menu' hook. */
-add_action( 'admin_menu', 'custom_field_series_create_meta_box' );
-
 /* Add support for the 'custom-field-series' extension to posts. */
 add_action( 'init', 'custom_field_series_post_type_support' );
+
+/* Create the meta box on the 'admin_menu' hook. */
+add_action( 'admin_menu', 'custom_field_series_admin_setup' );
 
 /**
  * Checks for a series of posts by the current post's metadata.  The function grabs the meta value for the 
@@ -43,26 +43,26 @@ function custom_field_series( $args = array() ) {
 	/* Set $series to an empty string. */
 	$series = '';
 
-	/* Allow developers to overwrite the meta key used for the series name. */
-	$meta_key = apply_filters( 'custom_field_series_meta_key', 'Series' );
+	/* Get the current post ID. */
+	$post_id = get_the_ID();
 
 	/* Get the series meta value for the post. */
-	$meta_value = get_post_meta( $post->ID, $meta_key, true );
+	$meta_value = get_post_meta( $post_id, custom_field_series_meta_key(), true );
 
 	/* If a meta value was found, create a list of posts in the series. */
 	if ( !empty( $meta_value ) ) {
 
 		/* Set up the default post query arguments. */
 		$defaults = array(
-			'order' => 'DESC',
-			'orderby' => 'ID',
-			'include' => '',
-			'exclude' => '',
-			'post_type' => 'any',
-			'numberposts' => -1,
-			'meta_key' => $meta_key,
-			'meta_value' => $meta_value,
-			'echo' => true
+			'order' => 	'DESC',
+			'orderby' => 	'ID',
+			'include' => 	'',
+			'exclude' => 	'',
+			'post_type' => 	'any',
+			'numberposts' => 	-1,
+			'meta_key' => 	custom_field_series_meta_key(),
+			'meta_value' => 	$meta_value,
+			'echo' => 	true
 		);
 
 		/* Allow developers to override the arguments used. */
@@ -87,7 +87,7 @@ function custom_field_series( $args = array() ) {
 			foreach ( $series_posts as $serial ) {
 
 				/* If the current post in the loop matches the post we're viewing, don't link to it. */
-				if ( $serial->ID == $post->ID )
+				if ( $serial->ID == $post_id )
 					$series .= '<li class="current-post">' . $serial->post_title . '</li>';
 
 				/* Display a link to the post. */
@@ -123,25 +123,56 @@ function custom_field_series_post_type_support() {
 }
 
 /**
- * Creates the meta box on the post editing screen for the 'post' post type.
+ * Returns the meta key used for the 'Series' custom field so that developers can overwrite the key if they
+ * need to for their project.
  *
- * @since 0.3.0
+ * @since 0.4.0
  */
-function custom_field_series_create_meta_box() {
+function custom_field_series_meta_key() {
+	return apply_filters( 'custom_field_series_meta_key', 'Series' );
+}
 
-	/* Gets available public post types. */
-	$post_types = get_post_types();
+/**
+ * Admin setup for the custom field series script.
+ *
+ * @since 0.4.0
+ * @return void
+ */
+function custom_field_series_admin_setup() {
 
-	/* Loop through each available post type. */
-	foreach ( $post_types as $type ) {
+	/* Load the post meta boxes on the new post and edit post screens. */
+	add_action( 'load-post.php', 'custom_field_series_load_meta_boxes' );
+	add_action( 'load-post-new.php', 'custom_field_series_load_meta_boxes' );
+}
 
-		/* If the post type supports 'custom-field-series', add a meta box for it. */
-		if ( post_type_supports( $type, 'custom-field-series' ) )
-			add_meta_box( 'custom-field-series', __( 'Series', 'custom-field-series' ), 'custom_field_series_meta_box', $type, 'side', 'default' );
-	}
+/**
+ * Hooks into the 'add_meta_boxes' hook to add the custom field series meta box and the 'save_post' hook 
+ * to save the metadata.
+ *
+ * @since 0.4.0
+ * @return void
+ */
+function custom_field_series_load_meta_boxes() {
+
+	/* Add the custom field series meta box on the 'add_meta_boxes' hook. */
+	add_action( 'add_meta_boxes', 'custom_field_series_create_meta_box', 10, 2 );
 
 	/* Saves the post meta box data. */
 	add_action( 'save_post', 'custom_field_series_meta_box_save', 10, 2 );
+}
+
+/**
+ * Creates the meta box on the post editing screen for the 'post' post type.
+ *
+ * @since 0.3.0
+ * @param string $post_type The post type of the current post being edited.
+ * @param object $post The current post object.
+ * @return void
+ */
+function custom_field_series_create_meta_box( $post_type, $post ) {
+
+	if ( post_type_supports( $post_type, 'custom-field-series' ) )
+		add_meta_box( 'custom-field-series', __( 'Series', 'custom-field-series' ), 'custom_field_series_meta_box', $post_type, 'side', 'default' );
 }
 
 /**
@@ -152,8 +183,8 @@ function custom_field_series_create_meta_box() {
 function custom_field_series_meta_box( $object, $box ) { ?>
 
 	<p>
-		<input type="hidden" name="custom_field_series_meta_box_nonce" value="<?php echo wp_create_nonce( basename( __FILE__ ) ); ?>" />
-		<input type="text" name="custom-field-series" id="custom-field-series" value="<?php echo esc_attr( get_post_meta( $object->ID, apply_filters( 'custom_field_series_meta_key', 'Series' ), true ) ); ?>" size="30" tabindex="30" style="width: 99%;" />
+		<?php wp_nonce_field( basename( __FILE__ ), 'custom-field-series-nonce' ); ?>
+		<input type="text" name="custom-field-series" id="custom-field-series" value="<?php echo esc_attr( get_post_meta( $object->ID, custom_field_series_meta_key(), true ) ); ?>" size="30" tabindex="30" style="width: 99%;" />
 	</p>
 <?php
 }
@@ -166,21 +197,18 @@ function custom_field_series_meta_box( $object, $box ) { ?>
 function custom_field_series_meta_box_save( $post_id, $post ) {
 
 	/* Verify the nonce before proceeding. */
-	if ( !isset( $_POST['custom_field_series_meta_box_nonce'] ) || !wp_verify_nonce( $_POST['custom_field_series_meta_box_nonce'], basename( __FILE__ ) ) )
+	if ( !isset( $_POST['custom-field-series-nonce'] ) || !wp_verify_nonce( $_POST['custom-field-series-nonce'], basename( __FILE__ ) ) )
 		return $post_id;
 
-	/* Get the post type object. */
-	$post_type = get_post_type_object( $post->post_type );
-
 	/* Check if the current user has permission to edit the post. */
-	if ( !current_user_can( $post_type->cap->edit_post, $post_id ) )
+	if ( !current_user_can( 'edit_post_meta', $post_id ) )
 		return $post_id;
 
 	/* Get the posted series title and strip all tags from it. */
 	$new_meta_value = ( isset( $_POST['custom-field-series'] ) ? strip_tags( $_POST['custom-field-series'] ) : '' );
 
 	/* Get the meta key. */
-	$meta_key = apply_filters( 'custom_field_series_meta_key', 'Series' );
+	$meta_key = custom_field_series_meta_key();
 
 	/* Get the meta value of the custom field key. */
 	$meta_value = get_post_meta( $post_id, $meta_key, true );
