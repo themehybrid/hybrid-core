@@ -29,6 +29,7 @@ add_filter( 'attachment_template', 'hybrid_singular_template' );
  * is_date() allows by checking for the year, month, week, day, hour, and minute.
  *
  * @since 0.6.0
+ * @access private
  * @uses locate_template() Checks for template in child and parent theme.
  * @param string $template
  * @return string $template Full path to file.
@@ -83,6 +84,7 @@ function hybrid_date_template( $template ) {
  * user-$nicename.php, $user-role-$role.php, user.php, author.php, archive.php.
  *
  * @since 0.7.0
+ * @access private
  * @uses locate_template() Checks for template in child and parent theme.
  * @param string $template
  * @return string Full path to file.
@@ -125,6 +127,7 @@ function hybrid_user_template( $template ) {
  * taxonomy.php, archive.php.
  *
  * @since 0.7.0
+ * @access private
  * @uses locate_template() Checks for template in child and parent theme.
  * @param string $template
  * @return string Full path to file.
@@ -147,6 +150,7 @@ function hybrid_taxonomy_template( $template ) {
  * attachment-$mime[1].php, or attachment-$mime[0].php.
  *
  * @since 0.7.0
+ * @access private
  * @param string $template The default WordPress post template.
  * @return string $template The theme post template after all templates have been checked for.
  */

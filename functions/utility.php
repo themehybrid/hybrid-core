@@ -23,13 +23,15 @@ add_filter( 'image_size_names_choose', 'hybrid_image_size_names_choose' );
  * they're not registered.
  *
  * @since 0.8.0
+ * @access private
+ * @return void
  */
 function hybrid_add_post_type_support() {
 
-	/* Add support for excerpts and entry-views to the 'page' post type. */
+	/* Add support for excerpts to the 'page' post type. */
 	add_post_type_support( 'page', array( 'excerpt' ) );
 
-	/* Add support for comments, trackbacks, and entry-views to the 'attachment' post type. */
+	/* Add support for trackbacks to the 'attachment' post type. */
 	add_post_type_support( 'attachment', array( 'trackbacks' ) );
 }
 
@@ -39,6 +41,7 @@ function hybrid_add_post_type_support() {
  * displaying additional information to the theme user.
  *
  * @since 1.2.0
+ * @access private
  * @link http://codex.wordpress.org/Theme_Review#Licensing
  * @param array $headers Array of extra headers added by plugins/themes.
  * @return array $headers
@@ -74,6 +77,7 @@ function hybrid_extra_theme_headers( $headers ) {
  * allows users to insert these images within their post content editor.
  *
  * @since 1.3.0
+ * @access private
  * @param array $sizes Selectable image sizes.
  * @return array $sizes
  */
@@ -101,6 +105,7 @@ function hybrid_image_size_names_choose( $sizes ) {
  * being viewed by the user.
  *
  * @since 0.8.0
+ * @access public
  * @param string $template The slug of the template whose context we're searching for.
  * @return string $template The full path of the located template.
  */
@@ -132,6 +137,8 @@ function get_atomic_template( $template ) {
  * filter hook.
  *
  * @since 0.4.0
+ * @access private
+ * @return void
  */
 function hybrid_meta_template() {
 	$data = hybrid_get_theme_data();
@@ -144,6 +151,8 @@ function hybrid_meta_template() {
  * pages, wrap it in a <div> element. 
  *
  * @since 0.1.0
+ * @access public
+ * @return void
  */
 function hybrid_site_title() {
 
@@ -163,6 +172,8 @@ function hybrid_site_title() {
  * On other pages, wrap it in a <div> element.
  *
  * @since 0.1.0
+ * @access public
+ * @return void
  */
 function hybrid_site_description() {
 
@@ -182,6 +193,7 @@ function hybrid_site_description() {
  * is_page_template() function with the exception that it works for all post types.
  *
  * @since 1.2.0
+ * @access public
  * @param string $template The name of the template to check for.
  * @return bool Whether the post has a template.
  */

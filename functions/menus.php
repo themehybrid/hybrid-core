@@ -15,8 +15,10 @@ add_action( 'init', 'hybrid_register_menus' );
  * Registers the the framework's default menus based on the menus the theme has registered support for.
  *
  * @since 0.8.0
+ * @access private
  * @uses register_nav_menu() Registers a nav menu with WordPress.
  * @link http://codex.wordpress.org/Function_Reference/register_nav_menu
+ * @return void
  */
 function hybrid_register_menus() {
 

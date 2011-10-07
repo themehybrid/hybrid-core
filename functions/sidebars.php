@@ -17,8 +17,10 @@ add_action( 'widgets_init', 'hybrid_register_sidebars' );
  * for using add_theme_support().
  *
  * @since 0.7.0
+ * @access private
  * @uses register_sidebar() Registers a sidebar with WordPress.
  * @link http://codex.wordpress.org/Function_Reference/register_sidebar
+ * @return void
  */
 function hybrid_register_sidebars() {
 
@@ -64,6 +66,8 @@ function hybrid_register_sidebars() {
  * sidebar is registered.
  *
  * @since 1.2.0
+ * @access private
+ * @return array $sidebars All the available framework sidebars.
  */
 function hybrid_get_sidebars() {
 

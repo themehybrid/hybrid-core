@@ -21,6 +21,8 @@ add_action( 'wp_head', 'hybrid_meta_keywords', 1 );
  * hybrid_meta_robots filter hook at the end.
  *
  * @since 0.2.3
+ * @access private
+ * @return void
  */
 function hybrid_meta_robots() {
 
@@ -39,6 +41,8 @@ function hybrid_meta_robots() {
  * archives, it uses the user's display name.
  *
  * @since 0.3.3
+ * @access private
+ * @return void
  */
 function hybrid_meta_author() {
 
@@ -68,6 +72,8 @@ function hybrid_meta_author() {
  * published.  All other pages will show the current year. 
  *
  * @since 0.4.0
+ * @access private
+ * @return void
  */
 function hybrid_meta_copyright() {
 
@@ -89,6 +95,8 @@ function hybrid_meta_copyright() {
  * Add the revised meta tag on the singular view of posts.  This shows the last time the post was modified. 
  *
  * @since 0.4.0
+ * @access private
+ * @return void
  */
 function hybrid_meta_revised() {
 
@@ -106,6 +114,8 @@ function hybrid_meta_revised() {
  * Generates the meta description based on either metadata or the description for the object.
  *
  * @since 0.2.3
+ * @access private
+ * @return void
  */
 function hybrid_meta_description() {
 
@@ -173,6 +183,8 @@ function hybrid_meta_description() {
  * Generates meta keywords/tags for the site.
  *
  * @since 0.2.3
+ * @access private
+ * @return void
  */
 function hybrid_meta_keywords() {
 

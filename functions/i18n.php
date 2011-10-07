@@ -112,6 +112,7 @@ function hybrid_load_textdomain( $mofile, $domain ) {
  * @access private
  * @param string $mofile File name of the .mo file.
  * @param string $domain The textdomain currently being filtered.
+ * @return $mofile
  */
 function hybrid_load_textdomain_mofile( $mofile, $domain ) {
 

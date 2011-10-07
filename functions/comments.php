@@ -21,6 +21,7 @@ add_filter( 'get_avatar_comment_types', 'hybrid_avatar_comment_types' );
  * element to use for listing comments.
  *
  * @since 0.7.0
+ * @access public
  * @return array $args Arguments for listing comments.
  */
 function hybrid_list_comments_args() {
@@ -48,9 +49,11 @@ function hybrid_list_comments_args() {
  * is only located once if it is needed. Following comments will use the saved template.
  *
  * @since 0.2.3
+ * @access public
  * @param $comment The comment object.
- * @param $args Array of arguments passed from wp_list_comments()
- * @param $depth What level the particular comment is
+ * @param $args Array of arguments passed from wp_list_comments().
+ * @param $depth What level the particular comment is.
+ * @return void
  */
 function hybrid_comments_callback( $comment, $args, $depth ) {
 	global $hybrid;
@@ -85,6 +88,8 @@ function hybrid_comments_callback( $comment, $args, $depth ) {
  * case something is changed.
  *
  * @since 0.2.3
+ * @access public
+ * @return void
  */
 function hybrid_comments_end_callback() {
 	echo '</li><!-- .comment -->';
@@ -96,8 +101,10 @@ function hybrid_comments_end_callback() {
  * trackbacks and pingbacks.
  *
  * @since 0.2.0
+ * @access public
  * @global $comment The current comment's DB object.
  * @global $hybrid The global Hybrid object.
+ * @return void
  */
 function hybrid_avatar() {
 	global $comment, $hybrid;
@@ -147,6 +154,7 @@ function hybrid_avatar() {
  * users to build custom comment forms by filtering 'comment_form_defaults' in their child theme.
  *
  * @since 0.8.0
+ * @access public
  * @param array $args The default comment form arguments.
  * @return array $args The filtered comment form arguments.
  */
@@ -192,6 +200,7 @@ function hybrid_comment_form_args( $args ) {
  * default, WordPress only allows the 'comment' comment type to have an avatar.
  *
  * @since 1.2.0
+ * @access private
  * @param array $types List of all comment types allowed to have avatars.
  * @return array $types
  */

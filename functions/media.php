@@ -22,6 +22,8 @@ add_filter( 'stylesheet_uri', 'hybrid_debug_stylesheet', 10, 2 );
  * its own custom scripts, it should do so on the 'wp_enqueue_scripts' hook.
  *
  * @since 1.2.0
+ * @access private
+ * @return void
  */
 function hybrid_register_scripts() {
 
@@ -34,6 +36,8 @@ function hybrid_register_scripts() {
  * Tells WordPress to load the scripts needed for the framework using the wp_enqueue_script() function.
  *
  * @since 1.2.0
+ * @access private
+ * @return void
  */
 function hybrid_enqueue_scripts() {
 
@@ -52,6 +56,10 @@ function hybrid_enqueue_scripts() {
  * file is present within the theme folder and use it if it exists.  Else, it defaults to 'style.css'.
  *
  * @since 0.9.0
+ * @access private
+ * @param string $stylesheet_uri The URI of the active theme's stylesheet.
+ * @param string $stylesheet_dir_uri The directory URI of the active theme's stylesheet.
+ * @return string $stylesheet_uri
  */
 function hybrid_debug_stylesheet( $stylesheet_uri, $stylesheet_dir_uri ) {
 
@@ -82,8 +90,10 @@ function hybrid_debug_stylesheet( $stylesheet_uri, $stylesheet_dir_uri ) {
  * lead to messy template files.
  *
  * @since 0.5.0
+ * @access public
  * @uses get_post_mime_type() Gets the mime type of the attachment.
  * @uses wp_get_attachment_url() Gets the URL of the attachment file.
+ * @return void
  */
 function hybrid_attachment() {
 	$file = wp_get_attachment_url();
@@ -106,6 +116,7 @@ function hybrid_attachment() {
  * on those pages.
  *
  * @since 0.3.0
+ * @access public
  * @param string $mime attachment mime type
  * @param string $file attachment file URL
  * @return string
@@ -124,6 +135,7 @@ function hybrid_application_attachment( $mime = '', $file = '' ) {
  * in the pages.
  *
  * @since 0.3.0
+ * @access public
  * @param string $mime attachment mime type
  * @param string $file attachment file URL
  * @return string
@@ -144,6 +156,7 @@ function hybrid_text_attachment( $mime = '', $file = '' ) {
  * @todo Test out and support more audio types.
  *
  * @since 0.2.2
+ * @access public
  * @param string $mime attachment mime type
  * @param string $file attachment file URL
  * @return string
@@ -163,6 +176,7 @@ function hybrid_audio_attachment( $mime = '', $file = '' ) {
  * Handles video attachments on attachment pages.  Add other video types to the <object> element.
  *
  * @since 0.2.2
+ * @access public
  * @param string $mime attachment mime type
  * @param string $file attachment file URL
  * @return string

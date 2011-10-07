@@ -20,6 +20,7 @@
  * second during a specific minute within a specific hour on a specific day and so on.
  *
  * @since 0.7.0
+ * @access public
  * @global $wp_query The current page's query object.
  * @global $hybrid The global Hybrid object.
  * @return array $hybrid->context Several contexts based on the current page.
@@ -117,9 +118,10 @@ function hybrid_get_context() {
  * even, and alt are added.
  *
  * @since 0.5.0
+ * @access public
  * @global $post The current post's DB object.
  * @param string|array $class Additional classes for more control.
- * @return string $class
+ * @return void
  */
 function hybrid_entry_class( $class = '', $post_id = null ) {
 	static $post_alt;
@@ -203,8 +205,10 @@ function hybrid_entry_class( $class = '', $post_id = null ) {
  * (Odd should come first, even second).
  *
  * @since 0.2.0
+ * @access public
  * @global $wpdb WordPress DB access object.
  * @global $comment The current comment's DB object.
+ * @return void
  */
 function hybrid_comment_class( $class = '' ) {
 	global $post, $comment, $hybrid;
@@ -259,9 +263,10 @@ function hybrid_comment_class( $class = '' ) {
  * Provides classes for the <body> element depending on page context.
  *
  * @since 0.1.0
+ * @access public
  * @uses $wp_query
  * @param string|array $class Additional classes for more control.
- * @return string
+ * @return void
  */
 function hybrid_body_class( $class = '' ) {
 	global $wp_query;
@@ -342,7 +347,9 @@ function hybrid_body_class( $class = '' ) {
  * possible situation WordPress throws at it for the best optimization.
  *
  * @since 0.1.0
+ * @access public
  * @global $wp_query
+ * @return void
  */
 function hybrid_document_title() {
 	global $wp_query;

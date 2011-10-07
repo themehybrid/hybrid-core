@@ -15,6 +15,7 @@
  * each theme's hooks (assuming other themes used the same system).
  *
  * @since 0.7.0
+ * @access public
  * @uses get_template() Defines the theme prefix based on the theme directory.
  * @global object $hybrid The global Hybrid object.
  * @return string $hybrid->prefix The prefix of the theme.
@@ -38,6 +39,7 @@ function hybrid_get_prefix() {
  * 'hybrid_singular-post-ID_header'.
  *
  * @since 0.7.0
+ * @access public
  * @uses hybrid_get_prefix() Gets the theme prefix.
  * @uses hybrid_get_context() Gets the context of the current page.
  * @param string $tag Usually the location of the hook but defines what the base hook is.
@@ -71,6 +73,7 @@ function do_atomic( $tag = '', $arg = '' ) {
  * and 'hybrid_singular-post-ID_entry_meta'.
  *
  * @since 0.7.0
+ * @access public
  * @uses hybrid_get_prefix() Gets the theme prefix.
  * @uses hybrid_get_context() Gets the context of the current page.
  * @param string $tag Usually the location of the hook but defines what the base hook is.
@@ -106,6 +109,7 @@ function apply_atomic( $tag = '', $value = '' ) {
  * function itself, developers can create individual functions to handle shortcodes.
  *
  * @since 0.7.0
+ * @access public
  * @param string $tag Usually the location of the hook but defines what the base hook is.
  * @param mixed $value The value to be filtered.
  * @return mixed $value The value after it has been filtered.
@@ -119,6 +123,7 @@ function apply_atomic_shortcode( $tag = '', $value = '' ) {
  * setting a default of 12 hours or 43,200 seconds (60 * 60 * 12).
  *
  * @since 0.8.0
+ * @access public
  * @return int Transient expiration time in seconds.
  */
 function hybrid_get_transient_expiration() {
@@ -130,6 +135,7 @@ function hybrid_get_transient_expiration() {
  * the hook, and it will add a context (or any variable) if it's given.
  *
  * @since 0.7.0
+ * @access public
  * @param string $tag The basic name of the hook (e.g., 'before_header').
  * @param string $context A specific context/value to be added to the hook.
  */
@@ -142,6 +148,7 @@ function hybrid_format_hook( $tag, $context = '' ) {
  * simply overwrites whatever the content width is.
  *
  * @since 1.2.0
+ * @access public
  * @global int $content_width The width for the theme's content area.
  * @param int $width Numeric value of the width to set.
  */
@@ -155,6 +162,7 @@ function hybrid_set_content_width( $width = '' ) {
  * Function for getting the theme's content width.
  *
  * @since 1.2.0
+ * @access public
  * @global int $content_width The width for the theme's content area.
  * @return int $content_width
  */
@@ -169,6 +177,7 @@ function hybrid_get_content_width() {
  * having to run through the get_theme_data() function again.
  *
  * @since 1.2.0
+ * @access public
  * @param string $path Whether to use the template (parent theme) or stylesheet (child theme) path.
  */
 function hybrid_get_theme_data( $path = 'template' ) {
