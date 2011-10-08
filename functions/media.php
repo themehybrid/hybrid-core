@@ -30,6 +30,10 @@ function hybrid_register_scripts() {
 	/* Register the 'drop-downs' script if the current theme supports 'hybrid-core-drop-downs'. */
 	if ( current_theme_supports( 'hybrid-core-drop-downs' ) )
 		wp_register_script( 'drop-downs', esc_url( apply_atomic( 'drop_downs_script', trailingslashit( HYBRID_JS ) . 'drop-downs.js' ) ), array( 'jquery' ), '20110920', true );
+
+	/* Register the 'nav-bar' script if the current theme supports 'hybrid-core-nav-bar'. */
+	if ( current_theme_supports( 'hybrid-core-nav-bar' ) )
+		wp_register_script( 'nav-bar', esc_url( apply_atomic( 'nav_bar_script', trailingslashit( HYBRID_JS ) . 'nav-bar.js' ) ), array( 'jquery' ), '20111008', true );
 }
 
 /**
@@ -48,6 +52,10 @@ function hybrid_enqueue_scripts() {
 	/* Load the 'drop-downs' script if the current theme supports 'hybrid-core-drop-downs'. */
 	if ( current_theme_supports( 'hybrid-core-drop-downs' ) )
 		wp_enqueue_script( 'drop-downs' );
+
+	/* Load the 'nav-bar' script if the current theme supports 'hybrid-core-nav-bar'. */
+	if ( current_theme_supports( 'hybrid-core-nav-bar' ) )
+		wp_enqueue_script( 'nav-bar' );
 }
 
 /**
