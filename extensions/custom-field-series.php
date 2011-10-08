@@ -35,6 +35,7 @@ add_action( 'admin_menu', 'custom_field_series_admin_setup' );
  * meta key/value pair, the function adds them to an unordered list.
  *
  * @since 0.1.0
+ * @access public
  * @param array $args Array of arguments.
  */
 function custom_field_series( $args = array() ) {
@@ -117,6 +118,8 @@ function custom_field_series( $args = array() ) {
  * for additional post types.
  *
  * @since 0.4.0
+ * @access private
+ * @return void
  */
 function custom_field_series_post_type_support() {
 	add_post_type_support( 'post', 'custom-field-series' );
@@ -127,6 +130,8 @@ function custom_field_series_post_type_support() {
  * need to for their project.
  *
  * @since 0.4.0
+ * @access public
+ * @return string The meta key used for the series metadata.
  */
 function custom_field_series_meta_key() {
 	return apply_filters( 'custom_field_series_meta_key', 'Series' );
@@ -136,6 +141,7 @@ function custom_field_series_meta_key() {
  * Admin setup for the custom field series script.
  *
  * @since 0.4.0
+ * @access private
  * @return void
  */
 function custom_field_series_admin_setup() {
@@ -150,6 +156,7 @@ function custom_field_series_admin_setup() {
  * to save the metadata.
  *
  * @since 0.4.0
+ * @access private
  * @return void
  */
 function custom_field_series_load_meta_boxes() {
@@ -165,6 +172,7 @@ function custom_field_series_load_meta_boxes() {
  * Creates the meta box on the post editing screen for the 'post' post type.
  *
  * @since 0.3.0
+ * @access private
  * @param string $post_type The post type of the current post being edited.
  * @param object $post The current post object.
  * @return void
@@ -179,6 +187,10 @@ function custom_field_series_create_meta_box( $post_type, $post ) {
  * Displays the input field with the meta box.
  *
  * @since 0.3.0
+ * @access private
+ * @param object $object The post object currently being edited.
+ * @param array $box Specific information about the meta box being loaded.
+ * @return void
  */
 function custom_field_series_meta_box( $object, $box ) { ?>
 
@@ -193,6 +205,10 @@ function custom_field_series_meta_box( $object, $box ) { ?>
  * Saves the single value for the 'Series' meta key, which was set using the custom field series meta box.
  *
  * @since 0.3.0
+ * @access private
+ * @param int $post_id The ID of the current post being saved.
+ * @param object $post The post object currently being saved.
+ * @return void
  */
 function custom_field_series_meta_box_save( $post_id, $post ) {
 

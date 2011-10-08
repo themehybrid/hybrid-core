@@ -39,7 +39,7 @@ function hybrid_meta_box_theme_add_about() {
  * will be called a second time.
  *
  * @since 1.2.0
- * @param $object Variable passed through the do_meta_boxes() call.
+ * @param object $object Variable passed through the do_meta_boxes() call.
  * @param array $box Specific information about the meta box being loaded.
  * @return void
  */

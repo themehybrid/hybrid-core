@@ -324,8 +324,10 @@ function theme_layouts_add_meta_boxes( $post_type, $post ) {
  * the layout they wish to use for the specific post.
  *
  * @since 0.2.0
- * @param object $post
- * @param array $box
+ * @access private
+ * @param object $post The post object currently being edited.
+ * @param array $box Specific information about the meta box being loaded.
+ * @return void
  * @return void
  */
 function theme_layouts_post_meta_box( $post, $box ) {
@@ -359,8 +361,9 @@ function theme_layouts_post_meta_box( $post, $box ) {
  * Saves the post layout metadata if on the post editing screen in the admin.
  *
  * @since 0.2.0
- * @param int $post_id
- * @param object $post
+ * @access private
+ * @param int $post_id The ID of the current post being saved.
+ * @param object $post The post object currently being saved.
  * @return void|int
  */
 function theme_layouts_save_post( $post_id, $post ) {
@@ -388,6 +391,7 @@ function theme_layouts_save_post( $post_id, $post ) {
  * Adds a select drop-down element to the attachment edit form for selecting the attachment layout.
  *
  * @since 0.3.0
+ * @access private
  * @param array $fields Array of fields for the edit attachment form.
  * @param object $post The attachment post object.
  * @return array $fields
@@ -426,6 +430,7 @@ function theme_layouts_attachment_fields_to_edit( $fields, $post ) {
  * Saves the attachment layout for the attachment edit form.
  *
  * @since 0.3.0
+ * @access private
  * @param array $post The attachment post array (not the post object!).
  * @param array $fields Array of fields for the edit attachment form.
  * @return array $post
@@ -454,6 +459,7 @@ function theme_layouts_attachment_fields_to_save( $post, $fields ) {
  * Wrapper function for returning the metadata key used for objects that can use layouts.
  *
  * @since 0.3.0
+ * @access public
  * @return string The meta key used for theme layouts.
  */
 function theme_layouts_get_meta_key() {

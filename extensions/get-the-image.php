@@ -41,6 +41,7 @@ add_action( 'added_post_meta', 'get_the_image_delete_cache_by_meta', 10, 2 );
  * 'image_scan', 'callback', and 'default_image'.
  *
  * @since 0.1.0
+ * @access public
  * @global $post The current post's database object.
  * @param array $args Arguments for how to load and display the image.
  * @return string|array The HTML for the image. | Image attributes in an array.
@@ -188,6 +189,7 @@ function get_the_image( $args = array() ) {
  * is found, $image is set and the loop breaks.  If an image is found, it is returned.
  *
  * @since 0.7.0
+ * @access private
  * @param array $args Arguments for how to load and display the image.
  * @return array|bool Array of image attributes. | False if no image is found.
  */
@@ -228,6 +230,7 @@ function get_the_image_by_meta_key( $args = array() ) {
  * later added in the display_the_image() function.
  *
  * @since 0.7.0
+ * @access private
  * @param array $args Arguments for how to load and display the image.
  * @return array|bool Array of image attributes. | False if no image is found.
  */
@@ -258,6 +261,7 @@ function get_the_image_by_post_thumbnail( $args = array() ) {
  * attachments are found, loop through each.  The loop only breaks once $order_of_image is reached.
  *
  * @since 0.7.0
+ * @access private
  * @param array $args Arguments for how to load and display the image.
  * @return array|bool Array of image attributes. | False if no image is found.
  */
@@ -332,6 +336,7 @@ function get_the_image_by_attachment( $args = array() ) {
  * if using large images within posts, better to use the other options.
  *
  * @since 0.7.0
+ * @access private
  * @param array $args Arguments for how to load and display the image.
  * @return array|bool Array of image attributes. | False if no image is found.
  */
@@ -352,6 +357,7 @@ function get_the_image_by_scan( $args = array() ) {
  * Not used with get_the_image() by default.
  *
  * @since 0.7.0
+ * @access private
  * @param array $args Arguments for how to load and display the image.
  * @return array|bool Array of image attributes. | False if no image is found.
  */
@@ -364,6 +370,7 @@ function get_the_image_by_default( $args = array() ) {
  * only be called if there is an image to display, but will handle it if not.
  *
  * @since 0.7.0
+ * @access private
  * @param array $args Arguments for how to load and display the image.
  * @param array $image Array of image attributes ($image, $classes, $alt, $caption).
  * @return string $image Formatted image (w/link to post if the option is set).
@@ -425,6 +432,7 @@ function get_the_image_format( $args = array(), $image = false ) {
  * of expensive scans of the content when using the image scan feature.
  *
  * @since 0.6.0
+ * @access private
  * @param array $args Arguments for how to load and display the image.
  * @param array $image Array of image attributes ($image, $classes, $alt, $caption).
  */
@@ -450,6 +458,9 @@ function get_the_image_meta_key_save( $args = array(), $image = array() ) {
  * Deletes the image cache for the specific post when the 'save_post' hook is fired.
  *
  * @since 0.7.0
+ * @access private
+ * @param int $post_id The ID of the post to delete the cache for.
+ * @return void
  */
 function get_the_image_delete_cache_by_post( $post_id ) {
 	wp_cache_delete( $post_id, 'get_the_image' );
@@ -460,6 +471,10 @@ function get_the_image_delete_cache_by_post( $post_id ) {
  * or 'updated_post_meta' hooks are called.
  *
  * @since 0.7.0
+ * @access private
+ * @param int $meta_id The ID of the metadata being updated.
+ * @param int $post_id The ID of the post to delete the cache for.
+ * @return void
  */
 function get_the_image_delete_cache_by_meta( $meta_id, $post_id ) {
 	wp_cache_delete( $post_id, 'get_the_image' );

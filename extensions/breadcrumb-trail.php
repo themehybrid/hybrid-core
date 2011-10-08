@@ -27,6 +27,7 @@
  * formats those items.
  *
  * @since 0.1.0
+ * @access public
  * @param array $args Mixed arguments for the menu.
  * @return string Output of the breadcrumb menu.
  */
@@ -103,6 +104,7 @@ function breadcrumb_trail( $args = array() ) {
  *
  * @since 0.4.0
  * @todo Build in caching based on the queried object ID.
+ * @access private
  * @param array $args Mixed arguments for the menu.
  * @return array List of items to be shown in the trail.
  */
@@ -343,6 +345,7 @@ function breadcrumb_trail_get_items( $args = array() ) {
  * types.
  *
  * @since 0.4.0
+ * @access private
  * @param int $post_id ID of the post whose parents we want.
  * @param string $path Path of a potential parent page.
  * @param array $args Mixed arguments for the menu.
@@ -429,6 +432,7 @@ function breadcrumb_trail_map_rewrite_tags( $post_id = '', $path = '', $args = a
  * path, it'll be added.  But, it's also just a way to check for a hierarchy with hierarchical post types.
  *
  * @since 0.3.0
+ * @access private
  * @param int $post_id ID of the post whose parents we want.
  * @param string $path Path of a potential parent page.
  * @return array $trail Array of parent page links.
@@ -515,6 +519,7 @@ function breadcrumb_trail_get_parents( $post_id = '', $path = '' ) {
  * function get_category_parents() but handles any type of taxonomy.
  *
  * @since 0.3.0
+ * @access private
  * @param int $parent_id The ID of the first parent.
  * @param object|string $taxonomy The taxonomy of the term whose parents we want.
  * @return array $trail Array of links to parent terms.

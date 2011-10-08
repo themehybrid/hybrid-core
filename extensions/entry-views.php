@@ -26,7 +26,7 @@
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * @package EntryViews
- * @version 0.2.0
+ * @version 0.2.1
  * @author Justin Tadlock <justin@justintadlock.com>
  * @copyright Copyright (c) 2010 - 2011, Justin Tadlock
  * @link http://justintadlock.com
@@ -51,6 +51,8 @@ add_action( 'wp_ajax_nopriv_entry_views', 'entry_views_update_ajax' );
  * post types).  For all other post types, the theme should explicitly register support for this feature.
  *
  * @since 0.2.0
+ * @access private
+ * @return void
  */
 function entry_views_post_type_support() {
 
@@ -69,6 +71,8 @@ function entry_views_post_type_support() {
  * extension.  If so, set the $post_id variable and load the needed JavaScript.
  *
  * @since 0.1.0
+ * @access private
+ * @return void
  */
 function entry_views_load() {
 	global $entry_views;
@@ -100,6 +104,9 @@ function entry_views_load() {
  * 'entry_views_meta_key' hook.
  *
  * @since 0.1.0
+ * @access public
+ * @param int $post_id The ID of the post to update the meta for.
+ * @return void
  */
 function entry_views_update( $post_id = '' ) {
 
@@ -125,7 +132,9 @@ function entry_views_update( $post_id = '' ) {
  * [entry-views] format.
  *
  * @since 0.1.0
+ * @access public
  * @param array $attr Attributes for use in the shortcode.
+ * @return string
  */
 function entry_views_get( $attr = '' ) {
 
@@ -147,6 +156,8 @@ function entry_views_get( $attr = '' ) {
  * AJAX nonce and passes the given $post_id to the entry views update function.
  *
  * @since 0.1.0
+ * @access private
+ * @return void
  */
 function entry_views_update_ajax() {
 
@@ -167,6 +178,8 @@ function entry_views_update_ajax() {
  * callback function for updating the meta.
  *
  * @since 0.1.0
+ * @access private
+ * @return void
  */
 function entry_views_load_scripts() {
 	global $entry_views;

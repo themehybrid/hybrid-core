@@ -34,6 +34,7 @@ add_action( 'admin_menu', 'post_stylesheets_admin_setup' );
  * Adds post type support for the 'post-stylesheets' feature to all 'public' post types.
  *
  * @since 0.3.0
+ * @access private
  * @return void
  */
 function post_stylesheets_add_post_type_support() {
@@ -54,6 +55,7 @@ function post_stylesheets_add_post_type_support() {
  *
  * @since 0.1.0
  * @todo Use features from Ticket #18302 when available. http://core.trac.wordpress.org/ticket/18302
+ * @access private
  * @param string $stylesheet_uri The URI of the active theme's stylesheet.
  * @param string $stylesheet_dir_uri The directory URI of the active theme's stylesheet.
  * @return string $stylesheet_uri
@@ -94,6 +96,7 @@ function post_stylesheets_stylesheet_uri( $stylesheet_uri, $stylesheet_dir_uri )
  * Returns the post stylesheet if one is saved as post metadata.
  *
  * @since 0.3.0
+ * @access public
  * @param int $post_id The ID of the post to get the stylesheet for.
  * @return string|bool Stylesheet name if given.  False for no stylesheet.
  */
@@ -105,6 +108,7 @@ function get_post_stylesheet( $post_id ) {
  * Adds/updates the post stylesheet for a specific post.
  *
  * @since 0.3.0
+ * @access public
  * @param int $post_id The ID of the post to set the stylesheet for.
  * @param string $stylesheet The filename of the stylesheet.
  */
@@ -116,6 +120,7 @@ function set_post_stylesheet( $post_id, $stylesheet ) {
  * Checks if a post has a specific post stylesheet.
  *
  * @since 0.3.0
+ * @access public
  * @param string $stylesheet The filename of the stylesheet.
  * @param int $post_id The ID of the post to check.
  * @return bool True|False depending on whether the post has the stylesheet.
@@ -134,6 +139,7 @@ function has_post_stylesheet( $stylesheet, $post_id = '' ) {
  * Admin setup for the post stylesheets script.
  *
  * @since 0.3.0
+ * @access private
  * @return void
  */
 function post_stylesheets_admin_setup() {
@@ -148,6 +154,7 @@ function post_stylesheets_admin_setup() {
  * to save the metadata.
  *
  * @since 0.3.0
+ * @access private
  * @return void
  */
 function post_stylesheets_load_meta_boxes() {
@@ -164,6 +171,7 @@ function post_stylesheets_load_meta_boxes() {
  * permission to edit post meta.
  *
  * @since 0.2.0
+ * @access private
  * @param string $post_type The post type of the current post being edited.
  * @param object $post The current post object.
  * @return void
@@ -179,6 +187,10 @@ function post_stylesheets_create_meta_box( $post_type, $post ) {
  * Displays the input field for entering a custom stylesheet.
  *
  * @since 0.2.0
+ * @access private
+ * @param object $object The post object currently being edited.
+ * @param array $box Specific information about the meta box being loaded.
+ * @return void
  */
 function post_stylesheets_meta_box( $object, $box ) { ?>
 
@@ -193,6 +205,9 @@ function post_stylesheets_meta_box( $object, $box ) { ?>
  * Saves the user-selected post stylesheet on the 'save_post' hook.
  *
  * @since 0.2.0
+ * @access private
+ * @param int $post_id The ID of the current post being saved.
+ * @param object $post The post object currently being saved.
  */
 function post_stylesheets_meta_box_save( $post_id, $post ) {
 
@@ -223,6 +238,7 @@ function post_stylesheets_meta_box_save( $post_id, $post ) {
  * Returns the meta key used by the script for post metadata.
  *
  * @since 0.3.0
+ * @access public
  * @return string
  */
 function post_stylesheets_get_meta_key() {

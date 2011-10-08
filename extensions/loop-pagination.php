@@ -26,8 +26,10 @@
  * search pages.  It is not for singular views.
  *
  * @since 0.1.0
+ * @access public
  * @uses paginate_links() Creates a string of paginated links based on the arguments given.
  * @param array $args Arguments to customize how the page links are output.
+ * @return string $page_links
  */
 function loop_pagination( $args = array() ) {
 	global $wp_rewrite, $wp_query, $post;

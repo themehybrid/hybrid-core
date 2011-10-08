@@ -31,6 +31,7 @@ add_filter( 'post_gallery', 'cleaner_gallery', 10, 2 );
  * developers to style the gallery more easily.
  *
  * @since 0.9.0
+ * @access private
  * @param string $output
  * @param array $attr
  * @return string $output

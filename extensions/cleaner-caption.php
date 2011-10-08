@@ -16,7 +16,7 @@
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * @package CleanerCaption
- * @version 0.1.0
+ * @version 0.1.1
  * @author Justin Tadlock <justin@justintadlock.com>
  * @copyright Copyright (c) 2011, Justin Tadlock
  * @link http://justintadlock.com
@@ -31,6 +31,7 @@ add_filter( 'img_caption_shortcode', 'cleaner_caption', 10, 3 );
  * inline styling WP adds, which creates 10px of padding around captioned elements.
  *
  * @since 0.1.0
+ * @access private
  * @param string $output The output of the default caption (empty string at this point).
  * @param array $attr Array of arguments for the [caption] shortcode.
  * @param string $content The content placed after the opening [caption] tag and before the closing [/caption] tag.
