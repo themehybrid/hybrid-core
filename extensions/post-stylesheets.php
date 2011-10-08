@@ -245,14 +245,4 @@ function post_stylesheets_get_meta_key() {
 	return apply_filters( 'post_stylesheets_meta_key', 'Stylesheet' );
 }
 
-/**
- * Returns the textdomain used by the script and allows it to be filtered by plugins/themes.
- *
- * @since 0.3.0
- * @return string The textdomain for the script.
- */
-function post_stylesheets_textdomain() {
-	return apply_filters( 'post_stylesheets_textdomain', 'post-stylesheets' );
-}
-
 ?>

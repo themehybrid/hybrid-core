@@ -555,14 +555,4 @@ function breadcrumb_trail_get_term_parents( $parent_id = '', $taxonomy = '' ) {
 	return $trail;
 }
 
-/**
- * Returns the textdomain used by the script and allows it to be filtered by plugins/themes.
- *
- * @since 0.4.0
- * @returns string The textdomain for the script.
- */
-function breadcrumb_trail_textdomain() {
-	return apply_filters( 'breadcrumb_trail_textdomain', 'breadcrumb-trail' );
-}
-
 ?>

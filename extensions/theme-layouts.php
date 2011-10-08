@@ -467,16 +467,6 @@ function theme_layouts_get_meta_key() {
 }
 
 /**
- * Returns the textdomain used by the script and allows it to be filtered by plugins/themes.
- *
- * @since 0.2.0
- * @return string The textdomain for the script.
- */
-function theme_layouts_textdomain() {
-	return apply_filters( 'theme_layouts_textdomain', 'theme-layouts' );
-}
-
-/**
  * @since 0.1.0
  * @deprecated 0.2.0 Use theme_layouts_get_layout().
  */
