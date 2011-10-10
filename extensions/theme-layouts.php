@@ -142,6 +142,17 @@ function set_post_layout( $post_id, $layout ) {
 }
 
 /**
+ * Deletes a post layout.
+ *
+ * @since 0.4.0
+ * @access public
+ * @param int $post_id The ID of the post to delete the layout for.
+ */
+function delete_post_layout( $post_id ) {
+	return delete_post_meta( $post_id, theme_layouts_get_meta_key() );
+}
+
+/**
  * Checks if a specific post's layout matches that of the given layout.
  *
  * @since 0.3.0
@@ -184,6 +195,17 @@ function get_user_layout( $user_id ) {
  */
 function set_user_layout( $user_id, $layout ) {
 	return update_user_meta( $user_id, theme_layouts_get_meta_key(), $layout );
+}
+
+/**
+ * Deletes a user layout.
+ *
+ * @since 0.4.0
+ * @access public
+ * @param int $user_id The ID of the user to delete the layout for.
+ */
+function delete_user_layout( $user_id ) {
+	return delete_user_meta( $user_id, theme_layouts_get_meta_key() );
 }
 
 /**

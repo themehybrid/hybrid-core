@@ -117,6 +117,17 @@ function set_post_stylesheet( $post_id, $stylesheet ) {
 }
 
 /**
+ * Deletes a post stylesheet.
+ *
+ * @since 0.3.0
+ * @access public
+ * @param int $post_id The ID of the post to delete the stylesheet for.
+ */
+function delete_post_stylesheet( $post_id ) {
+	return delete_post_meta( $post_id, post_stylesheets_get_meta_key() );
+}
+
+/**
  * Checks if a post has a specific post stylesheet.
  *
  * @since 0.3.0
@@ -229,8 +240,12 @@ function post_stylesheets_meta_box_save( $post_id, $post ) {
 	/* Get the submitted post stylesheet. */
 	$new_stylesheet = esc_attr( strip_tags( $_POST['post-stylesheets'] ) );
 
+	/* If the stylesheet has been removed, delete the metadata completely. */
+	if ( !empty( $old_stylesheet ) && '' == $new_stylesheet )
+		delete_post_stylesheet( $post_id );
+
 	/* If the old stylesheet doesn't match the new stylesheet, update the post stylesheet meta. */
-	if ( $old_stylesheet !== $new_stylesheet )
+	elseif ( $old_stylesheet !== $new_stylesheet )
 		set_post_stylesheet( $post_id, $new_stylesheet );
 }
 
