@@ -47,7 +47,7 @@ add_filter( 'body_class', 'theme_layouts_body_class' );
  */
 function theme_layouts_register_meta() {
 	register_meta( 'post', theme_layouts_get_meta_key(), 'esc_attr' );
-	register_meta( 'comment', theme_layouts_get_meta_key(), 'esc_attr' );
+	register_meta( 'user', theme_layouts_get_meta_key(), 'esc_attr' );
 }
 
 /**
