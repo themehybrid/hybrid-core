@@ -119,8 +119,13 @@ function breadcrumb_trail_get_items( $args = array() ) {
 	if ( !is_front_page() && $args['show_home'] )
 		$trail[] = '<a href="' . home_url() . '" title="' . esc_attr( get_bloginfo( 'name' ) ) . '" rel="home" class="trail-begin">' . $args['show_home'] . '</a>';
 
+	/* If bbPress is installed and we're on a bbPress page. */
+	if ( function_exists( 'is_bbpress' ) && is_bbpress() ) {
+		$trail = array_merge( $trail, breadcrumb_trail_get_bbpress_items() );
+	}
+
 	/* If viewing the front page of the site. */
-	if ( is_front_page() ) {
+	elseif ( is_front_page() ) {
 		if ( $args['show_home'] && $args['front_page'] )
 			$trail['trail_end'] = "{$args['show_home']}";
 	}
@@ -336,6 +341,90 @@ function breadcrumb_trail_get_items( $args = array() ) {
 
 	/* Allow devs to step in and filter the $trail array. */
 	return apply_filters( 'breadcrumb_trail_items', $trail, $args );
+}
+
+/**
+ * Gets the items for the breadcrumb trail if bbPress is installed.
+ *
+ * @since 0.5.0
+ * @access private
+ * @param array $args Mixed arguments for the menu.
+ * @return array List of items to be shown in the trail.
+ */
+function breadcrumb_trail_get_bbpress_items( $args = array() ) {
+
+	$trail = array();
+
+	if ( bbp_is_forum_archive() )
+		$trail[] = bbp_get_forum_archive_title();
+
+	elseif ( bbp_is_topic_archive() )
+		$trail[] = bbp_get_topic_archive_title();
+
+	elseif ( bbp_is_single_view() )
+		$trail[] = bbp_get_view_title();
+
+	elseif ( bbp_is_single_forum() || bbp_is_single_topic() || bbp_is_single_reply()  ) {
+		$post = get_queried_object();
+		$post_id = absint( get_queried_object_id() );
+		$post_type = $post->post_type;
+
+		$post_type_object = get_post_type_object( bbp_get_forum_post_type() );
+
+		/* If there's an archive page, add it to the trail. */
+		if ( !empty( $post_type_object->has_archive ) )
+			$trail[] = '<a href="' . get_post_type_archive_link( $post_type ) . '" title="' . esc_attr( $post_type_object->labels->name ) . '">' . $post_type_object->labels->name . '</a>';
+
+		if ( 0 !== $post->post_parent )
+			$trail = array_merge( $trail, breadcrumb_trail_get_parents( $post->post_parent ) );
+
+		if ( bbp_is_topic_split() || bbp_is_topic_merge() || bbp_is_topic_edit() ) {
+
+			if ( $post_title = get_the_title() )
+				$trail[] = '<a href="' . get_permalink( $post_id ) . '">' . $post_title . '</a>';
+
+			if ( bbp_is_topic_split() )
+				$trail[] = __( 'Split' );
+			elseif ( bbp_is_topic_merge() )
+				$trail[] = __( 'Merge' );
+			elseif ( bbp_is_topic_edit() )
+				$trail[] = __( 'Edit' );
+		}
+
+		elseif ( bbp_is_reply_edit() ) {
+
+			if ( $post_title = get_the_title() )
+				$trail[] = '<a href="' . get_permalink( $post_id ) . '">' . $post_title . '</a>';
+				$trail[] = __( 'Edit' );
+
+		}
+
+		else {
+ 
+			if ( $post_title = get_the_title() )
+				$trail['trail_end'] = $post_title;
+		}
+
+	}
+
+	elseif ( bbp_is_single_user() || bbp_is_single_user_edit() ) {
+
+		$post_type_object = get_post_type_object( bbp_get_forum_post_type() );
+
+		/* If there's an archive page, add it to the trail. */
+		if ( !empty( $post_type_object->has_archive ) )
+			$trail[] = '<a href="' . get_post_type_archive_link( bbp_get_forum_post_type() ) . '" title="' . esc_attr( $post_type_object->labels->name ) . '">' . $post_type_object->labels->name . '</a>';
+
+		if ( bbp_is_single_user_edit() ) {
+			$trail[] = '<a href="' . bbp_get_user_profile_url() . '">' . bbp_get_displayed_user_field( 'display_name' ) . '</a>';
+			$trail[] = __( 'Edit' );
+		} else {
+			$trail[] = bbp_get_displayed_user_field( 'display_name' );
+		}
+
+	}
+
+	return apply_filters( 'breadcrumb_trail_get_bbpress_items', $trail, $args );
 }
 
 /**

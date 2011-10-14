@@ -167,7 +167,7 @@ class Hybrid {
 		hybrid_load_framework_textdomain( 'hybrid-core' );
 
 		/* Load theme textdomain. */
-		load_theme_textdomain( hybrid_get_textdomain() );
+		load_theme_textdomain( hybrid_get_parent_textdomain() );
 
 		/* Load child theme textdomain. */
 		if ( is_child_theme() )
@@ -313,6 +313,8 @@ class Hybrid {
 	 * @since 1.0.0
 	 */
 	function default_filters() {
+
+		remove_action( 'bbp_init', 'bbp_setup_theme_compat', 8 );
 
 		/* Move the WordPress generator to a better priority. */
 		remove_action( 'wp_head', 'wp_generator' );
