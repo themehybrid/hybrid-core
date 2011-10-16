@@ -27,7 +27,7 @@ function hybrid_load_framework_textdomain( $domain ) {
 	/* Check if the mofile is located in parent/child theme /languages folder. */
 	$mofile = locate_template( array( "languages/{$domain}-{$locale}.mo" ) );
 
-	/* If no mofile was found in the parent/child theme, set set it to the framework's mofile. */
+	/* If no mofile was found in the parent/child theme, set it to the framework's mofile. */
 	if ( empty( $mofile ) )
 		$mofile = trailingslashit( HYBRID_LANGUAGES ) . "{$domain}-{$locale}.mo";
 
