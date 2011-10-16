@@ -211,12 +211,6 @@ function hybrid_after_entry() {
  */
 function hybrid_after_singular() {
 	_deprecated_function( __FUNCTION__, '1.0.0', "do_atomic( 'after_singular' )" );
-
-	if ( is_singular( 'post' ) && !is_attachment() )
-		do_action( 'hybrid_after_single' );
-	elseif ( is_page() )
-		do_action( 'hybrid_after_page' );
-
 	do_atomic( 'after_singular' );
 }
 
@@ -357,7 +351,7 @@ add_action( 'check_admin_referer', 'hybrid_back_compat_update_settings' );
  * @deprecated 1.0.0
  */
 function hybrid_back_compat_update_settings( $action ) {
-	_deprecated_function( __FUNCTION__, '1.0.0' );
+	//_deprecated_function( __FUNCTION__, '1.0.0' );
 
 	$prefix = hybrid_get_prefix();
 
