@@ -21,7 +21,7 @@
  */
 function hybrid_load_framework_textdomain( $domain ) {
 
-	/* Get the WordPress installations locale set by the user. */
+	/* Get the WordPress installation's locale set by the user. */
 	$locale = get_locale();
 
 	/* Check if the mofile is located in parent/child theme /languages folder. */
