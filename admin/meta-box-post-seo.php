@@ -23,8 +23,10 @@ add_action( 'save_post', 'hybrid_meta_box_post_save_seo', 10, 2 );
  */
 function hybrid_meta_box_post_add_seo( $post_type, $post ) {
 
+	$post_type_object = get_post_type_object( $post_type );
+
 	/* Only add meta box if current user can edit, add, or delete meta for the post. */
-	if ( current_user_can( 'edit_post_meta', $post->ID ) || current_user_can( 'add_post_meta', $post->ID ) || current_user_can( 'delete_post_meta', $post->ID ) )
+	if ( ( true === $post_type_object->public ) && ( current_user_can( 'edit_post_meta', $post->ID ) || current_user_can( 'add_post_meta', $post->ID ) || current_user_can( 'delete_post_meta', $post->ID ) ) )
 		add_meta_box( 'hybrid-core-post-seo', __( 'SEO', 'hybrid-core' ), 'hybrid_meta_box_post_display_seo', $post_type, 'normal', 'high' );
 }
 
