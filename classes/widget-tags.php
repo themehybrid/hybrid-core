@@ -74,6 +74,12 @@ class Hybrid_Widget_Tags extends WP_Widget {
 			'echo' =>		false
 		);
 
+		if ( !empty( $instance['topic_count_text_callback'] ) && function_exists( $instance['topic_count_text_callback'] ) )
+			$args['topic_count_text_callback'] = $instance['topic_count_text_callback'];
+
+		if ( !empty( $instance['topic_count_scale_callback'] ) && function_exists( $instance['topic_count_scale_callback'] ) )
+			$args['topic_count_scale_callback'] = $instance['topic_count_scale_callback'];
+
 		/* Output the theme's $before_widget wrapper. */
 		echo $before_widget;
 
@@ -120,6 +126,8 @@ class Hybrid_Widget_Tags extends WP_Widget {
 		$instance['search'] = strip_tags( $new_instance['search'] );
 		$instance['child_of'] = strip_tags( $new_instance['child_of'] );
 		$instance['parent'] = strip_tags( $new_instance['parent'] );
+		$instance['topic_count_text_callback'] = strip_tags( $new_instance['topic_count_text_callback'] );
+		$instance['topic_count_scale_callback'] = strip_tags( $new_instance['topic_count_scale_callback'] );
 		$instance['unit'] = $new_instance['unit'];
 		$instance['format'] = $new_instance['format'];
 		$instance['orderby'] = $new_instance['orderby'];
@@ -158,7 +166,9 @@ class Hybrid_Widget_Tags extends WP_Widget {
 			'hide_empty' => 1,
 			'pad_counts' => false,
 			'search' => '',
-			'name__like' => ''
+			'name__like' => '',
+			'topic_count_text_callback' => '',
+			'topic_count_scale_callback' => '',
 		);
 
 		/* Merge the user-selected arguments with the defaults. */
@@ -166,7 +176,7 @@ class Hybrid_Widget_Tags extends WP_Widget {
 
 		/* <select> element options. */
 		$taxonomies = get_taxonomies( array( 'show_tagcloud' => true ), 'objects' );
-		$terms = get_terms( $instance['taxonomy'] );
+		$terms = get_terms( $instance['taxonomy'], array( 'hide_empty' => false ) );
 		$link = array( 'view' => esc_attr__( 'View', 'hybrid-core' ), 'edit' => esc_attr__( 'Edit', 'hybrid-core' ) );
 		$format = array( 'flat' => esc_attr__( 'Flat', 'hybrid-core' ), 'list' => esc_attr__( 'List', 'hybrid-core' ) );
 		$order = array( 'ASC' => esc_attr__( 'Ascending', 'hybrid-core' ), 'DESC' => esc_attr__( 'Descending', 'hybrid-core' ), 'RAND' => esc_attr__( 'Random', 'hybrid-core' ) );
@@ -259,13 +269,13 @@ class Hybrid_Widget_Tags extends WP_Widget {
 				<?php } ?>
 			</select>
 		</p>
-		</div>
-
-		<div class="hybrid-widget-controls columns-3 column-last">
 		<p>
 			<label for="<?php echo $this->get_field_id( 'separator' ); ?>"><code>separator</code></label>
 			<input type="text" class="smallfat code" id="<?php echo $this->get_field_id( 'separator' ); ?>" name="<?php echo $this->get_field_name( 'separator' ); ?>" value="<?php echo esc_attr( $instance['separator'] ); ?>" />
 		</p>
+		</div>
+
+		<div class="hybrid-widget-controls columns-3 column-last">
 		<p>
 			<label for="<?php echo $this->get_field_id( 'child_of' ); ?>"><code>child_of</code></label>
 			<input type="text" class="smallfat code" id="<?php echo $this->get_field_id( 'child_of' ); ?>" name="<?php echo $this->get_field_name( 'child_of' ); ?>" value="<?php echo esc_attr( $instance['child_of'] ); ?>" />
@@ -281,6 +291,14 @@ class Hybrid_Widget_Tags extends WP_Widget {
 		<p>
 			<label for="<?php echo $this->get_field_id( 'name__like' ); ?>"><code>name__like</code></label>
 			<input type="text" class="widefat code" id="<?php echo $this->get_field_id( 'name__like' ); ?>" name="<?php echo $this->get_field_name( 'name__like' ); ?>" value="<?php echo esc_attr( $instance['name__like'] ); ?>" />
+		</p>
+		<p>
+			<label for="<?php echo $this->get_field_id( 'topic_count_text_callback' ); ?>"><code>topic_count_text_callback</code></label>
+			<input type="text" class="widefat" id="<?php echo $this->get_field_id( 'topic_count_text_callback' ); ?>" name="<?php echo $this->get_field_name( 'topic_count_text_callback' ); ?>" value="<?php echo esc_attr( $instance['topic_count_text_callback'] ); ?>" />
+		</p>
+		<p>
+			<label for="<?php echo $this->get_field_id( 'topic_count_scale_callback' ); ?>"><code>topic_count_scale_callback</code></label>
+			<input type="text" class="widefat" id="<?php echo $this->get_field_id( 'topic_count_scale_callback' ); ?>" name="<?php echo $this->get_field_name( 'topic_count_scale_callback' ); ?>" value="<?php echo esc_attr( $instance['topic_count_scale_callback'] ); ?>" />
 		</p>
 		<p>
 			<label for="<?php echo $this->get_field_id( 'pad_counts' ); ?>">
