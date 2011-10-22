@@ -330,8 +330,7 @@ class Hybrid {
 		add_filter( 'gettext', 'hybrid_gettext', 1, 3 );
 		add_filter( 'gettext', 'hybrid_extensions_gettext', 1, 3 );
 
-		/* Make text widgets and term descriptions shortcode aware. */
-		add_filter( 'widget_text', 'do_shortcode' );
+		/* Make term descriptions shortcode aware. */
 		add_filter( 'term_description', 'do_shortcode' );
 	}
 }
