@@ -84,11 +84,11 @@ function hybrid_site_link_shortcode() {
  * @return string
  */
 function hybrid_wp_link_shortcode() {
-	return '<a class="wp-link" href="http://wordpress.org" title="' . esc_attr__( 'Powered by WordPress, state-of-the-art semantic personal publishing platform', 'hybrid-core' ) . '"><span>' . __( 'WordPress', 'hybrid-core' ) . '</span></a>';
+	return '<a class="wp-link" href="http://wordpress.org" title="' . esc_attr__( 'State-of-the-art semantic personal publishing platform', 'hybrid-core' ) . '"><span>' . __( 'WordPress', 'hybrid-core' ) . '</span></a>';
 }
 
 /**
- * Shortcode to display a link to the Hybrid theme page.
+ * Shortcode to display a link to the parent theme page.
  *
  * @since 0.6.0
  * @access public
@@ -97,7 +97,7 @@ function hybrid_wp_link_shortcode() {
  */
 function hybrid_theme_link_shortcode() {
 	$data = hybrid_get_theme_data();
-	return '<a class="theme-link" href="' . esc_url( $data['URI'] ) . '" title="' . esc_attr( $data['Name'] ) . '"><span>' . esc_attr( $data['Name'] ) . '</span></a>';
+	return '<a class="theme-link" href="' . esc_url( $data['URI'] ) . '" title="' . sprintf( esc_attr__( '%s WordPress Theme', 'hybrid-core' ), $data['Name'] ) . '"><span>' . esc_attr( $data['Name'] ) . '</span></a>';
 }
 
 /**
