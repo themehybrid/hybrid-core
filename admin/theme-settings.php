@@ -11,6 +11,10 @@
  *
  * @package HybridCore
  * @subpackage Admin
+ * @author Justin Tadlock <justin@justintadlock.com>
+ * @copyright Copyright (c) 2008 - 2011, Justin Tadlock
+ * @link http://themehybrid.com/hybrid-core
+ * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 /* Hook the settings page function to 'admin_menu'. */
