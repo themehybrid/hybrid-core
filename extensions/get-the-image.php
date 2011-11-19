@@ -47,30 +47,31 @@ add_action( 'added_post_meta', 'get_the_image_delete_cache_by_meta', 10, 2 );
  * @return string|array The HTML for the image. | Image attributes in an array.
  */
 function get_the_image( $args = array() ) {
-	global $post;
 
 	/* Set the default arguments. */
 	$defaults = array(
-		'meta_key' => array( 'Thumbnail', 'thumbnail' ),
-		'post_id' => $post->ID,
-		'attachment' => true,
-		'the_post_thumbnail' => true, // WP 2.9+ image function
-		'size' => 'thumbnail',
-		'default_image' => false,
-		'order_of_image' => 1,
-		'link_to_post' => true,
-		'image_class' => false,
-		'image_scan' => false,
-		'width' => false,
-		'height' => false,
-		'format' => 'img',
-		'meta_key_save' => false,
-		'thumbnail_id_save' => false, // Set 'featured image'.
-		'callback' => null,
-		'cache' => true,
-		'echo' => true,
-		'custom_key' => null, // @deprecated 0.6. Use 'meta_key'.
-		'default_size' => null, // @deprecated 0.5.  Use 'size'.
+		'meta_key' => 		array( 'Thumbnail', 'thumbnail' ), // array|string
+		'post_id' => 		get_the_ID(),
+		'attachment' => 		true,
+		'the_post_thumbnail' => 	true, // WP 2.9+ image function
+		'size' => 			'thumbnail',
+		'default_image' => 	false,
+		'order_of_image' => 	1,
+		'link_to_post' => 		true,
+		'image_class' => 		false,
+		'image_scan' => 		false,
+		'width' => 		false,
+		'height' => 		false,
+		'format' => 		'img',
+		'meta_key_save' => 	false,
+		'thumbnail_id_save' => 	false, // Set 'featured image'.
+		'callback' => 		null,
+		'cache' => 		true,
+		'before' => 		'',
+		'after' => 		'',
+		'echo' => 		true,
+		'custom_key' => 		null, // @deprecated 0.6. Use 'meta_key'.
+		'default_size' => 		null, // @deprecated 0.5.  Use 'size'.
 	);
 
 	/* Allow plugins/themes to filter the arguments. */
@@ -175,11 +176,11 @@ function get_the_image( $args = array() ) {
 
 	/* Or, if $echo is set to false, return the formatted image. */
 	elseif ( false === $echo ) {
-		return $image;
+		return $args['before'] . $image . $args['after'];
 	}
 
 	/* Display the image if we get to this point. */
-	echo $image;
+	return $args['before'] . $image . $args['after'];
 }
 
 /* Internal Functions */
