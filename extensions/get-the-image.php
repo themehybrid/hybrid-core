@@ -180,7 +180,7 @@ function get_the_image( $args = array() ) {
 	}
 
 	/* Display the image if we get to this point. */
-	return $args['before'] . $image . $args['after'];
+	echo $args['before'] . $image . $args['after'];
 }
 
 /* Internal Functions */
