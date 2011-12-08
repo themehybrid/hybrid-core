@@ -74,8 +74,18 @@ function hybrid_comments_callback( $comment, $args, $depth ) {
 	/* Check if a template has been provided for the specific comment type.  If not, get the template. */
 	if ( !isset( $hybrid->comment_template[$comment_type] ) ) {
 
-		/* Locate the template based on the comment type.  Default to 'comment.php'. */
-		$template = locate_template( array( "comment-{$comment_type}.php", 'comment.php' ) );
+		/* Create an array of template files to look for. */
+		$templates = array( "comment-{$comment_type}.php" );
+
+		/* If the comment type is a 'pingback' or 'trackback', allow the use of 'comment-ping.php'. */
+		if ( 'pingback' == $comment_type || 'trackback' == $comment_type )
+			$templates[] = 'comment-ping.php';
+
+		/* Add the fallback 'comment.php' template. */
+		$templates[] = 'comment.php';
+
+		/* Locate the comment template. */
+		$template = locate_template( $templates );
 
 		/* Set the template in the comment template array. */
 		$hybrid->comment_template[$comment_type] = $template;
