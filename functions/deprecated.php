@@ -399,6 +399,15 @@ function hybrid_settings_page_enqueue_script() {
 	return;
 }
 
+/**
+ * @since 0.7.0
+ * @deprecated 1.3.0
+ */
+function hybrid_admin_init() {
+	_deprecated_function( __FUNCTION__, '1.3.0', 'hybrid_admin_setup' );
+	return;
+}
+
 /* === Removed Functions === */
 
 /* Functions removed in the 0.8 branch. */

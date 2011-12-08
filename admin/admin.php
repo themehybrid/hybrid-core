@@ -11,16 +11,16 @@
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
-/* Add the admin init function to the 'admin_init' hook. */
-add_action( 'admin_init', 'hybrid_admin_init' );
+/* Add the admin setup function to the 'admin_menu' hook. */
+add_action( 'admin_menu', 'hybrid_admin_setup' );
 
 /**
- * Initializes any admin-related features needed for the framework.
+ * Sets up the adminstration functionality for the framework and themes.
  *
- * @since 0.7.0
+ * @since 1.3.0
  * @return void
  */
-function hybrid_admin_init() {
+function hybrid_admin_setup() {
 
 	/* Load the post meta boxes on the new post and edit post screens. */
 	add_action( 'load-post.php', 'hybrid_admin_load_post_meta_boxes' );
