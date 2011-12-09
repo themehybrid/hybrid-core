@@ -223,6 +223,9 @@ class Hybrid {
 		/* Load media-related functions. */
 		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'media.php' );
 
+		/* Load the metadata functions. */
+		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'meta.php' );
+
 		/* Load the utility functions. */
 		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'utility.php' );
 
