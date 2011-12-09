@@ -368,6 +368,14 @@ function breadcrumb_trail_get_bbpress_items( $args = array() ) {
 	elseif ( bbp_is_topic_archive() )
 		$trail[] = bbp_get_topic_archive_title();
 
+	elseif ( bbp_is_topic_tag() )
+		$trail[] = bbp_get_topic_tag_name();
+
+	elseif ( bbp_is_topic_tag_edit() ) {
+		$trail[] = '<a href="' . bbp_get_topic_tag_link() . '">' . bbp_get_topic_tag_name() . '</a>';
+		$trail[] = __( 'Edit', 'breadcrumb-trail' );
+	}
+
 	elseif ( bbp_is_single_view() )
 		$trail[] = bbp_get_view_title();
 
