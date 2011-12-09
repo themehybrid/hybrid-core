@@ -353,78 +353,106 @@ function breadcrumb_trail_get_items( $args = array() ) {
  */
 function breadcrumb_trail_get_bbpress_items( $args = array() ) {
 
+	/* Set up a new trail items array. */
 	$trail = array();
 
+	/* Get the forum post type object. */
 	$post_type_object = get_post_type_object( bbp_get_forum_post_type() );
 
+	/* If not viewing the forum root/archive page and a forum archive exists, add it. */
 	if ( !empty( $post_type_object->has_archive ) && !bbp_is_forum_archive() )
 		$trail[] = '<a href="' . get_post_type_archive_link( bbp_get_forum_post_type() ) . '">' . bbp_get_forum_archive_title() . '</a>';
 
-	if ( bbp_is_forum_archive() )
+	/* If viewing the forum root/archive. */
+	if ( bbp_is_forum_archive() ) {
 		$trail[] = bbp_get_forum_archive_title();
+	}
 
-	elseif ( bbp_is_topic_archive() )
+	/* If viewing the topics archive. */
+	elseif ( bbp_is_topic_archive() ) {
 		$trail[] = bbp_get_topic_archive_title();
+	}
 
-	elseif ( bbp_is_topic_tag() )
+	/* If viewing a topic tag archive. */
+	elseif ( bbp_is_topic_tag() ) {
 		$trail[] = bbp_get_topic_tag_name();
+	}
 
+	/* If viewing a topic tag edit page. */
 	elseif ( bbp_is_topic_tag_edit() ) {
 		$trail[] = '<a href="' . bbp_get_topic_tag_link() . '">' . bbp_get_topic_tag_name() . '</a>';
 		$trail[] = __( 'Edit', 'breadcrumb-trail' );
 	}
 
-	elseif ( bbp_is_single_view() )
+	/* If viewing a "view" page. */
+	elseif ( bbp_is_single_view() ) {
 		$trail[] = bbp_get_view_title();
+	}
 
+	/* If viewing a single topic page. */
 	elseif ( bbp_is_single_topic() ) {
 
+		/* Get the queried topic. */
 		$topic_id = get_queried_object_id();
 
+		/* Get the parent items for the topic, which would be its forum (and possibly forum grandparents). */
 		$trail = array_merge( $trail, breadcrumb_trail_get_parents( bbp_get_topic_forum_id( $topic_id ) ) );
 
+		/* If viewing a split, merge, or edit topic page, show the link back to the topic.  Else, display topic title. */
 		if ( bbp_is_topic_split() || bbp_is_topic_merge() || bbp_is_topic_edit() )
 			$trail[] = '<a href="' . bbp_get_topic_permalink( $topic_id ) . '">' . bbp_get_topic_title( $topic_id ) . '</a>';
 		else
 			$trail[] = bbp_get_topic_title( $topic_id );
 
+		/* If viewing a topic split page. */
 		if ( bbp_is_topic_split() )
 			$trail[] = __( 'Split', 'breadcrumb-trail' );
 
+		/* If viewing a topic merge page. */
 		elseif ( bbp_is_topic_merge() )
 			$trail[] = __( 'Merge', 'breadcrumb-trail' );
 
+		/* If viewing a topic edit page. */
 		elseif ( bbp_is_topic_edit() )
 			$trail[] = __( 'Edit', 'breadcrumb-trail' );
 	}
 
+	/* If viewing a single reply page. */
 	elseif ( bbp_is_single_reply() ) {
 
+		/* Get the queried reply object ID. */
 		$reply_id = get_queried_object_id();
 
+		/* Get the parent items for the reply, which should be its topic. */
 		$trail = array_merge( $trail, breadcrumb_trail_get_parents( bbp_get_reply_topic_id( $reply_id ) ) );
 
-		if ( !bbp_is_reply_edit() ) {
-			$trail[] = bbp_get_reply_title( $reply_id );
-
-		} else {
+		/* If viewing a reply edit page, link back to the reply. Else, display the reply title. */
+		if ( bbp_is_reply_edit() ) {
 			$trail[] = '<a href="' . bbp_get_reply_url( $reply_id ) . '">' . bbp_get_reply_title( $reply_id ) . '</a>';
 			$trail[] = __( 'Edit', 'breadcrumb-trail' );
+
+		} else {
+			$trail[] = bbp_get_reply_title( $reply_id );
 		}
 
 	}
 
+	/* If viewing a single forum. */
 	elseif ( bbp_is_single_forum() ) {
 
+		/* Get the queried forum ID and its parent forum ID. */
 		$forum_id = get_queried_object_id();
 		$forum_parent_id = bbp_get_forum_parent( $forum_id );
 
+		/* If the forum has a parent forum, get its parent(s). */
 		if ( 0 !== $forum_parent_id)
 			$trail = array_merge( $trail, breadcrumb_trail_get_parents( $forum_parent_id ) );
 
+		/* Add the forum title to the end of the trail. */
 		$trail[] = bbp_get_forum_title( $forum_id );
 	}
 
+	/* If viewing a user page or user edit page. */
 	elseif ( bbp_is_single_user() || bbp_is_single_user_edit() ) {
 
 		if ( bbp_is_single_user_edit() ) {
@@ -435,6 +463,7 @@ function breadcrumb_trail_get_bbpress_items( $args = array() ) {
 		}
 	}
 
+	/* Return the bbPress breadcrumb trail items. */
 	return apply_filters( 'breadcrumb_trail_get_bbpress_items', $trail, $args );
 }
 
