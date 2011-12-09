@@ -317,7 +317,9 @@ class Hybrid {
 	 */
 	function default_filters() {
 
-		remove_action( 'bbp_init', 'bbp_setup_theme_compat', 8 );
+		/* Remove bbPress theme compatibility if current theme supports bbPress. */
+		if ( current_theme_supports( 'bbpress' ) )
+			remove_action( 'bbp_init', 'bbp_setup_theme_compat', 8 );
 
 		/* Move the WordPress generator to a better priority. */
 		remove_action( 'wp_head', 'wp_generator' );
