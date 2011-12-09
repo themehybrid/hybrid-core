@@ -1,7 +1,5 @@
 <?php
 /**
- * @todo - http://themehybrid.com/support/topic/breadcrumbs-grab-wrong-title?replies=5#post-65071
- *
  * Breadcrumb Trail - A breadcrumb menu script for WordPress.
  *
  * Breadcrumb Trail is a script for showing a breadcrumb trail for any type of page.  It tries to anticipate 
@@ -212,7 +210,7 @@ function breadcrumb_trail_get_items( $args = array() ) {
 			$trail[] = $terms;
 
 		/* End with the post title. */
-		$post_title = get_the_title();
+		$post_title = single_post_title( '', false );
 		if ( !empty( $post_title ) )
 			$trail['trail_end'] = $post_title;
 	}
