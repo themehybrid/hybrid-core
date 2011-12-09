@@ -22,6 +22,7 @@ add_filter( 'author_template', 'hybrid_user_template' );
 /* Filter the tag and category (taxonomy) templates. */
 add_filter( 'tag_template', 'hybrid_taxonomy_template' );
 add_filter( 'category_template', 'hybrid_taxonomy_template' );
+add_filter( 'taxonomy_template', 'hybrid_taxonomy_template' );
 
 /* Filter the single, page, and attachment (singular) templates. */
 add_filter( 'single_template', 'hybrid_singular_template' );
@@ -141,8 +142,11 @@ function hybrid_taxonomy_template( $template ) {
 	/* Get the queried term object. */
 	$term = get_queried_object();
 
+	/* Remove 'post-format' from the slug. */
+	$slug = ( ( 'post_format' == $term->taxonomy ) ? str_replace( 'post-format-', '', $term->slug ) : $term->slug );
+
 	/* Return the available templates. */
-	return locate_template( array( "taxonomy-{$term->taxonomy}-{$term->slug}.php", "taxonomy-{$term->taxonomy}.php", 'taxonomy.php', 'archive.php' ) );
+	return locate_template( array( "taxonomy-{$term->taxonomy}-{$slug}.php", "taxonomy-{$term->taxonomy}.php", 'taxonomy.php', 'archive.php' ) );
 }
 
 /**

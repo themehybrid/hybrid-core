@@ -65,7 +65,9 @@ function hybrid_get_context() {
 		if ( is_tax() || is_category() || is_tag() ) {
 			$hybrid->context[] = 'taxonomy';
 			$hybrid->context[] = "taxonomy-{$object->taxonomy}";
-			$hybrid->context[] = "taxonomy-{$object->taxonomy}-" . sanitize_html_class( $object->slug, $object->term_id );
+
+			$slug = ( ( 'post_format' == $object->taxonomy ) ? str_replace( 'post-format-', '', $object->slug ) : $object->slug );
+			$hybrid->context[] = "taxonomy-{$object->taxonomy}-" . sanitize_html_class( $slug, $object->term_id );
 		}
 
 		/* Post type archives. */
