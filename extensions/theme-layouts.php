@@ -121,6 +121,10 @@ function theme_layouts_get_layout() {
 	if ( empty( $layout ) || !in_array( $layout, $post_layouts[0] ) )
 		$layout = 'default';
 
+	/* If the theme set a default layout, use it if the layout should be set to default. */
+	if ( 'default' == $layout && !empty( $post_layouts[1] ) && isset( $post_layouts[1]['default'] ) )
+		$layout = $post_layouts[1]['default'];
+
 	/* @deprecated 0.2.0. Use the 'get_theme_layout' hook. */
 	$layout = apply_filters( 'get_post_layout', "layout-{$layout}" );
 
