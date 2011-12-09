@@ -40,10 +40,11 @@ function hybrid_meta_box_theme_display_footer() {
 
 	/* Add a textarea using the wp_editor() function to make it easier on users to add custom content. */
 	wp_editor(
-		hybrid_get_setting( 'footer_insert' ),		// Editor content.
-		hybrid_settings_field_id( 'footer_insert' ),	// Editor ID.
+		esc_textarea( hybrid_get_setting( 'footer_insert' ) ),	// Editor content.
+		hybrid_settings_field_id( 'footer_insert' ),		// Editor ID.
 		array(
-			'textarea_name' => hybrid_settings_field_name( 'footer_insert' )
+			'tinymce' => 		false, // Don't use TinyMCE in a meta box.
+			'textarea_name' => 	hybrid_settings_field_name( 'footer_insert' )
 		)
 	); ?>
 
