@@ -298,6 +298,10 @@ function hybrid_body_class( $class = '' ) {
 	if ( is_admin_bar_showing() )
 		$classes[] = 'admin-bar';
 
+	/* Use the '.custom-background' class to integrate with the WP background feature. */
+	if ( get_background_image() || get_background_color() )
+		$classes[] = 'custom-background';
+
 	/* Merge base contextual classes with $classes. */
 	$classes = array_merge( $classes, hybrid_get_context() );
 
