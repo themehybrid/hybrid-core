@@ -42,7 +42,7 @@ add_action( 'admin_menu', 'post_stylesheets_admin_setup' );
  * @since 0.3.0
  * @return void
  */
-function theme_layouts_register_meta() {
+function post_stylesheets_register_meta() {
 	register_meta( 'post', post_stylesheets_get_meta_key(), 'post_stylesheets_sanitize_meta' );
 }
 
@@ -51,7 +51,7 @@ function theme_layouts_register_meta() {
  * If a developer wants to set up a custom method for sanitizing the data, they should use the 
  * "sanitize_{$meta_type}_meta_{$meta_key}" filter hook to do so.
  *
- * @since 0.4.0
+ * @since 0.3.0
  * @param mixed $meta_value The value of the data to sanitize.
  * @param string $meta_key The meta key name.
  * @param string $meta_type The type of metadata (post, comment, user, etc.)
