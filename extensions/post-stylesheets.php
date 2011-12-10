@@ -93,7 +93,7 @@ function post_stylesheets_remove_post_type_support() {
 		remove_post_type_support( bbp_get_topic_post_type(), 'post-stylesheets' );
 
 	/* Removes post stylesheets support of the bbPress 'reply' post type. */
-	elseif ( function_exists( 'bbp_get_reply_post_type' ) )
+	if ( function_exists( 'bbp_get_reply_post_type' ) )
 		remove_post_type_support( bbp_get_reply_post_type(), 'post-stylesheets' );
 }
 
