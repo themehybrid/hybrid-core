@@ -31,6 +31,7 @@ add_action( 'init', 'theme_layouts_register_meta' );
 
 /* Add post type support for theme layouts. */
 add_action( 'init', 'theme_layouts_add_post_type_support' );
+add_action( 'init', 'theme_layouts_remove_post_type_support' );
 
 /* Set up the custom post layouts. */
 add_action( 'admin_menu', 'theme_layouts_admin_setup' );
@@ -80,6 +81,19 @@ function theme_layouts_add_post_type_support() {
 	/* For each available post type, create a meta box on its edit page if it supports '$prefix-post-settings'. */
 	foreach ( $post_types as $type )
 		add_post_type_support( $type, 'theme-layouts' );
+}
+
+/**
+ * Removes theme layouts support from specific post types created by plugins.
+ *
+ * @since 0.4.0
+ * @return void
+ */
+function theme_layouts_remove_post_type_support() {
+
+	/* Removes theme layouts support of the bbPress 'reply' post type. */
+	if ( function_exists( 'bbp_get_reply_post_type' ) )
+		remove_post_type_support( bbp_get_reply_post_type(), 'theme-layouts' );
 }
 
 /**
