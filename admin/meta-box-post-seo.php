@@ -15,6 +15,7 @@
 
 /* Add the post SEO meta box on the 'add_meta_boxes' hook. */
 add_action( 'add_meta_boxes', 'hybrid_meta_box_post_add_seo', 10, 2 );
+add_action( 'add_meta_boxes', 'hybrid_meta_box_post_remove_seo', 10, 2 );
 
 /* Save the post SEO meta box data on the 'save_post' hook. */
 add_action( 'save_post', 'hybrid_meta_box_post_save_seo', 10, 2 );
@@ -23,6 +24,8 @@ add_action( 'save_post', 'hybrid_meta_box_post_save_seo', 10, 2 );
  * Adds the post SEO meta box for all public post types.
  *
  * @since 1.2.0
+ * @param string $post_type The post type of the current post being edited.
+ * @param object $post The current post being edited.
  * @return void
  */
 function hybrid_meta_box_post_add_seo( $post_type, $post ) {
@@ -32,6 +35,25 @@ function hybrid_meta_box_post_add_seo( $post_type, $post ) {
 	/* Only add meta box if current user can edit, add, or delete meta for the post. */
 	if ( ( true === $post_type_object->public ) && ( current_user_can( 'edit_post_meta', $post->ID ) || current_user_can( 'add_post_meta', $post->ID ) || current_user_can( 'delete_post_meta', $post->ID ) ) )
 		add_meta_box( 'hybrid-core-post-seo', __( 'SEO', 'hybrid-core' ), 'hybrid_meta_box_post_display_seo', $post_type, 'normal', 'high' );
+}
+
+/**
+ * Remove the meta box from some post types.
+ *
+ * @since 1.3.0
+ * @param string $post_type The post type of the current post being edited.
+ * @param object $post The current post being edited.
+ * @return void
+ */ 
+function hybrid_meta_box_post_remove_seo( $post_type, $post ) {
+
+	/* Removes post stylesheets support of the bbPress 'topic' post type. */
+	if ( function_exists( 'bbp_get_topic_post_type' ) && bbp_get_topic_post_type() == $post_type )
+		remove_meta_box( 'hybrid-core-post-seo', bbp_get_topic_post_type(), 'normal' );
+
+	/* Removes post stylesheets support of the bbPress 'reply' post type. */
+	elseif ( function_exists( 'bbp_get_reply_post_type' ) && bbp_get_reply_post_type() == $post_type )
+		remove_meta_box( 'hybrid-core-post-seo', bbp_get_reply_post_type(), 'normal' );
 }
 
 /**

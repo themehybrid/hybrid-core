@@ -15,6 +15,7 @@
 
 /* Add the post template meta box on the 'add_meta_boxes' hook. */
 add_action( 'add_meta_boxes', 'hybrid_meta_box_post_add_template', 10, 2 );
+add_action( 'add_meta_boxes', 'hybrid_meta_box_post_remove_template', 10, 2 );
 
 /* Save the post template meta box data on the 'save_post' hook. */
 add_action( 'save_post', 'hybrid_meta_box_post_save_template', 10, 2 );
@@ -31,8 +32,31 @@ function hybrid_meta_box_post_add_template( $post_type, $post ) {
 	$post_type_object = get_post_type_object( $post_type );
 
 	/* Only add meta box if current user can edit, add, or delete meta for the post. */
-	if ( ( 'page' !== $post_type ) && ( true === $post_type_object->public ) && ( current_user_can( 'edit_post_meta', $post->ID ) || current_user_can( 'add_post_meta', $post->ID ) || current_user_can( 'delete_post_meta', $post->ID ) ) )
+	if ( ( true === $post_type_object->public ) && ( current_user_can( 'edit_post_meta', $post->ID ) || current_user_can( 'add_post_meta', $post->ID ) || current_user_can( 'delete_post_meta', $post->ID ) ) )
 		add_meta_box( 'hybrid-core-post-template', __( 'Template', 'hybrid-core' ), 'hybrid_meta_box_post_display_template', $post_type, 'side', 'default' );
+}
+
+/**
+ * Remove the meta box from some post types.
+ *
+ * @since 1.3.0
+ * @param string $post_type The post type of the current post being edited.
+ * @param object $post The current post being edited.
+ * @return void
+ */ 
+function hybrid_meta_box_post_remove_template( $post_type, $post ) {
+
+	/* Removes meta box from pages since this is a built-in WordPress feature. */
+	if ( 'page' == $post_type )
+		remove_meta_box( 'hybrid-core-post-template', 'page', 'side' );
+
+	/* Removes meta box from the bbPress 'topic' post type. */
+	elseif ( function_exists( 'bbp_get_topic_post_type' ) && bbp_get_topic_post_type() == $post_type )
+		remove_meta_box( 'hybrid-core-post-template', bbp_get_topic_post_type(), 'side' );
+
+	/* Removes meta box from the bbPress 'reply' post type. */
+	elseif ( function_exists( 'bbp_get_reply_post_type' ) && bbp_get_reply_post_type() == $post_type )
+		remove_meta_box( 'hybrid-core-post-template', bbp_get_reply_post_type(), 'side' );
 }
 
 /**
