@@ -451,6 +451,9 @@ function hybrid_document_title() {
 	/* Apply the wp_title filters so we're compatible with plugins. */
 	$doctitle = apply_filters( 'wp_title', $doctitle, $separator, '' );
 
+	/* Trim separator + space from beginning and end in case a plugin adds it. */
+	$doctitle = trim( $doctitle, "{$separator} " );
+
 	/* Print the title to the screen. */
 	echo apply_atomic( 'document_title', esc_attr( $doctitle ) );
 }
