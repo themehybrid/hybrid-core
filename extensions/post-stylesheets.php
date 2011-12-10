@@ -28,6 +28,7 @@ add_action( 'init', 'post_stylesheets_register_meta' );
 
 /* Add post type support for the 'post-stylesheets' feature. */
 add_action( 'init', 'post_stylesheets_add_post_type_support' );
+add_action( 'init', 'post_stylesheets_remove_post_type_support' );
 
 /* Filters stylesheet_uri with a function for adding a new style. */
 add_filter( 'stylesheet_uri', 'post_stylesheets_stylesheet_uri', 10, 2 );
@@ -71,11 +72,29 @@ function post_styleheets_sanitize_meta( $meta_value, $meta_key, $meta_type ) {
 function post_stylesheets_add_post_type_support() {
 
 	/* Get all available 'public' post types. */
-	$post_types = get_post_types( array( 'public' => true ), 'objects' );
+	$post_types = get_post_types( array( 'public' => true ) );
 
 	/* Loop through each of the public post types and add support for post stylesheets. */
 	foreach ( $post_types as $type )
-		add_post_type_support( $type->name, 'post-stylesheets' );
+		add_post_type_support( $type, 'post-stylesheets' );
+}
+
+/**
+ * Removes post stylesheets support for certain post types created by plugins.
+ *
+ * @since 0.3.0
+ * @access private
+ * @return void
+ */
+function post_stylesheets_remove_post_type_support() {
+
+	/* Removes post stylesheets support of the bbPress 'topic' post type. */
+	if ( function_exists( 'bbp_get_topic_post_type' ) )
+		remove_post_type_support( bbp_get_topic_post_type(), 'post-stylesheets' );
+
+	/* Removes post stylesheets support of the bbPress 'reply' post type. */
+	elseif ( function_exists( 'bbp_get_reply_post_type' ) )
+		remove_post_type_support( bbp_get_reply_post_type(), 'post-stylesheets' );
 }
 
 /**
@@ -96,14 +115,23 @@ function post_stylesheets_stylesheet_uri( $stylesheet_uri, $stylesheet_dir_uri )
 	/* Check if viewing a singular post. */
 	if ( is_singular() ) {
 
+		/* If viewing a bbPress topic, use its forum object. */
+		if ( function_exists( 'bbp_is_single_topic' ) && bbp_is_single_topic() )
+			$post = get_post( bbp_get_topic_forum_id( get_queried_object_id() ) );
+
+		/* If viewing a bbPress reply, use its forum object. */
+		elseif ( function_exists( 'bbp_is_single_reply' ) && bbp_is_single_reply() )
+			$post = get_post( bbp_get_reply_forum_id( get_queried_object_id() ) );
+
 		/* Get the queried object (post). */
-		$post = get_queried_object();
+		else
+			$post = get_queried_object();
 
 		/* Check if the post type supports 'post-stylesheets' before proceeding. */
 		if ( post_type_supports( $post->post_type, 'post-stylesheets' ) ) {
 
 			/* Check if the user has set a value for the post stylesheet. */
-			$stylesheet = get_post_stylesheet( get_queried_object_id() );
+			$stylesheet = get_post_stylesheet( $post->ID );
 
 			/* If a meta value was given and the file exists, set $stylesheet_uri to the new file. */
 			if ( !empty( $stylesheet ) ) {
