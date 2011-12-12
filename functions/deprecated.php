@@ -408,6 +408,15 @@ function hybrid_admin_init() {
 	return;
 }
 
+/**
+ * @since 1.2.0
+ * @deprecated 1.3.0
+ */
+function hybrid_settings_page_contextual_help() {
+	_deprecated_function( __FUNCTION__, '1.3.0', 'hybrid_settings_page_help' );
+	return;
+}
+
 /* === Removed Functions === */
 
 /* Functions removed in the 0.8 branch. */

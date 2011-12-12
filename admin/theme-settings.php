@@ -57,8 +57,8 @@ function hybrid_settings_page_init() {
 		/* Filter the settings page capability so that it recognizes the 'edit_theme_options' cap. */
 		add_filter( "option_page_capability_{$prefix}_theme_settings", 'hybrid_settings_page_capability' );
 
-		/* Add contextual help to the theme settings page. */
-		add_contextual_help( $hybrid->settings_page, hybrid_settings_page_contextual_help() );
+		/* Add help tabs to the theme settings page. */
+		add_action( "load-{$hybrid->settings_page}", 'hybrid_settings_page_help' );
 
 		/* Load the theme settings meta boxes. */
 		add_action( "load-{$hybrid->settings_page}", 'hybrid_load_settings_page_meta_boxes' );
@@ -154,7 +154,6 @@ function hybrid_save_theme_settings( $settings ) {
  * meta boxes to be added to the page.
  *
  * @since 0.7.0
- * @global string $hybrid The global theme object.
  * @return void
  */
 function hybrid_settings_page() {
@@ -215,16 +214,13 @@ function hybrid_settings_field_name( $setting ) {
 }
 
 /**
- * Returns text for the contextual help tab on the theme settings page in the admin.  Theme authors can add 
- * a filter to the 'contextual_help' hook if they want to change the output of the help text.
+ * Adds a help tab to the theme settings screen if the theme has provided a 'Documentation URI' and/or 
+ * 'Support URI'.  Theme developers can add custom help tabs using get_current_screen()->add_help_tab().
  *
- * @since 1.2.0
- * @return string $help The contextual help text used on the theme settings page.
+ * @since 1.3.0
+ * @return void
  */
-function hybrid_settings_page_contextual_help() {
-
-	/* Set the $help variable to an empty string. */
-	$help = '';
+function hybrid_settings_page_help() {
 
 	/* Get the parent theme data. */
 	$theme = hybrid_get_theme_data();
@@ -245,10 +241,16 @@ function hybrid_settings_page_contextual_help() {
 
 		/* Close the unordered list for the help text. */
 		$help .= '</ul>';
-	}
 
-	/* Return the contextual help text for this screen. */
-	return $help;
+		/* Add a help tab with links for documentation and support. */
+		get_current_screen()->add_help_tab(
+			array(
+				'id' => 'default',
+				'title' => esc_attr( $theme['Name'] ),
+				'content' => $help
+			)
+		);
+	}
 }
 
 /**
