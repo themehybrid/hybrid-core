@@ -1,8 +1,8 @@
 <?php
 /**
- * The core functions file for the Hybrid framework. Functions defined here are generally
- * used across the entire framework to make various tasks faster. This file should be loaded
- * prior to any other files because its functions are needed to run the framework.
+ * Internationalization and translation functions.  Because Hybrid Core is a framework made up of various 
+ * extensions with different textdomains, it must filter 'gettext' so that a single translation file can 
+ * handle all translations.
  *
  * @package HybridCore
  * @subpackage Functions
@@ -97,14 +97,6 @@ function hybrid_get_child_textdomain() {
 
 	/* Return the expected textdomain of the child theme. */
 	return $hybrid->child_textdomain;
-}
-
-/**
- * @since 0.9.0
- * @deprecated 1.3.0
- */
-function hybrid_load_textdomain( $mofile, $domain ) {
-	return hybrid_load_textdomain_mofile( $mofile, $domain );
 }
 
 /**

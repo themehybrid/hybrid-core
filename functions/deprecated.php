@@ -417,6 +417,15 @@ function hybrid_settings_page_contextual_help() {
 	return;
 }
 
+/**
+ * @since 0.9.0
+ * @deprecated 1.3.0
+ */
+function hybrid_load_textdomain( $mofile, $domain ) {
+	_deprecated_function( __FUNCTION__, '1.3.0', 'hybrid_load_textdomain_mofile' );
+	return hybrid_load_textdomain_mofile( $mofile, $domain );
+}
+
 /* === Removed Functions === */
 
 /* Functions removed in the 0.8 branch. */
