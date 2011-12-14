@@ -36,12 +36,15 @@ function hybrid_register_meta() {
 		register_meta( 'user', 'Keywords', 'hybrid_sanitize_meta' );
 	}
 
+	/* Register meta if the theme supports the 'hybrid-core-template-hierarchy' feature. */
 	if ( current_theme_supports( 'hybrid-core-template-hierarchy' ) ) {
 
 		$post_types = get_post_types( array( 'public' => true ) );
 
-		foreach ( $post_types as $post_type )
-			register_meta( 'post', "_wp_{$post_type}_template", 'hybrid_sanitize_meta' );
+		foreach ( $post_types as $post_type ) {
+			if ( 'page' !== $post_type )
+				register_meta( 'post', "_wp_{$post_type}_template", 'hybrid_sanitize_meta' );
+		}
 	}
 }
 
