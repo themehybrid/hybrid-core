@@ -47,6 +47,8 @@ function hybrid_add_shortcodes() {
 	add_shortcode( 'entry-published', 'hybrid_entry_published_shortcode' );
 	add_shortcode( 'entry-edit-link', 'hybrid_entry_edit_link_shortcode' );
 	add_shortcode( 'entry-shortlink', 'hybrid_entry_shortlink_shortcode' );
+	add_shortcode( 'entry-permalink', 'hybrid_entry_permalink_shortcode' );
+	add_shortcode( 'post-format-link', 'hybrid_post_format_link_shortcode' );
 
 	/* Add comment-specific shortcodes. */
 	add_shortcode( 'comment-published', 'hybrid_comment_published_shortcode' );
@@ -312,7 +314,7 @@ function hybrid_entry_title_shortcode() {
 }
 
 /**
- * Displays the shortlinke of an individual entry.
+ * Displays the shortlink of an individual entry.
  *
  * @since 0.8.0
  * @access public
@@ -334,6 +336,37 @@ function hybrid_entry_shortlink_shortcode( $attr ) {
 	$shortlink = esc_url( wp_get_shortlink( $post->ID ) );
 
 	return "{$attr['before']}<a class='shortlink' href='{$shortlink}' title='" . esc_attr( $attr['title'] ) . "' rel='shortlink'>{$attr['text']}</a>{$attr['after']}";
+}
+
+/**
+ * Returns the output of the [entry-permalink] shortcode, which is a link back to the post permalink page.
+ *
+ * @since 1.3.0.
+ * @param array $attr The shortcode arguments.
+ * @return string A permalink back to the post.
+ */
+function hybrid_entry_permalink_shortcode( $attr ) {
+
+	$attr = shortcode_atts( array( 'before' => '', 'after' => '' ), $attr );
+
+	return $attr['before'] . '<a href="' . esc_url( get_permalink() ) . '" class="permalink">' . __( 'Permalink', 'hybrid-core' ) . '</a>' . $attr['after'];
+}
+
+/**
+ * Returns the output of the [post-format-link] shortcode.  This shortcode is for use when a theme uses the 
+ * post formats feature.
+ *
+ * @since 1.3.0.
+ * @param array $attr The shortcode arguments.
+ * @return string A link to the post format archive.
+ */
+function hybrid_post_format_link_shortcode( $attr ) {
+
+	$attr = shortcode_atts( array( 'before' => '', 'after' => '' ), $attr );
+	$format = get_post_format();
+	$url = ( empty( $format ) ? get_permalink() : get_post_format_link( $format ) );
+
+	return $attr['before'] . '<a href="' . esc_url( $url ) . '" class="post-format-link">' . get_post_format_string( $format ) . '</a>' . $attr['after'];
 }
 
 /**
