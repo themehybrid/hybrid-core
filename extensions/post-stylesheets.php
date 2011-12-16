@@ -157,7 +157,7 @@ function post_stylesheets_stylesheet_uri( $stylesheet_uri, $stylesheet_dir_uri )
  * @since 0.3.0
  * @access public
  * @param int $post_id The ID of the post to get the stylesheet for.
- * @return string|bool Stylesheet name if given.  False for no stylesheet.
+ * @return string Stylesheet name if given.  Empty string for no stylesheet.
  */
 function get_post_stylesheet( $post_id ) {
 	return get_post_meta( $post_id, post_stylesheets_get_meta_key(), true );
@@ -170,6 +170,7 @@ function get_post_stylesheet( $post_id ) {
  * @access public
  * @param int $post_id The ID of the post to set the stylesheet for.
  * @param string $stylesheet The filename of the stylesheet.
+ * @return bool True on successful update, false on failure.
  */
 function set_post_stylesheet( $post_id, $stylesheet ) {
 	return update_post_meta( $post_id, post_stylesheets_get_meta_key(), $stylesheet );
@@ -181,6 +182,7 @@ function set_post_stylesheet( $post_id, $stylesheet ) {
  * @since 0.3.0
  * @access public
  * @param int $post_id The ID of the post to delete the stylesheet for.
+ * @return bool True on successful delete, false on failure.
  */
 function delete_post_stylesheet( $post_id ) {
 	return delete_post_meta( $post_id, post_stylesheets_get_meta_key() );
