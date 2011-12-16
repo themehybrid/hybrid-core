@@ -26,6 +26,9 @@
 /* Add support for the 'custom-field-series' extension to posts. */
 add_action( 'init', 'custom_field_series_post_type_support' );
 
+/* Register metadata for the custom field series. */
+add_action( 'init', 'custom_field_series_register_meta' );
+
 /* Create the meta box on the 'admin_menu' hook. */
 add_action( 'admin_menu', 'custom_field_series_admin_setup' );
 
@@ -126,6 +129,33 @@ function custom_field_series_post_type_support() {
 }
 
 /**
+ * Registers the custom field series meta key 'Series' for for specific object types and provides a 
+ * function to sanitize the metadata on update.
+ *
+ * @since 0.4.0
+ * @access private
+ * @return void
+ */
+function custom_field_series_register_meta() {
+	register_meta( 'post', custom_field_series_meta_key(), 'custom_field_series_sanitize_meta' );
+}
+
+/**
+ * Callback function for sanitizing meta when add_metadata() or update_metadata() is called by WordPress. 
+ * If a developer wants to set up a custom method for sanitizing the data, they should use the 
+ * "sanitize_{$meta_type}_meta_{$meta_key}" filter hook to do so.
+ *
+ * @since 0.4.0
+ * @param mixed $meta_value The value of the data to sanitize.
+ * @param string $meta_key The meta key name.
+ * @param string $meta_type The type of metadata (post, comment, user, etc.)
+ * @return mixed $meta_value
+ */
+function custom_field_series_sanitize_meta( $meta_value, $meta_key, $meta_type ) {
+	return strip_tags( $meta_value );
+}
+
+/**
  * Returns the meta key used for the 'Series' custom field so that developers can overwrite the key if they
  * need to for their project.
  *
@@ -216,12 +246,8 @@ function custom_field_series_meta_box_save( $post_id, $post ) {
 	if ( !isset( $_POST['custom-field-series-nonce'] ) || !wp_verify_nonce( $_POST['custom-field-series-nonce'], basename( __FILE__ ) ) )
 		return $post_id;
 
-	/* Check if the current user has permission to edit the post. */
-	if ( !current_user_can( 'edit_post_meta', $post_id ) )
-		return $post_id;
-
 	/* Get the posted series title and strip all tags from it. */
-	$new_meta_value = ( isset( $_POST['custom-field-series'] ) ? strip_tags( $_POST['custom-field-series'] ) : '' );
+	$new_meta_value = $_POST['custom-field-series'];
 
 	/* Get the meta key. */
 	$meta_key = custom_field_series_meta_key();
@@ -229,17 +255,17 @@ function custom_field_series_meta_box_save( $post_id, $post ) {
 	/* Get the meta value of the custom field key. */
 	$meta_value = get_post_meta( $post_id, $meta_key, true );
 
+	/* If there is no new meta value but an old value exists, delete it. */
+	if ( current_user_can( 'delete_post_meta', $post_id, $meta_key ) && '' == $new_meta_value && $meta_value )
+		delete_post_meta( $post_id, $meta_key, $meta_value );
+
 	/* If a new meta value was added and there was no previous value, add it. */
-	if ( $new_meta_value && '' == $meta_value )
+	elseif ( current_user_can( 'add_post_meta', $post_id, $meta_key ) && $new_meta_value && '' == $meta_value )
 		add_post_meta( $post_id, $meta_key, $new_meta_value, true );
 
-	/* If the new meta value does not match the old value, update it. */
-	elseif ( $new_meta_value && $new_meta_value != $meta_value )
+	/* If the old layout doesn't match the new layout, update the post layout meta. */
+	elseif ( current_user_can( 'edit_post_meta', $post_id, $meta_key ) && $meta_value !== $new_meta_value )
 		update_post_meta( $post_id, $meta_key, $new_meta_value );
-
-	/* If there is no new meta value but an old value exists, delete it. */
-	elseif ( '' == $new_meta_value && $meta_value )
-		delete_post_meta( $post_id, $meta_key, $meta_value );
 }
 
 ?>
