@@ -395,12 +395,12 @@ function get_the_image_format( $args = array(), $image = false ) {
 	/* Loop through the custom field keys and add them as classes. */
 	if ( is_array( $meta_key ) ) {
 		foreach ( $meta_key as $key )
-			$classes[] = str_replace( ' ', '-', strtolower( $key ) );
+			$classes[] = sanitize_html_class( $key );
 	}
 
 	/* Add the $size and any user-added $image_class to the class. */
-	$classes[] = $size;
-	$classes[] = $image_class;
+	$classes[] = sanitize_html_class( $size );
+	$classes[] = sanitize_html_class( $image_class );
 
 	/* Join all the classes into a single string and make sure there are no duplicates. */
 	$class = join( ' ', array_unique( $classes ) );
