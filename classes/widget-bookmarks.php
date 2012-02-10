@@ -96,7 +96,13 @@ class Hybrid_Widget_Bookmarks extends WP_Widget {
 		);
 
 		/* Output the bookmarks widget. */
-		echo str_replace( array( "\r", "\n", "\t" ), '', wp_list_bookmarks( $args ) );
+		$bookmarks = str_replace( array( "\r", "\n", "\t" ), '', wp_list_bookmarks( $args ) );
+
+		/* If no title is given and the bookmarks aren't categorized, add a wrapper <ul>. */
+		if ( empty( $args['title_li'] ) && false === $args['categorize'] )
+			$bookmarks = '<ul class="xoxo bookmarks">' . $bookmarks . '</ul>';
+
+		echo $bookmarks;
 	}
 
 	/**
