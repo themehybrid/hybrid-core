@@ -104,6 +104,9 @@ function get_the_image( $args = array() ) {
 	if ( !is_array( $image_cache ) )
 		$image_cache = array();
 
+	/* Set up a default, empty $image_html variable. */
+	$image_html = '';
+
 	/* If there is no cached image, let's see if one exists. */
 	if ( !isset( $image_cache[$key] ) || empty( $cache ) ) {
 
@@ -205,25 +208,18 @@ function get_the_image( $args = array() ) {
 function get_the_image_by_meta_key( $args = array() ) {
 
 	/* If $meta_key is not an array. */
-	if ( !is_array( $args['meta_key'] ) ) {
+	if ( !is_array( $args['meta_key'] ) )
+		$args['meta_key'] = array( $args['meta_key'] );
 
-		/* Get the image URL by the single meta key. */
-		$image = get_post_meta( $args['post_id'], $args['meta_key'], true );
-	}
+	/* Loop through each of the given meta keys. */
+	foreach ( $args['meta_key'] as $meta_key ) {
 
-	/* If $meta_key is an array. */
-	elseif ( is_array( $args['meta_key'] ) ) {
+		/* Get the image URL by the current meta key in the loop. */
+		$image = get_post_meta( $args['post_id'], $meta_key, true );
 
-		/* Loop through each of the given meta keys. */
-		foreach ( $args['meta_key'] as $meta_key ) {
-
-			/* Get the image URL by the current meta key in the loop. */
-			$image = get_post_meta( $args['post_id'], $meta_key, true );
-
-			/* If an image was found, break out of the loop. */
-			if ( !empty( $image ) )
-				break;
-		}
+		/* If an image was found, break out of the loop. */
+		if ( !empty( $image ) )
+			break;
 	}
 
 	/* If a custom key value has been given for one of the keys, return the image URL. */
