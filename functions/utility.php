@@ -165,7 +165,7 @@ function hybrid_site_title() {
 
 	/* Get the site title.  If it's not empty, wrap it with the appropriate HTML. */
 	if ( $title = get_bloginfo( 'name' ) )
-		$title = sprintf( '<%1$s id="site-title" <a href="%2$s" title="%3$s" rel="home"><span>%4$s</span></a></%1$s>', tag_escape( $tag ), home_url(), esc_attr( $title ), $title );
+		$title = sprintf( '<%1$s id="site-title"><a href="%2$s" title="%3$s" rel="home"><span>%4$s</span></a></%1$s>', tag_escape( $tag ), home_url(), esc_attr( $title ), $title );
 
 	/* Display the site title and apply filters for developers to overwrite. */
 	echo apply_atomic( 'site_title', $title );
