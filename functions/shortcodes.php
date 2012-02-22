@@ -131,9 +131,9 @@ function hybrid_child_link_shortcode() {
  */
 function hybrid_loginout_link_shortcode() {
 	if ( is_user_logged_in() )
-		$out = '<a class="logout-link" href="' . esc_url( wp_logout_url( site_url( $_SERVER['REQUEST_URI'] ) ) ) . '" title="' . esc_attr__( 'Log out of this account', 'hybrid-core' ) . '">' . __( 'Log out', 'hybrid-core' ) . '</a>';
+		$out = '<a class="logout-link" href="' . esc_url( wp_logout_url( site_url( $_SERVER['REQUEST_URI'] ) ) ) . '" title="' . esc_attr__( 'Log out', 'hybrid-core' ) . '">' . __( 'Log out', 'hybrid-core' ) . '</a>';
 	else
-		$out = '<a class="login-link" href="' . esc_url( wp_login_url( site_url( $_SERVER['REQUEST_URI'] ) ) ) . '" title="' . esc_attr__( 'Log into this account', 'hybrid-core' ) . '">' . __( 'Log in', 'hybrid-core' ) . '</a>';
+		$out = '<a class="login-link" href="' . esc_url( wp_login_url( site_url( $_SERVER['REQUEST_URI'] ) ) ) . '" title="' . esc_attr__( 'Log in', 'hybrid-core' ) . '">' . __( 'Log in', 'hybrid-core' ) . '</a>';
 
 	return $out;
 }
@@ -193,16 +193,15 @@ function hybrid_nav_menu_shortcode( $attr ) {
  * @return string
  */
 function hybrid_entry_edit_link_shortcode( $attr ) {
-	global $post;
 
-	$post_type = get_post_type_object( $post->post_type );
+	$post_type = get_post_type_object( get_post_type() );
 
-	if ( !current_user_can( $post_type->cap->edit_post, $post->ID ) )
+	if ( !current_user_can( $post_type->cap->edit_post, get_the_ID() ) )
 		return '';
 
 	$attr = shortcode_atts( array( 'before' => '', 'after' => '' ), $attr );
 
-	return $attr['before'] . '<span class="edit"><a class="post-edit-link" href="' . esc_url( get_edit_post_link( $post->ID ) ) . '" title="' . sprintf( esc_attr__( 'Edit %1$s', 'hybrid-core' ), $post_type->labels->singular_name ) . '">' . __( 'Edit', 'hybrid-core' ) . '</a></span>' . $attr['after'];
+	return $attr['before'] . '<span class="edit"><a class="post-edit-link" href="' . esc_url( get_edit_post_link( get_the_ID() ) ) . '" title="' . sprintf( esc_attr__( 'Edit %1$s', 'hybrid-core' ), $post_type->labels->singular_name ) . '">' . __( 'Edit', 'hybrid-core' ) . '</a></span>' . $attr['after'];
 }
 
 /**
@@ -274,9 +273,8 @@ function hybrid_entry_author_shortcode( $attr ) {
  * @return string
  */
 function hybrid_entry_terms_shortcode( $attr ) {
-	global $post;
 
-	$attr = shortcode_atts( array( 'id' => $post->ID, 'taxonomy' => 'post_tag', 'separator' => ', ', 'before' => '', 'after' => '' ), $attr );
+	$attr = shortcode_atts( array( 'id' => get_the_ID(), 'taxonomy' => 'post_tag', 'separator' => ', ', 'before' => '', 'after' => '' ), $attr );
 
 	$attr['before'] = ( empty( $attr['before'] ) ? '<span class="' . $attr['taxonomy'] . '">' : '<span class="' . $attr['taxonomy'] . '"><span class="before">' . $attr['before'] . '</span>' );
 	$attr['after'] = ( empty( $attr['after'] ) ? '</span>' : '<span class="after">' . $attr['after'] . '</span></span>' );
@@ -291,24 +289,20 @@ function hybrid_entry_terms_shortcode( $attr ) {
  * @access public
  * @return string
  */
-function hybrid_entry_title_shortcode() {
-	global $post;
+function hybrid_entry_title_shortcode( $attr ) {
 
-	if ( is_front_page() && !is_home() )
-		$title = the_title( '<h2 class="' . esc_attr( $post->post_type ) . '-title entry-title"><a href="' . get_permalink() . '" title="' . the_title_attribute( 'echo=0' ) . '" rel="bookmark">', '</a></h2>', false );
+	$attr = shortcode_atts( array( 'permalink' => true ), $attr );
 
-	elseif ( is_singular() )
-		$title = the_title( '<h1 class="' . esc_attr( $post->post_type ) . '-title entry-title"><a href="' . get_permalink() . '" title="' . the_title_attribute( 'echo=0' ) . '" rel="bookmark">', '</a></h1>', false );
+	$tag = is_singular() ? 'h1' : 'h2';
+	$class = sanitize_html_class( get_post_type() ) . '-title entry-title';
 
-	elseif ( 'link_category' == get_query_var( 'taxonomy' ) )
-		$title = false;
-
+	if ( false == (bool)$attr['permalink'] )
+		$title = the_title( "<{$tag} class='{$class}'>", "</{$tag}>", false );
 	else
-		$title = the_title( '<h2 class="entry-title"><a href="' . get_permalink() . '" title="' . the_title_attribute( 'echo=0' ) . '" rel="bookmark">', '</a></h2>', false );
+		$title = the_title( "<{$tag} class='{$class}'><a href='" . get_permalink() . "'>", "</a></{$tag}>", false );
 
-	/* If there's no post title, return a clickable '(No title)'. */
-	if ( empty( $title ) && !is_singular() && 'link_category' !== get_query_var( 'taxonomy' ) )
-		$title = '<h2 class="entry-title no-entry-title"><a href="' . get_permalink() . '" rel="bookmark">' . __( '(Untitled)', 'hybrid-core' ) . '</a></h2>';
+	if ( empty( $title ) && !is_singular() )
+		$title = "<{$tag} class='{$class}'><a href='" . get_permalink() . "'>" . __( '(Untitled)', 'hybrid-core' ) . "</a></{$tag}>";
 
 	return $title;
 }
@@ -321,7 +315,6 @@ function hybrid_entry_title_shortcode() {
  * @return string
  */
 function hybrid_entry_shortlink_shortcode( $attr ) {
-	global $post;
 
 	$attr = shortcode_atts(
 		array(
@@ -333,7 +326,7 @@ function hybrid_entry_shortlink_shortcode( $attr ) {
 		$attr
 	);
 
-	$shortlink = esc_url( wp_get_shortlink( $post->ID ) );
+	$shortlink = esc_url( wp_get_shortlink( get_the_ID() ) );
 
 	return "{$attr['before']}<a class='shortlink' href='{$shortlink}' title='" . esc_attr( $attr['title'] ) . "' rel='shortlink'>{$attr['text']}</a>{$attr['after']}";
 }
