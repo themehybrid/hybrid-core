@@ -235,7 +235,7 @@ class Hybrid {
 		/* Load the menus functions if supported. */
 		require_if_theme_supports( 'hybrid-core-menus', trailingslashit( HYBRID_FUNCTIONS ) . 'menus.php' );
 
-		/* Load the core SEO component if supported and WPSEO_VERSION isn't defined. */
+		/* Load the core SEO component if supported. */
 		require_if_theme_supports( 'hybrid-core-seo', trailingslashit( HYBRID_FUNCTIONS ) . 'core-seo.php' );
 
 		/* Load the shortcodes if supported. */
@@ -264,13 +264,13 @@ class Hybrid {
 	 */
 	function extensions() {
 
-		/* Load the Breadcrumb Trail extension if supported and the plugin isn't active. */
+		/* Load the Breadcrumb Trail extension if supported. */
 		require_if_theme_supports( 'breadcrumb-trail', trailingslashit( HYBRID_EXTENSIONS ) . 'breadcrumb-trail.php' );
 
-		/* Load the Cleaner Gallery extension if supported and the plugin isn't active. */
+		/* Load the Cleaner Gallery extension if supported. */
 		require_if_theme_supports( 'cleaner-gallery', trailingslashit( HYBRID_EXTENSIONS ) . 'cleaner-gallery.php' );
 
-		/* Load the Get the Image extension if supported and the plugin isn't active. */
+		/* Load the Get the Image extension if supported. */
 		require_if_theme_supports( 'get-the-image', trailingslashit( HYBRID_EXTENSIONS ) . 'get-the-image.php' );
 
 		/* Load the Cleaner Caption extension if supported. */
