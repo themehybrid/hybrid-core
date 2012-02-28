@@ -213,7 +213,7 @@
  * Hybrid drop-downs.
  * @author Justin Tadlock
  * @license http://www.gnu.org/licenses/gpl.html
- * @copyright 2008 - 2011 Justin Tadlock
+ * @copyright 2008 - 2012 Justin Tadlock
  */
 $j = jQuery.noConflict();
 

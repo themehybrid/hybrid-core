@@ -16,7 +16,7 @@
  * @package PostStylesheets
  * @version 0.3.0
  * @author Justin Tadlock <justin@justintadlock.com>
- * @copyright Copyright (c) 2010 - 2011, Justin Tadlock
+ * @copyright Copyright (c) 2010 - 2012, Justin Tadlock
  * @link http://justintadlock.com
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  *

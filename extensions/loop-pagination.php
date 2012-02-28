@@ -16,7 +16,7 @@
  * @package LoopPagination
  * @version 0.1.4
  * @author Justin Tadlock <justin@justintadlock.com>
- * @copyright Copyright (c) 2010 - 2011, Justin Tadlock
+ * @copyright Copyright (c) 2010 - 2012, Justin Tadlock
  * @link http://devpress.com/blog/loop-pagination-for-theme-developers
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */

@@ -16,7 +16,7 @@
  * @package BreadcrumbTrail
  * @version 0.5.0
  * @author Justin Tadlock <justin@justintadlock.com>
- * @copyright Copyright (c) 2008 - 2011, Justin Tadlock
+ * @copyright Copyright (c) 2008 - 2012, Justin Tadlock
  * @link http://justintadlock.com/archives/2009/04/05/breadcrumb-trail-wordpress-plugin
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
