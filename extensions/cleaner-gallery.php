@@ -37,7 +37,6 @@ add_filter( 'post_gallery', 'cleaner_gallery', 10, 2 );
  * @return string $output
  */
 function cleaner_gallery( $output, $attr ) {
-	global $post;
 
 	static $cleaner_gallery_instance = 0;
 	$cleaner_gallery_instance++;
@@ -57,7 +56,7 @@ function cleaner_gallery( $output, $attr ) {
 	$defaults = array(
 		'order' => 'ASC',
 		'orderby' => 'menu_order ID',
-		'id' => $post->ID,
+		'id' => get_the_ID(),
 		'link' => '',
 		'itemtag' => 'dl',
 		'icontag' => 'dt',
