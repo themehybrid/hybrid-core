@@ -15,14 +15,13 @@
 /**
  * Categories Widget Class
  *
- * @since 0.6
- * @link http://codex.wordpress.org/Template_Tags/wp_list_categories
- * @link http://themehybrid.com/themes/hybrid/widgets
+ * @since 0.6.0
  */
 class Hybrid_Widget_Categories extends WP_Widget {
 
 	/**
 	 * Set up the widget's unique name, ID, class, description, and other options.
+	 *
 	 * @since 1.2.0
 	 */
 	function __construct() {
@@ -50,36 +49,18 @@ class Hybrid_Widget_Categories extends WP_Widget {
 
 	/**
 	 * Outputs the widget based on the arguments input through the widget controls.
+	 *
 	 * @since 0.6.0
 	 */
-	function widget( $args, $instance ) {
-		extract( $args );
+	function widget( $sidebar, $instance ) {
+		extract( $sidebar );
 
-		/* Set up the arguments for wp_list_categories(). */
-		$args = array(
-			'taxonomy' =>		$instance['taxonomy'],
-			'style' =>			$instance['style'],
-			'orderby' =>		$instance['orderby'],
-			'order' =>		$instance['order'],
-			'include' =>		!empty( $instance['include'] ) ? join( ', ', $instance['include'] ) : '',
-			'exclude' =>		!empty( $instance['exclude'] ) ? join( ', ', $instance['exclude'] ) : '',
-			'exclude_tree' =>		$instance['exclude_tree'],
-			'depth' =>		intval( $instance['depth'] ),
-			'number' =>		intval( $instance['number'] ),
-			'child_of' =>		intval( $instance['child_of'] ),
-			'current_category' =>	intval( $instance['current_category'] ),
-			'feed' =>			$instance['feed'],
-			'feed_type' =>		$instance['feed_type'],
-			'feed_image' =>		esc_url( $instance['feed_image'] ),
-			'search' =>		$instance['search'],
-			'hierarchical' =>		!empty( $instance['hierarchical'] ) ? true : false,
-			'use_desc_for_title' =>	!empty( $instance['use_desc_for_title'] ) ? true : false,
-			'show_last_update' =>	!empty( $instance['show_last_update'] ) ? true : false,
-			'show_count' =>		!empty( $instance['show_count'] ) ? true : false,
-			'hide_empty' =>		!empty( $instance['hide_empty'] ) ? true : false,
-			'title_li' =>		false,
-			'echo' =>			false
-		);
+		/* Set the $args for wp_list_categories() to the $instance array. */
+		$args = $instance;
+
+		/* Set the $title_li and $echo arguments to false. */
+		$args['title_li'] = false;
+		$args['echo'] = false;
 
 		/* Output the theme's widget wrapper. */
 		echo $before_widget;
@@ -104,6 +85,7 @@ class Hybrid_Widget_Categories extends WP_Widget {
 
 	/**
 	 * Updates the widget control options for the particular instance of the widget.
+	 *
 	 * @since 0.6.0
 	 */
 	function update( $new_instance, $old_instance ) {
@@ -126,12 +108,11 @@ class Hybrid_Widget_Categories extends WP_Widget {
 		$instance['child_of'] = strip_tags( $new_instance['child_of'] );
 		$instance['current_category'] = strip_tags( $new_instance['current_category'] );
 		$instance['feed'] = strip_tags( $new_instance['feed'] );
-		$instance['feed_image'] = strip_tags( $new_instance['feed_image'] );
+		$instance['feed_image'] = esc_url( $new_instance['feed_image'] );
 		$instance['search'] = strip_tags( $new_instance['search'] );
 
 		$instance['hierarchical'] = ( isset( $new_instance['hierarchical'] ) ? 1 : 0 );
 		$instance['use_desc_for_title'] = ( isset( $new_instance['use_desc_for_title'] ) ? 1 : 0 );
-		$instance['show_last_update'] = ( isset( $new_instance['show_last_update'] ) ? 1 : 0 );
 		$instance['show_count'] = ( isset( $new_instance['show_count'] ) ? 1 : 0 );
 		$instance['hide_empty'] = ( isset( $new_instance['hide_empty'] ) ? 1 : 0 );
 
@@ -140,6 +121,7 @@ class Hybrid_Widget_Categories extends WP_Widget {
 
 	/**
 	 * Displays the widget control options in the Widgets admin screen.
+	 *
 	 * @since 0.6.0
 	 */
 	function form( $instance ) {
@@ -165,7 +147,6 @@ class Hybrid_Widget_Categories extends WP_Widget {
 			'feed_type' => '',
 			'feed_image' => '',
 			'use_desc_for_title' => false,
-			'show_last_update' => false,
 			'show_count' => false,
 		);
 
@@ -288,10 +269,6 @@ class Hybrid_Widget_Categories extends WP_Widget {
 		<p>
 			<label for="<?php echo $this->get_field_id( 'use_desc_for_title' ); ?>">
 			<input class="checkbox" type="checkbox" <?php checked( $instance['use_desc_for_title'], true ); ?> id="<?php echo $this->get_field_id( 'use_desc_for_title' ); ?>" name="<?php echo $this->get_field_name( 'use_desc_for_title' ); ?>" /> <?php _e( 'Use description?', 'hybrid-core' ); ?> <code>use_desc_for_title</code></label>
-		</p>
-		<p>
-			<label for="<?php echo $this->get_field_id( 'show_last_update' ); ?>">
-			<input class="checkbox" type="checkbox" <?php checked( $instance['show_last_update'], true ); ?> id="<?php echo $this->get_field_id( 'show_last_update' ); ?>" name="<?php echo $this->get_field_name( 'show_last_update' ); ?>" /> <?php _e( 'Show last update?', 'hybrid-core' ); ?> <code>show_last_update</code></label>
 		</p>
 		<p>
 			<label for="<?php echo $this->get_field_id( 'show_count' ); ?>">
