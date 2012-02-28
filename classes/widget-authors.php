@@ -16,13 +16,12 @@
  * Authors Widget Class
  *
  * @since 0.6.0
- * @link http://codex.wordpress.org/Template_Tags/wp_list_authors
- * @link http://themehybrid.com/themes/hybrid/widgets
  */
 class Hybrid_Widget_Authors extends WP_Widget {
 
 	/**
 	 * Set up the widget's unique name, ID, class, description, and other options.
+	 *
 	 * @since 1.2.0
 	 */
 	function __construct() {
@@ -50,26 +49,17 @@ class Hybrid_Widget_Authors extends WP_Widget {
 
 	/**
 	 * Outputs the widget based on the arguments input through the widget controls.
+	 *
 	 * @since 0.6.0
 	 */
-	function widget( $args, $instance ) {
-		extract( $args, EXTR_SKIP );
+	function widget( $sidebar, $instance ) {
+		extract( $sidebar );
 
-		/* Set up the arguments for wp_list_authors(). */
-		$args = array(
-			'order' =>		$instance['order'],
-			'orderby' =>		$instance['orderby'],
-			'number' =>		!empty( $instance['number'] ) ? intval( $instance['number'] ) : '',
-			'style' => 		$instance['style'],
-			'feed' => 		$instance['feed'],
-			'feed_image' => 		$instance['feed_image'],
-			'optioncount' => 		!empty( $instance['optioncount'] ) ? true : false,
-			'exclude_admin' => 	!empty( $instance['exclude_admin'] ) ? true : false,
-			'show_fullname' => 	!empty( $instance['show_fullname'] ) ? true : false,
-			'hide_empty' => 		!empty( $instance['hide_empty'] ) ? true : false,
-			'html' => 			!empty( $instance['html'] ) ? true : false,
-			'echo' => 		false
-		);
+		/* Set the $args for wp_list_authors() to the $instance array. */
+		$args = $instance;
+
+		/* Overwrite the $echo argument and set it to false. */
+		$args['echo'] = false;
 
 		/* Output the theme's $before_widget wrapper. */
 		echo $before_widget;
@@ -94,6 +84,7 @@ class Hybrid_Widget_Authors extends WP_Widget {
 
 	/**
 	 * Updates the widget control options for the particular instance of the widget.
+	 *
 	 * @since 0.6.0
 	 */
 	function update( $new_instance, $old_instance ) {
@@ -118,6 +109,7 @@ class Hybrid_Widget_Authors extends WP_Widget {
 
 	/**
 	 * Displays the widget control options in the Widgets admin screen.
+	 *
 	 * @since 0.6.0
 	 */
 	function form( $instance ) {
