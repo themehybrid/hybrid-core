@@ -16,13 +16,12 @@
  * Pages Widget Class
  *
  * @since 0.6.0
- * @link http://codex.wordpress.org/Template_Tags/wp_list_pages
- * @link http://themehybrid.com/themes/hybrid/widgets
  */
 class Hybrid_Widget_Pages extends WP_Widget {
 
 	/**
 	 * Set up the widget's unique name, ID, class, description, and other options.
+	 *
 	 * @since 1.2.0
 	 */
 	function __construct() {
@@ -50,33 +49,24 @@ class Hybrid_Widget_Pages extends WP_Widget {
 
 	/**
 	 * Outputs the widget based on the arguments input through the widget controls.
+	 *
 	 * @since 0.6.0
 	 */
-	function widget( $args, $instance ) {
-		extract( $args );
+	function widget( $sidebar, $instance ) {
+		extract( $sidebar );
 
-		/* Set up the arguments for the wp_list_pages() function. */
-		$args = array(
-			'sort_column' => 		$instance['sort_column'],
-			'sort_order' =>		$instance['sort_order'],
-			'depth' =>		intval( $instance['depth'] ),
-			'child_of' =>		intval( $instance['child_of'] ),
-			'meta_key' =>		$instance['meta_key'],
-			'meta_value' =>		$instance['meta_value'],
-			'authors' =>		!empty( $instance['authors'] ) ? join( ', ', $instance['authors'] ) : '',
-			'include' =>		!empty( $instance['include'] ) ? join( ', ', $instance['include'] ) : '',
-			'exclude' =>		!empty( $instance['exclude'] ) ? join( ', ', $instance['exclude'] ) : '',
-			'exclude_tree' =>		$instance['exclude_tree'],
-			'link_before' =>		$instance['link_before'],
-			'link_after' =>		$instance['link_after'],
-			'date_format' =>		$instance['date_format'],
-			'show_date' =>		$instance['show_date'],
-			'number' =>		intval( $instance['number'] ),
-			'offset' =>		intval( $instance['offset'] ),
-			'hierarchical' =>		!empty( $instance['hierarchical'] ) ? true : false,
-			'title_li' =>		false,
-			'echo' =>			false
-		);
+		/* Set the $args for wp_list_pages() to the $instance array. */
+		$args = $instance;
+
+		/* wp_list_pages() won't accept array of excluded pages, so we need to pass a string. */
+		$args['exclude'] = is_array( $args['exclude'] ) ? join( ',', $args['exclude'] ) : $args['exclude'];
+
+		/* wp_list_pages() won't accept array of authors, so we need to pass a string. */
+		$args['authors'] = is_array( $args['authors'] ) ? join( ',', $args['authors'] ) : $args['authors'];
+
+		/* Set the $title_li and $echo to false. */
+		$args['title_li'] = false;
+		$args['echo'] = false;
 
 		/* Open the output of the widget. */
 		echo $before_widget;
@@ -94,6 +84,7 @@ class Hybrid_Widget_Pages extends WP_Widget {
 
 	/**
 	 * Updates the widget control options for the particular instance of the widget.
+	 *
 	 * @since 0.6.0
 	 */
 	function update( $new_instance, $old_instance ) {
@@ -124,6 +115,7 @@ class Hybrid_Widget_Pages extends WP_Widget {
 
 	/**
 	 * Displays the widget control options in the Widgets admin screen.
+	 *
 	 * @since 0.6.0
 	 */
 	function form( $instance ) {
