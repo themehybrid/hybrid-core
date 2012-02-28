@@ -16,13 +16,12 @@
  * Archives widget class.
  *
  * @since 0.6.0
- * @link http://codex.wordpress.org/Template_Tags/wp_get_archives
- * @link http://themehybrid.com/themes/hybrid/widgets
  */
 class Hybrid_Widget_Archives extends WP_Widget {
 
 	/**
 	 * Set up the widget's unique name, ID, class, description, and other options.
+	 *
 	 * @since 1.2.0
 	 */
 	function __construct() {
@@ -50,21 +49,17 @@ class Hybrid_Widget_Archives extends WP_Widget {
 
 	/**
 	 * Outputs the widget based on the arguments input through the widget controls.
+	 *
 	 * @since 0.6.0
 	 */
-	function widget( $args, $instance ) {
-		extract( $args );
+	function widget( $sidebar, $instance ) {
+		extract( $sidebar );
 
-		/* Set up the arguments for wp_get_archives(). */
-		$args = array(
-			'type' =>			$instance['type'],
-			'format' =>		$instance['format'],
-			'before' =>		$instance['before'],
-			'after' =>		$instance['after'],
-			'show_post_count' =>	!empty( $instance['show_post_count'] ) ? true : false,
-			'limit' =>			!empty( $instance['limit'] ) ? intval( $instance['limit'] ) : '',
-			'echo' =>			false
-		);
+		/* Set the $args for wp_get_archives() to the $instance array. */
+		$args = $instance;
+
+		/* Overwrite the $echo argument and set it to false. */
+		$args['echo'] = false;
 
 		/* Output the theme's $before_widget wrapper. */
 		echo $before_widget;
@@ -118,10 +113,10 @@ class Hybrid_Widget_Archives extends WP_Widget {
 
 	/**
 	 * Updates the widget control options for the particular instance of the widget.
+	 *
 	 * @since 0.6.0
 	 */
 	function update( $new_instance, $old_instance ) {
-		$instance = $old_instance;
 
 		$instance = $new_instance;
 
@@ -136,6 +131,7 @@ class Hybrid_Widget_Archives extends WP_Widget {
 
 	/**
 	 * Displays the widget control options in the Widgets admin screen.
+	 *
 	 * @since 0.6.0
 	 */
 	function form( $instance ) {
