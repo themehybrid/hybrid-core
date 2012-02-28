@@ -32,7 +32,7 @@
  * @return string $page_links
  */
 function loop_pagination( $args = array() ) {
-	global $wp_rewrite, $wp_query, $post;
+	global $wp_rewrite, $wp_query;
 
 	/* If there's not more than one page, return nothing. */
 	if ( 1 >= $wp_query->max_num_pages )
