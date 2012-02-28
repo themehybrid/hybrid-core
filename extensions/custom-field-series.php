@@ -42,7 +42,6 @@ add_action( 'admin_menu', 'custom_field_series_admin_setup' );
  * @param array $args Array of arguments.
  */
 function custom_field_series( $args = array() ) {
-	global $post;
 
 	/* Set $series to an empty string. */
 	$series = '';
