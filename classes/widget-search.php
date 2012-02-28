@@ -17,12 +17,12 @@
  * Search Widget Class
  *
  * @since 0.6.0
- * @link http://themehybrid.com/themes/hybrid/widgets
  */
 class Hybrid_Widget_Search extends WP_Widget {
 
 	/**
 	 * Set up the widget's unique name, ID, class, description, and other options.
+	 *
 	 * @since 1.2.0
 	 */
 	function __construct() {
@@ -50,10 +50,11 @@ class Hybrid_Widget_Search extends WP_Widget {
 
 	/**
 	 * Outputs the widget based on the arguments input through the widget controls.
-	 * @since 0.6
+	 *
+	 * @since 0.6.0
 	 */
-	function widget( $args, $instance ) {
-		extract( $args );
+	function widget( $sidebar, $instance ) {
+		extract( $sidebar );
 
 		/* Output the theme's $before_widget wrapper. */
 		echo $before_widget;
@@ -71,31 +72,30 @@ class Hybrid_Widget_Search extends WP_Widget {
 		else {
 
 			/* Set up some variables for the search form. */
-			global $search_form_num;
-			$search_num = ( ( $search_form_num ) ? '-' . esc_attr( $search_form_num ) : '' );
+			if ( empty( $instance['search_text'] ) )
+				$instance['search_text'] = '';
+
 			$search_text = ( ( is_search() ) ? esc_attr( get_search_query() ) : esc_attr( $instance['search_text'] ) );
 
 			/* Open the form. */
-			$search = '<form method="get" class="search-form" id="search-form' . $search_num . '" action="' . home_url() . '/"><div>';
+			$search = '<form method="get" class="search-form" id="search-form' . esc_attr( $this->id_base ) . '" action="' . home_url() . '/"><div>';
 
 			/* If a search label was set, add it. */
 			if ( !empty( $instance['search_label'] ) )
-				$search .= '<label for="search-text' . $search_num . '">' . $instance['search_label'] . '</label>';
+				$search .= '<label for="search-text' . esc_attr( $this->id_base ) . '">' . $instance['search_label'] . '</label>';
 
 			/* Search form text input. */
-			$search .= '<input class="search-text" type="text" name="s" id="search-text' . $search_num . '" value="' . $search_text . '" onfocus="if(this.value==this.defaultValue)this.value=\'\';" onblur="if(this.value==\'\')this.value=this.defaultValue;" />';
+			$search .= '<input class="search-text" type="text" name="s" id="search-text' . esc_attr( $this->id_base ) . '" value="' . $search_text . '" onfocus="if(this.value==this.defaultValue)this.value=\'\';" onblur="if(this.value==\'\')this.value=this.defaultValue;" />';
 
 			/* Search form submit button. */
 			if ( $instance['search_submit'] )
-				$search .= '<input class="search-submit button" name="submit" type="submit" id="search-submit' . $search_num . '" value="' . esc_attr( $instance['search_submit'] ) . '" />';
+				$search .= '<input class="search-submit button" name="submit" type="submit" id="search-submit' . esc_attr( $this->id_base ). '" value="' . esc_attr( $instance['search_submit'] ) . '" />';
 
 			/* Close the form. */
-			$search .= '</div></form><!-- .search-form -->';
+			$search .= '</div></form>';
 
 			/* Display the form. */
 			echo $search;
-
-			$search_form_num++;
 		}
 
 		/* Close the theme's widget wrapper. */
@@ -104,10 +104,12 @@ class Hybrid_Widget_Search extends WP_Widget {
 
 	/**
 	 * Updates the widget control options for the particular instance of the widget.
-	 * @since 0.6
+	 *
+	 * @since 0.6.0
 	 */
 	function update( $new_instance, $old_instance ) {
-		$instance = $old_instance;
+		$instance = $new_instance;
+
 		$instance['title'] = strip_tags( $new_instance['title'] );
 		$instance['search_label'] = strip_tags( $new_instance['search_label'] );
 		$instance['search_text'] = strip_tags( $new_instance['search_text'] );
@@ -119,7 +121,8 @@ class Hybrid_Widget_Search extends WP_Widget {
 
 	/**
 	 * Displays the widget control options in the Widgets admin screen.
-	 * @since 0.6
+	 *
+	 * @since 0.6.0
 	 */
 	function form( $instance ) {
 
