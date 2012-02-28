@@ -15,14 +15,13 @@
 /**
  * Tags Widget Class
  *
- * @since 0.6
- * @link http://codex.wordpress.org/Template_Tags/wp_tag_cloud
- * @link http://themehybrid.com/themes/hybrid/widgets
+ * @since 0.6.0
  */
 class Hybrid_Widget_Tags extends WP_Widget {
 
 	/**
 	 * Set up the widget's unique name, ID, class, description, and other options.
+	 *
 	 * @since 1.2.0
 	 */
 	function __construct() {
@@ -42,7 +41,7 @@ class Hybrid_Widget_Tags extends WP_Widget {
 		/* Create the widget. */
 		$this->WP_Widget(
 			'hybrid-tags',			// $this->id_base
-			__( 'Tags', 'hybrid-core' ),	// $this->name
+			__( 'Tags', 'hybrid-core' ),		// $this->name
 			$widget_options,			// $this->widget_options
 			$control_options			// $this->control_options
 		);
@@ -50,39 +49,24 @@ class Hybrid_Widget_Tags extends WP_Widget {
 
 	/**
 	 * Outputs the widget based on the arguments input through the widget controls.
-	 * @since 0.6
+	 *
+	 * @since 0.6.0
 	 */
-	function widget( $args, $instance ) {
-		extract( $args );
+	function widget( $sidebar, $instance ) {
+		extract( $sidebar );
 
-		/* Set up the arguments for wp_tag_cloud(). */
-		$args = array(
-			'taxonomy' => 	$instance['taxonomy'],
-			'largest' => 	!empty( $instance['largest'] ) ? absint( $instance['largest'] ) : 22,
-			'smallest' =>	!empty( $instance['smallest'] ) ? absint( $instance['smallest'] ) : 8,
-			'number' =>	intval( $instance['number'] ),
-			'child_of' =>	intval( $instance['child_of'] ),
-			'parent' =>	!empty( $instance['parent'] ) ? intval( $instance['parent'] ) : '',
-			'separator' =>	!empty( $instance['separator'] ) ? $instance['separator'] : "\n",
-			'pad_counts' =>	!empty( $instance['pad_counts'] ) ? true : false,
-			'hide_empty' =>	!empty( $instance['hide_empty'] ) ? true : false,
-			'unit' =>		$instance['unit'],
-			'format' =>	$instance['format'],
-			'include' =>	!empty( $instance['include'] ) ? join( ', ', $instance['include'] ) : '',
-			'exclude' =>	!empty( $instance['exclude'] ) ? join( ', ', $instance['exclude'] ) : '',
-			'order' =>	$instance['order'],
-			'orderby' =>	$instance['orderby'],
-			'link' =>		$instance['link'],
-			'search' =>	$instance['search'],
-			'name__like' =>	$instance['name__like'],
-			'echo' =>		false
-		);
+		/* Set the $args for wp_tag_cloud() to the $instance array. */
+		$args = $instance;
 
-		if ( !empty( $instance['topic_count_text_callback'] ) && function_exists( $instance['topic_count_text_callback'] ) )
-			$args['topic_count_text_callback'] = $instance['topic_count_text_callback'];
+		/* Make sure empty callbacks aren't passed for custom functions. */
+		$args['topic_count_text_callback'] = !empty( $args['topic_count_text_callback'] ) ? $args['topic_count_text_callback'] : 'default_topic_count_text';
+		$args['topic_count_scale_callback'] = !empty( $args['topic_count_scale_callback'] ) ? $args['topic_count_scale_callback'] : 'default_topic_count_scale';
 
-		if ( !empty( $instance['topic_count_scale_callback'] ) && function_exists( $instance['topic_count_scale_callback'] ) )
-			$args['topic_count_scale_callback'] = $instance['topic_count_scale_callback'];
+		/* If the separator is empty, set it to the default new line. */
+		$args['separator'] = !empty( $args['separator'] ) ? $args['separator'] : "\n";
+
+		/* Overwrite the echo argument. */
+		$args['echo'] = false;
 
 		/* Output the theme's $before_widget wrapper. */
 		echo $before_widget;
@@ -96,7 +80,7 @@ class Hybrid_Widget_Tags extends WP_Widget {
 
 		/* If $format should be flat, wrap it in the <p> element. */
 		if ( 'flat' == $instance['format'] )
-			$tags = '<p class="' . $instance['taxonomy'] . '-cloud term-cloud">' . $tags . '</p>';
+			$tags = '<p class="' . sanitize_html_class( "{$instance['taxonomy']}-cloud" ) . ' term-cloud">' . $tags . '</p>';
 
 		/* Output the tag cloud. */
 		echo $tags;
@@ -107,7 +91,8 @@ class Hybrid_Widget_Tags extends WP_Widget {
 
 	/**
 	 * Updates the widget control options for the particular instance of the widget.
-	 * @since 0.6
+	 *
+	 * @since 0.6.0
 	 */
 	function update( $new_instance, $old_instance ) {
 		$instance = $old_instance;
@@ -146,7 +131,8 @@ class Hybrid_Widget_Tags extends WP_Widget {
 
 	/**
 	 * Displays the widget control options in the Widgets admin screen.
-	 * @since 0.6
+	 *
+	 * @since 0.6.0
 	 */
 	function form( $instance ) {
 
@@ -163,7 +149,7 @@ class Hybrid_Widget_Tags extends WP_Widget {
 			'largest' => 22,
 			'link' => 'view',
 			'number' => 45,
-			'separator' => '',
+			'separator' => ' ',
 			'child_of' => '',
 			'parent' => '',
 			'taxonomy' => 'post_tag',
@@ -171,8 +157,8 @@ class Hybrid_Widget_Tags extends WP_Widget {
 			'pad_counts' => false,
 			'search' => '',
 			'name__like' => '',
-			'topic_count_text_callback' => '',
-			'topic_count_scale_callback' => '',
+			'topic_count_text_callback' => 'default_topic_count_text',
+			'topic_count_scale_callback' => 'default_topic_count_scale',
 		);
 
 		/* Merge the user-selected arguments with the defaults. */
