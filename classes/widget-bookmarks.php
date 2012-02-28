@@ -16,13 +16,12 @@
  * Bookmarks Widget Class
  *
  * @since 0.6.0
- * @link http://codex.wordpress.org/Template_Tags/wp_list_bookmarks
- * @link http://themehybrid.com/themes/hybrid/widgets
  */
 class Hybrid_Widget_Bookmarks extends WP_Widget {
 
 	/**
 	 * Set up the widget's unique name, ID, class, description, and other options.
+	 *
 	 * @since 1.2.0
 	 */
 	function __construct() {
@@ -47,53 +46,42 @@ class Hybrid_Widget_Bookmarks extends WP_Widget {
 			$control_options			// $this->control_options
 		);
 	}
-
 	/**
 	 * Outputs the widget based on the arguments input through the widget controls.
+	 *
 	 * @since 0.6.0
 	 */
-	function widget( $args, $instance ) {
-		extract( $args );
+	function widget( $sidebar, $instance ) {
+		extract( $sidebar );
 
 		/* Set up the $before_widget ID for multiple widgets created by the bookmarks widget. */
-		if ( $instance['categorize'] )
+		if ( !empty( $instance['categorize'] ) )
 			$before_widget = preg_replace( '/id="[^"]*"/','id="%id"', $before_widget );
 
 		/* Add a class to $before_widget if one is set. */
-		if ( $instance['class'] )
+		if ( !empty( $instance['class'] ) )
 			$before_widget = str_replace( 'class="', 'class="' . esc_attr( $instance['class'] ) . ' ', $before_widget );
 
-		/* Set up the arguments for wp_list_bookmarks(). */
-		$args = array(
-			'title_li' =>		apply_filters( 'widget_title', $instance['title_li'], $instance, $this->id_base ),
-			'category' =>		!empty( $instance['category'] ) ? join( ', ', $instance['category'] ) : '',
-			'exclude_category' =>	!empty( $instance['exclude_category'] ) ? join( ', ', $instance['exclude_category'] ) : '',
-			'category_order' =>	$instance['category_order'],
-			'category_orderby' => 	$instance['category_orderby'],
-			'include' =>		!empty( $instance['include'] ) ? join( ', ', $instance['include'] ) : '',
-			'exclude' =>		!empty( $instance['exclude'] ) ? join( ', ', $instance['exclude'] ) : '',
-			'order' =>		$instance['order'],
-			'orderby' =>		$instance['orderby'],
-			'limit' =>			$instance['limit'] ? intval( $instance['limit'] ) : -1,
-			'between' =>		$instance['between'],
-			'link_before' =>		$instance['link_before'],
-			'link_after' =>		$instance['link_after'],
-			'search' =>		$instance['search'],
-			'categorize' =>		!empty( $instance['categorize'] ) ? true : false,
-			'show_description' =>	!empty( $instance['show_description'] ) ? true : false,
-			'hide_invisible' =>		!empty( $instance['hide_invisible'] ) ? true : false,
-			'show_rating' =>		!empty( $instance['show_rating'] ) ? true : false,
-			'show_updated' =>		!empty( $instance['show_updated'] ) ? true : false,
-			'show_images' =>		!empty( $instance['show_images'] ) ? true : false,
-			'show_name' =>		!empty( $instance['show_name'] ) ? true : false,
-			'show_private' =>		!empty( $instance['show_private'] ) ? true : false,
-			'title_before' => 		$before_title,
-			'title_after' => 		$after_title,
-			'category_before' =>	$before_widget,
-			'category_after' =>	$after_widget,
-			'category_name' =>	false,
-			'echo' =>			false
-		);
+		/* Set the $args for wp_list_bookmarks() to the $instance array. */
+		$args = $instance;
+
+		/* wp_list_bookmarks() hasn't been updated in WP to use wp_parse_id_list(), so we have to pass strings for includes/excludes. */
+		$args['category'] = is_array( $args['category'] ) ? join( ', ', $instance['category'] ) : $args['category'];
+		$args['exclude_category'] = is_array( $args['exclude_category'] ) ? join( ', ', $instance['exclude_category'] ) : $args['exclude_category'];
+		$args['include'] = is_array( $args['include'] ) ? join( ', ', $instance['include'] ) : $args['include'];
+		$args['exclude'] = is_array( $args['exclude'] ) ? join( ', ', $instance['exclude'] ) : $args['exclude'];
+
+		/* If no limit is given, set it to -1. */
+		$args['limit'] = empty( $args['limit'] ) ? -1 : $args['limit'];
+
+		/* Some arguments must be set to the sidebar arguments to be output correctly. */
+		$args['title_li'] = apply_filters( 'widget_title', ( empty( $args['title_li'] ) ? __( 'Bookmarks', 'hybrid-core' ) : $args['title_li'] ), $instance, $this->id_base );
+		$args['title_before'] = $before_title;
+		$args['after_title'] = $after_title;
+		$args['category_before'] = $before_widget;
+		$args['category_after'] = $after_widget;
+		$args['category_name'] = '';
+		$args['echo'] = false;
 
 		/* Output the bookmarks widget. */
 		$bookmarks = str_replace( array( "\r", "\n", "\t" ), '', wp_list_bookmarks( $args ) );
@@ -102,11 +90,13 @@ class Hybrid_Widget_Bookmarks extends WP_Widget {
 		if ( empty( $args['title_li'] ) && false === $args['categorize'] )
 			$bookmarks = '<ul class="xoxo bookmarks">' . $bookmarks . '</ul>';
 
+		/* Output the bookmarks. */
 		echo $bookmarks;
 	}
 
 	/**
 	 * Updates the widget control options for the particular instance of the widget.
+	 *
 	 * @since 0.6.0
 	 */
 	function update( $new_instance, $old_instance ) {
@@ -141,6 +131,7 @@ class Hybrid_Widget_Bookmarks extends WP_Widget {
 
 	/**
 	 * Displays the widget control options in the Widgets admin screen.
+	 *
 	 * @since 0.6.0
 	 */
 	function form( $instance ) {
@@ -153,7 +144,7 @@ class Hybrid_Widget_Bookmarks extends WP_Widget {
 			'category_orderby' => 'name',
 			'category' => array(),
 			'exclude_category' => array(),
-			'limit' => '',
+			'limit' => -1,
 			'order' => 'ASC',
 			'orderby' => 'name',
 			'include' => array(),
