@@ -16,13 +16,12 @@
  * Calendar Widget Class
  *
  * @since 0.6.0
- * @link http://codex.wordpress.org/Function_Reference/get_calendar
- * @link http://themehybrid.com/themes/hybrid/widgets
  */
 class Hybrid_Widget_Calendar extends WP_Widget {
 
 	/**
 	 * Set up the widget's unique name, ID, class, description, and other options.
+	 *
 	 * @since 1.2.0
 	 */
 	function __construct() {
@@ -50,10 +49,11 @@ class Hybrid_Widget_Calendar extends WP_Widget {
 
 	/**
 	 * Outputs the widget based on the arguments input through the widget controls.
+	 *
 	 * @since 0.6.0
 	 */
-	function widget( $args, $instance ) {
-		extract( $args );
+	function widget( $sidebar, $instance ) {
+		extract( $sidebar );
 
 		/* Get the $initial argument. */
 		$initial = !empty( $instance['initial'] ) ? true : false;
@@ -76,12 +76,10 @@ class Hybrid_Widget_Calendar extends WP_Widget {
 
 	/**
 	 * Updates the widget control options for the particular instance of the widget.
+	 *
 	 * @since 0.6.0
 	 */
 	function update( $new_instance, $old_instance ) {
-		$instance = $old_instance;
-
-		$instance = $new_instance;
 
 		$instance['title'] = strip_tags( $new_instance['title'] );
 		$instance['initial'] = ( isset( $new_instance['initial'] ) ? 1 : 0 );
@@ -91,6 +89,7 @@ class Hybrid_Widget_Calendar extends WP_Widget {
 
 	/**
 	 * Displays the widget control options in the Widgets admin screen.
+	 *
 	 * @since 0.6.0
 	 */
 	function form( $instance ) {
