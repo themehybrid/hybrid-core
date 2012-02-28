@@ -16,12 +16,12 @@
  * Nav Menu Widget Class
  *
  * @since 0.8.0
- * @link http://themehybrid.com/themes/hybrid/widgets
  */
 class Hybrid_Widget_Nav_Menu extends WP_Widget {
 
 	/**
 	 * Set up the widget's unique name, ID, class, description, and other options.
+	 *
 	 * @since 1.2.0
 	 */
 	function __construct() {
@@ -49,28 +49,17 @@ class Hybrid_Widget_Nav_Menu extends WP_Widget {
 
 	/**
 	 * Outputs the widget based on the arguments input through the widget controls.
+	 *
 	 * @since 0.8.0
 	 */
-	function widget( $args, $instance ) {
-		extract( $args );
+	function widget( $sidebar, $instance ) {
+		extract( $sidebar );
 
-		/* Set up the arguments for the wp_nav_menu() function. */
-		$args = array(
-			'menu' => 		$instance['menu'],
-			'container' => 		$instance['container'],
-			'container_id' => 		$instance['container_id'],
-			'container_class' => 	$instance['container_class'],
-			'menu_id' => 		$instance['menu_id'],
-			'menu_class' => 		$instance['menu_class'],
-			'link_before' => 		$instance['link_before'],
-			'link_after' => 		$instance['link_after'],
-			'before' => 		$instance['before'],
-			'after' => 		$instance['after'],
-			'depth' => 		intval( $instance['depth'] ),
-			'fallback_cb' => 		$instance['fallback_cb'],
-			'walker' => 		$instance['walker'],
-			'echo' => 		false
-		);
+		/* Set the $args for wp_nav_menu() to the $instance array. */
+		$args = $instance;
+
+		/* Overwrite the $echo argument and set it to false. */
+		$args['echo'] = false;
 
 		/* Output the theme's widget wrapper. */
 		echo $before_widget;
@@ -88,6 +77,7 @@ class Hybrid_Widget_Nav_Menu extends WP_Widget {
 
 	/**
 	 * Updates the widget control options for the particular instance of the widget.
+	 *
 	 * @since 0.8.0
 	 */
 	function update( $new_instance, $old_instance ) {
@@ -109,6 +99,7 @@ class Hybrid_Widget_Nav_Menu extends WP_Widget {
 
 	/**
 	 * Displays the widget control options in the Widgets admin screen.
+	 *
 	 * @since 0.8.0
 	 */
 	function form( $instance ) {
