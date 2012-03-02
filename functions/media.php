@@ -94,7 +94,7 @@ function hybrid_debug_stylesheet( $stylesheet_uri, $stylesheet_dir_uri ) {
 		$stylesheet = str_replace( '.css', '.dev.css', $stylesheet );
 
 		/* If the stylesheet exists in the stylesheet directory, set the stylesheet URI to the dev stylesheet. */
-		if ( file_exists( trailingslashit( STYLESHEETPATH ) . $stylesheet ) )
+		if ( file_exists( trailingslashit( get_stylesheet_directory() ) . $stylesheet ) )
 			$stylesheet_uri = trailingslashit( $stylesheet_dir_uri ) . $stylesheet;
 	}
 
