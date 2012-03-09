@@ -24,7 +24,7 @@
  * to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  *
  * @package HybridCore
- * @version 1.3.0-beta-2
+ * @version 1.3.0-beta-3
  * @author Justin Tadlock <justin@justintadlock.com>
  * @copyright Copyright (c) 2008 - 2012, Justin Tadlock
  * @link http://themehybrid.com/hybrid-core
@@ -162,16 +162,20 @@ class Hybrid {
 	 * @since 1.2.0
 	 */
 	function i18n() {
+		global $hybrid;
+
+		/* Get parent and child theme textdomains. */
+		$parent_textdomain = hybrid_get_parent_textdomain();
+		$child_textdomain = hybrid_get_child_textdomain();
 
 		/* Load the framework textdomain. */
-		hybrid_load_framework_textdomain( 'hybrid-core' );
+		$hybrid->textdomain_loaded['hybrid-core'] = hybrid_load_framework_textdomain( 'hybrid-core' );
 
 		/* Load theme textdomain. */
-		load_theme_textdomain( hybrid_get_parent_textdomain() );
+		$hybrid->textdomain_loaded[$parent_textdomain] = load_theme_textdomain( $parent_textdomain );
 
 		/* Load child theme textdomain. */
-		if ( is_child_theme() )
-			load_child_theme_textdomain( hybrid_get_child_textdomain() );
+		$hybrid->textdomain_loaded[$child_textdomain] = is_child_theme() ? load_child_theme_textdomain( $child_textdomain ) : false;
 
 		/* Get the user's locale. */
 		$locale = get_locale();

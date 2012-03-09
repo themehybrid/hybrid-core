@@ -13,6 +13,22 @@
  */
 
 /**
+ * Checks if a textdomain's translation files have been loaded.  This function behaves differently from 
+ * WordPress core's is_textdomain_loaded(), which will return true after any translation function is run over 
+ * a text string with the given domain.  The purpose of this function is to simply check if the translation files 
+ * are loaded.
+ *
+ * @since 1.3.0
+ * @access private This is only used internally by the framework for checking translations.
+ * @param string $domain The textdomain to check translations for.
+ */
+function hybrid_is_textdomain_loaded( $domain ) {
+	global $hybrid;
+
+	return ( isset( $hybrid->textdomain_loaded[$domain] ) && true === $hybrid->textdomain_loaded[$domain] ) ? true : false;
+}
+
+/**
  * Loads the framework's translation files.  The function first checks if the parent theme or child theme 
  * has the translation files housed in their '/languages' folder.  If not, it sets the translation file the the 
  * framework '/languages' folder.
@@ -142,7 +158,7 @@ function hybrid_load_textdomain_mofile( $mofile, $domain ) {
 function hybrid_gettext( $translated, $text, $domain ) {
 
 	/* Check if 'hybrid-core' is the current textdomain, there's no mofile for it, and the theme has a mofile. */
-	if ( 'hybrid-core' == $domain && !is_textdomain_loaded( 'hybrid-core' ) && is_textdomain_loaded( hybrid_get_parent_textdomain() ) ) {
+	if ( 'hybrid-core' == $domain && !hybrid_is_textdomain_loaded( 'hybrid-core' ) && hybrid_is_textdomain_loaded( hybrid_get_parent_textdomain() ) ) {
 
 		/* Get the translations for the theme. */
 		$translations = &get_translations_for_domain( hybrid_get_parent_textdomain() );
@@ -174,11 +190,11 @@ function hybrid_extensions_gettext( $translated, $text, $domain ) {
 		if ( current_theme_supports( $domain ) ) {
 
 			/* If the framework mofile is loaded, use its translations. */
-			if ( is_textdomain_loaded( 'hybrid-core' ) )
+			if ( hybrid_is_textdomain_loaded( 'hybrid-core' ) )
 				$translations = &get_translations_for_domain( 'hybrid-core' );
 
 			/* If the theme mofile is loaded, use its translations. */
-			elseif ( is_textdomain_loaded( hybrid_get_parent_textdomain() ) )
+			elseif ( hybrid_is_textdomain_loaded( hybrid_get_parent_textdomain() ) )
 				$translations = &get_translations_for_domain( hybrid_get_parent_textdomain() );
 
 			/* If translations were found, translate the text. */
