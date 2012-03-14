@@ -77,7 +77,7 @@ class Hybrid_Widget_Bookmarks extends WP_Widget {
 		/* Some arguments must be set to the sidebar arguments to be output correctly. */
 		$args['title_li'] = apply_filters( 'widget_title', ( empty( $args['title_li'] ) ? __( 'Bookmarks', 'hybrid-core' ) : $args['title_li'] ), $instance, $this->id_base );
 		$args['title_before'] = $before_title;
-		$args['after_title'] = $after_title;
+		$args['title_after'] = $after_title;
 		$args['category_before'] = $before_widget;
 		$args['category_after'] = $after_widget;
 		$args['category_name'] = '';
