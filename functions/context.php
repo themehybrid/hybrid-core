@@ -223,7 +223,11 @@ function hybrid_comment_class( $class = '' ) {
 	$classes = get_comment_class( $class );
 
 	/* Get the comment type. */
-	$classes[] = get_comment_type();
+	$comment_type = get_comment_type();
+
+	/* If the comment type is 'pingback' or 'trackback', add the 'ping' comment class. */
+	if ( 'pingback' == $comment_type || 'trackback' == $comment_type )
+		$classes[] = 'ping';
 
 	/* User classes to match user role and user. */
 	if ( $comment->user_id > 0 ) {
@@ -231,14 +235,14 @@ function hybrid_comment_class( $class = '' ) {
 		/* Create new user object. */
 		$user = new WP_User( $comment->user_id );
 
-		/* Set a class with the user's role. */
+		/* Set a class with the user's role(s). */
 		if ( is_array( $user->roles ) ) {
 			foreach ( $user->roles as $role )
-				$classes[] = "role-{$role}";
+				$classes[] = sanitize_html_class( "role-{$role}" );
 		}
 
 		/* Set a class with the user's name. */
-		$classes[] = 'user-' . sanitize_html_class( $user->user_nicename, $user->ID );
+		$classes[] = sanitize_html_class( "user-{$user->user_nicename}", "user-{$user->ID}" );
 	}
 
 	/* If not a registered user */
@@ -258,6 +262,9 @@ function hybrid_comment_class( $class = '' ) {
 	/* If avatars are enabled and the comment types can display avatars, add the 'has-avatar' class. */
 	if ( get_option( 'show_avatars' ) && in_array( $comment->comment_type, $avatar_comment_types ) )
 		$classes[] = 'has-avatar';
+
+	/* Make sure comment classes doesn't have any duplicates. */
+	$classes = array_unique( $classes );
 
 	/* Join all the classes into one string and echo them. */
 	$class = join( ' ', $classes );
