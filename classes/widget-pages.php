@@ -59,10 +59,12 @@ class Hybrid_Widget_Pages extends WP_Widget {
 		$args = $instance;
 
 		/* wp_list_pages() won't accept array of excluded pages, so we need to pass a string. */
-		$args['exclude'] = is_array( $args['exclude'] ) ? join( ',', $args['exclude'] ) : $args['exclude'];
+		if ( !empty( $args['exclude'] ) && is_array( $args['exclude'] ) )
+			$args['exclude'] = join( ',', $args['exclude'] );
 
 		/* wp_list_pages() won't accept array of authors, so we need to pass a string. */
-		$args['authors'] = is_array( $args['authors'] ) ? join( ',', $args['authors'] ) : $args['authors'];
+		if ( !empty( $args['authors'] ) && is_array( $args['authors'] ) )
+			$args['authors'] = join( ',', $args['authors'] );
 
 		/* Set the $title_li and $echo to false. */
 		$args['title_li'] = false;
