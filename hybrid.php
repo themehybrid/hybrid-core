@@ -1,5 +1,6 @@
 <?php
 /**
+ * Test
  * Hybrid Core - A WordPress theme development framework.
  *
  * Hybrid Core is a framework for developing WordPress themes.  The framework allows theme developers
