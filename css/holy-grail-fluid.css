@@ -1,0 +1,5 @@
+/**
+ * @deprecated 1.0.0 - This file is for backwards compatibility with the Hybrid parent theme.  It will
+ * be removed in a future version.
+*/
+body{min-width:600px}#container{overflow:hidden;padding-left:200px; padding-right:200px}.content,#primary,#secondary{position:relative;float:left;padding-bottom:20010px; margin-bottom:-20000px}.content{width:100%}#primary{width:200px; right:200px; margin-left:-100%}#secondary{width:200px; margin-right:-200px}#footer{clear:both}* html #secondary{left:200px}

@@ -1,0 +1,5 @@
+/**
+ * @deprecated 1.0.0 - This file is for backwards compatibility with the Hybrid parent theme.  It will
+ * be removed in a future version.
+ */
+body{min-width:600px}#body-container{overflow:hidden;width:960px;margin:0 auto}#primary-menu{position:relative;z-index:100}#container{position:relative;clear:both;overflow:hidden;padding-left:240px; padding-right:240px; z-index:1}.no-widgets #container,.no-default-widgets #container{width:960px;padding-left:0;padding-right:0}.content,#primary,#secondary{position:relative;float:left;z-index:1}.content{width:100%}.no-widgets .content,.no-default-widgets .content{width:960px}#primary{width:220px; right:240px; margin-left:-100%}#secondary{width:220px; margin-right:-240px; margin-left:20px}* html #secondary{left:240px}#subsidiary{overflow:hidden}#subsidiary .widget{overflow:hidden;float:left;width:300px;margin:0 20px 0 0}#footer-container{clear:both;overflow:hidden}#footer{clear:both}

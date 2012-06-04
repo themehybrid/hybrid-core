@@ -1,0 +1,5 @@
+/**
+ * @deprecated 1.0.0 - This file is for backwards compatibility with the Hybrid parent theme.  It will
+ * be removed in a future version.
+*/
+.wp-pagenavi .pages{margin:2px 3px 2px 0;font-style:italic}.wp-pagenavi .current{margin:2px;padding:1px 6px;font-weight:bold}.wp-pagenavi .extend{margin:2px}.wp-pagenavi a{margin:0 2px;padding:1px 6px;font-style:italic;border:1px solid #ccc}.WP-EmailIcon{padding:0;margin:0;border:none}.comment_license{font-style:italic}img#wpstats{overflow:hidden !important;width:0 !important;height:0 !important;padding:0 !important;margin:0 !important}.contact-form{margin-bottom:21px}.contact-form legend{display:none}.contact-form .form-input input{display:block;margin-bottom:6px;padding:3px 6px;width:300px}.contact-form label{font-size:.9em}.contact-form textarea{width:97%;margin-bottom:6px;padding:6px}.contact-form .form-option{margin-bottom:6px}.contact-form .button{width:100px;margin-right:9px;padding:6px 9px}.contact-form .button:hover{cursor:pointer}
