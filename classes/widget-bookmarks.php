@@ -66,10 +66,17 @@ class Hybrid_Widget_Bookmarks extends WP_Widget {
 		$args = $instance;
 
 		/* wp_list_bookmarks() hasn't been updated in WP to use wp_parse_id_list(), so we have to pass strings for includes/excludes. */
-		$args['category'] = is_array( $args['category'] ) ? join( ', ', $instance['category'] ) : $args['category'];
-		$args['exclude_category'] = is_array( $args['exclude_category'] ) ? join( ', ', $instance['exclude_category'] ) : $args['exclude_category'];
-		$args['include'] = is_array( $args['include'] ) ? join( ', ', $instance['include'] ) : $args['include'];
-		$args['exclude'] = is_array( $args['exclude'] ) ? join( ', ', $instance['exclude'] ) : $args['exclude'];
+		if ( !empty( $args['category'] ) && is_array( $args['category'] ) )
+			$args['category'] = join( ', ', $args['category'] );
+
+		if ( !empty( $args['exclude_category'] ) && is_array( $args['exclude_category'] ) )
+			$args['exclude_category'] = join( ', ', $args['exclude_category'] );
+
+		if ( !empty( $args['include'] ) && is_array( $args['include'] ) )
+			$args['include'] = join( ',', $args['include'] );
+
+		if ( !empty( $args['exclude'] ) && is_array( $args['exclude'] ) )
+			$args['exclude'] = join( ',', $args['exclude'] );
 
 		/* If no limit is given, set it to -1. */
 		$args['limit'] = empty( $args['limit'] ) ? -1 : $args['limit'];
