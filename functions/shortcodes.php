@@ -102,8 +102,8 @@ function hybrid_wp_link_shortcode() {
  * @return string
  */
 function hybrid_theme_link_shortcode() {
-	$data = hybrid_get_theme_data();
-	return '<a class="theme-link" href="' . esc_url( $data['URI'] ) . '" title="' . sprintf( esc_attr__( '%s WordPress Theme', 'hybrid-core' ), $data['Name'] ) . '"><span>' . esc_attr( $data['Name'] ) . '</span></a>';
+	$theme = wp_get_theme( get_template(), get_theme_root( get_template_directory() ) );
+	return '<a class="theme-link" href="' . esc_url( $theme->get( 'ThemeURI' ) ) . '" title="' . sprintf( esc_attr__( '%s WordPress Theme', 'hybrid-core' ), $theme->get( 'Name' ) ) . '"><span>' . esc_attr( $theme->get( 'Name' ) ) . '</span></a>';
 }
 
 /**
@@ -115,8 +115,8 @@ function hybrid_theme_link_shortcode() {
  * @return string
  */
 function hybrid_child_link_shortcode() {
-	$data = hybrid_get_theme_data( 'stylesheet' );
-	return '<a class="child-link" href="' . esc_url( $data['URI'] ) . '" title="' . esc_attr( $data['Name'] ) . '"><span>' . esc_html( $data['Name'] ) . '</span></a>';
+	$theme = wp_get_theme( get_stylesheet(), get_theme_root( get_stylesheet_directory() ) );
+	return '<a class="child-link" href="' . esc_url( $theme->get( 'ThemeURI' ) ) . '" title="' . esc_attr( $theme->get( 'Name' ) ) . '"><span>' . esc_html( $theme->get( 'Name' ) ) . '</span></a>';
 }
 
 /**
