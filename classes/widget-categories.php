@@ -102,7 +102,6 @@ class Hybrid_Widget_Categories extends WP_Widget {
 
 		$instance['title'] = strip_tags( $new_instance['title'] );
 		$instance['taxonomy'] = $new_instance['taxonomy'];
-		$instance['exclude_tree'] = strip_tags( $new_instance['exclude_tree'] );
 		$instance['depth'] = strip_tags( $new_instance['depth'] );
 		$instance['number'] = strip_tags( $new_instance['number'] );
 		$instance['child_of'] = strip_tags( $new_instance['child_of'] );
@@ -110,6 +109,9 @@ class Hybrid_Widget_Categories extends WP_Widget {
 		$instance['feed'] = strip_tags( $new_instance['feed'] );
 		$instance['feed_image'] = esc_url( $new_instance['feed_image'] );
 		$instance['search'] = strip_tags( $new_instance['search'] );
+		$instance['include'] = preg_replace( '/[^0-9,]/', '', $new_instance['include'] );
+		$instance['exclude'] = preg_replace( '/[^0-9,]/', '', $new_instance['exclude'] );
+		$instance['exclude_tree'] = preg_replace( '/[^0-9,]/', '', $new_instance['exclude_tree'] );
 
 		$instance['hierarchical'] = ( isset( $new_instance['hierarchical'] ) ? 1 : 0 );
 		$instance['use_desc_for_title'] = ( isset( $new_instance['use_desc_for_title'] ) ? 1 : 0 );
@@ -131,8 +133,8 @@ class Hybrid_Widget_Categories extends WP_Widget {
 			'title' => esc_attr__( 'Categories', 'hybrid-core' ),
 			'taxonomy' => 'category',
 			'style' => 'list',
-			'include' => array(),
-			'exclude' => array(),
+			'include' => '',
+			'exclude' => '',
 			'exclude_tree' => '',
 			'child_of' => '',
 			'current_category' => '',
@@ -200,6 +202,9 @@ class Hybrid_Widget_Categories extends WP_Widget {
 				<?php } ?>
 			</select>
 		</p>
+		</div>
+
+		<div class="hybrid-widget-controls columns-3">
 		<p>
 			<label for="<?php echo $this->get_field_id( 'depth' ); ?>"><code>depth</code></label>
 			<input type="text" class="smallfat code" id="<?php echo $this->get_field_id( 'depth' ); ?>" name="<?php echo $this->get_field_name( 'depth' ); ?>" value="<?php echo esc_attr( $instance['depth'] ); ?>" />
@@ -208,24 +213,13 @@ class Hybrid_Widget_Categories extends WP_Widget {
 			<label for="<?php echo $this->get_field_id( 'number' ); ?>"><code>number</code></label>
 			<input type="text" class="smallfat code" id="<?php echo $this->get_field_id( 'number' ); ?>" name="<?php echo $this->get_field_name( 'number' ); ?>" value="<?php echo esc_attr( $instance['number'] ); ?>" />
 		</p>
-		</div>
-
-		<div class="hybrid-widget-controls columns-3">
 		<p>
-			<label for="<?php echo $this->get_field_id( 'include' ); ?>"><code>include</code></label> 
-			<select class="widefat" id="<?php echo $this->get_field_id( 'include' ); ?>" name="<?php echo $this->get_field_name( 'include' ); ?>[]" size="4" multiple="multiple">
-				<?php foreach ( $terms as $term ) { ?>
-					<option value="<?php echo esc_attr( $term->term_id ); ?>" <?php echo ( in_array( $term->term_id, (array) $instance['include'] ) ? 'selected="selected"' : '' ); ?>><?php echo esc_html( $term->name ); ?></option>
-				<?php } ?>
-			</select>
+			<label for="<?php echo $this->get_field_id( 'include' ); ?>"><code>include</code></label>
+			<input type="text" class="smallfat code" id="<?php echo $this->get_field_id( 'include' ); ?>" name="<?php echo $this->get_field_name( 'include' ); ?>" value="<?php echo esc_attr( $instance['include'] ); ?>" />
 		</p>
 		<p>
-			<label for="<?php echo $this->get_field_id( 'exclude' ); ?>"><code>exclude</code></label> 
-			<select class="widefat" id="<?php echo $this->get_field_id( 'exclude' ); ?>" name="<?php echo $this->get_field_name( 'exclude' ); ?>[]" size="4" multiple="multiple">
-				<?php foreach ( $terms as $term ) { ?>
-					<option value="<?php echo esc_attr( $term->term_id ); ?>" <?php echo ( in_array( $term->term_id, (array) $instance['exclude'] ) ? 'selected="selected"' : '' ); ?>><?php echo esc_html( $term->name ); ?></option>
-				<?php } ?>
-			</select>
+			<label for="<?php echo $this->get_field_id( 'exclude' ); ?>"><code>exclude</code></label>
+			<input type="text" class="smallfat code" id="<?php echo $this->get_field_id( 'exclude' ); ?>" name="<?php echo $this->get_field_name( 'exclude' ); ?>" value="<?php echo esc_attr( $instance['exclude'] ); ?>" />
 		</p>
 		<p>
 			<label for="<?php echo $this->get_field_id( 'exclude_tree' ); ?>"><code>exclude_tree</code></label>
