@@ -100,12 +100,6 @@ class Hybrid_Widget_Tags extends WP_Widget {
 		/* Set the instance to the new instance. */
 		$instance = $new_instance;
 
-		/* If new taxonomy is chosen, reset includes and excludes. */
-		if ( $instance['taxonomy'] !== $old_instance['taxonomy'] ) {
-			$instance['include'] = array();
-			$instance['exclude'] = array();
-		}
-
 		$instance['title'] = strip_tags( $new_instance['title'] );
 		$instance['smallest'] = strip_tags( $new_instance['smallest'] );
 		$instance['largest'] = strip_tags( $new_instance['largest'] );
@@ -117,6 +111,8 @@ class Hybrid_Widget_Tags extends WP_Widget {
 		$instance['parent'] = strip_tags( $new_instance['parent'] );
 		$instance['topic_count_text_callback'] = strip_tags( $new_instance['topic_count_text_callback'] );
 		$instance['topic_count_scale_callback'] = strip_tags( $new_instance['topic_count_scale_callback'] );
+		$instance['include'] = preg_replace( '/[^0-9,]/', '', $new_instance['include'] );
+		$instance['exclude'] = preg_replace( '/[^0-9,]/', '', $new_instance['exclude'] );
 		$instance['unit'] = $new_instance['unit'];
 		$instance['format'] = $new_instance['format'];
 		$instance['orderby'] = $new_instance['orderby'];
@@ -142,8 +138,8 @@ class Hybrid_Widget_Tags extends WP_Widget {
 			'order' => 'ASC',
 			'orderby' => 'name',
 			'format' => 'flat',
-			'include' => array(),
-			'exclude' => array(),
+			'include' => '',
+			'exclude' => '',
 			'unit' => 'pt',
 			'smallest' => 8,
 			'largest' => 22,
@@ -152,7 +148,7 @@ class Hybrid_Widget_Tags extends WP_Widget {
 			'separator' => ' ',
 			'child_of' => '',
 			'parent' => '',
-			'taxonomy' => 'post_tag',
+			'taxonomy' => array( 'post_tag' ),
 			'hide_empty' => 1,
 			'pad_counts' => false,
 			'search' => '',
@@ -166,7 +162,6 @@ class Hybrid_Widget_Tags extends WP_Widget {
 
 		/* <select> element options. */
 		$taxonomies = get_taxonomies( array( 'show_tagcloud' => true ), 'objects' );
-		$terms = get_terms( $instance['taxonomy'], array( 'hide_empty' => false ) );
 		$link = array( 'view' => esc_attr__( 'View', 'hybrid-core' ), 'edit' => esc_attr__( 'Edit', 'hybrid-core' ) );
 		$format = array( 'flat' => esc_attr__( 'Flat', 'hybrid-core' ), 'list' => esc_attr__( 'List', 'hybrid-core' ) );
 		$order = array( 'ASC' => esc_attr__( 'Ascending', 'hybrid-core' ), 'DESC' => esc_attr__( 'Descending', 'hybrid-core' ), 'RAND' => esc_attr__( 'Random', 'hybrid-core' ) );
@@ -182,17 +177,9 @@ class Hybrid_Widget_Tags extends WP_Widget {
 		</p>
 		<p>
 			<label for="<?php echo $this->get_field_id( 'taxonomy' ); ?>"><code>taxonomy</code></label> 
-			<select class="widefat" id="<?php echo $this->get_field_id( 'taxonomy' ); ?>" name="<?php echo $this->get_field_name( 'taxonomy' ); ?>">
+			<select class="widefat" id="<?php echo $this->get_field_id( 'taxonomy' ); ?>" name="<?php echo $this->get_field_name( 'taxonomy' ); ?>[]" size="4" multiple="multiple">
 				<?php foreach ( $taxonomies as $taxonomy ) { ?>
-					<option value="<?php echo $taxonomy->name; ?>" <?php selected( $instance['taxonomy'], $taxonomy->name ); ?>><?php echo $taxonomy->labels->singular_name; ?></option>
-				<?php } ?>
-			</select>
-		</p>
-		<p>
-			<label for="<?php echo $this->get_field_id( 'link' ); ?>"><code>link</code></label> 
-			<select class="widefat" id="<?php echo $this->get_field_id( 'link' ); ?>" name="<?php echo $this->get_field_name( 'link' ); ?>">
-				<?php foreach ( $link as $option_value => $option_label ) { ?>
-					<option value="<?php echo $option_value; ?>" <?php selected( $instance['link'], $option_value ); ?>><?php echo $option_label; ?></option>
+					<option value="<?php echo $taxonomy->name; ?>" <?php selected( in_array( $taxonomy->name, (array)$instance['taxonomy'] ) ); ?>><?php echo $taxonomy->labels->singular_name; ?></option>
 				<?php } ?>
 			</select>
 		</p>
@@ -224,20 +211,12 @@ class Hybrid_Widget_Tags extends WP_Widget {
 
 		<div class="hybrid-widget-controls columns-3">
 		<p>
-			<label for="<?php echo $this->get_field_id( 'include' ); ?>"><code>include</code></label> 
-			<select class="widefat" id="<?php echo $this->get_field_id( 'include' ); ?>" name="<?php echo $this->get_field_name( 'include' ); ?>[]" size="4" multiple="multiple">
-				<?php foreach ( $terms as $term ) { ?>
-					<option value="<?php echo $term->term_id; ?>" <?php echo ( in_array( $term->term_id, (array) $instance['include'] ) ? 'selected="selected"' : '' ); ?>><?php echo $term->name; ?></option>
-				<?php } ?>
-			</select>
+			<label for="<?php echo $this->get_field_id( 'include' ); ?>"><code>include</code></label>
+			<input type="text" class="smallfat code" id="<?php echo $this->get_field_id( 'include' ); ?>" name="<?php echo $this->get_field_name( 'include' ); ?>" value="<?php echo esc_attr( $instance['include'] ); ?>" />
 		</p>
 		<p>
-			<label for="<?php echo $this->get_field_id( 'exclude' ); ?>"><code>exclude</code></label> 
-			<select class="widefat" id="<?php echo $this->get_field_id( 'exclude' ); ?>" name="<?php echo $this->get_field_name( 'exclude' ); ?>[]" size="4" multiple="multiple">
-				<?php foreach ( $terms as $term ) { ?>
-					<option value="<?php echo $term->term_id; ?>" <?php echo ( in_array( $term->term_id, (array) $instance['exclude'] ) ? 'selected="selected"' : '' ); ?>><?php echo $term->name; ?></option>
-				<?php } ?>
-			</select>
+			<label for="<?php echo $this->get_field_id( 'exclude' ); ?>"><code>exclude</code></label>
+			<input type="text" class="smallfat code" id="<?php echo $this->get_field_id( 'exclude' ); ?>" name="<?php echo $this->get_field_name( 'exclude' ); ?>" value="<?php echo esc_attr( $instance['exclude'] ); ?>" />
 		</p>
 		<p>
 			<label for="<?php echo $this->get_field_id( 'number' ); ?>"><code>number</code></label>
@@ -263,9 +242,6 @@ class Hybrid_Widget_Tags extends WP_Widget {
 			<label for="<?php echo $this->get_field_id( 'separator' ); ?>"><code>separator</code></label>
 			<input type="text" class="smallfat code" id="<?php echo $this->get_field_id( 'separator' ); ?>" name="<?php echo $this->get_field_name( 'separator' ); ?>" value="<?php echo esc_attr( $instance['separator'] ); ?>" />
 		</p>
-		</div>
-
-		<div class="hybrid-widget-controls columns-3 column-last">
 		<p>
 			<label for="<?php echo $this->get_field_id( 'child_of' ); ?>"><code>child_of</code></label>
 			<input type="text" class="smallfat code" id="<?php echo $this->get_field_id( 'child_of' ); ?>" name="<?php echo $this->get_field_name( 'child_of' ); ?>" value="<?php echo esc_attr( $instance['child_of'] ); ?>" />
@@ -274,6 +250,17 @@ class Hybrid_Widget_Tags extends WP_Widget {
 			<label for="<?php echo $this->get_field_id( 'parent' ); ?>"><code>parent</code></label>
 			<input type="text" class="smallfat code" id="<?php echo $this->get_field_id( 'parent' ); ?>" name="<?php echo $this->get_field_name( 'parent' ); ?>" value="<?php echo esc_attr( $instance['parent'] ); ?>" />
 		</p>
+		<p>
+			<label for="<?php echo $this->get_field_id( 'link' ); ?>"><code>link</code></label> 
+			<select class="widefat" id="<?php echo $this->get_field_id( 'link' ); ?>" name="<?php echo $this->get_field_name( 'link' ); ?>">
+				<?php foreach ( $link as $option_value => $option_label ) { ?>
+					<option value="<?php echo $option_value; ?>" <?php selected( $instance['link'], $option_value ); ?>><?php echo $option_label; ?></option>
+				<?php } ?>
+			</select>
+		</p>
+		</div>
+
+		<div class="hybrid-widget-controls columns-3 column-last">
 		<p>
 			<label for="<?php echo $this->get_field_id( 'search' ); ?>"><code>search</code></label>
 			<input type="text" class="widefat code" id="<?php echo $this->get_field_id( 'search' ); ?>" name="<?php echo $this->get_field_name( 'search' ); ?>" value="<?php echo esc_attr( $instance['search'] ); ?>" />
