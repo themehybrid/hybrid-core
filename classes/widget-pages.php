@@ -58,14 +58,6 @@ class Hybrid_Widget_Pages extends WP_Widget {
 		/* Set the $args for wp_list_pages() to the $instance array. */
 		$args = $instance;
 
-		/* wp_list_pages() won't accept array of excluded pages, so we need to pass a string. */
-		if ( !empty( $args['exclude'] ) && is_array( $args['exclude'] ) )
-			$args['exclude'] = join( ',', $args['exclude'] );
-
-		/* wp_list_pages() won't accept array of authors, so we need to pass a string. */
-		if ( !empty( $args['authors'] ) && is_array( $args['authors'] ) )
-			$args['authors'] = join( ',', $args['authors'] );
-
 		/* Set the $title_li and $echo to false. */
 		$args['title_li'] = false;
 		$args['echo'] = false;
@@ -100,10 +92,14 @@ class Hybrid_Widget_Pages extends WP_Widget {
 		$instance['child_of'] = strip_tags( $new_instance['child_of'] );
 		$instance['meta_key'] = strip_tags( $new_instance['meta_key'] );
 		$instance['meta_value'] = strip_tags( $new_instance['meta_value'] );
-		$instance['exclude_tree'] = strip_tags( $new_instance['exclude_tree'] );
 		$instance['date_format'] = strip_tags( $new_instance['date_format'] );
 		$instance['number'] = strip_tags( $new_instance['number'] );
 		$instance['offset'] = strip_tags( $new_instance['offset'] );
+		$instance['include'] = preg_replace( '/[^0-9,]/', '', $new_instance['include'] );
+		$instance['exclude'] = preg_replace( '/[^0-9,]/', '', $new_instance['exclude'] );
+		$instance['exclude_tree'] = preg_replace( '/[^0-9,]/', '', $new_instance['exclude_tree'] );
+		$instance['authors'] = preg_replace( '/[^0-9,]/', '', $new_instance['authors'] );
+		$instance['post_type'] = $new_instance['post_type'];
 		$instance['sort_column'] = $new_instance['sort_column'];
 		$instance['sort_order'] = $new_instance['sort_order'];
 		$instance['show_date'] = $new_instance['show_date'];
@@ -125,16 +121,17 @@ class Hybrid_Widget_Pages extends WP_Widget {
 		/* Set up the default form values. */
 		$defaults = array(
 			'title' => esc_attr__( 'Pages', 'hybrid-core'),
+			'post_type' => 'page',
 			'depth' => 0,
 			'number' => '',
 			'offset' => '',
 			'child_of' => '',
-			'include' => array(),
-			'exclude' => array(),
+			'include' => '',
+			'exclude' => '',
 			'exclude_tree' => '',
 			'meta_key' => '',
 			'meta_value' => '',
-			'authors' => array(),
+			'authors' => '',
 			'link_before' => '',
 			'link_after' => '',
 			'show_date' => '',
@@ -147,11 +144,7 @@ class Hybrid_Widget_Pages extends WP_Widget {
 		/* Merge the user-selected arguments with the defaults. */
 		$instance = wp_parse_args( (array) $instance, $defaults );
 
-		$posts = get_posts( array( 'post_type' => 'page', 'post_status' => 'any', 'post_mime_type' => '', 'orderby' => 'title', 'order' => 'ASC', 'numberposts' => -1 ) );
-		$authors = array();
-		foreach ( $posts as $post )
-			$authors[$post->post_author] = get_the_author_meta( 'display_name', $post->post_author );
-
+		$post_types = get_post_types( array( 'public' => true, 'hierarchical' => true ), 'objects' );
 		$sort_order = array( 'ASC' => esc_attr__( 'Ascending', 'hybrid-core' ), 'DESC' => esc_attr__( 'Descending', 'hybrid-core' ) );
 		$sort_column = array( 'post_author' => esc_attr__( 'Author', 'hybrid-core' ), 'post_date' => esc_attr__( 'Date', 'hybrid-core' ), 'ID' => esc_attr__( 'ID', 'hybrid-core' ), 'menu_order' => esc_attr__( 'Menu Order', 'hybrid-core' ), 'post_modified' => esc_attr__( 'Modified', 'hybrid-core' ), 'post_name' => esc_attr__( 'Slug', 'hybrid-core' ), 'post_title' => esc_attr__( 'Title', 'hybrid-core' ) );
 		$show_date = array( '' => '', 'created' => esc_attr__( 'Created', 'hybrid-core' ), 'modified' => esc_attr__( 'Modified', 'hybrid-core' ) );
@@ -163,6 +156,14 @@ class Hybrid_Widget_Pages extends WP_Widget {
 		<p>
 			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:', 'hybrid-core' ); ?></label>
 			<input type="text" class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" value="<?php echo esc_attr( $instance['title'] ); ?>" />
+		</p>
+		<p>
+			<label for="<?php echo $this->get_field_id( 'post_type' ); ?>"><code>post_type</code></label> 
+			<select class="widefat" id="<?php echo $this->get_field_id( 'post_type' ); ?>" name="<?php echo $this->get_field_name( 'post_type' ); ?>">
+				<?php foreach ( $post_types as $post_type ) { ?>
+					<option value="<?php echo esc_attr( $post_type->name ); ?>" <?php selected( $instance['post_type'], $post_type->name ); ?>><?php echo esc_html( $post_type->labels->singular_name ); ?></option>
+				<?php } ?>
+			</select>
 		</p>
 		<p>
 			<label for="<?php echo $this->get_field_id( 'sort_order' ); ?>"><code>sort_order</code></label> 
@@ -188,6 +189,9 @@ class Hybrid_Widget_Pages extends WP_Widget {
 			<label for="<?php echo $this->get_field_id( 'number' ); ?>"><code>number</code></label>
 			<input type="text" class="smallfat code" id="<?php echo $this->get_field_id( 'number' ); ?>" name="<?php echo $this->get_field_name( 'number' ); ?>" value="<?php echo esc_attr( $instance['number'] ); ?>" />
 		</p>
+		</div>
+
+		<div class="hybrid-widget-controls columns-3">
 		<p>
 			<label for="<?php echo $this->get_field_id( 'offset' ); ?>"><code>offset</code></label>
 			<input type="text" class="smallfat code" id="<?php echo $this->get_field_id( 'offset' ); ?>" name="<?php echo $this->get_field_name( 'offset' ); ?>" value="<?php echo esc_attr( $instance['offset'] ); ?>"  />
@@ -196,24 +200,13 @@ class Hybrid_Widget_Pages extends WP_Widget {
 			<label for="<?php echo $this->get_field_id( 'child_of' ); ?>"><code>child_of</code></label>
 			<input type="text" class="smallfat code" id="<?php echo $this->get_field_id( 'child_of' ); ?>" name="<?php echo $this->get_field_name( 'child_of' ); ?>" value="<?php echo esc_attr( $instance['child_of'] ); ?>" />
 		</p>
-		</div>
-
-		<div class="hybrid-widget-controls columns-3">
 		<p>
-			<label for="<?php echo $this->get_field_id( 'include' ); ?>"><code>include</code></label> 
-			<select class="widefat" id="<?php echo $this->get_field_id( 'include' ); ?>" name="<?php echo $this->get_field_name( 'include' ); ?>[]" size="4" multiple="multiple">
-				<?php foreach ( $posts as $post ) { ?>
-					<option value="<?php echo esc_attr( $post->ID ); ?>" <?php echo ( in_array( $post->ID, (array) $instance['include'] ) ? 'selected="selected"' : '' ); ?>><?php echo esc_html( $post->post_title ); ?></option>
-				<?php } ?>
-			</select>
+			<label for="<?php echo $this->get_field_id( 'include' ); ?>"><code>include</code></label>
+			<input type="text" class="smallfat code" id="<?php echo $this->get_field_id( 'include' ); ?>" name="<?php echo $this->get_field_name( 'include' ); ?>" value="<?php echo esc_attr( $instance['include'] ); ?>" />
 		</p>
 		<p>
-			<label for="<?php echo $this->get_field_id( 'exclude' ); ?>"><code>exclude</code></label> 
-			<select class="widefat" id="<?php echo $this->get_field_id( 'exclude' ); ?>" name="<?php echo $this->get_field_name( 'exclude' ); ?>[]" size="4" multiple="multiple">
-				<?php foreach ( $posts as $post ) { ?>
-					<option value="<?php echo esc_attr( $post->ID ); ?>" <?php echo ( in_array( $post->ID, (array) $instance['exclude'] ) ? 'selected="selected"' : '' ); ?>><?php echo esc_html( $post->post_title ); ?></option>
-				<?php } ?>
-			</select>
+			<label for="<?php echo $this->get_field_id( 'exclude' ); ?>"><code>exclude</code></label>
+			<input type="text" class="smallfat code" id="<?php echo $this->get_field_id( 'exclude' ); ?>" name="<?php echo $this->get_field_name( 'exclude' ); ?>" value="<?php echo esc_attr( $instance['exclude'] ); ?>" />
 		</p>
 		<p>
 			<label for="<?php echo $this->get_field_id( 'exclude_tree' ); ?>"><code>exclude_tree</code></label>
@@ -235,12 +228,8 @@ class Hybrid_Widget_Pages extends WP_Widget {
 
 		<div class="hybrid-widget-controls columns-3 column-last">
 		<p>
-			<label for="<?php echo $this->get_field_id( 'authors' ); ?>"><code>authors</code></label> 
-			<select class="widefat" id="<?php echo $this->get_field_id( 'authors' ); ?>" name="<?php echo $this->get_field_name( 'authors' ); ?>[]" size="4" multiple="multiple">
-				<?php foreach ( $authors as $option_value => $option_label ) { ?>
-					<option value="<?php echo esc_attr( $option_value ); ?>" <?php echo ( in_array( $option_value, (array) $instance['authors'] ) ? 'selected="selected"' : '' ); ?>><?php echo esc_html( $option_label ); ?></option>
-				<?php } ?>
-			</select>
+			<label for="<?php echo $this->get_field_id( 'authors' ); ?>"><code>authors</code></label>
+			<input type="text" class="smallfat code" id="<?php echo $this->get_field_id( 'authors' ); ?>" name="<?php echo $this->get_field_name( 'authors' ); ?>" value="<?php echo esc_attr( $instance['authors'] ); ?>" />
 		</p>
 		<p>
 			<label for="<?php echo $this->get_field_id( 'link_before' ); ?>"><code>link_before</code></label>
