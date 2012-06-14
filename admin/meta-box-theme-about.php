@@ -25,15 +25,15 @@ function hybrid_meta_box_theme_add_about() {
 
 	/* Get theme information. */
 	$prefix = hybrid_get_prefix();
-	$theme_data = hybrid_get_theme_data();
+	$theme = wp_get_theme( get_template(), get_theme_root( get_template_directory() ) );
 
 	/* Adds the About box for the parent theme. */
-	add_meta_box( 'hybrid-core-about-theme', sprintf( __( 'About %1$s', 'hybrid-core' ), $theme_data['Title'] ), 'hybrid_meta_box_theme_display_about', hybrid_get_settings_page_name(), 'side', 'high' );
+	add_meta_box( 'hybrid-core-about-theme', sprintf( __( 'About %s', 'hybrid-core' ), $theme->get( 'Name' ) ), 'hybrid_meta_box_theme_display_about', hybrid_get_settings_page_name(), 'side', 'high' );
 
 	/* If the user is using a child theme, add an About box for it. */
 	if ( is_child_theme() ) {
-		$child_data = hybrid_get_theme_data( 'stylesheet' );
-		add_meta_box( 'hybrid-core-about-child', sprintf( __( 'About %1$s', 'hybrid-core' ), $child_data['Title'] ), 'hybrid_meta_box_theme_display_about', hybrid_get_settings_page_name(), 'side', 'high' );
+		$child = wp_get_theme( get_stylesheet(), get_theme_root( get_stylesheet_directory() ) );
+		add_meta_box( 'hybrid-core-about-child', sprintf( __( 'About %s', 'hybrid-core' ), $child->get( 'Name' ) ), 'hybrid_meta_box_theme_display_about', hybrid_get_settings_page_name(), 'side', 'high' );
 	}
 }
 
@@ -53,7 +53,7 @@ function hybrid_meta_box_theme_display_about( $object, $box ) {
 	$prefix = hybrid_get_prefix();
 
 	/* Grab theme information for the parent/child theme. */
-	$theme_data = ( ( 'hybrid-core-about-child' == $box['id'] ) ? hybrid_get_theme_data( 'stylesheet' ) : hybrid_get_theme_data() ); ?>
+	$theme = ( 'hybrid-core-about-child' == $box['id'] ) ? wp_get_theme( get_stylesheet(), get_theme_root( get_stylesheet_directory() ) ) : wp_get_theme( get_template(), get_theme_root( get_template_directory() ) ); ?>
 
 	<table class="form-table">
 		<tr>
@@ -61,7 +61,7 @@ function hybrid_meta_box_theme_display_about( $object, $box ) {
 				<?php _e( 'Theme:', 'hybrid-core' ); ?>
 			</th>
 			<td>
-				<a href="<?php echo $theme_data['URI']; ?>" title="<?php echo $theme_data['Title']; ?>"><?php echo $theme_data['Title']; ?></a>
+				<a href="<?php echo esc_url( $theme->get( 'ThemeURI' ) ); ?>" title="<?php echo esc_attr( $theme->get( 'Name' ) ); ?>"><?php echo $theme->get( 'Name' ); ?></a>
 			</td>
 		</tr>
 		<tr>
@@ -69,7 +69,7 @@ function hybrid_meta_box_theme_display_about( $object, $box ) {
 				<?php _e( 'Version:', 'hybrid-core' ); ?>
 			</th>
 			<td>
-				<?php echo $theme_data['Version']; ?>
+				<?php echo $theme->get( 'Version' ); ?>
 			</td>
 		</tr>
 		<tr>
@@ -77,7 +77,7 @@ function hybrid_meta_box_theme_display_about( $object, $box ) {
 				<?php _e( 'Author:', 'hybrid-core' ); ?>
 			</th>
 			<td>
-				<?php echo $theme_data['Author']; ?>
+				<a href="<?php echo esc_url( $theme->get( 'AuthorURI' ) ); ?>" title="<?php echo esc_attr( $theme->get( 'Author' ) ); ?>"><?php echo $theme->get( 'Author' ); ?></a>
 			</td>
 		</tr>
 		<tr>
@@ -85,7 +85,7 @@ function hybrid_meta_box_theme_display_about( $object, $box ) {
 				<?php _e( 'Description:', 'hybrid-core' ); ?>
 			</th>
 			<td>
-				<?php echo $theme_data['Description']; ?>
+				<?php echo $theme->get( 'Description' ); ?>
 			</td>
 		</tr>
 	</table><!-- .form-table --><?php

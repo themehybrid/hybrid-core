@@ -32,7 +32,7 @@ function hybrid_settings_page_init() {
 	global $hybrid;
 
 	/* Get theme information. */
-	$theme = hybrid_get_theme_data();
+	$theme = wp_get_theme( get_template(), get_theme_root( get_template_directory() ) );
 	$prefix = hybrid_get_prefix();
 
 	/* Register theme settings. */
@@ -44,7 +44,7 @@ function hybrid_settings_page_init() {
 
 	/* Create the theme settings page. */
 	$hybrid->settings_page = add_theme_page(
-		sprintf( esc_html__( '%1$s Theme Settings', 'hybrid-core' ), $theme['Name'] ),	// Settings page name.
+		sprintf( esc_html__( '%s Theme Settings', 'hybrid-core' ), $theme->get( 'Name' ) ),	// Settings page name.
 		esc_html__( 'Theme Settings', 'hybrid-core' ),				// Menu item name.
 		hybrid_settings_page_capability(),					// Required capability.
 		'theme-settings',							// Screen name.
@@ -106,7 +106,7 @@ function hybrid_get_settings_page_name() {
  */
 function hybrid_settings_page_add_meta_boxes() {
 
-	do_action( 'add_meta_boxes', hybrid_get_settings_page_name(), hybrid_get_theme_data() );
+	do_action( 'add_meta_boxes', hybrid_get_settings_page_name() );
 }
 
 /**
@@ -160,12 +160,12 @@ function hybrid_settings_page() {
 
 	/* Get the theme information. */
 	$prefix = hybrid_get_prefix();
-	$theme_data = hybrid_get_theme_data(); ?>
+	$theme = wp_get_theme( get_template(), get_theme_root( get_template_directory() ) ); ?>
 
 	<div class="wrap">
 
 		<?php screen_icon(); ?>
-		<h2><?php printf( __( '%1$s Theme Settings', 'hybrid-core' ), $theme_data['Name'] ); ?></h2>
+		<h2><?php printf( __( '%s Theme Settings', 'hybrid-core' ), $theme->get( 'Name' ) ); ?></h2>
 		<?php settings_errors(); ?>
 
 		<div class="hybrid-core-settings-wrap">
@@ -223,21 +223,23 @@ function hybrid_settings_field_name( $setting ) {
 function hybrid_settings_page_help() {
 
 	/* Get the parent theme data. */
-	$theme = hybrid_get_theme_data();
+	$theme = wp_get_theme( get_template(), get_theme_root( get_template_directory() ) );
+	$doc_uri = $theme->get( 'Documentation URI' );
+	$support_uri = $theme->get( 'Support URI' );
 
 	/* If the theme has provided a documentation or support URI, add them to the help text. */
-	if ( !empty( $theme['Documentation URI'] ) || !empty( $theme['Support URI'] ) ) {
+	if ( !empty( $doc_uri ) || !empty( $support_uri ) ) {
 
 		/* Open an unordered list for the help text. */
 		$help = '<ul>';
 
 		/* Add the Documentation URI. */
-		if ( !empty( $theme['Documentation URI'] ) )
-			$help .= '<li><a href="' . esc_url( $theme['Documentation URI'] ) . '">' . __( 'Documentation', 'hybrid-core' ) . '</a></li>';
+		if ( !empty( $doc_uri ) )
+			$help .= '<li><a href="' . esc_url( $doc_uri ) . '">' . __( 'Documentation', 'hybrid-core' ) . '</a></li>';
 
 		/* Add the Support URI. */
-		if ( !empty( $theme['Support URI'] ) )
-			$help .= '<li><a href="' . esc_url( $theme['Support URI'] ) . '">' . __( 'Support', 'hybrid-core' ) . '</a></li>';
+		if ( !empty( $support_uri ) )
+			$help .= '<li><a href="' . esc_url( $support_uri ) . '">' . __( 'Support', 'hybrid-core' ) . '</a></li>';
 
 		/* Close the unordered list for the help text. */
 		$help .= '</ul>';
@@ -246,7 +248,7 @@ function hybrid_settings_page_help() {
 		get_current_screen()->add_help_tab(
 			array(
 				'id' => 'default',
-				'title' => esc_attr( $theme['Name'] ),
+				'title' => esc_attr( $theme->get( 'Name' ) ),
 				'content' => $help
 			)
 		);
