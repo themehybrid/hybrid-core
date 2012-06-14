@@ -311,6 +311,10 @@ function hybrid_body_class( $class = '' ) {
 	if ( get_background_image() || get_background_color() )
 		$classes[] = 'custom-background';
 
+	/* Add the '.custom-header' class if the user is using a custom header. */
+	if ( get_header_image() )
+		$classes[] = 'custom-header';
+
 	/* Merge base contextual classes with $classes. */
 	$classes = array_merge( $classes, hybrid_get_context() );
 
