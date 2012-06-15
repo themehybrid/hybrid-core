@@ -43,21 +43,23 @@ function hybrid_customize_register( $wp_customize ) {
 	/* Get supported theme settings. */
 	$supports = get_theme_support( 'hybrid-core-theme-settings' );
 
+	/* Get the default theme settings. */
+	$default_settings = hybrid_get_default_theme_settings();
+
 	/* Add the footer section, setting, and control if theme supports the 'footer' setting. */
 	if ( is_array( $supports[0] ) && in_array( 'footer', $supports[0] ) ) {
 
+		/* Add the footer section. */
 		$wp_customize->add_section(
 			'hybrid-core-footer',
 			array(
 				'title' => __( 'Footer', 'hybrid-core' ),
 				'priority' => 200,
-				'capability' => 'edit_theme_options',
-			//	'theme_supports' => 'hybrid-core-theme-settings'
+				'capability' => 'edit_theme_options'
 			)
 		);
 
-		$default_settings = hybrid_get_default_theme_settings();
-
+		/* Add the 'footer_insert' setting. */
 		$wp_customize->add_setting(
 			hybrid_get_prefix() . '_theme_settings[footer_insert]',
 			array(
@@ -69,6 +71,7 @@ function hybrid_customize_register( $wp_customize ) {
 			)
 		);
 
+		/* Add the textarea control for the 'footer_insert' setting. */
 		$wp_customize->add_control(
 			new Hybrid_Customize_Control_Textarea(
 				$wp_customize,
@@ -81,6 +84,7 @@ function hybrid_customize_register( $wp_customize ) {
 			)
 		);
 
+		/* If viewing the customize preview screen, add a script to show a live preview. */
 		if ( $wp_customize->is_preview() && !is_admin() )
 			add_action( 'wp_footer', 'hybrid_customize_preview', 21 );
 	}
