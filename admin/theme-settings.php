@@ -160,13 +160,17 @@ function hybrid_settings_page() {
 
 	/* Get the theme information. */
 	$prefix = hybrid_get_prefix();
-	$theme = wp_get_theme( get_template(), get_theme_root( get_template_directory() ) ); ?>
+	$theme = wp_get_theme( get_template(), get_theme_root( get_template_directory() ) );
+
+	do_action( "{$prefix}_before_settings_page" ); ?>
 
 	<div class="wrap">
 
 		<?php screen_icon(); ?>
 		<h2><?php printf( __( '%s Theme Settings', 'hybrid-core' ), $theme->get( 'Name' ) ); ?></h2>
 		<?php settings_errors(); ?>
+
+		<?php do_action( "{$prefix}_open_settings_page" ); ?>
 
 		<div class="hybrid-core-settings-wrap">
 
@@ -177,9 +181,15 @@ function hybrid_settings_page() {
 				<?php wp_nonce_field( 'meta-box-order', 'meta-box-order-nonce', false ); ?>
 
 				<div class="metabox-holder">
-					<div class="post-box-container column-1 normal"><?php do_meta_boxes( hybrid_get_settings_page_name(), 'normal', null ); ?></div>
-					<div class="post-box-container column-2 side"><?php do_meta_boxes( hybrid_get_settings_page_name(), 'side', null ); ?></div>
-					<div class="post-box-container column-3 advanced"><?php do_meta_boxes( hybrid_get_settings_page_name(), 'advanced', null ); ?></div>
+					<div class="post-box-container column-1 normal">
+						<?php do_meta_boxes( hybrid_get_settings_page_name(), 'normal', null ); ?>
+					</div>
+					<div class="post-box-container column-2 side">
+						<?php do_meta_boxes( hybrid_get_settings_page_name(), 'side', null ); ?>
+					</div>
+					<div class="post-box-container column-3 advanced">
+						<?php do_meta_boxes( hybrid_get_settings_page_name(), 'advanced', null ); ?>
+					</div>
 				</div>
 
 				<?php submit_button( esc_attr__( 'Update Settings', 'hybrid-core' ) ); ?>
@@ -188,7 +198,11 @@ function hybrid_settings_page() {
 
 		</div><!-- .hybrid-core-settings-wrap -->
 
+		<?php do_action( "{$prefix}_close_settings_page" ); ?>
+
 	</div><!-- .wrap --><?php
+
+	do_action( "{$prefix}_after_settings_page" );
 }
 
 /**
