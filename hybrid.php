@@ -53,6 +53,10 @@ class Hybrid {
 	 * @since 1.0.0
 	 */
 	function __construct() {
+		global $hybrid;
+
+		/* Set up an empty class for the global $hybrid object. */
+		$hybrid = new stdClass;
 
 		/* Define framework, parent theme, and child theme constants. */
 		add_action( 'after_setup_theme', array( &$this, 'constants' ), 1 );
