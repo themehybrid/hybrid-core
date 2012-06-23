@@ -18,6 +18,10 @@ add_action( 'customize_register', 'hybrid_load_customize_controls', 1 );
 /* Register custom sections, settings, and controls. */
 add_action( 'customize_register', 'hybrid_customize_register' );
 
+/* Add the footer content Ajax to the correct hooks. */
+add_action( 'wp_ajax_hybrid_customize_footer_content', 'hybrid_customize_footer_content_ajax' );
+add_action( 'wp_ajax_nopriv_hybrid_customize_footer_content', 'hybrid_customize_footer_content_ajax' );
+
 /**
  * Loads framework-specific customize control classes.  Customize control classes extend the WordPress 
  * WP_Customize_Control class to create unique classes that can be used within the framework.
@@ -43,6 +47,9 @@ function hybrid_customize_register( $wp_customize ) {
 	/* Get supported theme settings. */
 	$supports = get_theme_support( 'hybrid-core-theme-settings' );
 
+	/* Get the theme prefix. */
+	$prefix = hybrid_get_prefix();
+
 	/* Get the default theme settings. */
 	$default_settings = hybrid_get_default_theme_settings();
 
@@ -53,21 +60,22 @@ function hybrid_customize_register( $wp_customize ) {
 		$wp_customize->add_section(
 			'hybrid-core-footer',
 			array(
-				'title' => __( 'Footer', 'hybrid-core' ),
-				'priority' => 200,
-				'capability' => 'edit_theme_options'
+				'title' => 		esc_html__( 'Footer', 'hybrid-core' ),
+				'priority' => 	200,
+				'capability' => 	'edit_theme_options'
 			)
 		);
 
 		/* Add the 'footer_insert' setting. */
 		$wp_customize->add_setting(
-			hybrid_get_prefix() . '_theme_settings[footer_insert]',
+			"{$prefix}_theme_settings[footer_insert]",
 			array(
-				'default' => $default_settings['footer_insert'],
-				'type' => 'option',
-				'capability' => 'edit_theme_options',
-				//'sanitize_js_callback' => 'do_shortcode',
-				'transport' => 'postMessage',
+				'default' => 		$default_settings['footer_insert'],
+				'type' => 			'option',
+				'capability' => 		'edit_theme_options',
+				'sanitize_callback' => 	'hybrid_customize_sanitize',
+				'sanitize_js_callback' => 	'hybrid_customize_sanitize',
+				'transport' => 		'postMessage',
 			)
 		);
 
@@ -77,17 +85,60 @@ function hybrid_customize_register( $wp_customize ) {
 				$wp_customize,
 				'hybrid-core-footer',
 				array(
-					'label' => __( 'Footer', 'hybrid-core' ),
-					'section' => 'hybrid-core-footer',
-					'settings' => hybrid_get_prefix() . '_theme_settings[footer_insert]',
+					'label' => 	esc_html__( 'Footer', 'hybrid-core' ),
+					'section' => 	'hybrid-core-footer',
+					'settings' => 	"{$prefix}_theme_settings[footer_insert]",
 				)
 			)
 		);
 
 		/* If viewing the customize preview screen, add a script to show a live preview. */
 		if ( $wp_customize->is_preview() && !is_admin() )
-			add_action( 'wp_footer', 'hybrid_customize_preview', 21 );
+			add_action( 'wp_footer', 'hybrid_customize_preview_script', 21 );
 	}
+}
+
+/**
+ * Sanitizes the footer content on the customize screen.  Users with the 'unfiltered_html' cap can post 
+ * anything.  For other users, wp_filter_post_kses() is ran over the setting.
+ *
+ * @since 1.4.0
+ * @access public
+ * @param mixed $setting The current setting passed to sanitize.
+ * @param object $object The setting object passed via WP_Customize_Setting.
+ * @return mixed $setting
+ */
+function hybrid_customize_sanitize( $setting, $object ) {
+
+	/* Get the theme prefix. */
+	$prefix = hybrid_get_prefix();
+
+	/* Make sure we kill evil scripts from users without the 'unfiltered_html' cap. */
+	if ( "{$prefix}_theme_settings[footer_insert]" == $object->id && !current_user_can( 'unfiltered_html' )  )
+		$setting = stripslashes( wp_filter_post_kses( addslashes( $setting ) ) );
+
+	/* Return the sanitized setting and apply filters. */
+	return apply_filters( "{$prefix}_customize_sanitize", $setting, $object );
+}
+
+/**
+ * Runs the footer content posted via Ajax through the do_shortcode() function.  This makes sure the 
+ * shortcodes are output correctly in the live preview.
+ *
+ * @since 1.4.0
+ * @access private
+ */
+function hybrid_customize_footer_content_ajax() {
+
+	/* Check the AJAX nonce to make sure this is a valid request. */
+	check_ajax_referer( 'hybrid_customize_footer_content_nonce' );
+
+	/* If footer content has been posted, run it through the do_shortcode() function. */
+	if ( isset( $_POST['footer_content'] ) )
+		echo do_shortcode( wp_kses_stripslashes( $_POST['footer_content'] ) );
+
+	/* Always die() when handling Ajax. */
+	die();
 }
 
 /**
@@ -96,7 +147,11 @@ function hybrid_customize_register( $wp_customize ) {
  * @since 1.4.0
  * @access private
  */
-function hybrid_customize_preview() {
+function hybrid_customize_preview_script() {
+
+	/* Create a nonce for the Ajax. */
+	$nonce = wp_create_nonce( 'hybrid_customize_footer_content_nonce' );
+
 	?>
 	<script type="text/javascript">
 	wp.customize(
@@ -104,7 +159,17 @@ function hybrid_customize_preview() {
 		function( value ) {
 			value.bind(
 				function( to ) {
-					jQuery( '#footer .wrap' ).html( to );
+					jQuery.post( 
+						'<?php echo admin_url( 'admin-ajax.php' ); ?>', 
+						{ 
+							action: 'hybrid_customize_footer_content',
+							_ajax_nonce: '<?php echo $nonce; ?>',
+							footer_content: to
+						},
+						function( response ) {
+							jQuery( '.footer-content' ).html( response );
+						}
+					);
 				}
 			);
 		}
