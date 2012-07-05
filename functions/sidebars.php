@@ -52,11 +52,17 @@ function hybrid_register_sidebars() {
 				'after_title' => 		'</h3>'
 			);
 
+			/* Allow developers to filter the default sidebar arguments. */
+			$defaults = apply_filters( hybrid_get_prefix() . '_sidebar_defaults', $defaults, $sidebar );
+
 			/* Parse the sidebar arguments and defaults. */
 			$args = wp_parse_args( $core_sidebars[$sidebar], $defaults );
 
 			/* If no 'id' was given, use the $sidebar variable and sanitize it. */
 			$args['id'] = ( isset( $args['id'] ) ? sanitize_key( $args['id'] ) : sanitize_key( $sidebar ) );
+
+			/* Allow developers to filter the sidebar arguments. */
+			$defaults = apply_filters( hybrid_get_prefix() . '_sidebar_args', $defaults, $sidebar );
 
 			/* Register the sidebar. */
 			register_sidebar( $args );
