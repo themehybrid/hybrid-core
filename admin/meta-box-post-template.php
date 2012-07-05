@@ -71,7 +71,7 @@ function hybrid_meta_box_post_display_template( $object, $box ) {
 	$post_type_object = get_post_type_object( $object->post_type );
 
 	/* Get a list of available custom templates for the post type. */
-	$templates = hybrid_get_post_templates( array( 'label' => array( "{$post_type_object->labels->singular_name} Template", "{$post_type_object->name} Template" ) ) );
+	$templates = hybrid_get_post_templates( $object->post_type );
 
 	wp_nonce_field( basename( __FILE__ ), 'hybrid-core-post-meta-box-template' ); ?>
 

@@ -79,54 +79,51 @@ function hybrid_admin_enqueue_styles( $hook_suffix ) {
  * page templates function because it doesn't allow for other types of templates.
  *
  * @since 0.7.0
- * @param array $args Arguments to check the templates against.
+ * @param string $post_type The name of the post type to get templates for.
  * @return array $post_templates The array of templates.
  */
-function hybrid_get_post_templates( $args = array() ) {
+function hybrid_get_post_templates( $post_type = 'post' ) {
 
-	/* Parse the arguments with the defaults. */
-	$args = wp_parse_args( $args, array( 'label' => array( 'Post Template' ) ) );
-
-	/* Get theme and templates variables. */
-	$themes = get_themes();
-	$theme = get_current_theme();
-	$templates = $themes[$theme]['Template Files'];
+	/* Set up an empty post templates array. */
 	$post_templates = array();
 
-	/* If there's an array of templates, loop through each template. */
-	if ( is_array( $templates ) ) {
+	/* Get the post type object. */
+	$post_type_object = get_post_type_object( $post_type );
 
-		/* Set up a $base path that we'll use to remove from the file name. */
-		$base = array( trailingslashit( get_template_directory() ), trailingslashit( get_stylesheet_directory() ) );
+	/* Get the theme (parent theme if using a child theme) object. */
+	$theme = wp_get_theme( get_template(), get_theme_root( get_template_directory() ) );
 
-		/* Loop through the post templates. */
-		foreach ( $templates as $template ) {
+	/* Get the theme PHP files one level deep. */
+	$files = (array) $theme->get_files( 'php', 1 );
 
-			/* Remove the base (parent/child theme path) from the template file name. */
-			$basename = str_replace( $base, '', $template );
+	/* If a child theme is active, get its files and merge with the parent theme files. */
+	if ( is_child_theme() ) {
+		$child = wp_get_theme( get_stylesheet(), get_theme_root( get_stylesheet_directory() ) );
+		$child_files = (array) $child->get_files( 'php', 1 );
+		$files = array_merge( $files, $child_files );
+	}
 
-			/* Get the template data. */
-			$template_data = implode( '', file( $template ) );
+	/* Loop through each of the PHP files and check if they are post templates. */
+	foreach ( $files as $file => $path ) {
 
-			/* Make sure the name is set to an empty string. */
-			$name = '';
+		/* Get file data based on the post type singular name (e.g., "Post Template", "Book Template", etc.). */
+		$headers = get_file_data(
+			$path,
+			array( 
+				"{$post_type_object->labels->singular_name} Template" => "{$post_type_object->labels->singular_name} Template",
+			)
+		);
 
-			/* Loop through each of the potential labels and see if a match is found. */
-			foreach ( $args['label'] as $label ) {
-				if ( preg_match( "|{$label}:(.*)$|mi", $template_data, $name ) ) {
-					$name = _cleanup_header_comment( $name[1] );
-					break;
-				}
-			}
+		/* Continue loop if the header is empty. */
+		if ( empty( $headers["{$post_type_object->labels->singular_name} Template"] ) )
+			continue;
 
-			/* If a post template was found, add its name and file name to the $post_templates array. */
-			if ( !empty( $name ) )
-				$post_templates[trim( $name )] = $basename;
-		}
+		/* Add the PHP filename and template name to the array. */
+		$post_templates[ $file ] = $headers["{$post_type_object->labels->singular_name} Template"];
 	}
 
 	/* Return array of post templates. */
-	return $post_templates;
+	return array_flip( $post_templates );
 }
 
 ?>
