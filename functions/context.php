@@ -325,7 +325,7 @@ function hybrid_body_class( $class = '' ) {
 		$post = get_queried_object();
 
 		/* Checks for custom template. */
-		$template = str_replace( array ( "{$post->post_type}-template-", "{$post->post_type}-", '.php' ), '', get_post_meta( get_queried_object_id(), "_wp_{$post->post_type}_template", true ) );
+		$template = str_replace( array ( "{$post->post_type}-template-", "{$post->post_type}-" ), '', basename( get_post_meta( get_queried_object_id(), "_wp_{$post->post_type}_template", true ), '.php' ) );
 		if ( !empty( $template ) )
 			$classes[] = "{$post->post_type}-template-{$template}";
 
