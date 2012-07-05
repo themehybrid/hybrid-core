@@ -79,8 +79,14 @@ class Hybrid_Widget_Tags extends WP_Widget {
 		$tags = str_replace( array( "\r", "\n", "\t" ), ' ', wp_tag_cloud( $args ) );
 
 		/* If $format should be flat, wrap it in the <p> element. */
-		if ( 'flat' == $instance['format'] )
-			$tags = '<p class="' . sanitize_html_class( "{$instance['taxonomy']}-cloud" ) . ' term-cloud">' . $tags . '</p>';
+		if ( 'flat' == $instance['format'] ) {
+			$classes = array( 'term-cloud' );
+
+			foreach ( $instance['taxonomy'] as $tax )
+				$classes[] = sanitize_html_class( "{$tax}-cloud" );
+
+			$tags = '<p class="' . join( $classes, ' ' ) . '">' . $tags . '</p>';
+		}
 
 		/* Output the tag cloud. */
 		echo $tags;
