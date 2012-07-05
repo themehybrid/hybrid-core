@@ -164,6 +164,20 @@ function hybrid_site_description() {
 }
 
 /**
+ * Standardized function for outputting the footer content.
+ *
+ * @since 1.4.0
+ * @access public
+ * @return void
+ */
+function hybrid_footer_content() {
+
+	/* Only run the code if the theme supports the Hybrid Core theme settings. */
+	if ( current_theme_supports( 'hybrid-core-theme-settings' ) )
+		echo apply_atomic_shortcode( 'footer_content', hybrid_get_setting( 'footer_insert' ) );
+}
+
+/**
  * Checks if a post of any post type has a custom template.  This is the equivalent of WordPress' 
  * is_page_template() function with the exception that it works for all post types.
  *
