@@ -2,9 +2,10 @@
 /**
  * Breadcrumb Trail - A breadcrumb menu script for WordPress.
  *
- * Breadcrumb Trail is a script for showing a breadcrumb trail for any type of page.  It tries to anticipate 
- * any type of structure and display the best possible trail that matches your site's permalink structure.
- * While not perfect, it attempts to fill in the gaps left by many other breadcrumb scripts.
+ * Breadcrumb Trail is a script for showing a breadcrumb trail for any type of page.  It tries to 
+ * anticipate any type of structure and display the best possible trail that matches your site's 
+ * permalink structure.  While not perfect, it attempts to fill in the gaps left by many other 
+ * breadcrumb scripts.
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the GNU 
  * General Public License as published by the Free Software Foundation; either version 2 of the License, 
@@ -38,12 +39,13 @@ function breadcrumb_trail( $args = array() ) {
 
 	/* Set up the default arguments for the breadcrumb. */
 	$defaults = array(
-		'separator' => '/',
-		'before' => __( 'Browse:', 'breadcrumb-trail' ),
-		'after' => false,
-		'front_page' => true,
-		'show_home' => __( 'Home', 'breadcrumb-trail' ),
-		'echo' => true
+		'container' => 		'div', // div, nav, p, etc.
+		'separator' => 		'/',
+		'before' => 		__( 'Browse:', 'breadcrumb-trail' ),
+		'after' => 		false,
+		'front_page' => 	true,
+		'show_home' => 		__( 'Home', 'breadcrumb-trail' ),
+		'echo' => 		true
 	);
 
 	/* Allow singular post views to have a taxonomy's terms prefixing the trail. */
@@ -65,7 +67,7 @@ function breadcrumb_trail( $args = array() ) {
 	if ( !empty( $trail ) && is_array( $trail ) ) {
 
 		/* Open the breadcrumb trail containers. */
-		$breadcrumb = '<div class="breadcrumb breadcrumbs"><div class="breadcrumb-trail">';
+		$breadcrumb = '<' . tag_escape( $args['container'] ) . ' class="breadcrumb-trail breadcrumbs" itemprop="breadcrumb">';
 
 		/* If $before was set, wrap it in a container. */
 		$breadcrumb .= ( !empty( $args['before'] ) ? '<span class="trail-before">' . $args['before'] . '</span> ' : '' );
@@ -87,7 +89,7 @@ function breadcrumb_trail( $args = array() ) {
 		$breadcrumb .= ( !empty( $args['after'] ) ? ' <span class="trail-after">' . $args['after'] . '</span>' : '' );
 
 		/* Close the breadcrumb trail containers. */
-		$breadcrumb .= '</div></div>';
+		$breadcrumb .= '</' . tag_escape( $args['container'] ) . '>';
 	}
 
 	/* Allow developers to filter the breadcrumb trail HTML. */
