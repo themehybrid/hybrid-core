@@ -18,13 +18,18 @@
  */
 class Hybrid_Customize_Control_Textarea extends WP_Customize_Control {
 
+	/**
+	 * The type of customize control being rendered.
+	 *
+	 * @since 1.4.0
+	 */
 	public $type = 'textarea';
 
-	public function __construct( $manager, $id, $args = array() ) {
-
-		parent::__construct( $manager, $id, $args );
-	}
-
+	/**
+	 * Displays the textarea on the customize screen.
+	 *
+	 * @since 1.4.0
+	 */
 	public function render_content() { ?>
 		<label>
 			<span class="customize-control-title"><?php echo esc_html( $this->label ); ?></span>
