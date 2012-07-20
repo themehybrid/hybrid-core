@@ -62,7 +62,7 @@ function hybrid_register_sidebars() {
 			$args['id'] = ( isset( $args['id'] ) ? sanitize_key( $args['id'] ) : sanitize_key( $sidebar ) );
 
 			/* Allow developers to filter the sidebar arguments. */
-			$defaults = apply_filters( hybrid_get_prefix() . '_sidebar_args', $defaults, $sidebar );
+			$args = apply_filters( hybrid_get_prefix() . '_sidebar_args', $args, $sidebar );
 
 			/* Register the sidebar. */
 			register_sidebar( $args );
