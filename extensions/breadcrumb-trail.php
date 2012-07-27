@@ -15,7 +15,7 @@
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * @package BreadcrumbTrail
- * @version 0.5.1
+ * @version 0.5.2
  * @author Justin Tadlock <justin@justintadlock.com>
  * @copyright Copyright (c) 2008 - 2012, Justin Tadlock
  * @link http://justintadlock.com/archives/2009/04/05/breadcrumb-trail-wordpress-plugin
@@ -447,7 +447,7 @@ function breadcrumb_trail_get_bbpress_items( $args = array() ) {
 
 		/* Get the queried forum ID and its parent forum ID. */
 		$forum_id = get_queried_object_id();
-		$forum_parent_id = bbp_get_forum_parent( $forum_id );
+		$forum_parent_id = bbp_get_forum_parent_id( $forum_id );
 
 		/* If the forum has a parent forum, get its parent(s). */
 		if ( 0 !== $forum_parent_id)
