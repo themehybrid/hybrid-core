@@ -34,7 +34,7 @@ class Hybrid_Customize_Control_Textarea extends WP_Customize_Control {
 		<label>
 			<span class="customize-control-title"><?php echo esc_html( $this->label ); ?></span>
 			<div class="customize-control-content">
-				<textarea cols="45" rows="5" <?php $this->link(); ?>><?php echo esc_textarea( $this->value() ); ?></textarea>
+				<textarea class="widefat" cols="45" rows="5" <?php $this->link(); ?>><?php echo esc_textarea( $this->value() ); ?></textarea>
 			</div>
 		</label>
 	<?php }
