@@ -83,8 +83,8 @@ function entry_views_load() {
 		/* Get the post object. */
 		$post = get_queried_object();
 
-		/* Check if the post type supports the 'entry-views' feature. */
-		if ( post_type_supports( $post->post_type, 'entry-views' ) ) {
+		/* Check if this is not a post preview and the post type supports the 'entry-views' feature. */
+		if ( !is_preview() && post_type_supports( $post->post_type, 'entry-views' ) ) {
 
 			/* Set the post ID for later use because we wouldn't want a custom query to change this. */
 			$_entry_views_post_id = get_queried_object_id();
