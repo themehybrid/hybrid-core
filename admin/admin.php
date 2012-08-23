@@ -110,16 +110,16 @@ function hybrid_get_post_templates( $post_type = 'post' ) {
 		$headers = get_file_data(
 			$path,
 			array( 
-				"{$post_type_object->labels->singular_name} Template" => "{$post_type_object->labels->singular_name} Template",
+				"{$post_type_object->name} Template" => "{$post_type_object->name} Template",
 			)
 		);
 
 		/* Continue loop if the header is empty. */
-		if ( empty( $headers["{$post_type_object->labels->singular_name} Template"] ) )
+		if ( empty( $headers["{$post_type_object->name} Template"] ) )
 			continue;
 
 		/* Add the PHP filename and template name to the array. */
-		$post_templates[ $file ] = $headers["{$post_type_object->labels->singular_name} Template"];
+		$post_templates[ $file ] = $headers["{$post_type_object->name} Template"];
 	}
 
 	/* Return array of post templates. */

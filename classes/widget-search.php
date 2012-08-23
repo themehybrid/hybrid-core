@@ -131,7 +131,7 @@ class Hybrid_Widget_Search extends WP_Widget {
 			'title' => esc_attr__( 'Search', 'hybrid-core' ),
 			'theme_search' => false,
 			'search_label' => '',
-			'search_text' => esc_attr__( 'Submit', 'hybrid-core' ),
+			'search_text' => '',
 			'search_submit' => ''
 		);
 
