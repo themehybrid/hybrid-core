@@ -78,7 +78,7 @@ function entry_views_load() {
 	global $_entry_views_post_id;
 
 	/* Check if we're on a singular post view. */
-	if ( is_singular() ) {
+	if ( is_singular() && !is_preview() ) {
 
 		/* Get the post object. */
 		$post = get_queried_object();
