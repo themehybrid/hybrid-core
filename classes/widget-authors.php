@@ -75,6 +75,10 @@ class Hybrid_Widget_Authors extends WP_Widget {
 		if ( 'list' == $args['style'] && $args['html'] )
 			$authors = '<ul class="xoxo authors">' . $authors . '</ul><!-- .xoxo .authors -->';
 
+		/* If 'none' is the style and the output should be HTML, wrap the authors in a <p>. */
+		elseif ( 'none' == $args['style'] && $args['html'] )
+			$authors = '<p class="authors">' . $authors . '</p><!-- .authors -->';
+
 		/* Display the authors list. */
 		echo $authors;
 
