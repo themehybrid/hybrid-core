@@ -215,7 +215,7 @@ function hybrid_entry_edit_link_shortcode( $attr ) {
 function hybrid_entry_published_shortcode( $attr ) {
 	$attr = shortcode_atts( array( 'before' => '', 'after' => '', 'format' => get_option( 'date_format' ) ), $attr );
 
-	$published = '<abbr class="published" title="' . sprintf( get_the_time( esc_attr__( 'l, F jS, Y, g:i a', 'hybrid-core' ) ) ) . '">' . sprintf( get_the_time( $attr['format'] ) ) . '</abbr>';
+	$published = '<abbr class="published" title="' . get_the_time( esc_attr__( 'l, F jS, Y, g:i a', 'hybrid-core' ) ) . '">' . get_the_time( $attr['format'] ) . '</abbr>';
 	return $attr['before'] . $published . $attr['after'];
 }
 
