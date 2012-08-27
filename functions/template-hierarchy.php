@@ -29,6 +29,9 @@ add_filter( 'single_template', 'hybrid_singular_template' );
 add_filter( 'page_template', 'hybrid_singular_template' );
 add_filter( 'attachment_template', 'hybrid_singular_template' );
 
+/* Filter the comments template. */
+add_filter( 'comments_template', 'hybrid_comments_template' );
+
 /**
  * Overrides WP's default template for date-based archives. Better abstraction of templates than 
  * is_date() allows by checking for the year, month, week, day, hour, and minute.
@@ -203,6 +206,34 @@ function hybrid_singular_template( $template ) {
 
 	/* Add a general template of singular.php. */
 	$templates[] = "singular.php";
+
+	/* Return the found template. */
+	return locate_template( $templates );
+}
+
+/**
+ * Overrides the default comments template.  This filter allows for a "comments-{$post_type}.php" 
+ * template based on the post type of the current single post view.  If this template is not found, it falls 
+ * back to the default "comments.php" template.
+ *
+ * @since 1.5.0
+ * @access private
+ * @param string $template The comments template file name.
+ * @return string $template The theme comments template after all templates have been checked for.
+ */
+function hybrid_comments_template( $template ) {
+
+	$templates = array();
+
+	/* If viewing a singular post, add a comments template based on the post type. */
+	if ( is_singular() ) {
+		$post = get_queried_object();
+
+		$templates[] = "comments-{$post->post_type}.php";
+	}
+
+	/* Add the default comments template. */
+	$templates[] = 'comments.php';
 
 	/* Return the found template. */
 	return locate_template( $templates );
