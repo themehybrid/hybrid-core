@@ -61,6 +61,12 @@ function hybrid_get_context() {
 	elseif ( is_archive() ) {
 		$hybrid->context[] = 'archive';
 
+		/* Post type archives. */
+		if ( is_post_type_archive() ) {
+			$post_type = get_post_type_object( get_query_var( 'post_type' ) );
+			$hybrid->context[] = "archive-{$post_type->name}";
+		}
+
 		/* Taxonomy archives. */
 		if ( is_tax() || is_category() || is_tag() ) {
 			$hybrid->context[] = 'taxonomy';
@@ -70,38 +76,33 @@ function hybrid_get_context() {
 			$hybrid->context[] = "taxonomy-{$object->taxonomy}-" . sanitize_html_class( $slug, $object->term_id );
 		}
 
-		/* Post type archives. */
-		elseif ( is_post_type_archive() ) {
-			$post_type = get_post_type_object( get_query_var( 'post_type' ) );
-			$hybrid->context[] = "archive-{$post_type->name}";
-		}
-
 		/* User/author archives. */
-		elseif ( is_author() ) {
+		if ( is_author() ) {
+			$user_id = get_query_var( 'author' );
 			$hybrid->context[] = 'user';
-			$hybrid->context[] = 'user-' . sanitize_html_class( get_the_author_meta( 'user_nicename', $object_id ), $object_id );
+			$hybrid->context[] = 'user-' . sanitize_html_class( get_the_author_meta( 'user_nicename', $user_id ), $user_id );
 		}
 
-		/* Time/Date archives. */
-		else {
-			if ( is_date() ) {
-				$hybrid->context[] = 'date';
-				if ( is_year() )
-					$hybrid->context[] = 'year';
-				if ( is_month() )
-					$hybrid->context[] = 'month';
-				if ( get_query_var( 'w' ) )
-					$hybrid->context[] = 'week';
-				if ( is_day() )
-					$hybrid->context[] = 'day';
-			}
-			if ( is_time() ) {
-				$hybrid->context[] = 'time';
-				if ( get_query_var( 'hour' ) )
-					$hybrid->context[] = 'hour';
-				if ( get_query_var( 'minute' ) )
-					$hybrid->context[] = 'minute';
-			}
+		/* Date archives. */
+		if ( is_date() ) {
+			$hybrid->context[] = 'date';
+			if ( is_year() )
+				$hybrid->context[] = 'year';
+			if ( is_month() )
+				$hybrid->context[] = 'month';
+			if ( get_query_var( 'w' ) )
+				$hybrid->context[] = 'week';
+			if ( is_day() )
+				$hybrid->context[] = 'day';
+		}
+
+		/* Time archives. */
+		if ( is_time() ) {
+			$hybrid->context[] = 'time';
+			if ( get_query_var( 'hour' ) )
+				$hybrid->context[] = 'hour';
+			if ( get_query_var( 'minute' ) )
+				$hybrid->context[] = 'minute';
 		}
 	}
 
