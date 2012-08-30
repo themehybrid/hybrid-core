@@ -19,7 +19,7 @@
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * @package ThemeLayouts
- * @version 0.4.0
+ * @version 0.5.0
  * @author Justin Tadlock <justin@justintadlock.com>
  * @copyright Copyright (c) 2010 - 2012, Justin Tadlock
  * @link http://justintadlock.com
@@ -35,6 +35,9 @@ add_action( 'init', 'theme_layouts_remove_post_type_support' );
 
 /* Set up the custom post layouts. */
 add_action( 'admin_menu', 'theme_layouts_admin_setup' );
+
+/* Add layout option in Customize. */
+add_action( 'customize_register', 'theme_layouts_customize_register' );
 
 /* Filters the body_class hook to add a custom class. */
 add_filter( 'body_class', 'theme_layouts_body_class' );
@@ -97,6 +100,37 @@ function theme_layouts_remove_post_type_support() {
 }
 
 /**
+ * Gets all the available layouts for the theme.
+ *
+ * @since 0.5.0
+ * @access public
+ * @return array Either theme-supported layouts or the default layouts.
+ */
+function theme_layouts_get_layouts() {
+
+	$layouts = get_theme_support( 'theme-layouts' );
+
+	return isset( $layouts[0] ) ? $layouts[0] : array_keys( theme_layouts_strings() );
+}
+
+/**
+ * Returns an array of arguments for setting up the theme layouts script.  The defaults are merged 
+ * with the theme-supported arguments.
+ *
+ * @since 0.5.0
+ * @access public
+ * @return array Arguments for the theme layouts script.
+ */
+function theme_layouts_get_args() {
+
+	$layouts = get_theme_support( 'theme-layouts' );
+
+	$args = isset( $layouts[1] ) ? $layouts[1] : array();
+
+	return wp_parse_args( $args, array( 'customize' => true, 'default' => 'default' ) );
+}
+
+/**
  * Gets the layout for the current post based off the 'Layout' custom field key if viewing a singular post 
  * entry.  All other pages are given a default layout of 'layout-default'.
  *
@@ -105,11 +139,14 @@ function theme_layouts_remove_post_type_support() {
  */
 function theme_layouts_get_layout() {
 
-	/* Get the available post layouts. */
-	$post_layouts = get_theme_support( 'theme-layouts' );
+	/* Get the available theme layouts. */
+	$layouts = theme_layouts_get_layouts();
+
+	/* Get the theme layout arguments. */
+	$args = theme_layouts_get_args();
 
 	/* Set the layout to an empty string. */
-	$layout = '';
+	$layout = get_theme_mod( 'theme-layout', $args['default'] );
 
 	/* If viewing a singular post, check if a layout has been specified. */
 	if ( is_singular() ) {
@@ -132,12 +169,8 @@ function theme_layouts_get_layout() {
 	}
 
 	/* Make sure the given layout is in the array of available post layouts for the theme. */
-	if ( empty( $layout ) || !in_array( $layout, $post_layouts[0] ) )
-		$layout = 'default';
-
-	/* If the theme set a default layout, use it if the layout should be set to default. */
-	if ( 'default' == $layout && !empty( $post_layouts[1] ) && isset( $post_layouts[1]['default'] ) )
-		$layout = $post_layouts[1]['default'];
+	if ( empty( $layout ) || !in_array( $layout, $layouts ) || 'default' == $layout )
+		$layout = $args['default'];
 
 	/* @deprecated 0.2.0. Use the 'get_theme_layout' hook. */
 	$layout = apply_filters( 'get_post_layout', "layout-{$layout}" );
@@ -391,8 +424,7 @@ function theme_layouts_add_meta_boxes( $post_type, $post ) {
 function theme_layouts_post_meta_box( $post, $box ) {
 
 	/* Get theme-supported theme layouts. */
-	$layouts = get_theme_support( 'theme-layouts' );
-	$post_layouts = $layouts[0];
+	$post_layouts = theme_layouts_get_layouts();
 
 	/* Get the current post's layout. */
 	$post_layout = get_post_layout( $post->ID ); ?>
@@ -464,8 +496,7 @@ function theme_layouts_save_post( $post_id, $post ) {
 function theme_layouts_attachment_fields_to_edit( $fields, $post ) {
 
 	/* Get theme-supported theme layouts. */
-	$layouts = get_theme_support( 'theme-layouts' );
-	$post_layouts = $layouts[0];
+	$layouts = theme_layouts_get_layouts();
 
 	/* Get the current post's layout. */
 	$post_layout = get_post_layout( $post->ID );
@@ -540,6 +571,107 @@ function theme_layouts_attachment_fields_to_save( $post, $fields ) {
  */
 function theme_layouts_get_meta_key() {
 	return apply_filters( 'theme_layouts_meta_key', 'Layout' );
+}
+
+/**
+ * Registers custom sections, settings, and controls for the $wp_customize instance.
+ *
+ * @since 0.1.0
+ * @author Justin Tadlock <justin@justintadlock.com>
+ * @author Sami Keijonen <sami.keijonen@foxnet.fi>
+ * @copyright Copyright (c) 2012
+ * @link http://themehybrid.com/support/topic/add-theme-layout-in-theme-customize
+ * @access private
+ * @param object $wp_customize
+ */
+function theme_layouts_customize_register( $wp_customize ) {
+
+	/* Get supported theme layouts. */
+	$layouts = theme_layouts_get_layouts();
+	$args = theme_layouts_get_args();
+
+	if ( true === $args['customize'] ) {
+
+		/* Add the layout section. */
+		$wp_customize->add_section(
+			'layout',
+			array(
+				'title' => 		esc_html__( 'Layout', 'theme-layouts' ),
+				'priority' => 	190,
+				'capability' => 	'edit_theme_options'
+			)
+		);
+
+		/* Add the 'layout' setting. */
+		$wp_customize->add_setting(
+			'theme-layout',
+			array(
+				'default' =>		$args['default'],
+				'type' =>			'option',
+				'capability' =>		'edit_theme_options',
+				'sanitize_callback' =>	'sanitize_html_class',
+				'transport' =>		'postMessage'
+			)
+		);
+
+		/* Set up an array for the layout choices and add in the 'default' layout. */
+		$layout_choices = array();
+
+		/* Only add 'default' if it's the actual default layout. */
+		if ( 'default' == $args['default'] )
+			$layout_choices['default'] = theme_layouts_get_string( 'default' );
+
+		/* Loop through each of the layouts and add it to the choices array with proper key/value pairs. */
+		foreach ( $layouts as $layout )
+			$layout_choices[$layout] = theme_layouts_get_string( $layout );
+
+		/* Add the layout control. */
+		$wp_customize->add_control(
+			'theme-layout-control',
+			array(
+				'label' => 		esc_html__( 'Global Layout', 'theme-layouts' ),
+				'section' => 	'layout',
+				'settings' => 	'theme-layout',
+				'type' =>		'radio',
+				'choices' =>	$layout_choices
+			)
+		);
+
+		/* If viewing the customize preview screen, add a script to show a live preview. */
+		if ( $wp_customize->is_preview() && !is_admin() )
+			add_action( 'wp_footer', 'theme_layouts_customize_preview_script', 21 );
+	}
+}
+
+/**
+ * JavaScript for handling the live preview editing of the theme layout in the theme customizer.  The 
+ * script uses regex to remove all potential "layout-xyx" classes and replaces it with the user-selected 
+ * layout.
+ *
+ * @since 0.1.0
+ * @access public
+ * @author Justin Tadlock <justin@justintadlock.com>
+ * @author Sami Keijonen <sami.keijonen@foxnet.fi>
+ * @copyright Copyright (c) 2012
+ * @link http://themehybrid.com/support/topic/add-theme-layout-in-theme-customize
+ * @return void
+ */
+function theme_layouts_customize_preview_script() { ?>
+
+	<script type="text/javascript">
+	wp.customize(
+		'theme-layout',
+		function( value ) {
+			value.bind( 
+				function( to ) {
+					var classes = jQuery( 'body' ).attr( 'class' ).replace( /layout-[a-zA-Z0-9_-]*/g, '' );
+					jQuery( 'body' ).attr( 'class', classes ).addClass( 'layout-' + to );
+				} 
+			);
+		}
+	);
+	</script>
+	<?php
 }
 
 /**
