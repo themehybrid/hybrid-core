@@ -645,7 +645,7 @@ function theme_layouts_customize_register( $wp_customize ) {
 
 /**
  * JavaScript for handling the live preview editing of the theme layout in the theme customizer.  The 
- * script uses regex to remove all potential "layout-xyx" classes and replaces it with the user-selected 
+ * script uses regex to remove all potential "layout-xyz" classes and replaces it with the user-selected 
  * layout.
  *
  * @since 0.1.0
