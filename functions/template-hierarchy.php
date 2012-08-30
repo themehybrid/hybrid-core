@@ -225,6 +225,12 @@ function hybrid_comments_template( $template ) {
 
 	$templates = array();
 
+	/* Allow for custom templates entered into comments_template( $file ). */
+	$template = str_replace( trailingslashit( get_stylesheet_directory() ), '', $template );
+
+	if ( 'comments.php' !== $template )
+		$templates[] = $template;
+
 	/* If viewing a singular post, add a comments template based on the post type. */
 	if ( is_singular() ) {
 		$post = get_queried_object();
