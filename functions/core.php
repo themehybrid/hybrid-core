@@ -43,6 +43,9 @@ function hybrid_get_prefix() {
  * 'hybrid_singular-post-ID_header'.
  *
  * @since 0.7.0
+ * @author Justin Tadlock <justin@justintadlock.com>
+ * @author Ptah Dunbar <pt@ptahd.com>
+ * @link http://ptahdunbar.com/wordpress/smarter-hooks-context-sensitive-hooks
  * @access public
  * @uses hybrid_get_prefix() Gets the theme prefix.
  * @uses hybrid_get_context() Gets the context of the current page.
