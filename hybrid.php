@@ -215,6 +215,10 @@ class Hybrid {
 		/* Remove support for the the Get the Image extension if the plugin is installed. */
 		if ( function_exists( 'get_the_image' ) )
 			remove_theme_support( 'get-the-image' );
+
+		/* Remove support for the Featured Header extension if the class exists. */
+		if ( class_exists( 'Featured_Header' ) )
+			remove_theme_support( 'featued-header' );
 	}
 
 	/**
@@ -301,6 +305,9 @@ class Hybrid {
 
 		/* Load the Post Stylesheets extension if supported. */
 		require_if_theme_supports( 'post-stylesheets', trailingslashit( HYBRID_EXTENSIONS ) . 'post-stylesheets.php' );
+
+		/* Load the Featured Header extension if supported. */
+		require_if_theme_supports( 'featured-header', trailingslashit( HYBRID_EXTENSIONS ) . 'featured-header.php' );
 	}
 
 	/**
