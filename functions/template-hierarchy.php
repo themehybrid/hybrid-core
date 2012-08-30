@@ -231,12 +231,8 @@ function hybrid_comments_template( $template ) {
 	if ( 'comments.php' !== $template )
 		$templates[] = $template;
 
-	/* If viewing a singular post, add a comments template based on the post type. */
-	if ( is_singular() ) {
-		$post = get_queried_object();
-
-		$templates[] = "comments-{$post->post_type}.php";
-	}
+	/* Add a comments template based on the post type. */
+	$templates[] = 'comments-' . get_post_type() . '.php';
 
 	/* Add the default comments template. */
 	$templates[] = 'comments.php';
