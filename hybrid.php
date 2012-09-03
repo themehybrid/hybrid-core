@@ -219,6 +219,10 @@ class Hybrid {
 		/* Remove support for the Featured Header extension if the class exists. */
 		if ( class_exists( 'Featured_Header' ) )
 			remove_theme_support( 'featued-header' );
+
+		/* Remove support for the Random Custom Background extension if the class exists. */
+		if ( class_exists( 'Random_Custom_Background' ) )
+			remove_theme_support( 'random-custom-background' );
 	}
 
 	/**
@@ -308,6 +312,9 @@ class Hybrid {
 
 		/* Load the Featured Header extension if supported. */
 		require_if_theme_supports( 'featured-header', trailingslashit( HYBRID_EXTENSIONS ) . 'featured-header.php' );
+
+		/* Load the Random Custom Background extension if supported. */
+		require_if_theme_supports( 'random-custom-background', trailingslashit( HYBRID_EXTENSIONS ) . 'random-custom-background.php' );
 	}
 
 	/**
