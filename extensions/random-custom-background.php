@@ -195,7 +195,7 @@ class Random_Custom_Background {
 	public function background_color( $color ) {
 
 		/* Only return random color if the user hasn't chosen a color. */
-		return empty( $color ) ? $this->color : $color;
+		return empty( $color ) ? preg_replace( '/[^0-9a-fA-F]/', '', $this->color ) : $color;
 	}
 
 	/**
@@ -210,7 +210,7 @@ class Random_Custom_Background {
 	public function background_image( $image ) {
 
 		/* Only return the random image if the user hasn't chosen an image. */
-		return empty( $image ) ? $this->image : $image;
+		return empty( $image ) ? esc_url( $this->image ) : $image;
 	}
 
 	/**
