@@ -146,8 +146,14 @@ class Random_Custom_Background {
 		/* Get the theme-supported random background array. */
 		$supports = get_theme_support( 'random-custom-background' );
 
+		/* Get the random backgrounds set. */
+		$backgrounds = isset( $supports[0] ) ? $supports[0] : array();
+
+		/* Allow developers to overwrite the backgrounds. */
+		$backgrounds = apply_filters( 'random_custom_backgrounds', $backgrounds );
+
 		/* If no backgrounds are set, return. */
-		if ( !isset( $supports[0] ) || !is_array( $supports[0] ) )
+		if ( empty( $backgrounds ) )
 			return;
 
 		/* Set the backgrounds to the $backgrounds variable. */
