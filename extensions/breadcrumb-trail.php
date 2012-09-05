@@ -65,11 +65,11 @@ final class Breadcrumb_Trail {
 		/* Parse the arguments and extract them for easy variable naming. */
 		$this->args = wp_parse_args( $this->args, $defaults );
 
-		/* Get the trail items. */
-		$trail = $this->get_items();
+		/* Generate the trail items. */
+		$this->generate_trail_items();
 
 		/* Connect the breadcrumb trail if there are items in the trail. */
-		if ( !empty( $trail ) && is_array( $trail ) ) {
+		if ( !empty( $this->items ) ) {
 
 			/* Open the breadcrumb trail containers. */
 			$breadcrumb = '<' . tag_escape( $this->args['container'] ) . ' class="breadcrumb-trail breadcrumbs" itemprop="breadcrumb">';
@@ -78,17 +78,17 @@ final class Breadcrumb_Trail {
 			$breadcrumb .= ( !empty( $this->args['before'] ) ? '<span class="trail-before">' . $this->args['before'] . '</span> ' : '' );
 
 			/* Adds the 'trail-begin' class around first item if there's more than one item. */
-			if ( 1 < count( $trail ) )
-				array_unshift( $trail, '<span class="trail-begin">' . array_shift( $trail ) . '</span>' );
+			if ( 1 < count( $this->items ) )
+				array_unshift( $this->items, '<span class="trail-begin">' . array_shift( $this->items ) . '</span>' );
 
 			/* Adds the 'trail-end' class around last item. */
-			array_push( $trail, '<span class="trail-end">' . array_pop( $trail ) . '</span>' );
+			array_push( $this->items, '<span class="trail-end">' . array_pop( $this->items ) . '</span>' );
 
 			/* Format the separator. */
 			$separator = ( !empty( $this->args['separator'] ) ? '<span class="sep">' . $this->args['separator'] . '</span>' : '<span class="sep">/</span>' );
 
 			/* Join the individual trail items into a single string. */
-			$breadcrumb .= join( " {$separator} ", $trail );
+			$breadcrumb .= join( " {$separator} ", $this->items );
 
 			/* If $after was set, wrap it in a container. */
 			$breadcrumb .= ( !empty( $this->args['after'] ) ? ' <span class="trail-after">' . $this->args['after'] . '</span>' : '' );
@@ -117,7 +117,7 @@ final class Breadcrumb_Trail {
 	 * @access private
 	 * @return array List of items to be shown in the trail.
 	 */
-	public function get_items() {
+	public function generate_trail_items() {
 		global $wp_rewrite;
 
 		/* Set up an empty trail array and empty path. */
@@ -348,7 +348,7 @@ final class Breadcrumb_Trail {
 			$this->items[] = __( '404 Not Found', 'breadcrumb-trail' );
 
 		/* Allow devs to step in and filter the $trail array. */
-		return apply_filters( 'items', $this->items, $this->args );
+		$this->items = apply_filters( 'breadcrumb_trail_items', $this->items, $this->args );
 	}
 
 	/**
