@@ -26,9 +26,8 @@
  * Generates a random custom background and filters the 'theme_mod_background_* hooks to 
  * overwrite the theme's set background.
  *
- * @todo Sanitize.  Sanitize.  Sanitize.
- *
  * @since 0.1.0
+ * @access public
  */
 class Random_Custom_Background {
 
@@ -103,7 +102,7 @@ class Random_Custom_Background {
 		$this->generate_random_background();
 
 		/* Get the user-selected background image. */
-		$image = get_theme_mod( 'background_image' );
+		$image = get_theme_mod( 'background_image', '' );
 
 		/* Filter the background color. */
 		add_filter( 'theme_mod_background_color', array( &$this, 'background_color' ) );
@@ -113,14 +112,14 @@ class Random_Custom_Background {
 
 		/**
 		 * If no background image is set by the user, set the properties related to the background 
-		 * image.  The script must overwrite these values completely if we're adding a random 
-		 * background because the user can't clear these values.
+		 * image.  The script must overwrite these values completely rather than relinquish control 
+		 * to the user setting to work properly with the random image.
 		 */
 		if ( empty( $image ) && !empty( $this->image ) ) {
 			add_filter( 'theme_mod_background_repeat', array( &$this, 'background_repeat' ) );
-			add_filter( 'theme_mod_background_attachment', array( &$this, 'background_attachment' ) );
-			add_filter( 'theme_mod_background_position_x', array( &$this, 'background_position_x' ) );
 			add_filter( 'theme_mod_background_position_y', array( &$this, 'background_position_y' ) );
+			add_filter( 'theme_mod_background_position_x', array( &$this, 'background_position_x' ) );
+			add_filter( 'theme_mod_background_attachment', array( &$this, 'background_attachment' ) );
 		}
 
 		/* Get the custom background arguments. */
@@ -136,7 +135,7 @@ class Random_Custom_Background {
 	 * add a second parameter to register their backgrounds (an array of background arrays).
 	 * add_theme_support( 'random-custom-background', $backgrounds ).
 	 *
-	 * Supported background arguments: 'image', 'color', 'repeat', 'position_x', 'position_y', 'attachment'.
+	 * Supported background arguments: 'image', 'color', 'repeat', 'position_y', 'position_x', 'attachment'.
 	 *
 	 * @since 0.1.0
 	 * @access public
@@ -169,13 +168,8 @@ class Random_Custom_Background {
 	}
 
 	/**
-	 * Sets the background color.  Right now, we must respect the user's color setting because
-	 * there's no way for the user to remove it.  Thus, there's no way for the script to know 
-	 * whether the user intends to use their custom background color or the randomly-
-	 * generated color.
-	 *
-	 * @todo Update script once users are allowed to remove background color.
-	 * @link http://core.trac.wordpress.org/ticket/21059
+	 * Sets the background color.  This script will respect the user's background color setting.  
+	 * If the user has set a color, the random color won't be used.
 	 *
 	 * @since 0.1.0
 	 * @access public
@@ -189,7 +183,8 @@ class Random_Custom_Background {
 	}
 
 	/**
-	 * Sets the background image URL.
+	 * Sets the background image.  This script will respect the user's background image setting.  
+	 * If the user has set an image, the random image won't be used.
 	 *
 	 * @since 0.1.0
 	 * @access public
@@ -215,9 +210,10 @@ class Random_Custom_Background {
 	}
 
 	/**
-	 * Sets the background vertical position.  This isn't technically supported in WordPress (as of 3.5).  
-	 * This method is only executed if using a random background and the custom_background_callback()
-	 * method is executed (themes can also use it in custom callbacks).
+	 * Sets the background vertical position.  This isn't technically supported in WordPress (as 
+	 * of 3.5).  This method is only executed if using a random background image and the 
+	 * custom_background_callback() method is executed (themes can also use it in custom 
+	 * callbacks).
 	 *
 	 * @since 0.1.0
 	 * @access public
@@ -229,7 +225,7 @@ class Random_Custom_Background {
 	}
 
 	/**
-	 * Sets the background horizontal position.  Only exectued if using a random background.
+	 * Sets the background horizontal position.  Only exectued if using a random background image.
 	 *
 	 * @since 0.1.0
 	 * @access public
@@ -241,7 +237,7 @@ class Random_Custom_Background {
 	}
 
 	/**
-	 * Sets the background attachment property.  Only exectued if using a random background.
+	 * Sets the background attachment property.  Only exectued if using a random background image.
 	 *
 	 * @since 0.1.0
 	 * @access public
