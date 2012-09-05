@@ -300,7 +300,7 @@ class Random_Custom_Background {
 		}
 
 		/* Output the custom background style. */
-		echo "\n" . '<style type="text/css" id="custom-background-css">body.custom-background{ ' . trim( $style ) . '; }</style>' . "\n";
+		echo "\n" . '<style type="text/css" id="custom-background-css">body.custom-background{ ' . trim( $style ) . ' }</style>' . "\n";
 	}
 }
 
