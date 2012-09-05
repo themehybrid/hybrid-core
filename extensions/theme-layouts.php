@@ -607,7 +607,7 @@ function theme_layouts_customize_register( $wp_customize ) {
 			'theme-layout',
 			array(
 				'default' =>		$args['default'],
-				'type' =>			'option',
+				'type' =>			'theme_mod',
 				'capability' =>		'edit_theme_options',
 				'sanitize_callback' =>	'sanitize_html_class',
 				'transport' =>		'postMessage'
