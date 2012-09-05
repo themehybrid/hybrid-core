@@ -153,10 +153,20 @@ class Random_Custom_Background {
 		/* Set the backgrounds to the $backgrounds variable. */
 		$backgrounds = $supports[0];
 
+		/* Count the number of backgrounds. */
+		$count = count( $backgrounds );
+
 		/* Generate a random background from the given set of backgrounds. */
-		srand( (double) microtime() * 1000000 );
-		$random = rand( 0, count( $backgrounds ) - 1 );
-		$args = $backgrounds[$random];
+		if ( 1 < $count ) {
+			srand( (double) microtime() * 1000000 );
+			$random = rand( 0, $count - 1 );
+			$args = $backgrounds[$random];
+		}
+
+		/* Get the background arguments if there's just one background. */
+		else {
+			$args = $backgrounds[0];
+		}
 
 		/* Set the background properties. */
 		$this->image = 		!empty( $args['image'] ) ? 		$args['image'] : 		$this->image;
