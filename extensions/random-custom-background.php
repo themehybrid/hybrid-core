@@ -14,19 +14,19 @@
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- * @package 	RandomCustomBackground
- * @version 	0.1.0 - Alpha
- * @author 	Justin Tadlock <justin@justintadlock.com>
- * @copyright 	Copyright (c) 2012, Justin Tadlock
- * @link 	http://justintadlock.com
- * @license 	http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @package   RandomCustomBackground
+ * @version   0.1.0 - Alpha
+ * @author    Justin Tadlock <justin@justintadlock.com>
+ * @copyright Copyright (c) 2012, Justin Tadlock
+ * @link      http://justintadlock.com
+ * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 /**
  * Generates a random custom background and filters the 'theme_mod_background_*' hooks to 
  * overwrite the theme's set background.
  *
- * @since 0.1.0
+ * @since  0.1.0
  * @access public
  */
 class Random_Custom_Background {
@@ -34,61 +34,61 @@ class Random_Custom_Background {
 	/**
 	 * The background color property.
 	 *
-	 * @since 0.1.0
+	 * @since  0.1.0
 	 * @access public
-	 * @var string
+	 * @var    string
 	 */
 	public $color = '';
 
 	/**
 	 * The background image property.
 	 *
-	 * @since 0.1.0
+	 * @since  0.1.0
 	 * @access public
-	 * @var string
+	 * @var    string
 	 */
 	public $image = '';
 
 	/**
 	 * The background repeat property.  Allowed: 'no-repeat', 'repeat', 'repeat-x', 'repeat-y'.
 	 *
-	 * @since 0.1.0
+	 * @since  0.1.0
 	 * @access public
-	 * @var string
+	 * @var    string
 	 */
 	public $repeat = 'repeat';
 
 	/**
 	 * The vertical value of the background position property.  Allowed: 'top', 'bottom', 'center'.
 	 *
-	 * @since 0.1.0
+	 * @since  0.1.0
 	 * @access public
-	 * @var string
+	 * @var    string
 	 */
 	public $position_y = 'top';
 
 	/**
 	 * The horizontal value of the background position property.  Allowed: 'left', 'right', 'center'.
 	 *
-	 * @since 0.1.0
+	 * @since  0.1.0
 	 * @access public
-	 * @var string
+	 * @var    string
 	 */
 	public $position_x = 'left';
 
 	/**
 	 * The background attachment property.  Allowed: 'scroll', 'fixed'.
 	 *
-	 * @since 0.1.0
+	 * @since  0.1.0
 	 * @access public
-	 * @var string
+	 * @var    string
 	 */
 	public $attachment = 'scroll';
 
 	/**
 	 * Constructor method.  Sets up the random background feature.
 	 *
-	 * @since 0.1.0
+	 * @since  0.1.0
 	 * @access public
 	 * @return void
 	 */
@@ -116,7 +116,7 @@ class Random_Custom_Background {
 		 * to the user setting to work properly with the random image.
 		 */
 		if ( empty( $image ) && !empty( $this->image ) ) {
-			add_filter( 'theme_mod_background_repeat', array( &$this, 'background_repeat' ) );
+			add_filter( 'theme_mod_background_repeat',     array( &$this, 'background_repeat' ) );
 			add_filter( 'theme_mod_background_position_y', array( &$this, 'background_position_y' ) );
 			add_filter( 'theme_mod_background_position_x', array( &$this, 'background_position_x' ) );
 			add_filter( 'theme_mod_background_attachment', array( &$this, 'background_attachment' ) );
@@ -137,7 +137,7 @@ class Random_Custom_Background {
 	 *
 	 * Supported background arguments: 'image', 'color', 'repeat', 'position_y', 'position_x', 'attachment'.
 	 *
-	 * @since 0.1.0
+	 * @since  0.1.0
 	 * @access public
 	 * @return void
 	 */
@@ -166,7 +166,7 @@ class Random_Custom_Background {
 		if ( 1 < $count ) {
 			srand( (double) microtime() * 1000000 );
 			$random = rand( 0, $count - 1 );
-			$args = $backgrounds[$random];
+			$args = $backgrounds[ $random ];
 		}
 
 		/* Get the background arguments if there's just one background. */
@@ -187,9 +187,9 @@ class Random_Custom_Background {
 	 * Sets the background color.  This script will respect the user's background color setting.  
 	 * If the user has set a color, the random color won't be used.
 	 *
-	 * @since 0.1.0
+	 * @since  0.1.0
 	 * @access public
-	 * @param string $color The background color property.
+	 * @param  string $color The background color property.
 	 * @return string
 	 */
 	public function background_color( $color ) {
@@ -202,9 +202,9 @@ class Random_Custom_Background {
 	 * Sets the background image.  This script will respect the user's background image setting.  
 	 * If the user has set an image, the random image won't be used.
 	 *
-	 * @since 0.1.0
+	 * @since  0.1.0
 	 * @access public
-	 * @param string $image The background image property.
+	 * @param  string $image The background image property.
 	 * @return string
 	 */
 	public function background_image( $image ) {
@@ -216,9 +216,9 @@ class Random_Custom_Background {
 	/**
 	 * Sets the background repeat property.  Only exectued if using a random background.
 	 *
-	 * @since 0.1.0
+	 * @since  0.1.0
 	 * @access public
-	 * @param string $repeat The background repeat property.
+	 * @param  string $repeat The background repeat property.
 	 * @return string
 	 */
 	public function background_repeat( $repeat ) {
@@ -231,9 +231,9 @@ class Random_Custom_Background {
 	 * custom_background_callback() method is executed (themes can also use it in custom 
 	 * callbacks).
 	 *
-	 * @since 0.1.0
+	 * @since  0.1.0
 	 * @access public
-	 * @param string $position_y The background vertical position.
+	 * @param  string $position_y The background vertical position.
 	 * @return string
 	 */
 	public function background_position_y( $position_y ) {
@@ -243,9 +243,9 @@ class Random_Custom_Background {
 	/**
 	 * Sets the background horizontal position.  Only exectued if using a random background image.
 	 *
-	 * @since 0.1.0
+	 * @since  0.1.0
 	 * @access public
-	 * @param string $position_x The background horizontal position.
+	 * @param  string $position_x The background horizontal position.
 	 * @return string
 	 */
 	public function background_position_x( $position_x ) {
@@ -255,9 +255,9 @@ class Random_Custom_Background {
 	/**
 	 * Sets the background attachment property.  Only exectued if using a random background image.
 	 *
-	 * @since 0.1.0
+	 * @since  0.1.0
 	 * @access public
-	 * @param string $url The background attachment property.
+	 * @param  string $url The background attachment property.
 	 * @return string
 	 */
 	public function background_attachment( $attachment ) {
@@ -268,7 +268,7 @@ class Random_Custom_Background {
 	 * Outputs the custom background style in the header.  This function is only executed if the value 
 	 * of the 'wp-head-callback' for the 'custom-background' feature is set to '__return_false'.
 	 *
-	 * @since 0.1.0
+	 * @since  0.1.0
 	 * @access public
 	 * @return void
 	 */
