@@ -14,16 +14,16 @@
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- * @package RandomCustomBackground
- * @version 0.1.0 - Alpha
- * @author Justin Tadlock <justin@justintadlock.com>
- * @copyright Copyright (c) 2012, Justin Tadlock
- * @link http://justintadlock.com
- * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @package 	RandomCustomBackground
+ * @version 	0.1.0 - Alpha
+ * @author 	Justin Tadlock <justin@justintadlock.com>
+ * @copyright 	Copyright (c) 2012, Justin Tadlock
+ * @link 	http://justintadlock.com
+ * @license 	http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 /**
- * Generates a random custom background and filters the 'theme_mod_background_* hooks to 
+ * Generates a random custom background and filters the 'theme_mod_background_*' hooks to 
  * overwrite the theme's set background.
  *
  * @since 0.1.0
@@ -175,12 +175,12 @@ class Random_Custom_Background {
 		}
 
 		/* Set the background properties. */
-		$this->image = 		!empty( $args['image'] ) ? 		$args['image'] : 		$this->image;
-		$this->color = 		!empty( $args['color'] ) ? 		$args['color'] : 			$this->color;
-		$this->repeat = 		!empty( $args['repeat'] ) ? 	$args['repeat'] : 		$this->repeat;
-		$this->position_y = 	!empty( $args['position_y'] ) ? 	$args['position_y'] :		$this->position_y;
-		$this->position_x = 	!empty( $args['position_x'] ) ? 	$args['position_x'] : 		$this->position_x;
-		$this->attachment = 	!empty( $args['attachment'] ) ?	$args['attachment'] :	$this->attachment;
+		$this->image      = !empty( $args['image'] )      ? $args['image']      : $this->image;
+		$this->color      = !empty( $args['color'] )      ? $args['color']      : $this->color;
+		$this->repeat     = !empty( $args['repeat'] )     ? $args['repeat']     : $this->repeat;
+		$this->position_y = !empty( $args['position_y'] ) ? $args['position_y'] : $this->position_y;
+		$this->position_x = !empty( $args['position_x'] ) ? $args['position_x'] : $this->position_x;
+		$this->attachment = !empty( $args['attachment'] ) ? $args['attachment'] : $this->attachment;
 	}
 
 	/**
@@ -312,7 +312,7 @@ class Random_Custom_Background {
 			$attachment = get_theme_mod( 'background_attachment', 'scroll' );
 			$attachment = in_array( $attachment, array( 'fixed', 'scroll' ) ) ? $attachment : 'scroll';
 
-			$style .= " background-attachment: $attachment;";
+			$style .= " background-attachment: {$attachment};";
 		}
 
 		/* Output the custom background style. */
