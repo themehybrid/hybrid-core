@@ -496,7 +496,7 @@ function theme_layouts_save_post( $post_id, $post ) {
 function theme_layouts_attachment_fields_to_edit( $fields, $post ) {
 
 	/* Get theme-supported theme layouts. */
-	$layouts = theme_layouts_get_layouts();
+	$post_layouts = theme_layouts_get_layouts();
 
 	/* Get the current post's layout. */
 	$post_layout = get_post_layout( $post->ID );
