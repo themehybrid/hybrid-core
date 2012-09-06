@@ -15,12 +15,12 @@
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- * @package FeaturedHeader
- * @version 0.1.0 - Alpha
- * @author Justin Tadlock <justin@justintadlock.com>
+ * @package   FeaturedHeader
+ * @version   0.1.0 - Alpha
+ * @author    Justin Tadlock <justin@justintadlock.com>
  * @copyright Copyright (c) 2012, Justin Tadlock
- * @link http://justintadlock.com
- * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @link      http://justintadlock.com
+ * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 /**
@@ -162,11 +162,11 @@ class Featured_Header {
 
 	/**
 	 * Filters the 'theme_mod_header_image_data' hook.  This is used to set the header image width 
-	 * and height attributes.
+	 * and height attributes if a featured header image was found.
 	 *
 	 * @since 0.1.0
 	 * @access public
-	 * @param array $data Data about the header image (width, height, url, thumbnail_url).
+	 * @param array $data Header image data (width, height, url, thumbnail_url).
 	 * @return array
 	 */
 	public function header_image_data( $data ) {
