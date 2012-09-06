@@ -18,12 +18,12 @@
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- * @package ThemeLayouts
- * @version 0.5.0 - Alpha
- * @author Justin Tadlock <justin@justintadlock.com>
+ * @package   ThemeLayouts
+ * @version   0.5.0 - Alpha
+ * @author    Justin Tadlock <justin@justintadlock.com>
  * @copyright Copyright (c) 2010 - 2012, Justin Tadlock
- * @link http://justintadlock.com
- * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @link      http://justintadlock.com
+ * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 /* Register metadata with WordPress. */
@@ -43,8 +43,8 @@ add_action( 'customize_register', 'theme_layouts_customize_register' );
 add_filter( 'body_class', 'theme_layouts_body_class' );
 
 /**
- * Registers the theme layouts meta key ('Layout') for specific object types and provides a function to sanitize
- * the metadata on update.
+ * Registers the theme layouts meta key ('Layout') for specific object types and provides a function to 
+ * sanitize the metadata on update.
  *
  * @since 0.4.0
  * @return void
@@ -70,8 +70,8 @@ function theme_layouts_sanitize_meta( $meta_value, $meta_key, $meta_type ) {
 }
 
 /**
- * Adds post type support to all 'public' post types.  This allows themes to remove support for the 'theme-layouts'
- * feature with remove_post_type_support().
+ * Adds post type support to all 'public' post types.  This allows themes to remove support for the 
+ * 'theme-layouts' feature with remove_post_type_support().
  *
  * @since 0.4.0
  * @return void
@@ -325,13 +325,13 @@ function theme_layouts_strings() {
 
 	/* Set up the default layout strings. */
 	$strings = array(
-		'default' => 	__( 'Default', 'theme-layouts' ),
-		'1c' => 		__( 'One Column', 'theme-layouts' ),
-		'2c-l' => 		__( 'Two Columns, Left', 'theme-layouts' ),
-		'2c-r' => 	__( 'Two Columns, Right', 'theme-layouts' ),
-		'3c-l' => 		__( 'Three Columns, Left', 'theme-layouts' ),
-		'3c-r' => 	__( 'Three Columns, Right', 'theme-layouts' ),
-		'3c-c' => 	__( 'Three Columns, Center', 'theme-layouts' )
+		'default' => __( 'Default', 'theme-layouts' ),
+		'1c'      => __( 'One Column', 'theme-layouts' ),
+		'2c-l'    => __( 'Two Columns, Left', 'theme-layouts' ),
+		'2c-r'    => __( 'Two Columns, Right', 'theme-layouts' ),
+		'3c-l'    => __( 'Three Columns, Left', 'theme-layouts' ),
+		'3c-r'    => __( 'Three Columns, Right', 'theme-layouts' ),
+		'3c-c'    => __( 'Three Columns, Center', 'theme-layouts' )
 	);
 
 	/* Allow devs to filter the strings for custom layouts. */
@@ -351,7 +351,7 @@ function theme_layouts_get_string( $layout ) {
 	$strings = theme_layouts_strings();
 
 	/* Return the layout's string if it exists. Else, return the layout slug. */
-	return ( ( isset( $strings[$layout] ) ) ? $strings[$layout] : $layout );
+	return ( ( isset( $strings[ $layout ] ) ) ? $strings[ $layout ] : $layout );
 }
 
 /**
@@ -581,7 +581,7 @@ function theme_layouts_get_meta_key() {
  * @author Sami Keijonen <sami.keijonen@foxnet.fi>
  * @copyright Copyright (c) 2012
  * @link http://themehybrid.com/support/topic/add-theme-layout-in-theme-customize
- * @access private
+ * @access public
  * @param object $wp_customize
  */
 function theme_layouts_customize_register( $wp_customize ) {
@@ -596,9 +596,9 @@ function theme_layouts_customize_register( $wp_customize ) {
 		$wp_customize->add_section(
 			'layout',
 			array(
-				'title' => 		esc_html__( 'Layout', 'theme-layouts' ),
-				'priority' => 	190,
-				'capability' => 	'edit_theme_options'
+				'title'      => esc_html__( 'Layout', 'theme-layouts' ),
+				'priority'   => 190,
+				'capability' => 'edit_theme_options'
 			)
 		);
 
@@ -606,11 +606,11 @@ function theme_layouts_customize_register( $wp_customize ) {
 		$wp_customize->add_setting(
 			'theme-layout',
 			array(
-				'default' =>		$args['default'],
-				'type' =>			'theme_mod',
-				'capability' =>		'edit_theme_options',
-				'sanitize_callback' =>	'sanitize_html_class',
-				'transport' =>		'postMessage'
+				'default'           => $args['default'],
+				'type'              => 'theme_mod',
+				'capability'        => 'edit_theme_options',
+				'sanitize_callback' => 'sanitize_html_class',
+				'transport'         => 'postMessage'
 			)
 		);
 
@@ -629,11 +629,11 @@ function theme_layouts_customize_register( $wp_customize ) {
 		$wp_customize->add_control(
 			'theme-layout-control',
 			array(
-				'label' => 		esc_html__( 'Global Layout', 'theme-layouts' ),
-				'section' => 	'layout',
-				'settings' => 	'theme-layout',
-				'type' =>		'radio',
-				'choices' =>	$layout_choices
+				'label'    => esc_html__( 'Global Layout', 'theme-layouts' ),
+				'section'  => 'layout',
+				'settings' => 'theme-layout',
+				'type'     => 'radio',
+				'choices'  => $layout_choices
 			)
 		);
 
