@@ -4,12 +4,12 @@
  * control over the output to the user by allowing the input of all the arguments typically seen
  * in the wp_list_pages() function.
  *
- * @package Hybrid
+ * @package    Hybrid
  * @subpackage Widgets
- * @author Justin Tadlock <justin@justintadlock.com>
- * @copyright Copyright (c) 2008 - 2012, Justin Tadlock
- * @link http://themehybrid.com/hybrid-core
- * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @author     Justin Tadlock <justin@justintadlock.com>
+ * @copyright  Copyright (c) 2008 - 2012, Justin Tadlock
+ * @link       http://themehybrid.com/hybrid-core
+ * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 /**
@@ -28,22 +28,22 @@ class Hybrid_Widget_Pages extends WP_Widget {
 
 		/* Set up the widget options. */
 		$widget_options = array(
-			'classname' => 'pages',
+			'classname'   => 'pages',
 			'description' => esc_html__( 'An advanced widget that gives you total control over the output of your page links.', 'hybrid-core' )
 		);
 
 		/* Set up the widget control options. */
 		$control_options = array(
-			'width' => 800,
+			'width'  => 800,
 			'height' => 350
 		);
 
 		/* Create the widget. */
 		$this->WP_Widget(
-			'hybrid-pages',			// $this->id_base
-			__( 'Pages', 'hybrid-core'),		// $this->name
-			$widget_options,			// $this->widget_options
-			$control_options			// $this->control_options
+			'hybrid-pages',              // $this->id_base
+			__( 'Pages', 'hybrid-core'), // $this->name
+			$widget_options,             // $this->widget_options
+			$control_options             // $this->control_options
 		);
 	}
 
@@ -87,24 +87,26 @@ class Hybrid_Widget_Pages extends WP_Widget {
 		/* Set the instance to the new instance. */
 		$instance = $new_instance;
 
-		$instance['title'] = strip_tags( $new_instance['title'] );
-		$instance['depth'] = strip_tags( $new_instance['depth'] );
-		$instance['child_of'] = strip_tags( $new_instance['child_of'] );
-		$instance['meta_key'] = strip_tags( $new_instance['meta_key'] );
-		$instance['meta_value'] = strip_tags( $new_instance['meta_value'] );
+		$instance['title']       = strip_tags( $new_instance['title'] );
+		$instance['depth']       = strip_tags( $new_instance['depth'] );
+		$instance['child_of']    = strip_tags( $new_instance['child_of'] );
+		$instance['meta_key']    = strip_tags( $new_instance['meta_key'] );
+		$instance['meta_value']  = strip_tags( $new_instance['meta_value'] );
 		$instance['date_format'] = strip_tags( $new_instance['date_format'] );
-		$instance['number'] = strip_tags( $new_instance['number'] );
-		$instance['offset'] = strip_tags( $new_instance['offset'] );
-		$instance['include'] = preg_replace( '/[^0-9,]/', '', $new_instance['include'] );
-		$instance['exclude'] = preg_replace( '/[^0-9,]/', '', $new_instance['exclude'] );
+		$instance['number']      = strip_tags( $new_instance['number'] );
+		$instance['offset']      = strip_tags( $new_instance['offset'] );
+
+		$instance['include']      = preg_replace( '/[^0-9,]/', '', $new_instance['include'] );
+		$instance['exclude']      = preg_replace( '/[^0-9,]/', '', $new_instance['exclude'] );
 		$instance['exclude_tree'] = preg_replace( '/[^0-9,]/', '', $new_instance['exclude_tree'] );
-		$instance['authors'] = preg_replace( '/[^0-9,]/', '', $new_instance['authors'] );
-		$instance['post_type'] = $new_instance['post_type'];
+		$instance['authors']      = preg_replace( '/[^0-9,]/', '', $new_instance['authors'] );
+
+		$instance['post_type']   = $new_instance['post_type'];
 		$instance['sort_column'] = $new_instance['sort_column'];
-		$instance['sort_order'] = $new_instance['sort_order'];
-		$instance['show_date'] = $new_instance['show_date'];
+		$instance['sort_order']  = $new_instance['sort_order'];
+		$instance['show_date']   = $new_instance['show_date'];
 		$instance['link_before'] = $new_instance['link_before'];
-		$instance['link_after'] = $new_instance['link_after'];
+		$instance['link_after']  = $new_instance['link_after'];
 
 		$instance['hierarchical'] = ( isset( $new_instance['hierarchical'] ) ? 1 : 0 );
 
@@ -120,34 +122,53 @@ class Hybrid_Widget_Pages extends WP_Widget {
 
 		/* Set up the default form values. */
 		$defaults = array(
-			'title' => esc_attr__( 'Pages', 'hybrid-core'),
-			'post_type' => 'page',
-			'depth' => 0,
-			'number' => '',
-			'offset' => '',
-			'child_of' => '',
-			'include' => '',
-			'exclude' => '',
+			'title'        => esc_attr__( 'Pages', 'hybrid-core'),
+			'post_type'    => 'page',
+			'depth'        => 0,
+			'number'       => '',
+			'offset'       => '',
+			'child_of'     => '',
+			'include'      => '',
+			'exclude'      => '',
 			'exclude_tree' => '',
-			'meta_key' => '',
-			'meta_value' => '',
-			'authors' => '',
-			'link_before' => '',
-			'link_after' => '',
-			'show_date' => '',
+			'meta_key'     => '',
+			'meta_value'   => '',
+			'authors'      => '',
+			'link_before'  => '',
+			'link_after'   => '',
+			'show_date'    => '',
 			'hierarchical' => true,
-			'sort_column' => 'post_title',
-			'sort_order' => 'ASC',
-			'date_format' => get_option( 'date_format' )
+			'sort_column'  => 'post_title',
+			'sort_order'   => 'ASC',
+			'date_format'  => get_option( 'date_format' )
 		);
 
 		/* Merge the user-selected arguments with the defaults. */
 		$instance = wp_parse_args( (array) $instance, $defaults );
 
 		$post_types = get_post_types( array( 'public' => true, 'hierarchical' => true ), 'objects' );
-		$sort_order = array( 'ASC' => esc_attr__( 'Ascending', 'hybrid-core' ), 'DESC' => esc_attr__( 'Descending', 'hybrid-core' ) );
-		$sort_column = array( 'post_author' => esc_attr__( 'Author', 'hybrid-core' ), 'post_date' => esc_attr__( 'Date', 'hybrid-core' ), 'ID' => esc_attr__( 'ID', 'hybrid-core' ), 'menu_order' => esc_attr__( 'Menu Order', 'hybrid-core' ), 'post_modified' => esc_attr__( 'Modified', 'hybrid-core' ), 'post_name' => esc_attr__( 'Slug', 'hybrid-core' ), 'post_title' => esc_attr__( 'Title', 'hybrid-core' ) );
-		$show_date = array( '' => '', 'created' => esc_attr__( 'Created', 'hybrid-core' ), 'modified' => esc_attr__( 'Modified', 'hybrid-core' ) );
+
+		$sort_order = array( 
+			'ASC'  => esc_attr__( 'Ascending', 'hybrid-core' ), 
+			'DESC' => esc_attr__( 'Descending', 'hybrid-core' ) 
+		);
+
+		$sort_column = array( 
+			'post_author'   => esc_attr__( 'Author', 'hybrid-core' ), 
+			'post_date'     => esc_attr__( 'Date', 'hybrid-core' ), 
+			'ID'            => esc_attr__( 'ID', 'hybrid-core' ), 
+			'menu_order'    => esc_attr__( 'Menu Order', 'hybrid-core' ), 
+			'post_modified' => esc_attr__( 'Modified', 'hybrid-core' ), 
+			'post_name'     => esc_attr__( 'Slug', 'hybrid-core' ), 
+			'post_title'    => esc_attr__( 'Title', 'hybrid-core' ) 
+		);
+
+		$show_date = array( 
+			''         => '', 
+			'created'  => esc_attr__( 'Created', 'hybrid-core' ), 
+			'modified' => esc_attr__( 'Modified', 'hybrid-core' ) 
+		);
+
 		$meta_key = array_merge( array( '' ), (array) get_meta_keys() );
 
 		?>

@@ -4,12 +4,12 @@
  * control over the output to the user by allowing the input of all the arguments typically seen
  * in the wp_get_archives() function.
  *
- * @package Hybrid
+ * @package    Hybrid
  * @subpackage Classes
- * @author Justin Tadlock <justin@justintadlock.com>
- * @copyright Copyright (c) 2008 - 2012, Justin Tadlock
- * @link http://themehybrid.com/hybrid-core
- * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @author     Justin Tadlock <justin@justintadlock.com>
+ * @copyright  Copyright (c) 2008 - 2012, Justin Tadlock
+ * @link       http://themehybrid.com/hybrid-core
+ * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 /**
@@ -28,22 +28,22 @@ class Hybrid_Widget_Archives extends WP_Widget {
 
 		/* Set up the widget options. */
 		$widget_options = array(
-			'classname' => 'archives',
+			'classname'   => 'archives',
 			'description' => esc_html__( 'An advanced widget that gives you total control over the output of your archives.', 'hybrid-core' )
 		);
 
 		/* Set up the widget control options. */
 		$control_options = array(
-			'width' => 525,
+			'width'  => 525,
 			'height' => 350
 		);
 
 		/* Create the widget. */
 		$this->WP_Widget(
-			'hybrid-archives',			// $this->id_base
-			__( 'Archives', 'hybrid-core' ),	// $this->name
-			$widget_options,			// $this->widget_options
-			$control_options			// $this->control_options
+			'hybrid-archives',               // $this->id_base
+			__( 'Archives', 'hybrid-core' ), // $this->name
+			$widget_options,                 // $this->widget_options
+			$control_options                 // $this->control_options
 		);
 	}
 
@@ -120,10 +120,11 @@ class Hybrid_Widget_Archives extends WP_Widget {
 
 		$instance = $new_instance;
 
-		$instance['title'] = strip_tags( $new_instance['title'] );
+		$instance['title']  = strip_tags( $new_instance['title'] );
 		$instance['before'] = strip_tags( $new_instance['before'] );
-		$instance['after'] = strip_tags( $new_instance['after'] );
-		$instance['limit'] = strip_tags( $new_instance['limit'] );
+		$instance['after']  = strip_tags( $new_instance['after'] );
+		$instance['limit']  = strip_tags( $new_instance['limit'] );
+
 		$instance['show_post_count'] = ( isset( $new_instance['show_post_count'] ) ? 1 : 0 );
 
 		return $instance;
@@ -138,12 +139,12 @@ class Hybrid_Widget_Archives extends WP_Widget {
 
 		/* Set up the default form values. */
 		$defaults = array(
-			'title' => esc_attr__( 'Archives', 'hybrid-core' ),
-			'limit' => 10,
-			'type' => 'monthly',
-			'format' => 'html',
-			'before' => '',
-			'after' => '',
+			'title'           => esc_attr__( 'Archives', 'hybrid-core' ),
+			'limit'           => 10,
+			'type'            => 'monthly',
+			'format'          => 'html',
+			'before'          => '',
+			'after'           => '',
 			'show_post_count' => false
 		);
 
@@ -151,10 +152,21 @@ class Hybrid_Widget_Archives extends WP_Widget {
 		$instance = wp_parse_args( (array) $instance, $defaults );
 
 		/* Create an array of archive types. */
-		$type = array( 'alpha' => esc_attr__( 'Alphabetical', 'hybrid-core' ), 'daily' => esc_attr__( 'Daily', 'hybrid-core' ), 'monthly' => esc_attr__( 'Monthly', 'hybrid-core' ),'postbypost' => esc_attr__( 'Post By Post', 'hybrid-core' ), 'weekly' => esc_attr__( 'Weekly', 'hybrid-core' ), 'yearly' => esc_attr__( 'Yearly', 'hybrid-core' ) );
+		$type = array( 
+			'alpha'      => esc_attr__( 'Alphabetical', 'hybrid-core' ), 
+			'daily'      => esc_attr__( 'Daily', 'hybrid-core' ), 
+			'monthly'    => esc_attr__( 'Monthly', 'hybrid-core' ),
+			'postbypost' => esc_attr__( 'Post By Post', 'hybrid-core' ), 
+			'weekly'     => esc_attr__( 'Weekly', 'hybrid-core' ), 
+			'yearly'     => esc_attr__( 'Yearly', 'hybrid-core' ) 
+		);
 
 		/* Create an array of archive formats. */
-		$format = array( 'custom' => esc_attr__( 'Custom', 'hybrid-core' ), 'html' => esc_attr__( 'HTML', 'hybrid-core' ), 'option' => esc_attr__( 'Option', 'hybrid-core' ) );
+		$format = array( 
+			'custom' => esc_attr__( 'Custom', 'hybrid-core' ), 
+			'html'   => esc_attr__( 'HTML', 'hybrid-core' ), 
+			'option' => esc_attr__( 'Option', 'hybrid-core' ) 
+		);
 		?>
 
 		<div class="hybrid-widget-controls columns-2">

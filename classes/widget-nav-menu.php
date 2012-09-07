@@ -4,12 +4,12 @@
  * Menus screen, by the theme, or by plugins using the wp_nav_menu() function.  It replaces the default
  * WordPress navigation menu class.
  *
- * @package Hybrid
+ * @package    Hybrid
  * @subpackage Classes
- * @author Justin Tadlock <justin@justintadlock.com>
- * @copyright Copyright (c) 2008 - 2012, Justin Tadlock
- * @link http://themehybrid.com/hybrid-core
- * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @author     Justin Tadlock <justin@justintadlock.com>
+ * @copyright  Copyright (c) 2008 - 2012, Justin Tadlock
+ * @link       http://themehybrid.com/hybrid-core
+ * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 /**
@@ -28,22 +28,22 @@ class Hybrid_Widget_Nav_Menu extends WP_Widget {
 
 		/* Set up the widget options. */
 		$widget_options = array(
-			'classname' => 'nav-menu',
+			'classname'   => 'nav-menu',
 			'description' => esc_html__( 'An advanced widget that gives you total control over the output of your menus.', 'hybrid-core' )
 		);
 
 		/* Set up the widget control options. */
 		$control_options = array(
-			'width' => 525,
+			'width'  => 525,
 			'height' => 350
 		);
 
 		/* Create the widget. */
 		$this->WP_Widget(
-			'hybrid-nav-menu',				// $this->id_base
-			__( 'Navigation Menu', 'hybrid-core' ),	// $this->name
-			$widget_options,				// $this->widget_options
-			$control_options				// $this->control_options
+			'hybrid-nav-menu',                      // $this->id_base
+			__( 'Navigation Menu', 'hybrid-core' ), // $this->name
+			$widget_options,                        // $this->widget_options
+			$control_options                        // $this->control_options
 		);
 	}
 
@@ -85,14 +85,14 @@ class Hybrid_Widget_Nav_Menu extends WP_Widget {
 
 		$instance = $new_instance;
 
-		$instance['title'] = strip_tags( $new_instance['title'] );
-		$instance['depth'] = strip_tags( $new_instance['depth'] );
-		$instance['container_id'] = strip_tags( $new_instance['container_id'] );
+		$instance['title']           = strip_tags( $new_instance['title'] );
+		$instance['depth']           = strip_tags( $new_instance['depth'] );
+		$instance['container_id']    = strip_tags( $new_instance['container_id'] );
 		$instance['container_class'] = strip_tags( $new_instance['container_class'] );
-		$instance['menu_id'] = strip_tags( $new_instance['menu_id'] );
-		$instance['menu_class'] = strip_tags( $new_instance['menu_class'] );
-		$instance['fallback_cb'] = strip_tags( $new_instance['fallback_cb'] );
-		$instance['walker'] = strip_tags( $new_instance['walker'] );
+		$instance['menu_id']         = strip_tags( $new_instance['menu_id'] );
+		$instance['menu_class']      = strip_tags( $new_instance['menu_class'] );
+		$instance['fallback_cb']     = strip_tags( $new_instance['fallback_cb'] );
+		$instance['walker']          = strip_tags( $new_instance['walker'] );
 
 		return $instance;
 	}
@@ -106,20 +106,20 @@ class Hybrid_Widget_Nav_Menu extends WP_Widget {
 
 		/* Set up the default form values. */
 		$defaults = array(
-			'title' => esc_attr__( 'Navigation', 'hybrid-core' ),
-			'menu' => '',
-			'container' => 'div',
-			'container_id' => '',
+			'title'           => esc_attr__( 'Navigation', 'hybrid-core' ),
+			'menu'            => '',
+			'container'       => 'div',
+			'container_id'    => '',
 			'container_class' => '',
-			'menu_id' => '',
-			'menu_class' => 'nav-menu',
-			'depth' => 0,
-			'before' => '',
-			'after' => '',
-			'link_before' => '',
-			'link_after' => '',
-			'fallback_cb' => 'wp_page_menu',
-			'walker' => ''
+			'menu_id'         => '',
+			'menu_class'      => 'nav-menu',
+			'depth'           => 0,
+			'before'          => '',
+			'after'           => '',
+			'link_before'     => '',
+			'link_after'      => '',
+			'fallback_cb'     => 'wp_page_menu',
+			'walker'          => ''
 		);
 
 		/* Merge the user-selected arguments with the defaults. */

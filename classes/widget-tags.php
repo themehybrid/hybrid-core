@@ -4,12 +4,12 @@
  * control over the output to the user by allowing the input of all the arguments typically seen
  * in the wp_tag_cloud() function.
  *
- * @package Hybrid
+ * @package    Hybrid
  * @subpackage Classes
- * @author Justin Tadlock <justin@justintadlock.com>
- * @copyright Copyright (c) 2008 - 2012, Justin Tadlock
- * @link http://themehybrid.com/hybrid-core
- * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @author     Justin Tadlock <justin@justintadlock.com>
+ * @copyright  Copyright (c) 2008 - 2012, Justin Tadlock
+ * @link       http://themehybrid.com/hybrid-core
+ * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 /**
@@ -28,22 +28,22 @@ class Hybrid_Widget_Tags extends WP_Widget {
 
 		/* Set up the widget options. */
 		$widget_options = array(
-			'classname' => 'tags',
+			'classname'   => 'tags',
 			'description' => esc_html__( 'An advanced widget that gives you total control over the output of your tags.', 'hybrid-core' )
 		);
 
 		/* Set up the widget control options. */
 		$control_options = array(
-			'width' => 800,
+			'width'  => 800,
 			'height' => 350
 		);
 
 		/* Create the widget. */
 		$this->WP_Widget(
-			'hybrid-tags',			// $this->id_base
-			__( 'Tags', 'hybrid-core' ),		// $this->name
-			$widget_options,			// $this->widget_options
-			$control_options			// $this->control_options
+			'hybrid-tags',               // $this->id_base
+			__( 'Tags', 'hybrid-core' ), // $this->name
+			$widget_options,             // $this->widget_options
+			$control_options             // $this->control_options
 		);
 	}
 
@@ -106,25 +106,28 @@ class Hybrid_Widget_Tags extends WP_Widget {
 		/* Set the instance to the new instance. */
 		$instance = $new_instance;
 
-		$instance['title'] = strip_tags( $new_instance['title'] );
-		$instance['smallest'] = strip_tags( $new_instance['smallest'] );
-		$instance['largest'] = strip_tags( $new_instance['largest'] );
-		$instance['number'] = strip_tags( $new_instance['number'] );
-		$instance['separator'] = strip_tags( $new_instance['separator'] );
-		$instance['name__like'] = strip_tags( $new_instance['name__like'] );
-		$instance['search'] = strip_tags( $new_instance['search'] );
-		$instance['child_of'] = strip_tags( $new_instance['child_of'] );
-		$instance['parent'] = strip_tags( $new_instance['parent'] );
-		$instance['topic_count_text_callback'] = strip_tags( $new_instance['topic_count_text_callback'] );
+		$instance['title']                      = strip_tags( $new_instance['title'] );
+		$instance['smallest']                   = strip_tags( $new_instance['smallest'] );
+		$instance['largest']                    = strip_tags( $new_instance['largest'] );
+		$instance['number']                     = strip_tags( $new_instance['number'] );
+		$instance['separator']                  = strip_tags( $new_instance['separator'] );
+		$instance['name__like']                 = strip_tags( $new_instance['name__like'] );
+		$instance['search']                     = strip_tags( $new_instance['search'] );
+		$instance['child_of']                   = strip_tags( $new_instance['child_of'] );
+		$instance['parent']                     = strip_tags( $new_instance['parent'] );
+		$instance['topic_count_text_callback']  = strip_tags( $new_instance['topic_count_text_callback'] );
 		$instance['topic_count_scale_callback'] = strip_tags( $new_instance['topic_count_scale_callback'] );
+
 		$instance['include'] = preg_replace( '/[^0-9,]/', '', $new_instance['include'] );
 		$instance['exclude'] = preg_replace( '/[^0-9,]/', '', $new_instance['exclude'] );
-		$instance['unit'] = $new_instance['unit'];
-		$instance['format'] = $new_instance['format'];
-		$instance['orderby'] = $new_instance['orderby'];
-		$instance['order'] = $new_instance['order'];
+
+		$instance['unit']     = $new_instance['unit'];
+		$instance['format']   = $new_instance['format'];
+		$instance['orderby']  = $new_instance['orderby'];
+		$instance['order']    = $new_instance['order'];
 		$instance['taxonomy'] = $new_instance['taxonomy'];
-		$instance['link'] = $new_instance['link'];
+		$instance['link']     = $new_instance['link'];
+
 		$instance['pad_counts'] = ( isset( $new_instance['pad_counts'] ) ? 1 : 0 );
 		$instance['hide_empty'] = ( isset( $new_instance['hide_empty'] ) ? 1 : 0 );
 
@@ -140,26 +143,26 @@ class Hybrid_Widget_Tags extends WP_Widget {
 
 		/* Set up the default form values. */
 		$defaults = array(
-			'title' => esc_attr__( 'Tags', 'hybrid-core' ),
-			'order' => 'ASC',
-			'orderby' => 'name',
-			'format' => 'flat',
-			'include' => '',
-			'exclude' => '',
-			'unit' => 'pt',
-			'smallest' => 8,
-			'largest' => 22,
-			'link' => 'view',
-			'number' => 45,
-			'separator' => ' ',
-			'child_of' => '',
-			'parent' => '',
-			'taxonomy' => array( 'post_tag' ),
-			'hide_empty' => 1,
-			'pad_counts' => false,
-			'search' => '',
-			'name__like' => '',
-			'topic_count_text_callback' => 'default_topic_count_text',
+			'title'                      => esc_attr__( 'Tags', 'hybrid-core' ),
+			'order'                      => 'ASC',
+			'orderby'                    => 'name',
+			'format'                     => 'flat',
+			'include'                    => '',
+			'exclude'                    => '',
+			'unit'                       => 'pt',
+			'smallest'                   => 8,
+			'largest'                    => 22,
+			'link'                       => 'view',
+			'number'                     => 45,
+			'separator'                  => ' ',
+			'child_of'                   => '',
+			'parent'                     => '',
+			'taxonomy'                   => array( 'post_tag' ),
+			'hide_empty'                 => 1,
+			'pad_counts'                 => false,
+			'search'                     => '',
+			'name__like'                 => '',
+			'topic_count_text_callback'  => 'default_topic_count_text',
 			'topic_count_scale_callback' => 'default_topic_count_scale',
 		);
 
@@ -168,11 +171,34 @@ class Hybrid_Widget_Tags extends WP_Widget {
 
 		/* <select> element options. */
 		$taxonomies = get_taxonomies( array( 'show_tagcloud' => true ), 'objects' );
-		$link = array( 'view' => esc_attr__( 'View', 'hybrid-core' ), 'edit' => esc_attr__( 'Edit', 'hybrid-core' ) );
-		$format = array( 'flat' => esc_attr__( 'Flat', 'hybrid-core' ), 'list' => esc_attr__( 'List', 'hybrid-core' ) );
-		$order = array( 'ASC' => esc_attr__( 'Ascending', 'hybrid-core' ), 'DESC' => esc_attr__( 'Descending', 'hybrid-core' ), 'RAND' => esc_attr__( 'Random', 'hybrid-core' ) );
-		$orderby = array( 'count' => esc_attr__( 'Count', 'hybrid-core' ), 'name' => esc_attr__( 'Name', 'hybrid-core' ) );
-		$unit = array( 'pt' => 'pt', 'px' => 'px', 'em' => 'em', '%' => '%' );
+
+		$link = array( 
+			'view' => esc_attr__( 'View', 'hybrid-core' ), 
+			'edit' => esc_attr__( 'Edit', 'hybrid-core' ) 
+		);
+
+		$format = array( 
+			'flat' => esc_attr__( 'Flat', 'hybrid-core' ), 
+			'list' => esc_attr__( 'List', 'hybrid-core' ) 
+		);
+
+		$order = array( 
+			'ASC'  => esc_attr__( 'Ascending', 'hybrid-core' ), 
+			'DESC' => esc_attr__( 'Descending', 'hybrid-core' ), 
+			'RAND' => esc_attr__( 'Random', 'hybrid-core' ) 
+		);
+
+		$orderby = array( 
+			'count' => esc_attr__( 'Count', 'hybrid-core' ), 
+			'name'  => esc_attr__( 'Name', 'hybrid-core' ) 
+		);
+
+		$unit = array( 
+			'pt' => 'pt', 
+			'px' => 'px', 
+			'em' => 'em', 
+			'%'  => '%' 
+		);
 
 		?>
 
