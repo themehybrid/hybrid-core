@@ -156,9 +156,6 @@ class Random_Custom_Background {
 		if ( empty( $backgrounds ) )
 			return;
 
-		/* Set the backgrounds to the $backgrounds variable. */
-		$backgrounds = $supports[0];
-
 		/* Count the number of backgrounds. */
 		$count = count( $backgrounds );
 
