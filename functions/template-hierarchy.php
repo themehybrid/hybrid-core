@@ -5,12 +5,12 @@
  * making it smarter and more flexible.  The goal is to give theme developers and end users an 
  * easy-to-override system that doesn't involve massive amounts of conditional tags within files.
  *
- * @package HybridCore
+ * @package    HybridCore
  * @subpackage Functions
- * @author Justin Tadlock <justin@justintadlock.com>
- * @copyright Copyright (c) 2008 - 2012, Justin Tadlock
- * @link http://themehybrid.com/hybrid-core
- * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @author     Justin Tadlock <justin@justintadlock.com>
+ * @copyright  Copyright (c) 2008 - 2012, Justin Tadlock
+ * @link       http://themehybrid.com/hybrid-core
+ * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 /* Filter the date template. */
@@ -37,7 +37,7 @@ add_filter( 'comments_template', 'hybrid_comments_template' );
  * is_date() allows by checking for the year, month, week, day, hour, and minute.
  *
  * @since 0.6.0
- * @access private
+ * @access public
  * @uses locate_template() Checks for template in child and parent theme.
  * @param string $template
  * @return string $template Full path to file.
@@ -92,7 +92,7 @@ function hybrid_date_template( $template ) {
  * user-$nicename.php, $user-role-$role.php, user.php, author.php, archive.php.
  *
  * @since 0.7.0
- * @access private
+ * @access public
  * @uses locate_template() Checks for template in child and parent theme.
  * @param string $template
  * @return string Full path to file.
@@ -135,7 +135,7 @@ function hybrid_user_template( $template ) {
  * taxonomy.php, archive.php.
  *
  * @since 0.7.0
- * @access private
+ * @access public
  * @uses locate_template() Checks for template in child and parent theme.
  * @param string $template
  * @return string Full path to file.
@@ -161,7 +161,7 @@ function hybrid_taxonomy_template( $template ) {
  * attachment-$mime[1].php, or attachment-$mime[0].php.
  *
  * @since 0.7.0
- * @access private
+ * @access public
  * @param string $template The default WordPress post template.
  * @return string $template The theme post template after all templates have been checked for.
  */
@@ -217,7 +217,7 @@ function hybrid_singular_template( $template ) {
  * back to the default "comments.php" template.
  *
  * @since 1.5.0
- * @access private
+ * @access public
  * @param string $template The comments template file name.
  * @return string $template The theme comments template after all templates have been checked for.
  */

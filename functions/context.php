@@ -5,12 +5,12 @@
  * The functions also integrate with WordPress' implementations of body_class, post_class, and 
  * comment_class, so your theme won't have any trouble with plugin integration.
  *
- * @package HybridCore
+ * @package    HybridCore
  * @subpackage Functions
- * @author Justin Tadlock <justin@justintadlock.com>
- * @copyright Copyright (c) 2008 - 2012, Justin Tadlock
- * @link http://themehybrid.com/hybrid-core
- * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @author     Justin Tadlock <justin@justintadlock.com>
+ * @copyright  Copyright (c) 2008 - 2012, Justin Tadlock
+ * @link       http://themehybrid.com/hybrid-core
+ * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 /**
@@ -86,12 +86,16 @@ function hybrid_get_context() {
 		/* Date archives. */
 		if ( is_date() ) {
 			$hybrid->context[] = 'date';
+
 			if ( is_year() )
 				$hybrid->context[] = 'year';
+
 			if ( is_month() )
 				$hybrid->context[] = 'month';
+
 			if ( get_query_var( 'w' ) )
 				$hybrid->context[] = 'week';
+
 			if ( is_day() )
 				$hybrid->context[] = 'day';
 		}
@@ -99,8 +103,10 @@ function hybrid_get_context() {
 		/* Time archives. */
 		if ( is_time() ) {
 			$hybrid->context[] = 'time';
+
 			if ( get_query_var( 'hour' ) )
 				$hybrid->context[] = 'hour';
+
 			if ( get_query_var( 'minute' ) )
 				$hybrid->context[] = 'minute';
 		}

@@ -4,12 +4,12 @@
  * This file loads additional classes and adds settings to the customizer for the built-in Hybrid Core 
  * settings.
  *
- * @package HybridCore
+ * @package    HybridCore
  * @subpackage Functions
- * @author Justin Tadlock <justin@justintadlock.com>
- * @copyright Copyright (c) 2008 - 2012, Justin Tadlock
- * @link http://themehybrid.com/hybrid-core
- * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @author     Justin Tadlock <justin@justintadlock.com>
+ * @copyright  Copyright (c) 2008 - 2012, Justin Tadlock
+ * @link       http://themehybrid.com/hybrid-core
+ * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 /* Load custom control classes. */
@@ -60,9 +60,9 @@ function hybrid_customize_register( $wp_customize ) {
 		$wp_customize->add_section(
 			'hybrid-core-footer',
 			array(
-				'title' => 		esc_html__( 'Footer', 'hybrid-core' ),
-				'priority' => 	200,
-				'capability' => 	'edit_theme_options'
+				'title'      => esc_html__( 'Footer', 'hybrid-core' ),
+				'priority'   => 200,
+				'capability' => 'edit_theme_options'
 			)
 		);
 
@@ -70,12 +70,12 @@ function hybrid_customize_register( $wp_customize ) {
 		$wp_customize->add_setting(
 			"{$prefix}_theme_settings[footer_insert]",
 			array(
-				'default' => 		$default_settings['footer_insert'],
-				'type' => 			'option',
-				'capability' => 		'edit_theme_options',
-				'sanitize_callback' => 	'hybrid_customize_sanitize',
-				'sanitize_js_callback' => 	'hybrid_customize_sanitize',
-				'transport' => 		'postMessage',
+				'default'              => $default_settings['footer_insert'],
+				'type'                 => 'option',
+				'capability'           => 'edit_theme_options',
+				'sanitize_callback'    => 'hybrid_customize_sanitize',
+				'sanitize_js_callback' => 'hybrid_customize_sanitize',
+				'transport'            => 'postMessage',
 			)
 		);
 
@@ -85,9 +85,9 @@ function hybrid_customize_register( $wp_customize ) {
 				$wp_customize,
 				'hybrid-core-footer',
 				array(
-					'label' => 	esc_html__( 'Footer', 'hybrid-core' ),
-					'section' => 	'hybrid-core-footer',
-					'settings' => 	"{$prefix}_theme_settings[footer_insert]",
+					'label'    => esc_html__( 'Footer', 'hybrid-core' ),
+					'section'  => 'hybrid-core-footer',
+					'settings' => "{$prefix}_theme_settings[footer_insert]",
 				)
 			)
 		);
