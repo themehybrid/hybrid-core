@@ -4,12 +4,12 @@
  * used across the entire framework to make various tasks faster. This file should be loaded
  * prior to any other files because its functions are needed to run the framework.
  *
- * @package HybridCore
+ * @package    HybridCore
  * @subpackage Functions
- * @author Justin Tadlock <justin@justintadlock.com>
- * @copyright Copyright (c) 2008 - 2012, Justin Tadlock
- * @link http://themehybrid.com/hybrid-core
- * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @author     Justin Tadlock <justin@justintadlock.com>
+ * @copyright  Copyright (c) 2008 - 2012, Justin Tadlock
+ * @link       http://themehybrid.com/hybrid-core
+ * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 /**
@@ -42,10 +42,11 @@ function hybrid_get_prefix() {
  * give extra hooks such as 'hybrid_singular_header', 'hybrid_singular-post_header', and 
  * 'hybrid_singular-post-ID_header'.
  *
- * @since 0.7.0
  * @author Justin Tadlock <justin@justintadlock.com>
  * @author Ptah Dunbar <pt@ptahd.com>
  * @link http://ptahdunbar.com/wordpress/smarter-hooks-context-sensitive-hooks
+ *
+ * @since 0.7.0
  * @access public
  * @uses hybrid_get_prefix() Gets the theme prefix.
  * @uses hybrid_get_context() Gets the context of the current page.
@@ -53,6 +54,7 @@ function hybrid_get_prefix() {
  * @param mixed $arg,... Optional additional arguments which are passed on to the functions hooked to the action.
  */
 function do_atomic( $tag = '', $arg = '' ) {
+
 	if ( empty( $tag ) )
 		return false;
 
@@ -67,7 +69,7 @@ function do_atomic( $tag = '', $arg = '' ) {
 	do_action_ref_array( "{$pre}_{$tag}", $args );
 
 	/* Loop through context array and fire actions on a contextual scale. */
-	foreach ( (array)hybrid_get_context() as $context )
+	foreach ( (array) hybrid_get_context() as $context )
 		do_action_ref_array( "{$pre}_{$context}_{$tag}", $args );
 }
 
@@ -89,6 +91,7 @@ function do_atomic( $tag = '', $arg = '' ) {
  * @return mixed $value The value after it has been filtered.
  */
 function apply_atomic( $tag = '', $value = '' ) {
+
 	if ( empty( $tag ) )
 		return false;
 
@@ -103,7 +106,7 @@ function apply_atomic( $tag = '', $value = '' ) {
 	$value = $args[0] = apply_filters_ref_array( "{$pre}_{$tag}", $args );
 
 	/* Loop through context array and apply filters on a contextual scale. */
-	foreach ( (array)hybrid_get_context() as $context )
+	foreach ( (array) hybrid_get_context() as $context )
 		$value = $args[0] = apply_filters_ref_array( "{$pre}_{$context}_{$tag}", $args );
 
 	/* Return the final value once all filters have been applied. */
