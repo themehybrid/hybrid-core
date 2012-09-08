@@ -15,12 +15,12 @@
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- * @package GetTheImage
- * @version 0.8.1 - Alpha
- * @author Justin Tadlock <justin@justintadlock.com>
+ * @package   GetTheImage
+ * @version   0.8.1 - Alpha
+ * @author    Justin Tadlock <justin@justintadlock.com>
  * @copyright Copyright (c) 2008 - 2012, Justin Tadlock
- * @link http://justintadlock.com/archives/2008/05/27/get-the-image-wordpress-plugin
- * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @link      http://justintadlock.com/archives/2008/05/27/get-the-image-wordpress-plugin
+ * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 /* Adds theme support for WordPress 'featured images'. */
@@ -50,28 +50,28 @@ function get_the_image( $args = array() ) {
 
 	/* Set the default arguments. */
 	$defaults = array(
-		'meta_key' => 		array( 'Thumbnail', 'thumbnail' ), // array|string
-		'post_id' => 		get_the_ID(),
-		'attachment' => 		true,
-		'the_post_thumbnail' => 	true, // WP 2.9+ image function
-		'size' => 			'thumbnail',
-		'default_image' => 	false,
-		'order_of_image' => 	1,
-		'link_to_post' => 		true,
-		'image_class' => 		false,
-		'image_scan' => 		false,
-		'width' => 		false,
-		'height' => 		false,
-		'format' => 		'img',
-		'meta_key_save' => 	false,
-		'thumbnail_id_save' => 	false, // Set 'featured image'.
-		'callback' => 		null,
-		'cache' => 		true,
-		'before' => 		'',
-		'after' => 		'',
-		'echo' => 		true,
-		'custom_key' => 		null, // @deprecated 0.6. Use 'meta_key'.
-		'default_size' => 		null, // @deprecated 0.5.  Use 'size'.
+		'meta_key'           => array( 'Thumbnail', 'thumbnail' ), // array|string
+		'post_id'            => get_the_ID(),
+		'attachment'         => true,
+		'the_post_thumbnail' => true, // WP 2.9+ image function
+		'size'               => 'thumbnail',
+		'default_image'      => false,
+		'order_of_image'     => 1,
+		'link_to_post'       => true,
+		'image_class'        => false,
+		'image_scan'         => false,
+		'width'              => false,
+		'height'             => false,
+		'format'             => 'img',
+		'meta_key_save'      => false,
+		'thumbnail_id_save'  => false, // Set 'featured image'.
+		'callback'           => null,
+		'cache'              => true,
+		'before'             => '',
+		'after'              => '',
+		'echo'               => true,
+		'custom_key'         => null, // @deprecated 0.6. Use 'meta_key'.
+		'default_size'       => null, // @deprecated 0.5.  Use 'size'.
 	);
 
 	/* Allow plugins/themes to filter the arguments. */
@@ -286,12 +286,12 @@ function get_the_image_by_attachment( $args = array() ) {
 		/* Get attachments for the inputted $post_id. */
 		$attachments = get_children(
 			array(
-				'post_parent' => $args['post_id'],
-				'post_status' => 'inherit',
-				'post_type' => 'attachment',
-				'post_mime_type' => 'image',
-				'order' => 'ASC',
-				'orderby' => 'menu_order ID',
+				'post_parent'      => $args['post_id'],
+				'post_status'      => 'inherit',
+				'post_type'        => 'attachment',
+				'post_mime_type'   => 'image',
+				'order'            => 'ASC',
+				'orderby'          => 'menu_order ID',
 				'suppress_filters' => true
 			)
 		);
