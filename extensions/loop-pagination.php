@@ -13,12 +13,12 @@
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- * @package LoopPagination
- * @version 0.1.6 - Alpha
- * @author Justin Tadlock <justin@justintadlock.com>
+ * @package   LoopPagination
+ * @version   0.1.6 - Alpha
+ * @author    Justin Tadlock <justin@justintadlock.com>
  * @copyright Copyright (c) 2010 - 2012, Justin Tadlock
- * @link http://devpress.com/blog/loop-pagination-for-theme-developers
- * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @link      http://themehybrid.com/docs/tutorials/loop-pagination
+ * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 /**
@@ -46,26 +46,27 @@ function loop_pagination( $args = array() ) {
 
 	/* Set up some default arguments for the paginate_links() function. */
 	$defaults = array(
-		'base' => add_query_arg( 'paged', '%#%' ),
-		'format' => '',
-		'total' => $max_num_pages,
-		'current' => $current,
-		'prev_next' => true,
-		//'prev_text' => __( '&laquo; Previous' ), // This is the WordPress default.
-		//'next_text' => __( 'Next &raquo;' ), // This is the WordPress default.
-		'show_all' => false,
-		'end_size' => 1,
-		'mid_size' => 1,
+		'base'         => add_query_arg( 'paged', '%#%' ),
+		'format'       => '',
+		'total'        => $max_num_pages,
+		'current'      => $current,
+		'prev_next'    => true,
+		//'prev_text'  => __( '&laquo; Previous' ), // This is the WordPress default.
+		//'next_text'  => __( 'Next &raquo;' ), // This is the WordPress default.
+		'show_all'     => false,
+		'end_size'     => 1,
+		'mid_size'     => 1,
 		'add_fragment' => '',
-		'type' => 'plain',
-		'before' => '<div class="pagination loop-pagination">', // Begin loop_pagination() arguments.
-		'after' => '</div>',
-		'echo' => true,
+		'type'         => 'plain',
+
+		// Begin loop_pagination() arguments.
+		'before'       => '<div class="pagination loop-pagination">',
+		'after'        => '</div>',
+		'echo'         => true,
 	);
 
 	/* Add the $base argument to the array if the user is using permalinks. */
 	if ( $wp_rewrite->using_permalinks() && !is_search() )
-	//	$defaults['base'] = str_replace( 2, '%#%', esc_url( get_pagenum_link( 2 ) ) );
 		$defaults['base'] = user_trailingslashit( trailingslashit( get_pagenum_link() ) . 'page/%#%' );
 
 	/* @todo Find a way to make pretty links work for search in all cases. */
