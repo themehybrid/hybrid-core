@@ -319,14 +319,14 @@ function get_the_image_by_attachment( $args = array() ) {
 	if ( !empty( $attachment_id ) ) {
 
 		/* Get the attachment image. */
-		$image = wp_get_attachment_image_src( $id, $args['size'] );
+		$image = wp_get_attachment_image_src( $attachment_id, $args['size'] );
 
 		/* Get the attachment excerpt. */
-		$alt = trim( strip_tags( get_post_field( 'post_excerpt', $id ) ) );
+		$alt = trim( strip_tags( get_post_field( 'post_excerpt', $attachment_id ) ) );
 
 		/* Save the attachment as the 'featured image'. */
 		if ( true === $args['thumbnail_id_save'] )
-			set_post_thumbnail( $args['post_id'], $id );
+			set_post_thumbnail( $args['post_id'], $attachment_id );
 
 		/* Return the image URL. */
 		return array( 'src' => $image[0], 'alt' => $alt );
