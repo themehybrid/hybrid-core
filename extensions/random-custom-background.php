@@ -161,8 +161,7 @@ class Random_Custom_Background {
 
 		/* Generate a random background from the given set of backgrounds. */
 		if ( 1 < $count ) {
-			srand( (double) microtime() * 1000000 );
-			$random = rand( 0, $count - 1 );
+			$random = mt_rand( 0, $count - 1 );
 			$args = $backgrounds[ $random ];
 		}
 
