@@ -258,7 +258,7 @@ function hybrid_comment_class( $class = '' ) {
 	}
 
 	/* Comment by the entry/post author. */
-	if ( $post = get_post( $post_id ) ) {
+	if ( $post = get_post( get_the_ID() ) ) {
 		if ( $comment->user_id === $post->post_author )
 			$classes[] = 'entry-author';
 	}
