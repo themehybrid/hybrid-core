@@ -108,7 +108,7 @@ function get_the_image( $args = array() ) {
 	$image_html = '';
 
 	/* If there is no cached image, let's see if one exists. */
-	if ( !isset( $image_cache[$key] ) || empty( $cache ) ) {
+	if ( !isset( $image_cache[ $key ] ) || empty( $cache ) ) {
 
 		/* If a custom field key (array) is defined, check for images by custom field. */
 		if ( !empty( $meta_key ) )
@@ -145,7 +145,7 @@ function get_the_image( $args = array() ) {
 			$image_html = get_the_image_format( $args, $image );
 
 			/* Set the image cache for the specific post. */
-			$image_cache[$key] = $image_html;
+			$image_cache[ $key ] = $image_html;
 			wp_cache_set( $post_id, $image_cache, 'get_the_image' );
 		}
 	}
@@ -169,7 +169,7 @@ function get_the_image( $args = array() ) {
 
 		/* Loop through the image attributes and add them in key/value pairs for the return array. */
 		foreach ( $atts as $att )
-			$out[$att['name']] = $att['value'];
+			$out[ $att['name'] ] = $att['value'];
 
 		$out['url'] = $out['src']; // @deprecated 0.5 Use 'src' instead of 'url'.
 
@@ -197,8 +197,8 @@ function get_the_image( $args = array() ) {
 /* Internal Functions */
 
 /**
- * Calls images by custom field key.  Script loops through multiple custom field keys.  If that particular key 
- * is found, $image is set and the loop breaks.  If an image is found, it is returned.
+ * Calls images by custom field key.  Script loops through multiple custom field keys.  If that particular 
+ * key is found, $image is set and the loop breaks.  If an image is found, it is returned.
  *
  * @since 0.7.0
  * @access private
