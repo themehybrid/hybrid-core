@@ -14,12 +14,12 @@
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- * @package CleanerGallery
- * @version 0.9.5 - Alpha
- * @author Justin Tadlock <justin@justintadlock.com>
+ * @package   CleanerGallery
+ * @version   0.9.5 - Alpha
+ * @author    Justin Tadlock <justin@justintadlock.com>
  * @copyright Copyright (c) 2008 - 2012, Justin Tadlock
- * @link http://justintadlock.com/archives/2008/04/13/cleaner-wordpress-gallery-plugin
- * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @link      http://justintadlock.com/archives/2008/04/13/cleaner-wordpress-gallery-plugin
+ * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 /* Filter the post gallery shortcode output. */
@@ -30,10 +30,10 @@ add_filter( 'post_gallery', 'cleaner_gallery', 10, 2 );
  * HTML and inline styles.  It adds the number of columns used as a class attribute, which allows 
  * developers to style the gallery more easily.
  *
- * @since 0.9.0
+ * @since  0.9.0
  * @access private
- * @param string $output
- * @param array $attr
+ * @param  string $output The output of the gallery shortcode.
+ * @param  array  $attr   The arguments for displaying the gallery.
  * @return string $output
  */
 function cleaner_gallery( $output, $attr ) {
@@ -54,20 +54,20 @@ function cleaner_gallery( $output, $attr ) {
 
 	/* Default gallery settings. */
 	$defaults = array(
-		'order' => 'ASC',
-		'orderby' => 'menu_order ID',
-		'id' => get_the_ID(),
-		'link' => '',
-		'itemtag' => 'dl',
-		'icontag' => 'dt',
-		'captiontag' => 'dd',
-		'columns' => 3,
-		'size' => 'thumbnail',
-		'ids' => '',
-		'include' => '',
-		'exclude' => '',
+		'order'       => 'ASC',
+		'orderby'     => 'menu_order ID',
+		'id'          => get_the_ID(),
+		'link'        => '',
+		'itemtag'     => 'dl',
+		'icontag'     => 'dt',
+		'captiontag'  => 'dd',
+		'columns'     => 3,
+		'size'        => 'thumbnail',
+		'ids'         => '',
+		'include'     => '',
+		'exclude'     => '',
 		'numberposts' => -1,
-		'offset' => ''
+		'offset'      => ''
 	);
 
 	/* Apply filters to the default arguments. */
@@ -83,16 +83,16 @@ function cleaner_gallery( $output, $attr ) {
 
 	/* Arguments for get_children(). */
 	$children = array(
-		'post_parent' => $id,
-		'post_status' => 'inherit',
-		'post_type' => 'attachment',
-		'post_mime_type' => 'image',
-		'order' => $order,
-		'orderby' => !empty( $ids ) ? 'post__in' : $orderby,
-		'exclude' => $exclude,
-		'include' => !empty( $ids ) ? $ids : $include,
-		'numberposts' => $numberposts,
-		'offset' => $offset,
+		'post_parent'      => $id,
+		'post_status'      => 'inherit',
+		'post_type'        => 'attachment',
+		'post_mime_type'   => 'image',
+		'order'            => $order,
+		'orderby'          => !empty( $ids ) ? 'post__in' : $orderby,
+		'exclude'          => $exclude,
+		'include'          => !empty( $ids ) ? $ids : $include,
+		'numberposts'      => $numberposts,
+		'offset'           => $offset,
 		'suppress_filters' => true
 	);
 
@@ -103,8 +103,8 @@ function cleaner_gallery( $output, $attr ) {
 		return '';
 
 	/* Properly escape the gallery tags. */
-	$itemtag = tag_escape( $itemtag );
-	$icontag = tag_escape( $icontag );
+	$itemtag    = tag_escape( $itemtag );
+	$icontag    = tag_escape( $icontag );
 	$captiontag = tag_escape( $captiontag );
 	$i = 0;
 
