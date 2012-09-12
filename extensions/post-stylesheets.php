@@ -138,13 +138,13 @@ function post_stylesheets_stylesheet_uri( $stylesheet_uri, $stylesheet_dir_uri )
 			if ( !empty( $stylesheet ) ) {
 
 				/* If the stylesheet is found in the child theme, use it. */
-				if ( file_exists( trailingslashit( get_stylesheet_directory() ) . "{$stylesheet}" ) ) {
-					$stylesheet_uri = trailingslashit( $stylesheet_dir_uri ) . "{$stylesheet}";
+				if ( file_exists( trailingslashit( get_stylesheet_directory() ) . $stylesheet ) ) {
+					$stylesheet_uri = trailingslashit( $stylesheet_dir_uri ) . $stylesheet;
 				}
 
 				/* Else, if the stylesheet is found in the parent theme, use it. */
-				elseif ( file_exists( trailingslashit( get_template_directory() ) . "{$stylesheet}" ) ) {
-					$stylesheet_uri = trailingslashit( get_template_directory_uri() ) . "{$stylesheet}";
+				elseif ( file_exists( trailingslashit( get_template_directory() ) . $stylesheet ) ) {
+					$stylesheet_uri = trailingslashit( get_template_directory_uri() ) . $stylesheet;
 				}
 
 				/* @deprecated 0.4.0 Back compatibility. */
