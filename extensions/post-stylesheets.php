@@ -136,13 +136,34 @@ function post_stylesheets_stylesheet_uri( $stylesheet_uri, $stylesheet_dir_uri )
 			/* If a meta value was given and the file exists, set $stylesheet_uri to the new file. */
 			if ( !empty( $stylesheet ) ) {
 
-				/* If the stylesheet is found in the child theme '/css' folder, use it. */
-				if ( file_exists( trailingslashit( get_stylesheet_directory() ) . "css/{$stylesheet}" ) )
-					$stylesheet_uri = trailingslashit( $stylesheet_dir_uri ) . "css/{$stylesheet}";
+				/* If the stylesheet is found in the child theme, use it. */
+				if ( file_exists( trailingslashit( get_stylesheet_directory() ) . "{$stylesheet}" ) ) {
+					$stylesheet_uri = trailingslashit( $stylesheet_dir_uri ) . "{$stylesheet}";
+				}
 
-				/* Else, if the stylesheet is found in the parent theme '/css' folder, use it. */
-				elseif ( file_exists( trailingslashit( get_template_directory() ) . "css/{$stylesheet}" ) )
-					$stylesheet_uri = trailingslashit( get_template_directory_uri() ) . "css/{$stylesheet}";
+				/* Else, if the stylesheet is found in the parent theme, use it. */
+				elseif ( file_exists( trailingslashit( get_template_directory() ) . "{$stylesheet}" ) ) {
+					$stylesheet_uri = trailingslashit( get_template_directory_uri() ) . "{$stylesheet}";
+				}
+
+				/* @deprecated 0.4.0 Back compatibility. */
+				else {
+					/* If the stylesheet is found in the child theme '/css' folder, use it. */
+					if ( file_exists( trailingslashit( get_stylesheet_directory() ) . "css/{$stylesheet}" ) ) {
+						$stylesheet_uri = trailingslashit( $stylesheet_dir_uri ) . "css/{$stylesheet}";
+
+						/* Set the post stylesheet to the correct directory. */
+						set_post_stylesheet( $post_id, str_replace( get_stylesheet_directory_uri(), 'css/', $stylesheet_uri ) );
+					}
+
+					/* Else, if the stylesheet is found in the parent theme '/css' folder, use it. */
+					elseif ( file_exists( trailingslashit( get_template_directory() ) . "css/{$stylesheet}" ) ) {
+						$stylesheet_uri = trailingslashit( get_template_directory_uri() ) . "css/{$stylesheet}";
+
+						/* Set the post stylesheet to the correct directory. */
+						set_post_stylesheet( $post_id, str_replace( get_template_directory_uri(), 'css/', $stylesheet_uri ) );
+					}
+				}
 			}
 		}
 	}
@@ -268,7 +289,17 @@ function post_stylesheets_meta_box( $object, $box ) { ?>
 
 	<p>
 		<?php wp_nonce_field( basename( __FILE__ ), 'post-stylesheets-nonce' ); ?>
-		<input type="text" class="widefat" name="post-stylesheets" id="post-stylesheets" value="<?php echo esc_attr( get_post_stylesheet( $object->ID ) ); ?>" />
+		<?php $styles = post_stylesheets_get_styles(); ?>
+
+		<select name="post-stylesheets" id="post-stylesheets" class="widefat">
+			<option value=""></option>
+
+			<?php if ( !empty( $styles ) ) {
+				foreach ( $styles as $label => $file ) { ?>
+					<option value="<?php echo esc_attr( $file ); ?>" <?php selected( get_post_stylesheet( $object->ID ), esc_attr( $file ) ); ?>><?php echo esc_html( $label ); ?></option>
+				<?php }
+			} ?>
+		</select>
 	</p>
 <?php
 }
@@ -311,6 +342,35 @@ function post_stylesheets_meta_box_save( $post_id, $post ) {
 	/* If the old layout doesn't match the new layout, update the post layout meta. */
 	elseif ( current_user_can( 'edit_post_meta', $post_id, $meta_key ) && $meta_value !== $new_meta_value )
 		set_post_stylesheet( $post_id, $new_meta_value );
+}
+
+function post_stylesheets_get_styles() {
+
+	/* Set up an empty styles array. */
+	$styles = array();
+
+	/* Get the theme object. */
+	$theme = wp_get_theme();
+
+	/* Get the theme CSS files two levels deep. */
+	$files = (array) $theme->get_files( 'css', 2, true );
+
+	/* Loop through each of the CSS files and check if they are styles. */
+	foreach ( $files as $file => $path ) {
+
+		/* Get file data based on the 'Style Name' header. */
+		$headers = get_file_data( $path, array( 'Style Name' => 'Style Name' ) );
+
+		/* Continue loop if the header is empty. */
+		if ( empty( $headers['Style Name'] ) )
+			continue;
+
+		/* Add the CSS filename and template name to the array. */
+		$styles[ $file ] = $headers['Style Name'];
+	}
+
+	/* Return array of styles. */
+	return array_flip( $styles );
 }
 
 /**
