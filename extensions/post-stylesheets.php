@@ -151,7 +151,7 @@ function post_stylesheets_stylesheet_uri( $stylesheet_uri, $stylesheet_dir_uri )
 						$stylesheet_uri = trailingslashit( $stylesheet_dir_uri ) . "css/{$stylesheet}";
 
 						/* Set the post stylesheet to the correct directory. */
-						set_post_stylesheet( $post_id, str_replace( get_stylesheet_directory_uri(), 'css/', $stylesheet_uri ) );
+						set_post_stylesheet( $post->ID, str_replace( get_stylesheet_directory_uri(), 'css/', $stylesheet_uri ) );
 					}
 
 					/* Else, if the stylesheet is found in the parent theme '/css' folder, use it. */
@@ -159,7 +159,7 @@ function post_stylesheets_stylesheet_uri( $stylesheet_uri, $stylesheet_dir_uri )
 						$stylesheet_uri = trailingslashit( get_template_directory_uri() ) . "css/{$stylesheet}";
 
 						/* Set the post stylesheet to the correct directory. */
-						set_post_stylesheet( $post_id, str_replace( get_template_directory_uri(), 'css/', $stylesheet_uri ) );
+						set_post_stylesheet( $post->ID, str_replace( get_template_directory_uri(), 'css/', $stylesheet_uri ) );
 					}
 				}
 			}
