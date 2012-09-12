@@ -3,8 +3,9 @@
  * Post Stylesheets - A WordPress script for post-specific stylesheets.
  *
  * Post Stylesheets allows users and developers to add unique, per-post stylesheets.  This script was 
- * created so that custom stylesheet files could be dropped into a theme's '/css' folder and loaded for 
- * individual posts using the 'Stylesheet' post meta key and the stylesheet name as the post meta value.
+ * created so that custom stylesheet files could be dropped into a theme folder or sub-folder and loaded
+ * for individual posts using the 'Stylesheet' post meta key and the stylesheet name as the post meta 
+ * value.  Custom stylesheets must have the 'Style Name: Value' header.
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the GNU 
  * General Public License as published by the Free Software Foundation; either version 2 of the License, 
@@ -39,6 +40,7 @@ add_action( 'admin_menu', 'post_stylesheets_admin_setup' );
  * the metadata on update.
  *
  * @since 0.3.0
+ * @access public
  * @return void
  */
 function post_stylesheets_register_meta() {
@@ -51,6 +53,7 @@ function post_stylesheets_register_meta() {
  * "sanitize_{$meta_type}_meta_{$meta_key}" filter hook to do so.
  *
  * @since 0.3.0
+ * @access public
  * @param mixed $meta_value The value of the data to sanitize.
  * @param string $meta_key The meta key name.
  * @param string $meta_type The type of metadata (post, comment, user, etc.)
@@ -64,7 +67,7 @@ function post_styleheets_sanitize_meta( $meta_value, $meta_key, $meta_type ) {
  * Adds post type support for the 'post-stylesheets' feature to all 'public' post types.
  *
  * @since 0.3.0
- * @access private
+ * @access public
  * @return void
  */
 function post_stylesheets_add_post_type_support() {
@@ -81,7 +84,7 @@ function post_stylesheets_add_post_type_support() {
  * Removes post stylesheets support for certain post types created by plugins.
  *
  * @since 0.3.0
- * @access private
+ * @access public
  * @return void
  */
 function post_stylesheets_remove_post_type_support() {
@@ -103,7 +106,7 @@ function post_stylesheets_remove_post_type_support() {
  *
  * @since 0.1.0
  * @todo Use features from Ticket #18302 when available. http://core.trac.wordpress.org/ticket/18302
- * @access private
+ * @access public
  * @param string $stylesheet_uri The URI of the active theme's stylesheet.
  * @param string $stylesheet_dir_uri The directory URI of the active theme's stylesheet.
  * @return string $stylesheet_uri
@@ -230,7 +233,7 @@ function has_post_stylesheet( $stylesheet, $post_id = '' ) {
  * Admin setup for the post stylesheets script.
  *
  * @since 0.3.0
- * @access private
+ * @access public
  * @return void
  */
 function post_stylesheets_admin_setup() {
@@ -245,7 +248,7 @@ function post_stylesheets_admin_setup() {
  * to save the metadata.
  *
  * @since 0.3.0
- * @access private
+ * @access public
  * @return void
  */
 function post_stylesheets_load_meta_boxes() {
@@ -262,7 +265,7 @@ function post_stylesheets_load_meta_boxes() {
  * permission to edit post meta.
  *
  * @since 0.2.0
- * @access private
+ * @access public
  * @param string $post_type The post type of the current post being edited.
  * @param object $post The current post object.
  * @return void
@@ -278,7 +281,7 @@ function post_stylesheets_create_meta_box( $post_type, $post ) {
  * Displays the input field for entering a custom stylesheet.
  *
  * @since 0.2.0
- * @access private
+ * @access public
  * @param object $object The post object currently being edited.
  * @param array $box Specific information about the meta box being loaded.
  * @return void
@@ -306,7 +309,7 @@ function post_stylesheets_meta_box( $object, $box ) { ?>
  * Saves the user-selected post stylesheet on the 'save_post' hook.
  *
  * @since 0.2.0
- * @access private
+ * @access public
  * @param int $post_id The ID of the current post being saved.
  * @param object $post The post object currently being saved.
  */
@@ -342,6 +345,14 @@ function post_stylesheets_meta_box_save( $post_id, $post ) {
 		set_post_stylesheet( $post_id, $new_meta_value );
 }
 
+/**
+ * Gets the stylesheet files within the parent or child theme and checks if they have the 'Style Name' 
+ * header. If any files are found, they are returned in an array.
+ *
+ * @since 0.4.0
+ * @access public
+ * @return array
+ */
 function post_stylesheets_get_styles() {
 
 	/* Set up an empty styles array. */
