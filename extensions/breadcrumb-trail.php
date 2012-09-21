@@ -261,7 +261,7 @@ function breadcrumb_trail_get_items( $args = array() ) {
 					$post_type_object = array_shift( $post_types );
 
 					/* Add support for a non-standard label of 'archive_title' (special use case). */
-					$label = !empty( $post_type_object->labels->archive_title ) ? $post_type_object->labels->archive_title : $post_type_object->name;
+					$label = !empty( $post_type_object->labels->archive_title ) ? $post_type_object->labels->archive_title : $post_type_object->labels->name;
 
 					$trail[] = '<a href="' . get_post_type_archive_link( $post_type_object->name ) . '" title="' . esc_attr( $label ) . '">' . $label . '</a>';
 				}
