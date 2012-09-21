@@ -171,15 +171,22 @@ function breadcrumb_trail_get_items( $args = array() ) {
 		/* If viewing a singular 'attachment'. */
 		elseif ( 'attachment' == $post_type ) {
 
-			/* If $front has been set, add it to the $path. */
-			$path .= trailingslashit( $wp_rewrite->front );
+			/* Get the parent post ID. */
+			$parent_id = $post->post_parent;
 
-			/* If there's a path, check for parents. */
-			if ( !empty( $path ) )
-				$trail = array_merge( $trail, breadcrumb_trail_get_parents( '', $path ) );
+			/* If the attachment has a parent (attached to a post). */
+			if ( 0 < $parent_id ) {
 
-			/* Map the post (parent) permalink structure tags to actual links. */
-			$trail = array_merge( $trail, breadcrumb_trail_map_rewrite_tags( $post->post_parent, get_option( 'permalink_structure' ), $args ) );
+				/* If $front has been set, add it to the $path. */
+				$path .= trailingslashit( $wp_rewrite->front );
+
+				/* If there's a path, check for parents. */
+				if ( !empty( $path ) )
+					$trail = array_merge( $trail, breadcrumb_trail_get_parents( '', $path ) );
+
+				/* Map the post (parent) permalink structure tags to actual links. */
+				$trail = array_merge( $trail, breadcrumb_trail_map_rewrite_tags( $post->post_parent, get_option( 'permalink_structure' ), $args ) );
+			}
 		}
 
 		/* If a custom post type, check if there are any pages in its hierarchy based on the slug. */
