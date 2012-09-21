@@ -272,7 +272,7 @@ function breadcrumb_trail_get_items( $args = array() ) {
 				$trail = array_merge( $trail, breadcrumb_trail_get_parents( '', $path ) );
 
 			/* Add the post type [plural] name to the trail end. */
-			$trail[] = $post_type_object->labels->name;
+			$trail[] = post_type_archive_title( '', false );
 		}
 
 		/* If viewing an author archive. */
