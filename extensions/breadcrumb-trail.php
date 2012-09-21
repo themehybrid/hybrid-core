@@ -202,6 +202,33 @@ function breadcrumb_trail_get_items( $args = array() ) {
 					/* Map the post (parent) permalink structure tags to actual links. */
 					$trail = array_merge( $trail, breadcrumb_trail_map_rewrite_tags( $post->post_parent, get_option( 'permalink_structure' ), $args ) );
 				}
+
+				/* Custom post types. */
+				elseif ( 'page' !== $parent_post_type ) {
+
+					$parent_post_type_object = get_post_type_object( $parent_post_type );
+
+					/* If $front has been set, add it to the $path. */
+					if ( $parent_post_type_object->rewrite['with_front'] && $wp_rewrite->front )
+						$path .= trailingslashit( $wp_rewrite->front );
+
+					/* If there's a slug, add it to the $path. */
+					if ( !empty( $parent_post_type_object->rewrite['slug'] ) )
+						$path .= $parent_post_type_object->rewrite['slug'];
+
+					/* If there's a path, check for parents. */
+					if ( !empty( $path ) )
+						$trail = array_merge( $trail, breadcrumb_trail_get_parents( '', $path ) );
+
+					/* If there's an archive page, add it to the trail. */
+					if ( !empty( $parent_post_type_object->has_archive ) ) {
+
+						/* Add support for a non-standard label of 'archive_title' (special use case). */
+						$label = !empty( $parent_post_type_object->labels->archive_title ) ? $parent_post_type_object->labels->archive_title : $parent_post_type_object->labels->name;
+
+						$trail[] = '<a href="' . get_post_type_archive_link( $parent_post_type ) . '" title="' . esc_attr( $label ) . '">' . $label . '</a>';
+					}
+				}
 			}
 		}
 
