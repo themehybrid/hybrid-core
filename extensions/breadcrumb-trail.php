@@ -14,12 +14,12 @@
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- * @package BreadcrumbTrail
- * @version 0.5.3 - Alpha
- * @author Justin Tadlock <justin@justintadlock.com>
+ * @package   BreadcrumbTrail
+ * @version   0.5.3 - Alpha
+ * @author    Justin Tadlock <justin@justintadlock.com>
  * @copyright Copyright (c) 2008 - 2012, Justin Tadlock
- * @link http://justintadlock.com/archives/2009/04/05/breadcrumb-trail-wordpress-plugin
- * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @link      http://themehybrid.com/plugins/breadcrumb-trail
+ * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 /**
@@ -39,13 +39,13 @@ function breadcrumb_trail( $args = array() ) {
 
 	/* Set up the default arguments for the breadcrumb. */
 	$defaults = array(
-		'container' => 		'div', // div, nav, p, etc.
-		'separator' => 		'/',
-		'before' => 		__( 'Browse:', 'breadcrumb-trail' ),
-		'after' => 		false,
-		'front_page' => 	true,
-		'show_home' => 		__( 'Home', 'breadcrumb-trail' ),
-		'echo' => 		true
+		'container'  => 'div', // div, nav, p, etc.
+		'separator'  => '/',
+		'before'     => __( 'Browse:', 'breadcrumb-trail' ),
+		'after'      => false,
+		'front_page' => true,
+		'show_home'  => __( 'Home', 'breadcrumb-trail' ),
+		'echo'       => true
 	);
 
 	/* Allow singular post views to have a taxonomy's terms prefixing the trail. */
@@ -109,7 +109,7 @@ function breadcrumb_trail( $args = array() ) {
  *
  * @since 0.4.0
  * @todo Build in caching based on the queried object ID.
- * @access private
+ * @access public
  * @param array $args Mixed arguments for the menu.
  * @return array List of items to be shown in the trail.
  */
@@ -369,7 +369,7 @@ function breadcrumb_trail_get_items( $args = array() ) {
  * Gets the items for the breadcrumb trail if bbPress is installed.
  *
  * @since 0.5.0
- * @access private
+ * @access public
  * @param array $args Mixed arguments for the menu.
  * @return array List of items to be shown in the trail.
  */
@@ -496,7 +496,7 @@ function breadcrumb_trail_get_bbpress_items( $args = array() ) {
  * types.
  *
  * @since 0.4.0
- * @access private
+ * @access public
  * @param int $post_id ID of the post whose parents we want.
  * @param string $path Path of a potential parent page.
  * @param array $args Mixed arguments for the menu.
@@ -583,7 +583,7 @@ function breadcrumb_trail_map_rewrite_tags( $post_id = '', $path = '', $args = a
  * path, it'll be added.  But, it's also just a way to check for a hierarchy with hierarchical post types.
  *
  * @since 0.3.0
- * @access private
+ * @access public
  * @param int $post_id ID of the post whose parents we want.
  * @param string $path Path of a potential parent page.
  * @return array $trail Array of parent page links.
@@ -670,7 +670,7 @@ function breadcrumb_trail_get_parents( $post_id = '', $path = '' ) {
  * function get_category_parents() but handles any type of taxonomy.
  *
  * @since 0.3.0
- * @access private
+ * @access public
  * @param int $parent_id The ID of the first parent.
  * @param object|string $taxonomy The taxonomy of the term whose parents we want.
  * @return array $trail Array of links to parent terms.
