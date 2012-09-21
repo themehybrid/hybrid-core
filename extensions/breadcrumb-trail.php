@@ -245,6 +245,23 @@ function breadcrumb_trail_get_items( $args = array() ) {
 			if ( $path )
 				$trail = array_merge( $trail, breadcrumb_trail_get_parents( '', $path ) );
 
+			/* Add post type archive if its 'has_archive' matches the taxonomy rewrite 'slug'. */
+			if ( $taxonomy->rewrite['slug'] ) {
+
+				/* Get public post types that match the rewrite slug. */
+				$post_types = get_post_types( array( 'public' => true, 'has_archive' => $taxonomy->rewrite['slug'] ), 'objects' );
+
+				/* If any post types are found, get the first one. */
+				if ( !empty( $post_types ) ) {
+					$post_type_object = array_shift( $post_types );
+
+					/* Add support for a non-standard label of 'archive_title' (special use case). */
+					$label = !empty( $post_type_object->labels->archive_title ) ? $post_type_object->labels->archive_title : $post_type_object->name;
+
+					$trail[] = '<a href="' . get_post_type_archive_link( $post_type_object->name ) . '" title="' . esc_attr( $label ) . '">' . $label . '</a>';
+				}
+			}
+
 			/* If the taxonomy is hierarchical, list its parent terms. */
 			if ( is_taxonomy_hierarchical( $term->taxonomy ) && $term->parent )
 				$trail = array_merge( $trail, breadcrumb_trail_get_term_parents( $term->parent, $term->taxonomy ) );
