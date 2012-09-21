@@ -412,8 +412,7 @@ function hybrid_document_title() {
 
 		/* If viewing a post type archive. */
 		elseif ( is_post_type_archive() ) {
-			$post_type = get_post_type_object( get_query_var( 'post_type' ) );
-			$doctitle = $post_type->labels->name;
+			$doctitle = post_type_archive_title( '', false );
 		}
 
 		/* If viewing an author/user archive. */
