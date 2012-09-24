@@ -269,6 +269,12 @@ class Hybrid {
 		/* Load the template hierarchy if supported. */
 		require_if_theme_supports( 'hybrid-core-template-hierarchy', trailingslashit( HYBRID_FUNCTIONS ) . 'template-hierarchy.php' );
 
+		/* Load the styles if supported. */
+		require_if_theme_supports( 'hybrid-core-css', trailingslashit( HYBRID_FUNCTIONS ) . 'styles.php' );
+
+		/* Load the scripts if supported. */
+		require_if_theme_supports( 'hybrid-core-javascript', trailingslashit( HYBRID_FUNCTIONS ) . 'scripts.php' );
+
 		/* Load the deprecated functions if supported. */
 		require_if_theme_supports( 'hybrid-core-deprecated', trailingslashit( HYBRID_FUNCTIONS ) . 'deprecated.php' );
 	}
