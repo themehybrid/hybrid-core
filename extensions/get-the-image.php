@@ -139,7 +139,7 @@ function get_the_image( $args = array() ) {
 
 			/* If $meta_key_save was set, save the image to a custom field. */
 			if ( !empty( $meta_key_save ) )
-				get_the_image_meta_key_save( $args, $image['src'] );
+				get_the_image_meta_key_save( $args, $image );
 
 			/* Format the image HTML. */
 			$image_html = get_the_image_format( $args, $image );
