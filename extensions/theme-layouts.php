@@ -39,6 +39,9 @@ add_action( 'admin_menu', 'theme_layouts_admin_setup' );
 /* Add layout option in Customize. */
 add_action( 'customize_register', 'theme_layouts_customize_register' );
 
+/* Filters the theme layout mod. */
+add_filter( 'theme_mods_theme_layout', 'theme_layouts_filter_layout' );
+
 /* Filters the body_class hook to add a custom class. */
 add_filter( 'body_class', 'theme_layouts_body_class' );
 
@@ -131,6 +134,32 @@ function theme_layouts_get_args() {
 }
 
 /**
+ * Filters the 'theme_mods_theme_layout' hook to alter the layout based on post and user metadata.  
+ * Theme authors should also use this hook to filter the layout if need be.
+ *
+ * @since 0.5.0
+ * @access public
+ * @param string $theme_layout
+ * @return string
+ */
+function theme_layouts_filter_layout( $theme_layout ) {
+
+	/* If viewing a singular post, get the post layout. */
+	if ( is_singular() )
+		$layout = get_post_layout( get_queried_object_id() );
+
+	/* If viewing an author archive, get the user layout. */
+	elseif ( is_author() )
+		$layout = get_user_layout( get_queried_object_id() );
+
+	/* If a layout was found, set it. */
+	if ( !empty( $layout ) && 'default' !== $layout )
+		$theme_layout = $layout;
+
+	return $theme_layout;
+}
+
+/**
  * Gets the layout for the current post based off the 'Layout' custom field key if viewing a singular post 
  * entry.  All other pages are given a default layout of 'layout-default'.
  *
@@ -146,27 +175,7 @@ function theme_layouts_get_layout() {
 	$args = theme_layouts_get_args();
 
 	/* Set the layout to an empty string. */
-	$layout = get_theme_mod( 'theme-layout', $args['default'] );
-
-	/* If viewing a singular post, check if a layout has been specified. */
-	if ( is_singular() ) {
-
-		/* Get the current post ID. */
-		$post_id = get_queried_object_id();
-
-		/* Get the post layout. */
-		$layout = get_post_layout( $post_id );
-	}
-
-	/* If viewing a user/author archive, check if a layout has been specified. */
-	elseif ( is_author() ) {
-
-		/* Get the current user ID. */
-		$user_id = get_queried_object_id();
-
-		/* Get the user layout. */
-		$layout = get_user_layout( $user_id );
-	}
+	$layout = get_theme_mod( 'theme_layout', $args['default'] );
 
 	/* Make sure the given layout is in the array of available post layouts for the theme. */
 	if ( empty( $layout ) || !in_array( $layout, $layouts ) || 'default' == $layout )
@@ -175,7 +184,7 @@ function theme_layouts_get_layout() {
 	/* @deprecated 0.2.0. Use the 'get_theme_layout' hook. */
 	$layout = apply_filters( 'get_post_layout', "layout-{$layout}" );
 
-	/* Return the layout and allow plugin/theme developers to override it. */
+	/* @deprecated 0.5.0.  Use the 'theme_mods_theme_layout' hook. */
 	return esc_attr( apply_filters( 'get_theme_layout', $layout ) );
 }
 
@@ -604,7 +613,7 @@ function theme_layouts_customize_register( $wp_customize ) {
 
 		/* Add the 'layout' setting. */
 		$wp_customize->add_setting(
-			'theme-layout',
+			'theme_layout',
 			array(
 				'default'           => $args['default'],
 				'type'              => 'theme_mod',
@@ -631,7 +640,7 @@ function theme_layouts_customize_register( $wp_customize ) {
 			array(
 				'label'    => esc_html__( 'Global Layout', 'theme-layouts' ),
 				'section'  => 'layout',
-				'settings' => 'theme-layout',
+				'settings' => 'theme_layout',
 				'type'     => 'radio',
 				'choices'  => $layout_choices
 			)
@@ -660,7 +669,7 @@ function theme_layouts_customize_preview_script() { ?>
 
 	<script type="text/javascript">
 	wp.customize(
-		'theme-layout',
+		'theme_layout',
 		function( value ) {
 			value.bind( 
 				function( to ) {
