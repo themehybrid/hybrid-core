@@ -1,7 +1,7 @@
 <?php
 /**
  * Functions for handling JavaScript in the framework.  Themes can add support for the 
- * 'hybrid-core-javascript' feature to allow the framework to handle loading the stylesheets into 
+ * 'hybrid-core-scripts' feature to allow the framework to handle loading the stylesheets into 
  * the theme header or footer at an appropriate time.
  *
  * @package    HybridCore
@@ -30,7 +30,7 @@ add_action( 'wp_enqueue_scripts', 'hybrid_enqueue_scripts' );
 function hybrid_register_scripts() {
 
 	/* Supported JavaScript. */
-	$supports = get_theme_support( 'hybrid-core-javascript' );
+	$supports = get_theme_support( 'hybrid-core-scripts' );
 
 	/* Register the 'drop-downs' script if the current theme supports 'hybrid-core-drop-downs'. */
 	if ( current_theme_supports( 'hybrid-core-drop-downs' ) || ( isset( $supports[0] ) && in_array( 'drop-downs', $supports[0] ) ) )
@@ -51,7 +51,7 @@ function hybrid_register_scripts() {
 function hybrid_enqueue_scripts() {
 
 	/* Supported JavaScript. */
-	$supports = get_theme_support( 'hybrid-core-javascript' );
+	$supports = get_theme_support( 'hybrid-core-scripts' );
 
 	/* Load the comment reply script on singular posts with open comments if threaded comments are supported. */
 	if ( is_singular() && get_option( 'thread_comments' ) && comments_open() )

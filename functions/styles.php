@@ -1,7 +1,7 @@
 <?php
 /**
  * Functions for handling stylesheets in the framework.  Themes can add support for the 
- * 'hybrid-core-css' feature to allow the framework to handle loading the stylesheets into the 
+ * 'hybrid-core-styles' feature to allow the framework to handle loading the stylesheets into the 
  * theme header at an appropriate point.
  *
  * @package    HybridCore
@@ -68,7 +68,7 @@ function hybrid_register_styles() {
 function hybrid_enqueue_styles() {
 
 	/* Get the theme-supported stylesheets. */
-	$supports = get_theme_support( 'hybrid-core-css' );
+	$supports = get_theme_support( 'hybrid-core-styles' );
 
 	/* If the theme doesn't add support for any styles, return. */
 	if ( !is_array( $supports[0] ) )
