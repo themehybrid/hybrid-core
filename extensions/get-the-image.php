@@ -179,7 +179,7 @@ function get_the_image( $args = array() ) {
 
 	/* Or, if $echo is set to false, return the formatted image. */
 	elseif ( false === $echo ) {
-		return $args['before'] . $image_html . $args['after'];
+		return !empty( $image_html ) ? $args['before'] . $image_html . $args['after'] : $image_html;
 	}
 
 	/* If there is a $post_thumbnail_id, do the actions associated with get_the_post_thumbnail(). */
@@ -187,7 +187,7 @@ function get_the_image( $args = array() ) {
 		do_action( 'begin_fetch_post_thumbnail_html', $post_id, $image['post_thumbnail_id'], $size );
 
 	/* Display the image if we get to this point. */
-	echo $args['before'] . $image_html . $args['after'];
+	echo !empty( $image_html ) ? $args['before'] . $image_html . $args['after'] : $image_html;
 
 	/* If there is a $post_thumbnail_id, do the actions associated with get_the_post_thumbnail(). */
 	if ( isset( $image['post_thumbnail_id'] ) )
