@@ -33,7 +33,7 @@ function hybrid_register_scripts() {
 	$supports = get_theme_support( 'hybrid-core-scripts' );
 
 	/* Register the 'drop-downs' script if the current theme supports 'drop-downs'. */
-	if ( isset( $supports[0] ) && in_array( 'drop-downs', $supports[0] ) ) )
+	if ( isset( $supports[0] ) && in_array( 'drop-downs', $supports[0] ) )
 		wp_register_script( 'drop-downs', esc_url( apply_atomic( 'drop_downs_script', trailingslashit( HYBRID_JS ) . 'drop-downs.js' ) ), array( 'jquery' ), '20110920', true );
 
 	/* Register the 'nav-bar' script if the current theme supports 'nav-bar'. */
