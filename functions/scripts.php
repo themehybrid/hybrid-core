@@ -32,11 +32,11 @@ function hybrid_register_scripts() {
 	/* Supported JavaScript. */
 	$supports = get_theme_support( 'hybrid-core-scripts' );
 
-	/* Register the 'drop-downs' script if the current theme supports 'hybrid-core-drop-downs'. */
+	/* Register the 'drop-downs' script if the current theme supports 'drop-downs'. */
 	if ( isset( $supports[0] ) && in_array( 'drop-downs', $supports[0] ) ) )
 		wp_register_script( 'drop-downs', esc_url( apply_atomic( 'drop_downs_script', trailingslashit( HYBRID_JS ) . 'drop-downs.js' ) ), array( 'jquery' ), '20110920', true );
 
-	/* Register the 'nav-bar' script if the current theme supports 'hybrid-core-nav-bar'. */
+	/* Register the 'nav-bar' script if the current theme supports 'nav-bar'. */
 	if ( isset( $supports[0] ) && in_array( 'nav-bar', $supports[0] ) )
 		wp_register_script( 'nav-bar', esc_url( apply_atomic( 'nav_bar_script', trailingslashit( HYBRID_JS ) . 'nav-bar.js' ) ), array( 'jquery' ), '20111008', true );
 }
@@ -57,11 +57,11 @@ function hybrid_enqueue_scripts() {
 	if ( is_singular() && get_option( 'thread_comments' ) && comments_open() )
 		wp_enqueue_script( 'comment-reply' );
 
-	/* Load the 'drop-downs' script if the current theme supports 'hybrid-core-drop-downs'. */
+	/* Load the 'drop-downs' script if the current theme supports 'drop-downs'. */
 	if ( isset( $supports[0] ) && in_array( 'drop-downs', $supports[0] ) )
 		wp_enqueue_script( 'drop-downs' );
 
-	/* Load the 'nav-bar' script if the current theme supports 'hybrid-core-nav-bar'. */
+	/* Load the 'nav-bar' script if the current theme supports 'nav-bar'. */
 	if ( isset( $supports[0] ) && in_array( 'nav-bar', $supports[0] ) )
 		wp_enqueue_script( 'nav-bar' );
 }
