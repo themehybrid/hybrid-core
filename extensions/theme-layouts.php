@@ -40,7 +40,7 @@ add_action( 'admin_menu', 'theme_layouts_admin_setup' );
 add_action( 'customize_register', 'theme_layouts_customize_register' );
 
 /* Filters the theme layout mod. */
-add_filter( 'theme_mods_theme_layout', 'theme_layouts_filter_layout' );
+add_filter( 'theme_mod_theme_layout', 'theme_layouts_filter_layout' );
 
 /* Filters the body_class hook to add a custom class. */
 add_filter( 'body_class', 'theme_layouts_body_class' );
