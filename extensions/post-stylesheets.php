@@ -59,7 +59,7 @@ function post_stylesheets_register_meta() {
  * @param string $meta_type The type of metadata (post, comment, user, etc.)
  * @return mixed $meta_value
  */
-function post_styleheets_sanitize_meta( $meta_value, $meta_key, $meta_type ) {
+function post_stylesheets_sanitize_meta( $meta_value, $meta_key, $meta_type ) {
 	return esc_attr( strip_tags( $meta_value ) );
 }
 
