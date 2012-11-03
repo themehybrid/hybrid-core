@@ -218,7 +218,7 @@ class Hybrid {
 
 		/* Remove support for the Featured Header extension if the class exists. */
 		if ( class_exists( 'Featured_Header' ) )
-			remove_theme_support( 'featued-header' );
+			remove_theme_support( 'featured-header' );
 
 		/* Remove support for the Random Custom Background extension if the class exists. */
 		if ( class_exists( 'Random_Custom_Background' ) )
