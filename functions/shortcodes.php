@@ -291,9 +291,14 @@ function hybrid_entry_terms_shortcode( $attr ) {
  */
 function hybrid_entry_title_shortcode( $attr ) {
 
-	$attr = shortcode_atts( array( 'permalink' => true ), $attr );
+	$attr = shortcode_atts(
+		array( 
+			'permalink' => true, 
+			'tag'       => is_singular() ? 'h1' : 'h2' 
+		), 
+	$attr );
 
-	$tag = is_singular() ? 'h1' : 'h2';
+	$tag = tag_escape( $attr['tag'] );
 	$class = sanitize_html_class( get_post_type() ) . '-title entry-title';
 
 	if ( false == (bool)$attr['permalink'] )
