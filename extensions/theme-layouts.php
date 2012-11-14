@@ -34,7 +34,7 @@ add_action( 'init', 'theme_layouts_add_post_type_support' );
 add_action( 'init', 'theme_layouts_remove_post_type_support' );
 
 /* Set up the custom post layouts. */
-add_action( 'admin_menu', 'theme_layouts_admin_setup' );
+add_action( 'admin_init', 'theme_layouts_admin_setup' );
 
 /* Add layout option in Customize. */
 add_action( 'customize_register', 'theme_layouts_customize_register' );
