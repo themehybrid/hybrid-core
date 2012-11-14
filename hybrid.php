@@ -321,6 +321,9 @@ class Hybrid {
 
 		/* Load the Random Custom Background extension if supported. */
 		require_if_theme_supports( 'random-custom-background', trailingslashit( HYBRID_EXTENSIONS ) . 'random-custom-background.php' );
+
+		/* Load the Post Format Tools extension if post formats are supported. */
+		require_if_theme_supports( 'post-formats', trailingslashit( HYBRID_EXTENSIONS ) . 'post-format-tools.php' );
 	}
 
 	/**
