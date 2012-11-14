@@ -4,6 +4,10 @@
  * of the functions handle basic <meta> elements for the <head> area of the site.  This file is a catchall file 
  * for adding these types of things to themes.
  *
+ * Theme authors, please do not use this in your publicly-released themes. This feature is no longer 
+ * officially supported as a theme feature.  Please recommend to your users that they should install an SEO 
+ * plugin, such as WP SEO, for this.
+ *
  * @package    HybridCore
  * @subpackage Functions
  * @author     Justin Tadlock <justin@justintadlock.com>
