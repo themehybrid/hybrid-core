@@ -44,6 +44,9 @@ function loop_pagination( $args = array() ) {
 	/* Get the max number of pages. */
 	$max_num_pages = intval( $wp_query->max_num_pages );
 
+	/* Get the pagination base. */
+	$pagination_base = $wp_rewrite->pagination_base;
+
 	/* Set up some default arguments for the paginate_links() function. */
 	$defaults = array(
 		'base'         => add_query_arg( 'paged', '%#%' ),
@@ -67,7 +70,7 @@ function loop_pagination( $args = array() ) {
 
 	/* Add the $base argument to the array if the user is using permalinks. */
 	if ( $wp_rewrite->using_permalinks() && !is_search() )
-		$defaults['base'] = user_trailingslashit( trailingslashit( get_pagenum_link() ) . 'page/%#%' );
+		$defaults['base'] = user_trailingslashit( trailingslashit( get_pagenum_link() ) . "{$pagination_base}/%#%" );
 
 	/* @todo Find a way to make pretty links work for search in all cases. */
 	/**
@@ -92,7 +95,7 @@ function loop_pagination( $args = array() ) {
 	$page_links = paginate_links( $args );
 
 	/* Remove 'page/1' from the entire output since it's not needed. */
-	$page_links = str_replace( array( '&#038;paged=1\'', '/page/1\'', '/page/1/\'' ), '\'', $page_links );
+	$page_links = str_replace( array( "&#038;paged=1'", "/{$pagination_base}/1'", "/{$pagination_base}/1/'" ), '\'', $page_links );
 
 	/* Wrap the paginated links with the $before and $after elements. */
 	$page_links = $args['before'] . $page_links . $args['after'];
