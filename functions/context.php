@@ -224,7 +224,7 @@ function hybrid_entry_class( $class = '', $post_id = null ) {
  * @return void
  */
 function hybrid_comment_class( $class = '' ) {
-	global $post, $comment, $hybrid;
+	global $comment, $hybrid;
 
 	/* Gets default WP comment classes. */
 	$classes = get_comment_class( $class );
