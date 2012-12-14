@@ -87,16 +87,16 @@ function cleaner_gallery( $output, $attr ) {
 		'post_type'        => 'attachment',
 		'post_mime_type'   => 'image',
 		'order'            => $order,
-		'orderby'          => !empty( $ids ) ? 'post__in' : $orderby,
+		'orderby'          => $orderby,
 		'exclude'          => $exclude,
-		'include'          => !empty( $ids ) ? $ids : $include,
+		'include'          => $include,
 		'numberposts'      => $numberposts,
 		'offset'           => $offset,
 		'suppress_filters' => true
 	);
 
 	/* Get image attachments. If none, return. */
-	if ( empty( $include ) && empty( $ids ) )
+	if ( empty( $include ) )
 		$attachments = get_children( array_merge( array( 'post_parent' => $id ), $children ) );
 	else
 		$attachments = get_posts( $children );
