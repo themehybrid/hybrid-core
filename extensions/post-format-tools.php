@@ -231,6 +231,8 @@ function post_format_tools_chat_content( $content ) {
 
 	/* Set the global variable of speaker IDs to a new, empty array for this chat. */
 	$_post_format_chat_ids = array();
+	$chat_author = '';
+	$speaker_id = 0;
 
 	/* Allow the separator (separator for speaker/text) to be filtered. */
 	$separator = apply_filters( 'post_format_chat_separator', ':' );
