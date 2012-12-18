@@ -45,6 +45,7 @@ function breadcrumb_trail( $args = array() ) {
 		'after'      => false,
 		'front_page' => true,
 		'show_home'  => __( 'Home', 'breadcrumb-trail' ),
+		'network'    => false,
 		'echo'       => true
 	);
 
@@ -121,8 +122,15 @@ function breadcrumb_trail_get_items( $args = array() ) {
 	$path = '';
 
 	/* If $show_home is set and we're not on the front page of the site, link to the home page. */
-	if ( !is_front_page() && $args['show_home'] )
-		$trail[] = '<a href="' . home_url() . '" title="' . esc_attr( get_bloginfo( 'name' ) ) . '" rel="home" class="trail-begin">' . $args['show_home'] . '</a>';
+	if ( !is_front_page() && $args['show_home'] ) {
+
+		if ( is_multisite() && true === $args['network'] ) {
+			$trail[] = '<a href="' . network_home_url() . '">' . $args['show_home'] . '</a>';
+			$trail[] = '<a href="' . home_url() . '" title="' . esc_attr( get_bloginfo( 'name' ) ) . '" rel="home" class="trail-begin">' . get_bloginfo( 'name' ) . '</a>';
+		} else {
+			$trail[] = '<a href="' . home_url() . '" title="' . esc_attr( get_bloginfo( 'name' ) ) . '" rel="home" class="trail-begin">' . $args['show_home'] . '</a>';
+		}
+	}
 
 	/* If bbPress is installed and we're on a bbPress page. */
 	if ( function_exists( 'is_bbpress' ) && is_bbpress() ) {
@@ -132,11 +140,25 @@ function breadcrumb_trail_get_items( $args = array() ) {
 	/* If viewing the front page of the site. */
 	elseif ( is_front_page() ) {
 
-		if ( !is_paged() && $args['show_home'] && $args['front_page'] )
-			$trail[] = "{$args['show_home']}";
+		if ( !is_paged() && $args['show_home'] && $args['front_page'] ) {
 
-		elseif ( is_paged() && $args['show_home'] && $args['front_page'] )
-			$trail[] = '<a href="' . home_url() . '" title="' . esc_attr( get_bloginfo( 'name' ) ) . '" rel="home" class="trail-begin">' . $args['show_home'] . '</a>';
+			if ( is_multisite() && true === $args['network'] ) {
+				$trail[] = '<a href="' . network_home_url() . '">' . $args['show_home'] . '</a>';
+				$trail[] = get_bloginfo( 'name' );
+			} else {
+				$trail[] = $args['show_home'];
+			}
+		}
+
+		elseif ( is_paged() && $args['show_home'] && $args['front_page'] ) {
+
+			if ( is_multisite() && true === $args['network'] ) {
+				$trail[] = '<a href="' . network_home_url() . '">' . $args['show_home'] . '</a>';
+				$trail[] = '<a href="' . home_url() . '" title="' . esc_attr( get_bloginfo( 'name' ) ) . '" rel="home" class="trail-begin">' . get_bloginfo( 'name' ) . '</a>';
+			} else {
+				$trail[] = '<a href="' . home_url() . '" title="' . esc_attr( get_bloginfo( 'name' ) ) . '" rel="home" class="trail-begin">' . $args['show_home'] . '</a>';
+			}
+		}
 	}
 
 	/* If viewing the "home"/posts page. */
