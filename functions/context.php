@@ -122,7 +122,7 @@ function hybrid_get_context() {
 		$hybrid->context[] = 'error-404';
 	}
 
-	return array_map( 'esc_attr', $hybrid->context );
+	return array_map( 'esc_attr', apply_filters( 'hybrid_context', $hybrid->context ) );
 }
 
 /**
