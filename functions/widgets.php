@@ -38,7 +38,8 @@ function hybrid_register_widgets() {
 	require_once( trailingslashit( HYBRID_CLASSES ) . 'widget-authors.php' );
 
 	/* Load the bookmarks widget class. */
-	require_once( trailingslashit( HYBRID_CLASSES ) . 'widget-bookmarks.php' );
+	if ( get_option( 'link_manager_enabled' ) )
+		require_once( trailingslashit( HYBRID_CLASSES ) . 'widget-bookmarks.php' );
 
 	/* Load the calendar widget class. */
 	require_once( trailingslashit( HYBRID_CLASSES ) . 'widget-calendar.php' );
@@ -65,7 +66,8 @@ function hybrid_register_widgets() {
 	register_widget( 'Hybrid_Widget_Authors' );
 
 	/* Register the bookmarks widget. */
-	register_widget( 'Hybrid_Widget_Bookmarks' );
+	if ( get_option( 'link_manager_enabled' ) )
+		register_widget( 'Hybrid_Widget_Bookmarks' );
 
 	/* Register the calendar widget. */
 	register_widget( 'Hybrid_Widget_Calendar' );
