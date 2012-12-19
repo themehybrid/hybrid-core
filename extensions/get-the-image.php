@@ -16,7 +16,7 @@
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * @package   GetTheImage
- * @version   0.8.1 - Alpha
+ * @version   0.8.1
  * @author    Justin Tadlock <justin@justintadlock.com>
  * @copyright Copyright (c) 2008 - 2012, Justin Tadlock
  * @link      http://justintadlock.com/archives/2008/05/27/get-the-image-wordpress-plugin
