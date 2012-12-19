@@ -401,8 +401,8 @@ function theme_layouts_load_meta_boxes() {
 
 	/* Saves the post format on the post editing page. */
 	add_action( 'save_post', 'theme_layouts_save_post', 10, 2 );
-	add_action( 'add_attachment', 'theme_layouts_save_attachment' );
-	add_action( 'edit_attachment', 'theme_layouts_save_attachment' );
+	add_action( 'add_attachment', 'theme_layouts_save_post' );
+	add_action( 'edit_attachment', 'theme_layouts_save_post' );
 }
 
 /**
@@ -467,7 +467,11 @@ function theme_layouts_post_meta_box( $post, $box ) {
  * @param object $post The post object currently being saved.
  * @return void|int
  */
-function theme_layouts_save_post( $post_id, $post ) {
+function theme_layouts_save_post( $post_id, $post = '' ) {
+
+	/* Fix for attachment save issue in WordPress 3.5. @link http://core.trac.wordpress.org/ticket/21963 */
+	if ( !is_object( $post ) )
+		$post = get_post();
 
 	/* Verify the nonce for the post formats meta box. */
 	if ( !isset( $_POST['theme-layouts-nonce'] ) || !wp_verify_nonce( $_POST['theme-layouts-nonce'], basename( __FILE__ ) ) )
@@ -493,25 +497,6 @@ function theme_layouts_save_post( $post_id, $post ) {
 	/* If the old layout doesn't match the new layout, update the post layout meta. */
 	elseif ( current_user_can( 'edit_post_meta', $post_id, $meta_key ) && $meta_value !== $new_meta_value )
 		set_post_layout( $post_id, $new_meta_value );
-}
-
-/**
- * Wrapper function for theme_layouts_save_post() when saving on an attachment page.  This function is 
- * required because WordPress core implemented a major change in attachment edit screens without 
- * completing the functionality.  This function merely gets the global $post object and passes it along 
- * since core doesn't do this.
- *
- * @since  0.5.0
- * @access public
- * @link http://core.trac.wordpress.org/ticket/21391
- * @link   http://core.trac.wordpress.org/ticket/21963
- * @global object $post    The current post object.
- * @param  int    $post_id The ID of the current post being saved.
- */
-function theme_layouts_save_attachment( $post_id ) {
-	global $post;
-
-	theme_layouts_save_post( $post_id, $post );
 }
 
 /**
