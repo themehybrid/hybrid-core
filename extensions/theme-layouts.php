@@ -522,9 +522,11 @@ function theme_layouts_attachment_fields_to_edit( $fields, $post ) {
 
 	/* Add the attachment layout field to the $fields array. */
 	$fields['theme-layouts-post-layout'] = array(
-		'label' => __( 'Layout', 'theme-layouts' ),
-		'input' => 'html',
-		'html' => $select
+		'label'         => __( 'Layout', 'theme-layouts' ),
+		'input'         => 'html',
+		'html'          => $select,
+		'show_in_edit'  => false,
+		'show_in_modal' => true
 	);
 
 	/* Return the $fields array back to WordPress. */
