@@ -142,6 +142,7 @@ class Hybrid_Widget_Archives extends WP_Widget {
 			'title'           => esc_attr__( 'Archives', 'hybrid-core' ),
 			'limit'           => 10,
 			'type'            => 'monthly',
+			'order'           => 'DESC',
 			'format'          => 'html',
 			'before'          => '',
 			'after'           => '',
@@ -159,6 +160,12 @@ class Hybrid_Widget_Archives extends WP_Widget {
 			'postbypost' => esc_attr__( 'Post By Post', 'hybrid-core' ), 
 			'weekly'     => esc_attr__( 'Weekly', 'hybrid-core' ), 
 			'yearly'     => esc_attr__( 'Yearly', 'hybrid-core' ) 
+		);
+
+		/* Create an array of order options. */
+		$order = array(
+			'ASC'  => esc_attr__( 'Ascending', 'hybrid-core' ),
+			'DESC' => esc_attr__( 'Descending', 'hybrid-core' )
 		);
 
 		/* Create an array of archive formats. */
@@ -187,6 +194,17 @@ class Hybrid_Widget_Archives extends WP_Widget {
 			</select>
 		</p>
 		<p>
+			<label for="<?php echo $this->get_field_id( 'order' ); ?>"><code>order</code></label> 
+			<select class="widefat" id="<?php echo $this->get_field_id( 'order' ); ?>" name="<?php echo $this->get_field_name( 'order' ); ?>">
+				<?php foreach ( $order as $option_value => $option_label ) { ?>
+					<option value="<?php echo esc_attr( $option_value ); ?>" <?php selected( $instance['order'], $option_value ); ?>><?php echo esc_html( $option_label ); ?></option>
+				<?php } ?>
+			</select>
+		</p>
+		</div>
+
+		<div class="hybrid-widget-controls columns-2 column-last">
+		<p>
 			<label for="<?php echo $this->get_field_id( 'format' ); ?>"><code>format</code></label> 
 			<select class="widefat" id="<?php echo $this->get_field_id( 'format' ); ?>" name="<?php echo $this->get_field_name( 'format' ); ?>">
 				<?php foreach ( $format as $option_value => $option_label ) { ?>
@@ -194,9 +212,6 @@ class Hybrid_Widget_Archives extends WP_Widget {
 				<?php } ?>
 			</select>
 		</p>
-		</div>
-
-		<div class="hybrid-widget-controls columns-2 column-last">
 		<p>
 			<label for="<?php echo $this->get_field_id( 'before' ); ?>"><code>before</code></label>
 			<input type="text" class="widefat code" id="<?php echo $this->get_field_id( 'before' ); ?>" name="<?php echo $this->get_field_name( 'before' ); ?>" value="<?php echo esc_attr( $instance['before'] ); ?>" />
