@@ -427,47 +427,6 @@ function hybrid_load_textdomain( $mofile, $domain ) {
 }
 
 /**
- * Gets theme data and stores it in the global $hybrid variable.  By storing it, it can be accessed quickly without 
- * having to run through the get_theme_data() function again.
- *
- * @since 1.2.0
- * @deprecated 1.5.0
- * @access public
- * @param string $path Whether to use the template (parent theme) or stylesheet (child theme) path.
- */
-function hybrid_get_theme_data( $path = 'template' ) {
-
-	_deprecated_function( __FUNCTION__, '1.5.0', 'wp_get_theme' );
-
-	global $hybrid;
-
-	/* If 'template' is requested, get the parent theme data. */
-	if ( 'template' == $path ) {
-
-		/* If the parent theme data isn't set, grab it with the get_theme_data() function. */
-		if ( empty( $hybrid->theme_data ) )
-			$hybrid->theme_data = get_theme_data( trailingslashit( get_template_directory() ) . 'style.css' );
-
-		/* Return the parent theme data. */
-		return $hybrid->theme_data;
-	}
-
-	/* If 'stylesheet' is requested, get the child theme data. */
-	elseif ( 'stylesheet' == $path ) {
-
-		/* If the child theme data isn't set, grab it with the get_theme_data() function. */
-		if ( empty( $hybrid->child_theme_data ) )
-			$hybrid->child_theme_data = get_theme_data( trailingslashit( get_stylesheet_directory() ) . 'style.css' );
-
-		/* Return the child theme data. */
-		return $hybrid->child_theme_data;
-	}
-
-	/* Return false for everything else. */
-	return false;
-}
-
-/**
  * @since 0.9.0
  * @deprecated 1.5.0
  */
@@ -611,6 +570,12 @@ function hybrid_add_theme_support() {
 }
 
 function hybrid_post_stylesheets() {
+	hybrid_function_removed( __FUNCTION__ );
+}
+
+/* Functions removed in the 1.5 branch. */
+
+function hybrid_get_theme_data() {
 	hybrid_function_removed( __FUNCTION__ );
 }
 
