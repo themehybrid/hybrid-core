@@ -131,7 +131,7 @@ function hybrid_get_styles() {
 	$styles['style'] = array( 'src' => get_stylesheet_uri(), 'version' => wp_get_theme()->get( 'Version' ) );
 
 	/* Return the array of styles. */
-	return $styles;
+	return apply_filters( hybrid_get_prefix() . '_styles', $styles );
 }
 
 /**
