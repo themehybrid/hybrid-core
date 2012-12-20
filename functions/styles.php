@@ -140,17 +140,19 @@ function hybrid_get_styles() {
 function hybrid_min_stylesheet_uri( $stylesheet_uri, $stylesheet_dir_uri ) {
 
 	/* Use the .min stylesheet if SCRIPT_DEBUG is turned off. */
-	$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
+	if ( !defined( 'SCRIPT_DEBUG' ) || false === SCRIPT_DEBUG ) {
+		$suffix = '.min';
 
-	/* Remove the stylesheet directory URI from the file name. */
-	$stylesheet = str_replace( trailingslashit( $stylesheet_dir_uri ), '', $stylesheet_uri );
+		/* Remove the stylesheet directory URI from the file name. */
+		$stylesheet = str_replace( trailingslashit( $stylesheet_dir_uri ), '', $stylesheet_uri );
 
-	/* Change the stylesheet name to 'style.min.css'. */
-	$stylesheet = str_replace( '.css', "{$suffix}.css", $stylesheet );
+		/* Change the stylesheet name to 'style.min.css'. */
+		$stylesheet = str_replace( '.css', "{$suffix}.css", $stylesheet );
 
-	/* If the stylesheet exists in the stylesheet directory, set the stylesheet URI to the dev stylesheet. */
-	if ( file_exists( trailingslashit( get_stylesheet_directory() ) . $stylesheet ) )
-		$stylesheet_uri = trailingslashit( $stylesheet_dir_uri ) . $stylesheet;
+		/* If the stylesheet exists in the stylesheet directory, set the stylesheet URI to the dev stylesheet. */
+		if ( file_exists( trailingslashit( get_stylesheet_directory() ) . $stylesheet ) )
+			$stylesheet_uri = trailingslashit( $stylesheet_dir_uri ) . $stylesheet;
+	}
 
 	/* Return the theme stylesheet. */
 	return $stylesheet_uri;
