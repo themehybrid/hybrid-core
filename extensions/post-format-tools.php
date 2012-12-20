@@ -345,14 +345,18 @@ function post_format_tools_chat_row_id( $chat_author ) {
  * @since 0.1.0
  * @access public
  * @global object $wp_embed The global WP_Embed object.
+ * @param array $args Arguments for the [embed] shortcode.
  * @return string
  */
-function post_format_tools_get_video() {
+function post_format_tools_get_video( $args = array() ) {
 	global $wp_embed;
 
 	/* If this is not a 'video' post, return. */
 	if ( !has_post_format( 'video' ) )
 		return false;
+
+	/* Merge the input arguments and the defaults. */
+	$args = wp_parse_args( $args, wp_embed_defaults() );
 
 	/* Get the post content. */
 	$content = get_the_content();
@@ -375,7 +379,7 @@ function post_format_tools_get_video() {
 		foreach ( $matches  as $value ) {
 
 			/* Apply filters (let WP handle this) to get an embedded video. */
-			$embed = apply_filters( 'post_format_tools_video_shortcode_embed', '[embed]' . $value[1]. '[/embed]' );
+			$embed = apply_filters( 'post_format_tools_video_shortcode_embed', '[embed width="' . absint( $args['width'] ) . '" height="' . absint( $args['height'] ) . '"]' . $value[1]. '[/embed]' );
 
 			/* If no embed, continue looping through the array of matches. */
 			if ( empty( $embed ) )
