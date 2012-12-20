@@ -116,7 +116,15 @@ function hybrid_get_styles() {
 	/* If a child theme is active, add the parent theme's style. */
 	if ( is_child_theme() ) {
 		$parent = wp_get_theme( get_template(), get_theme_root( get_template_directory() ) );
-		$styles['parent'] = array( 'src' => trailingslashit( THEME_URI ) . "style{$suffix}.css", 'version' => $parent->get( 'Version' ) );
+
+		/* Get the parent theme stylesheet. */
+		$src = trailingslashit( THEME_URI ) . "style.css";
+
+		/* If a '.min' version of the parent theme stylesheet exists, use it. */
+		if ( !empty( $suffix ) && file_exists( trailingslashit( THEME_URI ) . "style{$suffix}.css" ) )
+			$src = trailingslashit( THEME_URI ) . "style{$suffix}.css";
+
+		$styles['parent'] = array( 'src' => $src, 'version' => $parent->get( 'Version' ) );
 	}
 
 	/* Add the active theme style. */
