@@ -121,7 +121,7 @@ function hybrid_get_styles() {
 		$src = trailingslashit( THEME_URI ) . "style.css";
 
 		/* If a '.min' version of the parent theme stylesheet exists, use it. */
-		if ( !empty( $suffix ) && file_exists( trailingslashit( THEME_URI ) . "style{$suffix}.css" ) )
+		if ( !empty( $suffix ) && file_exists( trailingslashit( THEME_DIR ) . "style{$suffix}.css" ) )
 			$src = trailingslashit( THEME_URI ) . "style{$suffix}.css";
 
 		$styles['parent'] = array( 'src' => $src, 'version' => $parent->get( 'Version' ) );
