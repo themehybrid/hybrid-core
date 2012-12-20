@@ -81,9 +81,9 @@ function hybrid_enqueue_styles() {
 	$styles = hybrid_get_styles();
 
 	/* Loop through each of the core framework styles and enqueue them if supported. */
-	foreach ( $styles as $style => $args ) {
+	foreach ( $supports[0] as $style ) {
 
-		if ( in_array( $style, $supports[0] ) )
+		if ( isset( $styles[$style] ) )
 			wp_enqueue_style( $style );
 	}
 }
