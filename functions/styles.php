@@ -81,9 +81,9 @@ function hybrid_enqueue_styles() {
 	$styles = hybrid_get_styles();
 
 	/* Loop through each of the core framework styles and enqueue them if supported. */
-	foreach ( $styles as $style => $args ) {
+	foreach ( $supports[0] as $style ) {
 
-		if ( in_array( $style, $supports[0] ) )
+		if ( isset( $styles[$style] ) )
 			wp_enqueue_style( $style );
 	}
 }
@@ -116,14 +116,22 @@ function hybrid_get_styles() {
 	/* If a child theme is active, add the parent theme's style. */
 	if ( is_child_theme() ) {
 		$parent = wp_get_theme( get_template(), get_theme_root( get_template_directory() ) );
-		$styles['parent'] = array( 'src' => trailingslashit( THEME_URI ) . "style{$suffix}.css", 'version' => $parent->get( 'Version' ) );
+
+		/* Get the parent theme stylesheet. */
+		$src = trailingslashit( THEME_URI ) . "style.css";
+
+		/* If a '.min' version of the parent theme stylesheet exists, use it. */
+		if ( !empty( $suffix ) && file_exists( trailingslashit( THEME_DIR ) . "style{$suffix}.css" ) )
+			$src = trailingslashit( THEME_URI ) . "style{$suffix}.css";
+
+		$styles['parent'] = array( 'src' => $src, 'version' => $parent->get( 'Version' ) );
 	}
 
 	/* Add the active theme style. */
 	$styles['style'] = array( 'src' => get_stylesheet_uri(), 'version' => wp_get_theme()->get( 'Version' ) );
 
 	/* Return the array of styles. */
-	return $styles;
+	return apply_filters( hybrid_get_prefix() . '_styles', $styles );
 }
 
 /**
@@ -140,17 +148,19 @@ function hybrid_get_styles() {
 function hybrid_min_stylesheet_uri( $stylesheet_uri, $stylesheet_dir_uri ) {
 
 	/* Use the .min stylesheet if SCRIPT_DEBUG is turned off. */
-	$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
+	if ( !defined( 'SCRIPT_DEBUG' ) || false === SCRIPT_DEBUG ) {
+		$suffix = '.min';
 
-	/* Remove the stylesheet directory URI from the file name. */
-	$stylesheet = str_replace( trailingslashit( $stylesheet_dir_uri ), '', $stylesheet_uri );
+		/* Remove the stylesheet directory URI from the file name. */
+		$stylesheet = str_replace( trailingslashit( $stylesheet_dir_uri ), '', $stylesheet_uri );
 
-	/* Change the stylesheet name to 'style.min.css'. */
-	$stylesheet = str_replace( '.css', "{$suffix}.css", $stylesheet );
+		/* Change the stylesheet name to 'style.min.css'. */
+		$stylesheet = str_replace( '.css', "{$suffix}.css", $stylesheet );
 
-	/* If the stylesheet exists in the stylesheet directory, set the stylesheet URI to the dev stylesheet. */
-	if ( file_exists( trailingslashit( get_stylesheet_directory() ) . $stylesheet ) )
-		$stylesheet_uri = trailingslashit( $stylesheet_dir_uri ) . $stylesheet;
+		/* If the stylesheet exists in the stylesheet directory, set the stylesheet URI to the dev stylesheet. */
+		if ( file_exists( trailingslashit( get_stylesheet_directory() ) . $stylesheet ) )
+			$stylesheet_uri = trailingslashit( $stylesheet_dir_uri ) . $stylesheet;
+	}
 
 	/* Return the theme stylesheet. */
 	return $stylesheet_uri;
