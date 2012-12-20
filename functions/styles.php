@@ -19,7 +19,7 @@ add_action( 'wp_enqueue_scripts', 'hybrid_register_styles', 1 );
 add_action( 'wp_enqueue_scripts', 'hybrid_enqueue_styles', 5 );
 
 /* Load the development stylsheet in script debug mode. */
-add_filter( 'stylesheet_uri', 'hybrid_debug_stylesheet', 10, 2 );
+add_filter( 'stylesheet_uri', 'hybrid_min_stylesheet_uri', 10, 2 );
 
 /**
  * Registers stylesheets for the framework.  This function merely registers styles with WordPress using
@@ -35,12 +35,15 @@ function hybrid_register_styles() {
 	/* Get framework styles. */
 	$styles = hybrid_get_styles();
 
+	/* Use the .min stylesheet if SCRIPT_DEBUG is turned off. */
+	$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
+
 	/* Loop through each style and register it. */
 	foreach ( $styles as $style => $args ) {
 
 		$defaults = array( 
 			'handle'  => $style, 
-			'src'     => trailingslashit( HYBRID_CSS ) . "{$style}.css",
+			'src'     => trailingslashit( HYBRID_CSS ) . "{$style}{$suffix}.css",
 			'deps'    => null,
 			'version' => false,
 			'media'   => 'all'
@@ -94,6 +97,10 @@ function hybrid_enqueue_styles() {
  */
 function hybrid_get_styles() {
 
+	/* Use the .min stylesheet if SCRIPT_DEBUG is turned off. */
+	$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
+
+	/* Default styles available. */
 	$styles = array(
 		'18px'       => array( 'version' => '20110523' ),
 		'20px'       => array( 'version' => '20110523' ),
@@ -109,7 +116,7 @@ function hybrid_get_styles() {
 	/* If a child theme is active, add the parent theme's style. */
 	if ( is_child_theme() ) {
 		$parent = wp_get_theme( get_template(), get_theme_root( get_template_directory() ) );
-		$styles['parent'] = array( 'src' => trailingslashit( THEME_URI ) . 'style.css', 'version' => $parent->get( 'Version' ) );
+		$styles['parent'] = array( 'src' => trailingslashit( THEME_URI ) . "style{$suffix}.css", 'version' => $parent->get( 'Version' ) );
 	}
 
 	/* Add the active theme style. */
@@ -120,31 +127,30 @@ function hybrid_get_styles() {
 }
 
 /**
- * Function for using a debug stylesheet when developing.  To develop with the debug stylesheet, 
- * SCRIPT_DEBUG must be set to 'true' in the 'wp-config.php' file.  This will check if a 'style.dev.css'
- * file is present within the theme folder and use it if it exists.  Else, it defaults to 'style.css'.
+ * Filters the 'stylesheet_uri' to allow theme developers to offer a minimized version of their main 
+ * 'style.css' file.  It will detect if a 'style.min.css' file is available and use it if SCRIPT_DEBUG 
+ * is disabled.
  *
- * @since 0.9.0
- * @access private
- * @param string $stylesheet_uri The URI of the active theme's stylesheet.
- * @param string $stylesheet_dir_uri The directory URI of the active theme's stylesheet.
+ * @since 1.5.0
+ * @access public
+ * @param  string $stylesheet_uri The URI of the active theme's stylesheet.
+ * @param  string $stylesheet_dir_uri The directory URI of the active theme's stylesheet.
  * @return string $stylesheet_uri
  */
-function hybrid_debug_stylesheet( $stylesheet_uri, $stylesheet_dir_uri ) {
+function hybrid_min_stylesheet_uri( $stylesheet_uri, $stylesheet_dir_uri ) {
 
-	/* If SCRIPT_DEBUG is set to true and the theme supports 'dev-stylesheet'. */
-	if ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG && current_theme_supports( 'dev-stylesheet' ) ) {
+	/* Use the .min stylesheet if SCRIPT_DEBUG is turned off. */
+	$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
 
-		/* Remove the stylesheet directory URI from the file name. */
-		$stylesheet = str_replace( trailingslashit( $stylesheet_dir_uri ), '', $stylesheet_uri );
+	/* Remove the stylesheet directory URI from the file name. */
+	$stylesheet = str_replace( trailingslashit( $stylesheet_dir_uri ), '', $stylesheet_uri );
 
-		/* Change the stylesheet name to 'style.dev.css'. */
-		$stylesheet = str_replace( '.css', '.dev.css', $stylesheet );
+	/* Change the stylesheet name to 'style.dev.css'. */
+	$stylesheet = str_replace( '.css', '.min.css', $stylesheet );
 
-		/* If the stylesheet exists in the stylesheet directory, set the stylesheet URI to the dev stylesheet. */
-		if ( file_exists( trailingslashit( get_stylesheet_directory() ) . $stylesheet ) )
-			$stylesheet_uri = trailingslashit( $stylesheet_dir_uri ) . $stylesheet;
-	}
+	/* If the stylesheet exists in the stylesheet directory, set the stylesheet URI to the dev stylesheet. */
+	if ( file_exists( trailingslashit( get_stylesheet_directory() ) . $stylesheet ) )
+		$stylesheet_uri = trailingslashit( $stylesheet_dir_uri ) . $stylesheet;
 
 	/* Return the theme stylesheet. */
 	return $stylesheet_uri;

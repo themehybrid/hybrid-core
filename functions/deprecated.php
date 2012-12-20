@@ -467,6 +467,15 @@ function hybrid_get_theme_data( $path = 'template' ) {
 	return false;
 }
 
+/**
+ * @since 0.9.0
+ * @deprecated 1.5.0
+ */
+function hybrid_debug_stylesheet( $stylesheet_uri, $stylesheet_dir_uri ) {
+	_deprecated_function( __FUNCTION__, '1.5.0', 'hybrid_min_stylesheet_uri' );
+	return hybrid_min_stylesheet_uri( $stylesheet_uri, $stylesheet_dir_uri );
+}
+
 /* === Removed Functions === */
 
 /* Functions removed in the 0.8 branch. */

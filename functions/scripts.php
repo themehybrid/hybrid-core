@@ -32,13 +32,16 @@ function hybrid_register_scripts() {
 	/* Supported JavaScript. */
 	$supports = get_theme_support( 'hybrid-core-scripts' );
 
+	/* Use the .min script if SCRIPT_DEBUG is turned off. */
+	$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
+
 	/* Register the 'drop-downs' script if the current theme supports 'drop-downs'. */
 	if ( isset( $supports[0] ) && in_array( 'drop-downs', $supports[0] ) )
-		wp_register_script( 'drop-downs', esc_url( apply_atomic( 'drop_downs_script', trailingslashit( HYBRID_JS ) . 'drop-downs.js' ) ), array( 'jquery' ), '20110920', true );
+		wp_register_script( 'drop-downs', esc_url( apply_atomic( 'drop_downs_script', trailingslashit( HYBRID_JS ) . "drop-downs{$suffix}.js" ) ), array( 'jquery' ), '20110920', true );
 
 	/* Register the 'nav-bar' script if the current theme supports 'nav-bar'. */
 	if ( isset( $supports[0] ) && in_array( 'nav-bar', $supports[0] ) )
-		wp_register_script( 'nav-bar', esc_url( apply_atomic( 'nav_bar_script', trailingslashit( HYBRID_JS ) . 'nav-bar.js' ) ), array( 'jquery' ), '20111008', true );
+		wp_register_script( 'nav-bar', esc_url( apply_atomic( 'nav_bar_script', trailingslashit( HYBRID_JS ) . "nav-bar{$suffix}.js" ) ), array( 'jquery' ), '20111008', true );
 }
 
 /**
