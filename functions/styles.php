@@ -146,7 +146,7 @@ function hybrid_min_stylesheet_uri( $stylesheet_uri, $stylesheet_dir_uri ) {
 	$stylesheet = str_replace( trailingslashit( $stylesheet_dir_uri ), '', $stylesheet_uri );
 
 	/* Change the stylesheet name to 'style.min.css'. */
-	$stylesheet = str_replace( '.css', '.min.css', $stylesheet );
+	$stylesheet = str_replace( '.css', "{$suffix}.css", $stylesheet );
 
 	/* If the stylesheet exists in the stylesheet directory, set the stylesheet URI to the dev stylesheet. */
 	if ( file_exists( trailingslashit( get_stylesheet_directory() ) . $stylesheet ) )
