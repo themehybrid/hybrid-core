@@ -14,11 +14,14 @@
 /* Add extra support for post types. */
 add_action( 'init', 'hybrid_add_post_type_support' );
 
+/* Initialize the human readable time difference function. */
+add_action( 'init', 'hybrid_get_time_since' );
+
 /* Add extra file headers for themes. */
 add_filter( 'extra_theme_headers', 'hybrid_extra_theme_headers' );
 
 /**
- * This function is for adding extra support for features not default to the core post types.
+ * This function is for adding extra support for features not default to the core post ypes.
  * Excerpts are added to the 'page' post type.  Comments and trackbacks are added for the
  * 'attachment' post type.  Technically, these are already used for attachments in core, but 
  * they're not registered.
@@ -242,6 +245,92 @@ function hybrid_locate_theme_file( $file_names ) {
 	}
 
 	return $located;
+}
+
+/**
+ * Return the difference between two timestamps in
+ * a human readable format. E.g '10 minutes ago'.
+ *
+ * Function credit to the bbpress folks. - http://bbpress.org/
+ * 
+ * @since 1.5.0
+ * @param  string $older_date Unix timestamp from which the difference begins.
+ * @param  string $newer_date Unix timestamp to end the time difference. Defaults to false.
+ * @return string             Formated time.
+ */
+function hybrid_get_time_since( $older_date, $newer_date = false ) {
+		
+	/* Setup the strings. */
+	$unknown_text   = apply_filters( 'hybrid_core_time_since_unknown_text',   __( 'sometime',  'hybrid-core' ) );
+	$right_now_text = apply_filters( 'hybrid_core_time_since_right_now_text', __( 'right now', 'hybrid-core' ) );
+	$ago_text       = apply_filters( 'hybrid_core_time_since_ago_text',       __( '%s ago',    'hybrid-core' ) );
+
+	/* Array of time period chunks. */
+	$chunks = array(
+		array( 60 * 60 * 24 * 365 , __( 'year',   'hybrid-core' ), __( 'years',   'hybrid-core' ) ),
+		array( 60 * 60 * 24 * 30 ,  __( 'month',  'hybrid-core' ), __( 'months',  'hybrid-core' ) ),
+		array( 60 * 60 * 24 * 7,    __( 'week',   'hybrid-core' ), __( 'weeks',   'hybrid-core' ) ),
+		array( 60 * 60 * 24 ,       __( 'day',    'hybrid-core' ), __( 'days',    'hybrid-core' ) ),
+		array( 60 * 60 ,            __( 'hour',   'hybrid-core' ), __( 'hours',   'hybrid-core' ) ),
+		array( 60 ,                 __( 'minute', 'hybrid-core' ), __( 'minutes', 'hybrid-core' ) ),
+		array( 1,                   __( 'second', 'hybrid-core' ), __( 'seconds', 'hybrid-core' ) )
+	);
+
+	if ( !empty( $older_date ) && !is_numeric( $older_date ) ) {
+		$time_chunks = explode( ':', str_replace( ' ', ':', $older_date ) );
+		$date_chunks = explode( '-', str_replace( ' ', '-', $older_date ) );
+		$older_date  = gmmktime( (int) $time_chunks[1], (int) $time_chunks[2], (int) $time_chunks[3], (int) $date_chunks[1], (int) $date_chunks[2], (int) $date_chunks[0] );
+	}
+
+	/* $newer_date will equal false if we want to know the time elapsed
+		 between a date and the current time. $newer_date will have a value if
+		 we want to work out time elapsed between two known dates. */
+	$newer_date = ( !$newer_date ) ? strtotime( current_time( 'mysql' ) ) : $newer_date;
+
+	/* Difference in seconds. */
+	$since = $newer_date - $older_date;
+
+	/* Something went wrong with date calculation and we ended up with a negative date. */
+	if ( 0 > $since ) {
+		$output = $unknown_text;
+
+	/* We only want to output two chunks of time here, eg:
+	     x years
+	     x months,
+	     x days,
+	     x hours
+	 so there's only one bit of calculation below: */
+	} else {
+
+		/* Step one: the first chunk. */
+		for ( $i = 0, $j = count( $chunks ); $i < $j; ++$i ) {
+			$seconds = $chunks[$i][0];
+
+			/* Finding the biggest chunk (if the chunk fits, break). */
+			$count = floor( $since / $seconds );
+			if ( 0 != $count ) {
+				break;
+			}
+		}
+
+		/* If $i iterates all the way to $j, then the event happened 0 seconds ago. */
+		if ( !isset( $chunks[$i] ) ) {
+			$output = $right_now_text;
+
+		} else {
+
+			/* Set output var. */
+			$output = ( 1 == $count ) ? '1 '. $chunks[$i][1] : $count . ' ' . $chunks[$i][2];
+
+		}
+	}
+
+	/* Append 'ago' to the end of time-since if not 'right now'. */
+	if ( $output != $right_now_text ) {
+		$output = sprintf( $ago_text, $output );
+	}
+
+	return apply_filters( 'hybrid_get_time_since', $output, $older_date, $newer_date );
 }
 
 ?>

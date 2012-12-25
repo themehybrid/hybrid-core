@@ -213,9 +213,17 @@ function hybrid_entry_edit_link_shortcode( $attr ) {
  * @return string
  */
 function hybrid_entry_published_shortcode( $attr ) {
-	$attr = shortcode_atts( array( 'before' => '', 'after' => '', 'format' => get_option( 'date_format' ) ), $attr );
+	$attr = shortcode_atts( array( 'before' => '', 'after' => '', 'format' => get_option( 'date_format' ), 'human_time' => false ), $attr );
 
-	$published = '<abbr class="published" title="' . get_the_time( esc_attr__( 'l, F jS, Y, g:i a', 'hybrid-core' ) ) . '">' . get_the_time( $attr['format'] ) . '</abbr>';
+	/* Change format to 'time ago' if human_time is enabled. */
+	if ( true == (bool)$attr['human_time'] ) {
+		$attr['format'] = hybrid_get_time_since( get_the_time('U'), current_time('timestamp') );
+		$format = $attr['format'];
+	} else {
+		$format = get_the_time( $attr['format'] );
+	}
+
+	$published = '<abbr class="published" title="' . get_the_time( esc_attr__( 'l, F jS, Y, g:i a', 'hybrid-core' ) ) . '">' . $format . '</abbr>';
 	return $attr['before'] . $published . $attr['after'];
 }
 
@@ -374,8 +382,17 @@ function hybrid_post_format_link_shortcode( $attr ) {
  * @access public
  * @return string
  */
-function hybrid_comment_published_shortcode() {
-	$link = '<span class="published">' . sprintf( __( '%1$s at %2$s', 'hybrid-core' ), '<abbr class="comment-date" title="' . get_comment_date( esc_attr__( 'l, F jS, Y, g:i a', 'hybrid-core' ) ) . '">' . get_comment_date() . '</abbr>', '<abbr class="comment-time" title="' . get_comment_date( esc_attr__( 'l, F jS, Y, g:i a', 'hybrid-core' ) ) . '">' . get_comment_time() . '</abbr>' ) . '</span>';
+function hybrid_comment_published_shortcode( $attr ) {
+	$attr = shortcode_atts( array( 'format' => get_comment_date(), 'human_time' => false ), $atts);
+
+	/* Change format to 'time ago' if human_time is enabled. */
+	if ( true == (bool)$attr['human_time'] ) {
+		$attr['format'] = hybrid_get_time_since( get_comment_time('U'), current_time('timestamp') );
+		$link = '<span class="published">' . sprintf( __( '%1$s', 'hybrid-core' ), '<abbr class="comment-date" title="' . get_comment_date( esc_attr__( 'l, F jS, Y, g:i a', 'hybrid-core' ) ) . '">' . $attr['format'] . '</abbr>' ) . '</span>';
+	} else {
+		$link = '<span class="published">' . sprintf( __( '%1$s at %2$s', 'hybrid-core' ), '<abbr class="comment-date" title="' . get_comment_date( esc_attr__( 'l, F jS, Y, g:i a', 'hybrid-core' ) ) . '">' . $attr['format'] . '</abbr>', '<abbr class="comment-time" title="' . get_comment_date( esc_attr__( 'l, F jS, Y, g:i a', 'hybrid-core' ) ) . '">' . get_comment_time() . '</abbr>' ) . '</span>';
+	}
+
 	return $link;
 }
 
