@@ -126,7 +126,7 @@ class Random_Custom_Background {
 		$supports = get_theme_support( 'custom-background' );
 
 		/* If '__return_false' is the wp_head callback, roll our own. */
-		if ( '__return_false' == $supports[0]['wp-head-callback'] )
+		if ( isset( $supports[0]['wp-head-callback'] ) && '__return_false' == $supports[0]['wp-head-callback'] )
 			add_action( 'wp_head', array( &$this, 'custom_background_callback' ) );
 	}
 
