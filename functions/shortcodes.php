@@ -383,7 +383,7 @@ function hybrid_post_format_link_shortcode( $attr ) {
  * @return string
  */
 function hybrid_comment_published_shortcode( $attr ) {
-	$attr = shortcode_atts( array( 'format' => get_comment_date(), 'human_time' => false ), $atts);
+	$attr = shortcode_atts( array( 'format' => get_comment_date(), 'human_time' => false ), $attr);
 
 	/* Change format to 'time ago' if human_time is enabled. */
 	if ( true == (bool)$attr['human_time'] ) {
