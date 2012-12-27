@@ -390,7 +390,7 @@ function get_the_image_format( $args = array(), $image = false ) {
 	extract( $args );
 
 	/* If there is alt text, set it.  Otherwise, default to the post title. */
-	$image_alt = ( ( !empty( $image['alt'] ) ) ? $image['alt'] : apply_filters( 'the_title', get_post_field( 'post_title', $post_id ) ) );
+	$image_alt = ( ( !empty( $image['alt'] ) ) ? $image['alt'] : get_post_field( 'post_title', $post_id ) );
 
 	/* If there is a width or height, set them as HMTL-ready attributes. */
 	$width = ( ( $width ) ? ' width="' . esc_attr( $width ) . '"' : '' );
