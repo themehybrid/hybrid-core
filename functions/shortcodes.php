@@ -213,9 +213,17 @@ function hybrid_entry_edit_link_shortcode( $attr ) {
  * @return string
  */
 function hybrid_entry_published_shortcode( $attr ) {
-	$attr = shortcode_atts( array( 'before' => '', 'after' => '', 'format' => get_option( 'date_format' ) ), $attr );
 
-	$published = '<abbr class="published" title="' . sprintf( get_the_time( esc_attr__( 'l, F jS, Y, g:i a', 'hybrid-core' ) ) ) . '">' . sprintf( get_the_time( $attr['format'] ) ) . '</abbr>';
+	$custom_attr = $attr;	
+	$attr = shortcode_atts( array( 'before' => '', 'after' => '', 'format' => get_option( 'date_format' ), 'title' => sprintf( get_the_time( esc_attr__( 'l, F jS, Y, g:i a', 'hybrid-core' ) ) ) ), $attr );
+
+	$custom_attr = array_diff( $custom_attr, $attr );
+	
+	foreach( $custom_attr as $key => $value ) {
+		$custom_attributes .= ' '. $key .'="'. $value .'"';
+	}
+	
+	$published = '<abbr class="published" title="' . $attr['title'] . '"' . $custom_attributes . '>' . sprintf( get_the_time( $attr['format'] ) ) . '</abbr>';
 	return $attr['before'] . $published . $attr['after'];
 }
 
