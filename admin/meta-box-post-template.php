@@ -5,12 +5,12 @@
  * functions in this file create the template meta box and save the template chosen by the user when the 
  * post is saved.  This file is only used if the theme supports the 'hybrid-core-template-hierarchy' feature.
  *
- * @package HybridCore
+ * @package    HybridCore
  * @subpackage Admin
- * @author Justin Tadlock <justin@justintadlock.com>
- * @copyright Copyright (c) 2008 - 2012, Justin Tadlock
- * @link http://themehybrid.com/hybrid-core
- * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @author     Justin Tadlock <justin@justintadlock.com>
+ * @copyright  Copyright (c) 2008 - 2012, Justin Tadlock
+ * @link       http://themehybrid.com/hybrid-core
+ * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 /* Add the post template meta box on the 'add_meta_boxes' hook. */
