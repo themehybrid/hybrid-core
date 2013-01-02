@@ -14,7 +14,7 @@
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * @package   LoopPagination
- * @version   0.2 - Alpha
+ * @version   0.2
  * @author    Justin Tadlock <justin@justintadlock.com>
  * @copyright Copyright (c) 2010 - 2012, Justin Tadlock
  * @link      http://themehybrid.com/docs/tutorials/loop-pagination
