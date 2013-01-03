@@ -86,6 +86,10 @@ class Featured_Header {
 	 */
 	public function __construct() {
 
+		/* The theme should actually support the custom background feature. */
+		if ( !current_theme_supports( 'post-thumbnails' ) )
+			add_theme_support( 'post-thumbnails' );
+
 		/* Add image size based off theme's custom header dimensions. */
 		add_action( 'init', array( &$this, 'add_image_size' ) );
 
