@@ -4,12 +4,12 @@
  * there was no equivalent WordPress widget that offered the functionality. This widget allows full
  * control over its output by giving access to the parameters of wp_list_authors().
  *
- * @package Hybrid
+ * @package    Hybrid
  * @subpackage Classes
- * @author Justin Tadlock <justin@justintadlock.com>
- * @copyright Copyright (c) 2008 - 2012, Justin Tadlock
- * @link http://themehybrid.com/hybrid-core
- * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @author     Justin Tadlock <justin@justintadlock.com>
+ * @copyright  Copyright (c) 2008 - 2012, Justin Tadlock
+ * @link       http://themehybrid.com/hybrid-core
+ * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 /**
@@ -28,22 +28,22 @@ class Hybrid_Widget_Authors extends WP_Widget {
 
 		/* Set up the widget options. */
 		$widget_options = array(
-			'classname' => 'authors',
+			'classname'   => 'authors',
 			'description' => esc_html__( 'An advanced widget that gives you total control over the output of your author lists.', 'hybrid-core' )
 		);
 
 		/* Set up the widget control options. */
 		$control_options = array(
-			'width' => 525,
+			'width'  => 525,
 			'height' => 350
 		);
 
 		/* Create the widget. */
 		$this->WP_Widget(
-			'hybrid-authors',			// $this->id_base
-			__( 'Authors', 'hybrid-core' ),	// $this->name
-			$widget_options,			// $this->widget_options
-			$control_options			// $this->control_options
+			'hybrid-authors',               // $this->id_base
+			__( 'Authors', 'hybrid-core' ), // $this->name
+			$widget_options,                // $this->widget_options
+			$control_options                // $this->control_options
 		);
 	}
 
@@ -75,6 +75,10 @@ class Hybrid_Widget_Authors extends WP_Widget {
 		if ( 'list' == $args['style'] && $args['html'] )
 			$authors = '<ul class="xoxo authors">' . $authors . '</ul><!-- .xoxo .authors -->';
 
+		/* If 'none' is the style and the output should be HTML, wrap the authors in a <p>. */
+		elseif ( 'none' == $args['style'] && $args['html'] )
+			$authors = '<p class="authors">' . $authors . '</p><!-- .authors -->';
+
 		/* Display the authors list. */
 		echo $authors;
 
@@ -92,17 +96,17 @@ class Hybrid_Widget_Authors extends WP_Widget {
 
 		$instance = $new_instance;
 
-		$instance['title'] = strip_tags( $new_instance['title'] );
-		$instance['feed'] = strip_tags( $new_instance['feed'] );
-		$instance['order'] = strip_tags( $new_instance['order'] );
+		$instance['title']   = strip_tags( $new_instance['title'] );
+		$instance['feed']    = strip_tags( $new_instance['feed'] );
+		$instance['order']   = strip_tags( $new_instance['order'] );
 		$instance['orderby'] = strip_tags( $new_instance['orderby'] );
-		$instance['number'] = strip_tags( $new_instance['number'] );
+		$instance['number']  = strip_tags( $new_instance['number'] );
 
-		$instance['html'] = ( isset( $new_instance['html'] ) ? 1 : 0 );
-		$instance['optioncount'] = ( isset( $new_instance['optioncount'] ) ? 1 : 0 );
+		$instance['html']          = ( isset( $new_instance['html'] ) ? 1 : 0 );
+		$instance['optioncount']   = ( isset( $new_instance['optioncount'] ) ? 1 : 0 );
 		$instance['exclude_admin'] = ( isset( $new_instance['exclude_admin'] ) ? 1 : 0 );
 		$instance['show_fullname'] = ( isset( $new_instance['show_fullname'] ) ? 1 : 0 );
-		$instance['hide_empty'] = ( isset( $new_instance['hide_empty'] ) ? 1 : 0 );
+		$instance['hide_empty']    = ( isset( $new_instance['hide_empty'] ) ? 1 : 0 );
 
 		return $instance;
 	}
@@ -116,25 +120,38 @@ class Hybrid_Widget_Authors extends WP_Widget {
 
 		/* Set up the default form values. */
 		$defaults = array(
-			'title' => esc_attr__( 'Authors', 'hybrid-core' ),
-			'order' => 'ASC',
-			'orderby' => 'display_name',
-			'number' => '',
-			'optioncount' => false,
+			'title'         => esc_attr__( 'Authors', 'hybrid-core' ),
+			'order'         => 'ASC',
+			'orderby'       => 'display_name',
+			'number'        => '',
+			'optioncount'   => false,
 			'exclude_admin' => false,
 			'show_fullname' => true,
-			'hide_empty' => true,
-			'style' => 'list',
-			'html' => true,
-			'feed' => '',
-			'feed_image' => ''
+			'hide_empty'    => true,
+			'style'         => 'list',
+			'html'          => true,
+			'feed'          => '',
+			'feed_image'    => ''
 		);
 
 		/* Merge the user-selected arguments with the defaults. */
 		$instance = wp_parse_args( (array) $instance, $defaults );
 
-		$order = array( 'ASC' => esc_attr__( 'Ascending', 'hybrid-core' ), 'DESC' => esc_attr__( 'Descending', 'hybrid-core' ) );
-		$orderby = array( 'display_name' => esc_attr__( 'Display Name', 'hybrid-core' ), 'email' => esc_attr__( 'Email', 'hybrid-core' ), 'ID' => esc_attr__( 'ID', 'hybrid-core' ), 'nicename' => esc_attr__( 'Nice Name', 'hybrid-core' ), 'post_count' => esc_attr__( 'Post Count', 'hybrid-core' ), 'registered' => esc_attr__( 'Registered', 'hybrid-core' ), 'url' => esc_attr__( 'URL', 'hybrid-core' ), 'user_login' => esc_attr__( 'Login', 'hybrid-core' ) );
+		$order = array( 
+			'ASC'  => esc_attr__( 'Ascending', 'hybrid-core' ), 
+			'DESC' => esc_attr__( 'Descending', 'hybrid-core' ) 
+		);
+
+		$orderby = array( 
+			'display_name' => esc_attr__( 'Display Name', 'hybrid-core' ), 
+			'email'        => esc_attr__( 'Email', 'hybrid-core' ), 
+			'ID'           => esc_attr__( 'ID', 'hybrid-core' ), 
+			'nicename'     => esc_attr__( 'Nice Name', 'hybrid-core' ), 
+			'post_count'   => esc_attr__( 'Post Count', 'hybrid-core' ), 
+			'registered'   => esc_attr__( 'Registered', 'hybrid-core' ), 
+			'url'          => esc_attr__( 'URL', 'hybrid-core' ), 
+			'user_login'   => esc_attr__( 'Login', 'hybrid-core' ) 
+		);
 
 		?>
 

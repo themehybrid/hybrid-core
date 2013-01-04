@@ -26,7 +26,7 @@
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * @package EntryViews
- * @version 0.2.2
+ * @version 0.2.3
  * @author Justin Tadlock <justin@justintadlock.com>
  * @copyright Copyright (c) 2010 - 2012, Justin Tadlock
  * @link http://justintadlock.com
@@ -78,7 +78,7 @@ function entry_views_load() {
 	global $_entry_views_post_id;
 
 	/* Check if we're on a singular post view. */
-	if ( is_singular() ) {
+	if ( is_singular() && !is_preview() ) {
 
 		/* Get the post object. */
 		$post = get_queried_object();

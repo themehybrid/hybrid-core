@@ -3,8 +3,9 @@
  * Post Stylesheets - A WordPress script for post-specific stylesheets.
  *
  * Post Stylesheets allows users and developers to add unique, per-post stylesheets.  This script was 
- * created so that custom stylesheet files could be dropped into a theme's '/css' folder and loaded for 
- * individual posts using the 'Stylesheet' post meta key and the stylesheet name as the post meta value.
+ * created so that custom stylesheet files could be dropped into a theme folder or sub-folder and loaded
+ * for individual posts using the 'Stylesheet' post meta key and the stylesheet name as the post meta 
+ * value.  Custom stylesheets must have the 'Style Name: Value' header.
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the GNU 
  * General Public License as published by the Free Software Foundation; either version 2 of the License, 
@@ -13,14 +14,12 @@
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- * @package PostStylesheets
- * @version 0.3.0
- * @author Justin Tadlock <justin@justintadlock.com>
+ * @package   PostStylesheets
+ * @version   0.4.0
+ * @author    Justin Tadlock <justin@justintadlock.com>
  * @copyright Copyright (c) 2010 - 2012, Justin Tadlock
- * @link http://justintadlock.com
- * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
- *
- * @todo register_meta()
+ * @link      http://justintadlock.com
+ * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 /* Register metadata with WordPress. */
@@ -41,6 +40,7 @@ add_action( 'admin_menu', 'post_stylesheets_admin_setup' );
  * the metadata on update.
  *
  * @since 0.3.0
+ * @access public
  * @return void
  */
 function post_stylesheets_register_meta() {
@@ -53,12 +53,13 @@ function post_stylesheets_register_meta() {
  * "sanitize_{$meta_type}_meta_{$meta_key}" filter hook to do so.
  *
  * @since 0.3.0
+ * @access public
  * @param mixed $meta_value The value of the data to sanitize.
  * @param string $meta_key The meta key name.
  * @param string $meta_type The type of metadata (post, comment, user, etc.)
  * @return mixed $meta_value
  */
-function post_styleheets_sanitize_meta( $meta_value, $meta_key, $meta_type ) {
+function post_stylesheets_sanitize_meta( $meta_value, $meta_key, $meta_type ) {
 	return esc_attr( strip_tags( $meta_value ) );
 }
 
@@ -66,7 +67,7 @@ function post_styleheets_sanitize_meta( $meta_value, $meta_key, $meta_type ) {
  * Adds post type support for the 'post-stylesheets' feature to all 'public' post types.
  *
  * @since 0.3.0
- * @access private
+ * @access public
  * @return void
  */
 function post_stylesheets_add_post_type_support() {
@@ -83,7 +84,7 @@ function post_stylesheets_add_post_type_support() {
  * Removes post stylesheets support for certain post types created by plugins.
  *
  * @since 0.3.0
- * @access private
+ * @access public
  * @return void
  */
 function post_stylesheets_remove_post_type_support() {
@@ -105,7 +106,7 @@ function post_stylesheets_remove_post_type_support() {
  *
  * @since 0.1.0
  * @todo Use features from Ticket #18302 when available. http://core.trac.wordpress.org/ticket/18302
- * @access private
+ * @access public
  * @param string $stylesheet_uri The URI of the active theme's stylesheet.
  * @param string $stylesheet_dir_uri The directory URI of the active theme's stylesheet.
  * @return string $stylesheet_uri
@@ -136,13 +137,34 @@ function post_stylesheets_stylesheet_uri( $stylesheet_uri, $stylesheet_dir_uri )
 			/* If a meta value was given and the file exists, set $stylesheet_uri to the new file. */
 			if ( !empty( $stylesheet ) ) {
 
-				/* If the stylesheet is found in the child theme '/css' folder, use it. */
-				if ( file_exists( trailingslashit( get_stylesheet_directory() ) . "css/{$stylesheet}" ) )
-					$stylesheet_uri = trailingslashit( $stylesheet_dir_uri ) . "css/{$stylesheet}";
+				/* If the stylesheet is found in the child theme, use it. */
+				if ( file_exists( trailingslashit( get_stylesheet_directory() ) . $stylesheet ) ) {
+					$stylesheet_uri = trailingslashit( $stylesheet_dir_uri ) . $stylesheet;
+				}
 
-				/* Else, if the stylesheet is found in the parent theme '/css' folder, use it. */
-				elseif ( file_exists( trailingslashit( get_template_directory() ) . "css/{$stylesheet}" ) )
-					$stylesheet_uri = trailingslashit( get_template_directory_uri() ) . "css/{$stylesheet}";
+				/* Else, if the stylesheet is found in the parent theme, use it. */
+				elseif ( file_exists( trailingslashit( get_template_directory() ) . $stylesheet ) ) {
+					$stylesheet_uri = trailingslashit( get_template_directory_uri() ) . $stylesheet;
+				}
+
+				/* @deprecated 0.4.0 Back compatibility. */
+				else {
+					/* If the stylesheet is found in the child theme '/css' folder, use it. */
+					if ( file_exists( trailingslashit( get_stylesheet_directory() ) . "css/{$stylesheet}" ) ) {
+						$stylesheet_uri = trailingslashit( $stylesheet_dir_uri ) . "css/{$stylesheet}";
+
+						/* Set the post stylesheet to the correct directory. */
+						set_post_stylesheet( $post->ID, str_replace( get_stylesheet_directory_uri(), 'css/', $stylesheet_uri ) );
+					}
+
+					/* Else, if the stylesheet is found in the parent theme '/css' folder, use it. */
+					elseif ( file_exists( trailingslashit( get_template_directory() ) . "css/{$stylesheet}" ) ) {
+						$stylesheet_uri = trailingslashit( get_template_directory_uri() ) . "css/{$stylesheet}";
+
+						/* Set the post stylesheet to the correct directory. */
+						set_post_stylesheet( $post->ID, str_replace( get_template_directory_uri(), 'css/', $stylesheet_uri ) );
+					}
+				}
 			}
 		}
 	}
@@ -211,7 +233,7 @@ function has_post_stylesheet( $stylesheet, $post_id = '' ) {
  * Admin setup for the post stylesheets script.
  *
  * @since 0.3.0
- * @access private
+ * @access public
  * @return void
  */
 function post_stylesheets_admin_setup() {
@@ -226,7 +248,7 @@ function post_stylesheets_admin_setup() {
  * to save the metadata.
  *
  * @since 0.3.0
- * @access private
+ * @access public
  * @return void
  */
 function post_stylesheets_load_meta_boxes() {
@@ -236,6 +258,8 @@ function post_stylesheets_load_meta_boxes() {
 
 	/* Saves the post meta box data. */
 	add_action( 'save_post', 'post_stylesheets_meta_box_save', 10, 2 );
+	add_action( 'add_attachment', 'post_stylesheets_meta_box_save' );
+	add_action( 'edit_attachment', 'post_stylesheets_meta_box_save' );
 }
 
 /**
@@ -243,7 +267,7 @@ function post_stylesheets_load_meta_boxes() {
  * permission to edit post meta.
  *
  * @since 0.2.0
- * @access private
+ * @access public
  * @param string $post_type The post type of the current post being edited.
  * @param object $post The current post object.
  * @return void
@@ -259,7 +283,7 @@ function post_stylesheets_create_meta_box( $post_type, $post ) {
  * Displays the input field for entering a custom stylesheet.
  *
  * @since 0.2.0
- * @access private
+ * @access public
  * @param object $object The post object currently being edited.
  * @param array $box Specific information about the meta box being loaded.
  * @return void
@@ -268,7 +292,17 @@ function post_stylesheets_meta_box( $object, $box ) { ?>
 
 	<p>
 		<?php wp_nonce_field( basename( __FILE__ ), 'post-stylesheets-nonce' ); ?>
-		<input type="text" class="widefat" name="post-stylesheets" id="post-stylesheets" value="<?php echo esc_attr( get_post_stylesheet( $object->ID ) ); ?>" />
+		<?php $styles = post_stylesheets_get_styles(); ?>
+
+		<select name="post-stylesheets" id="post-stylesheets" class="widefat">
+			<option value=""></option>
+
+			<?php if ( !empty( $styles ) ) {
+				foreach ( $styles as $label => $file ) { ?>
+					<option value="<?php echo esc_attr( $file ); ?>" <?php selected( get_post_stylesheet( $object->ID ), esc_attr( $file ) ); ?>><?php echo esc_html( $label ); ?></option>
+				<?php }
+			} ?>
+		</select>
 	</p>
 <?php
 }
@@ -277,11 +311,15 @@ function post_stylesheets_meta_box( $object, $box ) { ?>
  * Saves the user-selected post stylesheet on the 'save_post' hook.
  *
  * @since 0.2.0
- * @access private
+ * @access public
  * @param int $post_id The ID of the current post being saved.
  * @param object $post The post object currently being saved.
  */
-function post_stylesheets_meta_box_save( $post_id, $post ) {
+function post_stylesheets_meta_box_save( $post_id, $post = '' ) {
+
+	/* Fix for attachment save issue in WordPress 3.5. @link http://core.trac.wordpress.org/ticket/21963 */
+	if ( !is_object( $post ) )
+		$post = get_post();
 
 	/* Verify the nonce before proceeding. */
 	if ( !isset( $_POST['post-stylesheets-nonce'] ) || !wp_verify_nonce( $_POST['post-stylesheets-nonce'], basename( __FILE__ ) ) )
@@ -311,6 +349,43 @@ function post_stylesheets_meta_box_save( $post_id, $post ) {
 	/* If the old layout doesn't match the new layout, update the post layout meta. */
 	elseif ( current_user_can( 'edit_post_meta', $post_id, $meta_key ) && $meta_value !== $new_meta_value )
 		set_post_stylesheet( $post_id, $new_meta_value );
+}
+
+/**
+ * Gets the stylesheet files within the parent or child theme and checks if they have the 'Style Name' 
+ * header. If any files are found, they are returned in an array.
+ *
+ * @since 0.4.0
+ * @access public
+ * @return array
+ */
+function post_stylesheets_get_styles() {
+
+	/* Set up an empty styles array. */
+	$styles = array();
+
+	/* Get the theme object. */
+	$theme = wp_get_theme();
+
+	/* Get the theme CSS files two levels deep. */
+	$files = (array) $theme->get_files( 'css', 2, true );
+
+	/* Loop through each of the CSS files and check if they are styles. */
+	foreach ( $files as $file => $path ) {
+
+		/* Get file data based on the 'Style Name' header. */
+		$headers = get_file_data( $path, array( 'Style Name' => 'Style Name' ) );
+
+		/* Continue loop if the header is empty. */
+		if ( empty( $headers['Style Name'] ) )
+			continue;
+
+		/* Add the CSS filename and template name to the array. */
+		$styles[ $file ] = $headers['Style Name'];
+	}
+
+	/* Return array of styles. */
+	return array_flip( $styles );
 }
 
 /**

@@ -14,12 +14,12 @@
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- * @package BreadcrumbTrail
- * @version 0.5.2
- * @author Justin Tadlock <justin@justintadlock.com>
+ * @package   BreadcrumbTrail
+ * @version   0.5.3
+ * @author    Justin Tadlock <justin@justintadlock.com>
  * @copyright Copyright (c) 2008 - 2012, Justin Tadlock
- * @link http://justintadlock.com/archives/2009/04/05/breadcrumb-trail-wordpress-plugin
- * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @link      http://themehybrid.com/plugins/breadcrumb-trail
+ * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 /**
@@ -39,13 +39,14 @@ function breadcrumb_trail( $args = array() ) {
 
 	/* Set up the default arguments for the breadcrumb. */
 	$defaults = array(
-		'container' => 		'div', // div, nav, p, etc.
-		'separator' => 		'/',
-		'before' => 		__( 'Browse:', 'breadcrumb-trail' ),
-		'after' => 		false,
-		'front_page' => 	true,
-		'show_home' => 		__( 'Home', 'breadcrumb-trail' ),
-		'echo' => 		true
+		'container'  => 'div', // div, nav, p, etc.
+		'separator'  => '/',
+		'before'     => __( 'Browse:', 'breadcrumb-trail' ),
+		'after'      => false,
+		'front_page' => true,
+		'show_home'  => __( 'Home', 'breadcrumb-trail' ),
+		'network'    => false,
+		'echo'       => true
 	);
 
 	/* Allow singular post views to have a taxonomy's terms prefixing the trail. */
@@ -109,7 +110,7 @@ function breadcrumb_trail( $args = array() ) {
  *
  * @since 0.4.0
  * @todo Build in caching based on the queried object ID.
- * @access private
+ * @access public
  * @param array $args Mixed arguments for the menu.
  * @return array List of items to be shown in the trail.
  */
@@ -121,8 +122,15 @@ function breadcrumb_trail_get_items( $args = array() ) {
 	$path = '';
 
 	/* If $show_home is set and we're not on the front page of the site, link to the home page. */
-	if ( !is_front_page() && $args['show_home'] )
-		$trail[] = '<a href="' . home_url() . '" title="' . esc_attr( get_bloginfo( 'name' ) ) . '" rel="home" class="trail-begin">' . $args['show_home'] . '</a>';
+	if ( !is_front_page() && $args['show_home'] ) {
+
+		if ( is_multisite() && true === $args['network'] ) {
+			$trail[] = '<a href="' . network_home_url() . '">' . $args['show_home'] . '</a>';
+			$trail[] = '<a href="' . home_url() . '" title="' . esc_attr( get_bloginfo( 'name' ) ) . '" rel="home" class="trail-begin">' . get_bloginfo( 'name' ) . '</a>';
+		} else {
+			$trail[] = '<a href="' . home_url() . '" title="' . esc_attr( get_bloginfo( 'name' ) ) . '" rel="home" class="trail-begin">' . $args['show_home'] . '</a>';
+		}
+	}
 
 	/* If bbPress is installed and we're on a bbPress page. */
 	if ( function_exists( 'is_bbpress' ) && is_bbpress() ) {
@@ -131,15 +139,38 @@ function breadcrumb_trail_get_items( $args = array() ) {
 
 	/* If viewing the front page of the site. */
 	elseif ( is_front_page() ) {
-		if ( $args['show_home'] && $args['front_page'] )
-			$trail[] = "{$args['show_home']}";
+
+		if ( !is_paged() && $args['show_home'] && $args['front_page'] ) {
+
+			if ( is_multisite() && true === $args['network'] ) {
+				$trail[] = '<a href="' . network_home_url() . '">' . $args['show_home'] . '</a>';
+				$trail[] = get_bloginfo( 'name' );
+			} else {
+				$trail[] = $args['show_home'];
+			}
+		}
+
+		elseif ( is_paged() && $args['show_home'] && $args['front_page'] ) {
+
+			if ( is_multisite() && true === $args['network'] ) {
+				$trail[] = '<a href="' . network_home_url() . '">' . $args['show_home'] . '</a>';
+				$trail[] = '<a href="' . home_url() . '" title="' . esc_attr( get_bloginfo( 'name' ) ) . '" rel="home" class="trail-begin">' . get_bloginfo( 'name' ) . '</a>';
+			} else {
+				$trail[] = '<a href="' . home_url() . '" title="' . esc_attr( get_bloginfo( 'name' ) ) . '" rel="home" class="trail-begin">' . $args['show_home'] . '</a>';
+			}
+		}
 	}
 
 	/* If viewing the "home"/posts page. */
 	elseif ( is_home() ) {
 		$home_page = get_page( get_queried_object_id() );
+
 		$trail = array_merge( $trail, breadcrumb_trail_get_parents( $home_page->post_parent, '' ) );
-		$trail[] = get_the_title( $home_page->ID );
+
+		if ( is_paged() )
+			$trail[]  = '<a href="' . get_permalink( $home_page->ID ) . '" title="' . esc_attr( get_the_title( $home_page->ID ) ) . '">' . get_the_title( $home_page->ID ) . '</a>';
+		else
+			$trail[] = get_the_title( $home_page->ID );
 	}
 
 	/* If viewing a singular post (page, attachment, etc.). */
@@ -171,15 +202,56 @@ function breadcrumb_trail_get_items( $args = array() ) {
 		/* If viewing a singular 'attachment'. */
 		elseif ( 'attachment' == $post_type ) {
 
-			/* If $front has been set, add it to the $path. */
-			$path .= trailingslashit( $wp_rewrite->front );
+			/* Get the parent post ID. */
+			$parent_id = $post->post_parent;
 
-			/* If there's a path, check for parents. */
-			if ( !empty( $path ) )
-				$trail = array_merge( $trail, breadcrumb_trail_get_parents( '', $path ) );
+			/* If the attachment has a parent (attached to a post). */
+			if ( 0 < $parent_id ) {
 
-			/* Map the post (parent) permalink structure tags to actual links. */
-			$trail = array_merge( $trail, breadcrumb_trail_map_rewrite_tags( $post->post_parent, get_option( 'permalink_structure' ), $args ) );
+				/* Get the parent post type. */
+				$parent_post_type = get_post_type( $parent_id );
+
+				/* If the post type is 'post'. */
+				if ( 'post' == $parent_post_type ) {
+
+					/* If $front has been set, add it to the $path. */
+					$path .= trailingslashit( $wp_rewrite->front );
+
+					/* If there's a path, check for parents. */
+					if ( !empty( $path ) )
+						$trail = array_merge( $trail, breadcrumb_trail_get_parents( '', $path ) );
+
+					/* Map the post (parent) permalink structure tags to actual links. */
+					$trail = array_merge( $trail, breadcrumb_trail_map_rewrite_tags( $post->post_parent, get_option( 'permalink_structure' ), $args ) );
+				}
+
+				/* Custom post types. */
+				elseif ( 'page' !== $parent_post_type ) {
+
+					$parent_post_type_object = get_post_type_object( $parent_post_type );
+
+					/* If $front has been set, add it to the $path. */
+					if ( $parent_post_type_object->rewrite['with_front'] && $wp_rewrite->front )
+						$path .= trailingslashit( $wp_rewrite->front );
+
+					/* If there's a slug, add it to the $path. */
+					if ( !empty( $parent_post_type_object->rewrite['slug'] ) )
+						$path .= $parent_post_type_object->rewrite['slug'];
+
+					/* If there's a path, check for parents. */
+					if ( !empty( $path ) )
+						$trail = array_merge( $trail, breadcrumb_trail_get_parents( '', $path ) );
+
+					/* If there's an archive page, add it to the trail. */
+					if ( !empty( $parent_post_type_object->has_archive ) ) {
+
+						/* Add support for a non-standard label of 'archive_title' (special use case). */
+						$label = !empty( $parent_post_type_object->labels->archive_title ) ? $parent_post_type_object->labels->archive_title : $parent_post_type_object->labels->name;
+
+						$trail[] = '<a href="' . get_post_type_archive_link( $parent_post_type ) . '" title="' . esc_attr( $label ) . '">' . $label . '</a>';
+					}
+				}
+			}
 		}
 
 		/* If a custom post type, check if there are any pages in its hierarchy based on the slug. */
@@ -198,8 +270,13 @@ function breadcrumb_trail_get_items( $args = array() ) {
 				$trail = array_merge( $trail, breadcrumb_trail_get_parents( '', $path ) );
 
 			/* If there's an archive page, add it to the trail. */
-			if ( !empty( $post_type_object->has_archive ) )
-				$trail[] = '<a href="' . get_post_type_archive_link( $post_type ) . '" title="' . esc_attr( $post_type_object->labels->name ) . '">' . $post_type_object->labels->name . '</a>';
+			if ( !empty( $post_type_object->has_archive ) ) {
+
+				/* Add support for a non-standard label of 'archive_title' (special use case). */
+				$label = !empty( $post_type_object->labels->archive_title ) ? $post_type_object->labels->archive_title : $post_type_object->labels->name;
+
+				$trail[] = '<a href="' . get_post_type_archive_link( $post_type ) . '" title="' . esc_attr( $label ) . '">' . $label . '</a>';
+			}
 		}
 
 		/* If the post type path returns nothing and there is a parent, get its parents. */
@@ -216,7 +293,11 @@ function breadcrumb_trail_get_items( $args = array() ) {
 
 		/* End with the post title. */
 		$post_title = single_post_title( '', false );
-		if ( !empty( $post_title ) )
+
+		if ( 1 < get_query_var( 'page' ) && !empty( $post_title ) )
+			$trail[] = '<a href="' . get_permalink( $post_id ) . '" title="' . esc_attr( $post_title ) . '">' . $post_title . '</a>';
+
+		elseif ( !empty( $post_title ) )
 			$trail[] = $post_title;
 	}
 
@@ -245,12 +326,45 @@ function breadcrumb_trail_get_items( $args = array() ) {
 			if ( $path )
 				$trail = array_merge( $trail, breadcrumb_trail_get_parents( '', $path ) );
 
+			/* Add post type archive if its 'has_archive' matches the taxonomy rewrite 'slug'. */
+			if ( $taxonomy->rewrite['slug'] ) {
+
+				/* Get public post types that match the rewrite slug. */
+				$post_types = get_post_types( array( 'public' => true, 'has_archive' => $taxonomy->rewrite['slug'] ), 'objects' );
+
+				/**
+				 * If any post types are found, loop through them to find one that matches.
+				 * The reason for this is because WP doesn't match the 'has_archive' string 
+				 * exactly when calling get_post_types(). I'm assuming it just matches 'true'.
+				 */
+				if ( !empty( $post_types ) ) {
+
+					foreach ( $post_types as $post_type_object ) {
+
+						if ( $taxonomy->rewrite['slug'] === $post_type_object->has_archive ) {
+
+							/* Add support for a non-standard label of 'archive_title' (special use case). */
+							$label = !empty( $post_type_object->labels->archive_title ) ? $post_type_object->labels->archive_title : $post_type_object->labels->name;
+
+							/* Add the post type archive link to the trail. */
+							$trail[] = '<a href="' . get_post_type_archive_link( $post_type_object->name ) . '" title="' . esc_attr( $label ) . '">' . $label . '</a>';
+
+							/* Break out of the loop. */
+							break;
+						}
+					}
+				}
+			}
+
 			/* If the taxonomy is hierarchical, list its parent terms. */
 			if ( is_taxonomy_hierarchical( $term->taxonomy ) && $term->parent )
 				$trail = array_merge( $trail, breadcrumb_trail_get_term_parents( $term->parent, $term->taxonomy ) );
 
 			/* Add the term name to the trail end. */
-			$trail[] = single_term_title( '', false );
+			if ( is_paged() )
+				$trail[] = '<a href="' . esc_url( get_term_link( $term, $term->taxonomy ) ) . '" title="' . esc_attr( single_term_title( '', false ) ) . '">' . single_term_title( '', false ) . '</a>';
+			else
+				$trail[] = single_term_title( '', false );
 		}
 
 		/* If viewing a post type archive. */
@@ -272,11 +386,17 @@ function breadcrumb_trail_get_items( $args = array() ) {
 				$trail = array_merge( $trail, breadcrumb_trail_get_parents( '', $path ) );
 
 			/* Add the post type [plural] name to the trail end. */
-			$trail[] = $post_type_object->labels->name;
+			if ( is_paged() )
+				$trail[] = '<a href="' . esc_url( get_post_type_archive_link( $post_type_object->name ) ) . '" title="' . esc_attr( post_type_archive_title( '', false ) ) . '">' . post_type_archive_title( '', false ) . '</a>';
+			else
+				$trail[] = post_type_archive_title( '', false );
 		}
 
 		/* If viewing an author archive. */
 		elseif ( is_author() ) {
+
+			/* Get the user ID. */
+			$user_id = get_query_var( 'author' );
 
 			/* If $front has been set, add it to $path. */
 			if ( !empty( $wp_rewrite->front ) )
@@ -291,7 +411,10 @@ function breadcrumb_trail_get_items( $args = array() ) {
 				$trail = array_merge( $trail, breadcrumb_trail_get_parents( '', $path ) );
 
 			/* Add the author's display name to the trail end. */
-			$trail[] = get_the_author_meta( 'display_name', get_query_var( 'author' ) );
+			if ( is_paged() )
+				$trail[] = '<a href="'. esc_url( get_author_posts_url( $user_id ) ) . '" title="' . esc_attr( get_the_author_meta( 'display_name', $user_id ) ) . '">' . get_the_author_meta( 'display_name', $user_id ) . '</a>';
+			else
+				$trail[] = get_the_author_meta( 'display_name', $user_id );
 		}
 
 		/* If viewing a time-based archive. */
@@ -317,32 +440,60 @@ function breadcrumb_trail_get_items( $args = array() ) {
 			if ( is_day() ) {
 				$trail[] = '<a href="' . get_year_link( get_the_time( 'Y' ) ) . '" title="' . get_the_time( esc_attr__( 'Y', 'breadcrumb-trail' ) ) . '">' . get_the_time( __( 'Y', 'breadcrumb-trail' ) ) . '</a>';
 				$trail[] = '<a href="' . get_month_link( get_the_time( 'Y' ), get_the_time( 'm' ) ) . '" title="' . get_the_time( esc_attr__( 'F', 'breadcrumb-trail' ) ) . '">' . get_the_time( __( 'F', 'breadcrumb-trail' ) ) . '</a>';
-				$trail[] = get_the_time( __( 'd', 'breadcrumb-trail' ) );
+
+				if ( is_paged() )
+					$trail[] = '<a href="' . get_day_link( get_the_time( 'Y' ), get_the_time( 'm' ), get_the_time( 'd' ) ) . '" title="' . get_the_time( esc_attr__( 'd', 'breadcrumb-trail' ) ) . '">' . get_the_time( __( 'd', 'breadcrumb-trail' ) ) . '</a>';
+				else
+					$trail[] = get_the_time( __( 'd', 'breadcrumb-trail' ) );
 			}
 
 			elseif ( get_query_var( 'w' ) ) {
 				$trail[] = '<a href="' . get_year_link( get_the_time( 'Y' ) ) . '" title="' . get_the_time( esc_attr__( 'Y', 'breadcrumb-trail' ) ) . '">' . get_the_time( __( 'Y', 'breadcrumb-trail' ) ) . '</a>';
-				$trail[] = sprintf( __( 'Week %1$s', 'breadcrumb-trail' ), get_the_time( esc_attr__( 'W', 'breadcrumb-trail' ) ) );
+
+				if ( is_paged() )
+					$trail[] = get_archives_link( add_query_arg( array( 'm' => get_the_time( 'Y' ), 'w' => get_the_time( 'W' ) ), home_url() ), sprintf( __( 'Week %1$s', 'breadcrumb-trail' ), get_the_time( esc_attr__( 'W', 'breadcrumb-trail' ) ) ), false );
+				else
+					$trail[] = sprintf( __( 'Week %1$s', 'breadcrumb-trail' ), get_the_time( esc_attr__( 'W', 'breadcrumb-trail' ) ) );
 			}
 
 			elseif ( is_month() ) {
 				$trail[] = '<a href="' . get_year_link( get_the_time( 'Y' ) ) . '" title="' . get_the_time( esc_attr__( 'Y', 'breadcrumb-trail' ) ) . '">' . get_the_time( __( 'Y', 'breadcrumb-trail' ) ) . '</a>';
-				$trail[] = get_the_time( __( 'F', 'breadcrumb-trail' ) );
+
+				if ( is_paged() )
+					$trail[] = '<a href="' . get_month_link( get_the_time( 'Y' ), get_the_time( 'm' ) ) . '" title="' . get_the_time( esc_attr__( 'F', 'breadcrumb-trail' ) ) . '">' . get_the_time( __( 'F', 'breadcrumb-trail' ) ) . '</a>';
+				else
+					$trail[] = get_the_time( __( 'F', 'breadcrumb-trail' ) );
 			}
 
 			elseif ( is_year() ) {
-				$trail[] = get_the_time( __( 'Y', 'breadcrumb-trail' ) );
+
+				if ( is_paged() )
+					$trail[] = '<a href="' . get_year_link( get_the_time( 'Y' ) ) . '" title="' . esc_attr( get_the_time( __( 'Y', 'breadcrumb-trail' ) ) ) . '">' . get_the_time( __( 'Y', 'breadcrumb-trail' ) ) . '</a>';
+				else
+					$trail[] = get_the_time( __( 'Y', 'breadcrumb-trail' ) );
 			}
 		}
 	}
 
 	/* If viewing search results. */
-	elseif ( is_search() )
-		$trail[] = sprintf( __( 'Search results for &quot;%1$s&quot;', 'breadcrumb-trail' ), esc_attr( get_search_query() ) );
+	elseif ( is_search() ) {
+
+		if ( is_paged() )
+			$trail[] = '<a href="' . get_search_link() . '" title="' . sprintf( esc_attr__( 'Search results for &quot;%1$s&quot;', 'breadcrumb-trail' ), esc_attr( get_search_query() ) ) . '">' . sprintf( __( 'Search results for &quot;%1$s&quot;', 'breadcrumb-trail' ), esc_attr( get_search_query() ) ) . '</a>';
+		else
+			$trail[] = sprintf( __( 'Search results for &quot;%1$s&quot;', 'breadcrumb-trail' ), esc_attr( get_search_query() ) );
+	}
 
 	/* If viewing a 404 error page. */
-	elseif ( is_404() )
+	elseif ( is_404() ) {
 		$trail[] = __( '404 Not Found', 'breadcrumb-trail' );
+	}
+
+	/* Check for pagination. */
+	if ( is_paged() )
+		$trail[] = sprintf( __( 'Page %d', 'breadcrumb-trail' ), absint( get_query_var( 'paged' ) ) );
+	elseif ( is_singular() && 1 < get_query_var( 'page' ) )
+		$trail[] = sprintf( __( 'Page %d', 'breadcrumb-trail' ), absint( get_query_var( 'page' ) ) );
 
 	/* Allow devs to step in and filter the $trail array. */
 	return apply_filters( 'breadcrumb_trail_items', $trail, $args );
@@ -352,7 +503,7 @@ function breadcrumb_trail_get_items( $args = array() ) {
  * Gets the items for the breadcrumb trail if bbPress is installed.
  *
  * @since 0.5.0
- * @access private
+ * @access public
  * @param array $args Mixed arguments for the menu.
  * @return array List of items to be shown in the trail.
  */
@@ -479,7 +630,7 @@ function breadcrumb_trail_get_bbpress_items( $args = array() ) {
  * types.
  *
  * @since 0.4.0
- * @access private
+ * @access public
  * @param int $post_id ID of the post whose parents we want.
  * @param string $path Path of a potential parent page.
  * @param array $args Mixed arguments for the menu.
@@ -566,7 +717,7 @@ function breadcrumb_trail_map_rewrite_tags( $post_id = '', $path = '', $args = a
  * path, it'll be added.  But, it's also just a way to check for a hierarchy with hierarchical post types.
  *
  * @since 0.3.0
- * @access private
+ * @access public
  * @param int $post_id ID of the post whose parents we want.
  * @param string $path Path of a potential parent page.
  * @return array $trail Array of parent page links.
@@ -653,7 +804,7 @@ function breadcrumb_trail_get_parents( $post_id = '', $path = '' ) {
  * function get_category_parents() but handles any type of taxonomy.
  *
  * @since 0.3.0
- * @access private
+ * @access public
  * @param int $parent_id The ID of the first parent.
  * @param object|string $taxonomy The taxonomy of the term whose parents we want.
  * @return array $trail Array of links to parent terms.

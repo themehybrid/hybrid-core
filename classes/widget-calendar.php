@@ -4,12 +4,12 @@
  * using all the available options given in the get_calendar() function. It replaces the default WordPress
  * calendar widget.
  *
- * @package Hybrid
+ * @package    Hybrid
  * @subpackage Classes
- * @author Justin Tadlock <justin@justintadlock.com>
- * @copyright Copyright (c) 2008 - 2012, Justin Tadlock
- * @link http://themehybrid.com/hybrid-core
- * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @author     Justin Tadlock <justin@justintadlock.com>
+ * @copyright  Copyright (c) 2008 - 2012, Justin Tadlock
+ * @link       http://themehybrid.com/hybrid-core
+ * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 /**
@@ -28,22 +28,22 @@ class Hybrid_Widget_Calendar extends WP_Widget {
 
 		/* Set up the widget options. */
 		$widget_options = array(
-			'classname' => 'calendar',
+			'classname'   => 'calendar',
 			'description' => esc_html__( 'An advanced widget that gives you total control over the output of your calendar.', 'hybrid-core' )
 		);
 
 		/* Set up the widget control options. */
 		$control_options = array(
-			'width' => 200,
+			'width'  => 200,
 			'height' => 350
 		);
 
 		/* Create the widget. */
 		$this->WP_Widget(
-			'hybrid-calendar',			// $this->id_base
-			__( 'Calendar', 'hybrid-core' ),	// $this->name
-			$widget_options,			// $this->widget_options
-			$control_options			// $this->control_options
+			'hybrid-calendar',               // $this->id_base
+			__( 'Calendar', 'hybrid-core' ), // $this->name
+			$widget_options,                 // $this->widget_options
+			$control_options                 // $this->control_options
 		);
 	}
 
@@ -96,7 +96,7 @@ class Hybrid_Widget_Calendar extends WP_Widget {
 
 		/* Set up the default form values. */
 		$defaults = array(
-			'title' => esc_attr__( 'Calendar', 'hybrid-core' ),
+			'title'   => esc_attr__( 'Calendar', 'hybrid-core' ),
 			'initial' => false
 		);
 

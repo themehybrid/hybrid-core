@@ -5,12 +5,12 @@
  * represent a search form. It also gives the user the option of using the theme's search form
  * through the use of the get_search_form() function.
  *
- * @package Hybrid
+ * @package    Hybrid
  * @subpackage Classes
- * @author Justin Tadlock <justin@justintadlock.com>
- * @copyright Copyright (c) 2008 - 2012, Justin Tadlock
- * @link http://themehybrid.com/hybrid-core
- * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @author     Justin Tadlock <justin@justintadlock.com>
+ * @copyright  Copyright (c) 2008 - 2012, Justin Tadlock
+ * @link       http://themehybrid.com/hybrid-core
+ * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 /**
@@ -29,22 +29,22 @@ class Hybrid_Widget_Search extends WP_Widget {
 
 		/* Set up the widget options. */
 		$widget_options = array(
-			'classname' => 'search',
+			'classname'   => 'search',
 			'description' => esc_html__( 'An advanced widget that gives you total control over the output of your search form.', 'hybrid-core' )
 		);
 
 		/* Set up the widget control options. */
 		$control_options = array(
-			'width' => 525,
+			'width'  => 525,
 			'height' => 350
 		);
 
 		/* Create the widget. */
 		$this->WP_Widget(
-			'hybrid-search',			// $this->id_base
-			__( 'Search', 'hybrid-core' ),	// $this->name
-			$widget_options,			// $this->widget_options
-			$control_options			// $this->control_options
+			'hybrid-search',               // $this->id_base
+			__( 'Search', 'hybrid-core' ), // $this->name
+			$widget_options,               // $this->widget_options
+			$control_options               // $this->control_options
 		);
 	}
 
@@ -110,10 +110,11 @@ class Hybrid_Widget_Search extends WP_Widget {
 	function update( $new_instance, $old_instance ) {
 		$instance = $new_instance;
 
-		$instance['title'] = strip_tags( $new_instance['title'] );
-		$instance['search_label'] = strip_tags( $new_instance['search_label'] );
-		$instance['search_text'] = strip_tags( $new_instance['search_text'] );
+		$instance['title']         = strip_tags( $new_instance['title'] );
+		$instance['search_label']  = strip_tags( $new_instance['search_label'] );
+		$instance['search_text']   = strip_tags( $new_instance['search_text'] );
 		$instance['search_submit'] = strip_tags( $new_instance['search_submit'] );
+
 		$instance['theme_search'] = ( isset( $new_instance['theme_search'] ) ? 1 : 0 );
 
 		return $instance;
@@ -128,10 +129,10 @@ class Hybrid_Widget_Search extends WP_Widget {
 
 		/* Set up the default form values. */
 		$defaults = array(
-			'title' => esc_attr__( 'Search', 'hybrid-core' ),
-			'theme_search' => false,
-			'search_label' => '',
-			'search_text' => '',
+			'title'         => esc_attr__( 'Search', 'hybrid-core' ),
+			'theme_search'  => false,
+			'search_label'  => '',
+			'search_text'   => '',
 			'search_submit' => ''
 		);
 

@@ -3,12 +3,12 @@
  * Additional helper functions that the framework or themes may use.  The functions in this file are functions
  * that don't really have a home within any other parts of the framework.
  *
- * @package HybridCore
+ * @package    HybridCore
  * @subpackage Functions
- * @author Justin Tadlock <justin@justintadlock.com>
- * @copyright Copyright (c) 2008 - 2012, Justin Tadlock
- * @link http://themehybrid.com/hybrid-core
- * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @author     Justin Tadlock <justin@justintadlock.com>
+ * @copyright  Copyright (c) 2008 - 2012, Justin Tadlock
+ * @link       http://themehybrid.com/hybrid-core
+ * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 /* Add extra support for post types. */
@@ -24,7 +24,7 @@ add_filter( 'extra_theme_headers', 'hybrid_extra_theme_headers' );
  * they're not registered.
  *
  * @since 0.8.0
- * @access private
+ * @access public
  * @return void
  */
 function hybrid_add_post_type_support() {
@@ -42,7 +42,7 @@ function hybrid_add_post_type_support() {
  * displaying additional information to the theme user.
  *
  * @since 1.2.0
- * @access private
+ * @access public
  * @link http://codex.wordpress.org/Theme_Review#Licensing
  * @param array $headers Array of extra headers added by plugins/themes.
  * @return array $headers
@@ -112,7 +112,7 @@ function get_atomic_template( $template ) {
  * filter hook.
  *
  * @since 0.4.0
- * @access private
+ * @access public
  * @return void
  */
 function hybrid_meta_template() {
@@ -208,6 +208,40 @@ function hybrid_has_post_template( $template = '' ) {
 
 	/* Return false for everything else. */
 	return false;
+}
+
+/**
+ * Retrieves the file with the highest priority that exists.  The function searches both the stylesheet 
+ * and template directories.  This function is similar to the locate_template() function in WordPress 
+ * but returns the file name with the URI path instead of the directory path.
+ *
+ * @since 1.5.0
+ * @access public
+ * @link http://core.trac.wordpress.org/ticket/18302
+ * @param array $file_names The files to search for.
+ * @return string
+ */
+function hybrid_locate_theme_file( $file_names ) {
+
+	$located = '';
+
+	/* Loops through each of the given file names. */
+	foreach ( (array) $file_names as $file ) {
+
+		/* If the file exists in the stylesheet (child theme) directory. */
+		if ( is_child_theme() && file_exists( trailingslashit( get_stylesheet_directory() ) . $file ) ) {
+			$located = trailingslashit( get_stylesheet_directory_uri() ) . $file;
+			break;
+		}
+
+		/* If the file exists in the template (parent theme) directory. */
+		elseif ( file_exists( trailingslashit( get_template_directory ) ) . $file ) {
+			$located = trailingslashit( get_template_directory_uri() ) . $file;
+			break;
+		}
+	}
+
+	return $located;
 }
 
 ?>

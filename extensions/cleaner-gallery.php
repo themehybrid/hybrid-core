@@ -14,12 +14,12 @@
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- * @package CleanerGallery
- * @version 0.9.4
- * @author Justin Tadlock <justin@justintadlock.com>
+ * @package   CleanerGallery
+ * @version   0.9.5
+ * @author    Justin Tadlock <justin@justintadlock.com>
  * @copyright Copyright (c) 2008 - 2012, Justin Tadlock
- * @link http://justintadlock.com/archives/2008/04/13/cleaner-wordpress-gallery-plugin
- * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @link      http://justintadlock.com/archives/2008/04/13/cleaner-wordpress-gallery-plugin
+ * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 /* Filter the post gallery shortcode output. */
@@ -30,10 +30,10 @@ add_filter( 'post_gallery', 'cleaner_gallery', 10, 2 );
  * HTML and inline styles.  It adds the number of columns used as a class attribute, which allows 
  * developers to style the gallery more easily.
  *
- * @since 0.9.0
+ * @since  0.9.0
  * @access private
- * @param string $output
- * @param array $attr
+ * @param  string $output The output of the gallery shortcode.
+ * @param  array  $attr   The arguments for displaying the gallery.
  * @return string $output
  */
 function cleaner_gallery( $output, $attr ) {
@@ -54,19 +54,20 @@ function cleaner_gallery( $output, $attr ) {
 
 	/* Default gallery settings. */
 	$defaults = array(
-		'order' => 'ASC',
-		'orderby' => 'menu_order ID',
-		'id' => get_the_ID(),
-		'link' => '',
-		'itemtag' => 'dl',
-		'icontag' => 'dt',
-		'captiontag' => 'dd',
-		'columns' => 3,
-		'size' => 'thumbnail',
-		'include' => '',
-		'exclude' => '',
+		'order'       => 'ASC',
+		'orderby'     => 'menu_order ID',
+		'id'          => get_the_ID(),
+		'link'        => '',
+		'itemtag'     => 'dl',
+		'icontag'     => 'dt',
+		'captiontag'  => 'dd',
+		'columns'     => 3,
+		'size'        => 'thumbnail',
+		'ids'         => '',
+		'include'     => '',
+		'exclude'     => '',
 		'numberposts' => -1,
-		'offset' => ''
+		'offset'      => ''
 	);
 
 	/* Apply filters to the default arguments. */
@@ -82,28 +83,30 @@ function cleaner_gallery( $output, $attr ) {
 
 	/* Arguments for get_children(). */
 	$children = array(
-		'post_parent' => $id,
-		'post_status' => 'inherit',
-		'post_type' => 'attachment',
-		'post_mime_type' => 'image',
-		'order' => $order,
-		'orderby' => $orderby,
-		'exclude' => $exclude,
-		'include' => $include,
-		'numberposts' => $numberposts,
-		'offset' => $offset,
+		'post_status'      => 'inherit',
+		'post_type'        => 'attachment',
+		'post_mime_type'   => 'image',
+		'order'            => $order,
+		'orderby'          => $orderby,
+		'exclude'          => $exclude,
+		'include'          => $include,
+		'numberposts'      => $numberposts,
+		'offset'           => $offset,
 		'suppress_filters' => true
 	);
 
 	/* Get image attachments. If none, return. */
-	$attachments = get_children( $children );
+	if ( empty( $include ) )
+		$attachments = get_children( array_merge( array( 'post_parent' => $id ), $children ) );
+	else
+		$attachments = get_posts( $children );
 
 	if ( empty( $attachments ) )
-		return '';
+		return '<!-- Here be dragons but no images. -->';
 
 	/* Properly escape the gallery tags. */
-	$itemtag = tag_escape( $itemtag );
-	$icontag = tag_escape( $icontag );
+	$itemtag    = tag_escape( $itemtag );
+	$icontag    = tag_escape( $icontag );
 	$captiontag = tag_escape( $captiontag );
 	$i = 0;
 
@@ -118,7 +121,7 @@ function cleaner_gallery( $output, $attr ) {
 	$output = "\n\t\t\t<div id='gallery-{$id}-{$cleaner_gallery_instance}' class='gallery gallery-{$id}'>";
 
 	/* Loop through each attachment. */
-	foreach ( $attachments as $id => $attachment ) {
+	foreach ( $attachments as $attachment ) {
 
 		/* Open each gallery row. */
 		if ( $columns > 0 && $i % $columns == 0 )
@@ -131,14 +134,14 @@ function cleaner_gallery( $output, $attr ) {
 		$output .= "\n\t\t\t\t\t\t<{$icontag} class='gallery-icon'>";
 
 		/* Add the image. */
-		$image = ( ( isset( $attr['link'] ) && 'file' == $attr['link'] ) ? wp_get_attachment_link( $id, $size, false, false ) : wp_get_attachment_link( $id, $size, true, false ) );
-		$output .= apply_filters( 'cleaner_gallery_image', $image, $id, $attr, $cleaner_gallery_instance );
+		$image = ( ( isset( $attr['link'] ) && 'file' == $attr['link'] ) ? wp_get_attachment_link( $attachment->ID, $size, false, false ) : wp_get_attachment_link( $attachment->ID, $size, true, false ) );
+		$output .= apply_filters( 'cleaner_gallery_image', $image, $attachment->ID, $attr, $cleaner_gallery_instance );
 
 		/* Close the image wrapper. */
 		$output .= "</{$icontag}>";
 
 		/* Get the caption. */
-		$caption = apply_filters( 'cleaner_gallery_caption', wptexturize( $attachment->post_excerpt ), $id, $attr, $cleaner_gallery_instance );
+		$caption = apply_filters( 'cleaner_gallery_caption', wptexturize( $attachment->post_excerpt ), $attachment->ID, $attr, $cleaner_gallery_instance );
 
 		/* If image caption is set. */
 		if ( !empty( $caption ) )

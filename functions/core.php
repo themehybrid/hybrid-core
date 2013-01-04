@@ -4,12 +4,12 @@
  * used across the entire framework to make various tasks faster. This file should be loaded
  * prior to any other files because its functions are needed to run the framework.
  *
- * @package HybridCore
+ * @package    HybridCore
  * @subpackage Functions
- * @author Justin Tadlock <justin@justintadlock.com>
- * @copyright Copyright (c) 2008 - 2012, Justin Tadlock
- * @link http://themehybrid.com/hybrid-core
- * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @author     Justin Tadlock <justin@justintadlock.com>
+ * @copyright  Copyright (c) 2008 - 2012, Justin Tadlock
+ * @link       http://themehybrid.com/hybrid-core
+ * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 /**
@@ -42,6 +42,10 @@ function hybrid_get_prefix() {
  * give extra hooks such as 'hybrid_singular_header', 'hybrid_singular-post_header', and 
  * 'hybrid_singular-post-ID_header'.
  *
+ * @author Justin Tadlock <justin@justintadlock.com>
+ * @author Ptah Dunbar <pt@ptahd.com>
+ * @link http://ptahdunbar.com/wordpress/smarter-hooks-context-sensitive-hooks
+ *
  * @since 0.7.0
  * @access public
  * @uses hybrid_get_prefix() Gets the theme prefix.
@@ -50,6 +54,7 @@ function hybrid_get_prefix() {
  * @param mixed $arg,... Optional additional arguments which are passed on to the functions hooked to the action.
  */
 function do_atomic( $tag = '', $arg = '' ) {
+
 	if ( empty( $tag ) )
 		return false;
 
@@ -64,7 +69,7 @@ function do_atomic( $tag = '', $arg = '' ) {
 	do_action_ref_array( "{$pre}_{$tag}", $args );
 
 	/* Loop through context array and fire actions on a contextual scale. */
-	foreach ( (array)hybrid_get_context() as $context )
+	foreach ( (array) hybrid_get_context() as $context )
 		do_action_ref_array( "{$pre}_{$context}_{$tag}", $args );
 }
 
@@ -86,6 +91,7 @@ function do_atomic( $tag = '', $arg = '' ) {
  * @return mixed $value The value after it has been filtered.
  */
 function apply_atomic( $tag = '', $value = '' ) {
+
 	if ( empty( $tag ) )
 		return false;
 
@@ -100,7 +106,7 @@ function apply_atomic( $tag = '', $value = '' ) {
 	$value = $args[0] = apply_filters_ref_array( "{$pre}_{$tag}", $args );
 
 	/* Loop through context array and apply filters on a contextual scale. */
-	foreach ( (array)hybrid_get_context() as $context )
+	foreach ( (array) hybrid_get_context() as $context )
 		$value = $args[0] = apply_filters_ref_array( "{$pre}_{$context}_{$tag}", $args );
 
 	/* Return the final value once all filters have been applied. */
@@ -174,43 +180,6 @@ function hybrid_get_content_width() {
 	global $content_width;
 
 	return $content_width;
-}
-
-/**
- * Gets theme data and stores it in the global $hybrid variable.  By storing it, it can be accessed quickly without 
- * having to run through the get_theme_data() function again.
- *
- * @since 1.2.0
- * @access public
- * @param string $path Whether to use the template (parent theme) or stylesheet (child theme) path.
- */
-function hybrid_get_theme_data( $path = 'template' ) {
-	global $hybrid;
-
-	/* If 'template' is requested, get the parent theme data. */
-	if ( 'template' == $path ) {
-
-		/* If the parent theme data isn't set, grab it with the get_theme_data() function. */
-		if ( empty( $hybrid->theme_data ) )
-			$hybrid->theme_data = get_theme_data( trailingslashit( TEMPLATEPATH ) . 'style.css' );
-
-		/* Return the parent theme data. */
-		return $hybrid->theme_data;
-	}
-
-	/* If 'stylesheet' is requested, get the child theme data. */
-	elseif ( 'stylesheet' == $path ) {
-
-		/* If the child theme data isn't set, grab it with the get_theme_data() function. */
-		if ( empty( $hybrid->child_theme_data ) )
-			$hybrid->child_theme_data = get_theme_data( trailingslashit( STYLESHEETPATH ) . 'style.css' );
-
-		/* Return the child theme data. */
-		return $hybrid->child_theme_data;
-	}
-
-	/* Return false for everything else. */
-	return false;
 }
 
 ?>

@@ -4,12 +4,16 @@
  * of the functions handle basic <meta> elements for the <head> area of the site.  This file is a catchall file 
  * for adding these types of things to themes.
  *
- * @package HybridCore
+ * Theme authors, please do not use this in your publicly-released themes. This feature is no longer 
+ * officially supported as a theme feature.  Please recommend to your users that they should install an SEO 
+ * plugin, such as WP SEO, for this.
+ *
+ * @package    HybridCore
  * @subpackage Functions
- * @author Justin Tadlock <justin@justintadlock.com>
- * @copyright Copyright (c) 2008 - 2012, Justin Tadlock
- * @link http://themehybrid.com/hybrid-core
- * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @author     Justin Tadlock <justin@justintadlock.com>
+ * @copyright  Copyright (c) 2008 - 2012, Justin Tadlock
+ * @link       http://themehybrid.com/hybrid-core
+ * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 /* Add <meta> elements to the <head> area. */
@@ -25,7 +29,7 @@ add_action( 'wp_head', 'hybrid_meta_keywords', 1 );
  * hybrid_meta_robots filter hook at the end.
  *
  * @since 0.2.3
- * @access private
+ * @access public
  * @return void
  */
 function hybrid_meta_robots() {
@@ -45,7 +49,7 @@ function hybrid_meta_robots() {
  * archives, it uses the user's display name.
  *
  * @since 0.3.3
- * @access private
+ * @access public
  * @return void
  */
 function hybrid_meta_author() {
@@ -76,7 +80,7 @@ function hybrid_meta_author() {
  * published.  All other pages will show the current year. 
  *
  * @since 0.4.0
- * @access private
+ * @access public
  * @return void
  */
 function hybrid_meta_copyright() {
@@ -99,7 +103,7 @@ function hybrid_meta_copyright() {
  * Add the revised meta tag on the singular view of posts.  This shows the last time the post was modified. 
  *
  * @since 0.4.0
- * @access private
+ * @access public
  * @return void
  */
 function hybrid_meta_revised() {
@@ -118,7 +122,7 @@ function hybrid_meta_revised() {
  * Generates the meta description based on either metadata or the description for the object.
  *
  * @since 0.2.3
- * @access private
+ * @access public
  * @return void
  */
 function hybrid_meta_description() {
@@ -187,7 +191,7 @@ function hybrid_meta_description() {
  * Generates meta keywords/tags for the site.
  *
  * @since 0.2.3
- * @access private
+ * @access public
  * @return void
  */
 function hybrid_meta_keywords() {

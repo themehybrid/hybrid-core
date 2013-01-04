@@ -6,12 +6,12 @@
  * point in a future release.  If your theme is using one of these, you should use the listed alternative or 
  * remove it from your theme if necessary.
  *
- * @package HybridCore
+ * @package    HybridCore
  * @subpackage Functions
- * @author Justin Tadlock <justin@justintadlock.com>
- * @copyright Copyright (c) 2008 - 2012, Justin Tadlock
- * @link http://themehybrid.com/hybrid-core
- * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @author     Justin Tadlock <justin@justintadlock.com>
+ * @copyright  Copyright (c) 2008 - 2012, Justin Tadlock
+ * @link       http://themehybrid.com/hybrid-core
+ * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 /**
@@ -426,6 +426,15 @@ function hybrid_load_textdomain( $mofile, $domain ) {
 	return hybrid_load_textdomain_mofile( $mofile, $domain );
 }
 
+/**
+ * @since 0.9.0
+ * @deprecated 1.5.0
+ */
+function hybrid_debug_stylesheet( $stylesheet_uri, $stylesheet_dir_uri ) {
+	_deprecated_function( __FUNCTION__, '1.5.0', 'hybrid_min_stylesheet_uri' );
+	return hybrid_min_stylesheet_uri( $stylesheet_uri, $stylesheet_dir_uri );
+}
+
 /* === Removed Functions === */
 
 /* Functions removed in the 0.8 branch. */
@@ -561,6 +570,12 @@ function hybrid_add_theme_support() {
 }
 
 function hybrid_post_stylesheets() {
+	hybrid_function_removed( __FUNCTION__ );
+}
+
+/* Functions removed in the 1.5 branch. */
+
+function hybrid_get_theme_data() {
 	hybrid_function_removed( __FUNCTION__ );
 }
 

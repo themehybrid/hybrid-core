@@ -4,12 +4,12 @@
  * extensions with different textdomains, it must filter 'gettext' so that a single translation file can 
  * handle all translations.
  *
- * @package HybridCore
+ * @package    HybridCore
  * @subpackage Functions
- * @author Justin Tadlock <justin@justintadlock.com>
- * @copyright Copyright (c) 2008 - 2012, Justin Tadlock
- * @link http://themehybrid.com/hybrid-core
- * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @author     Justin Tadlock <justin@justintadlock.com>
+ * @copyright  Copyright (c) 2008 - 2012, Justin Tadlock
+ * @link       http://themehybrid.com/hybrid-core
+ * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 /**
@@ -25,7 +25,7 @@
 function hybrid_is_textdomain_loaded( $domain ) {
 	global $hybrid;
 
-	return ( isset( $hybrid->textdomain_loaded[$domain] ) && true === $hybrid->textdomain_loaded[$domain] ) ? true : false;
+	return ( isset( $hybrid->textdomain_loaded[ $domain ] ) && true === $hybrid->textdomain_loaded[ $domain ] ) ? true : false;
 }
 
 /**

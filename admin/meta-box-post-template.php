@@ -5,12 +5,12 @@
  * functions in this file create the template meta box and save the template chosen by the user when the 
  * post is saved.  This file is only used if the theme supports the 'hybrid-core-template-hierarchy' feature.
  *
- * @package HybridCore
+ * @package    HybridCore
  * @subpackage Admin
- * @author Justin Tadlock <justin@justintadlock.com>
- * @copyright Copyright (c) 2008 - 2012, Justin Tadlock
- * @link http://themehybrid.com/hybrid-core
- * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @author     Justin Tadlock <justin@justintadlock.com>
+ * @copyright  Copyright (c) 2008 - 2012, Justin Tadlock
+ * @link       http://themehybrid.com/hybrid-core
+ * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 /* Add the post template meta box on the 'add_meta_boxes' hook. */
@@ -19,6 +19,8 @@ add_action( 'add_meta_boxes', 'hybrid_meta_box_post_remove_template', 10, 2 );
 
 /* Save the post template meta box data on the 'save_post' hook. */
 add_action( 'save_post', 'hybrid_meta_box_post_save_template', 10, 2 );
+add_action( 'add_attachment', 'hybrid_meta_box_post_save_template' );
+add_action( 'edit_attachment', 'hybrid_meta_box_post_save_temlate' );
 
 /**
  * Adds the post template meta box for all public post types, excluding the 'page' post type since WordPress 
@@ -98,7 +100,11 @@ function hybrid_meta_box_post_display_template( $object, $box ) {
  * @param int $post The post object currently being saved.
  * @return void|int
  */
-function hybrid_meta_box_post_save_template( $post_id, $post ) {
+function hybrid_meta_box_post_save_template( $post_id, $post = '' ) {
+
+	/* Fix for attachment save issue in WordPress 3.5. @link http://core.trac.wordpress.org/ticket/21963 */
+	if ( !is_object( $post ) )
+		$post = get_post();
 
 	/* Verify the nonce before proceeding. */
 	if ( !isset( $_POST['hybrid-core-post-meta-box-template'] ) || !wp_verify_nonce( $_POST['hybrid-core-post-meta-box-template'], basename( __FILE__ ) ) )

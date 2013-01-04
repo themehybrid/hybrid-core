@@ -5,12 +5,12 @@
  * The functions also integrate with WordPress' implementations of body_class, post_class, and 
  * comment_class, so your theme won't have any trouble with plugin integration.
  *
- * @package HybridCore
+ * @package    HybridCore
  * @subpackage Functions
- * @author Justin Tadlock <justin@justintadlock.com>
- * @copyright Copyright (c) 2008 - 2012, Justin Tadlock
- * @link http://themehybrid.com/hybrid-core
- * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @author     Justin Tadlock <justin@justintadlock.com>
+ * @copyright  Copyright (c) 2008 - 2012, Justin Tadlock
+ * @link       http://themehybrid.com/hybrid-core
+ * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 /**
@@ -61,6 +61,12 @@ function hybrid_get_context() {
 	elseif ( is_archive() ) {
 		$hybrid->context[] = 'archive';
 
+		/* Post type archives. */
+		if ( is_post_type_archive() ) {
+			$post_type = get_post_type_object( get_query_var( 'post_type' ) );
+			$hybrid->context[] = "archive-{$post_type->name}";
+		}
+
 		/* Taxonomy archives. */
 		if ( is_tax() || is_category() || is_tag() ) {
 			$hybrid->context[] = 'taxonomy';
@@ -70,38 +76,39 @@ function hybrid_get_context() {
 			$hybrid->context[] = "taxonomy-{$object->taxonomy}-" . sanitize_html_class( $slug, $object->term_id );
 		}
 
-		/* Post type archives. */
-		elseif ( is_post_type_archive() ) {
-			$post_type = get_post_type_object( get_query_var( 'post_type' ) );
-			$hybrid->context[] = "archive-{$post_type->name}";
-		}
-
 		/* User/author archives. */
-		elseif ( is_author() ) {
+		if ( is_author() ) {
+			$user_id = get_query_var( 'author' );
 			$hybrid->context[] = 'user';
-			$hybrid->context[] = 'user-' . sanitize_html_class( get_the_author_meta( 'user_nicename', $object_id ), $object_id );
+			$hybrid->context[] = 'user-' . sanitize_html_class( get_the_author_meta( 'user_nicename', $user_id ), $user_id );
 		}
 
-		/* Time/Date archives. */
-		else {
-			if ( is_date() ) {
-				$hybrid->context[] = 'date';
-				if ( is_year() )
-					$hybrid->context[] = 'year';
-				if ( is_month() )
-					$hybrid->context[] = 'month';
-				if ( get_query_var( 'w' ) )
-					$hybrid->context[] = 'week';
-				if ( is_day() )
-					$hybrid->context[] = 'day';
-			}
-			if ( is_time() ) {
-				$hybrid->context[] = 'time';
-				if ( get_query_var( 'hour' ) )
-					$hybrid->context[] = 'hour';
-				if ( get_query_var( 'minute' ) )
-					$hybrid->context[] = 'minute';
-			}
+		/* Date archives. */
+		if ( is_date() ) {
+			$hybrid->context[] = 'date';
+
+			if ( is_year() )
+				$hybrid->context[] = 'year';
+
+			if ( is_month() )
+				$hybrid->context[] = 'month';
+
+			if ( get_query_var( 'w' ) )
+				$hybrid->context[] = 'week';
+
+			if ( is_day() )
+				$hybrid->context[] = 'day';
+		}
+
+		/* Time archives. */
+		if ( is_time() ) {
+			$hybrid->context[] = 'time';
+
+			if ( get_query_var( 'hour' ) )
+				$hybrid->context[] = 'hour';
+
+			if ( get_query_var( 'minute' ) )
+				$hybrid->context[] = 'minute';
 		}
 	}
 
@@ -115,7 +122,7 @@ function hybrid_get_context() {
 		$hybrid->context[] = 'error-404';
 	}
 
-	return array_map( 'esc_attr', $hybrid->context );
+	return array_map( 'esc_attr', apply_filters( 'hybrid_context', $hybrid->context ) );
 }
 
 /**
@@ -217,7 +224,7 @@ function hybrid_entry_class( $class = '', $post_id = null ) {
  * @return void
  */
 function hybrid_comment_class( $class = '' ) {
-	global $post, $comment, $hybrid;
+	global $comment, $hybrid;
 
 	/* Gets default WP comment classes. */
 	$classes = get_comment_class( $class );
@@ -251,7 +258,7 @@ function hybrid_comment_class( $class = '' ) {
 	}
 
 	/* Comment by the entry/post author. */
-	if ( $post = get_post( $post_id ) ) {
+	if ( $post = get_post( get_the_ID() ) ) {
 		if ( $comment->user_id === $post->post_author )
 			$classes[] = 'entry-author';
 	}
@@ -405,8 +412,7 @@ function hybrid_document_title() {
 
 		/* If viewing a post type archive. */
 		elseif ( is_post_type_archive() ) {
-			$post_type = get_post_type_object( get_query_var( 'post_type' ) );
-			$doctitle = $post_type->labels->name;
+			$doctitle = post_type_archive_title( '', false );
 		}
 
 		/* If viewing an author/user archive. */

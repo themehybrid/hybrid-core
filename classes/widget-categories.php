@@ -4,12 +4,12 @@
  * control over the output to the user by allowing the input of all the arguments typically seen
  * in the wp_list_categories() function.
  *
- * @package Hybrid
+ * @package    Hybrid
  * @subpackage Classes
- * @author Justin Tadlock <justin@justintadlock.com>
- * @copyright Copyright (c) 2008 - 2012, Justin Tadlock
- * @link http://themehybrid.com/hybrid-core
- * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @author     Justin Tadlock <justin@justintadlock.com>
+ * @copyright  Copyright (c) 2008 - 2012, Justin Tadlock
+ * @link       http://themehybrid.com/hybrid-core
+ * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 /**
@@ -28,22 +28,22 @@ class Hybrid_Widget_Categories extends WP_Widget {
 
 		/* Set up the widget options. */
 		$widget_options = array(
-			'classname' => 'categories',
+			'classname'   => 'categories',
 			'description' => esc_html__( 'An advanced widget that gives you total control over the output of your category links.', 'hybrid-core' )
 		);
 
 		/* Set up the widget control options. */
 		$control_options = array(
-			'width' => 800,
+			'width'  => 800,
 			'height' => 350
 		);
 
 		/* Create the widget. */
 		$this->WP_Widget(
-			'hybrid-categories',		// $this->id_base
-			__( 'Categories', 'hybrid-core' ),	// $this->name
-			$widget_options,			// $this->widget_options
-			$control_options			// $this->control_options
+			'hybrid-categories',               // $this->id_base
+			__( 'Categories', 'hybrid-core' ), // $this->name
+			$widget_options,                   // $this->widget_options
+			$control_options                   // $this->control_options
 		);
 	}
 
@@ -100,23 +100,26 @@ class Hybrid_Widget_Categories extends WP_Widget {
 			$instance['exclude'] = array();
 		}
 
-		$instance['title'] = strip_tags( $new_instance['title'] );
 		$instance['taxonomy'] = $new_instance['taxonomy'];
-		$instance['depth'] = strip_tags( $new_instance['depth'] );
-		$instance['number'] = strip_tags( $new_instance['number'] );
-		$instance['child_of'] = strip_tags( $new_instance['child_of'] );
-		$instance['current_category'] = strip_tags( $new_instance['current_category'] );
-		$instance['feed'] = strip_tags( $new_instance['feed'] );
+
 		$instance['feed_image'] = esc_url( $new_instance['feed_image'] );
-		$instance['search'] = strip_tags( $new_instance['search'] );
-		$instance['include'] = preg_replace( '/[^0-9,]/', '', $new_instance['include'] );
-		$instance['exclude'] = preg_replace( '/[^0-9,]/', '', $new_instance['exclude'] );
+
+		$instance['title']            = strip_tags( $new_instance['title'] );
+		$instance['depth']            = strip_tags( $new_instance['depth'] );
+		$instance['number']           = strip_tags( $new_instance['number'] );
+		$instance['child_of']         = strip_tags( $new_instance['child_of'] );
+		$instance['current_category'] = strip_tags( $new_instance['current_category'] );
+		$instance['feed']             = strip_tags( $new_instance['feed'] );
+		$instance['search']           = strip_tags( $new_instance['search'] );
+
+		$instance['include']      = preg_replace( '/[^0-9,]/', '', $new_instance['include'] );
+		$instance['exclude']      = preg_replace( '/[^0-9,]/', '', $new_instance['exclude'] );
 		$instance['exclude_tree'] = preg_replace( '/[^0-9,]/', '', $new_instance['exclude_tree'] );
 
-		$instance['hierarchical'] = ( isset( $new_instance['hierarchical'] ) ? 1 : 0 );
+		$instance['hierarchical']       = ( isset( $new_instance['hierarchical'] ) ? 1 : 0 );
 		$instance['use_desc_for_title'] = ( isset( $new_instance['use_desc_for_title'] ) ? 1 : 0 );
-		$instance['show_count'] = ( isset( $new_instance['show_count'] ) ? 1 : 0 );
-		$instance['hide_empty'] = ( isset( $new_instance['hide_empty'] ) ? 1 : 0 );
+		$instance['show_count']         = ( isset( $new_instance['show_count'] ) ? 1 : 0 );
+		$instance['hide_empty']         = ( isset( $new_instance['hide_empty'] ) ? 1 : 0 );
 
 		return $instance;
 	}
@@ -130,26 +133,26 @@ class Hybrid_Widget_Categories extends WP_Widget {
 
 		/* Set up the default form values. */
 		$defaults = array(
-			'title' => esc_attr__( 'Categories', 'hybrid-core' ),
-			'taxonomy' => 'category',
-			'style' => 'list',
-			'include' => '',
-			'exclude' => '',
-			'exclude_tree' => '',
-			'child_of' => '',
-			'current_category' => '',
-			'search' => '',
-			'hierarchical' => true,
-			'hide_empty' => true,
-			'order' => 'ASC',
-			'orderby' => 'name',
-			'depth' => 0,
-			'number' => '',
-			'feed' => '',
-			'feed_type' => '',
-			'feed_image' => '',
+			'title'              => esc_attr__( 'Categories', 'hybrid-core' ),
+			'taxonomy'           => 'category',
+			'style'              => 'list',
+			'include'            => '',
+			'exclude'            => '',
+			'exclude_tree'       => '',
+			'child_of'           => '',
+			'current_category'   => '',
+			'search'             => '',
+			'hierarchical'       => true,
+			'hide_empty'         => true,
+			'order'              => 'ASC',
+			'orderby'            => 'name',
+			'depth'              => 0,
+			'number'             => '',
+			'feed'               => '',
+			'feed_type'          => '',
+			'feed_image'         => '',
 			'use_desc_for_title' => false,
-			'show_count' => false,
+			'show_count'         => false,
 		);
 
 		/* Merge the user-selected arguments with the defaults. */
@@ -158,10 +161,32 @@ class Hybrid_Widget_Categories extends WP_Widget {
 		/* <select> element options. */
 		$taxonomies = get_taxonomies( array( 'show_tagcloud' => true ), 'objects' );
 		$terms = get_terms( $instance['taxonomy'] );
-		$style = array( 'list' => esc_attr__( 'List', 'hybrid-core' ), 'none' => esc_attr__( 'None', 'hybrid-core' ) );
-		$order = array( 'ASC' => esc_attr__( 'Ascending', 'hybrid-core' ), 'DESC' => esc_attr__( 'Descending', 'hybrid-core' ) );
-		$orderby = array( 'count' => esc_attr__( 'Count', 'hybrid-core' ), 'ID' => esc_attr__( 'ID', 'hybrid-core' ), 'name' => esc_attr__( 'Name', 'hybrid-core' ), 'slug' => esc_attr__( 'Slug', 'hybrid-core' ), 'term_group' => esc_attr__( 'Term Group', 'hybrid-core' ) );
-		$feed_type = array( '' => '', 'atom' => esc_attr__( 'Atom', 'hybrid-core' ), 'rdf' => esc_attr__( 'RDF', 'hybrid-core' ), 'rss' => esc_attr__( 'RSS', 'hybrid-core' ), 'rss2' => esc_attr__( 'RSS 2.0', 'hybrid-core' ) );
+
+		$style = array( 
+			'list' => esc_attr__( 'List', 'hybrid-core' ), 
+			'none' => esc_attr__( 'None', 'hybrid-core' ) 
+		);
+
+		$order = array( 
+			'ASC'  => esc_attr__( 'Ascending', 'hybrid-core' ), 
+			'DESC' => esc_attr__( 'Descending', 'hybrid-core' ) 
+		);
+
+		$orderby = array( 
+			'count'      => esc_attr__( 'Count', 'hybrid-core' ), 
+			'ID'         => esc_attr__( 'ID', 'hybrid-core' ), 
+			'name'       => esc_attr__( 'Name', 'hybrid-core' ), 
+			'slug'       => esc_attr__( 'Slug', 'hybrid-core' ), 
+			'term_group' => esc_attr__( 'Term Group', 'hybrid-core' ) 
+		);
+
+		$feed_type = array( 
+			''     => '', 
+			'atom' => esc_attr__( 'Atom', 'hybrid-core' ), 
+			'rdf'  => esc_attr__( 'RDF', 'hybrid-core' ), 
+			'rss'  => esc_attr__( 'RSS', 'hybrid-core' ), 
+			'rss2' => esc_attr__( 'RSS 2.0', 'hybrid-core' ) 
+		);
 
 		?>
 

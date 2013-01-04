@@ -3,12 +3,12 @@
  * Theme administration functions used with other components of the framework admin.  This file is for 
  * setting up any basic features and holding additional admin helper functions.
  *
- * @package HybridCore
+ * @package    HybridCore
  * @subpackage Admin
- * @author Justin Tadlock <justin@justintadlock.com>
- * @copyright Copyright (c) 2008 - 2012, Justin Tadlock
- * @link http://themehybrid.com/hybrid-core
- * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @author     Justin Tadlock <justin@justintadlock.com>
+ * @copyright  Copyright (c) 2008 - 2012, Justin Tadlock
+ * @link       http://themehybrid.com/hybrid-core
+ * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 /* Add the admin setup function to the 'admin_menu' hook. */
@@ -31,6 +31,14 @@ function hybrid_admin_setup() {
 
 	/* Loads admin stylesheets for the framework. */
 	add_action( 'admin_enqueue_scripts', 'hybrid_admin_enqueue_styles' );
+
+	/* Add the WordPress 'Customize' page as an admin menu link. */
+	add_theme_page( 
+		esc_html__( 'Customize', 'hybrid-core' ), // Settings page name
+		esc_html__( 'Customize', 'hybrid-core' ), // Menu name
+		'edit_theme_options',                     // Required capability
+		'customize.php'	                          // File to load
+	);
 }
 
 /**
@@ -57,7 +65,11 @@ function hybrid_admin_load_post_meta_boxes() {
  * @return void
  */
 function hybrid_admin_register_styles() {
-	wp_register_style( 'hybrid-core-admin', trailingslashit( HYBRID_CSS ) . 'admin.css', false, '20110512', 'screen' );
+
+	/* Use the .min stylesheet if SCRIPT_DEBUG is turned off. */
+	$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
+
+	wp_register_style( 'hybrid-core-admin', trailingslashit( HYBRID_CSS ) . "admin{$suffix}.css", false, '20110512', 'screen' );
 }
 
 /**

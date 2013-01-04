@@ -4,12 +4,12 @@
  * control over the output to the user by allowing the input of all the arguments typically seen
  * in the wp_list_bookmarks() function.
  *
- * @package Hybrid
+ * @package    Hybrid
  * @subpackage Classes
- * @author Justin Tadlock <justin@justintadlock.com>
- * @copyright Copyright (c) 2008 - 2012, Justin Tadlock
- * @link http://themehybrid.com/hybrid-core
- * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @author     Justin Tadlock <justin@justintadlock.com>
+ * @copyright  Copyright (c) 2008 - 2012, Justin Tadlock
+ * @link       http://themehybrid.com/hybrid-core
+ * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 /**
@@ -28,24 +28,25 @@ class Hybrid_Widget_Bookmarks extends WP_Widget {
 
 		/* Set up the widget options. */
 		$widget_options = array(
-			'classname' => 'bookmarks',
+			'classname'   => 'bookmarks',
 			'description' => esc_html__( 'An advanced widget that gives you total control over the output of your bookmarks (links).', 'hybrid-core' )
 		);
 
 		/* Set up the widget control options. */
 		$control_options = array(
-			'width' => 800,
+			'width'  => 800,
 			'height' => 350
 		);
 
 		/* Create the widget. */
 		$this->WP_Widget(
-			'hybrid-bookmarks',		// $this->id_base
-			__( 'Bookmarks', 'hybrid-core' ),	// $this->name	
-			$widget_options,			// $this->widget_options
-			$control_options			// $this->control_options
+			'hybrid-bookmarks',               // $this->id_base
+			__( 'Bookmarks', 'hybrid-core' ), // $this->name	
+			$widget_options,                  // $this->widget_options
+			$control_options                  // $this->control_options
 		);
 	}
+
 	/**
 	 * Outputs the widget based on the arguments input through the widget controls.
 	 *
@@ -82,13 +83,13 @@ class Hybrid_Widget_Bookmarks extends WP_Widget {
 		$args['limit'] = empty( $args['limit'] ) ? -1 : $args['limit'];
 
 		/* Some arguments must be set to the sidebar arguments to be output correctly. */
-		$args['title_li'] = apply_filters( 'widget_title', ( empty( $args['title_li'] ) ? __( 'Bookmarks', 'hybrid-core' ) : $args['title_li'] ), $instance, $this->id_base );
-		$args['title_before'] = $before_title;
-		$args['title_after'] = $after_title;
+		$args['title_li']        = apply_filters( 'widget_title', ( empty( $args['title_li'] ) ? __( 'Bookmarks', 'hybrid-core' ) : $args['title_li'] ), $instance, $this->id_base );
+		$args['title_before']    = $before_title;
+		$args['title_after']     = $after_title;
 		$args['category_before'] = $before_widget;
-		$args['category_after'] = $after_widget;
-		$args['category_name'] = '';
-		$args['echo'] = false;
+		$args['category_after']  = $after_widget;
+		$args['category_name']   = '';
+		$args['echo']            = false;
 
 		/* Output the bookmarks widget. */
 		$bookmarks = str_replace( array( "\r", "\n", "\t" ), '', wp_list_bookmarks( $args ) );
@@ -113,24 +114,25 @@ class Hybrid_Widget_Bookmarks extends WP_Widget {
 		$instance = $new_instance;
 
 		$instance['title_li'] = strip_tags( $new_instance['title_li'] );
-		$instance['limit'] = strip_tags( $new_instance['limit'] );
-		$instance['class'] = strip_tags( $new_instance['class'] );
-		$instance['search'] = strip_tags( $new_instance['search'] );
-		$instance['category_order'] = $new_instance['category_order'];
-		$instance['category_orderby'] = $new_instance['category_orderby'];
-		$instance['orderby'] = $new_instance['orderby'];
-		$instance['order'] = $new_instance['order'];
-		$instance['between'] = $new_instance['between'];
-		$instance['link_before'] = $new_instance['link_before'];
-		$instance['link_after'] = $new_instance['link_after'];
+		$instance['limit']    = strip_tags( $new_instance['limit'] );
+		$instance['class']    = strip_tags( $new_instance['class'] );
+		$instance['search']   = strip_tags( $new_instance['search'] );
 
-		$instance['categorize'] = ( isset( $new_instance['categorize'] ) ? 1 : 0 );
-		$instance['hide_invisible'] = ( isset( $new_instance['hide_invisible'] ) ? 1 : 0 );
-		$instance['show_private'] = ( isset( $new_instance['show_private'] ) ? 1 : 0 );
-		$instance['show_rating'] = ( isset( $new_instance['show_rating'] ) ? 1 : 0 );
-		$instance['show_updated'] = ( isset( $new_instance['show_updated'] ) ? 1 : 0 );
-		$instance['show_images'] = ( isset( $new_instance['show_images'] ) ? 1 : 0 );
-		$instance['show_name'] = ( isset( $new_instance['show_name'] ) ? 1 : 0 );
+		$instance['category_order']   = $new_instance['category_order'];
+		$instance['category_orderby'] = $new_instance['category_orderby'];
+		$instance['orderby']          = $new_instance['orderby'];
+		$instance['order']            = $new_instance['order'];
+		$instance['between']          = $new_instance['between'];
+		$instance['link_before']      = $new_instance['link_before'];
+		$instance['link_after']       = $new_instance['link_after'];
+
+		$instance['categorize']       = ( isset( $new_instance['categorize'] ) ? 1 : 0 );
+		$instance['hide_invisible']   = ( isset( $new_instance['hide_invisible'] ) ? 1 : 0 );
+		$instance['show_private']     = ( isset( $new_instance['show_private'] ) ? 1 : 0 );
+		$instance['show_rating']      = ( isset( $new_instance['show_rating'] ) ? 1 : 0 );
+		$instance['show_updated']     = ( isset( $new_instance['show_updated'] ) ? 1 : 0 );
+		$instance['show_images']      = ( isset( $new_instance['show_images'] ) ? 1 : 0 );
+		$instance['show_name']        = ( isset( $new_instance['show_name'] ) ? 1 : 0 );
 		$instance['show_description'] = ( isset( $new_instance['show_description'] ) ? 1 : 0 );
 
 		return $instance;
@@ -145,29 +147,29 @@ class Hybrid_Widget_Bookmarks extends WP_Widget {
 
 		/* Set up the default form values. */
 		$defaults = array(
-			'title_li' => esc_attr__( 'Bookmarks', 'hybrid-core' ),
-			'categorize' => true,
-			'category_order' => 'ASC',
+			'title_li'         => esc_attr__( 'Bookmarks', 'hybrid-core' ),
+			'categorize'       => true,
+			'category_order'   => 'ASC',
 			'category_orderby' => 'name',
-			'category' => array(),
+			'category'         => array(),
 			'exclude_category' => array(),
-			'limit' => -1,
-			'order' => 'ASC',
-			'orderby' => 'name',
-			'include' => array(),
-			'exclude' => array(),
-			'search' => '',
-			'hide_invisible' => true,
+			'limit'            => -1,
+			'order'            => 'ASC',
+			'orderby'          => 'name',
+			'include'          => array(),
+			'exclude'          => array(),
+			'search'           => '',
+			'hide_invisible'   => true,
 			'show_description' => false,
-			'show_images' => false,
-			'show_rating' => false,
-			'show_updated' => false,
-			'show_private' => false,
-			'show_name' => false,
-			'class' => 'linkcat',
-			'link_before' => '<span>',
-			'link_after' => '</span>',
-			'between' => '<br />',
+			'show_images'      => false,
+			'show_rating'      => false,
+			'show_updated'     => false,
+			'show_private'     => false,
+			'show_name'        => false,
+			'class'            => 'linkcat',
+			'link_before'      => '<span>',
+			'link_after'       => '</span>',
+			'between'          => '<br />',
 		);
 
 		/* Merge the user-selected arguments with the defaults. */
@@ -175,11 +177,39 @@ class Hybrid_Widget_Bookmarks extends WP_Widget {
 
 		$terms = get_terms( 'link_category' );
 		$bookmarks = get_bookmarks( array( 'hide_invisible' => false ) );
-		$category_order = array( 'ASC' => esc_attr__( 'Ascending', 'hybrid-core' ), 'DESC' => esc_attr__( 'Descending', 'hybrid-core' ) );
-		$category_orderby = array( 'count' => esc_attr__( 'Count', 'hybrid-core' ), 'ID' => esc_attr__( 'ID', 'hybrid-core' ), 'name' => esc_attr__( 'Name', 'hybrid-core' ), 'slug' => esc_attr__( 'Slug', 'hybrid-core' ) );
-		$order = array( 'ASC' => esc_attr__( 'Ascending', 'hybrid-core' ), 'DESC' => esc_attr__( 'Descending', 'hybrid-core' ) );
-		$orderby = array( 'id' => esc_attr__( 'ID', 'hybrid-core' ), 'description' => esc_attr__( 'Description',  'hybrid-core' ), 'length' => esc_attr__( 'Length',  'hybrid-core' ), 'name' => esc_attr__( 'Name',  'hybrid-core' ), 'notes' => esc_attr__( 'Notes',  'hybrid-core' ), 'owner' => esc_attr__( 'Owner',  'hybrid-core' ), 'rand' => esc_attr__( 'Random',  'hybrid-core' ), 'rating' => esc_attr__( 'Rating',  'hybrid-core' ), 'rel' => esc_attr__( 'Rel',  'hybrid-core' ), 'rss' => esc_attr__( 'RSS',  'hybrid-core' ), 'target' => esc_attr__( 'Target',  'hybrid-core' ), 'updated' => esc_attr__( 'Updated',  'hybrid-core' ), 'url' => esc_attr__( 'URL',  'hybrid-core' ) );
 
+		$category_order = array( 
+			'ASC'  => esc_attr__( 'Ascending', 'hybrid-core' ), 
+			'DESC' => esc_attr__( 'Descending', 'hybrid-core' ) 
+		);
+
+		$category_orderby = array( 
+			'count' => esc_attr__( 'Count', 'hybrid-core' ), 
+			'ID'    => esc_attr__( 'ID', 'hybrid-core' ), 
+			'name'  => esc_attr__( 'Name', 'hybrid-core' ), 
+			'slug'  => esc_attr__( 'Slug', 'hybrid-core' ) 
+		);
+
+		$order = array( 
+			'ASC'  => esc_attr__( 'Ascending', 'hybrid-core' ), 
+			'DESC' => esc_attr__( 'Descending', 'hybrid-core' ) 
+		);
+
+		$orderby = array( 
+			'id'          => esc_attr__( 'ID', 'hybrid-core' ), 
+			'description' => esc_attr__( 'Description', 'hybrid-core' ), 
+			'length'      => esc_attr__( 'Length', 'hybrid-core' ), 
+			'name'        => esc_attr__( 'Name', 'hybrid-core' ), 
+			'notes'       => esc_attr__( 'Notes', 'hybrid-core' ), 
+			'owner'       => esc_attr__( 'Owner', 'hybrid-core' ), 
+			'rand'        => esc_attr__( 'Random', 'hybrid-core' ), 
+			'rating'      => esc_attr__( 'Rating', 'hybrid-core' ), 
+			'rel'         => esc_attr__( 'Rel', 'hybrid-core' ), 
+			'rss'         => esc_attr__( 'RSS', 'hybrid-core' ), 
+			'target'      => esc_attr__( 'Target', 'hybrid-core' ), 
+			'updated'     => esc_attr__( 'Updated', 'hybrid-core' ), 
+			'url'         => esc_attr__( 'URL', 'hybrid-core' ) 
+		);
 		?>
 
 		<div class="hybrid-widget-controls columns-3">

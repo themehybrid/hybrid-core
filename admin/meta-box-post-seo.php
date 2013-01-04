@@ -5,12 +5,12 @@
  * To use this feature, the theme must support the 'hybrid-core-seo' feature.  The functions in this file create
  * the SEO meta box and save the settings chosen by the user when the post is saved.
  *
- * @package HybridCore
+ * @package    HybridCore
  * @subpackage Admin
- * @author Justin Tadlock <justin@justintadlock.com>
- * @copyright Copyright (c) 2008 - 2012, Justin Tadlock
- * @link http://themehybrid.com/hybrid-core
- * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @author     Justin Tadlock <justin@justintadlock.com>
+ * @copyright  Copyright (c) 2008 - 2012, Justin Tadlock
+ * @link       http://themehybrid.com/hybrid-core
+ * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 /* Add the post SEO meta box on the 'add_meta_boxes' hook. */
@@ -19,6 +19,8 @@ add_action( 'add_meta_boxes', 'hybrid_meta_box_post_remove_seo', 10, 2 );
 
 /* Save the post SEO meta box data on the 'save_post' hook. */
 add_action( 'save_post', 'hybrid_meta_box_post_save_seo', 10, 2 );
+add_action( 'add_attachment', 'hybrid_meta_box_post_save_seo' );
+add_action( 'edit_attachment', 'hybrid_meta_box_post_save_seo' );
 
 /**
  * Adds the post SEO meta box for all public post types.
@@ -92,9 +94,13 @@ function hybrid_meta_box_post_display_seo( $object, $box ) {
  * @param int $post_id The ID of the current post being saved.
  * @param int $post The post object currently being saved.
  */
-function hybrid_meta_box_post_save_seo( $post_id, $post ) {
+function hybrid_meta_box_post_save_seo( $post_id, $post = '' ) {
 
 	$prefix = hybrid_get_prefix();
+
+	/* Fix for attachment save issue in WordPress 3.5. @link http://core.trac.wordpress.org/ticket/21963 */
+	if ( !is_object( $post ) )
+		$post = get_post();
 
 	/* Verify the nonce before proceeding. */
 	if ( !isset( $_POST['hybrid-core-post-seo'] ) || !wp_verify_nonce( $_POST['hybrid-core-post-seo'], basename( __FILE__ ) ) )
