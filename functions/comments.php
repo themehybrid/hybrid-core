@@ -141,7 +141,7 @@ function hybrid_avatar() {
 	if ( in_array( $comment_type, $avatar_comment_types ) ) {
 
 		/* Set a default avatar for pingbacks and trackbacks. */
-		$default_avatar = ( ( 'pingback' == $comment_type || 'trackback' == $comment_type ) ? trailingslashit( HYBRID_IMAGES ) . "{$comment_type}.png" : '' );
+		$default_avatar = ( ( 'pingback' == $comment_type || 'trackback' == $comment_type ) ? trailingslashit( HYBRID_IMAGES ) . 'ping.png' : '' );
 
 		/* Allow the default avatar to be filtered by comment type. */
 		$default_avatar = apply_filters( "{$hybrid->prefix}_{$comment_type}_avatar", $default_avatar );
