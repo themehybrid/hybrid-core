@@ -15,7 +15,7 @@
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * @package   BreadcrumbTrail
- * @version   0.5.3 - Alpha
+ * @version   0.5.3
  * @author    Justin Tadlock <justin@justintadlock.com>
  * @copyright Copyright (c) 2008 - 2012, Justin Tadlock
  * @link      http://themehybrid.com/plugins/breadcrumb-trail
@@ -332,14 +332,27 @@ function breadcrumb_trail_get_items( $args = array() ) {
 				/* Get public post types that match the rewrite slug. */
 				$post_types = get_post_types( array( 'public' => true, 'has_archive' => $taxonomy->rewrite['slug'] ), 'objects' );
 
-				/* If any post types are found, get the first one. */
+				/**
+				 * If any post types are found, loop through them to find one that matches.
+				 * The reason for this is because WP doesn't match the 'has_archive' string 
+				 * exactly when calling get_post_types(). I'm assuming it just matches 'true'.
+				 */
 				if ( !empty( $post_types ) ) {
-					$post_type_object = array_shift( $post_types );
 
-					/* Add support for a non-standard label of 'archive_title' (special use case). */
-					$label = !empty( $post_type_object->labels->archive_title ) ? $post_type_object->labels->archive_title : $post_type_object->labels->name;
+					foreach ( $post_types as $post_type_object ) {
 
-					$trail[] = '<a href="' . get_post_type_archive_link( $post_type_object->name ) . '" title="' . esc_attr( $label ) . '">' . $label . '</a>';
+						if ( $taxonomy->rewrite['slug'] === $post_type_object->has_archive ) {
+
+							/* Add support for a non-standard label of 'archive_title' (special use case). */
+							$label = !empty( $post_type_object->labels->archive_title ) ? $post_type_object->labels->archive_title : $post_type_object->labels->name;
+
+							/* Add the post type archive link to the trail. */
+							$trail[] = '<a href="' . get_post_type_archive_link( $post_type_object->name ) . '" title="' . esc_attr( $label ) . '">' . $label . '</a>';
+
+							/* Break out of the loop. */
+							break;
+						}
+					}
 				}
 			}
 

@@ -16,7 +16,7 @@
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * @package   FeaturedHeader
- * @version   0.1.0 - Alpha
+ * @version   0.1.0
  * @author    Justin Tadlock <justin@justintadlock.com>
  * @copyright Copyright (c) 2012, Justin Tadlock
  * @link      http://justintadlock.com
@@ -85,6 +85,10 @@ class Featured_Header {
 	 * @return void
 	 */
 	public function __construct() {
+
+		/* The theme should actually support the custom background feature. */
+		if ( !current_theme_supports( 'post-thumbnails' ) )
+			add_theme_support( 'post-thumbnails' );
 
 		/* Add image size based off theme's custom header dimensions. */
 		add_action( 'init', array( &$this, 'add_image_size' ) );

@@ -3,12 +3,12 @@
  * Theme administration functions used with other components of the framework admin.  This file is for 
  * setting up any basic features and holding additional admin helper functions.
  *
- * @package HybridCore
+ * @package    HybridCore
  * @subpackage Admin
- * @author Justin Tadlock <justin@justintadlock.com>
- * @copyright Copyright (c) 2008 - 2012, Justin Tadlock
- * @link http://themehybrid.com/hybrid-core
- * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @author     Justin Tadlock <justin@justintadlock.com>
+ * @copyright  Copyright (c) 2008 - 2012, Justin Tadlock
+ * @link       http://themehybrid.com/hybrid-core
+ * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 /* Add the admin setup function to the 'admin_menu' hook. */
