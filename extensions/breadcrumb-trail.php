@@ -281,13 +281,14 @@ class Breadcrumb_Trail {
 	 */
 	public function do_paged_items() {
 
+		/* If viewing a paged singular post. */
+		if ( is_singular() && 1 < get_query_var( 'page' ) )
+			$this->items[] = sprintf( $this->args['labels']['paged'], absint( get_query_var( 'page' ) ) );
+
 		/* If viewing a paged archive-type page. */
-		if ( is_paged() )
+		elseif ( is_paged() )
 			$this->items[] = sprintf( $this->args['labels']['paged'], absint( get_query_var( 'paged' ) ) );
 
-		/* If viewing a paged singular post. */
-		elseif ( is_singular() && 1 < get_query_var( 'page' ) )
-			$this->items[] = sprintf( $this->args['labels']['paged'], absint( get_query_var( 'page' ) ) );
 	}
 
 	/**
