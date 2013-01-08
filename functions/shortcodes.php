@@ -17,6 +17,10 @@
 /* Register shortcodes. */
 add_action( 'init', 'hybrid_add_shortcodes' );
 
+/* Don't allow theme shortcodes to be used in post content. */
+add_filter( 'the_content', 'hybrid_post_content_remove_shortcodes', 0 );
+add_filter( 'the_content', 'hybrid_post_content_add_shortcodes', 99 );
+
 /**
  * Creates new shortcodes for use in any shortcode-ready area.  This function uses the add_shortcode() 
  * function to register new shortcodes with WordPress.
@@ -56,6 +60,69 @@ function hybrid_add_shortcodes() {
 	add_shortcode( 'comment-edit-link',  'hybrid_comment_edit_link_shortcode' );
 	add_shortcode( 'comment-reply-link', 'hybrid_comment_reply_link_shortcode' );
 	add_shortcode( 'comment-permalink',  'hybrid_comment_permalink_shortcode' );
+}
+
+/**
+ * Removes framework shortcodes when the_content() is in use.  Shortcodes for use in post content should 
+ * only be defined in plugins for data portability.  This function just makes sure the shortcodes the 
+ * framework defines won't work in the content.
+ *
+ * @since  1.6.0
+ * @access public
+ * @param  string $content The post content.
+ * @return string
+ */
+function hybrid_post_content_remove_shortcodes( $content ) {
+
+	/* Create an array of all the framework shortcode tags. */
+	$shortcode_tags = array(
+		'the-year',
+		'site-link',
+		'wp-link',
+		'theme-link',
+		'child-link',
+		'loginout-link',
+		'query-counter',
+		'nav-menu',
+		'entry-title',
+		'entry-author',
+		'entry-terms',
+		'entry-comments-link',
+		'entry-published',
+		'entry-edit-link',
+		'entry-shortlink',
+		'entry-permalink',
+		'post-format-link',
+		'comment-published',
+		'comment-author',
+		'comment-edit-link',
+		'comment-reply-link',
+		'comment-permalink'
+	);
+
+	/* Loop through the shortcodes and remove them. */
+	foreach ( $shortcode_tags as $shortcode_tag )
+		remove_shortcode( $shortcode_tag );
+
+	/* Return the post content. */
+	return $content;
+}
+
+/**
+ * Adds the framework shortcodes back after the post content has been handled.
+ *
+ * @since  1.6.0
+ * @access public
+ * @param  string $content The post content.
+ * @return string
+ */
+function hybrid_post_content_add_shortcodes( $content ) {
+
+	/* Add the original shortcodes back. */
+	hybrid_add_shortcodes();
+
+	/* Return the post content. */
+	return $content;
 }
 
 /**
