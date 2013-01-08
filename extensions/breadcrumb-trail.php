@@ -1005,7 +1005,7 @@ class bbPress_Breadcrumb_Trail extends Breadcrumb_Trail {
 	 * @access public
 	 * @return void
 	 */
-	public function do_items() {
+	public function do_trail_items() {
 
 		/* Get the forum post type object. */
 		$post_type_object = get_post_type_object( bbp_get_forum_post_type() );
