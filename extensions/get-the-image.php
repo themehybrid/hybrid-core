@@ -18,7 +18,7 @@
  * @package   GetTheImage
  * @version   0.8.2 - Alpha
  * @author    Justin Tadlock <justin@justintadlock.com>
- * @copyright Copyright (c) 2008 - 2012, Justin Tadlock
+ * @copyright Copyright (c) 2008 - 2013, Justin Tadlock
  * @link      http://justintadlock.com/archives/2008/05/27/get-the-image-wordpress-plugin
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
@@ -50,26 +50,40 @@ function get_the_image( $args = array() ) {
 
 	/* Set the default arguments. */
 	$defaults = array(
-		'meta_key'           => array( 'Thumbnail', 'thumbnail' ), // array|string
+
+		/* Post the image is associated with. */
 		'post_id'            => get_the_ID(),
+
+		/* Methods of getting an image (in order). */
+		'meta_key'           => array( 'Thumbnail', 'thumbnail' ), // array|string
+		'the_post_thumbnail' => true,
 		'attachment'         => true,
-		'the_post_thumbnail' => true, // WP 2.9+ image function
-		'size'               => 'thumbnail',
+		'image_scan'         => false,
+		'callback'           => null,
 		'default_image'      => false,
+
+		/* Attachment-specific arguments. */
+		'size'               => 'thumbnail',
 		'order_of_image'     => 1,
+
+		/* Format/display of image. */
 		'link_to_post'       => true,
 		'image_class'        => false,
-		'image_scan'         => false,
 		'width'              => false,
 		'height'             => false,
-		'format'             => 'img',
-		'meta_key_save'      => false,
-		'thumbnail_id_save'  => false, // Set 'featured image'.
-		'callback'           => null,
-		'cache'              => true,
 		'before'             => '',
 		'after'              => '',
+
+		/* Saving the image. */
+		'meta_key_save'      => false,
+		'thumbnail_id_save'  => false, // Set 'featured image'.
+		'cache'              => true,
+
+		/* Return/echo image. */
+		'format'             => 'img',
 		'echo'               => true,
+
+		/* Deprecated arguments. */
 		'custom_key'         => null, // @deprecated 0.6. Use 'meta_key'.
 		'default_size'       => null, // @deprecated 0.5.  Use 'size'.
 	);
