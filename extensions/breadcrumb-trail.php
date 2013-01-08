@@ -360,7 +360,7 @@ class Breadcrumb_Trail {
 
 		/* Add the posts page item. */
 		if ( is_paged() )
-			$this->items  = '<a href="' . get_permalink( $post_id ) . '" title="' . esc_attr( get_the_title( $post_id ) ) . '">' . get_the_title( $post_id ) . '</a>';
+			$this->items[]  = '<a href="' . get_permalink( $post_id ) . '" title="' . esc_attr( get_the_title( $post_id ) ) . '">' . get_the_title( $post_id ) . '</a>';
 		else
 			$this->items[] = get_the_title( $post_id );
 	}
