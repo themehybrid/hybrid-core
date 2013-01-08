@@ -196,48 +196,38 @@ class Breadcrumb_Trail {
 			/* If viewing an archive page. */
 			elseif ( is_archive() ) {
 
-				if ( is_post_type_archive() ) {
+				if ( is_post_type_archive() )
 					$this->get_post_type_archive_items();
-				}
 
-				elseif ( is_category() || is_tag() || is_tax() ) {
+				elseif ( is_category() || is_tag() || is_tax() )
 					$this->do_term_archive_items();
-				}
 
-				elseif ( is_author() ) {
+				elseif ( is_author() )
 					$this->do_user_archive_items();
-				}
 
-				elseif ( is_time() ) {
+				elseif ( get_query_var( 'minute' ) && get_query_var( 'hour' ) )
+					$this->do_minute_hour_archive_items();
 
-					if ( get_query_var( 'minute' ) && get_query_var( 'hour' ) )
-						$this->do_minute_hour_archive_items();
+				elseif ( get_query_var( 'minute' ) )
+					$this->do_minute_archive_items();
 
-					elseif ( get_query_var( 'minute' ) )
-						$this->do_minute_archive_items();
+				elseif ( get_query_var( 'hour' ) )
+					$this->do_hour_archive_items();
 
-					elseif ( get_query_var( 'hour' ) )
-						$this->do_hour_archive_items();
-				}
+				elseif ( is_day() )
+					$this->do_day_archive_items();
 
-				elseif ( is_date() ) {
+				elseif ( get_query_var( 'w' ) )
+					$this->do_week_archive_items();
 
-					if ( is_day() )
-						$this->do_day_archive_items();
+				elseif ( is_month() )
+					$this->do_month_archive_items();
 
-					elseif ( get_query_var( 'w' ) )
-						$this->do_week_archive_items();
+				elseif ( is_year() )
+					$this->do_year_archive_items();
 
-					elseif ( is_month() )
-						$this->do_month_archive_items();
-
-					elseif ( is_year() )
-						$this->do_year_archive_items();
-				}
-
-				else {
+				else
 					$this->do_default_archive_items();
-				}
 			}
 
 			/* If viewing a search results page. */
