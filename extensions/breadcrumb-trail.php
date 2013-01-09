@@ -197,7 +197,7 @@ class Breadcrumb_Trail {
 			elseif ( is_archive() ) {
 
 				if ( is_post_type_archive() )
-					$this->get_post_type_archive_items();
+					$this->do_post_type_archive_items();
 
 				elseif ( is_category() || is_tag() || is_tax() )
 					$this->do_term_archive_items();
@@ -566,7 +566,7 @@ class Breadcrumb_Trail {
 	 * @access public
 	 * @return void
 	 */
-	public function get_post_type_archive_items() {
+	public function do_post_type_archive_items() {
 
 		/* Get the post type object. */
 		$post_type_object = get_post_type_object( get_query_var( 'post_type' ) );
