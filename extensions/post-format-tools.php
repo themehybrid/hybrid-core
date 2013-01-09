@@ -43,6 +43,9 @@ add_filter( 'the_content', 'post_format_tools_quote_content' );
 /* Makes URLs in link posts clickable. */
 add_filter( 'the_content', 'post_format_tools_link_content' );
 
+/* Add infinity symbol to aside posts. */
+add_filter( 'the_content', 'post_format_tools_aside_infinity', 9 ); // run before wpautop
+
 /**
  * Filters the single post format title, which is used on the term archive page. The purpose of this 
  * function is to replace the singular name with a plural version.
@@ -119,6 +122,22 @@ function post_format_tools_get_plural_strings() {
 function post_format_tools_post_has_content( $id = 0 ) {
 	$post = get_post( $id );
 	return ( !empty( $post->post_content ) ? true : false );
+}
+
+/**
+ * Adds an infinity character "&#8734;" to the end of the post content on 'aside' posts.
+ *
+ * @since 0.1.1
+ * @access public
+ * @param string $content The post content.
+ * @return string $content
+ */
+function post_format_tools_aside_infinity( $content ) {
+
+	if ( has_post_format( 'aside' ) && !is_singular() )
+		$content .= ' <a class="permalink" href="' . get_permalink() . '" title="' . the_title_attribute( array( 'echo' => false ) ) . '">&#8734;</a>';
+
+	return $content;
 }
 
 /**
