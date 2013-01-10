@@ -215,7 +215,7 @@ function hybrid_entry_edit_link_shortcode( $attr ) {
 function hybrid_entry_published_shortcode( $attr ) {
 
 	$custom_attr = $attr;	
-	$attr = shortcode_atts( array( 'before' => '', 'after' => '', 'format' => get_option( 'date_format' ), 'title' => sprintf( get_the_time( esc_attr__( 'l, F jS, Y, g:i a', 'hybrid-core' ) ) ) ), $attr );
+	$attr = shortcode_atts( array( 'before' => '', 'after' => '', 'class' => 'published', 'element' => 'abbr ', 'format' => get_option( 'date_format' ), 'title' => sprintf( get_the_time( esc_attr__( 'l, F jS, Y, g:i a', 'hybrid-core' ) ) ) ), $attr );
 
 	$custom_attr = array_diff( $custom_attr, $attr );
 	
@@ -223,7 +223,7 @@ function hybrid_entry_published_shortcode( $attr ) {
 		$custom_attributes .= ' '. $key .'="'. $value .'"';
 	}
 	
-	$published = '<abbr class="published" title="' . $attr['title'] . '"' . $custom_attributes . '>' . sprintf( get_the_time( $attr['format'] ) ) . '</abbr>';
+	$published = '<' . $attr['element'] . ' class="' . $attr['class'] . '" title="' . $attr['title'] . '"' . $custom_attributes . '>' . sprintf( get_the_time( $attr['format'] ) ) . '</' . $attr['element'] . '>';
 	return $attr['before'] . $published . $attr['after'];
 }
 
