@@ -290,7 +290,7 @@ class Breadcrumb_Trail {
 	 * @return void
 	 */
 	public function do_network_home_link() {
-		if ( is_multisite() && true === $this->args['network'] )
+		if ( is_multisite() && !is_main_site() && true === $this->args['network'] )
 			$this->items[] = '<a href="' . network_home_url() . '" title="' . esc_attr( $this->args['labels']['home'] ) . '">' . $this->args['labels']['home'] . '</a>';
 	}
 
@@ -302,7 +302,7 @@ class Breadcrumb_Trail {
 	 * @return void
 	 */
 	public function do_site_home_link() {
-		$label = ( is_multisite() && true === $this->args['network'] ) ? get_bloginfo( 'name' ) : $this->args['labels']['home'];
+		$label = ( is_multisite() && !is_main_site() && true === $this->args['network'] ) ? get_bloginfo( 'name' ) : $this->args['labels']['home'];
 		$this->items[] = '<a href="' . home_url() . '" title="' . esc_attr( get_bloginfo( 'name' ) ) . '">' . $label . '</a>';
 	}
 
