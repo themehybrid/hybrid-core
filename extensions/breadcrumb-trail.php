@@ -87,6 +87,7 @@ class Breadcrumb_Trail {
 			'show_on_front'   => true,
 			'network'         => false,
 			//'show_edit_link'  => false,
+			'show_title'      => true,
 			'echo'            => true,
 
 			/* Post taxonomy (examples follow). */
@@ -272,11 +273,11 @@ class Breadcrumb_Trail {
 	public function do_paged_items() {
 
 		/* If viewing a paged singular post. */
-		if ( is_singular() && 1 < get_query_var( 'page' ) )
+		if ( is_singular() && 1 < get_query_var( 'page' ) && true === $this->args['show_title'] )
 			$this->items[] = sprintf( $this->args['labels']['paged'], absint( get_query_var( 'page' ) ) );
 
 		/* If viewing a paged archive-type page. */
-		elseif ( is_paged() )
+		elseif ( is_paged() && true === $this->args['show_title'] )
 			$this->items[] = sprintf( $this->args['labels']['paged'], absint( get_query_var( 'paged' ) ) );
 
 	}
@@ -326,7 +327,9 @@ class Breadcrumb_Trail {
 			/* If on the main front page, add the network home link item and the home item. */
 			else {
 				$this->do_network_home_link();
-				$this->items[] = ( is_multisite() && true === $this->args['network'] ) ? get_bloginfo( 'name' ) : $this->args['labels']['home'];
+
+				if ( true === $this->args['show_title'] )
+					$this->items[] = ( is_multisite() && true === $this->args['network'] ) ? get_bloginfo( 'name' ) : $this->args['labels']['home'];
 			}
 		}
 	}
@@ -351,8 +354,9 @@ class Breadcrumb_Trail {
 		/* Add the posts page item. */
 		if ( is_paged() )
 			$this->items[]  = '<a href="' . get_permalink( $post_id ) . '" title="' . esc_attr( get_the_title( $post_id ) ) . '">' . get_the_title( $post_id ) . '</a>';
-		else
-			$this->items[] = get_the_title( $post_id );
+
+		elseif ( $title = get_the_title( $post_id ) && true === $this->args['show_title'] )
+			$this->items[] = $title;
 	}
 
 	/**
@@ -384,7 +388,8 @@ class Breadcrumb_Trail {
 
 			if ( 1 < get_query_var( 'page' ) )
 				$this->items[] = '<a href="' . get_permalink( $post_id ) . '" title="' . esc_attr( $post_title ) . '">' . $post_title . '</a>';
-			else
+
+			elseif ( true === $this->args['show_title'] )
 				$this->items[] = $post_title;
 		}
 	}
@@ -555,7 +560,8 @@ class Breadcrumb_Trail {
 		/* Add the term name to the trail end. */
 		if ( is_paged() )
 			$this->items[] = '<a href="' . esc_url( get_term_link( $term, $term->taxonomy ) ) . '" title="' . esc_attr( single_term_title( '', false ) ) . '">' . single_term_title( '', false ) . '</a>';
-		else
+
+		elseif ( true === $this->args['show_title'] )
 			$this->items[] = single_term_title( '', false );
 	}
 
@@ -585,7 +591,8 @@ class Breadcrumb_Trail {
 		/* Add the post type [plural] name to the trail end. */
 		if ( is_paged() )
 			$this->items[] = '<a href="' . esc_url( get_post_type_archive_link( $post_type_object->name ) ) . '" title="' . esc_attr( post_type_archive_title( '', false ) ) . '">' . post_type_archive_title( '', false ) . '</a>';
-		else
+
+		elseif ( true === $this->args['show_title'] )
 			$this->items[] = post_type_archive_title( '', false );
 	}
 
@@ -613,7 +620,8 @@ class Breadcrumb_Trail {
 		/* Add the author's display name to the trail end. */
 		if ( is_paged() )
 			$this->items[] = '<a href="'. esc_url( get_author_posts_url( $user_id ) ) . '" title="' . esc_attr( get_the_author_meta( 'display_name', $user_id ) ) . '">' . get_the_author_meta( 'display_name', $user_id ) . '</a>';
-		else
+
+		elseif ( true === $this->args['show_title'] )
 			$this->items[] = get_the_author_meta( 'display_name', $user_id );
 	}
 
@@ -630,7 +638,8 @@ class Breadcrumb_Trail {
 		$this->do_rewrite_front_items();
 
 		/* Add the minute + hour item. */
-		$this->items[] = get_the_time( __( 'g:i a', 'breadcrumb-trail' ) );
+		if ( true === $this->args['show_title'] )
+			$this->items[] = get_the_time( __( 'g:i a', 'breadcrumb-trail' ) );
 	}
 
 	/**
@@ -646,7 +655,8 @@ class Breadcrumb_Trail {
 		$this->do_rewrite_front_items();
 
 		/* Add the minute item. */
-		$this->items[] = sprintf( __( 'Minute %s', 'breadcrumb-trail' ), date_i18n( 'i', get_the_time( 'U' ) ) );
+		if ( true === $this->args['show_title'] )
+			$this->items[] = sprintf( __( 'Minute %s', 'breadcrumb-trail' ), date_i18n( 'i', get_the_time( 'U' ) ) );
 	}
 
 	/**
@@ -662,7 +672,8 @@ class Breadcrumb_Trail {
 		$this->do_rewrite_front_items();
 
 		/* Add the hour item. */
-		$this->items[] = get_the_time( __( 'g a', 'breadcrumb-trail' ) );
+		if ( true === $this->args['show_title'] )
+			$this->items[] = get_the_time( __( 'g a', 'breadcrumb-trail' ) );
 	}
 
 	/**
@@ -689,7 +700,8 @@ class Breadcrumb_Trail {
 		/* Add the day item. */
 		if ( is_paged() )
 			$this->items[] = '<a href="' . get_day_link( get_the_time( 'Y' ), get_the_time( 'm' ), get_the_time( 'd' ) ) . '" title="' . esc_attr( $day ) . '">' . $day . '</a>';
-		else
+
+		elseif ( true === $this->args['show_title'] )
 			$this->items[] = $day;
 	}
 
@@ -715,7 +727,8 @@ class Breadcrumb_Trail {
 		/* Add the week item. */
 		if ( is_paged() )
 			$this->items[] = get_archives_link( add_query_arg( array( 'm' => get_the_time( 'Y' ), 'w' => get_the_time( 'W' ) ), home_url() ), $week, false );
-		else
+
+		elseif ( true === $this->args['show_title'] )
 			$this->items[] = $week;
 	}
 
@@ -741,7 +754,8 @@ class Breadcrumb_Trail {
 		/* Add the month item. */
 		if ( is_paged() )
 			$this->items[] = '<a href="' . get_month_link( get_the_time( 'Y' ), get_the_time( 'm' ) ) . '" title="' . esc_attr( $month ) . '">' . $month . '</a>';
-		else
+
+		elseif ( true === $this->args['show_title'] )
 			$this->items[] = $month;
 	}
 
@@ -763,7 +777,8 @@ class Breadcrumb_Trail {
 		/* Add the year item. */
 		if ( is_paged() )
 			$this->items[] = '<a href="' . get_year_link( get_the_time( 'Y' ) ) . '" title="' . esc_attr( $year ) . '">' . $year . '</a>';
-		else
+
+		elseif ( true === $this->args['show_title'] )
 			$this->items[] = $year;
 	}
 
@@ -781,7 +796,8 @@ class Breadcrumb_Trail {
 		if ( is_date() || is_time() )
 			$this->do_rewrite_front_items();
 
-		$this->items[] = $this->args['labels']['archives'];
+		if ( true === $this->args['show_title'] )
+			$this->items[] = $this->args['labels']['archives'];
 	}
 
 	/**
@@ -792,9 +808,11 @@ class Breadcrumb_Trail {
 	 * @return void
 	 */
 	public function do_search_items() {
+
 		if ( is_paged() )
 			$this->items[] = '<a href="' . get_search_link() . '" title="' . esc_attr( sprintf( $this->args['labels']['search'], get_search_query() ) ) . '">' . sprintf( $this->args['labels']['search'], get_search_query() ) . '</a>';
-		else
+
+		elseif ( true === $this->args['show_title'] )
 			$this->items[] = sprintf( $this->args['labels']['search'], get_search_query() );
 	}
 
@@ -806,7 +824,9 @@ class Breadcrumb_Trail {
 	 * @return void
 	 */
 	public function do_404_items() {
-		$this->items[] = $this->args['labels']['error_404'];
+
+		if ( true === $this->args['show_title'] )
+			$this->items[] = $this->args['labels']['error_404'];
 	}
 
 	/**
@@ -1006,28 +1026,38 @@ class bbPress_Breadcrumb_Trail extends Breadcrumb_Trail {
 
 		/* If viewing the forum root/archive. */
 		if ( bbp_is_forum_archive() ) {
-			$this->items[] = bbp_get_forum_archive_title();
+
+			if ( true === $this->args['show_title'] )
+				$this->items[] = bbp_get_forum_archive_title();
 		}
 
 		/* If viewing the topics archive. */
 		elseif ( bbp_is_topic_archive() ) {
-			$this->items[] = bbp_get_topic_archive_title();
+
+			if ( true === $this->args['show_title'] )
+				$this->items[] = bbp_get_topic_archive_title();
 		}
 
 		/* If viewing a topic tag archive. */
 		elseif ( bbp_is_topic_tag() ) {
-			$this->items[] = bbp_get_topic_tag_name();
+
+			if ( true === $this->args['show_title'] )
+				$this->items[] = bbp_get_topic_tag_name();
 		}
 
 		/* If viewing a topic tag edit page. */
 		elseif ( bbp_is_topic_tag_edit() ) {
 			$this->items[] = '<a href="' . bbp_get_topic_tag_link() . '">' . bbp_get_topic_tag_name() . '</a>';
-			$this->items[] = __( 'Edit', 'breadcrumb-trail' );
+
+			if ( true === $this->args['show_title'] )
+				$this->items[] = __( 'Edit', 'breadcrumb-trail' );
 		}
 
 		/* If viewing a "view" page. */
 		elseif ( bbp_is_single_view() ) {
-			$this->items[] = bbp_get_view_title();
+
+			if ( true === $this->args['show_title'] )
+				$this->items[] = bbp_get_view_title();
 		}
 
 		/* If viewing a single topic page. */
@@ -1042,19 +1072,20 @@ class bbPress_Breadcrumb_Trail extends Breadcrumb_Trail {
 			/* If viewing a split, merge, or edit topic page, show the link back to the topic.  Else, display topic title. */
 			if ( bbp_is_topic_split() || bbp_is_topic_merge() || bbp_is_topic_edit() )
 				$this->items[] = '<a href="' . bbp_get_topic_permalink( $topic_id ) . '">' . bbp_get_topic_title( $topic_id ) . '</a>';
-			else
+
+			elseif ( true === $this->args['show_title'] )
 				$this->items[] = bbp_get_topic_title( $topic_id );
 
 			/* If viewing a topic split page. */
-			if ( bbp_is_topic_split() )
+			if ( bbp_is_topic_split() && true === $this->args['show_title'] )
 				$this->items[] = __( 'Split', 'breadcrumb-trail' );
 
 			/* If viewing a topic merge page. */
-			elseif ( bbp_is_topic_merge() )
+			elseif ( bbp_is_topic_merge() && true === $this->args['show_title'] )
 				$this->items[] = __( 'Merge', 'breadcrumb-trail' );
 
 			/* If viewing a topic edit page. */
-			elseif ( bbp_is_topic_edit() )
+			elseif ( bbp_is_topic_edit() && true === $this->args['show_title'] )
 				$this->items[] = __( 'Edit', 'breadcrumb-trail' );
 		}
 
@@ -1070,9 +1101,11 @@ class bbPress_Breadcrumb_Trail extends Breadcrumb_Trail {
 			/* If viewing a reply edit page, link back to the reply. Else, display the reply title. */
 			if ( bbp_is_reply_edit() ) {
 				$this->items[] = '<a href="' . bbp_get_reply_url( $reply_id ) . '">' . bbp_get_reply_title( $reply_id ) . '</a>';
-				$this->items[] = __( 'Edit', 'breadcrumb-trail' );
 
-			} else {
+				if ( true === $this->args['show_title'] )
+					$this->items[] = __( 'Edit', 'breadcrumb-trail' );
+
+			} elseif ( true === $this->args['show_title'] ) {
 				$this->items[] = bbp_get_reply_title( $reply_id );
 			}
 
@@ -1090,7 +1123,8 @@ class bbPress_Breadcrumb_Trail extends Breadcrumb_Trail {
 				$this->do_post_parents( $forum_parent_id );
 
 			/* Add the forum title to the end of the trail. */
-			$this->items[] = bbp_get_forum_title( $forum_id );
+			if ( true === $this->args['show_title'] )
+				$this->items[] = bbp_get_forum_title( $forum_id );
 		}
 
 		/* If viewing a user page or user edit page. */
@@ -1098,8 +1132,10 @@ class bbPress_Breadcrumb_Trail extends Breadcrumb_Trail {
 
 			if ( bbp_is_single_user_edit() ) {
 				$this->items[] = '<a href="' . bbp_get_user_profile_url() . '">' . bbp_get_displayed_user_field( 'display_name' ) . '</a>';
-				$this->items[] = __( 'Edit', 'breadcrumb-trail' );
-			} else {
+
+				if ( true === $this->args['show_title'] )
+					$this->items[] = __( 'Edit', 'breadcrumb-trail' );
+			} elseif ( true === $this->args['show_title'] ) {
 				$this->items[] = bbp_get_displayed_user_field( 'display_name' );
 			}
 		}
