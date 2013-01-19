@@ -623,7 +623,7 @@ function theme_layouts_customize_register( $wp_customize ) {
 		$wp_customize->add_setting(
 			'theme_layout',
 			array(
-				'default'           => $args['default'],
+				'default'           => get_theme_mod( 'theme_layout', $args['default'] ),
 				'type'              => 'theme_mod',
 				'capability'        => 'edit_theme_options',
 				'sanitize_callback' => 'sanitize_html_class',
