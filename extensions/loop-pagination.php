@@ -96,7 +96,7 @@ function loop_pagination( $args = array() ) {
 
 	/* Remove 'page/1' from the entire output since it's not needed. */
 	$page_links = str_replace( array( "?paged=1'", "&#038;paged=1'", "/{$pagination_base}/1'", "/{$pagination_base}/1/'" ), '\'', $page_links );
-	$page_links = str_replace( array( '?paged=1"', '&#038;paged=1"', "/{$pagination_base}/1\"", "/{$pagination_base}/1/\"" ), '\"', $page_links );
+	$page_links = str_replace( array( '?paged=1"', '&#038;paged=1"', "/{$pagination_base}/1\"", "/{$pagination_base}/1/\"" ), '"', $page_links );
 
 	/* Wrap the paginated links with the $before and $after elements. */
 	$page_links = $args['before'] . $page_links . $args['after'];
