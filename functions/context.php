@@ -34,7 +34,7 @@ function hybrid_get_context() {
 
 	/* If $hybrid->context has been set, don't run through the conditionals again. Just return the variable. */
 	if ( isset( $hybrid->context ) )
-		return $hybrid->context;
+		return apply_filters( 'hybrid_context', $hybrid->context );
 
 	/* Set some variables for use within the function. */
 	$hybrid->context = array();
