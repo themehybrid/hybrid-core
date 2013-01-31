@@ -20,7 +20,7 @@ add_action( 'add_meta_boxes', 'hybrid_meta_box_post_remove_template', 10, 2 );
 /* Save the post template meta box data on the 'save_post' hook. */
 add_action( 'save_post', 'hybrid_meta_box_post_save_template', 10, 2 );
 add_action( 'add_attachment', 'hybrid_meta_box_post_save_template' );
-add_action( 'edit_attachment', 'hybrid_meta_box_post_save_temlate' );
+add_action( 'edit_attachment', 'hybrid_meta_box_post_save_template' );
 
 /**
  * Adds the post template meta box for all public post types, excluding the 'page' post type since WordPress 
