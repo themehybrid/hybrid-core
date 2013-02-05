@@ -74,6 +74,9 @@ function get_the_image( $args = array() ) {
 		'before'             => '',
 		'after'              => '',
 
+		/* Captions. */
+		'caption'            => false,
+
 		/* Saving the image. */
 		'meta_key_save'      => false,
 		'thumbnail_id_save'  => false, // Set 'featured image'.
@@ -268,8 +271,8 @@ function get_the_image_by_post_thumbnail( $args = array() ) {
 	/* Get the attachment image source.  This should return an array. */
 	$image = wp_get_attachment_image_src( $post_thumbnail_id, $size );
 
-	/* Get the attachment excerpt to use as alt text. */
-	$alt = trim( strip_tags( get_post_field( 'post_excerpt', $post_thumbnail_id ) ) );
+	/* Get the attachment alt text. */
+	$alt = trim( strip_tags( get_post_meta( $post_thumbnail_id, '_wp_attachment_image_alt', true ) ) );
 
 	/* Return both the image URL and the post thumbnail ID. */
 	return array( 'src' => $image[0], 'post_thumbnail_id' => $post_thumbnail_id, 'alt' => $alt );
@@ -335,8 +338,8 @@ function get_the_image_by_attachment( $args = array() ) {
 		/* Get the attachment image. */
 		$image = wp_get_attachment_image_src( $attachment_id, $args['size'] );
 
-		/* Get the attachment excerpt. */
-		$alt = trim( strip_tags( get_post_field( 'post_excerpt', $attachment_id ) ) );
+		/* Get the attachment alt text. */
+		$alt = trim( strip_tags( get_post_meta( $post_thumbnail_id, '_wp_attachment_image_alt', true ) ) );
 
 		/* Save the attachment as the 'featured image'. */
 		if ( true === $args['thumbnail_id_save'] )
