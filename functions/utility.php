@@ -235,7 +235,7 @@ function hybrid_locate_theme_file( $file_names ) {
 		}
 
 		/* If the file exists in the template (parent theme) directory. */
-		elseif ( file_exists( trailingslashit( get_template_directory ) ) . $file ) {
+		elseif ( file_exists( trailingslashit( get_template_directory() ) . $file ) ) {
 			$located = trailingslashit( get_template_directory_uri() ) . $file;
 			break;
 		}

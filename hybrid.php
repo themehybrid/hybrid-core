@@ -24,7 +24,7 @@
  * to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  *
  * @package   HybridCore
- * @version   1.5.2
+ * @version   1.5.3
  * @author    Justin Tadlock <justin@justintadlock.com>
  * @copyright Copyright (c) 2008 - 2013, Justin Tadlock
  * @link      http://themehybrid.com/hybrid-core
@@ -93,7 +93,7 @@ class Hybrid {
 	function constants() {
 
 		/* Sets the framework version number. */
-		define( 'HYBRID_VERSION', '1.5.1' );
+		define( 'HYBRID_VERSION', '1.5.3' );
 
 		/* Sets the path to the parent theme directory. */
 		define( 'THEME_DIR', get_template_directory() );
