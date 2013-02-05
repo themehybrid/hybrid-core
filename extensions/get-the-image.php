@@ -75,7 +75,7 @@ function get_the_image( $args = array() ) {
 		'after'              => '',
 
 		/* Captions. */
-		'caption'            => false,
+		'caption'            => false, // Default WP [caption] requires a width.
 
 		/* Saving the image. */
 		'meta_key_save'      => false,
@@ -274,8 +274,11 @@ function get_the_image_by_post_thumbnail( $args = array() ) {
 	/* Get the attachment alt text. */
 	$alt = trim( strip_tags( get_post_meta( $post_thumbnail_id, '_wp_attachment_image_alt', true ) ) );
 
+	/* Get the attachment caption. */
+	$caption = get_post_field( 'post_excerpt', $post_thumbnail_id );
+
 	/* Return both the image URL and the post thumbnail ID. */
-	return array( 'src' => $image[0], 'post_thumbnail_id' => $post_thumbnail_id, 'alt' => $alt );
+	return array( 'src' => $image[0], 'post_thumbnail_id' => $post_thumbnail_id, 'alt' => $alt, 'caption' => $caption );
 }
 
 /**
@@ -341,12 +344,15 @@ function get_the_image_by_attachment( $args = array() ) {
 		/* Get the attachment alt text. */
 		$alt = trim( strip_tags( get_post_meta( $post_thumbnail_id, '_wp_attachment_image_alt', true ) ) );
 
+		/* Get the attachment caption. */
+		$caption = get_post_field( 'post_excerpt', $post_thumbnail_id );
+
 		/* Save the attachment as the 'featured image'. */
 		if ( true === $args['thumbnail_id_save'] )
 			set_post_thumbnail( $args['post_id'], $attachment_id );
 
 		/* Return the image URL. */
-		return array( 'src' => $image[0], 'alt' => $alt );
+		return array( 'src' => $image[0], 'alt' => $alt, 'caption' => $caption );
 	}
 
 	/* Return false for anything else. */
@@ -436,6 +442,11 @@ function get_the_image_format( $args = array(), $image = false ) {
 	/* If there is a $post_thumbnail_id, apply the WP filters normally associated with get_the_post_thumbnail(). */
 	if ( !empty( $image['post_thumbnail_id'] ) )
 		$html = apply_filters( 'post_thumbnail_html', $html, $post_id, $image['post_thumbnail_id'], $size, '' );
+
+
+	/* If we're showing a caption. */
+	if ( true === $args['caption'] && !empty( $image['caption'] ) )
+		$html = img_caption_shortcode( array( 'caption' => $image['caption'], 'width' => $args['width'] ), $html );
 
 	return $html;
 }
