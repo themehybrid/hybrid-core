@@ -466,7 +466,7 @@ function hybrid_document_title() {
 		$doctitle = sprintf( __( '%1$s Page %2$s', 'hybrid-core' ), $doctitle . $separator, number_format_i18n( $page ) );
 
 	/* Apply the wp_title filters so we're compatible with plugins. */
-	$doctitle = apply_filters( 'wp_title', $doctitle, $separator, '' );
+	$doctitle = apply_filters( 'wp_title', strip_tags( $doctitle ), $separator, '' );
 
 	/* Trim separator + space from beginning and end in case a plugin adds it. */
 	$doctitle = trim( $doctitle, "{$separator} " );
