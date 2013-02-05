@@ -498,9 +498,11 @@ class Breadcrumb_Trail {
 	 *
 	 * @since  0.6.0
 	 * @access public
+	 * @global object $wp_rewrite
 	 * @return void
 	 */
 	public function do_term_archive_items() {
+		global $wp_rewrite;
 
 		/* Get some taxonomy and term variables. */
 		$term     = get_queried_object();
