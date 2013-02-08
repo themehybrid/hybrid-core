@@ -31,6 +31,13 @@ add_action( 'edit_attachment', 'hybrid_meta_box_post_save_template' );
  */
 function hybrid_meta_box_post_add_template( $post_type, $post ) {
 
+	/* Get the post templates. */
+	$templates = hybrid_get_post_templates( $post_type );
+
+	/* If no post templates were found for this post type, don't add the meta box. */
+	if ( empty( $templates ) )
+		return;
+
 	$post_type_object = get_post_type_object( $post_type );
 
 	/* Only add meta box if current user can edit, add, or delete meta for the post. */
@@ -85,8 +92,6 @@ function hybrid_meta_box_post_display_template( $object, $box ) {
 					<option value="<?php echo esc_attr( $template ); ?>" <?php selected( esc_attr( get_post_meta( $object->ID, "_wp_{$post_type_object->name}_template", true ) ), esc_attr( $template ) ); ?>><?php echo esc_html( $label ); ?></option>
 				<?php } ?>
 			</select>
-		<?php } else { ?>
-			<?php _e( 'No templates exist for this post type.', 'hybrid-core' ); ?>
 		<?php } ?>
 	</p>
 <?php

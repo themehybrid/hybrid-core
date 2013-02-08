@@ -95,6 +95,15 @@ function hybrid_admin_enqueue_styles( $hook_suffix ) {
  * @return array $post_templates The array of templates.
  */
 function hybrid_get_post_templates( $post_type = 'post' ) {
+	global $hybrid;
+
+	/* If templates have already been called, just return them. */
+	if ( !empty( $hybrid->post_templates ) && isset( $hybrid->post_templates[ $post_type ] ) )
+		return $hybrid->post_templates[ $post_type ];
+
+	/* Else, set up an empty array to house the templates. */
+	else
+		$hybrid->post_templates = array();
 
 	/* Set up an empty post templates array. */
 	$post_templates = array();
@@ -134,8 +143,11 @@ function hybrid_get_post_templates( $post_type = 'post' ) {
 		$post_templates[ $file ] = $headers["{$post_type_object->name} Template"];
 	}
 
+	/* Add the templates to the global $hybrid object. */
+	$hybrid->post_templates[ $post_type ] = array_flip( $post_templates );
+
 	/* Return array of post templates. */
-	return array_flip( $post_templates );
+	return $hybrid->post_templates[ $post_type ];
 }
 
 ?>
