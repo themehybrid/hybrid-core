@@ -102,7 +102,7 @@ function cleaner_gallery( $output, $attr ) {
 		$attachments = get_posts( $children );
 
 	if ( empty( $attachments ) )
-		return '<!-- Here be dragons but no images. -->';
+		return '';
 
 	/* Properly escape the gallery tags. */
 	$itemtag    = tag_escape( $itemtag );
