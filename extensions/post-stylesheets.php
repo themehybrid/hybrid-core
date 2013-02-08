@@ -274,6 +274,13 @@ function post_stylesheets_load_meta_boxes() {
  */
 function post_stylesheets_create_meta_box( $post_type, $post ) {
 
+	/* Get the post styles. */
+	$styles = post_stylesheets_get_styles( $post_type );
+
+	/* If there are no post styles, don't show the meta box. */
+	if ( empty( $styles ) )
+		return;
+
 	/* Add the meta box if the post type supports 'post-stylesheets'. */
 	if ( ( post_type_supports( $post_type, 'post-stylesheets' ) ) && ( current_user_can( 'edit_post_meta', $post->ID ) || current_user_can( 'add_post_meta', $post->ID ) || current_user_can( 'delete_post_meta', $post->ID ) ) )
 		add_meta_box( "post-stylesheets", __( 'Stylesheet', 'post-stylesheets' ), 'post_stylesheets_meta_box', $post_type, 'side', 'default' );
@@ -357,12 +364,18 @@ function post_stylesheets_meta_box_save( $post_id, $post = '' ) {
  *
  * @since 0.4.0
  * @access public
+ * @global array $_post_stylesheets Array of post-type specific stylesheets.
  * @return array
  */
 function post_stylesheets_get_styles( $post_type = 'post' ) {
+	global $_post_stylesheets;
+
+	/* If stylesheets have already been loaded, return them. */
+	if ( !empty( $_post_stylesheets ) && isset( $_post_stylesheets[ $post_type ] ) )
+		return $_post_stylesheets[ $post_type ];
 
 	/* Set up an empty styles array. */
-	$styles = array();
+	$_post_stylesheets[ $post_type ] = array();
 
 	/* Get the theme object. */
 	$theme = wp_get_theme();
@@ -384,14 +397,17 @@ function post_stylesheets_get_styles( $post_type = 'post' ) {
 
 		/* Add the CSS filename and template name to the array. */
 		if ( !empty( $headers['Style Name'] ) )
-			$styles[ $file ] = $headers['Style Name'];
+			$_post_stylesheets[ $post_type ][ $file ] = $headers['Style Name'];
 
 		elseif ( !empty( $headers["{$post_type} Style"] ) )
-			$styles[ $file ] = $headers["{$post_type} Style"];
+			$_post_stylesheets[ $post_type ][ $file ] = $headers["{$post_type} Style"];
 	}
 
+	/* Flip the array of styles. */
+	$_post_stylesheets[ $post_type ] = array_flip( $_post_stylesheets[ $post_type ] );
+
 	/* Return array of styles. */
-	return array_flip( $styles );
+	return $_post_stylesheets[ $post_type ];
 }
 
 /**
