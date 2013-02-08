@@ -292,7 +292,7 @@ function post_stylesheets_meta_box( $object, $box ) { ?>
 
 	<p>
 		<?php wp_nonce_field( basename( __FILE__ ), 'post-stylesheets-nonce' ); ?>
-		<?php $styles = post_stylesheets_get_styles(); ?>
+		<?php $styles = post_stylesheets_get_styles( $object->post_type ); ?>
 
 		<select name="post-stylesheets" id="post-stylesheets" class="widefat">
 			<option value=""></option>
@@ -359,7 +359,7 @@ function post_stylesheets_meta_box_save( $post_id, $post = '' ) {
  * @access public
  * @return array
  */
-function post_stylesheets_get_styles() {
+function post_stylesheets_get_styles( $post_type = 'post' ) {
 
 	/* Set up an empty styles array. */
 	$styles = array();
@@ -374,14 +374,20 @@ function post_stylesheets_get_styles() {
 	foreach ( $files as $file => $path ) {
 
 		/* Get file data based on the 'Style Name' header. */
-		$headers = get_file_data( $path, array( 'Style Name' => 'Style Name' ) );
-
-		/* Continue loop if the header is empty. */
-		if ( empty( $headers['Style Name'] ) )
-			continue;
+		$headers = get_file_data(
+			$path, 
+			array( 
+				'Style Name'         => 'Style Name',
+				"{$post_type} Style" => "{$post_type} Style"
+			) 
+		);
 
 		/* Add the CSS filename and template name to the array. */
-		$styles[ $file ] = $headers['Style Name'];
+		if ( !empty( $headers['Style Name'] ) )
+			$styles[ $file ] = $headers['Style Name'];
+
+		elseif ( !empty( $headers["{$post_type} Style"] ) )
+			$styles[ $file ] = $headers["{$post_type} Style"];
 	}
 
 	/* Return array of styles. */
