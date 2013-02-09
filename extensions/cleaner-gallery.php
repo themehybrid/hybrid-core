@@ -41,7 +41,7 @@ function cleaner_gallery( $output, $attr ) {
 	static $cleaner_gallery_instance = 0;
 	$cleaner_gallery_instance++;
 
-	/* We're not worried abut galleries in feeds, so just return the output here. */
+	/* We're not worried about galleries in feeds, so just return the output here. */
 	if ( is_feed() )
 		return $output;
 
