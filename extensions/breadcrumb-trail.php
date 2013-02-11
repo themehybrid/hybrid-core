@@ -108,7 +108,7 @@ class Breadcrumb_Trail {
 			)
 		);
 
-		$this->args = wp_parse_args( $args, $defaults );
+		$this->args = apply_filters( 'breadcrumb_trail_args', wp_parse_args( $args, $defaults ) );
 
 		$this->do_trail_items();
 	}
