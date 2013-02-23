@@ -14,7 +14,7 @@
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * @package   LoopPagination
- * @version   0.2.1
+ * @version   0.3.0-alpha
  * @author    Justin Tadlock <justin@justintadlock.com>
  * @copyright Copyright (c) 2010 - 2012, Justin Tadlock
  * @link      http://themehybrid.com/docs/tutorials/loop-pagination
@@ -95,8 +95,16 @@ function loop_pagination( $args = array() ) {
 	$page_links = paginate_links( $args );
 
 	/* Remove 'page/1' from the entire output since it's not needed. */
-	$page_links = str_replace( array( "?paged=1'", "&#038;paged=1'", "/{$pagination_base}/1'", "/{$pagination_base}/1/'" ), '\'', $page_links );
-	$page_links = str_replace( array( '?paged=1"', '&#038;paged=1"', "/{$pagination_base}/1\"", "/{$pagination_base}/1/\"" ), '"', $page_links );
+	$page_links = preg_replace( 
+		array( 
+			"#(href=['\"].*?){$pagination_base}/1(['\"])#",  // 'page/1'
+			"#(href=['\"].*?){$pagination_base}/1/(['\"])#", // 'page/1/'
+			"#(href=['\"].*?)\?paged=1(['\"])#",             // '?paged=1'
+			"#(href=['\"].*?)&\#038;paged=1(['\"])#"         // '&#038;paged=1'
+		), 
+		'$1$2', 
+		$page_links 
+	);
 
 	/* Wrap the paginated links with the $before and $after elements. */
 	$page_links = $args['before'] . $page_links . $args['after'];
