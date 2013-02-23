@@ -200,6 +200,29 @@ function post_format_tools_url_grabber() {
 	return esc_url_raw( $matches[1] );
 }
 
+function post_format_tools_get_image_count() {
+
+	$content = has_post_format( 'gallery' ) ? get_post_meta( get_the_ID(), '_wp_format_gallery', true ) : '';
+
+	if ( empty( $content ) )
+		$content = get_post_field( 'post_content', get_the_ID() );
+
+	preg_match_all( '/' . get_shortcode_regex() . '/s', $content, $matches, PREG_SET_ORDER );
+
+	if ( !empty( $matches ) ) {
+
+		foreach ( $matches as $i => $shortcode ) {
+
+			if ( 'gallery' === $shortcode[2] )
+				$content .= do_shortcode( $shortcode[0] );
+		}
+	}
+
+	preg_match_all( '/<img.*?src=[\'"](.*?)[\'"].*?>/i', $content, $images, PREG_SET_ORDER );
+
+	return count( $images );
+}
+
 /**
  * Returns the number of images attached to the current post in the loop.
  *
