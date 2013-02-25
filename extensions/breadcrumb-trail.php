@@ -494,6 +494,30 @@ class Breadcrumb_Trail {
 	}
 
 	/**
+	 * Gets post types by slug.  This is needed because the get_post_types() function doesn't exactly 
+	 * match the 'has_archive' argument when it's set as a string instead of a boolean.
+	 *
+	 * @since  0.6.0
+	 * @access public
+	 * @param  int    $slug  The post type archive slug to search for.
+	 * @return void
+	 */
+	public function get_post_types_by_slug( $slug ) {
+
+		$return = array();
+
+		$post_types = get_post_types( array(), 'objects' );
+
+		foreach ( $post_types as $type ) {
+
+			if ( $slug === $type->has_archive || ( true === $type->has_archive && $slug === $type->rewrite['slug'] ) )
+				$return[] = $type;
+		}
+
+		return $return;
+	}
+
+	/**
 	 * Adds the items to the trail items array for taxonomy term archives.
 	 *
 	 * @since  0.6.0
@@ -521,25 +545,32 @@ class Breadcrumb_Trail {
 			/* Add post type archive if its 'has_archive' matches the taxonomy rewrite 'slug'. */
 			if ( $taxonomy->rewrite['slug'] ) {
 
-				/* Get public post types that match the rewrite slug. */
-				$post_types = get_post_types(
-					array(
-						'public'      => true, 
-						'has_archive' => $taxonomy->rewrite['slug'] 
-					), 
-					'objects'
-				);
+				$slug = trim( $taxonomy->rewrite['slug'], '/' );
 
-				if ( !empty( $post_types ) ) {
+				/**
+				 * Deals with the situation if the slug has a '/' between multiple strings. For 
+				 * example, "movies/genres" where "movies" is the post type archive.
+				 */
+				$matches = explode( '/', $slug );
 
-					/**
-					 * WP doesn't match 'has_archive' correctly as an argument in 
-					 * get_post_types() if 'has_archive' is a string, so we must loop 
-					 * through them and check for a match.
-					 */
-					foreach ( $post_types as $post_type_object ) {
+				/* If matches are found for the path. */
+				if ( isset( $matches ) ) {
 
-						if ( $taxonomy->rewrite['slug'] === $post_type_object->has_archive ) {
+					/* Reverse the array of matches to search for posts in the proper order. */
+					$matches = array_reverse( $matches );
+
+					/* Loop through each of the path matches. */
+					foreach ( $matches as $match ) {
+
+						/* If a match is found. */
+						$slug = $match;
+
+						/* Get public post types that match the rewrite slug. */
+						$post_types = $this->get_post_types_by_slug( $match );
+
+						if ( !empty( $post_types ) ) {
+
+							$post_type_object = $post_types[0];
 
 							/* Add support for a non-standard label of 'archive_title' (special use case). */
 							$label = !empty( $post_type_object->labels->archive_title ) ? $post_type_object->labels->archive_title : $post_type_object->labels->name;
