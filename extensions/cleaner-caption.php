@@ -70,16 +70,16 @@ function cleaner_caption( $output, $attr, $content ) {
 	$attributes .= ' style="width: ' . esc_attr( $attr['width'] ) . 'px"';
 
 	/* Open the caption <div>. */
-	$output = '<div' . $attributes .'>';
+	$output = '<figure' . $attributes .'>';
 
 	/* Allow shortcodes for the content the caption was created for. */
 	$output .= do_shortcode( $content );
 
 	/* Append the caption text. */
-	$output .= '<p class="wp-caption-text">' . $attr['caption'] . '</p>';
+	$output .= '<figcaption class="wp-caption-text">' . $attr['caption'] . '</figcaption>';
 
 	/* Close the caption </div>. */
-	$output .= '</div>';
+	$output .= '</figure>';
 
 	/* Return the formatted, clean caption. */
 	return apply_filters( 'cleaner_caption', $output );
