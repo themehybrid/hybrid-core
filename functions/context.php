@@ -122,7 +122,7 @@ function hybrid_get_context() {
 		$hybrid->context[] = 'error-404';
 	}
 
-	return array_map( 'esc_attr', apply_filters( 'hybrid_context', $hybrid->context ) );
+	return array_map( 'esc_attr', apply_filters( 'hybrid_context', array_unique( $hybrid->context ) ) );
 }
 
 /**
@@ -207,7 +207,7 @@ function hybrid_entry_class( $class = '', $post_id = null ) {
 	$classes = apply_filters( 'post_class', $classes, $class, $post_id );
 
 	/* Join all the classes into one string and echo them. */
-	$class = join( ' ', $classes );
+	$class = join( ' ', array_unique( $classes ) );
 
 	echo apply_atomic( 'entry_class', $class );
 }
@@ -364,7 +364,7 @@ function hybrid_body_class( $class = '' ) {
 	$classes = apply_filters( 'body_class', $classes, $class );
 
 	/* Join all the classes into one string. */
-	$class = join( ' ', $classes );
+	$class = join( ' ', array_unique( $classes ) );
 
 	/* Print the body class. */
 	echo apply_atomic( 'body_class', $class );
