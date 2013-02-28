@@ -153,7 +153,7 @@ class Hybrid_Widget_Tags extends WP_Widget {
 			'smallest'                   => 8,
 			'largest'                    => 22,
 			'link'                       => 'view',
-			'number'                     => 45,
+			'number'                     => 25,
 			'separator'                  => ' ',
 			'child_of'                   => '',
 			'parent'                     => '',
