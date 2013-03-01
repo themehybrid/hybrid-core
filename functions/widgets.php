@@ -8,7 +8,7 @@
  * @package    HybridCore
  * @subpackage Functions
  * @author     Justin Tadlock <justin@justintadlock.com>
- * @copyright  Copyright (c) 2008 - 2012, Justin Tadlock
+ * @copyright  Copyright (c) 2008 - 2013, Justin Tadlock
  * @link       http://themehybrid.com/hybrid-core
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
@@ -107,7 +107,6 @@ function hybrid_unregister_widgets() {
 	unregister_widget( 'WP_Widget_Links' );
 	unregister_widget( 'WP_Nav_Menu_Widget' );
 	unregister_widget( 'WP_Widget_Pages' );
-	unregister_widget( 'WP_Widget_Recent_Posts' );
 	unregister_widget( 'WP_Widget_Search' );
 	unregister_widget( 'WP_Widget_Tag_Cloud' );
 }
