@@ -12,7 +12,7 @@
  * @package    HybridCore
  * @subpackage Admin
  * @author     Justin Tadlock <justin@justintadlock.com>
- * @copyright  Copyright (c) 2008 - 2013, Justin Tadlock
+ * @copyright  Copyright (c) 2008 - 2012, Justin Tadlock
  * @link       http://themehybrid.com/hybrid-core
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
@@ -56,6 +56,9 @@ function hybrid_settings_page_init() {
 
 		/* Filter the settings page capability so that it recognizes the 'edit_theme_options' cap. */
 		add_filter( "option_page_capability_{$prefix}_theme_settings", 'hybrid_settings_page_capability' );
+
+		/* Screen layout column */
+		add_filter( 'screen_layout_columns', 'hybrid_settings_screen_layout_columns', 10, 2 );
 
 		/* Add help tabs to the theme settings page. */
 		add_action( "load-{$hybrid->settings_page}", 'hybrid_settings_page_help' );
@@ -158,6 +161,9 @@ function hybrid_save_theme_settings( $settings ) {
  */
 function hybrid_settings_page() {
 
+	/* we need the global screen column value to be able to have a sidebar */
+	global $screen_layout_columns;
+
 	/* Get the theme information. */
 	$prefix = hybrid_get_prefix();
 	$theme = wp_get_theme( get_template(), get_theme_root( get_template_directory() ) );
@@ -183,17 +189,32 @@ function hybrid_settings_page() {
 				<?php wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false ); ?>
 				<?php wp_nonce_field( 'meta-box-order', 'meta-box-order-nonce', false ); ?>
 
-				<div class="metabox-holder">
-					<div class="post-box-container column-1 normal">
-						<?php do_meta_boxes( hybrid_get_settings_page_name(), 'normal', null ); ?>
-					</div>
-					<div class="post-box-container column-2 side">
-						<?php do_meta_boxes( hybrid_get_settings_page_name(), 'side', null ); ?>
-					</div>
-					<div class="post-box-container column-3 advanced">
-						<?php do_meta_boxes( hybrid_get_settings_page_name(), 'advanced', null ); ?>
-					</div>
-				</div>
+				<div id="poststuff">
+
+					<div id="post-body" class="metabox-holder columns-2">
+
+						<div id="postbox-container-1" class="postbox-container">
+
+							<?php do_meta_boxes( hybrid_get_settings_page_name(), 'side', null ); ?>
+							<!-- #side-sortables -->
+
+						</div><!-- #postbox-container-1 -->
+
+						<div id="postbox-container-2" class="postbox-container">
+
+							<?php do_meta_boxes( hybrid_get_settings_page_name(), 'normal', null ); ?>
+							<!-- #normal-sortables -->
+
+							<?php do_meta_boxes( hybrid_get_settings_page_name(), 'advanced', null ); ?>
+							<!-- #advanced-sortables -->
+
+						</div><!-- #postbox-container-2 -->
+
+					</div><!-- #post-body -->
+
+					<br class="clear">
+
+				</div><!-- #poststuff -->
 
 				<?php submit_button( esc_attr__( 'Update Settings', 'hybrid-core' ) ); ?>
 
@@ -228,6 +249,25 @@ function hybrid_settings_field_id( $setting ) {
  */
 function hybrid_settings_field_name( $setting ) {
 	return hybrid_get_prefix() . "_theme_settings[{$setting}]";
+}
+
+
+/**
+ * Screen Layout Column set to two column
+ *
+ * @link https://gist.github.com/bueltge/757903
+ * @return array
+ */
+function hybrid_settings_screen_layout_columns( $columns, $screen ) {
+
+	/* get settings page name */
+	$page_hook = hybrid_get_settings_page_name();
+
+	if ( $screen == $page_hook ) {
+		$columns[$page_hook] = 2;
+	}
+
+	return $columns;
 }
 
 /**
@@ -295,8 +335,12 @@ function hybrid_settings_page_enqueue_styles( $hook_suffix ) {
  */
 function hybrid_settings_page_enqueue_scripts( $hook_suffix ) {
 
-	if ( $hook_suffix == hybrid_get_settings_page_name() )
+	if ( $hook_suffix == hybrid_get_settings_page_name() ){
+		wp_enqueue_script( 'common' );
+		wp_enqueue_script( 'wp-lists' );
 		wp_enqueue_script( 'postbox' );
+	
+	}
 }
 
 /**
