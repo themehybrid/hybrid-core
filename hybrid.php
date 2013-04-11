@@ -327,6 +327,9 @@ class Hybrid {
 
 		/* Load the Color Palette extension if supported. */
 		require_if_theme_supports( 'color-palette', trailingslashit( HYBRID_EXTENSIONS ) . 'color-palette.php' );
+
+		/* Load the Theme Fonts extension if supported. */
+		require_if_theme_supports( 'theme-fonts', trailingslashit( HYBRID_EXTENSIONS ) . 'theme-fonts.php' );
 	}
 
 	/**
