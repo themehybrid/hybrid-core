@@ -553,10 +553,6 @@ function hybrid_search_form() {
 	hybrid_function_removed( __FUNCTION__ );
 }
 
-function hybrid_post_class() {
-	hybrid_function_removed( __FUNCTION__ );
-}
-
 function is_sidebar_active() {
 	hybrid_function_removed( __FUNCTION__ );
 }
