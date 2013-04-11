@@ -97,6 +97,10 @@ function get_the_image( $args = array() ) {
 	/* Merge the input arguments and the defaults. */
 	$args = wp_parse_args( $args, $defaults );
 
+	/* If no post ID, return. */
+	if ( empty( $args['post_id'] ) )
+		return false;
+
 	/* If $default_size is given, overwrite $size. */
 	if ( !is_null( $args['default_size'] ) )
 		$args['size'] = $args['default_size']; // Deprecated 0.5 in favor of $size
