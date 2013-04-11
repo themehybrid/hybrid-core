@@ -17,6 +17,9 @@ add_action( 'init', 'hybrid_add_post_type_support' );
 /* Add extra file headers for themes. */
 add_filter( 'extra_theme_headers', 'hybrid_extra_theme_headers' );
 
+/* Filters the title for untitled posts. */
+add_filter( 'the_title', 'hybrid_untitled_post' );
+
 /**
  * This function is for adding extra support for features not default to the core post types.
  * Excerpts are added to the 'page' post type.  Comments and trackbacks are added for the
@@ -242,6 +245,24 @@ function hybrid_locate_theme_file( $file_names ) {
 	}
 
 	return $located;
+}
+
+/**
+ * The WordPress.org theme review requires that a link be provided to the single post page for untitled 
+ * posts.  This is a filter on 'the_title' so that an '(Untitled)' title appears in that scenario, allowing 
+ * for the normal method to work.
+ *
+ * @since  1.6.0
+ * @access public
+ * @param  string  $title
+ * @return string
+ */
+function hybrid_untitled_post( $title ) {
+
+	if ( empty( $title ) && !is_singular() && in_the_loop() )
+		$title = __( '(Untitled)', 'hybrid-core' );
+
+	return $title;
 }
 
 ?>

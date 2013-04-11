@@ -373,9 +373,6 @@ function hybrid_entry_title_shortcode( $attr ) {
 	else
 		$title = the_title( "<{$tag} class='{$class}'><a href='" . get_permalink() . "'>", "</a></{$tag}>", false );
 
-	if ( empty( $title ) && !is_singular() )
-		$title = "<{$tag} class='{$class}'><a href='" . get_permalink() . "'>" . __( '(Untitled)', 'hybrid-core' ) . "</a></{$tag}>";
-
 	return $title;
 }
 
