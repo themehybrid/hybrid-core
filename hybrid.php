@@ -324,6 +324,9 @@ class Hybrid {
 
 		/* Load the Post Format Tools extension if post formats are supported. */
 		require_if_theme_supports( 'post-formats', trailingslashit( HYBRID_EXTENSIONS ) . 'post-format-tools.php' );
+
+		/* Load the Color Palette extension if supported. */
+		require_if_theme_supports( 'color-palette', trailingslashit( HYBRID_EXTENSIONS ) . 'color-palette.php' );
 	}
 
 	/**
