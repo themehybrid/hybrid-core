@@ -259,7 +259,7 @@ function hybrid_locate_theme_file( $file_names ) {
  */
 function hybrid_untitled_post( $title ) {
 
-	if ( empty( $title ) && !is_singular() && in_the_loop() )
+	if ( empty( $title ) && !is_singular() && in_the_loop() && !is_admin() )
 		$title = __( '(Untitled)', 'hybrid-core' );
 
 	return $title;
