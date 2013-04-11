@@ -31,14 +31,6 @@ function hybrid_admin_setup() {
 
 	/* Loads admin stylesheets for the framework. */
 	add_action( 'admin_enqueue_scripts', 'hybrid_admin_enqueue_styles' );
-
-	/* Add the WordPress 'Customize' page as an admin menu link. */
-	add_theme_page( 
-		esc_html__( 'Customize', 'hybrid-core' ), // Settings page name
-		esc_html__( 'Customize', 'hybrid-core' ), // Menu name
-		'edit_theme_options',                     // Required capability
-		'customize.php'	                          // File to load
-	);
 }
 
 /**
