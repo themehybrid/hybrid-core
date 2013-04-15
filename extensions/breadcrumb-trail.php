@@ -464,7 +464,7 @@ class Breadcrumb_Trail {
 		$post_type        = get_post_type( $post_id );
 		$post_type_object = get_post_type_object( $post_type );
 
-		/* If this is the 'post' post type, geet the rewrite front items and map the rewrite tags. */
+		/* If this is the 'post' post type, get the rewrite front items and map the rewrite tags. */
 		if ( 'post' === $post_type ) {
 
 			/* Add $wp_rewrite->front to the trail. */
