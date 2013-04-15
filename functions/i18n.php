@@ -209,7 +209,7 @@ function hybrid_gettext( $translated, $text, $domain ) {
 
 	/* Check if 'hybrid-core' is the current textdomain, there's no mofile for it, and the theme has a mofile. */
 	if ( 'hybrid-core' == $domain && !hybrid_is_textdomain_loaded( 'hybrid-core' ) && hybrid_is_textdomain_loaded( hybrid_get_parent_textdomain() ) )
-		$translated = hybrid_translate( $domain, $text );
+		$translated = hybrid_translate( hybrid_get_parent_textdomain(), $text );
 
 	return $translated;
 }
@@ -229,7 +229,7 @@ function hybrid_gettext_with_context( $translated, $text, $context, $domain ) {
 
 	/* Check if 'hybrid-core' is the current textdomain, there's no mofile for it, and the theme has a mofile. */
 	if ( 'hybrid-core' == $domain && !hybrid_is_textdomain_loaded( 'hybrid-core' ) && hybrid_is_textdomain_loaded( hybrid_get_parent_textdomain() ) )
-		$translated = hybrid_translate( $domain, $text, $context );
+		$translated = hybrid_translate( hybrid_get_parent_textdomain(), $text, $context );
 
 	return $translated;
 }
@@ -250,7 +250,7 @@ function hybrid_ngettext( $translated, $single, $plural, $number, $domain ) {
 
 	/* Check if 'hybrid-core' is the current textdomain, there's no mofile for it, and the theme has a mofile. */
 	if ( 'hybrid-core' == $domain && !hybrid_is_textdomain_loaded( 'hybrid-core' ) && hybrid_is_textdomain_loaded( hybrid_get_parent_textdomain() ) )
-		$translated = hybrid_translate_plural( $domain, $single, $plural, $number );
+		$translated = hybrid_translate_plural( hybrid_get_parent_textdomain(), $single, $plural, $number );
 
 	return $translated;
 }
@@ -272,7 +272,7 @@ function hybrid_ngettext_with_context( $translated, $single, $plural, $number, $
 
 	/* Check if 'hybrid-core' is the current textdomain, there's no mofile for it, and the theme has a mofile. */
 	if ( 'hybrid-core' == $domain && !hybrid_is_textdomain_loaded( 'hybrid-core' ) && hybrid_is_textdomain_loaded( hybrid_get_parent_textdomain() ) )
-		$translated = hybrid_translate_plural( $domain, $single, $plural, $number, $context );
+		$translated = hybrid_translate_plural( hybrid_get_parent_textdomain(), $single, $plural, $number, $context );
 
 	return $translated;
 }
