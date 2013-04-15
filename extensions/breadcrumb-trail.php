@@ -351,11 +351,14 @@ class Breadcrumb_Trail {
 		if ( 0 < $post->post_parent )
 			$this->do_post_parents( $post->post_parent );
 
+		/* Get the page title. */
+		$title = get_the_title( $post_id );
+
 		/* Add the posts page item. */
 		if ( is_paged() )
-			$this->items[]  = '<a href="' . get_permalink( $post_id ) . '" title="' . esc_attr( get_the_title( $post_id ) ) . '">' . get_the_title( $post_id ) . '</a>';
+			$this->items[]  = '<a href="' . get_permalink( $post_id ) . '" title="' . esc_attr( $title ) . '">' . $title . '</a>';
 
-		elseif ( $title = get_the_title( $post_id ) && true === $this->args['show_title'] )
+		elseif ( $title && true === $this->args['show_title'] )
 			$this->items[] = $title;
 	}
 
