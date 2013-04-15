@@ -880,6 +880,10 @@ class Breadcrumb_Trail {
 		/* Trim '/' off $path in case we just got a simple '/' instead of a real path. */
 		$path = trim( $path, '/' );
 
+		/* If there's no path, return. */
+		if ( empty( $path ) )
+			return;
+
 		/* Get parent post by the path. */
 		$post = get_page_by_path( $path );
 
