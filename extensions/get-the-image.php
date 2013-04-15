@@ -186,7 +186,7 @@ function get_the_image( $args = array() ) {
 		$out = array();
 
 		/* Get the image attributes. */
-		$atts = wp_kses_hair( $image_html, array( 'http' ) );
+		$atts = wp_kses_hair( $image_html, array( 'http', 'https' ) );
 
 		/* Loop through the image attributes and add them in key/value pairs for the return array. */
 		foreach ( $atts as $att )
