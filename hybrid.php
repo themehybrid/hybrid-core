@@ -368,13 +368,6 @@ class Hybrid {
 		/* Add the theme info to the header (lets theme developers give better support). */
 		add_action( 'wp_head', 'hybrid_meta_template', 1 );
 
-		/* Filter the textdomain mofile to allow child themes to load the parent theme translation. */
-		add_filter( 'load_textdomain_mofile', 'hybrid_load_textdomain_mofile', 10, 2 );
-
-		/* Filter text strings for Hybrid Core and extensions so themes can serve up translations. */
-		add_filter( 'gettext', 'hybrid_gettext', 1, 3 );
-		add_filter( 'gettext', 'hybrid_extensions_gettext', 1, 3 );
-
 		/* Make text widgets and term descriptions shortcode aware. */
 		add_filter( 'widget_text', 'do_shortcode' );
 		add_filter( 'term_description', 'do_shortcode' );
