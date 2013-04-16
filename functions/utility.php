@@ -34,9 +34,6 @@ function hybrid_add_post_type_support() {
 
 	/* Add support for excerpts to the 'page' post type. */
 	add_post_type_support( 'page', array( 'excerpt' ) );
-
-	/* Add support for trackbacks to the 'attachment' post type. */
-	add_post_type_support( 'attachment', array( 'trackbacks' ) );
 }
 
 /**
