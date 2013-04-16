@@ -47,6 +47,7 @@ add_action( 'added_post_meta', 'get_the_image_delete_cache_by_meta', 10, 2 );
  * @return string|array The HTML for the image. | Image attributes in an array.
  */
 function get_the_image( $args = array() ) {
+	global $_wp_additional_image_sizes;
 
 	/* Set the default arguments. */
 	$defaults = array(
@@ -63,7 +64,7 @@ function get_the_image( $args = array() ) {
 		'default_image'      => false,
 
 		/* Attachment-specific arguments. */
-		'size'               => 'thumbnail',
+		'size'               => isset( $_wp_additional_image_sizes['post-thumbnail'] ) ? 'post-thumbnail' : 'thumbnail',
 		'order_of_image'     => 1,
 
 		/* Format/display of image. */
