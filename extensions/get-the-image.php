@@ -57,6 +57,7 @@ function get_the_image( $args = array() ) {
 
 		/* Methods of getting an image (in order). */
 		'meta_key'           => array( 'Thumbnail', 'thumbnail' ), // array|string
+		'post_format_image'  => true,
 		'the_post_thumbnail' => true,
 		'attachment'         => true,
 		'image_scan'         => false,
@@ -135,6 +136,10 @@ function get_the_image( $args = array() ) {
 		/* If a custom field key (array) is defined, check for images by custom field. */
 		if ( !empty( $meta_key ) )
 			$image = get_the_image_by_meta_key( $args );
+
+		/* If no image found and $post_format_image is true, check for the post format image. */
+		if ( empty( $image ) && has_post_format( 'image', $args['post_id'] ) && !empty( $post_format_image ) )
+			$image = get_the_image_by_post_format_meta( $args );
 
 		/* If no image found and $the_post_thumbnail is set to true, check for a post image (WP feature). */
 		if ( empty( $image ) && !empty( $the_post_thumbnail ) )
@@ -250,6 +255,46 @@ function get_the_image_by_meta_key( $args = array() ) {
 		return array( 'src' => $image );
 
 	return false;
+}
+
+/**
+ * Gets the image added via the image post format method, which is saved as metadata.
+ *
+ * @since  0.9.0
+ * @access public
+ * @param array $args Arguments for how to load and display the image.
+ * @return array|bool Array of image attributes. | False if no image is found.
+ */
+function get_the_image_by_post_format_meta( $args = array() ) {
+
+	$meta = get_post_format_meta( $args['post_id'] );
+
+	if ( empty( $meta['image'] ) )
+		return false;
+
+	/* If the image is numeric, assume it's an attachment. */
+	if ( is_numeric( $meta['image'] ) ) {
+		$args['post_id'] = $meta['image'];
+		return get_the_image_by_attachment( $args );
+	}
+
+	/* Scan for an attachment ID. */
+	$attachment_id = img_html_to_post_id( $meta['image'] ); // @todo Incorporate this into 'image_scan'.
+
+	if ( 0 < $attachment_id ) {
+		$args['post_id'] = $attachment_id;
+		return get_the_image_by_attachment( $args );
+	}
+
+	/* Search the image content for the <img /> tag and get its URL. */
+	preg_match_all( '|<img.*?src=[\'"](.*?)[\'"].*?>|i', $meta['image'], $matches );
+
+	/* If there is a match for the image, return its URL. */
+	if ( isset( $matches ) && !empty( $matches[1][0] ) )
+		return array( 'src' => esc_url( $matches[1][0] ) );
+
+	/* Assume this is just a URL and use it. */
+	return array( 'src' => esc_url( $meta['image'] ) );
 }
 
 /**
