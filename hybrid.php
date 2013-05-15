@@ -275,6 +275,9 @@ class Hybrid {
 		/* Load the scripts if supported. */
 		require_if_theme_supports( 'hybrid-core-scripts', trailingslashit( HYBRID_FUNCTIONS ) . 'scripts.php' );
 
+		/* Load the post format functionality if post formats are supported. */
+		require_if_theme_supports( 'post-formats', trailingslashit( HYBRID_FUNCTIONS ) . 'post-formats.php' );
+
 		/* Load the deprecated functions if supported. */
 		require_if_theme_supports( 'hybrid-core-deprecated', trailingslashit( HYBRID_FUNCTIONS ) . 'deprecated.php' );
 	}
@@ -321,9 +324,6 @@ class Hybrid {
 
 		/* Load the Random Custom Background extension if supported. */
 		require_if_theme_supports( 'random-custom-background', trailingslashit( HYBRID_EXTENSIONS ) . 'random-custom-background.php' );
-
-		/* Load the Post Format Tools extension if post formats are supported. */
-		require_if_theme_supports( 'post-formats', trailingslashit( HYBRID_EXTENSIONS ) . 'post-format-tools.php' );
 
 		/* Load the Color Palette extension if supported. */
 		require_if_theme_supports( 'color-palette', trailingslashit( HYBRID_EXTENSIONS ) . 'color-palette.php' );
