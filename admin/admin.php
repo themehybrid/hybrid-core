@@ -61,7 +61,7 @@ function hybrid_admin_register_styles() {
 	/* Use the .min stylesheet if SCRIPT_DEBUG is turned off. */
 	$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
 
-	wp_register_style( 'hybrid-core-admin', trailingslashit( HYBRID_CSS ) . "admin{$suffix}.css", false, '20110512', 'screen' );
+	wp_register_style( 'hybrid-core-admin', trailingslashit( HYBRID_CSS ) . "admin{$suffix}.css", false, '20130515', 'screen' );
 }
 
 /**

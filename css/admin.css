@@ -5,18 +5,6 @@
 	text-align: left;
 	padding-left: 0;
 	}
-.appearance_page_theme-settings .metabox-holder .column-1 {
-	float: left;
-	width: 66%;
-	}
-.appearance_page_theme-settings .metabox-holder .column-2 {
-	float: right;
-	width: 32%;
-	}
-.appearance_page_theme-settings .metabox-holder .column-3 {
-	clear: both;
-	width: 100%;
-	}
 .appearance_page_theme-settings .metabox-holder textarea {
 	width: 100%;
 	}
