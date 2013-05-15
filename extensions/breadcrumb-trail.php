@@ -96,21 +96,38 @@ class Breadcrumb_Trail {
 				// 'book'  => 'genre',
 			),
 
-			/* Labels for text used. */
-			'labels' => array(
-				'browse'      => __( 'Browse:',                 'breadcrumb-trail' ), // @todo Use this
-				'home'        => __( 'Home',                    'breadcrumb-trail' ),
-				'search'      => __( 'Search results for "%s"', 'breadcrumb-trail' ),
-				'error_404'   => __( '404 Not Found',           'breadcrumb-trail' ),
-				'paged'       => __( 'Page %d',                 'breadcrumb-trail' ),
-				'archives'    => __( 'Archives',                'breadcrumb-trail' ),
-			//	'edit'        => __( 'Edit',                    'breadcrumb-trail' ), // @todo Implement edit link
-			)
+			/* Labels for text used (see below). */
+			'labels' => array()
 		);
 
 		$this->args = apply_filters( 'breadcrumb_trail_args', wp_parse_args( $args, $defaults ) );
 
+		/* Merge the user-added labels with the defaults. */
+		$this->args['labels'] = wp_parse_args( $this->args['labels'], $this->default_labels() );
+
 		$this->do_trail_items();
+	}
+
+	/**
+	 * Returns an array of the default labels.
+	 *
+	 * @since  0.6.0
+	 * @access public
+	 * @return array
+	 */
+	public function default_labels() {
+
+		$labels = array(
+			'browse'      => __( 'Browse:',                 'breadcrumb-trail' ), // @todo Use this
+			'home'        => __( 'Home',                    'breadcrumb-trail' ),
+			'search'      => __( 'Search results for "%s"', 'breadcrumb-trail' ),
+			'error_404'   => __( '404 Not Found',           'breadcrumb-trail' ),
+			'paged'       => __( 'Page %d',                 'breadcrumb-trail' ),
+			'archives'    => __( 'Archives',                'breadcrumb-trail' ),
+		//	'edit'        => __( 'Edit',                    'breadcrumb-trail' ), // @todo Implement edit link
+		);
+
+		return $labels;
 	}
 
 	/**
