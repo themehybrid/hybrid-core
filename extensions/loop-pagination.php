@@ -63,8 +63,8 @@ function loop_pagination( $args = array() ) {
 		'type'         => 'plain',
 
 		// Begin loop_pagination() arguments.
-		'before'       => '<div class="pagination loop-pagination">',
-		'after'        => '</div>',
+		'before'       => '<nav class="pagination loop-pagination">',
+		'after'        => '</nav>',
 		'echo'         => true,
 	);
 
