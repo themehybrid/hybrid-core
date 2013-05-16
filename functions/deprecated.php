@@ -471,6 +471,33 @@ function post_format_tools_get_video( $deprecated = '' ) {
 	the_post_format_video();
 }
 
+/**
+ * @since 0.8.0
+ * @deprecated 1.6.0
+ */
+function get_atomic_template( $template ) {
+	_deprecated_function( __FUNCTION__, '1.6.0', '' );
+
+	$templates = array();
+
+	$theme_dir = trailingslashit( THEME_DIR ) . $template;
+	$child_dir = trailingslashit( CHILD_THEME_DIR ) . $template;
+
+	if ( is_dir( $child_dir ) || is_dir( $theme_dir ) ) {
+		$dir = true;
+		$templates[] = "{$template}/index.php";
+	}
+	else {
+		$dir = false;
+		$templates[] = "{$template}.php";
+	}
+
+	foreach ( hybrid_get_context() as $context )
+		$templates[] = ( ( $dir ) ? "{$template}/{$context}.php" : "{$template}-{$context}.php" );
+
+	return locate_template( array_reverse( $templates ), true, false );
+}
+
 /* === Removed Functions === */
 
 /* Functions removed in the 0.8 branch. */

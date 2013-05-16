@@ -74,39 +74,6 @@ function hybrid_extra_theme_headers( $headers ) {
 }
 
 /**
- * Looks for a template based on the hybrid_get_context() function.  If the $template parameter
- * is a directory, it will look for files within that directory.  Otherwise, $template becomes the 
- * template name prefix.  The function looks for templates based on the context of the current page
- * being viewed by the user.
- *
- * @since 0.8.0
- * @access public
- * @param string $template The slug of the template whose context we're searching for.
- * @return string $template The full path of the located template.
- */
-function get_atomic_template( $template ) {
-
-	$templates = array();
-
-	$theme_dir = trailingslashit( THEME_DIR ) . $template;
-	$child_dir = trailingslashit( CHILD_THEME_DIR ) . $template;
-
-	if ( is_dir( $child_dir ) || is_dir( $theme_dir ) ) {
-		$dir = true;
-		$templates[] = "{$template}/index.php";
-	}
-	else {
-		$dir = false;
-		$templates[] = "{$template}.php";
-	}
-
-	foreach ( hybrid_get_context() as $context )
-		$templates[] = ( ( $dir ) ? "{$template}/{$context}.php" : "{$template}-{$context}.php" );
-
-	return locate_template( array_reverse( $templates ), true, false );
-}
-
-/**
  * Generates the relevant template info.  Adds template meta with theme version.  Uses the theme 
  * name and version from style.css.  In 0.6, added the hybrid_meta_template 
  * filter hook.
