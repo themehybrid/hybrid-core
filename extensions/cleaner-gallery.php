@@ -57,6 +57,7 @@ function cleaner_gallery( $output, $attr ) {
 		'order'       => 'ASC',
 		'orderby'     => 'menu_order ID',
 		'id'          => get_the_ID(),
+		'mime_type'   => 'image',
 		'link'        => '',
 		'itemtag'     => 'figure',
 		'icontag'     => 'div',
@@ -85,7 +86,7 @@ function cleaner_gallery( $output, $attr ) {
 	$children = array(
 		'post_status'      => 'inherit',
 		'post_type'        => 'attachment',
-		'post_mime_type'   => 'image',
+		'post_mime_type'   => wp_parse_args( $mime_type ),
 		'order'            => $order,
 		'orderby'          => $orderby,
 		'exclude'          => $exclude,
@@ -134,7 +135,7 @@ function cleaner_gallery( $output, $attr ) {
 		$output .= "\n\t\t\t\t\t\t<{$icontag} class='gallery-icon'>";
 
 		/* Add the image. */
-		$image = ( ( isset( $attr['link'] ) && 'file' == $attr['link'] ) ? wp_get_attachment_link( $attachment->ID, $size, false, false ) : wp_get_attachment_link( $attachment->ID, $size, true, false ) );
+		$image = ( ( isset( $attr['link'] ) && 'file' == $attr['link'] ) ? wp_get_attachment_link( $attachment->ID, $size, false, true ) : wp_get_attachment_link( $attachment->ID, $size, true, true ) );
 		$output .= apply_filters( 'cleaner_gallery_image', $image, $attachment->ID, $attr, $cleaner_gallery_instance );
 
 		/* Close the image wrapper. */
