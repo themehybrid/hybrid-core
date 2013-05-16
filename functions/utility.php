@@ -103,7 +103,7 @@ function get_atomic_template( $template ) {
 	foreach ( hybrid_get_context() as $context )
 		$templates[] = ( ( $dir ) ? "{$template}/{$context}.php" : "{$template}-{$context}.php" );
 
-	return locate_template( array_reverse( $templates ), true );
+	return locate_template( array_reverse( $templates ), true, false );
 }
 
 /**
