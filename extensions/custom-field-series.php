@@ -82,7 +82,7 @@ function custom_field_series( $args = array() ) {
 			$class = sanitize_html_class( sanitize_title_with_dashes( $meta_value ) );
 
 			/* Create the opening wrapper div, title, and list element. */
-			$series = '<div class="series series-' . esc_attr( $class ) . '">';
+			$series  = '<aside class="series series-' . esc_attr( $class ) . '">';
 			$series .= '<h4 class="series-title">' . apply_filters( 'custom_field_series_title', __( 'Articles in this series', 'custom-field-series' ) ) . '</h4>';
 			$series .= '<ul>';
 
@@ -99,7 +99,7 @@ function custom_field_series( $args = array() ) {
 			}
 
 			/* Close the unordered list and wrapper div. */
-			$series .= '</ul></div>';
+			$series .= '</ul></aside>';
 		}
 	}
 
