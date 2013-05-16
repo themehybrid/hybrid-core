@@ -242,6 +242,9 @@ class Hybrid {
 		/* Load the metadata functions. */
 		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'meta.php' );
 
+		/* Load the template functions. */
+		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'template.php' );
+
 		/* Load the utility functions. */
 		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'utility.php' );
 
