@@ -88,6 +88,7 @@ class Breadcrumb_Trail {
 			'network'         => false,
 			//'show_edit_link'  => false,
 			'show_title'      => true,
+			'show_browse'     => true,
 			'echo'            => true,
 
 			/* Post taxonomy (examples follow). */
@@ -96,7 +97,7 @@ class Breadcrumb_Trail {
 				// 'book'  => 'genre',
 			),
 
-			/* Labels for text used (see below). */
+			/* Labels for text used (see Breadcrumb_Trail::default_labels). */
 			'labels' => array()
 		);
 
@@ -106,28 +107,6 @@ class Breadcrumb_Trail {
 		$this->args['labels'] = wp_parse_args( $this->args['labels'], $this->default_labels() );
 
 		$this->do_trail_items();
-	}
-
-	/**
-	 * Returns an array of the default labels.
-	 *
-	 * @since  0.6.0
-	 * @access public
-	 * @return array
-	 */
-	public function default_labels() {
-
-		$labels = array(
-			'browse'      => __( 'Browse:',                 'breadcrumb-trail' ), // @todo Use this
-			'home'        => __( 'Home',                    'breadcrumb-trail' ),
-			'search'      => __( 'Search results for "%s"', 'breadcrumb-trail' ),
-			'error_404'   => __( '404 Not Found',           'breadcrumb-trail' ),
-			'paged'       => __( 'Page %d',                 'breadcrumb-trail' ),
-			'archives'    => __( 'Archives',                'breadcrumb-trail' ),
-		//	'edit'        => __( 'Edit',                    'breadcrumb-trail' ), // @todo Implement edit link
-		);
-
-		return $labels;
 	}
 
 	/**
@@ -149,6 +128,10 @@ class Breadcrumb_Trail {
 
 			/* If $before was set, wrap it in a container. */
 			$breadcrumb .= ( !empty( $this->args['before'] ) ? "\n\t\t\t" . '<span class="trail-before">' . $this->args['before'] . '</span> ' . "\n\t\t\t" : '' );
+
+			/* Add 'browse' label if it should be shown. */
+			if ( true === $this->args['show_browse'] )
+				$breadcrumb .= "\n\t\t\t" . '<span class="trail-browse">' . $this->args['labels']['browse'] . '</span>';
 
 			/* Adds the 'trail-begin' class around first item if there's more than one item. */
 			if ( 1 < count( $this->items ) )
@@ -177,6 +160,28 @@ class Breadcrumb_Trail {
 			echo $breadcrumb;
 		else
 			return $breadcrumb;
+	}
+
+	/**
+	 * Returns an array of the default labels.
+	 *
+	 * @since  0.6.0
+	 * @access public
+	 * @return array
+	 */
+	public function default_labels() {
+
+		$labels = array(
+			'browse'      => __( 'Browse:',                 'breadcrumb-trail' ), // @todo Use this
+			'home'        => __( 'Home',                    'breadcrumb-trail' ),
+			'search'      => __( 'Search results for "%s"', 'breadcrumb-trail' ),
+			'error_404'   => __( '404 Not Found',           'breadcrumb-trail' ),
+			'paged'       => __( 'Page %d',                 'breadcrumb-trail' ),
+			'archives'    => __( 'Archives',                'breadcrumb-trail' ),
+		//	'edit'        => __( 'Edit',                    'breadcrumb-trail' ), // @todo Implement edit link
+		);
+
+		return $labels;
 	}
 
 	/**
