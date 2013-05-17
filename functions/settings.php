@@ -44,8 +44,8 @@ function hybrid_get_setting( $option = '' ) {
 	if ( !isset( $hybrid->settings[ $option ] ) && isset( $defaults[ $option ] ) )
 		$hybrid->settings[ $option ] = $defaults[ $option ];
 
-	/* Else, just return false. */
-	else
+	/* If no option is found at this point, return false. */
+	if ( !isset( $hybrid->settings[ $option ] ) )
 		return false;
 
 	/* If the specific option is an array, return it. */
