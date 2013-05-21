@@ -393,10 +393,10 @@ function get_the_image_by_attachment( $args = array() ) {
 		$image = wp_get_attachment_image_src( $attachment_id, $args['size'] );
 
 		/* Get the attachment alt text. */
-		$alt = trim( strip_tags( get_post_meta( $post_thumbnail_id, '_wp_attachment_image_alt', true ) ) );
+		$alt = trim( strip_tags( get_post_meta( $attachment_id, '_wp_attachment_image_alt', true ) ) );
 
 		/* Get the attachment caption. */
-		$caption = get_post_field( 'post_excerpt', $post_thumbnail_id );
+		$caption = get_post_field( 'post_excerpt', $attachment_id );
 
 		/* Save the attachment as the 'featured image'. */
 		if ( true === $args['thumbnail_id_save'] )
