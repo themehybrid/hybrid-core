@@ -66,11 +66,12 @@ function hybrid_structured_post_formats() {
 		add_filter( 'post_format_chat_text', 'wpautop' );
 	}
 
-	/* We're completely overwriting the default WP output here and supporting all formats. */
-	add_theme_support( 
-		'structured-post-formats', 
-		array( 'aside', 'audio', 'chat', 'image', 'gallery', 'link', 'quote', 'status', 'video' ) 
-	);
+	/* Add structured support for all post formats that the theme supports.  Let WP handle the rest. */
+	$supports = get_theme_support( 'post-formats' );
+	$formats  = isset( $supports[0] ) ? $supports[0] : array();
+
+	if ( !empty( $formats ) )
+		add_theme_support( 'structured-post-formats', array_intersect( $formats, get_post_format_slugs() ) );
 }
 
 /**
