@@ -42,6 +42,10 @@ function hybrid_structured_post_formats() {
 	if ( !current_theme_supports( 'structured-post-formats', 'aside' ) )
 		add_filter( 'the_content', 'hybrid_aside_infinity', 9 ); // run before wpautop
 
+	/* Add audio to audio posts. */
+	if ( !current_theme_supports( 'structured-post-formats', 'audio' ) )
+		add_filter( 'the_content', 'hybrid_audio_content', 7 );
+
 	/* Add image to content if the user didn't add it. */
 	if ( !current_theme_supports( 'structured-post-formats', 'image' ) )
 		add_filter( 'the_content', 'hybrid_image_content' );
@@ -178,6 +182,36 @@ function hybrid_aside_infinity( $content ) {
 
 	if ( has_post_format( 'aside' ) && !is_singular() )
 		$content .= ' <a class="permalink" href="' . get_permalink() . '" title="' . the_title_attribute( array( 'echo' => false ) ) . '">&#8734;</a>';
+
+	return $content;
+}
+
+/* === Audio === */
+
+/**
+ * Adds the meta audio to the content if it exists.
+ *
+ * @since  1.6.0
+ * @access public
+ * @param  string  $content
+ * @return string
+ */
+function hybrid_audio_content( $content ) {
+
+	if ( has_post_format( 'audio' ) ) {
+
+		$meta = get_post_format_meta( get_the_ID() );
+
+		if ( !empty( $meta['audio_embed'] ) ) {
+
+			$null  = null;
+			$audio = get_the_post_format_media( 'audio', $null, 1 );
+
+			$audio = !empty( $audio ) ? $audio : $meta['audio_embed'];
+
+			$content = $audio . $content;
+		}
+	}
 
 	return $content;
 }
@@ -434,6 +468,36 @@ function hybrid_chat_row_id( $chat_author ) {
 
 	/* Return the array key for the chat author and add "1" to avoid an ID of "0". */
 	return absint( array_search( $chat_author, $_post_format_chat_ids ) ) + 1;
+}
+
+/* === Videos === */
+
+/**
+ * Adds the meta video to the content if it exists.
+ *
+ * @since  1.6.0
+ * @access public
+ * @param  string  $content
+ * @return string
+ */
+function hybrid_video_content( $content ) {
+
+	if ( has_post_format( 'video' ) ) {
+
+		$meta = get_post_format_meta( get_the_ID() );
+
+		if ( !empty( $meta['video_embed'] ) ) {
+
+			$null  = null;
+			$video = get_the_post_format_media( 'video', $null, 1 );
+
+			$video = !empty( $video ) ? $video : $meta['video_embed'];
+
+			$content = $video . $content;
+		}
+	}
+
+	return $content;
 }
 
 ?>
