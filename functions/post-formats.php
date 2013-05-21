@@ -223,6 +223,55 @@ function hybrid_audio_content( $content ) {
 /* === Galleries === */
 
 /**
+ * Gets the gallery *item* count.  This is different from getting the gallery *image* count.  By default, 
+ * WordPress only allows attachments with the 'image' mime type in galleries.  However, some scripts such 
+ * as Cleaner Gallery allow for other mime types.  This is a more accurate count than the 
+ * hybrid_get_gallery_image_count() function since it will count all gallery items regardless of mime type.
+ *
+ * @since  1.6.0
+ * @access public
+ * @return int
+ */
+function hybrid_get_gallery_item_count() {
+
+	/* Get the current post. */
+	$post = get_post();
+
+	/* Check the post content for galleries. */
+	$galleries = get_content_galleries( $post->post_content, true );
+
+	/* If galleries were found in the content, get the gallery item count. */
+	if ( !empty( $galleries ) ) {
+		$items = '';
+
+		foreach ( $galleries as $gallery => $gallery_items )
+			$items .= $gallery_items;
+
+		preg_match_all( '#src=([\'"])(.+?)\1#is', $images, $sources, PREG_SET_ORDER );
+
+		if ( !empty( $sources ) )
+			return count( $sources );
+	}
+
+	/* If an item count wasn't returned, get the post attachments. */
+	$attachments = get_posts( 
+		array( 
+			'fields'         => 'ids',
+			'post_parent'    => get_the_ID(), 
+			'post_type'      => 'attachment', 
+			'numberposts'    => -1 
+		) 
+	);
+
+	/* Return the attachment count if items were found. */
+	if ( !empty( $attachments ) )
+		return count( $attachments );
+
+	/* Return 0 for everything else. */
+	return 0;
+}
+
+/**
  * Returns the number of images displayed by the gallery or galleries in a post.
  *
  * @since  1.6.0
