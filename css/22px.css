@@ -62,8 +62,7 @@ h5 {
 h6 {
 	font-size: 1.1em;
 	}
-
-p {
+p, figure {
 	margin: 0 0 22px 0;
 	}
 
