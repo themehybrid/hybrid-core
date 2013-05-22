@@ -400,8 +400,13 @@ function hybrid_link_content( $content ) {
  */
 function hybrid_quote_content( $content ) {
 
-	if ( has_post_format( 'quote' ) )
-		$content = get_the_post_format_quote();
+	if ( has_post_format( 'quote' ) ) {
+		$post  = get_post();
+		$quote = get_the_post_format_quote( $post );
+
+		if ( !empty( $quote ) )
+			get_content_quote( $post->post_content, true, $quote );
+	}
 
 	return $content;
 }
