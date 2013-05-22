@@ -208,8 +208,8 @@ function hybrid_audio_content( $content ) {
 
 		if ( !empty( $meta['audio_embed'] ) ) {
 
-			$null  = null;
-			$audio = get_the_post_format_media( 'audio', $null, 1 );
+			$post  = get_post();
+			$audio = get_the_post_format_media( 'audio', $post, 1 );
 
 			$audio = !empty( $audio ) ? $audio : $meta['audio_embed'];
 
@@ -546,8 +546,8 @@ function hybrid_video_content( $content ) {
 
 		if ( !empty( $meta['video_embed'] ) ) {
 
-			$null  = null;
-			$video = get_the_post_format_media( 'video', $null, 1 );
+			$post  = get_post();
+			$video = get_the_post_format_media( 'video', $post, 1 );
 
 			$video = !empty( $video ) ? $video : $meta['video_embed'];
 
