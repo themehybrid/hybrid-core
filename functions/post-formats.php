@@ -247,7 +247,7 @@ function hybrid_get_gallery_item_count() {
 		foreach ( $galleries as $gallery => $gallery_items )
 			$items .= $gallery_items;
 
-		preg_match_all( '#src=([\'"])(.+?)\1#is', $images, $sources, PREG_SET_ORDER );
+		preg_match_all( '#src=([\'"])(.+?)\1#is', $items, $sources, PREG_SET_ORDER );
 
 		if ( !empty( $sources ) )
 			return count( $sources );
