@@ -103,12 +103,12 @@ function hybrid_get_styles() {
 	/* Default styles available. */
 	$styles = array(
 		'one-five'   => array( 'version' => '20130523' ),
-		'18px'       => array( 'version' => '20110523' ),
-		'20px'       => array( 'version' => '20110523' ),
-		'21px'       => array( 'version' => '20110523' ),
-		'22px'       => array( 'version' => '20110523' ),
-		'24px'       => array( 'version' => '20110523' ),
-		'25px'       => array( 'version' => '20110523' ),
+		'18px'       => array( 'version' => '20130521' ),
+		'20px'       => array( 'version' => '20130521' ),
+		'21px'       => array( 'version' => '20130521' ),
+		'22px'       => array( 'version' => '20130521' ),
+		'24px'       => array( 'version' => '20130521' ),
+		'25px'       => array( 'version' => '20130521' ),
 		'drop-downs' => array( 'version' => '20110919' ),
 		'nav-bar'    => array( 'version' => '20110519' ),
 		'gallery'    => array( 'version' => '20120222' ),
