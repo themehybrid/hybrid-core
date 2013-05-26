@@ -111,7 +111,7 @@ function hybrid_get_styles() {
 		'25px'       => array( 'version' => '20130526' ),
 		'drop-downs' => array( 'version' => '20110919' ),
 		'nav-bar'    => array( 'version' => '20110519' ),
-		'gallery'    => array( 'version' => '20120222' ),
+		'gallery'    => array( 'version' => '20130526' ),
 	);
 
 	/* If a child theme is active, add the parent theme's style. */
