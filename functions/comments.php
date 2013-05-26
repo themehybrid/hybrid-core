@@ -185,8 +185,8 @@ function hybrid_comment_form_args( $args ) {
 	/* Sets up the default comment form fields. */
 	$fields = array(
 		'author' => '<p class="form-author' . esc_attr( $input_class ) . '"><label for="author">' . __( 'Name', 'hybrid-core' ) . $req . '</label> <input type="text" class="text-input" name="author" id="author" value="' . esc_attr( $commenter['comment_author'] ) . '" size="40" /></p>',
-		'email'  => '<p class="form-email' . esc_attr( $input_class ) . '"><label for="email">' . __( 'Email', 'hybrid-core' ) . $req . '</label> <input type="text" class="text-input" name="email" id="email" value="' . esc_attr( $commenter['comment_author_email'] ) . '" size="40" /></p>',
-		'url'    => '<p class="form-url"><label for="url">' . __( 'Website', 'hybrid-core' ) . '</label><input type="text" class="text-input" name="url" id="url" value="' . esc_attr( $commenter['comment_author_url'] ) . '" size="40" /></p>'
+		'email'  => '<p class="form-email' . esc_attr( $input_class ) . '"><label for="email">' . __( 'Email', 'hybrid-core' ) . $req . '</label> <input type="email" class="text-input" name="email" id="email" value="' . esc_attr( $commenter['comment_author_email'] ) . '" size="40" /></p>',
+		'url'    => '<p class="form-url"><label for="url">' . __( 'Website', 'hybrid-core' ) . '</label><input type="url" class="text-input" name="url" id="url" value="' . esc_attr( $commenter['comment_author_url'] ) . '" size="40" /></p>'
 	);
 
 	/* Sets the default arguments for displaying the comment form. */
