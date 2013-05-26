@@ -126,7 +126,7 @@ function cleaner_gallery( $output, $attr ) {
 
 		/* Open each gallery row. */
 		if ( $columns > 0 && $i % $columns == 0 )
-			$output .= "\n\t\t\t\t<div class='gallery-row gallery-clear'>";
+			$output .= "\n\t\t\t\t<div class='gallery-row gallery-col-{$columns} gallery-clear'>";
 
 		/* Open each gallery item. */
 		$output .= "\n\t\t\t\t\t<{$itemtag} class='gallery-item col-{$columns}'>";
