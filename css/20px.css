@@ -129,14 +129,19 @@ em em, cite cite {
 	font-style: normal;
 	}
 
-abbr {
+abbr[title],
+time[title],
+acronym[title] {
 	cursor: help;
+	}
+
+abbr,
+acronym {
+	border-bottom: 1px dotted #666;
 	}
 
 acronym {
 	text-transform: uppercase;
-	border-bottom: 1px dashed #666;
-	cursor: help;
 	}
 
 big {
