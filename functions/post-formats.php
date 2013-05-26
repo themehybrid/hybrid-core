@@ -39,27 +39,27 @@ add_filter( 'get_the_post_format_url', 'hybrid_get_the_post_format_url', 10, 2 )
 function hybrid_structured_post_formats() {
 
 	/* Add infinity symbol to aside posts. */
-	if ( !current_theme_supports( 'structured-post-formats', 'aside' ) && current_theme_supports( 'post-formats', 'aside' ) )
+	if ( !current_theme_supports( 'structured-post-formats', 'aside' ) )
 		add_filter( 'the_content', 'hybrid_aside_infinity', 9 ); // run before wpautop
 
 	/* Add audio to audio posts. */
-	if ( !current_theme_supports( 'structured-post-formats', 'audio' ) && current_theme_supports( 'post-formats', 'audio' ) )
+	if ( !current_theme_supports( 'structured-post-formats', 'audio' ) )
 		add_filter( 'the_content', 'hybrid_audio_content', 7 ); // run before WP_Embed
 
 	/* Add audio to audio posts. */
-	if ( !current_theme_supports( 'structured-post-formats', 'video' ) && current_theme_supports( 'post-formats', 'video' ) )
+	if ( !current_theme_supports( 'structured-post-formats', 'video' ) )
 		add_filter( 'the_content', 'hybrid_video_content', 7 ); // run before WP_Embed
 
 	/* Add image to content if the user didn't add it. */
-	if ( !current_theme_supports( 'structured-post-formats', 'image' ) && current_theme_supports( 'post-formats', 'image' ) )
+	if ( !current_theme_supports( 'structured-post-formats', 'image' ) )
 		add_filter( 'the_content', 'hybrid_image_content' );
 
 	/* Adds the link to the content if it's not in the post. */
-	if ( !current_theme_supports( 'structured-post-formats', 'link' ) && current_theme_supports( 'post-formats', 'link' ) )
+	if ( !current_theme_supports( 'structured-post-formats', 'link' ) )
 		add_filter( 'the_content', 'hybrid_link_content', 9 ); // run before wpautop
 
 	/* Wraps <blockquote> around quote posts. */
-	if ( !current_theme_supports( 'structured-post-formats', 'quote' ) && current_theme_supports( 'post-formats', 'quote' ) ) {
+	if ( !current_theme_supports( 'structured-post-formats', 'quote' ) ) {
 		add_filter( 'the_content', 'hybrid_quote_content' );
 
 		/* Filters the quote source format. */
@@ -67,19 +67,15 @@ function hybrid_structured_post_formats() {
 	}
 
 	/* Filter the content of chat posts. */
-	if ( !current_theme_supports( 'structured-post-formats', 'chat' ) && current_theme_supports( 'post-formats', 'chat' ) ) {
+	if ( !current_theme_supports( 'structured-post-formats', 'chat' ) ) {
 		add_filter( 'the_content', 'hybrid_chat_content' );
 
 		/* Auto-add paragraphs to the chat text. */
 		add_filter( 'post_format_chat_text', 'wpautop' );
 	}
 
-	/* Add structured support for all post formats that the theme supports.  Let WP handle the rest. */
-	$supports = get_theme_support( 'post-formats' );
-	$formats  = isset( $supports[0] ) ? $supports[0] : array();
-
-	if ( !empty( $formats ) )
-		add_theme_support( 'structured-post-formats', array_intersect( $formats, get_post_format_slugs() ) );
+	/* We're completely overwriting the default WP output here and supporting all formats. */
+	add_theme_support( 'structured-post-formats', get_post_format_slugs() );
 }
 
 /**
