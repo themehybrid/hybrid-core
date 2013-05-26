@@ -280,9 +280,18 @@ function hybrid_entry_edit_link_shortcode( $attr ) {
  * @return string
  */
 function hybrid_entry_published_shortcode( $attr ) {
-	$attr = shortcode_atts( array( 'before' => '', 'after' => '', 'format' => get_option( 'date_format' ) ), $attr );
+	$attr = shortcode_atts( array( 'before' => '', 'after' => '', 'format' => get_option( 'date_format' ), 'human_time' => '' ), $attr );
 
-	$published = '<time class="published" title="' . get_the_time( esc_attr__( 'l, F jS, Y, g:i a', 'hybrid-core' ) ) . '">' . get_the_time( $attr['format'] ) . '</time>';
+	/* If $human_time is passed in, allow for '%s ago' where '%s' is the return value of human_time_diff(). */
+	if ( !empty( $attr['human_time'] ) )
+		$time = sprintf( $attr['human_time'], human_time_diff( get_the_time( 'U' ), current_time( 'timestamp' ) ) );
+
+	/* Else, just grab the time based on the format. */
+	else
+		$time = get_the_time( $attr['format'] );
+
+	$published = '<time class="published" title="' . get_the_time( esc_attr__( 'l, F jS, Y, g:i a', 'hybrid-core' ) ) . '">' . $time . '</time>';
+
 	return $attr['before'] . $published . $attr['after'];
 }
 
@@ -454,9 +463,26 @@ function hybrid_post_format_link_shortcode( $attr ) {
  * @access public
  * @return string
  */
-function hybrid_comment_published_shortcode() {
-	$link = '<span class="published">' . sprintf( __( '%1$s at %2$s', 'hybrid-core' ), '<time class="comment-date" title="' . get_comment_date( esc_attr__( 'l, F jS, Y, g:i a', 'hybrid-core' ) ) . '">' . get_comment_date() . '</time>', '<time class="comment-time" title="' . get_comment_date( esc_attr__( 'l, F jS, Y, g:i a', 'hybrid-core' ) ) . '">' . get_comment_time() . '</time>' ) . '</span>';
-	return $link;
+function hybrid_comment_published_shortcode( $attr ) {
+
+	$attr = shortcode_atts(
+		array(
+			'human_time' => '',
+			'before'     => '',
+			'after'      => '',
+		),
+		$attr
+	);
+
+	/* If $human_time is passed in, allow for '%s ago' where '%s' is the return value of human_time_diff(). */
+	if ( !empty( $attr['human_time'] ) )
+		$published = '<time class="published" title="' . get_comment_date( esc_attr__( 'l, F jS, Y, g:i a', 'hybrid-core' ) ) . '">' . sprintf( $attr['human_time'], human_time_diff( get_comment_time( 'U' ), current_time( 'timestamp' ) ) ) . '</time>';
+
+	/* Else, just return the default. */
+	else
+		$published = '<span class="published">' . sprintf( __( '%1$s at %2$s', 'hybrid-core' ), '<time class="comment-date" title="' . get_comment_date( esc_attr__( 'l, F jS, Y, g:i a', 'hybrid-core' ) ) . '">' . get_comment_date() . '</time>', '<time class="comment-time" title="' . get_comment_date( esc_attr__( 'l, F jS, Y, g:i a', 'hybrid-core' ) ) . '">' . get_comment_time() . '</time>' ) . '</span>';
+
+	return $attr['before'] . $published . $attr['after'];
 }
 
 /**
