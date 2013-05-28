@@ -42,6 +42,10 @@ function hybrid_register_scripts() {
 	/* Register the 'nav-bar' script if the current theme supports 'nav-bar'. */
 	if ( isset( $supports[0] ) && in_array( 'nav-bar', $supports[0] ) )
 		wp_register_script( 'nav-bar', esc_url( apply_atomic( 'nav_bar_script', trailingslashit( HYBRID_JS ) . "nav-bar{$suffix}.js" ) ), array( 'jquery' ), '20130526', true );
+
+	/* Register the 'mobile-toggle' script if the current theme supports 'mobile-toggle'. */
+	if ( isset( $supports[0] ) && in_array( 'mobile-toggle', $supports[0] ) )
+		wp_register_script( 'mobile-toggle', esc_url( trailingslashit( HYBRID_JS ) . "mobile-toggle{$suffix}.js" ), array( 'jquery' ), '20130528', true );
 }
 
 /**
@@ -67,6 +71,10 @@ function hybrid_enqueue_scripts() {
 	/* Load the 'nav-bar' script if the current theme supports 'nav-bar'. */
 	if ( isset( $supports[0] ) && in_array( 'nav-bar', $supports[0] ) )
 		wp_enqueue_script( 'nav-bar' );
+
+	/* Load the 'mobile-toggle' script if the current theme supports 'mobile-toggle'. */
+	if ( isset( $supports[0] ) && in_array( 'mobile-toggle', $supports[0] ) )
+		wp_enqueue_script( 'mobile-toggle' );
 }
 
 ?>
