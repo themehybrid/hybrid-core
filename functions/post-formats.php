@@ -319,7 +319,7 @@ function hybrid_image_content( $content ) {
 		preg_match( '/<img.*?>/', $content, $matches );
 
 		if ( empty( $matches ) && current_theme_supports( 'get-the-image' ) )
-			$content = get_the_image( array( 'link_to_post' => false, 'echo' => false ) );
+			$content = get_the_image( array( 'meta_key' => false, 'size' => 'large', 'link_to_post' => false, 'echo' => false ) ) . $content;
 
 		elseif ( empty( $matches ) )
 			$content = get_the_post_format_image() . $content;
