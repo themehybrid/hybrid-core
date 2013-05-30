@@ -37,6 +37,7 @@ add_filter( 'post_gallery', 'cleaner_gallery', 10, 2 );
  * @return string $output
  */
 function cleaner_gallery( $output, $attr ) {
+	global $_wp_additional_image_sizes;
 
 	static $cleaner_gallery_instance = 0;
 	$cleaner_gallery_instance++;
@@ -63,7 +64,7 @@ function cleaner_gallery( $output, $attr ) {
 		'icontag'     => 'div',
 		'captiontag'  => 'figcaption',
 		'columns'     => 3,
-		'size'        => 'thumbnail',
+		'size'        => isset( $_wp_additional_image_sizes['post-thumbnail'] ) ? 'post-thumbnail' : 'thumbnail',
 		'ids'         => '',
 		'include'     => '',
 		'exclude'     => '',
