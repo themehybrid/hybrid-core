@@ -5,7 +5,7 @@
  * compatibility issues that WordPress 3.6 created with its new post format functionality.
  *
  * This file is only loaded if themes declare support for 'post-formats'.  If a theme declares support for 
- * 'structured-post-formats', the content filters will not run for the individual formats that the theme 
+ * 'post-formats', the content filters will not run for the individual formats that the theme 
  * supports.
  *
  * @package    HybridCore
@@ -22,16 +22,11 @@ add_action( 'wp_loaded', 'hybrid_structured_post_formats', 1 );
 /* Filter the post format archive title. */
 add_filter( 'single_term_title', 'hybrid_single_post_format_title' );
 
-/* Returns the post permalink if there's no post format URL. */
-add_filter( 'get_the_post_format_url', 'hybrid_get_the_post_format_url', 10, 2 );
-
 /**
- * If the theme hasn't declared support for 'structured-post-formats', the framework will take care of 
- * the functionality.  This function checks whether the theme supports individual formats.  The reason 
- * for using this feature over WordPress' built-in compat function is for backwards compatibility and 
- * supporting the features that most Hybrid Core users have been enjoying since post formats were first 
- * added to WordPress.
+ * Theme compatibility for post formats.  This function adds appropriate filters to 'the_content' for 
+ * the various post formats that a theme supports.
  *
+ * @note   This function may change drastically in the future depending on the direction of the WP post format UI.
  * @since  1.6.0
  * @access public
  * @return void
@@ -39,43 +34,36 @@ add_filter( 'get_the_post_format_url', 'hybrid_get_the_post_format_url', 10, 2 )
 function hybrid_structured_post_formats() {
 
 	/* Add infinity symbol to aside posts. */
-	if ( !current_theme_supports( 'structured-post-formats', 'aside' ) )
+	if ( current_theme_supports( 'post-formats', 'aside' ) )
 		add_filter( 'the_content', 'hybrid_aside_infinity', 9 ); // run before wpautop
 
 	/* Add audio to audio posts. */
-	if ( !current_theme_supports( 'structured-post-formats', 'audio' ) )
+	if ( current_theme_supports( 'post-formats', 'audio' ) )
 		add_filter( 'the_content', 'hybrid_audio_content', 7 ); // run before WP_Embed
 
 	/* Add audio to audio posts. */
-	if ( !current_theme_supports( 'structured-post-formats', 'video' ) )
+	if ( current_theme_supports( 'post-formats', 'video' ) )
 		add_filter( 'the_content', 'hybrid_video_content', 7 ); // run before WP_Embed
 
 	/* Add image to content if the user didn't add it. */
-	if ( !current_theme_supports( 'structured-post-formats', 'image' ) )
+	if ( current_theme_supports( 'post-formats', 'image' ) )
 		add_filter( 'the_content', 'hybrid_image_content' );
 
 	/* Adds the link to the content if it's not in the post. */
-	if ( !current_theme_supports( 'structured-post-formats', 'link' ) )
+	if ( current_theme_supports( 'post-formats', 'link' ) )
 		add_filter( 'the_content', 'hybrid_link_content', 9 ); // run before wpautop
 
 	/* Wraps <blockquote> around quote posts. */
-	if ( !current_theme_supports( 'structured-post-formats', 'quote' ) ) {
+	if ( current_theme_supports( 'post-formats', 'quote' ) )
 		add_filter( 'the_content', 'hybrid_quote_content' );
 
-		/* Filters the quote source format. */
-		add_filter( 'quote_source_format', 'hybrid_quote_source_format' );
-	}
-
 	/* Filter the content of chat posts. */
-	if ( !current_theme_supports( 'structured-post-formats', 'chat' ) ) {
+	if ( current_theme_supports( 'post-formats', 'chat' ) ) {
 		add_filter( 'the_content', 'hybrid_chat_content' );
 
 		/* Auto-add paragraphs to the chat text. */
 		add_filter( 'post_format_chat_text', 'wpautop' );
 	}
-
-	/* We're completely overwriting the default WP output here and supporting all formats. */
-	add_theme_support( 'structured-post-formats', get_post_format_slugs() );
 }
 
 /**
@@ -165,7 +153,7 @@ function hybrid_clean_post_format_slug( $slug ) {
  */
 function hybrid_post_has_content( $id = 0 ) {
 	$post = get_post( $id );
-	return ( !empty( $post->post_content ) ? true : false );
+	return !empty( $post->post_content ) ? true : false;
 }
 
 /* === Asides === */
@@ -199,18 +187,9 @@ function hybrid_aside_infinity( $content ) {
 function hybrid_audio_content( $content ) {
 
 	if ( has_post_format( 'audio' ) ) {
-
-		$meta = get_post_format_meta( get_the_ID() );
-
-		if ( !empty( $meta['audio_embed'] ) ) {
-
-			$post  = get_post();
-			$audio = get_the_post_format_media( 'audio', $post, 1 );
-
-			$audio = !empty( $audio ) ? $audio : $meta['audio_embed'];
-
-			$content = $audio . $content;
-		}
+		$post    = get_post();
+		$audio   = get_the_post_format_media( 'audio', $post, 1 );
+		$content = $audio . $content;
 	}
 
 	return $content;
@@ -223,6 +202,8 @@ function hybrid_audio_content( $content ) {
  * WordPress only allows attachments with the 'image' mime type in galleries.  However, some scripts such 
  * as Cleaner Gallery allow for other mime types.  This is a more accurate count than the 
  * hybrid_get_gallery_image_count() function since it will count all gallery items regardless of mime type.
+ *
+ * @todo Check for the [gallery] shortcode with the 'mime_type' parameter and use that in get_posts().
  *
  * @since  1.6.0
  * @access public
@@ -354,11 +335,14 @@ function hybrid_get_content_url( $content ) {
  * @access public
  * @param  string  $url
  * @param  object  $post
+ * @note   Setting defaults for the parameters so that this function can become a filter in future WP versions.
  * @return string
  */
-function hybrid_get_the_post_format_url( $url, $post ) {
+function hybrid_get_the_post_format_url( $url = '', $post = null ) {
 
 	if ( empty( $url ) ) {
+
+		$post = is_null( $post ) ? get_post() : $post;
 
 		$content_url = hybrid_get_content_url( $post->post_content );
 
@@ -379,10 +363,8 @@ function hybrid_get_the_post_format_url( $url, $post ) {
  */
 function hybrid_link_content( $content ) {
 
-	if ( has_post_format( 'link' ) ) {
-		if ( !preg_match( '/<a\s[^>]*?href=[\'"](.+?)[\'"]/is', make_clickable( $content ) ) )
-			$content = get_the_post_format_url() . $content;
-	}
+	if ( has_post_format( 'link' ) && !preg_match( '/<a\s[^>]*?href=[\'"](.+?)[\'"]/is', $content ) )
+		$content = make_clickable( $content );
 
 	return $content;
 }
@@ -390,7 +372,8 @@ function hybrid_link_content( $content ) {
 /* === Quotes === */
 
 /**
- * Replaces the post content with an overly-complicated post quote by WP.
+ * Checks if the quote post has a <blockquote> tag within the content.  If not, wraps the entire post 
+ * content with one.
  *
  * @since  1.6.0
  * @access public
@@ -400,29 +383,74 @@ function hybrid_link_content( $content ) {
 function hybrid_quote_content( $content ) {
 
 	if ( has_post_format( 'quote' ) ) {
-		$post  = get_post();
-		$quote = get_the_post_format_quote( $post );
+		preg_match( '/<blockquote.*?>/', $content, $matches );
 
-		if ( !empty( $quote ) )
-			get_content_quote( $post->post_content, true, $quote );
+		if ( empty( $matches ) )
+			$content = "<blockquote>{$content}</blockquote>";
 	}
 
 	return $content;
 }
 
+/* === Chats === */
+
 /**
- * Formats the output of the quote and quote source.
+ * Separates the post content into an array of arrays for further formatting of the chat content.
  *
  * @since  1.6.0
  * @access public
- * @param  string  $format
- * @return string
+ * @return array
  */
-function hybrid_quote_source_format( $format ) {
-	return "%s";
-}
+function hybrid_get_the_post_format_chat() {
 
-/* === Chats === */
+	$post    = get_post();
+	$stanzas = array();
+
+	/* Allow the separator (separator for speaker/text) to be filtered. */
+	$separator = apply_filters( 'post_format_chat_separator', ':' );
+
+	/* Split the content to get individual chat rows. */
+	$chat_rows = preg_split( "/(\r?\n)+|(<br\s*\/?>\s*)+/", get_paged_content( $post->post_content ) );
+
+	/* Loop through each row and format the output. */
+	foreach ( $chat_rows as $chat_row ) {
+
+		/* Set up a new, empty array of this stanza. */
+		$stanza = array();
+
+		/* If a speaker is found, create a new chat row with speaker and text. */
+		if ( preg_match( '/(?<!http|https)' . $separator . '/', $chat_row ) ) {
+
+			/* Set up a new, empty array for this row. */
+			$row = array();
+
+			/* Split the chat row into author/text. */
+			$chat_row_split = explode( $separator, trim( $chat_row ), 2 );
+
+			/* Get the chat author and strip tags. */
+			$row['author'] = strip_tags( trim( $chat_row_split[0] ) );
+
+			/* Get the chat text. */
+			$row['message'] = trim( $chat_row_split[1] );
+
+			/* Add the row to the stanza. */
+			$stanza[] = $row;
+		}
+
+		/* If no speaker is found. */
+		else {
+
+			/* Make sure we have text. */
+			if ( !empty( $chat_row ) ) {
+				$stanza[] = array( 'message' => $chat_row );
+			}
+		}
+
+		$stanzas[] = $stanza;
+	}
+
+	return $stanzas;
+}
 
 /**
  * This function filters the post content when viewing a post with the "chat" post format.  It formats 
@@ -437,12 +465,13 @@ function hybrid_quote_source_format( $format ) {
  *
  * @since  1.6.0
  * @access public
- * @global array   $_post_format_chat_ids  An array of IDs for the chat rows based on the author.
+ * @global array   $_hybrid_post_chat_ids  An array of IDs for the chat rows based on the author.
  * @param  string  $content                The content of the post.
  * @return string  $chat_output            The formatted content of the post.
  */
 function hybrid_chat_content( $content ) {
 
+	/* If this isn't a chat, return. */
 	if ( !has_post_format( 'chat' ) )
 		return $content;
 
@@ -453,7 +482,7 @@ function hybrid_chat_content( $content ) {
 	$separator = apply_filters( 'post_format_chat_separator', ':' );
 
 	/* Get the stanzas from the post content. */
-	$stanzas = get_the_post_format_chat();
+	$stanzas = hybrid_get_the_post_format_chat();
 
 	/* Loop through the stanzas that were returned. */
 	foreach ( $stanzas as $stanza ) {
@@ -463,7 +492,7 @@ function hybrid_chat_content( $content ) {
 
 			/* Get the chat author and message. */
 			$chat_author = $row['author'];
-			$chat_text = $row['message'];
+			$chat_text   = $row['message'];
 
 			/* Get the speaker/row ID. */
 			$speaker_id = hybrid_chat_row_id( $chat_author );
@@ -507,30 +536,30 @@ function hybrid_chat_content( $content ) {
  *
  * @since  1.6.0
  * @access public
- * @global array   $_post_format_chat_ids  An array of IDs for the chat rows based on the author.
+ * @global array   $_hybrid_post_chat_ids  An array of IDs for the chat rows based on the author.
  * @param  string  $chat_author            Author of the current chat row.
  * @return int                             The ID for the chat row based on the author.
  */
 function hybrid_chat_row_id( $chat_author ) {
-	global $_post_format_chat_ids;
+	global $_hybrid_post_chat_ids;
 
 	/* Let's sanitize the chat author to avoid craziness and differences like "John" and "john". */
 	$chat_author = strtolower( strip_tags( $chat_author ) );
 
 	/* Add the chat author to the array. */
-	$_post_format_chat_ids[] = $chat_author;
+	$_hybrid_post_chat_ids[] = $chat_author;
 
 	/* Make sure the array only holds unique values. */
-	$_post_format_chat_ids = array_unique( $_post_format_chat_ids );
+	$_hybrid_post_chat_ids = array_unique( $_hybrid_post_chat_ids );
 
 	/* Return the array key for the chat author and add "1" to avoid an ID of "0". */
-	return absint( array_search( $chat_author, $_post_format_chat_ids ) ) + 1;
+	return absint( array_search( $chat_author, $_hybrid_post_chat_ids ) ) + 1;
 }
 
 /* === Videos === */
 
 /**
- * Adds the meta video to the content if it exists.
+ * Adds the post format video to the content if it exists.
  *
  * @since  1.6.0
  * @access public
@@ -540,18 +569,9 @@ function hybrid_chat_row_id( $chat_author ) {
 function hybrid_video_content( $content ) {
 
 	if ( has_post_format( 'video' ) ) {
-
-		$meta = get_post_format_meta( get_the_ID() );
-
-		if ( !empty( $meta['video_embed'] ) ) {
-
-			$post  = get_post();
-			$video = get_the_post_format_media( 'video', $post, 1 );
-
-			$video = !empty( $video ) ? $video : $meta['video_embed'];
-
-			$content = $video . $content;
-		}
+		$post    = get_post();
+		$video   = get_the_post_format_media( 'video', $post, 1 );
+		$content = $video . $content;
 	}
 
 	return $content;
