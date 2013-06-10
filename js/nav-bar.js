@@ -15,7 +15,7 @@
 				bcClass: 'sf-breadcrumb',
 				menuClass: 'sf-js-enabled',
 				anchorClass: 'sf-with-ul',
-				menuArrowClass: 'sf-arrows'
+				menuArrowClass: 'sf-sub-indicator'
 			},
 			ios = /iPhone|iPad|iPod/i.test(navigator.userAgent),
 			wp7 = (function() {
