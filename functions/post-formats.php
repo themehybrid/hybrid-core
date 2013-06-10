@@ -38,12 +38,12 @@ function hybrid_structured_post_formats() {
 		add_filter( 'the_content', 'hybrid_aside_infinity', 9 ); // run before wpautop
 
 	/* Add audio to audio posts. */
-	if ( current_theme_supports( 'post-formats', 'audio' ) )
-		add_filter( 'the_content', 'hybrid_audio_content', 7 ); // run before WP_Embed
+	//if ( current_theme_supports( 'post-formats', 'audio' ) )
+	//	add_filter( 'the_content', 'hybrid_audio_content', 7 ); // run before WP_Embed
 
 	/* Add audio to audio posts. */
-	if ( current_theme_supports( 'post-formats', 'video' ) )
-		add_filter( 'the_content', 'hybrid_video_content', 7 ); // run before WP_Embed
+	//if ( current_theme_supports( 'post-formats', 'video' ) )
+	//	add_filter( 'the_content', 'hybrid_video_content', 7 ); // run before WP_Embed
 
 	/* Add image to content if the user didn't add it. */
 	if ( current_theme_supports( 'post-formats', 'image' ) )
