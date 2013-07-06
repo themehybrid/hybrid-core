@@ -440,6 +440,9 @@ function get_the_image_format( $args = array(), $image = false ) {
 			$image_class = preg_split( '#\s+#', $image_class );
 		$classes = array_merge( $classes, $image_class );
 	}
+        
+        /*filter for image classes*/
+        $classes = apply_filters('image_classes', $classes);
 
 	/* Sanitize all the classes. */
 	$classes = array_map( 'sanitize_html_class', $classes );
