@@ -396,18 +396,16 @@ function hybrid_quote_content( $content ) {
  *
  * @since  1.6.0
  * @access public
+ * @param  string $content
  * @return array
  */
-function hybrid_get_the_post_format_chat() {
-
-	$post    = get_post();
-	$stanzas = array();
+function hybrid_get_the_post_format_chat( $content ) {
 
 	/* Allow the separator (separator for speaker/text) to be filtered. */
 	$separator = apply_filters( 'post_format_chat_separator', ':' );
 
 	/* Split the content to get individual chat rows. */
-	$chat_rows = preg_split( "/(\r?\n)+|(<br\s*\/?>\s*)+/", get_paged_content( $post->post_content ) );
+	$chat_rows = preg_split( "/(\r?\n)+|(<br\s*\/?>\s*)+/", $content );
 
 	/* Loop through each row and format the output. */
 	foreach ( $chat_rows as $chat_row ) {
@@ -479,7 +477,7 @@ function hybrid_chat_content( $content ) {
 	$separator = apply_filters( 'post_format_chat_separator', ':' );
 
 	/* Get the stanzas from the post content. */
-	$stanzas = hybrid_get_the_post_format_chat();
+	$stanzas = hybrid_get_the_post_format_chat( $content );
 
 	/* Loop through the stanzas that were returned. */
 	foreach ( $stanzas as $stanza ) {
