@@ -211,11 +211,8 @@ function hybrid_audio_content( $content ) {
  */
 function hybrid_get_gallery_item_count() {
 
-	/* Get the current post. */
-	$post = get_post();
-
 	/* Check the post content for galleries. */
-	$galleries = get_content_galleries( $post->post_content, true );
+	$galleries = get_post_galleries( get_the_ID(), true );
 
 	/* If galleries were found in the content, get the gallery item count. */
 	if ( !empty( $galleries ) ) {
