@@ -111,7 +111,7 @@ function hybrid_get_post_templates( $post_type = 'post' ) {
 
 	/* If a child theme is active, get its files and merge with the parent theme files. */
 	if ( is_child_theme() ) {
-		$child = wp_get_theme( get_stylesheet(), get_theme_root( get_stylesheet_directory() ) );
+		$child = wp_get_theme();
 		$child_files = (array) $child->get_files( 'php', 1 );
 		$files = array_merge( $files, $child_files );
 	}

@@ -182,7 +182,7 @@ function hybrid_theme_link_shortcode() {
  * @return string
  */
 function hybrid_child_link_shortcode() {
-	$theme = wp_get_theme( get_stylesheet(), get_theme_root( get_stylesheet_directory() ) );
+	$theme = wp_get_theme();
 	return '<a class="child-link" href="' . esc_url( $theme->get( 'ThemeURI' ) ) . '" title="' . esc_attr( $theme->get( 'Name' ) ) . '"><span>' . esc_html( $theme->get( 'Name' ) ) . '</span></a>';
 }
 
