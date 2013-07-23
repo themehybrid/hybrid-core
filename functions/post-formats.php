@@ -54,7 +54,7 @@ function hybrid_structured_post_formats() {
 		add_filter( 'the_content', 'hybrid_chat_content' );
 
 		/* Auto-add paragraphs to the chat text. */
-		add_filter( 'post_format_chat_text', 'wpautop' );
+		add_filter( 'hybrid_post_format_chat_text', 'wpautop' );
 	}
 }
 
@@ -373,7 +373,7 @@ function hybrid_quote_content( $content ) {
 function hybrid_get_the_post_format_chat( $content ) {
 
 	/* Allow the separator (separator for speaker/text) to be filtered. */
-	$separator = apply_filters( 'post_format_chat_separator', ':' );
+	$separator = apply_filters( 'hybrid_post_format_chat_separator', ':' );
 
 	/* Split the content to get individual chat rows. */
 	$chat_rows = preg_split( "/(\r?\n)+|(<br\s*\/?>\s*)+/", $content );
@@ -445,7 +445,7 @@ function hybrid_chat_content( $content ) {
 	$chat_output = "\n\t\t\t" . '<div id="chat-transcript-' . esc_attr( get_the_ID() ) . '" class="chat-transcript">';
 
 	/* Allow the separator (separator for speaker/text) to be filtered. */
-	$separator = apply_filters( 'post_format_chat_separator', ':' );
+	$separator = apply_filters( 'hybrid_post_format_chat_separator', ':' );
 
 	/* Get the stanzas from the post content. */
 	$stanzas = hybrid_get_the_post_format_chat( $content );
@@ -471,10 +471,10 @@ function hybrid_chat_content( $content ) {
 
 			/* Add the chat row author. */
 			if ( !empty( $chat_author ) )
-				$chat_output .= "\n\t\t\t\t\t" . '<div class="chat-author ' . sanitize_html_class( strtolower( "chat-author-{$chat_author}" ) ) . ' vcard">' . $time . '<cite class="fn">' . apply_filters( 'post_format_chat_author', $chat_author, $speaker_id ) . '</cite>:</div>';
+				$chat_output .= "\n\t\t\t\t\t" . '<div class="chat-author ' . sanitize_html_class( strtolower( "chat-author-{$chat_author}" ) ) . ' vcard">' . $time . '<cite class="fn">' . apply_filters( 'hybrid_post_format_chat_author', $chat_author, $speaker_id ) . '</cite>:</div>';
 
 			/* Add the chat row text. */
-			$chat_output .= "\n\t\t\t\t\t" . '<div class="chat-text">' . str_replace( array( "\r", "\n", "\t" ), '', apply_filters( 'post_format_chat_text', $chat_text, $chat_author, $speaker_id ) ) . '</div>';
+			$chat_output .= "\n\t\t\t\t\t" . '<div class="chat-text">' . str_replace( array( "\r", "\n", "\t" ), '', apply_filters( 'hybrid_post_format_chat_text', $chat_text, $chat_author, $speaker_id ) ) . '</div>';
 
 			/* Close the chat row. */
 			$chat_output .= "\n\t\t\t\t" . '</div><!-- .chat-row -->';
