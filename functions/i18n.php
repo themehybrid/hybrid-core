@@ -93,8 +93,14 @@ function hybrid_get_parent_textdomain() {
 	global $hybrid;
 
 	/* If the global textdomain isn't set, define it. Plugin/theme authors may also define a custom textdomain. */
-	if ( empty( $hybrid->parent_textdomain ) )
-		$hybrid->parent_textdomain = sanitize_key( apply_filters( hybrid_get_prefix() . '_parent_textdomain', get_template() ) );
+	if ( empty( $hybrid->parent_textdomain ) ) {
+
+		$theme = wp_get_theme( get_template(), get_theme_root( get_template_directory() ) );
+
+		$textdomain = $theme->get( 'TextDomain' ) ? $theme->get( 'TextDomain' ) : get_template();
+
+		$hybrid->parent_textdomain = sanitize_key( apply_filters( hybrid_get_prefix() . '_parent_textdomain', $textdomain ) );
+	}
 
 	/* Return the expected textdomain of the parent theme. */
 	return $hybrid->parent_textdomain;
@@ -121,8 +127,14 @@ function hybrid_get_child_textdomain() {
 		return '';
 
 	/* If the global textdomain isn't set, define it. Plugin/theme authors may also define a custom textdomain. */
-	if ( empty( $hybrid->child_textdomain ) )
-		$hybrid->child_textdomain = sanitize_key( apply_filters( hybrid_get_prefix() . '_child_textdomain', get_stylesheet() ) );
+	if ( empty( $hybrid->child_textdomain ) ) {
+
+		$theme = wp_get_theme();
+
+		$textdomain = $theme->get( 'TextDomain' ) ? $theme->get( 'TextDomain' ) : get_stylesheet();
+
+		$hybrid->child_textdomain = sanitize_key( apply_filters( hybrid_get_prefix() . '_child_textdomain', $textdomain ) );
+	}
 
 	/* Return the expected textdomain of the child theme. */
 	return $hybrid->child_textdomain;
