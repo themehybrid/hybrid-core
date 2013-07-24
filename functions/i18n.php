@@ -95,7 +95,7 @@ function hybrid_get_parent_textdomain() {
 	/* If the global textdomain isn't set, define it. Plugin/theme authors may also define a custom textdomain. */
 	if ( empty( $hybrid->parent_textdomain ) ) {
 
-		$theme = wp_get_theme( get_template(), get_theme_root( get_template_directory() ) );
+		$theme = wp_get_theme( get_template() );
 
 		$textdomain = $theme->get( 'TextDomain' ) ? $theme->get( 'TextDomain' ) : get_template();
 

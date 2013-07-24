@@ -83,7 +83,7 @@ function hybrid_extra_theme_headers( $headers ) {
  * @return void
  */
 function hybrid_meta_template() {
-	$theme = wp_get_theme( get_template(), get_theme_root( get_template_directory() ) );
+	$theme = wp_get_theme( get_template() );
 	$template = '<meta name="template" content="' . esc_attr( $theme->get( 'Name' ) . ' ' . $theme->get( 'Version' ) ) . '" />' . "\n";
 	echo apply_atomic( 'meta_template', $template );
 }

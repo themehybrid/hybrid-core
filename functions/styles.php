@@ -116,7 +116,7 @@ function hybrid_get_styles() {
 
 	/* If a child theme is active, add the parent theme's style. */
 	if ( is_child_theme() ) {
-		$parent = wp_get_theme( get_template(), get_theme_root( get_template_directory() ) );
+		$parent = wp_get_theme( get_template() );
 
 		/* Get the parent theme stylesheet. */
 		$src = trailingslashit( THEME_URI ) . "style.css";

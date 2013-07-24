@@ -169,7 +169,7 @@ function hybrid_wp_link_shortcode() {
  * @return string
  */
 function hybrid_theme_link_shortcode() {
-	$theme = wp_get_theme( get_template(), get_theme_root( get_template_directory() ) );
+	$theme = wp_get_theme( get_template() );
 	return '<a class="theme-link" href="' . esc_url( $theme->get( 'ThemeURI' ) ) . '" title="' . sprintf( esc_attr__( '%s WordPress Theme', 'hybrid-core' ), $theme->get( 'Name' ) ) . '"><span>' . esc_attr( $theme->get( 'Name' ) ) . '</span></a>';
 }
 

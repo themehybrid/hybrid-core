@@ -32,7 +32,7 @@ function hybrid_settings_page_init() {
 	global $hybrid;
 
 	/* Get theme information. */
-	$theme = wp_get_theme( get_template(), get_theme_root( get_template_directory() ) );
+	$theme = wp_get_theme( get_template() );
 	$prefix = hybrid_get_prefix();
 
 	/* Register theme settings. */
@@ -160,7 +160,7 @@ function hybrid_settings_page() {
 
 	/* Get the theme information. */
 	$prefix = hybrid_get_prefix();
-	$theme = wp_get_theme( get_template(), get_theme_root( get_template_directory() ) );
+	$theme = wp_get_theme( get_template() );
 
 	do_action( "{$prefix}_before_settings_page" ); ?>
 
@@ -247,7 +247,7 @@ function hybrid_settings_field_name( $setting ) {
 function hybrid_settings_page_help() {
 
 	/* Get the parent theme data. */
-	$theme = wp_get_theme( get_template(), get_theme_root( get_template_directory() ) );
+	$theme = wp_get_theme( get_template() );
 	$doc_uri = $theme->get( 'Documentation URI' );
 	$support_uri = $theme->get( 'Support URI' );
 

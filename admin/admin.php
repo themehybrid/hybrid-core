@@ -104,7 +104,7 @@ function hybrid_get_post_templates( $post_type = 'post' ) {
 	$post_type_object = get_post_type_object( $post_type );
 
 	/* Get the theme (parent theme if using a child theme) object. */
-	$theme = wp_get_theme( get_template(), get_theme_root( get_template_directory() ) );
+	$theme = wp_get_theme( get_template() );
 
 	/* Get the theme PHP files one level deep. */
 	$files = (array) $theme->get_files( 'php', 1 );

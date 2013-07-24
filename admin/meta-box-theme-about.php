@@ -25,7 +25,7 @@ function hybrid_meta_box_theme_add_about() {
 
 	/* Get theme information. */
 	$prefix = hybrid_get_prefix();
-	$theme = wp_get_theme( get_template(), get_theme_root( get_template_directory() ) );
+	$theme = wp_get_theme( get_template() );
 
 	/* Adds the About box for the parent theme. */
 	add_meta_box( 'hybrid-core-about-theme', sprintf( __( 'About %s', 'hybrid-core' ), $theme->get( 'Name' ) ), 'hybrid_meta_box_theme_display_about', hybrid_get_settings_page_name(), 'side', 'high' );
@@ -53,7 +53,7 @@ function hybrid_meta_box_theme_display_about( $object, $box ) {
 	$prefix = hybrid_get_prefix();
 
 	/* Grab theme information for the parent/child theme. */
-	$theme = ( 'hybrid-core-about-child' == $box['id'] ) ? wp_get_theme() : wp_get_theme( get_template(), get_theme_root( get_template_directory() ) ); ?>
+	$theme = ( 'hybrid-core-about-child' == $box['id'] ) ? wp_get_theme() : wp_get_theme( get_template() ); ?>
 
 	<table class="form-table">
 		<tr>
