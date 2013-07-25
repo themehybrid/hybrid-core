@@ -6,7 +6,8 @@
  * post.  It's an attempt to consolidate the various methods that users have used over the years to 
  * embed media into their posts.  This script was written so that theme developers could grab that 
  * media and use it in interesting ways within their themes.  For example, a theme could get a video 
- * and display it on archive pages alongside the post excerpt.
+ * and display it on archive pages alongside the post excerpt or pull it out of the content to display 
+ * it above the post on single post views.
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the GNU 
  * General Public License as published by the Free Software Foundation; either version 2 of the License, 
@@ -103,7 +104,7 @@ class Hybrid_Media_Grabber {
 	public function __construct( $args = array() ) {
 		global $wp_embed;
 
-		/* Use the WP's embed functionality to handle the [embed] shortcode and autoembeds. */
+		/* Use WP's embed functionality to handle the [embed] shortcode and autoembeds. */
 		add_filter( 'hybrid_media_grabber_embed_shortcode_media', array( $wp_embed, 'run_shortcode' ) );
 		add_filter( 'hybrid_media_grabber_get_auto_embed',        array( $wp_embed, 'autoembed' ) );
 
@@ -139,7 +140,6 @@ class Hybrid_Media_Grabber {
 	 * @return void
 	 */
 	public function __destruct() {
-
 		remove_filter( 'embed_maybe_make_link', '__return_false' );
 	}
 
@@ -240,7 +240,7 @@ class Hybrid_Media_Grabber {
 
 		$this->media = apply_filters(
 			'hybrid_media_grabber_embed_shortcode_media',
-			array_shift( $this->original_media )
+			$this->original_media
 		);
 	}
 
@@ -375,16 +375,19 @@ class Hybrid_Media_Grabber {
 		$patterns     = array();
 		$replacements = array();
 
+		/* If we have a width, set up the patterns and replacements for it. */
 		if ( !empty( $this->args['width'] ) ) {
 			$patterns[]     = '/(width=[\'"]).+?([\'"])/i';
 			$replacements[] = '${1}' . $this->args['width'] . '${2}';
 		}
 
+		/* If we have a height, set up the patterns and replacements for it. */
 		if ( !empty( $this->args['height'] ) ) {
 			$patterns[]     = '/(height=[\'"]).+?([\'"])/i';
 			$replacements[] = '${1}' . $this->args['height'] . '${2}';
 		}
 
+		/* Filter the width and/or the height if needed. */
 		if ( !empty( $patterns ) && !empty( $replacements ) )
 			return preg_replace( $patterns, $replacements, $html );
 
