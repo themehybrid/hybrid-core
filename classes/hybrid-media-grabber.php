@@ -57,6 +57,15 @@ class Hybrid_Media_Grabber {
 	public $media = '';
 
 	/**
+	 * The original media taken from the post content.
+	 *
+	 * @since  0.1.0
+	 * @access public
+	 * @var    string
+	 */
+	public $original_media = '';
+
+	/**
 	 * The type of media to get.  Current supported types are 'audio' and 'video'.
 	 *
 	 * @since  0.1.0
@@ -99,11 +108,12 @@ class Hybrid_Media_Grabber {
 		add_filter( 'embed_maybe_make_link',                      '__return_false' );
 
 		$defaults = array(
-			'type'   => 'video',
-			'before' => '',
-			'after'  => '',
-			'width'  => 0,        // only set if you need to override
-			'height' => 0
+			'type'        => 'video',
+			'before'      => '',
+			'after'       => '',
+			'split_media' => false,
+			'width'       => 0,        // only set if you need to override
+			'height'      => 0
 		);
 
 		$this->args    = wp_parse_args( $args, $defaults );
@@ -148,13 +158,16 @@ class Hybrid_Media_Grabber {
 			$this->do_attached_media();
 
 		/* If media is found, add any HTML before and after it if set in the arguments. */
-		if ( !empty( $media ) ) {
+		if ( !empty( $this->media ) ) {
 
 			if ( isset( $this->args['before'] ) )
 				$this->media = $this->args['before'] . $this->media;
 
 			if ( isset( $this->args['after'] ) )
 				$this->media .= $this->args['after'];
+
+			if ( true === $this->args['split_media'] && !empty( $this->original_media ) )
+				add_filter( 'the_content', array( $this, 'split_media' ), 5 );
 		}
 
 		/* Return the media. */
@@ -199,9 +212,11 @@ class Hybrid_Media_Grabber {
 	 */
 	public function embed_shortcode_media( $shortcode ) {
 
+		$this->original_media = array_shift( $shortcode );
+
 		$this->media = apply_filters(
 			'hybrid_media_grabber_embed_shortcode_media',
-			array_shift( $shortcode )
+			array_shift( $this->original_media )
 		);
 	}
 
@@ -215,7 +230,9 @@ class Hybrid_Media_Grabber {
 	 */
 	public function audio_shortcode_media( $shortcode ) {
 
-		$this->media = do_shortcode( array_shift( $shortcode ) );
+		$this->original_media = array_shift( $shortcode );
+
+		$this->media = do_shortcode( $this->original_media );
 	}
 
 	/**
@@ -228,7 +245,9 @@ class Hybrid_Media_Grabber {
 	 */
 	public function video_shortcode_media( $shortcode ) {
 
-		$this->media = do_shortcode( array_shift( $shortcode ) );
+		$this->original_media = array_shift( $shortcode );
+
+		$this->media = do_shortcode( $this->original_media );
 	}
 
 	/**
@@ -251,6 +270,7 @@ class Hybrid_Media_Grabber {
 				$embed = apply_filters( 'hybrid_media_grabber_get_auto_embed', $value[0] );
 
 				if ( !empty( $embed ) ) {
+					$this->original_media = $value[0];
 					$this->media = $embed;
 					break;
 				}
@@ -271,7 +291,7 @@ class Hybrid_Media_Grabber {
 		$embedded_media = get_media_embedded_in_content( $this->content );
 
 		if ( !empty( $embedded_media ) )
-			$this->media = array_shift( $embedded_media );
+			$this->media = $this->original_media = array_shift( $embedded_media );
 	}
 
 	/**
@@ -299,6 +319,22 @@ class Hybrid_Media_Grabber {
 			/* Run the media as a shortcode using WordPress' built-in [audio] and [video] shortcodes. */
 			$this->media = do_shortcode( "[{$this->type} src='{$url}']" );
 		}
+	}
+
+	/**
+	 * Removes the found media from the content.  The purpose of this is so that themes can retrieve the 
+	 * media from the content and display it elsewhere on the page based on its design.
+	 *
+	 * @since  0.1.0
+	 * @access public
+	 * @param  string  $content
+	 * @return string
+	 */
+	public function split_media( $content ) {
+
+		remove_filter( 'the_content', array( $this, 'split_media' ), 5 );
+
+		return str_replace( $this->original_media, '', $content );
 	}
 
 	/**
