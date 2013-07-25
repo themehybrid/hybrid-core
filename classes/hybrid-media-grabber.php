@@ -103,22 +103,32 @@ class Hybrid_Media_Grabber {
 	public function __construct( $args = array() ) {
 		global $wp_embed;
 
+		/* Use the WP's embed functionality to handle the [embed] shortcode and autoembeds. */
 		add_filter( 'hybrid_media_grabber_embed_shortcode_media', array( $wp_embed, 'run_shortcode' ) );
 		add_filter( 'hybrid_media_grabber_get_auto_embed',        array( $wp_embed, 'autoembed' ) );
-		add_filter( 'embed_maybe_make_link',                      '__return_false' );
 
+		/* Don't return a link if embeds don't work. Need media or nothing at all. */
+		add_filter( 'embed_maybe_make_link', '__return_false' );
+
+		/* Set up the default arguments. */
 		$defaults = array(
-			'type'        => 'video',
-			'before'      => '',
-			'after'       => '',
-			'split_media' => false,
-			'width'       => 0,        // only set if you need to override
+			'type'        => 'video',  // audio|video
+			'before'      => '',       // HTML before the output
+			'after'       => '',       // HTML after the output
+			'split_media' => false,   // Splits the media from the post content
+
+			/* Only set a width or height if you need to override. Otherwise, leave it to WP. */
+			'width'       => 0,
 			'height'      => 0
 		);
 
+		/* Set the object properties. */
 		$this->args    = wp_parse_args( $args, $defaults );
 		$this->content = get_the_content();
 		$this->type    = isset( $this->args['type'] ) && in_array( $this->args['type'], array( 'audio', 'video' ) ) ? $this->args['type'] : 'video';
+
+		/* Find the media related to the post. */
+		$this->set_media();
 	}
 
 	/**
@@ -134,13 +144,24 @@ class Hybrid_Media_Grabber {
 	}
 
 	/**
-	 * Tries several methods to find media related to the post.  Returns the found media.
+	 * Basic method for returning the media found.
 	 *
 	 * @since  0.1.0
 	 * @access public
 	 * @return string
 	 */
 	public function get_media() {
+		return $this->media;
+	}
+
+	/**
+	 * Tries several methods to find media related to the post.  Returns the found media.
+	 *
+	 * @since  0.1.0
+	 * @access public
+	 * @return void
+	 */
+	public function set_media() {
 
 		/* Find media in the post content based on WordPress' media-related shortcodes. */
 		$this->do_shortcode_embed();
@@ -157,21 +178,24 @@ class Hybrid_Media_Grabber {
 		if ( empty( $this->media ) )
 			$this->do_attached_media();
 
-		/* If media is found, add any HTML before and after it if set in the arguments. */
+		/* If media is found, let's run a few things. */
 		if ( !empty( $this->media ) ) {
 
+			/* Add the before HTML. */
 			if ( isset( $this->args['before'] ) )
 				$this->media = $this->args['before'] . $this->media;
 
+			/* Add the after HTML. */
 			if ( isset( $this->args['after'] ) )
 				$this->media .= $this->args['after'];
 
+			/* Split the media from the content. */
 			if ( true === $this->args['split_media'] && !empty( $this->original_media ) )
 				add_filter( 'the_content', array( $this, 'split_media' ), 5 );
-		}
 
-		/* Return the media. */
-		return $this->filter_dimensions( $this->media );
+			/* Filter the media dimensions. */
+			$this->media = $this->filter_dimensions( $this->media );
+		}
 	}
 
 	/**
