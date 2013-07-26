@@ -106,7 +106,7 @@ class Hybrid_Media_Grabber {
 
 		/* Use WP's embed functionality to handle the [embed] shortcode and autoembeds. */
 		add_filter( 'hybrid_media_grabber_embed_shortcode_media', array( $wp_embed, 'run_shortcode' ) );
-		add_filter( 'hybrid_media_grabber_get_auto_embed',        array( $wp_embed, 'autoembed' ) );
+		add_filter( 'hybrid_media_grabber_autoembed_media',       array( $wp_embed, 'autoembed' ) );
 
 		/* Don't return a link if embeds don't work. Need media or nothing at all. */
 		add_filter( 'embed_maybe_make_link', '__return_false' );
@@ -164,11 +164,11 @@ class Hybrid_Media_Grabber {
 	public function set_media() {
 
 		/* Find media in the post content based on WordPress' media-related shortcodes. */
-		$this->do_shortcode_embed();
+		$this->do_shortcode_media();
 
 		/* If no media is found and autoembeds are enabled, check for autoembeds. */
 		if ( empty( $this->media ) && get_option( 'embed_autourls' ) )
-			$this->do_auto_embed();
+			$this->do_autoembed_media();
 
 		/* If no media is found, check for media HTML within the post content. */
 		if ( empty( $this->media ) )
@@ -207,7 +207,7 @@ class Hybrid_Media_Grabber {
 	 * @access public
 	 * @return void
 	 */
-	public function do_shortcode_embed() {
+	public function do_shortcode_media() {
 
 		/* Finds matches for shortcodes in the content. */
 		preg_match_all( '/' . get_shortcode_regex() . '/s', $this->content, $matches, PREG_SET_ORDER );
@@ -219,7 +219,7 @@ class Hybrid_Media_Grabber {
 
 				/* Call the method related to the specific shortcode found and break out of the loop. */
 				if ( in_array( $shortcode[2], array( 'embed', 'audio', 'video' ) ) ) {
-					call_user_func( array( $this, "{$shortcode[2]}_shortcode_media" ), $shortcode );
+					call_user_func( array( $this, "do_{$shortcode[2]}_shortcode_media" ), $shortcode );
 					break;
 				}
 			}
@@ -234,7 +234,7 @@ class Hybrid_Media_Grabber {
 	 * @param  array  $shortcode
 	 * @return void
 	 */
-	public function embed_shortcode_media( $shortcode ) {
+	public function do_embed_shortcode_media( $shortcode ) {
 
 		$this->original_media = array_shift( $shortcode );
 
@@ -252,7 +252,7 @@ class Hybrid_Media_Grabber {
 	 * @param  array  $shortcode
 	 * @return void
 	 */
-	public function audio_shortcode_media( $shortcode ) {
+	public function do_audio_shortcode_media( $shortcode ) {
 
 		$this->original_media = array_shift( $shortcode );
 
@@ -267,7 +267,7 @@ class Hybrid_Media_Grabber {
 	 * @param  array  $shortcode
 	 * @return void
 	 */
-	public function video_shortcode_media( $shortcode ) {
+	public function do_video_shortcode_media( $shortcode ) {
 
 		$this->original_media = array_shift( $shortcode );
 
@@ -281,7 +281,7 @@ class Hybrid_Media_Grabber {
 	 * @access public
 	 * @return void
 	 */
-	public function do_auto_embed() {
+	public function do_autoembed_media() {
 
 		preg_match_all( '|^\s*(https?://[^\s"]+)\s*$|im', $this->content, $matches, PREG_SET_ORDER );
 
@@ -291,7 +291,7 @@ class Hybrid_Media_Grabber {
 			foreach ( $matches as $value ) {
 
 				/* Let WP work its magic with the 'autoembed' method. */
-				$embed = apply_filters( 'hybrid_media_grabber_get_auto_embed', $value[0] );
+				$embed = apply_filters( 'hybrid_media_grabber_autoembed_media', $value[0] );
 
 				if ( !empty( $embed ) ) {
 					$this->original_media = $value[0];
