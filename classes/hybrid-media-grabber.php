@@ -151,7 +151,7 @@ class Hybrid_Media_Grabber {
 	 * @return string
 	 */
 	public function get_media() {
-		return add_filter( 'hybrid_media_grabber_media', $this->media, $this );
+		return apply_filters( 'hybrid_media_grabber_media', $this->media, $this );
 	}
 
 	/**
