@@ -124,7 +124,7 @@ class Hybrid_Media_Grabber {
 		);
 
 		/* Set the object properties. */
-		$this->args    = wp_parse_args( $args, $defaults );
+		$this->args    = apply_filters( 'hybrid_media_grabber_args', wp_parse_args( $args, $defaults ) );
 		$this->content = get_the_content();
 		$this->type    = isset( $this->args['type'] ) && in_array( $this->args['type'], array( 'audio', 'video' ) ) ? $this->args['type'] : 'video';
 
@@ -151,7 +151,7 @@ class Hybrid_Media_Grabber {
 	 * @return string
 	 */
 	public function get_media() {
-		return $this->media;
+		return add_filter( 'hybrid_media_grabber_media', $this->media, $this );
 	}
 
 	/**
