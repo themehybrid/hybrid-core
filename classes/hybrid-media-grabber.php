@@ -218,7 +218,7 @@ class Hybrid_Media_Grabber {
 			foreach ( $matches as $shortcode ) {
 
 				/* Call the method related to the specific shortcode found and break out of the loop. */
-				if ( in_array( $shortcode[2], array( 'embed', 'audio', 'video' ) ) ) {
+				if ( in_array( $shortcode[2], array( 'embed', $this->type ) ) ) {
 					call_user_func( array( $this, "do_{$shortcode[2]}_shortcode_media" ), $shortcode );
 					break;
 				}
