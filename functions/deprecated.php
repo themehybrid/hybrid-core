@@ -449,8 +449,8 @@ function post_format_tools_post_has_content( $id = 0 ) {
  * @deprecated 1.6.0
  */
 function post_format_tools_url_grabber() {
-	_deprecated_function( __FUNCTION__, '1.6.0', 'get_the_post_format_url()' );
-	get_the_post_format_url();
+	_deprecated_function( __FUNCTION__, '1.6.0', 'hybrid_get_the_post_format_url()' );
+	hybrid_get_the_post_format_url();
 }
 
 /**
@@ -467,8 +467,8 @@ function post_format_tools_get_image_attachment_count() {
  * @deprecated 1.6.0
  */
 function post_format_tools_get_video( $deprecated = '' ) {
-	_deprecated_function( __FUNCTION__, '1.6.0', 'the_post_format_video()' );
-	the_post_format_video();
+	_deprecated_function( __FUNCTION__, '1.6.0', 'hybrid_media_grabber()' );
+	hybrid_media_grabber();
 }
 
 /**
