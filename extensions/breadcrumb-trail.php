@@ -784,7 +784,7 @@ class Breadcrumb_Trail {
 
 		/* Get the year and week. */
 		$year = get_the_time( $this->args['labels']['archive_year'] );
-		$week = sprintf( $this->args['labels']['archive_week'], get_query_var( 'w' ) );
+		$week = sprintf( $this->args['labels']['archive_week'], date_i18n( 'W', get_the_time( 'U' ) ) );
 
 		/* Add the year item. */
 		$this->items[] = '<a href="' . get_year_link( get_the_time( 'Y' ) ) . '" title="' . esc_attr( $year ) . '">' . $year . '</a>';
