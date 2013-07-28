@@ -179,10 +179,10 @@ class Breadcrumb_Trail {
 			'paged'               => __( 'Page %d',                 'breadcrumb-trail' ),
 			'archives'            => __( 'Archives',                'breadcrumb-trail' ),
 			'archive_minute_hour' => __( 'g:i a',                   'breadcrumb-trail' ),
-			'archive_minute'      => __( 'Minute %s',               'breadcrumb-trail' ),
+			'archive_minute'      => __( 'Minute %d',               'breadcrumb-trail' ),
 			'archive_hour'        => __( 'g a',                     'breadcrumb-trail' ),
 			'archive_day'         => __( 'd',                       'breadcrumb-trail' ),
-			'archive_week'        => __( 'Week %s',                 'breadcrumb-trail' ),
+			'archive_week'        => __( 'Week %d',                 'breadcrumb-trail' ),
 			'archive_month'       => __( 'F',                       'breadcrumb-trail' ),
 			'archive_year'        => __( 'Y',                       'breadcrumb-trail' ),
 		//	'edit'                => __( 'Edit',                    'breadcrumb-trail' ), // @todo Implement edit link
@@ -784,7 +784,7 @@ class Breadcrumb_Trail {
 
 		/* Get the year and week. */
 		$year = get_the_time( $this->args['labels']['archive_year'] );
-		$week = sprintf( $this->args['labels']['archive_week'], date_i18n( 'W', get_the_time( 'U' ) ) );
+		$week = sprintf( $this->args['labels']['archive_week'], get_query_var( 'w' ) );
 
 		/* Add the year item. */
 		$this->items[] = '<a href="' . get_year_link( get_the_time( 'Y' ) ) . '" title="' . esc_attr( $year ) . '">' . $year . '</a>';
