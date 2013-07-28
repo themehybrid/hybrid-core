@@ -172,13 +172,20 @@ class Breadcrumb_Trail {
 	public function default_labels() {
 
 		$labels = array(
-			'browse'      => __( 'Browse:',                 'breadcrumb-trail' ), // @todo Use this
-			'home'        => __( 'Home',                    'breadcrumb-trail' ),
-			'search'      => __( 'Search results for "%s"', 'breadcrumb-trail' ),
-			'error_404'   => __( '404 Not Found',           'breadcrumb-trail' ),
-			'paged'       => __( 'Page %d',                 'breadcrumb-trail' ),
-			'archives'    => __( 'Archives',                'breadcrumb-trail' ),
-		//	'edit'        => __( 'Edit',                    'breadcrumb-trail' ), // @todo Implement edit link
+			'browse'              => __( 'Browse:',                 'breadcrumb-trail' ),
+			'home'                => __( 'Home',                    'breadcrumb-trail' ),
+			'search'              => __( 'Search results for "%s"', 'breadcrumb-trail' ),
+			'error_404'           => __( '404 Not Found',           'breadcrumb-trail' ),
+			'paged'               => __( 'Page %d',                 'breadcrumb-trail' ),
+			'archives'            => __( 'Archives',                'breadcrumb-trail' ),
+			'archive_minute_hour' => __( 'g:i a',                   'breadcrumb-trail' ),
+			'archive_minute'      => __( 'Minute %s',               'breadcrumb-trail' ),
+			'archive_hour'        => __( 'g a',                     'breadcrumb-trail' ),
+			'archive_day'         => __( 'd',                       'breadcrumb-trail' ),
+			'archive_week'        => __( 'Week %s',                 'breadcrumb-trail' ),
+			'archive_month'       => __( 'F',                       'breadcrumb-trail' ),
+			'archive_year'        => __( 'Y',                       'breadcrumb-trail' ),
+		//	'edit'                => __( 'Edit',                    'breadcrumb-trail' ), // @todo Implement edit link
 		);
 
 		return $labels;
@@ -697,7 +704,7 @@ class Breadcrumb_Trail {
 
 		/* Add the minute + hour item. */
 		if ( true === $this->args['show_title'] )
-			$this->items[] = get_the_time( __( 'g:i a', 'breadcrumb-trail' ) );
+			$this->items[] = get_the_time( $this->args['labels']['archive_minute_hour'] );
 	}
 
 	/**
@@ -714,7 +721,7 @@ class Breadcrumb_Trail {
 
 		/* Add the minute item. */
 		if ( true === $this->args['show_title'] )
-			$this->items[] = sprintf( __( 'Minute %s', 'breadcrumb-trail' ), date_i18n( 'i', get_the_time( 'U' ) ) );
+			$this->items[] = sprintf( $this->args['labels']['archive_minute'], date_i18n( 'i', get_the_time( 'U' ) ) );
 	}
 
 	/**
@@ -731,7 +738,7 @@ class Breadcrumb_Trail {
 
 		/* Add the hour item. */
 		if ( true === $this->args['show_title'] )
-			$this->items[] = get_the_time( __( 'g a', 'breadcrumb-trail' ) );
+			$this->items[] = get_the_time( $this->args['labels']['archive_hour'] );
 	}
 
 	/**
@@ -747,9 +754,9 @@ class Breadcrumb_Trail {
 		$this->do_rewrite_front_items();
 
 		/* Get year, month, and day. */
-		$year  = get_the_time( __( 'Y', 'breadcrumb-trail' ) );
-		$month = get_the_time( __( 'F', 'breadcrumb-trail' ) );
-		$day   = get_the_time( __( 'd', 'breadcrumb-trail' ) );
+		$year  = get_the_time( $this->args['labels']['archive_year'] );
+		$month = get_the_time( $this->args['labels']['archive_month'] );
+		$day   = get_the_time( $this->args['labels']['archive_day'] );
 
 		/* Add the year and month items. */
 		$this->items[] = '<a href="' . get_year_link( get_the_time( 'Y' ) ) . '" title="' . esc_attr( $year ) . '">' . $year . '</a>';
@@ -776,8 +783,8 @@ class Breadcrumb_Trail {
 		$this->do_rewrite_front_items();
 
 		/* Get the year and week. */
-		$year = get_the_time( __( 'Y', 'breadcrumb-trail' ) );
-		$week = sprintf( __( 'Week %s', 'breadcrumb-trail' ), date_i18n( 'W', get_the_time( 'U' ) ) );
+		$year = get_the_time( $this->args['labels']['archive_year'] );
+		$week = sprintf( $this->args['labels']['archive_week'], date_i18n( 'W', get_the_time( 'U' ) ) );
 
 		/* Add the year item. */
 		$this->items[] = '<a href="' . get_year_link( get_the_time( 'Y' ) ) . '" title="' . esc_attr( $year ) . '">' . $year . '</a>';
@@ -803,8 +810,8 @@ class Breadcrumb_Trail {
 		$this->do_rewrite_front_items();
 
 		/* Get the year and month. */
-		$year  = get_the_time( __( 'Y', 'breadcrumb-trail' ) );
-		$month = get_the_time( __( 'F', 'breadcrumb-trail' ) );
+		$year  = get_the_time( $this->args['labels']['archive_year'] );
+		$month = get_the_time( $this->args['labels']['archive_month'] );
 
 		/* Add the year item. */
 		$this->items[] = '<a href="' . get_year_link( get_the_time( 'Y' ) ) . '" title="' . esc_attr( $year ) . '">' . $year . '</a>';
@@ -830,7 +837,7 @@ class Breadcrumb_Trail {
 		$this->do_rewrite_front_items();
 
 		/* Get the year. */
-		$year  = get_the_time( __( 'Y', 'breadcrumb-trail' ) );
+		$year  = get_the_time( $this->args['labels']['archive_year'] );
 
 		/* Add the year item. */
 		if ( is_paged() )
@@ -1017,15 +1024,15 @@ class Breadcrumb_Trail {
 
 				/* If using the %year% tag, add a link to the yearly archive. */
 				if ( '%year%' == $tag )
-					$this->items[] = '<a href="' . get_year_link( get_the_time( 'Y', $post_id ) ) . '" title="' . get_the_time( esc_attr__( 'Y', 'breadcrumb-trail' ), $post_id ) . '">' . get_the_time( __( 'Y', 'breadcrumb-trail' ), $post_id ) . '</a>';
+					$this->items[] = '<a href="' . get_year_link( get_the_time( 'Y', $post_id ) ) . '" title="' . get_the_time( __( 'Y', 'breadcrumb-trail' ), $post_id ) . '">' . get_the_time( $this->args['labels']['archive_year'], $post_id ) . '</a>';
 
 				/* If using the %monthnum% tag, add a link to the monthly archive. */
 				elseif ( '%monthnum%' == $tag )
-					$this->items[] = '<a href="' . get_month_link( get_the_time( 'Y', $post_id ), get_the_time( 'm', $post_id ) ) . '" title="' . get_the_time( esc_attr__( 'F Y', 'breadcrumb-trail' ), $post_id ) . '">' . get_the_time( __( 'F', 'breadcrumb-trail' ), $post_id ) . '</a>';
+					$this->items[] = '<a href="' . get_month_link( get_the_time( 'Y', $post_id ), get_the_time( 'm', $post_id ) ) . '" title="' . get_the_time( esc_attr__( 'F Y', 'breadcrumb-trail' ), $post_id ) . '">' . get_the_time( $this->args['labels']['archive_month'], $post_id ) . '</a>';
 
 				/* If using the %day% tag, add a link to the daily archive. */
 				elseif ( '%day%' == $tag )
-					$this->items[] = '<a href="' . get_day_link( get_the_time( 'Y', $post_id ), get_the_time( 'm', $post_id ), get_the_time( 'd', $post_id ) ) . '" title="' . get_the_time( esc_attr__( 'F j, Y', 'breadcrumb-trail' ), $post_id ) . '">' . get_the_time( __( 'd', 'breadcrumb-trail' ), $post_id ) . '</a>';
+					$this->items[] = '<a href="' . get_day_link( get_the_time( 'Y', $post_id ), get_the_time( 'm', $post_id ), get_the_time( 'd', $post_id ) ) . '" title="' . get_the_time( esc_attr__( 'F j, Y', 'breadcrumb-trail' ), $post_id ) . '">' . get_the_time( $this->args['labels']['archive_day'], $post_id ) . '</a>';
 
 				/* If using the %author% tag, add a link to the post author archive. */
 				elseif ( '%author%' == $tag )
