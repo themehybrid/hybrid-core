@@ -550,25 +550,25 @@ function hybrid_document_title() {
 		/* If viewing a date-/time-based archive. */
 		elseif ( is_date () ) {
 			if ( get_query_var( 'minute' ) && get_query_var( 'hour' ) )
-				$doctitle = sprintf( __( 'Archive for %1$s', 'hybrid-core' ), get_the_time( __( 'g:i a', 'hybrid-core' ) ) );
+				$doctitle = sprintf( __( 'Archive for %s', 'hybrid-core' ), get_the_time( __( 'g:i a', 'hybrid-core' ) ) );
 
 			elseif ( get_query_var( 'minute' ) )
-				$doctitle = sprintf( __( 'Archive for minute %1$s', 'hybrid-core' ), get_the_time( __( 'i', 'hybrid-core' ) ) );
+				$doctitle = sprintf( __( 'Archive for minute %s', 'hybrid-core' ), get_the_time( __( 'i', 'hybrid-core' ) ) );
 
 			elseif ( get_query_var( 'hour' ) )
-				$doctitle = sprintf( __( 'Archive for %1$s', 'hybrid-core' ), get_the_time( __( 'g a', 'hybrid-core' ) ) );
+				$doctitle = sprintf( __( 'Archive for %s', 'hybrid-core' ), get_the_time( __( 'g a', 'hybrid-core' ) ) );
 
 			elseif ( is_day() )
-				$doctitle = sprintf( __( 'Archive for %1$s', 'hybrid-core' ), get_the_time( __( 'F jS, Y', 'hybrid-core' ) ) );
+				$doctitle = sprintf( __( 'Archive for %s', 'hybrid-core' ), get_the_time( __( 'F jS, Y', 'hybrid-core' ) ) );
 
 			elseif ( get_query_var( 'w' ) )
-				$doctitle = sprintf( __( 'Archive for week %1$s of %2$s', 'hybrid-core' ), get_the_time( __( 'W', 'hybrid-core' ) ), get_the_time( __( 'Y', 'hybrid-core' ) ) );
+				$doctitle = sprintf( __( 'Archive for week %s of %s', 'hybrid-core' ), get_the_time( __( 'W', 'hybrid-core' ) ), get_the_time( __( 'Y', 'hybrid-core' ) ) );
 
 			elseif ( is_month() )
-				$doctitle = sprintf( __( 'Archive for %1$s', 'hybrid-core' ), single_month_title( ' ', false) );
+				$doctitle = sprintf( __( 'Archive for %s', 'hybrid-core' ), single_month_title( ' ', false) );
 
 			elseif ( is_year() )
-				$doctitle = sprintf( __( 'Archive for %1$s', 'hybrid-core' ), get_the_time( __( 'Y', 'hybrid-core' ) ) );
+				$doctitle = sprintf( __( 'Archive for %s', 'hybrid-core' ), get_the_time( __( 'Y', 'hybrid-core' ) ) );
 		}
 
 		/* For any other archives. */
