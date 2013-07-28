@@ -113,10 +113,11 @@ class Hybrid_Media_Grabber {
 
 		/* Set up the default arguments. */
 		$defaults = array(
-			'type'        => 'video',  // audio|video
-			'before'      => '',       // HTML before the output
-			'after'       => '',       // HTML after the output
-			'split_media' => false,   // Splits the media from the post content
+			'post_id'     => get_the_ID(), // post ID (assumes within The Loop by default)
+			'type'        => 'video',      // audio|video
+			'before'      => '',           // HTML before the output
+			'after'       => '',           // HTML after the output
+			'split_media' => false,       // Splits the media from the post content
 
 			/* Only set a width or height if you need to override. Otherwise, leave it to WP. */
 			'width'       => 0,
@@ -125,7 +126,7 @@ class Hybrid_Media_Grabber {
 
 		/* Set the object properties. */
 		$this->args    = apply_filters( 'hybrid_media_grabber_args', wp_parse_args( $args, $defaults ) );
-		$this->content = get_the_content();
+		$this->content = get_post_field( 'post_content', $this->args['post_id'] );
 		$this->type    = isset( $this->args['type'] ) && in_array( $this->args['type'], array( 'audio', 'video' ) ) ? $this->args['type'] : 'video';
 
 		/* Find the media related to the post. */
@@ -329,7 +330,7 @@ class Hybrid_Media_Grabber {
 	public function do_attached_media() {
 
 		/* Gets media attached to the post by mime type. */
-		$attached_media = get_attached_media( $this->type );
+		$attached_media = get_attached_media( $this->type, $this->args['post_id'] );
 
 		/* If media is found. */
 		if ( !empty( $attached_media ) ) {
