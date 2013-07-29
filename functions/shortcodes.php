@@ -234,7 +234,7 @@ function hybrid_entry_published_shortcode( $attr ) {
 	else
 		$time = get_the_time( $attr['format'] );
 
-	$published = '<time class="published" title="' . get_the_time( esc_attr__( 'l, F jS, Y, g:i a', 'hybrid-core' ) ) . '">' . $time . '</time>';
+	$published = '<time class="published" datetime="' . get_the_time( 'Y-m-d\TH:i:sP' ) . '" title="' . get_the_time( esc_attr__( 'l, F jS, Y, g:i a', 'hybrid-core' ) ) . '">' . $time . '</time>';
 
 	return $attr['before'] . $published . $attr['after'];
 }
@@ -448,11 +448,11 @@ function hybrid_comment_published_shortcode( $attr ) {
 
 	/* If $human_time is passed in, allow for '%s ago' where '%s' is the return value of human_time_diff(). */
 	if ( !empty( $attr['human_time'] ) )
-		$published = '<time class="published" title="' . get_comment_date( esc_attr__( 'l, F jS, Y, g:i a', 'hybrid-core' ) ) . '">' . sprintf( $attr['human_time'], human_time_diff( get_comment_time( 'U' ), current_time( 'timestamp' ) ) ) . '</time>';
+		$published = '<time class="published" datetime="' . get_comment_time( 'Y-m-d\TH:i:sP' ) . '" title="' . get_comment_date( esc_attr__( 'l, F jS, Y, g:i a', 'hybrid-core' ) ) . '">' . sprintf( $attr['human_time'], human_time_diff( get_comment_time( 'U' ), current_time( 'timestamp' ) ) ) . '</time>';
 
 	/* Else, just return the default. */
 	else
-		$published = '<span class="published">' . sprintf( __( '%1$s at %2$s', 'hybrid-core' ), '<time class="comment-date" title="' . get_comment_date( esc_attr__( 'l, F jS, Y, g:i a', 'hybrid-core' ) ) . '">' . get_comment_date() . '</time>', '<time class="comment-time" title="' . get_comment_date( esc_attr__( 'l, F jS, Y, g:i a', 'hybrid-core' ) ) . '">' . get_comment_time() . '</time>' ) . '</span>';
+		$published = '<span class="published">' . sprintf( __( '%1$s at %2$s', 'hybrid-core' ), '<time class="comment-date" datetime="' . get_comment_time( 'Y-m-d\TH:i:sP' ) . '" title="' . get_comment_date( esc_attr__( 'l, F jS, Y, g:i a', 'hybrid-core' ) ) . '">' . get_comment_date() . '</time>', '<time class="comment-time" title="' . get_comment_date( esc_attr__( 'l, F jS, Y, g:i a', 'hybrid-core' ) ) . '">' . get_comment_time() . '</time>' ) . '</span>';
 
 	return $attr['before'] . $published . $attr['after'];
 }
