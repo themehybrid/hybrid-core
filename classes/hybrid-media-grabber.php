@@ -99,10 +99,11 @@ class Hybrid_Media_Grabber {
 	 * @since  0.1.0
 	 * @access public
 	 * @global object $wp_embed
+	 * @global int    $content_width
 	 * @return void
 	 */
 	public function __construct( $args = array() ) {
-		global $wp_embed;
+		global $wp_embed, $content_width;
 
 		/* Use WP's embed functionality to handle the [embed] shortcode and autoembeds. */
 		add_filter( 'hybrid_media_grabber_embed_shortcode_media', array( $wp_embed, 'run_shortcode' ) );
@@ -113,15 +114,12 @@ class Hybrid_Media_Grabber {
 
 		/* Set up the default arguments. */
 		$defaults = array(
-			'post_id'     => get_the_ID(), // post ID (assumes within The Loop by default)
-			'type'        => 'video',      // audio|video
-			'before'      => '',           // HTML before the output
-			'after'       => '',           // HTML after the output
-			'split_media' => false,       // Splits the media from the post content
-
-			/* Only set a width or height if you need to override. Otherwise, leave it to WP. */
-			'width'       => 0,
-			'height'      => 0
+			'post_id'     => get_the_ID(),   // post ID (assumes within The Loop by default)
+			'type'        => 'video',        // audio|video
+			'before'      => '',             // HTML before the output
+			'after'       => '',             // HTML after the output
+			'split_media' => false,          // Splits the media from the post content
+			'width'       => $content_width, // Custom width. Can't be greater than $content_width.
 		);
 
 		/* Set the object properties. */
@@ -141,6 +139,7 @@ class Hybrid_Media_Grabber {
 	 * @return void
 	 */
 	public function __destruct() {
+		remove_filter( 'wp_video_shortcode',    array( $this, 'video_shortcode' ) );
 		remove_filter( 'embed_maybe_make_link', '__return_false' );
 	}
 
@@ -272,7 +271,8 @@ class Hybrid_Media_Grabber {
 
 		$this->original_media = array_shift( $shortcode );
 
-		$this->media = do_shortcode( $this->original_media );
+		/* Need to filter dimensions here to overwrite WP's <div> surrounding the [video] shortcode. */
+		$this->media = do_shortcode( $this->filter_dimensions( $this->original_media ) );
 	}
 
 	/**
@@ -368,31 +368,43 @@ class Hybrid_Media_Grabber {
 	 *
 	 * @since  0.1.0
 	 * @access public
+	 * @global int     $content_width
 	 * @param  string  $html
 	 * @return string
 	 */
 	public function filter_dimensions( $html ) {
+		global $content_width;
 
-		$patterns     = array();
-		$replacements = array();
+		/* Find the dimensions of the media. */
+		preg_match( '/width=[\'"](.+?)[\'"].+?height=[\'"](.+?)[\'"]/i', $html, $dimensions );
 
-		/* If we have a width, set up the patterns and replacements for it. */
-		if ( !empty( $this->args['width'] ) ) {
-			$patterns[]     = '/(width=[\'"]).+?([\'"])/i';
-			$replacements[] = '${1}' . $this->args['width'] . '${2}';
-		}
+		/* If no dimensions are found, just return the HTML. */
+		if ( empty( $dimensions ) || !isset( $dimensions[1] ) || !isset( $dimensions[2] ) )
+			return $html;
 
-		/* If we have a height, set up the patterns and replacements for it. */
-		if ( !empty( $this->args['height'] ) ) {
-			$patterns[]     = '/(height=[\'"]).+?([\'"])/i';
-			$replacements[] = '${1}' . $this->args['height'] . '${2}';
-		}
+		/* Width can't be greater than $content_width. This is consistent with the [video] shortcode. */
+		$this->args['width'] = $this->args['width'] > $content_width ? $content_width : $this->args['width'];
 
-		/* Filter the width and/or the height if needed. */
-		if ( !empty( $patterns ) && !empty( $replacements ) )
-			return preg_replace( $patterns, $replacements, $html );
+		/* Get the ration by dividing the original width by the height of the media. */
+		$ratio = $dimensions[1] / $dimensions[2];
 
-		return $html;
+		/* Correct the height based on the inputted width and the ratio. */
+		$height = round( $this->args['width'] / $ratio );
+
+		/* Set up the patterns for the 'width' and 'height' attributes. */
+		$patterns = array(
+			'/(width=[\'"]).+?([\'"])/i',
+			'/(height=[\'"]).+?([\'"])/i'
+		);
+
+		/* Set up the replacements for the 'width' and 'height' attributes. */
+		$replacements = array(
+			'${1}' . $this->args['width'] . '${2}',
+			'${1}' . $height . '${2}'
+		);
+
+		/* Filter the dimensions and return the media HTML. */
+		return preg_replace( $patterns, $replacements, $html );
 	}
 }
 
