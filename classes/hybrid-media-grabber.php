@@ -292,7 +292,7 @@ class Hybrid_Media_Grabber {
 			foreach ( $matches as $value ) {
 
 				/* Let WP work its magic with the 'autoembed' method. */
-				$embed = apply_filters( 'hybrid_media_grabber_autoembed_media', $value[0] );
+				$embed = trim( apply_filters( 'hybrid_media_grabber_autoembed_media', $value[0] ) );
 
 				if ( !empty( $embed ) ) {
 					$this->original_media = $value[0];
@@ -375,21 +375,25 @@ class Hybrid_Media_Grabber {
 	public function filter_dimensions( $html ) {
 		global $content_width;
 
-		/* Find the dimensions of the media. */
-		preg_match( '/width=[\'"](.+?)[\'"].+?height=[\'"](.+?)[\'"]/i', $html, $dimensions );
+		/* Find the attributes of the media. */
+		$atts = wp_kses_hair( $html, array( 'http', 'https' ) );
+
+		/* Loop through the media attributes and add them in key/value pairs. */
+		foreach ( $atts as $att )
+			$media_atts[ $att['name'] ] = $att['value'];
 
 		/* If no dimensions are found, just return the HTML. */
-		if ( empty( $dimensions ) || !isset( $dimensions[1] ) || !isset( $dimensions[2] ) )
+		if ( empty( $media_atts ) || !isset( $media_atts['width'] ) || !isset( $media_atts['height'] ) )
 			return $html;
 
-		/* Width can't be greater than $content_width. This is consistent with the [video] shortcode. */
-		$this->args['width'] = $this->args['width'] > $content_width ? $content_width : $this->args['width'];
+		/* Get the ratio by dividing the original width by the height of the media. */
+		$ratio = $media_atts['width'] / $media_atts['height'];
 
-		/* Get the ration by dividing the original width by the height of the media. */
-		$ratio = $dimensions[1] / $dimensions[2];
+		/* Width can't be greater than $content_width. This is consistent with the [video] shortcode. */
+		$width = $this->args['width'] > $content_width ? $content_width : $this->args['width'];
 
 		/* Correct the height based on the inputted width and the ratio. */
-		$height = round( $this->args['width'] / $ratio );
+		$height = round( $width / $ratio );
 
 		/* Set up the patterns for the 'width' and 'height' attributes. */
 		$patterns = array(
@@ -399,7 +403,7 @@ class Hybrid_Media_Grabber {
 
 		/* Set up the replacements for the 'width' and 'height' attributes. */
 		$replacements = array(
-			'${1}' . $this->args['width'] . '${2}',
+			'${1}' . $width . '${2}',
 			'${1}' . $height . '${2}'
 		);
 
