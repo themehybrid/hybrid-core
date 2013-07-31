@@ -384,14 +384,23 @@ class Hybrid_Media_Grabber {
 		if ( empty( $media_atts ) || !isset( $media_atts['width'] ) || !isset( $media_atts['height'] ) )
 			return $html;
 
-		/* Get the ratio by dividing the original width by the height of the media. */
-		$ratio = $media_atts['width'] / $media_atts['height'];
-
-		/* Set the width to the inputted width. */
-		$width = $this->args['width'];
-
 		/* Correct the height based on the inputted width and the ratio. */
-		$height = round( $width / $ratio );
+		$max_height = round( $this->args['width'] / ( $media_atts['width'] / $media_atts['height'] ) );
+
+		/* Fix for Spotify embeds. @todo - needs testing. */
+		if ( !empty( $media_atts['src'] ) && preg_match( '#https?://(embed)\.spotify\.com/.*#i', $media_atts['src'], $matches ) )
+			$max_height = 380;
+
+		/* Calculate new media dimensions. */
+		$dimensions = wp_expand_dimensions( 
+			$media_atts['width'], 
+			$media_atts['height'], 
+			$this->args['width'], 
+			$max_height
+		);
+
+		$width = $dimensions[0];
+		$height = $dimensions[1];
 
 		/* Set up the patterns for the 'width' and 'height' attributes. */
 		$patterns = array(
