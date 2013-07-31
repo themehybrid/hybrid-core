@@ -392,15 +392,12 @@ class Hybrid_Media_Grabber {
 			$max_height = 380;
 
 		/* Calculate new media dimensions. */
-		$dimensions = wp_expand_dimensions( 
+		list( $width, $height ) = wp_expand_dimensions( 
 			$media_atts['width'], 
 			$media_atts['height'], 
 			$this->args['width'], 
 			$max_height
 		);
-
-		$width = $dimensions[0];
-		$height = $dimensions[1];
 
 		/* Set up the patterns for the 'width' and 'height' attributes. */
 		$patterns = array(
