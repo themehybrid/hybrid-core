@@ -368,12 +368,10 @@ class Hybrid_Media_Grabber {
 	 *
 	 * @since  0.1.0
 	 * @access public
-	 * @global int     $content_width
 	 * @param  string  $html
 	 * @return string
 	 */
 	public function filter_dimensions( $html ) {
-		global $content_width;
 
 		/* Find the attributes of the media. */
 		$atts = wp_kses_hair( $html, array( 'http', 'https' ) );
