@@ -119,7 +119,7 @@ class Hybrid_Media_Grabber {
 			'before'      => '',             // HTML before the output
 			'after'       => '',             // HTML after the output
 			'split_media' => false,          // Splits the media from the post content
-			'width'       => $content_width, // Custom width. Can't be greater than $content_width.
+			'width'       => $content_width, // Custom width. Defaults to the theme's content width.
 		);
 
 		/* Set the object properties. */
@@ -389,8 +389,8 @@ class Hybrid_Media_Grabber {
 		/* Get the ratio by dividing the original width by the height of the media. */
 		$ratio = $media_atts['width'] / $media_atts['height'];
 
-		/* Width can't be greater than $content_width. This is consistent with the [video] shortcode. */
-		$width = $this->args['width'] > $content_width ? $content_width : $this->args['width'];
+		/* Set the width to the inputted width. */
+		$width = $this->args['width'];
 
 		/* Correct the height based on the inputted width and the ratio. */
 		$height = round( $width / $ratio );
@@ -398,13 +398,15 @@ class Hybrid_Media_Grabber {
 		/* Set up the patterns for the 'width' and 'height' attributes. */
 		$patterns = array(
 			'/(width=[\'"]).+?([\'"])/i',
-			'/(height=[\'"]).+?([\'"])/i'
+			'/(height=[\'"]).+?([\'"])/i',
+			'/(<div.+?style=[\'"].*?width:.+?).+?(px;.+?[\'"].*?>)/i'
 		);
 
 		/* Set up the replacements for the 'width' and 'height' attributes. */
 		$replacements = array(
 			'${1}' . $width . '${2}',
-			'${1}' . $height . '${2}'
+			'${1}' . $height . '${2}',
+			'${1}' . $width . '${2}'
 		);
 
 		/* Filter the dimensions and return the media HTML. */
