@@ -384,18 +384,21 @@ class Hybrid_Media_Grabber {
 		if ( empty( $media_atts ) || !isset( $media_atts['width'] ) || !isset( $media_atts['height'] ) )
 			return $html;
 
-		/* Correct the height based on the inputted width and the ratio. */
+		/* Set the max height based on the inputted width and the ratio. */
 		$max_height = round( $this->args['width'] / ( $media_atts['width'] / $media_atts['height'] ) );
 
-		/* Fix for Spotify embeds. @todo - needs testing. */
+		/* Set the max width. */
+		$max_width = $this->args['width'];
+
+		/* Fix for Spotify embeds. */
 		if ( !empty( $media_atts['src'] ) && preg_match( '#https?://(embed)\.spotify\.com/.*#i', $media_atts['src'], $matches ) )
-			$max_height = 380;
+			list( $max_width, $max_height ) = $this->spotify_dimensions( $media_atts );
 
 		/* Calculate new media dimensions. */
 		list( $width, $height ) = wp_expand_dimensions( 
 			$media_atts['width'], 
 			$media_atts['height'], 
-			$this->args['width'], 
+			$max_width,
 			$max_height
 		);
 
@@ -415,6 +418,27 @@ class Hybrid_Media_Grabber {
 
 		/* Filter the dimensions and return the media HTML. */
 		return preg_replace( $patterns, $replacements, $html );
+	}
+
+	/**
+	 * Fix for Spotify embeds because they're the only embeddable service that doesn't work that well 
+	 * with custom-sized embeds.  So, we need to adjust this the best we can.  Right now, the only 
+	 * embed size that works for full-width embeds is the "compact" player (height of 80).
+	 *
+	 * @since  0.1.0
+	 * @access public
+	 * @param  array   $media_atts
+	 * @return array
+	 */
+	public function spotify_dimensions( $media_atts ) {
+
+		$max_width  = $media_atts['width'];
+		$max_height = $media_atts['height'];
+
+		if ( 80 == $media_atts['height'] )
+			$max_width  = $this->args['width'];
+
+		return array( $max_width, $max_height );
 	}
 }
 
