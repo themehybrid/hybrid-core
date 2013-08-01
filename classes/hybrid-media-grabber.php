@@ -395,11 +395,19 @@ class Hybrid_Media_Grabber {
 			list( $max_width, $max_height ) = $this->spotify_dimensions( $media_atts );
 
 		/* Calculate new media dimensions. */
-		list( $width, $height ) = wp_expand_dimensions( 
+		$dimensions = wp_expand_dimensions( 
 			$media_atts['width'], 
 			$media_atts['height'], 
 			$max_width,
 			$max_height
+		);
+
+		/* Allow devs to filter the final width and height of the media. */
+		list( $width, $height ) = apply_filters( 
+			'hybrid_media_grabber_dimensions', 
+			$dimensions,                       // width/height array
+			$media_atts,                       // media HTML attributes
+			$this                              // media grabber object
 		);
 
 		/* Set up the patterns for the 'width' and 'height' attributes. */
