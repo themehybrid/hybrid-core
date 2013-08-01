@@ -383,11 +383,11 @@ class Hybrid_Media_Grabber {
 		if ( empty( $media_atts ) || !isset( $media_atts['width'] ) || !isset( $media_atts['height'] ) )
 			return $html;
 
-		/* Set the max height based on the inputted width and the ratio. */
-		$max_height = round( $this->args['width'] / ( $media_atts['width'] / $media_atts['height'] ) );
-
 		/* Set the max width. */
 		$max_width = $this->args['width'];
+
+		/* Set the max height based on the max width and original width/height ratio. */
+		$max_height = round( $max_width / ( $media_atts['width'] / $media_atts['height'] ) );
 
 		/* Fix for Spotify embeds. */
 		if ( !empty( $media_atts['src'] ) && preg_match( '#https?://(embed)\.spotify\.com/.*#i', $media_atts['src'], $matches ) )
