@@ -72,15 +72,6 @@ function loop_pagination( $args = array() ) {
 	if ( $wp_rewrite->using_permalinks() && !is_search() )
 		$defaults['base'] = user_trailingslashit( trailingslashit( get_pagenum_link() ) . "{$pagination_base}/%#%" );
 
-	/* @todo Find a way to make pretty links work for search in all cases. */
-	/**
-	if ( is_search() ) {
-		$search_permastruct = $wp_rewrite->get_search_permastruct();
-		if ( !empty( $search_permastruct ) )
-			$defaults['base'] = user_trailingslashit( trailingslashit( get_search_link() ) . 'page/%#%' );
-	}
-	/**/
-
 	/* Allow developers to overwrite the arguments with a filter. */
 	$args = apply_filters( 'loop_pagination_args', $args );
 
