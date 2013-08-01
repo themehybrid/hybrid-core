@@ -139,7 +139,6 @@ class Hybrid_Media_Grabber {
 	 * @return void
 	 */
 	public function __destruct() {
-		remove_filter( 'wp_video_shortcode',    array( $this, 'video_shortcode' ) );
 		remove_filter( 'embed_maybe_make_link', '__return_false' );
 	}
 
