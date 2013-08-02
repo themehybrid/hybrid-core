@@ -134,20 +134,6 @@ function hybrid_clean_post_format_slug( $slug ) {
 	return str_replace( 'post-format-', '', $slug );
 }
 
-/**
- * Checks if a post has any content. Useful if you need to check if the user has written any content 
- * before performing any actions.
- *
- * @since  1.6.0
- * @access public
- * @param  int    $id  The ID of the post.
- * @return bool
- */
-function hybrid_post_has_content( $id = 0 ) {
-	$post = get_post( $id );
-	return !empty( $post->post_content ) ? true : false;
-}
-
 /* === Asides === */
 
 /**
