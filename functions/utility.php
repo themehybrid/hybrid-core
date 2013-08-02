@@ -34,6 +34,10 @@ function hybrid_add_post_type_support() {
 
 	/* Add support for excerpts to the 'page' post type. */
 	add_post_type_support( 'page', array( 'excerpt' ) );
+
+	/* Add thumbnail support for audio and video attachments. */
+	add_post_type_support( 'attachment:audio', 'thumbnail' );
+	add_post_type_support( 'attachment:video', 'thumbnail' );
 }
 
 /**
