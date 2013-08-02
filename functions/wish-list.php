@@ -1,6 +1,6 @@
 <?php
 /**
- * Functions that I've found useful that I wish WordPress had equivalents too baked right into core.  If 
+ * Functions that I've found useful that I wish WordPress had equivalents for baked right into core.  If 
  * there's a relevant Trac ticket, it'll be listed in with the function.
  *
  * @package    HybridCore
