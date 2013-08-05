@@ -132,8 +132,17 @@ function cleaner_gallery( $output, $attr ) {
 		/* Open each gallery item. */
 		$output .= "\n\t\t\t\t\t<{$itemtag} class='gallery-item col-{$columns}'>";
 
+		/* Get the image attachment meta. */
+		$image_meta  = wp_get_attachment_metadata( $id );
+
+		/* Get the image orientation (portrait|landscape) based off the width and height. */
+		$orientation = '';
+
+		if ( isset( $image_meta['height'], $image_meta['width'] ) )
+			$orientation = ( $image_meta['height'] > $image_meta['width'] ) ? 'portrait' : 'landscape';
+
 		/* Open the element to wrap the image. */
-		$output .= "\n\t\t\t\t\t\t<{$icontag} class='gallery-icon'>";
+		$output .= "\n\t\t\t\t\t\t<{$icontag} class='gallery-icon {$orientation}'>";
 
 		/* Get the image. */
 		if ( isset( $attr['link'] ) && 'file' == $attr['link'] ) 
