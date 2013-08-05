@@ -125,6 +125,9 @@ class Featured_Header {
 			/* If both the width and height are greater than '0', add the custom image size. */
 			if ( 0 < $this->width && 0 < $this->height )
 				add_image_size( $this->size, $this->width, $this->height, $this->crop );
+
+			/* Add translatable featured header image name. */
+			add_filter( 'image_size_names_choose', array( &$this, 'image_size_names_choose' ) );
 		}
 	}
 
@@ -182,6 +185,22 @@ class Featured_Header {
 		}
 
 		return $data;
+	}
+
+	/**
+	 * Adds an internationalized version of the Featured Header image size name to the image sizes list 
+	 * when inserting an image from the media gallery into a post.
+	 *
+	 * @since  0.1.1
+	 * @access public
+	 * @link   https://foxnet-themes.fi/2013/07/03/translating-custom-image-sizes/
+	 * @param  array  $sizes
+	 * @return array
+	 */
+	public function image_size_names_choose( $sizes ) {
+		$sizes[ $this->size ] = __( 'Featured Header', 'featured-header' );
+
+		return $sizes;
 	}
 }
 
