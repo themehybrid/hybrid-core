@@ -15,7 +15,7 @@
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * @package   PostStylesheets
- * @version   0.5.0-alpha
+ * @version   0.5.0
  * @author    Justin Tadlock <justin@justintadlock.com>
  * @copyright Copyright (c) 2010 - 2013, Justin Tadlock
  * @link      http://justintadlock.com

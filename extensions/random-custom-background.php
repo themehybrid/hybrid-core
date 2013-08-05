@@ -15,9 +15,9 @@
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * @package   RandomCustomBackground
- * @version   0.2.0-alpha
+ * @version   0.2.0
  * @author    Justin Tadlock <justin@justintadlock.com>
- * @copyright Copyright (c) 2012, Justin Tadlock
+ * @copyright Copyright (c) 2012 - 2013, Justin Tadlock
  * @link      http://justintadlock.com
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
