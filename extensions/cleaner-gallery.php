@@ -135,8 +135,17 @@ function cleaner_gallery( $output, $attr ) {
 		/* Open the element to wrap the image. */
 		$output .= "\n\t\t\t\t\t\t<{$icontag} class='gallery-icon'>";
 
-		/* Add the image. */
-		$image = ( ( isset( $attr['link'] ) && 'file' == $attr['link'] ) ? wp_get_attachment_link( $attachment->ID, $size, false, true ) : wp_get_attachment_link( $attachment->ID, $size, true, true ) );
+		/* Get the image. */
+		if ( isset( $attr['link'] ) && 'file' == $attr['link'] ) 
+			$image = wp_get_attachment_link( $attachment->ID, $size, false, true );
+
+		elseif ( isset( $attr['link'] ) && 'none' == $attr['link'] )
+			$image = wp_get_attachment_image( $attachment->ID, $size, false );
+
+		else
+			$image = wp_get_attachment_link( $attachment->ID, $size, true, true );
+
+		/* Apply filters over the image itself. */
 		$output .= apply_filters( 'cleaner_gallery_image', $image, $attachment->ID, $attr, $cleaner_gallery_instance );
 
 		/* Close the image wrapper. */
