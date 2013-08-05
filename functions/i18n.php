@@ -301,7 +301,7 @@ function hybrid_ngettext_with_context( $translated, $single, $plural, $number, $
  */
 function hybrid_extensions_gettext( $translated, $text, $domain ) {
 
-	$extensions = array( 'breadcrumb-trail', 'custom-field-series', 'post-stylesheets', 'theme-fonts', 'theme-layouts' );
+	$extensions = array( 'breadcrumb-trail', 'custom-field-series', 'featured-header', 'post-stylesheets', 'theme-fonts', 'theme-layouts' );
 
 	/* Check if the current textdomain matches one of the framework extensions. */
 	if ( in_array( $domain, $extensions ) && current_theme_supports( $domain ) ) {
@@ -331,7 +331,7 @@ function hybrid_extensions_gettext( $translated, $text, $domain ) {
  */
 function hybrid_extensions_gettext_with_context( $translated, $text, $context, $domain ) {
 
-	$extensions = array( 'breadcrumb-trail', 'custom-field-series', 'post-stylesheets', 'theme-fonts', 'theme-layouts' );
+	$extensions = array( 'breadcrumb-trail', 'custom-field-series', 'featured-header', 'post-stylesheets', 'theme-fonts', 'theme-layouts' );
 
 	/* Check if the current textdomain matches one of the framework extensions. */
 	if ( in_array( $domain, $extensions ) && current_theme_supports( $domain ) ) {
@@ -362,7 +362,7 @@ function hybrid_extensions_gettext_with_context( $translated, $text, $context, $
  */
 function hybrid_extensions_ngettext( $translated, $single, $plural, $number, $domain ) {
 
-	$extensions = array( 'breadcrumb-trail', 'custom-field-series', 'post-stylesheets', 'theme-fonts', 'theme-layouts' );
+	$extensions = array( 'breadcrumb-trail', 'custom-field-series', 'featured-header', 'post-stylesheets', 'theme-fonts', 'theme-layouts' );
 
 	/* Check if the current textdomain matches one of the framework extensions. */
 	if ( in_array( $domain, $extensions ) && current_theme_supports( $domain ) ) {
@@ -394,7 +394,7 @@ function hybrid_extensions_ngettext( $translated, $single, $plural, $number, $do
  */
 function hybrid_extensions_ngettext_with_context( $translated, $single, $plural, $number, $context, $domain ) {
 
-	$extensions = array( 'breadcrumb-trail', 'custom-field-series', 'post-stylesheets', 'theme-fonts', 'theme-layouts' );
+	$extensions = array( 'breadcrumb-trail', 'custom-field-series', 'featured-header', 'post-stylesheets', 'theme-fonts', 'theme-layouts' );
 
 	/* Check if the current textdomain matches one of the framework extensions. */
 	if ( in_array( $domain, $extensions ) && current_theme_supports( $domain ) ) {
