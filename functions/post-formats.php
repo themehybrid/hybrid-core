@@ -257,7 +257,7 @@ function hybrid_image_content( $content ) {
 			$content = get_the_image( array( 'meta_key' => false, 'size' => 'large', 'link_to_post' => false, 'echo' => false ) ) . $content;
 
 		elseif ( empty( $matches ) )
-			$content = get_the_post_format_image() . $content;
+			$content = get_the_post_thumbnail( get_the_ID(), 'large' ) . $content;
 	}
 
 	return $content;
