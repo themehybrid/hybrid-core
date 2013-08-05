@@ -31,10 +31,11 @@ add_filter( 'post_gallery', 'cleaner_gallery', 10, 2 );
  * developers to style the gallery more easily.
  *
  * @since  0.9.0
- * @access private
+ * @access public
+ * @global array  $_wp_additional_image_sizes
  * @param  string $output The output of the gallery shortcode.
  * @param  array  $attr   The arguments for displaying the gallery.
- * @return string $output
+ * @return string
  */
 function cleaner_gallery( $output, $attr ) {
 	global $_wp_additional_image_sizes;
