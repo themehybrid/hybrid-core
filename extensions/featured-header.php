@@ -123,11 +123,12 @@ class Featured_Header {
 			$this->height = apply_filters( 'featured_header_image_height', absint( get_theme_support( 'custom-header', 'height' ) ) );
 
 			/* If both the width and height are greater than '0', add the custom image size. */
-			if ( 0 < $this->width && 0 < $this->height )
+			if ( 0 < $this->width && 0 < $this->height ) {
 				add_image_size( $this->size, $this->width, $this->height, $this->crop );
 
-			/* Add translatable featured header image name. */
-			add_filter( 'image_size_names_choose', array( &$this, 'image_size_names_choose' ) );
+				/* Add translatable featured header image name. */
+				add_filter( 'image_size_names_choose', array( &$this, 'image_size_names_choose' ) );
+			}
 		}
 	}
 
