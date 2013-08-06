@@ -14,9 +14,9 @@
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * @package   LoopPagination
- * @version   0.2.1
+ * @version   0.3.0
  * @author    Justin Tadlock <justin@justintadlock.com>
- * @copyright Copyright (c) 2010 - 2012, Justin Tadlock
+ * @copyright Copyright (c) 2010 - 2013, Justin Tadlock
  * @link      http://themehybrid.com/docs/tutorials/loop-pagination
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
@@ -63,23 +63,14 @@ function loop_pagination( $args = array() ) {
 		'type'         => 'plain',
 
 		// Begin loop_pagination() arguments.
-		'before'       => '<div class="pagination loop-pagination">',
-		'after'        => '</div>',
+		'before'       => '<nav class="pagination loop-pagination">',
+		'after'        => '</nav>',
 		'echo'         => true,
 	);
 
 	/* Add the $base argument to the array if the user is using permalinks. */
 	if ( $wp_rewrite->using_permalinks() && !is_search() )
 		$defaults['base'] = user_trailingslashit( trailingslashit( get_pagenum_link() ) . "{$pagination_base}/%#%" );
-
-	/* @todo Find a way to make pretty links work for search in all cases. */
-	/**
-	if ( is_search() ) {
-		$search_permastruct = $wp_rewrite->get_search_permastruct();
-		if ( !empty( $search_permastruct ) )
-			$defaults['base'] = user_trailingslashit( trailingslashit( get_search_link() ) . 'page/%#%' );
-	}
-	/**/
 
 	/* Allow developers to overwrite the arguments with a filter. */
 	$args = apply_filters( 'loop_pagination_args', $args );
@@ -95,8 +86,16 @@ function loop_pagination( $args = array() ) {
 	$page_links = paginate_links( $args );
 
 	/* Remove 'page/1' from the entire output since it's not needed. */
-	$page_links = str_replace( array( "?paged=1'", "&#038;paged=1'", "/{$pagination_base}/1'", "/{$pagination_base}/1/'" ), '\'', $page_links );
-	$page_links = str_replace( array( '?paged=1"', '&#038;paged=1"', "/{$pagination_base}/1\"", "/{$pagination_base}/1/\"" ), '"', $page_links );
+	$page_links = preg_replace( 
+		array( 
+			"#(href=['\"].*?){$pagination_base}/1(['\"])#",  // 'page/1'
+			"#(href=['\"].*?){$pagination_base}/1/(['\"])#", // 'page/1/'
+			"#(href=['\"].*?)\?paged=1(['\"])#",             // '?paged=1'
+			"#(href=['\"].*?)&\#038;paged=1(['\"])#"         // '&#038;paged=1'
+		), 
+		'$1$2', 
+		$page_links 
+	);
 
 	/* Wrap the paginated links with the $before and $after elements. */
 	$page_links = $args['before'] . $page_links . $args['after'];

@@ -6,7 +6,7 @@
  * @package HybridCore
  * @subpackage Functions
  * @author Justin Tadlock <justin@justintadlock.com>
- * @copyright Copyright (c) 2008 - 2012, Justin Tadlock
+ * @copyright Copyright (c) 2008 - 2013, Justin Tadlock
  * @link http://themehybrid.com/hybrid-core
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
@@ -121,14 +121,7 @@ function hybrid_text_attachment( $mime = '', $file = '' ) {
  * @return string
  */
 function hybrid_audio_attachment( $mime = '', $file = '' ) {
-	$embed_defaults = wp_embed_defaults();
-	$audio = '<object type="' . esc_attr( $mime ) . '" class="player audio" data="' . esc_url( $file ) . '" width="' . esc_attr( $embed_defaults['width'] ) . '" height="' . esc_attr( $embed_defaults['height'] ) . '">';
-		$audio .= '<param name="src" value="' . esc_url( $file ) . '" />';
-		$audio .= '<param name="autostart" value="false" />';
-		$audio .= '<param name="controller" value="true" />';
-	$audio .= '</object>';
-
-	return $audio;
+	return do_shortcode( '[audio src="' . esc_url( $file ) . '"]' );
 }
 
 /**
@@ -141,19 +134,7 @@ function hybrid_audio_attachment( $mime = '', $file = '' ) {
  * @return string
  */
 function hybrid_video_attachment( $mime = false, $file = false ) {
-	$embed_defaults = wp_embed_defaults();
-
-	if ( $mime == 'video/asf' )
-		$mime = 'video/x-ms-wmv';
-
-	$video = '<object type="' . esc_attr( $mime ) . '" class="player video" data="' . esc_url( $file ) . '" width="' . esc_attr( $embed_defaults['width'] ) . '" height="' . esc_attr( $embed_defaults['height'] ) . '">';
-		$video .= '<param name="src" value="' . esc_url( $file ) . '" />';
-		$video .= '<param name="autoplay" value="false" />';
-		$video .= '<param name="allowfullscreen" value="true" />';
-		$video .= '<param name="controller" value="true" />';
-	$video .= '</object>';
-
-	return $video;
+	return do_shortcode( '[video src="' . esc_url( $file ) . '"]' );
 }
 
 ?>

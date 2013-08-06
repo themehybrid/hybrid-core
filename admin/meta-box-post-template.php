@@ -8,7 +8,7 @@
  * @package    HybridCore
  * @subpackage Admin
  * @author     Justin Tadlock <justin@justintadlock.com>
- * @copyright  Copyright (c) 2008 - 2012, Justin Tadlock
+ * @copyright  Copyright (c) 2008 - 2013, Justin Tadlock
  * @link       http://themehybrid.com/hybrid-core
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
@@ -30,6 +30,13 @@ add_action( 'edit_attachment', 'hybrid_meta_box_post_save_template' );
  * @return void
  */
 function hybrid_meta_box_post_add_template( $post_type, $post ) {
+
+	/* Get the post templates. */
+	$templates = hybrid_get_post_templates( $post_type );
+
+	/* If no post templates were found for this post type, don't add the meta box. */
+	if ( empty( $templates ) )
+		return;
 
 	$post_type_object = get_post_type_object( $post_type );
 
@@ -85,8 +92,6 @@ function hybrid_meta_box_post_display_template( $object, $box ) {
 					<option value="<?php echo esc_attr( $template ); ?>" <?php selected( esc_attr( get_post_meta( $object->ID, "_wp_{$post_type_object->name}_template", true ) ), esc_attr( $template ) ); ?>><?php echo esc_html( $label ); ?></option>
 				<?php } ?>
 			</select>
-		<?php } else { ?>
-			<?php _e( 'No templates exist for this post type.', 'hybrid-core' ); ?>
 		<?php } ?>
 	</p>
 <?php

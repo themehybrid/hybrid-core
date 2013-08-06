@@ -15,9 +15,9 @@
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * @package   RandomCustomBackground
- * @version   0.1.0
+ * @version   0.2.0
  * @author    Justin Tadlock <justin@justintadlock.com>
- * @copyright Copyright (c) 2012, Justin Tadlock
+ * @copyright Copyright (c) 2012 - 2013, Justin Tadlock
  * @link      http://justintadlock.com
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
@@ -86,6 +86,33 @@ class Random_Custom_Background {
 	public $attachment = 'scroll';
 
 	/**
+	 * The background clip property.  Allowed: 'border-box', 'padding-box', 'content-box'.
+	 *
+	 * @since  0.2.0
+	 * @access public
+	 * @var    string
+	 */
+	public $clip = 'border-box';
+
+	/**
+	 * The background origin property.  Allowed: 'padding-box', 'border-box', 'content-box'.
+	 *
+	 * @since  0.2.0
+	 * @access public
+	 * @var    string
+	 */
+	public $origin = 'padding-box';
+
+	/**
+	 * The background size property.  Allowed: $length, $percentage, 'auto', 'contain', 'cover'.
+	 *
+	 * @since  0.2.0
+	 * @access public
+	 * @var    string
+	 */
+	public $size = 'auto';
+
+	/**
 	 * Constructor method.  Sets up the random background feature.
 	 *
 	 * @since  0.1.0
@@ -120,6 +147,9 @@ class Random_Custom_Background {
 			add_filter( 'theme_mod_background_position_y', array( &$this, 'background_position_y' ) );
 			add_filter( 'theme_mod_background_position_x', array( &$this, 'background_position_x' ) );
 			add_filter( 'theme_mod_background_attachment', array( &$this, 'background_attachment' ) );
+			add_filter( 'theme_mod_background_clip',       array( &$this, 'background_clip' ) );
+			add_filter( 'theme_mod_background_origin',     array( &$this, 'background_origin' ) );
+			add_filter( 'theme_mod_background_size',       array( &$this, 'background_size' ) );
 		}
 
 		/* Get the custom background arguments. */
@@ -135,7 +165,8 @@ class Random_Custom_Background {
 	 * add a second parameter to register their backgrounds (an array of background arrays).
 	 * add_theme_support( 'random-custom-background', $backgrounds ).
 	 *
-	 * Supported background arguments: 'image', 'color', 'repeat', 'position_y', 'position_x', 'attachment'.
+	 * Supported background arguments: 'image', 'color', 'repeat', 'position_y', 'position_x', 
+	 * 'attachment', 'clip', 'origin', 'size'.
 	 *
 	 * @since  0.1.0
 	 * @access public
@@ -177,6 +208,9 @@ class Random_Custom_Background {
 		$this->position_y = !empty( $args['position_y'] ) ? $args['position_y'] : $this->position_y;
 		$this->position_x = !empty( $args['position_x'] ) ? $args['position_x'] : $this->position_x;
 		$this->attachment = !empty( $args['attachment'] ) ? $args['attachment'] : $this->attachment;
+		$this->clip       = !empty( $args['clip'] )       ? $args['clip']       : $this->clip;
+		$this->origin     = !empty( $args['origin'] )     ? $args['origin']     : $this->origin;
+		$this->size       = !empty( $args['size'] )       ? $args['size']       : $this->size;
 	}
 
 	/**
@@ -261,6 +295,51 @@ class Random_Custom_Background {
 	}
 
 	/**
+	 * Sets the background clip property.  This isn't technically supported in WordPress. This 
+	 * method is only executed if using a random background image and the 
+	 * custom_background_callback() method is executed (themes can also use it in custom 
+	 * callbacks).
+	 *
+	 * @since  0.2.0
+	 * @access public
+	 * @param  string $clip The background clip property.
+	 * @return string
+	 */
+	public function background_clip( $clip ) {
+		return $this->clip;
+	}
+
+	/**
+	 * Sets the background origin property.  This isn't technically supported in WordPress. This 
+	 * method is only executed if using a random background image and the 
+	 * custom_background_callback() method is executed (themes can also use it in custom 
+	 * callbacks).
+	 *
+	 * @since  0.2.0
+	 * @access public
+	 * @param  string $origin The background origin property.
+	 * @return string
+	 */
+	public function background_origin( $origin ) {
+		return $this->origin;
+	}
+
+	/**
+	 * Sets the background size property.  This isn't technically supported in WordPress. This 
+	 * method is only executed if using a random background image and the 
+	 * custom_background_callback() method is executed (themes can also use it in custom 
+	 * callbacks).
+	 *
+	 * @since  0.2.0
+	 * @access public
+	 * @param  string $size The background size property.
+	 * @return string
+	 */
+	public function background_size( $size ) {
+		return $this->size;
+	}
+
+	/**
 	 * Outputs the custom background style in the header.  This function is only executed if the value 
 	 * of the 'wp-head-callback' for the 'custom-background' feature is set to '__return_false'.
 	 *
@@ -309,6 +388,24 @@ class Random_Custom_Background {
 			$attachment = in_array( $attachment, array( 'fixed', 'scroll' ) ) ? $attachment : 'scroll';
 
 			$style .= " background-attachment: {$attachment};";
+
+			/* Backgroud clip. */
+			$clip = get_theme_mod( 'background_clip', 'border-box' );
+			$clip = in_array( $clip, array( 'border-box', 'padding-box', 'content-box' ) ) ? $clip : 'border-box';
+
+			$style .= " background-clip: {$clip};";
+
+			/* Backgroud origin. */
+			$origin = get_theme_mod( 'background_origin', 'padding-box' );
+			$origin = in_array( $origin, array( 'padding-box', 'border-box', 'content-box' ) ) ? $origin : 'padding-box';
+
+			$style .= " background-origin: {$origin};";
+
+			/* Background size. */
+			$size = get_theme_mod( 'background_size', 'auto' );
+			$size = in_array( $size, array( 'auto', 'contain', 'cover' ) ) ? $size : preg_replace( "/[^0-9a-zA-Z%\s]/", '', $size );
+
+			$style .= " background-size: {$size};";
 		}
 
 		/* Output the custom background style. */

@@ -7,7 +7,7 @@
  * @package    HybridCore
  * @subpackage Functions
  * @author     Justin Tadlock <justin@justintadlock.com>
- * @copyright  Copyright (c) 2008 - 2012, Justin Tadlock
+ * @copyright  Copyright (c) 2008 - 2013, Justin Tadlock
  * @link       http://themehybrid.com/hybrid-core
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
@@ -102,20 +102,21 @@ function hybrid_get_styles() {
 
 	/* Default styles available. */
 	$styles = array(
-		'18px'       => array( 'version' => '20110523' ),
-		'20px'       => array( 'version' => '20110523' ),
-		'21px'       => array( 'version' => '20110523' ),
-		'22px'       => array( 'version' => '20110523' ),
-		'24px'       => array( 'version' => '20110523' ),
-		'25px'       => array( 'version' => '20110523' ),
-		'drop-downs' =>	array( 'version' => '20110919' ),
+		'one-five'   => array( 'version' => '20130523' ),
+		'18px'       => array( 'version' => '20130526' ),
+		'20px'       => array( 'version' => '20130526' ),
+		'21px'       => array( 'version' => '20130526' ),
+		'22px'       => array( 'version' => '20130526' ),
+		'24px'       => array( 'version' => '20130526' ),
+		'25px'       => array( 'version' => '20130526' ),
+		'drop-downs' => array( 'version' => '20110919' ),
 		'nav-bar'    => array( 'version' => '20110519' ),
-		'gallery'    => array( 'version' => '20120222' ),
+		'gallery'    => array( 'version' => '20130526' ),
 	);
 
 	/* If a child theme is active, add the parent theme's style. */
 	if ( is_child_theme() ) {
-		$parent = wp_get_theme( get_template(), get_theme_root( get_template_directory() ) );
+		$parent = wp_get_theme( get_template() );
 
 		/* Get the parent theme stylesheet. */
 		$src = trailingslashit( THEME_URI ) . "style.css";

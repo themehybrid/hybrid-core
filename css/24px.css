@@ -1,4 +1,4 @@
-html, body, div, span, object, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, samp, small, strong, sub, sup, tt, var, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary, time, mark, audio, video {
+html, body, div, span, object, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, samp, small, strong, sub, sup, tt, var, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, figcaption, figure, footer, header, hgroup, menu, nav, section, main, summary, time, mark, audio, video {
 	margin: 0;
 	padding: 0;
 	vertical-align: baseline;
@@ -9,7 +9,7 @@ html, body, div, span, object, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, ab
 	text-decoration: none;
 	}
 
-article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section { 
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section, main { 
 	display: block;
 	}
 
@@ -62,8 +62,7 @@ h5 {
 h6 {
 	font-size: 1.1em;
 	}
-
-p {
+p, figure {
 	margin: 0 0 24px 0;
 	}
 
@@ -130,14 +129,19 @@ em em, cite cite {
 	font-style: normal;
 	}
 
-abbr {
+abbr[title],
+time[title],
+acronym[title] {
 	cursor: help;
+	}
+
+abbr,
+acronym {
+	border-bottom: 1px dotted #666;
 	}
 
 acronym {
 	text-transform: uppercase;
-	border-bottom: 1px dashed #666;
-	cursor: help;
 	}
 
 big {

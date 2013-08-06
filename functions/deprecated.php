@@ -9,7 +9,7 @@
  * @package    HybridCore
  * @subpackage Functions
  * @author     Justin Tadlock <justin@justintadlock.com>
- * @copyright  Copyright (c) 2008 - 2012, Justin Tadlock
+ * @copyright  Copyright (c) 2008 - 2013, Justin Tadlock
  * @link       http://themehybrid.com/hybrid-core
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
@@ -435,6 +435,69 @@ function hybrid_debug_stylesheet( $stylesheet_uri, $stylesheet_dir_uri ) {
 	return hybrid_min_stylesheet_uri( $stylesheet_uri, $stylesheet_dir_uri );
 }
 
+/**
+ * @since 1.5.0
+ * @deprecated 1.6.0
+ */
+function post_format_tools_post_has_content( $id = 0 ) {
+	_deprecated_function( __FUNCTION__, '1.6.0', 'hybrid_post_has_content()' );
+	hybrid_post_has_content( $id );
+}
+
+/**
+ * @since 1.5.0
+ * @deprecated 1.6.0
+ */
+function post_format_tools_url_grabber() {
+	_deprecated_function( __FUNCTION__, '1.6.0', 'hybrid_get_the_post_format_url()' );
+	hybrid_get_the_post_format_url();
+}
+
+/**
+ * @since 1.5.0
+ * @deprecated 1.6.0
+ */
+function post_format_tools_get_image_attachment_count() {
+	_deprecated_function( __FUNCTION__, '1.6.0', 'hybrid_get_gallery_image_count()' );
+	hybrid_get_gallery_image_count();
+}
+
+/**
+ * @since 1.5.0
+ * @deprecated 1.6.0
+ */
+function post_format_tools_get_video( $deprecated = '' ) {
+	_deprecated_function( __FUNCTION__, '1.6.0', 'hybrid_media_grabber()' );
+	hybrid_media_grabber();
+}
+
+/**
+ * @since 0.8.0
+ * @deprecated 1.6.0
+ */
+function get_atomic_template( $template ) {
+	_deprecated_function( __FUNCTION__, '1.6.0', '' );
+
+	$templates = array();
+
+	$theme_dir = trailingslashit( THEME_DIR ) . $template;
+	$child_dir = trailingslashit( CHILD_THEME_DIR ) . $template;
+
+	if ( is_dir( $child_dir ) || is_dir( $theme_dir ) ) {
+		$dir = true;
+		$templates[] = "{$template}/index.php";
+	}
+	else {
+		$dir = false;
+		$templates[] = "{$template}.php";
+	}
+
+	foreach ( hybrid_get_context() as $context )
+		$templates[] = ( ( $dir ) ? "{$template}/{$context}.php" : "{$template}-{$context}.php" );
+
+	return locate_template( array_reverse( $templates ), true, false );
+}
+
 /* === Removed Functions === */
 
 /* Functions removed in the 0.8 branch. */
@@ -553,10 +616,6 @@ function hybrid_search_form() {
 	hybrid_function_removed( __FUNCTION__ );
 }
 
-function hybrid_post_class() {
-	hybrid_function_removed( __FUNCTION__ );
-}
-
 function is_sidebar_active() {
 	hybrid_function_removed( __FUNCTION__ );
 }
@@ -576,6 +635,44 @@ function hybrid_post_stylesheets() {
 /* Functions removed in the 1.5 branch. */
 
 function hybrid_get_theme_data() {
+	hybrid_function_removed( __FUNCTION__ );
+}
+
+/* Functions removed in the 1.6 branch. */
+
+function post_format_tools_single_term_title() {
+	hybrid_function_removed( __FUNCTION__ );
+}
+
+function post_format_tools_aside_infinity() {
+	hybrid_function_removed( __FUNCTION__ );
+}
+
+function post_format_tools_quote_content() {
+	hybrid_function_removed( __FUNCTION__ );
+}
+
+function post_format_tools_link_content() {
+	hybrid_function_removed( __FUNCTION__ );
+}
+
+function post_format_tools_chat_content() {
+	hybrid_function_removed( __FUNCTION__ );
+}
+
+function post_format_tools_chat_row_id() {
+	hybrid_function_removed( __FUNCTION__ );
+}
+
+function post_format_tools_get_plural_string() {
+	hybrid_function_removed( __FUNCTION__ );
+}
+
+function post_format_tools_get_plural_strings() {
+	hybrid_function_removed( __FUNCTION__ );
+}
+
+function post_format_tools_clean_post_format_slug() {
 	hybrid_function_removed( __FUNCTION__ );
 }
 

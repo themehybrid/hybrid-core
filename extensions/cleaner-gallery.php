@@ -15,9 +15,9 @@
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * @package   CleanerGallery
- * @version   0.9.5
+ * @version   1.0.0
  * @author    Justin Tadlock <justin@justintadlock.com>
- * @copyright Copyright (c) 2008 - 2012, Justin Tadlock
+ * @copyright Copyright (c) 2008 - 2013, Justin Tadlock
  * @link      http://justintadlock.com/archives/2008/04/13/cleaner-wordpress-gallery-plugin
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
@@ -31,17 +31,19 @@ add_filter( 'post_gallery', 'cleaner_gallery', 10, 2 );
  * developers to style the gallery more easily.
  *
  * @since  0.9.0
- * @access private
+ * @access public
+ * @global array  $_wp_additional_image_sizes
  * @param  string $output The output of the gallery shortcode.
  * @param  array  $attr   The arguments for displaying the gallery.
- * @return string $output
+ * @return string
  */
 function cleaner_gallery( $output, $attr ) {
+	global $_wp_additional_image_sizes;
 
 	static $cleaner_gallery_instance = 0;
 	$cleaner_gallery_instance++;
 
-	/* We're not worried abut galleries in feeds, so just return the output here. */
+	/* We're not worried about galleries in feeds, so just return the output here. */
 	if ( is_feed() )
 		return $output;
 
@@ -57,12 +59,13 @@ function cleaner_gallery( $output, $attr ) {
 		'order'       => 'ASC',
 		'orderby'     => 'menu_order ID',
 		'id'          => get_the_ID(),
+		'mime_type'   => 'image',
 		'link'        => '',
-		'itemtag'     => 'dl',
-		'icontag'     => 'dt',
-		'captiontag'  => 'dd',
+		'itemtag'     => 'figure',
+		'icontag'     => 'div',
+		'captiontag'  => 'figcaption',
 		'columns'     => 3,
-		'size'        => 'thumbnail',
+		'size'        => isset( $_wp_additional_image_sizes['post-thumbnail'] ) ? 'post-thumbnail' : 'thumbnail',
 		'ids'         => '',
 		'include'     => '',
 		'exclude'     => '',
@@ -85,7 +88,7 @@ function cleaner_gallery( $output, $attr ) {
 	$children = array(
 		'post_status'      => 'inherit',
 		'post_type'        => 'attachment',
-		'post_mime_type'   => 'image',
+		'post_mime_type'   => wp_parse_args( $mime_type ),
 		'order'            => $order,
 		'orderby'          => $orderby,
 		'exclude'          => $exclude,
@@ -102,7 +105,7 @@ function cleaner_gallery( $output, $attr ) {
 		$attachments = get_posts( $children );
 
 	if ( empty( $attachments ) )
-		return '<!-- Here be dragons but no images. -->';
+		return '';
 
 	/* Properly escape the gallery tags. */
 	$itemtag    = tag_escape( $itemtag );
@@ -125,16 +128,34 @@ function cleaner_gallery( $output, $attr ) {
 
 		/* Open each gallery row. */
 		if ( $columns > 0 && $i % $columns == 0 )
-			$output .= "\n\t\t\t\t<div class='gallery-row gallery-clear'>";
+			$output .= "\n\t\t\t\t<div class='gallery-row gallery-col-{$columns} gallery-clear'>";
 
 		/* Open each gallery item. */
 		$output .= "\n\t\t\t\t\t<{$itemtag} class='gallery-item col-{$columns}'>";
 
-		/* Open the element to wrap the image. */
-		$output .= "\n\t\t\t\t\t\t<{$icontag} class='gallery-icon'>";
+		/* Get the image attachment meta. */
+		$image_meta  = wp_get_attachment_metadata( $id );
 
-		/* Add the image. */
-		$image = ( ( isset( $attr['link'] ) && 'file' == $attr['link'] ) ? wp_get_attachment_link( $attachment->ID, $size, false, false ) : wp_get_attachment_link( $attachment->ID, $size, true, false ) );
+		/* Get the image orientation (portrait|landscape) based off the width and height. */
+		$orientation = '';
+
+		if ( isset( $image_meta['height'], $image_meta['width'] ) )
+			$orientation = ( $image_meta['height'] > $image_meta['width'] ) ? 'portrait' : 'landscape';
+
+		/* Open the element to wrap the image. */
+		$output .= "\n\t\t\t\t\t\t<{$icontag} class='gallery-icon {$orientation}'>";
+
+		/* Get the image. */
+		if ( isset( $attr['link'] ) && 'file' == $attr['link'] ) 
+			$image = wp_get_attachment_link( $attachment->ID, $size, false, true );
+
+		elseif ( isset( $attr['link'] ) && 'none' == $attr['link'] )
+			$image = wp_get_attachment_image( $attachment->ID, $size, false );
+
+		else
+			$image = wp_get_attachment_link( $attachment->ID, $size, true, true );
+
+		/* Apply filters over the image itself. */
 		$output .= apply_filters( 'cleaner_gallery_image', $image, $attachment->ID, $attr, $cleaner_gallery_instance );
 
 		/* Close the image wrapper. */

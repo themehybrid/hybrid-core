@@ -7,7 +7,7 @@
  * @package    HybridCore
  * @subpackage Admin
  * @author     Justin Tadlock <justin@justintadlock.com>
- * @copyright  Copyright (c) 2008 - 2012, Justin Tadlock
+ * @copyright  Copyright (c) 2008 - 2013, Justin Tadlock
  * @link       http://themehybrid.com/hybrid-core
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
@@ -25,14 +25,14 @@ function hybrid_meta_box_theme_add_about() {
 
 	/* Get theme information. */
 	$prefix = hybrid_get_prefix();
-	$theme = wp_get_theme( get_template(), get_theme_root( get_template_directory() ) );
+	$theme = wp_get_theme( get_template() );
 
 	/* Adds the About box for the parent theme. */
 	add_meta_box( 'hybrid-core-about-theme', sprintf( __( 'About %s', 'hybrid-core' ), $theme->get( 'Name' ) ), 'hybrid_meta_box_theme_display_about', hybrid_get_settings_page_name(), 'side', 'high' );
 
 	/* If the user is using a child theme, add an About box for it. */
 	if ( is_child_theme() ) {
-		$child = wp_get_theme( get_stylesheet(), get_theme_root( get_stylesheet_directory() ) );
+		$child = wp_get_theme();
 		add_meta_box( 'hybrid-core-about-child', sprintf( __( 'About %s', 'hybrid-core' ), $child->get( 'Name' ) ), 'hybrid_meta_box_theme_display_about', hybrid_get_settings_page_name(), 'side', 'high' );
 	}
 }
@@ -53,7 +53,7 @@ function hybrid_meta_box_theme_display_about( $object, $box ) {
 	$prefix = hybrid_get_prefix();
 
 	/* Grab theme information for the parent/child theme. */
-	$theme = ( 'hybrid-core-about-child' == $box['id'] ) ? wp_get_theme( get_stylesheet(), get_theme_root( get_stylesheet_directory() ) ) : wp_get_theme( get_template(), get_theme_root( get_template_directory() ) ); ?>
+	$theme = ( 'hybrid-core-about-child' == $box['id'] ) ? wp_get_theme() : wp_get_theme( get_template() ); ?>
 
 	<table class="form-table">
 		<tr>

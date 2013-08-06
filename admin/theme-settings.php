@@ -12,7 +12,7 @@
  * @package    HybridCore
  * @subpackage Admin
  * @author     Justin Tadlock <justin@justintadlock.com>
- * @copyright  Copyright (c) 2008 - 2012, Justin Tadlock
+ * @copyright  Copyright (c) 2008 - 2013, Justin Tadlock
  * @link       http://themehybrid.com/hybrid-core
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
@@ -32,7 +32,7 @@ function hybrid_settings_page_init() {
 	global $hybrid;
 
 	/* Get theme information. */
-	$theme = wp_get_theme( get_template(), get_theme_root( get_template_directory() ) );
+	$theme = wp_get_theme( get_template() );
 	$prefix = hybrid_get_prefix();
 
 	/* Register theme settings. */
@@ -160,7 +160,7 @@ function hybrid_settings_page() {
 
 	/* Get the theme information. */
 	$prefix = hybrid_get_prefix();
-	$theme = wp_get_theme( get_template(), get_theme_root( get_template_directory() ) );
+	$theme = wp_get_theme( get_template() );
 
 	do_action( "{$prefix}_before_settings_page" ); ?>
 
@@ -183,17 +183,24 @@ function hybrid_settings_page() {
 				<?php wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false ); ?>
 				<?php wp_nonce_field( 'meta-box-order', 'meta-box-order-nonce', false ); ?>
 
-				<div class="metabox-holder">
-					<div class="post-box-container column-1 normal">
-						<?php do_meta_boxes( hybrid_get_settings_page_name(), 'normal', null ); ?>
-					</div>
-					<div class="post-box-container column-2 side">
-						<?php do_meta_boxes( hybrid_get_settings_page_name(), 'side', null ); ?>
-					</div>
-					<div class="post-box-container column-3 advanced">
-						<?php do_meta_boxes( hybrid_get_settings_page_name(), 'advanced', null ); ?>
-					</div>
-				</div>
+				<div id="poststuff">
+
+					<div id="post-body" class="metabox-holder columns-2">
+
+						<div id="postbox-container-1" class="postbox-container side">
+							<?php do_meta_boxes( hybrid_get_settings_page_name(), 'side', null ); ?>
+						</div><!-- #postbox-container-1 -->
+
+						<div id="postbox-container-2" class="postbox-container normal advanced">
+							<?php do_meta_boxes( hybrid_get_settings_page_name(), 'normal', null ); ?>
+							<?php do_meta_boxes( hybrid_get_settings_page_name(), 'advanced', null ); ?>
+						</div><!-- #postbox-container-2 -->
+
+					</div><!-- #post-body -->
+
+					<br class="clear">
+
+				</div><!-- #poststuff -->
 
 				<?php submit_button( esc_attr__( 'Update Settings', 'hybrid-core' ) ); ?>
 
@@ -240,7 +247,7 @@ function hybrid_settings_field_name( $setting ) {
 function hybrid_settings_page_help() {
 
 	/* Get the parent theme data. */
-	$theme = wp_get_theme( get_template(), get_theme_root( get_template_directory() ) );
+	$theme = wp_get_theme( get_template() );
 	$doc_uri = $theme->get( 'Documentation URI' );
 	$support_uri = $theme->get( 'Support URI' );
 
@@ -295,8 +302,12 @@ function hybrid_settings_page_enqueue_styles( $hook_suffix ) {
  */
 function hybrid_settings_page_enqueue_scripts( $hook_suffix ) {
 
-	if ( $hook_suffix == hybrid_get_settings_page_name() )
+	if ( $hook_suffix == hybrid_get_settings_page_name() ){
+		wp_enqueue_script( 'common' );
+		wp_enqueue_script( 'wp-lists' );
 		wp_enqueue_script( 'postbox' );
+	
+	}
 }
 
 /**

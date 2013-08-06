@@ -7,10 +7,23 @@
  * @package    HybridCore
  * @subpackage Functions
  * @author     Justin Tadlock <justin@justintadlock.com>
- * @copyright  Copyright (c) 2008 - 2012, Justin Tadlock
+ * @copyright  Copyright (c) 2008 - 2013, Justin Tadlock
  * @link       http://themehybrid.com/hybrid-core
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
+
+/* Filter the textdomain mofile to allow child themes to load the parent theme translation. */
+add_filter( 'load_textdomain_mofile', 'hybrid_load_textdomain_mofile', 10, 2 );
+
+/* Filter text strings for Hybrid Core and extensions so themes can serve up translations. */
+add_filter( 'gettext',               'hybrid_gettext',                          1, 3 );
+add_filter( 'gettext',               'hybrid_extensions_gettext',               1, 3 );
+add_filter( 'gettext_with_context',  'hybrid_gettext_with_context',             1, 4 );
+add_filter( 'gettext_with_context',  'hybrid_extensions_gettext_with_context',  1, 4 );
+add_filter( 'ngettext',              'hybrid_ngettext',                         1, 5 );
+add_filter( 'ngettext',              'hybrid_extensions_ngettext',              1, 5 );
+add_filter( 'ngettext_with_context', 'hybrid_ngettext_with_context',            1, 6 );
+add_filter( 'ngettext_with_context', 'hybrid_extensions_ngettext_with_context', 1, 6 );
 
 /**
  * Checks if a textdomain's translation files have been loaded.  This function behaves differently from 
@@ -80,8 +93,14 @@ function hybrid_get_parent_textdomain() {
 	global $hybrid;
 
 	/* If the global textdomain isn't set, define it. Plugin/theme authors may also define a custom textdomain. */
-	if ( empty( $hybrid->parent_textdomain ) )
-		$hybrid->parent_textdomain = sanitize_key( apply_filters( hybrid_get_prefix() . '_parent_textdomain', get_template() ) );
+	if ( empty( $hybrid->parent_textdomain ) ) {
+
+		$theme = wp_get_theme( get_template() );
+
+		$textdomain = $theme->get( 'TextDomain' ) ? $theme->get( 'TextDomain' ) : get_template();
+
+		$hybrid->parent_textdomain = sanitize_key( apply_filters( hybrid_get_prefix() . '_parent_textdomain', $textdomain ) );
+	}
 
 	/* Return the expected textdomain of the parent theme. */
 	return $hybrid->parent_textdomain;
@@ -108,8 +127,14 @@ function hybrid_get_child_textdomain() {
 		return '';
 
 	/* If the global textdomain isn't set, define it. Plugin/theme authors may also define a custom textdomain. */
-	if ( empty( $hybrid->child_textdomain ) )
-		$hybrid->child_textdomain = sanitize_key( apply_filters( hybrid_get_prefix() . '_child_textdomain', get_stylesheet() ) );
+	if ( empty( $hybrid->child_textdomain ) ) {
+
+		$theme = wp_get_theme();
+
+		$textdomain = $theme->get( 'TextDomain' ) ? $theme->get( 'TextDomain' ) : get_stylesheet();
+
+		$hybrid->child_textdomain = sanitize_key( apply_filters( hybrid_get_prefix() . '_child_textdomain', $textdomain ) );
+	}
 
 	/* Return the expected textdomain of the child theme. */
 	return $hybrid->child_textdomain;
@@ -145,62 +170,242 @@ function hybrid_load_textdomain_mofile( $mofile, $domain ) {
 }
 
 /**
- * Filters 'gettext' to change the translations used for the 'hybrid-core' textdomain.  This filter makes it possible 
- * for the theme's MO file to translate the framework's text strings.
+ * Helper function for allowing the theme to translate the text strings for both Hybrid Core and the 
+ * available framework extensions.
  *
- * @since 1.3.0
- * @access private
- * @param string $translated The translated text.
- * @param string $text The original, untranslated text.
- * @param string $domain The textdomain for the text.
- * @return string $translated
+ * @since  1.6.0
+ * @access public
+ * @param  string  $domain
+ * @param  string  $text
+ * @param  string  $context
+ * @return string
+ */
+function hybrid_translate( $domain, $text, $context = null ) {
+
+	$translations = get_translations_for_domain( $domain );
+
+	return $translations->translate( $text, $context );
+}
+
+/**
+ * Helper function for allowing the theme to translate the plural text strings for both Hybrid Core and 
+ * the available framework extensions.
+ *
+ * @since  1.6.0
+ * @access public
+ * @param  string  $domain
+ * @param  string  $single
+ * @param  string  $plural
+ * @param  int     $number
+ * @param  string  $context
+ * @return string
+ */
+function hybrid_translate_plural( $domain, $single, $plural, $number, $context = null ) {
+
+	$translations = get_translations_for_domain( $domain );
+
+	return $translations->translate_plural( $single, $plural, $number, $context );
+}
+
+/**
+ * Filters 'gettext' to change the translations used for the 'hybrid-core' textdomain.
+ *
+ * @since  1.3.0
+ * @access public
+ * @param  string $translated The translated text.
+ * @param  string $text       The original, untranslated text.
+ * @param  string $domain     The textdomain for the text.
+ * @return string
  */
 function hybrid_gettext( $translated, $text, $domain ) {
 
 	/* Check if 'hybrid-core' is the current textdomain, there's no mofile for it, and the theme has a mofile. */
-	if ( 'hybrid-core' == $domain && !hybrid_is_textdomain_loaded( 'hybrid-core' ) && hybrid_is_textdomain_loaded( hybrid_get_parent_textdomain() ) ) {
+	if ( 'hybrid-core' == $domain && !hybrid_is_textdomain_loaded( 'hybrid-core' ) && hybrid_is_textdomain_loaded( hybrid_get_parent_textdomain() ) )
+		$translated = hybrid_translate( hybrid_get_parent_textdomain(), $text );
 
-		/* Get the translations for the theme. */
-		$translations = &get_translations_for_domain( hybrid_get_parent_textdomain() );
+	return $translated;
+}
 
-		/* Translate the text using the theme's translation. */
-		$translated = $translations->translate( $text );
+/**
+ * Filters 'gettext_with_context' to change the translations used for the 'hybrid-core' textdomain.
+ *
+ * @since  1.6.0
+ * @access public
+ * @param  string $translated The translated text.
+ * @param  string $text       The original, untranslated text.
+ * @param  string $context    The context of the text.
+ * @param  string $domain     The textdomain for the text.
+ * @return string
+ */
+function hybrid_gettext_with_context( $translated, $text, $context, $domain ) {
+
+	/* Check if 'hybrid-core' is the current textdomain, there's no mofile for it, and the theme has a mofile. */
+	if ( 'hybrid-core' == $domain && !hybrid_is_textdomain_loaded( 'hybrid-core' ) && hybrid_is_textdomain_loaded( hybrid_get_parent_textdomain() ) )
+		$translated = hybrid_translate( hybrid_get_parent_textdomain(), $text, $context );
+
+	return $translated;
+}
+
+/**
+ * Filters 'ngettext' to change the translations used for the 'hybrid-core' textdomain.
+ *
+ * @since  1.6.0
+ * @access public
+ * @param  string $translated The translated text.
+ * @param  string $single     The singular form of the untranslated text.
+ * @param  string $plural     The plural form of the untranslated text.
+ * @param  int    $number     The number to use to base whether something is singular or plural.
+ * @param  string $domain     The textdomain for the text.
+ * @return string
+ */
+function hybrid_ngettext( $translated, $single, $plural, $number, $domain ) {
+
+	/* Check if 'hybrid-core' is the current textdomain, there's no mofile for it, and the theme has a mofile. */
+	if ( 'hybrid-core' == $domain && !hybrid_is_textdomain_loaded( 'hybrid-core' ) && hybrid_is_textdomain_loaded( hybrid_get_parent_textdomain() ) )
+		$translated = hybrid_translate_plural( hybrid_get_parent_textdomain(), $single, $plural, $number );
+
+	return $translated;
+}
+
+/**
+ * Filters 'ngettext_with_context' to change the translations used for the 'hybrid-core' textdomain.
+ *
+ * @since  1.6.0
+ * @access public
+ * @param  string $translated The translated text.
+ * @param  string $single     The singular form of the untranslated text.
+ * @param  string $plural     The plural form of the untranslated text.
+ * @param  int    $number     The number to use to base whether something is singular or plural.
+ * @param  string $context    The context of the text.
+ * @param  string $domain     The textdomain for the text.
+ * @return string
+ */
+function hybrid_ngettext_with_context( $translated, $single, $plural, $number, $context, $domain ) {
+
+	/* Check if 'hybrid-core' is the current textdomain, there's no mofile for it, and the theme has a mofile. */
+	if ( 'hybrid-core' == $domain && !hybrid_is_textdomain_loaded( 'hybrid-core' ) && hybrid_is_textdomain_loaded( hybrid_get_parent_textdomain() ) )
+		$translated = hybrid_translate_plural( hybrid_get_parent_textdomain(), $single, $plural, $number, $context );
+
+	return $translated;
+}
+
+/**
+ * Filters 'gettext_with_context' to change the translations used for each of the extensions' textdomains.
+ *
+ * @since  1.3.0
+ * @access public
+ * @param  string $translated The translated text.
+ * @param  string $text       The untranslated text.
+ * @param  string $domain     The textdomain for the text.
+ * @return string
+ */
+function hybrid_extensions_gettext( $translated, $text, $domain ) {
+
+	$extensions = array( 'breadcrumb-trail', 'custom-field-series', 'featured-header', 'post-stylesheets', 'theme-fonts', 'theme-layouts' );
+
+	/* Check if the current textdomain matches one of the framework extensions. */
+	if ( in_array( $domain, $extensions ) && current_theme_supports( $domain ) ) {
+
+		/* If the framework mofile is loaded, use its translations. */
+		if ( hybrid_is_textdomain_loaded( 'hybrid-core' ) )
+			$translated = hybrid_translate( 'hybrid-core', $text );
+
+		/* If the theme mofile is loaded, use its translations. */
+		elseif ( hybrid_is_textdomain_loaded( hybrid_get_parent_textdomain() ) )
+			$translated = hybrid_translate( hybrid_get_parent_textdomain(), $text );
 	}
 
 	return $translated;
 }
 
 /**
- * Filters 'gettext' to change the translations used for the each of the extensions' textdomains.  This filter 
- * makes it possible for the theme's MO file to translate the framework's extensions.
+ * Filters 'gettext_with_context' to change the translations used for each of the extensions' textdomains.
  *
- * @since 1.3.0
- * @access private
- * @param string $translated The translated text.
- * @param string $text The original, untranslated text.
- * @param string $domain The textdomain for the text.
- * @return string $translated
+ * @since  1.6.0
+ * @access public
+ * @param  string $translated The translated text.
+ * @param  string $text       The untranslated text.
+ * @param  string $context    The context of the text.
+ * @param  string $domain     The textdomain for the text.
+ * @return string
  */
-function hybrid_extensions_gettext( $translated, $text, $domain ) {
+function hybrid_extensions_gettext_with_context( $translated, $text, $context, $domain ) {
+
+	$extensions = array( 'breadcrumb-trail', 'custom-field-series', 'featured-header', 'post-stylesheets', 'theme-fonts', 'theme-layouts' );
 
 	/* Check if the current textdomain matches one of the framework extensions. */
-	if ( in_array( $domain, array( 'breadcrumb-trail', 'custom-field-series', 'post-stylesheets', 'theme-layouts' ) ) ) {
+	if ( in_array( $domain, $extensions ) && current_theme_supports( $domain ) ) {
 
-		/* If the theme supports the extension, switch the translations. */
-		if ( current_theme_supports( $domain ) ) {
+		/* If the framework mofile is loaded, use its translations. */
+		if ( hybrid_is_textdomain_loaded( 'hybrid-core' ) )
+			$translated = hybrid_translate( 'hybrid-core', $text, $context );
 
-			/* If the framework mofile is loaded, use its translations. */
-			if ( hybrid_is_textdomain_loaded( 'hybrid-core' ) )
-				$translations = &get_translations_for_domain( 'hybrid-core' );
+		/* If the theme mofile is loaded, use its translations. */
+		elseif ( hybrid_is_textdomain_loaded( hybrid_get_parent_textdomain() ) )
+			$translated = hybrid_translate( hybrid_get_parent_textdomain(), $text, $context );
+	}
 
-			/* If the theme mofile is loaded, use its translations. */
-			elseif ( hybrid_is_textdomain_loaded( hybrid_get_parent_textdomain() ) )
-				$translations = &get_translations_for_domain( hybrid_get_parent_textdomain() );
+	return $translated;
+}
 
-			/* If translations were found, translate the text. */
-			if ( !empty( $translations ) )
-				$translated = $translations->translate( $text );
-		}
+/**
+ * Filters 'ngettext' to change the translations used for each of the extensions' textdomains.
+ *
+ * @since  1.6.0
+ * @access public
+ * @param  string $translated The translated text.
+ * @param  string $single     The singular form of the untranslated text.
+ * @param  string $plural     The plural form of the untranslated text.
+ * @param  int    $number     The number to use to base whether something is singular or plural.
+ * @param  string $domain     The textdomain for the text.
+ * @return string
+ */
+function hybrid_extensions_ngettext( $translated, $single, $plural, $number, $domain ) {
+
+	$extensions = array( 'breadcrumb-trail', 'custom-field-series', 'featured-header', 'post-stylesheets', 'theme-fonts', 'theme-layouts' );
+
+	/* Check if the current textdomain matches one of the framework extensions. */
+	if ( in_array( $domain, $extensions ) && current_theme_supports( $domain ) ) {
+
+		/* If the framework mofile is loaded, use its translations. */
+		if ( hybrid_is_textdomain_loaded( 'hybrid-core' ) )
+			$translated = hybrid_translate_plural( 'hybrid-core', $single, $plural, $number );
+
+		/* If the theme mofile is loaded, use its translations. */
+		elseif ( hybrid_is_textdomain_loaded( hybrid_get_parent_textdomain() ) )
+			$translated = hybrid_translate_plural( hybrid_get_parent_textdomain(), $single, $plural, $number );
+	}
+
+	return $translated;
+}
+
+/**
+ * Filters 'ngettext_with_context' to change the translations used for each of the extensions' textdomains.
+ *
+ * @since  1.6.0
+ * @access public
+ * @param  string $translated The translated text.
+ * @param  string $single     The singular form of the untranslated text.
+ * @param  string $plural     The plural form of the untranslated text.
+ * @param  int    $number     The number to use to base whether something is singular or plural.
+ * @param  string $context    The context of the text.
+ * @param  string $domain     The textdomain for the text.
+ * @return string
+ */
+function hybrid_extensions_ngettext_with_context( $translated, $single, $plural, $number, $context, $domain ) {
+
+	$extensions = array( 'breadcrumb-trail', 'custom-field-series', 'featured-header', 'post-stylesheets', 'theme-fonts', 'theme-layouts' );
+
+	/* Check if the current textdomain matches one of the framework extensions. */
+	if ( in_array( $domain, $extensions ) && current_theme_supports( $domain ) ) {
+
+		/* If the framework mofile is loaded, use its translations. */
+		if ( hybrid_is_textdomain_loaded( 'hybrid-core' ) )
+			$translated = hybrid_translate_plural( 'hybrid-core', $single, $plural, $number, $context );
+
+		/* If the theme mofile is loaded, use its translations. */
+		elseif ( hybrid_is_textdomain_loaded( hybrid_get_parent_textdomain() ) )
+			$translated = hybrid_translate_plural( hybrid_get_parent_textdomain(), $single, $plural, $number, $context );
 	}
 
 	return $translated;

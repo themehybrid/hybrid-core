@@ -8,7 +8,7 @@
  * @package    HybridCore
  * @subpackage Functions
  * @author     Justin Tadlock <justin@justintadlock.com>
- * @copyright  Copyright (c) 2008 - 2012, Justin Tadlock
+ * @copyright  Copyright (c) 2008 - 2013, Justin Tadlock
  * @link       http://themehybrid.com/hybrid-core
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
@@ -122,173 +122,58 @@ function hybrid_get_context() {
 		$hybrid->context[] = 'error-404';
 	}
 
-	return array_map( 'esc_attr', apply_filters( 'hybrid_context', $hybrid->context ) );
+	return array_map( 'esc_attr', apply_filters( 'hybrid_context', array_unique( $hybrid->context ) ) );
 }
 
 /**
- * Creates a set of classes for each site entry upon display. Each entry is given the class of 
- * 'hentry'. Posts are given category, tag, and author classes. Alternate post classes of odd, 
- * even, and alt are added.
+ * Outputs the attributes for the <body> element.  By default, this is just the 'class' attribute, but 
+ * developers can filter this to add other attributes.
  *
- * @since 0.5.0
+ * @since  1.6.0
  * @access public
- * @global $post The current post's DB object.
- * @param string|array $class Additional classes for more control.
  * @return void
  */
-function hybrid_entry_class( $class = '', $post_id = null ) {
-	static $post_alt;
+function hybrid_body_attributes() {
 
-	$post = get_post( $post_id );
+	$attributes = array();
+	$output     = '';
 
-	/* Make sure we have a real post first. */
-	if ( !empty( $post ) ) {
+	$attributes['class'] = join( ' ', hybrid_get_body_class() );
 
-		$post_id = $post->ID;
+	$attributes = apply_atomic( 'body_attributes', $attributes );
 
-		/* Add hentry for microformats compliance, the post type, and post status. */
-		$classes = array( 'hentry', $post->post_type, $post->post_status );
+	foreach( $attributes as $attr => $value )
+		$output .= " {$attr}='{$value}'";
 
-		/* Post alt class. */
-		$classes[] = 'post-' . ++$post_alt;
-		$classes[] = ( $post_alt % 2 ) ? 'odd' : 'even alt';
-
-		/* Author class. */
-		$classes[] = 'author-' . sanitize_html_class( get_the_author_meta( 'user_nicename' ), get_the_author_meta( 'ID' ) );
-
-		/* Sticky class (only on home/blog page). */
-		if ( is_home() && is_sticky() && !is_paged() )
-			$classes[] = 'sticky';
-
-		/* Password-protected posts. */
-		if ( post_password_required() )
-			$classes[] = 'protected';
-
-		/* Has excerpt. */
-		if ( post_type_supports( $post->post_type, 'excerpt' ) && has_excerpt() )
-			$classes[] = 'has-excerpt';
-
-		/* Has <!--more--> link. */
-		if ( !is_singular() && false !== strpos( $post->post_content, '<!--more-->' ) )
-			$classes[] = 'has-more-link';
-
-		/* Post format. */
-		if ( current_theme_supports( 'post-formats' ) && post_type_supports( $post->post_type, 'post-formats' ) ) {
-			$post_format = get_post_format( $post_id );
-			$classes[] = ( ( empty( $post_format ) || is_wp_error( $post_format ) ) ? 'format-standard' : "format-{$post_format}" );
-		}
-
-		/* Add category and post tag terms as classes. */
-		if ( 'post' == $post->post_type ) {
-
-			foreach ( array( 'category', 'post_tag' ) as $tax ) {
-
-				foreach ( (array)get_the_terms( $post->ID, $tax ) as $term ) {
-					if ( !empty( $term->slug ) )
-						$classes[] = $tax . '-' . sanitize_html_class( $term->slug, $term->term_id );
-				}
-			}
-		}
-	}
-
-	/* If not a post. */
-	else {
-		$classes = array( 'hentry', 'error' );
-	}
-
-	/* User-created classes. */
-	if ( !empty( $class ) ) {
-		if ( !is_array( $class ) )
-			$class = preg_split( '#\s+#', $class );
-		$classes = array_merge( $classes, $class );
-	}
-
-	/* Apply the filters for WP's 'post_class'. */
-	$classes = apply_filters( 'post_class', $classes, $class, $post_id );
-
-	/* Join all the classes into one string and echo them. */
-	$class = join( ' ', $classes );
-
-	echo apply_atomic( 'entry_class', $class );
+	echo $output;
 }
 
 /**
- * Sets a class for each comment. Sets alt, odd/even, and author/user classes. Adds author, user, 
- * and reader classes. Needs more work because WP, by default, assigns even/odd backwards 
- * (Odd should come first, even second).
- *
- * @since 0.2.0
- * @access public
- * @global $wpdb WordPress DB access object.
- * @global $comment The current comment's DB object.
- * @return void
- */
-function hybrid_comment_class( $class = '' ) {
-	global $comment, $hybrid;
-
-	/* Gets default WP comment classes. */
-	$classes = get_comment_class( $class );
-
-	/* Get the comment type. */
-	$comment_type = get_comment_type();
-
-	/* If the comment type is 'pingback' or 'trackback', add the 'ping' comment class. */
-	if ( 'pingback' == $comment_type || 'trackback' == $comment_type )
-		$classes[] = 'ping';
-
-	/* User classes to match user role and user. */
-	if ( $comment->user_id > 0 ) {
-
-		/* Create new user object. */
-		$user = new WP_User( $comment->user_id );
-
-		/* Set a class with the user's role(s). */
-		if ( is_array( $user->roles ) ) {
-			foreach ( $user->roles as $role )
-				$classes[] = sanitize_html_class( "role-{$role}" );
-		}
-
-		/* Set a class with the user's name. */
-		$classes[] = sanitize_html_class( "user-{$user->user_nicename}", "user-{$user->ID}" );
-	}
-
-	/* If not a registered user */
-	else {
-		$classes[] = 'reader';
-	}
-
-	/* Comment by the entry/post author. */
-	if ( $post = get_post( get_the_ID() ) ) {
-		if ( $comment->user_id === $post->post_author )
-			$classes[] = 'entry-author';
-	}
-
-	/* Get comment types that are allowed to have an avatar. */
-	$avatar_comment_types = apply_filters( 'get_avatar_comment_types', array( 'comment' ) );
-
-	/* If avatars are enabled and the comment types can display avatars, add the 'has-avatar' class. */
-	if ( get_option( 'show_avatars' ) && in_array( $comment->comment_type, $avatar_comment_types ) )
-		$classes[] = 'has-avatar';
-
-	/* Make sure comment classes doesn't have any duplicates. */
-	$classes = array_unique( $classes );
-
-	/* Join all the classes into one string and echo them. */
-	$class = join( ' ', $classes );
-
-	echo apply_filters( "{$hybrid->prefix}_comment_class", $class );
-}
-
-/**
- * Provides classes for the <body> element depending on page context.
+ * Outputs classes for the <body> element depending on page context.
  *
  * @since 0.1.0
  * @access public
- * @uses $wp_query
  * @param string|array $class Additional classes for more control.
  * @return void
  */
 function hybrid_body_class( $class = '' ) {
+
+	/* Get the body class. */
+	$classes = hybrid_get_body_class( $class );
+
+	/* Print the body class. */
+	echo apply_atomic( 'body_class', join( ' ', $classes ) );
+}
+
+/**
+ * Returns classes for the <body> element depending on page context.
+ * 
+ * @since  1.6.0
+ * @access public
+ * @param  string|array $class Additional classes for more control.
+ * @return array
+ */
+function hybrid_get_body_class( $class = '' ) {
 	global $wp_query;
 
 	/* Text direction (which direction does the text flow). */
@@ -361,13 +246,252 @@ function hybrid_body_class( $class = '' ) {
 	}
 
 	/* Apply the filters for WP's 'body_class'. */
-	$classes = apply_filters( 'body_class', $classes, $class );
+	return array_unique( apply_filters( 'body_class', $classes, $class ) );
+}
 
-	/* Join all the classes into one string. */
-	$class = join( ' ', $classes );
+/**
+ * Outputs the attributes for the post wrapper.  By default, this is the 'class' and 'id' attributes, 
+ * but developers can filter this to add other attributes.
+ *
+ * @since  1.6.0
+ * @access public
+ * @return void
+ */
+function hybrid_post_attributes() {
+
+	$attributes = array();
+	$output     = '';
+
+	$attributes['id']    = 'post-' . get_the_ID();
+	$attributes['class'] = join( ' ', hybrid_get_post_class() );
+
+	$attributes = apply_atomic( 'post_attributes', $attributes );
+
+	foreach( $attributes as $attr => $value )
+		$output .= " {$attr}='{$value}'";
+
+	echo $output;
+}
+
+/**
+ * Outputs the class for the post wrapper.
+ *
+ * @since  1.6.0
+ * @access public
+ * @param  string|array $class    Additional classes for more control.
+ * @param  int          $post_id  ID of a specific post to get the class for.
+ * @return void
+ */
+function hybrid_post_class( $class = '', $post_id = null ) {
+
+	/* Get the post class. */
+	$classes = hybrid_get_post_class( $class, $post_id );
 
 	/* Print the body class. */
-	echo apply_atomic( 'body_class', $class );
+	echo apply_atomic( 'post_class', join( ' ', $classes ) );
+}
+
+/**
+ * Outputs the class for the post wrapper.  Use hybrid_post_class() instead.
+ *
+ * @since      0.5.0
+ * @deprecated 1.6.0
+ * @access     public
+ * @param      string|array $class    Additional classes for more control.
+ * @param      int          $post_id  ID of a specific post to get the class for.
+ * @return     void
+ */
+function hybrid_entry_class( $class = '', $post_id = null ) {
+
+	/* Get the post class. */
+	$classes = hybrid_get_post_class( $class );
+
+	/* Print the entry class. */
+	echo apply_atomic( 'entry_class', join( ' ', $classes ) );
+}
+
+/**
+ * Creates a set of classes for each site entry upon display. Each entry is given the class of 
+ * 'hentry'. Posts are given category, tag, and author classes. Alternate post classes of odd, 
+ * even, and alt are added.
+ *
+ * @since  1.6.0
+ * @access public
+ * @param  string|array $class    Additional classes for more control.
+ * @param  int          $post_id  ID of a specific post to get the class for.
+ * @return array
+ */
+function hybrid_get_post_class( $class = '', $post_id = null ) {
+	static $post_alt;
+
+	$post = get_post( $post_id );
+
+	/* Make sure we have a real post first. */
+	if ( !empty( $post ) ) {
+
+		$post_id = $post->ID;
+
+		/* Add hentry for microformats compliance, the post type, and post status. */
+		$classes = array( 'hentry', $post->post_type, $post->post_status );
+
+		/* Post alt class. */
+		$classes[] = 'post-' . ++$post_alt;
+		$classes[] = ( $post_alt % 2 ) ? 'odd' : 'even alt';
+
+		/* Author class. */
+		$classes[] = 'author-' . sanitize_html_class( get_the_author_meta( 'user_nicename' ), get_the_author_meta( 'ID' ) );
+
+		/* Sticky class (only on home/blog page). */
+		if ( is_home() && is_sticky() && !is_paged() )
+			$classes[] = 'sticky';
+
+		/* Password-protected posts. */
+		if ( post_password_required() )
+			$classes[] = 'protected';
+
+		/* Has excerpt. */
+		if ( post_type_supports( $post->post_type, 'excerpt' ) && has_excerpt() )
+			$classes[] = 'has-excerpt';
+
+		/* Has <!--more--> link. */
+		if ( !is_singular() && false !== strpos( $post->post_content, '<!--more-->' ) )
+			$classes[] = 'has-more-link';
+
+		/* Post format. */
+		if ( current_theme_supports( 'post-formats' ) && post_type_supports( $post->post_type, 'post-formats' ) ) {
+			$post_format = get_post_format( $post_id );
+			$classes[] = ( ( empty( $post_format ) || is_wp_error( $post_format ) ) ? 'format-standard' : "format-{$post_format}" );
+		}
+
+		/* Add category and post tag terms as classes. */
+		if ( 'post' == $post->post_type ) {
+
+			foreach ( array( 'category', 'post_tag' ) as $tax ) {
+
+				foreach ( (array)get_the_terms( $post->ID, $tax ) as $term ) {
+					if ( !empty( $term->slug ) )
+						$classes[] = $tax . '-' . sanitize_html_class( $term->slug, $term->term_id );
+				}
+			}
+		}
+	}
+
+	/* If not a post. */
+	else {
+		$classes = array( 'hentry', 'error' );
+	}
+
+	/* User-created classes. */
+	if ( !empty( $class ) ) {
+		if ( !is_array( $class ) )
+			$class = preg_split( '#\s+#', $class );
+		$classes = array_merge( $classes, $class );
+	}
+
+	/* Apply the filters for WP's 'post_class'. */
+	return array_unique( apply_filters( 'post_class', $classes, $class, $post_id ) );
+}
+
+/**
+ * Outputs the attributes for the comment wrapper.  By default, this is the 'class' and 'id' attributes, 
+ * but developers can filter this to add other attributes.
+ *
+ * @since  1.6.0
+ * @access public
+ * @return void
+ */
+function hybrid_comment_attributes() {
+
+	$attributes = array();
+	$output     = '';
+
+	$attributes['id']    = 'comment-' . get_comment_ID();
+	$attributes['class'] = join( ' ', hybrid_get_comment_class() );
+
+	$attributes = apply_atomic( 'comment_attributes', $attributes );
+
+	foreach( $attributes as $attr => $value )
+		$output .= " {$attr}='{$value}'";
+
+	echo $output;
+}
+
+/**
+ * Outputs the class for the current comment wrapper element.
+ *
+ * @since  0.2.0
+ * @access public
+ * @global $comment The current comment's DB object.
+ * @return void
+ */
+function hybrid_comment_class( $class = '' ) {
+	global $hybrid;
+
+	/* Join all the classes into one string and echo them. */
+	$class = join( ' ', hybrid_get_comment_class( $class ) );
+
+	echo apply_filters( "{$hybrid->prefix}_comment_class", $class );
+}
+
+/**
+ * Sets a class for each comment. Sets alt, odd/even, and author/user classes. Adds author, user, 
+ * and reader classes. Needs more work because WP, by default, assigns even/odd backwards 
+ * (Odd should come first, even second).
+ *
+ * @since  1.6.0
+ * @access public
+ * @global $comment The current comment's DB object
+ * @return void
+ */
+function hybrid_get_comment_class( $class = '' ) {
+	global $comment;
+
+	/* Gets default WP comment classes. */
+	$classes = get_comment_class( $class );
+
+	/* Get the comment type. */
+	$comment_type = get_comment_type();
+
+	/* If the comment type is 'pingback' or 'trackback', add the 'ping' comment class. */
+	if ( 'pingback' == $comment_type || 'trackback' == $comment_type )
+		$classes[] = 'ping';
+
+	/* User classes to match user role and user. */
+	if ( $comment->user_id > 0 ) {
+
+		/* Create new user object. */
+		$user = new WP_User( $comment->user_id );
+
+		/* Set a class with the user's role(s). */
+		if ( is_array( $user->roles ) ) {
+			foreach ( $user->roles as $role )
+				$classes[] = sanitize_html_class( "role-{$role}" );
+		}
+
+		/* Set a class with the user's name. */
+		$classes[] = sanitize_html_class( "user-{$user->user_nicename}", "user-{$user->ID}" );
+	}
+
+	/* If not a registered user */
+	else {
+		$classes[] = 'reader';
+	}
+
+	/* Comment by the entry/post author. */
+	if ( $post = get_post( get_the_ID() ) ) {
+		if ( $comment->user_id == $post->post_author )
+			$classes[] = 'entry-author';
+	}
+
+	/* Get comment types that are allowed to have an avatar. */
+	$avatar_comment_types = apply_filters( 'get_avatar_comment_types', array( 'comment' ) );
+
+	/* If avatars are enabled and the comment types can display avatars, add the 'has-avatar' class. */
+	if ( get_option( 'show_avatars' ) && in_array( $comment->comment_type, $avatar_comment_types ) )
+		$classes[] = 'has-avatar';
+
+	/* Make sure comment classes doesn't have any duplicates. */
+	return array_unique( $classes );
 }
 
 /**
@@ -426,25 +550,25 @@ function hybrid_document_title() {
 		/* If viewing a date-/time-based archive. */
 		elseif ( is_date () ) {
 			if ( get_query_var( 'minute' ) && get_query_var( 'hour' ) )
-				$doctitle = sprintf( __( 'Archive for %1$s', 'hybrid-core' ), get_the_time( __( 'g:i a', 'hybrid-core' ) ) );
+				$doctitle = sprintf( __( 'Archive for %s', 'hybrid-core' ), get_the_time( __( 'g:i a', 'hybrid-core' ) ) );
 
 			elseif ( get_query_var( 'minute' ) )
-				$doctitle = sprintf( __( 'Archive for minute %1$s', 'hybrid-core' ), get_the_time( __( 'i', 'hybrid-core' ) ) );
+				$doctitle = sprintf( __( 'Archive for minute %s', 'hybrid-core' ), get_the_time( __( 'i', 'hybrid-core' ) ) );
 
 			elseif ( get_query_var( 'hour' ) )
-				$doctitle = sprintf( __( 'Archive for %1$s', 'hybrid-core' ), get_the_time( __( 'g a', 'hybrid-core' ) ) );
+				$doctitle = sprintf( __( 'Archive for %s', 'hybrid-core' ), get_the_time( __( 'g a', 'hybrid-core' ) ) );
 
 			elseif ( is_day() )
-				$doctitle = sprintf( __( 'Archive for %1$s', 'hybrid-core' ), get_the_time( __( 'F jS, Y', 'hybrid-core' ) ) );
+				$doctitle = sprintf( __( 'Archive for %s', 'hybrid-core' ), get_the_time( __( 'F jS, Y', 'hybrid-core' ) ) );
 
 			elseif ( get_query_var( 'w' ) )
-				$doctitle = sprintf( __( 'Archive for week %1$s of %2$s', 'hybrid-core' ), get_the_time( __( 'W', 'hybrid-core' ) ), get_the_time( __( 'Y', 'hybrid-core' ) ) );
+				$doctitle = sprintf( __( 'Archive for week %s of %s', 'hybrid-core' ), get_the_time( __( 'W', 'hybrid-core' ) ), get_the_time( __( 'Y', 'hybrid-core' ) ) );
 
 			elseif ( is_month() )
-				$doctitle = sprintf( __( 'Archive for %1$s', 'hybrid-core' ), single_month_title( ' ', false) );
+				$doctitle = sprintf( __( 'Archive for %s', 'hybrid-core' ), single_month_title( ' ', false) );
 
 			elseif ( is_year() )
-				$doctitle = sprintf( __( 'Archive for %1$s', 'hybrid-core' ), get_the_time( __( 'Y', 'hybrid-core' ) ) );
+				$doctitle = sprintf( __( 'Archive for %s', 'hybrid-core' ), get_the_time( __( 'Y', 'hybrid-core' ) ) );
 		}
 
 		/* For any other archives. */
@@ -455,7 +579,7 @@ function hybrid_document_title() {
 
 	/* If viewing a search results page. */
 	elseif ( is_search() )
-		$doctitle = sprintf( __( 'Search results for &quot;%1$s&quot;', 'hybrid-core' ), esc_attr( get_search_query() ) );
+		$doctitle = sprintf( __( 'Search results for "%s"', 'hybrid-core' ), esc_attr( get_search_query() ) );
 
 	/* If viewing a 404 not found page. */
 	elseif ( is_404() )
@@ -466,7 +590,7 @@ function hybrid_document_title() {
 		$doctitle = sprintf( __( '%1$s Page %2$s', 'hybrid-core' ), $doctitle . $separator, number_format_i18n( $page ) );
 
 	/* Apply the wp_title filters so we're compatible with plugins. */
-	$doctitle = apply_filters( 'wp_title', $doctitle, $separator, '' );
+	$doctitle = apply_filters( 'wp_title', strip_tags( $doctitle ), $separator, '' );
 
 	/* Trim separator + space from beginning and end in case a plugin adds it. */
 	$doctitle = trim( $doctitle, "{$separator} " );

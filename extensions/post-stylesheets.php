@@ -15,9 +15,9 @@
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * @package   PostStylesheets
- * @version   0.4.0
+ * @version   0.5.0
  * @author    Justin Tadlock <justin@justintadlock.com>
- * @copyright Copyright (c) 2010 - 2012, Justin Tadlock
+ * @copyright Copyright (c) 2010 - 2013, Justin Tadlock
  * @link      http://justintadlock.com
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
@@ -274,6 +274,13 @@ function post_stylesheets_load_meta_boxes() {
  */
 function post_stylesheets_create_meta_box( $post_type, $post ) {
 
+	/* Get the post styles. */
+	$styles = post_stylesheets_get_styles( $post_type );
+
+	/* If there are no post styles, don't show the meta box. */
+	if ( empty( $styles ) )
+		return;
+
 	/* Add the meta box if the post type supports 'post-stylesheets'. */
 	if ( ( post_type_supports( $post_type, 'post-stylesheets' ) ) && ( current_user_can( 'edit_post_meta', $post->ID ) || current_user_can( 'add_post_meta', $post->ID ) || current_user_can( 'delete_post_meta', $post->ID ) ) )
 		add_meta_box( "post-stylesheets", __( 'Stylesheet', 'post-stylesheets' ), 'post_stylesheets_meta_box', $post_type, 'side', 'default' );
@@ -292,7 +299,7 @@ function post_stylesheets_meta_box( $object, $box ) { ?>
 
 	<p>
 		<?php wp_nonce_field( basename( __FILE__ ), 'post-stylesheets-nonce' ); ?>
-		<?php $styles = post_stylesheets_get_styles(); ?>
+		<?php $styles = post_stylesheets_get_styles( $object->post_type ); ?>
 
 		<select name="post-stylesheets" id="post-stylesheets" class="widefat">
 			<option value=""></option>
@@ -357,12 +364,18 @@ function post_stylesheets_meta_box_save( $post_id, $post = '' ) {
  *
  * @since 0.4.0
  * @access public
+ * @global array $_post_stylesheets Array of post-type specific stylesheets.
  * @return array
  */
-function post_stylesheets_get_styles() {
+function post_stylesheets_get_styles( $post_type = 'post' ) {
+	global $_post_stylesheets;
+
+	/* If stylesheets have already been loaded, return them. */
+	if ( !empty( $_post_stylesheets ) && isset( $_post_stylesheets[ $post_type ] ) )
+		return $_post_stylesheets[ $post_type ];
 
 	/* Set up an empty styles array. */
-	$styles = array();
+	$_post_stylesheets[ $post_type ] = array();
 
 	/* Get the theme object. */
 	$theme = wp_get_theme();
@@ -374,18 +387,27 @@ function post_stylesheets_get_styles() {
 	foreach ( $files as $file => $path ) {
 
 		/* Get file data based on the 'Style Name' header. */
-		$headers = get_file_data( $path, array( 'Style Name' => 'Style Name' ) );
-
-		/* Continue loop if the header is empty. */
-		if ( empty( $headers['Style Name'] ) )
-			continue;
+		$headers = get_file_data(
+			$path, 
+			array( 
+				'Style Name'         => 'Style Name',
+				"{$post_type} Style" => "{$post_type} Style"
+			) 
+		);
 
 		/* Add the CSS filename and template name to the array. */
-		$styles[ $file ] = $headers['Style Name'];
+		if ( !empty( $headers['Style Name'] ) )
+			$_post_stylesheets[ $post_type ][ $file ] = $headers['Style Name'];
+
+		elseif ( !empty( $headers["{$post_type} Style"] ) )
+			$_post_stylesheets[ $post_type ][ $file ] = $headers["{$post_type} Style"];
 	}
 
+	/* Flip the array of styles. */
+	$_post_stylesheets[ $post_type ] = array_flip( $_post_stylesheets[ $post_type ] );
+
 	/* Return array of styles. */
-	return array_flip( $styles );
+	return $_post_stylesheets[ $post_type ];
 }
 
 /**

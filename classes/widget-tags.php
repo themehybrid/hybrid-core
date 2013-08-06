@@ -7,7 +7,7 @@
  * @package    Hybrid
  * @subpackage Classes
  * @author     Justin Tadlock <justin@justintadlock.com>
- * @copyright  Copyright (c) 2008 - 2012, Justin Tadlock
+ * @copyright  Copyright (c) 2008 - 2013, Justin Tadlock
  * @link       http://themehybrid.com/hybrid-core
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
@@ -153,7 +153,7 @@ class Hybrid_Widget_Tags extends WP_Widget {
 			'smallest'                   => 8,
 			'largest'                    => 22,
 			'link'                       => 'view',
-			'number'                     => 45,
+			'number'                     => 25,
 			'separator'                  => ' ',
 			'child_of'                   => '',
 			'parent'                     => '',
