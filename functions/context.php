@@ -177,7 +177,7 @@ function hybrid_get_body_class( $class = '' ) {
 	global $wp_query;
 
 	/* Text direction (which direction does the text flow). */
-	$classes = array( 'wordpress', get_bloginfo( 'text_direction' ), get_locale() );
+	$classes = array( 'wordpress', (  is_rtl() ? 'rtl' : 'ltr' ), get_locale() );
 
 	/* Check if the current theme is a parent or child theme. */
 	$classes[] = ( is_child_theme() ? 'child-theme' : 'parent-theme' );
