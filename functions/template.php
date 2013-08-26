@@ -54,7 +54,7 @@ function hybrid_get_content_template() {
 	$templates[] = 'content.php';
 
 	/* Apply filters and return the found content template. */
-	return apply_atomic( 'content_template', locate_template( $templates, true, false ) );
+	include( apply_atomic( 'content_template', locate_template( $templates, false, false ) ) );
 }
 
 ?>
