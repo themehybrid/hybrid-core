@@ -16,7 +16,7 @@
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * @package CleanerCaption
- * @version 0.2.0
+ * @version 0.2.1
  * @author Justin Tadlock <justin@justintadlock.com>
  * @copyright Copyright (c) 2013, Justin Tadlock
  * @link http://justintadlock.com
@@ -67,7 +67,7 @@ function cleaner_caption( $output, $attr, $content ) {
 	/* Set up the attributes for the caption <div>. */
 	$attributes = ( !empty( $attr['id'] ) ? ' id="' . esc_attr( $attr['id'] ) . '"' : '' );
 	$attributes .= ' class="wp-caption ' . esc_attr( $attr['align'] ) . '"';
-	$attributes .= ' style="width: ' . esc_attr( $attr['width'] ) . 'px"';
+	$attributes .= ' style="max-width: ' . esc_attr( $attr['width'] ) . 'px"';
 
 	/* Open the caption <div>. */
 	$output = '<figure' . $attributes .'>';
