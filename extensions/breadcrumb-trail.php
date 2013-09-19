@@ -1087,6 +1087,10 @@ class bbPress_Breadcrumb_Trail extends Breadcrumb_Trail {
 	 */
 	public function do_trail_items() {
 
+		/* Add the network and site home links. */
+		$this->do_network_home_link();
+		$this->do_site_home_link();
+
 		/* Get the forum post type object. */
 		$post_type_object = get_post_type_object( bbp_get_forum_post_type() );
 
