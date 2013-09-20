@@ -349,7 +349,7 @@ class Breadcrumb_Trail {
 	public function do_front_page_items() {
 
 		/* Only show front items if the 'show_on_front' argument is set to 'true'. */
-		if ( true === $this->args['show_on_front'] ) {
+		if ( true === $this->args['show_on_front'] || is_paged() || ( is_singular() && 1 < get_query_var( 'page' ) ) ) {
 
 			/* If on a paged view, add the home link items. */
 			if ( is_paged() ) {
