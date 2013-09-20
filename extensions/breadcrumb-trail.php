@@ -123,6 +123,9 @@ class Breadcrumb_Trail {
 		/* Connect the breadcrumb trail if there are items in the trail. */
 		if ( !empty( $this->items ) && is_array( $this->items ) ) {
 
+			/* Make sure we have a unique array of items. */
+			$this->items = array_unique( $this->items );
+
 			/* Open the breadcrumb trail containers. */
 			$breadcrumb = "\n\t\t" . '<' . tag_escape( $this->args['container'] ) . ' class="breadcrumb-trail breadcrumbs" itemprop="breadcrumb">';
 
@@ -522,7 +525,7 @@ class Breadcrumb_Trail {
 			/* Add support for a non-standard label of 'archive_title' (special use case). */
 			$label = !empty( $post_type_object->labels->archive_title ) ? $post_type_object->labels->archive_title : $post_type_object->labels->name;
 
-			$this->items[] = '<a href="' . get_post_type_archive_link( $post_type ) . '" title="' . esc_attr( $label ) . '">' . $label . '</a>';
+			$this->items[] = '<a href="' . get_post_type_archive_link( $post_type ) . '">' . $label . '</a>';
 		}
 	}
 
