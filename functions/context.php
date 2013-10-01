@@ -143,7 +143,7 @@ function hybrid_body_attributes() {
 	$attributes = apply_atomic( 'body_attributes', $attributes );
 
 	foreach( $attributes as $attr => $value )
-		$output .= " {$attr}='{$value}'";
+		$output .= !empty( $value ) ? " {$attr}='{$value}'" : " {$attr}";
 
 	echo $output;
 }
@@ -268,7 +268,7 @@ function hybrid_post_attributes() {
 	$attributes = apply_atomic( 'post_attributes', $attributes );
 
 	foreach( $attributes as $attr => $value )
-		$output .= " {$attr}='{$value}'";
+		$output .= !empty( $value ) ? " {$attr}='{$value}'" : " {$attr}";
 
 	echo $output;
 }
@@ -411,7 +411,7 @@ function hybrid_comment_attributes() {
 	$attributes = apply_atomic( 'comment_attributes', $attributes );
 
 	foreach( $attributes as $attr => $value )
-		$output .= " {$attr}='{$value}'";
+		$output .= !empty( $value ) ? " {$attr}='{$value}'" : " {$attr}";
 
 	echo $output;
 }
