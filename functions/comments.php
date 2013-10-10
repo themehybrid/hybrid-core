@@ -84,6 +84,9 @@ function hybrid_comments_callback( $comment, $args, $depth ) {
 		/* Add the fallback 'comment.php' template. */
 		$templates[] = 'comment.php';
 
+		/* Allow devs to filter the template hierarchy. */
+		$templates = apply_filters( 'hybrid_comment_template_hierarchy', $templates, $comment_type );
+
 		/* Locate the comment template. */
 		$template = locate_template( $templates );
 
