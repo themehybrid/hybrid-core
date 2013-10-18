@@ -51,19 +51,19 @@ final class Color_Palette {
 	 * Array of individual color options and their settings.
 	 *
 	 * @since  0.1.0
-	 * @access protected
+	 * @access public
 	 * @var    array
 	 */
-	protected $colors = array();
+	public $colors = array();
 
 	/**
 	 * An array of properties and selectors.  "$rules[ $color_id ][ $property ][ $selectors ]"
 	 *
 	 * @since  0.1.0
-	 * @access protected
+	 * @access public
 	 * @var    array
 	 */
-	protected $rules = array();
+	public $rules = array();
 
 	/**
 	 * The allowed CSS properties the theme developer can set a color rule for.
@@ -97,6 +97,10 @@ final class Color_Palette {
 		/* If a callback was set, add it to the correct action hook. */
 		if ( !empty( $this->supports[0] ) && isset( $this->supports[0]['callback'] ) ) 
 			add_action( 'color_palette_register', $this->supports[0]['callback'] );
+
+		/* If a wp-head-callback was set, add it to the correct action hook. */
+		if ( !empty( $this->supports[0] ) && isset( $this->supports[0]['wp-head-callback'] ) )
+			add_action( 'color_palette_wp_head_callback', $this->supports[0]['wp-head-callback'] );
 
 		/* Output CSS into <head>. */
 		add_action( 'wp_head', array( &$this, 'wp_head_callback' ) );
@@ -196,6 +200,13 @@ final class Color_Palette {
 	 * @return void
 	 */
 	public function wp_head_callback() {
+
+		/* Allow devs to hook in early. This is used for the `wp-head-callback`. */
+		do_action( 'color_palette_wp_head_callback', $this );
+
+		/* If a `wp-head-callback` was set, bail. */
+		if ( !empty( $this->supports[0] ) && isset( $this->supports[0]['wp-head-callback'] ) )
+			return;
 
 		/* Get the cached style. */
 		$style = wp_cache_get( 'color_palette' );
