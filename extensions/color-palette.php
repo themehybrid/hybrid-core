@@ -39,6 +39,15 @@
 final class Color_Palette {
 
 	/**
+	 * Theme-supports arguments passed by the theme.
+	 *
+	 * @since  0.2.0
+	 * @access public
+	 * @var    array
+	 */
+	public $supports = array();
+
+	/**
 	 * Array of individual color options and their settings.
 	 *
 	 * @since  0.1.0
@@ -83,11 +92,11 @@ final class Color_Palette {
 	public function __construct() {
 
 		/* Get the theme support arguements for 'color-palette'. */
-		$supports = get_theme_support( 'color-palette' );
+		$this->supports = get_theme_support( 'color-palette' );
 
 		/* If a callback was set, add it to the correct action hook. */
-		if ( !empty( $supports[0] ) && isset( $supports[0]['callback'] ) ) 
-			add_action( 'color_palette_register', $supports[0]['callback'] );
+		if ( !empty( $this->supports[0] ) && isset( $this->supports[0]['callback'] ) ) 
+			add_action( 'color_palette_register', $this->supports[0]['callback'] );
 
 		/* Output CSS into <head>. */
 		add_action( 'wp_head', array( &$this, 'wp_head_callback' ) );
