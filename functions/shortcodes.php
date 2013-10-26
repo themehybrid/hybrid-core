@@ -56,6 +56,8 @@ function hybrid_add_shortcodes() {
 	add_shortcode( 'comment-edit-link',  'hybrid_comment_edit_link_shortcode' );
 	add_shortcode( 'comment-reply-link', 'hybrid_comment_reply_link_shortcode' );
 	add_shortcode( 'comment-permalink',  'hybrid_comment_permalink_shortcode' );
+
+	add_shortcode( 'gallery-carousel', 'hybrid_gallery_carousel_shortcode' );
 }
 
 /**
@@ -555,4 +557,113 @@ function hybrid_comment_reply_link_shortcode( $attr ) {
 	return get_comment_reply_link( $attr );
 }
 
+/**
+ * Displays a gallery carousel.
+ *
+ * @access public
+ * @return string
+ */
+function hybrid_gallery_carousel_shortcode( $attr ) {
+
+
+    $post = get_post();
+
+	static $instance = 0;
+	$instance++;
+
+	if ( ! empty( $attr['ids'] ) ) {
+		// 'ids' is explicitly ordered, unless you specify otherwise.
+		if ( empty( $attr['orderby'] ) )
+			$attr['orderby'] = 'post__in';
+		$attr['include'] = $attr['ids'];
+	}
+
+	// Allow plugins/themes to override the default gallery template.
+	$o = apply_filters('post_gallery_carousel', '', $attr);
+
+	if ( $o != '' )
+		return $o;
+
+	// We're trusting author input, so let's at least make sure it looks like a valid orderby statement
+	if ( isset( $attr['orderby'] ) ) {
+		$attr['orderby'] = sanitize_sql_orderby( $attr['orderby'] );
+		if ( !$attr['orderby'] )
+			unset( $attr['orderby'] );
+	}
+
+	
+	$defaults = array(
+		'order'      => 'ASC',
+		'orderby'    => 'menu_order ID',
+		'id'         => $post ? $post->ID : 0,
+		'size'       => 'large',
+		'include'    => '',
+		'exclude'    => '',
+		'prevtext'   => '&#x276e;',
+		'nexttext'   => '&#x276f;',
+	);
+
+	$attr = shortcode_atts( $defaults, $attr );
+
+	extract($attr);
+
+	$id = intval($id);
+
+	if ( 'RAND' == $order )
+		$orderby = 'none';
+
+	if ( !empty($include) ) {
+		$_attachments = get_posts( array('include' => $include, 'post_status' => 'inherit', 'post_type' => 'attachment', 'post_mime_type' => 'image', 'order' => $order, 'orderby' => $orderby) );
+
+		$attachments = array();
+		foreach ( $_attachments as $key => $val ) {
+			$attachments[$val->ID] = $_attachments[$key];
+		}
+	} elseif ( !empty($exclude) ) {
+		$attachments = get_children( array('post_parent' => $id, 'exclude' => $exclude, 'post_status' => 'inherit', 'post_type' => 'attachment', 'post_mime_type' => 'image', 'order' => $order, 'orderby' => $orderby) );
+	} else {
+		$attachments = get_children( array('post_parent' => $id, 'post_status' => 'inherit', 'post_type' => 'attachment', 'post_mime_type' => 'image', 'order' => $order, 'orderby' => $orderby) );
+	}
+
+	if ( empty($attachments) )
+		return '';
+
+
+	$i = 0;
+	$item = '';
+	foreach ( $attachments as $id => $attachment ) {
+		if ( ! empty( $attr['link'] ) && 'file' === $attr['link'] )
+			$image_output = wp_get_attachment_link( $id, $size, false, false );
+		elseif ( ! empty( $attr['link'] ) && 'none' === $attr['link'] )
+			$image_output = wp_get_attachment_image( $id, $size, false );
+		else
+			$image_output = wp_get_attachment_link( $id, $size, true, false );
+
+		$item .= '<div class="gallery-carousel-item item '. ($i == 0 ? 'active' : '') .'">';
+		$item .= $image_output;
+
+		if( !empty($attachment->post_excerpt) ) {
+			$item .= '<div class="carousel-caption gallery-carousel-caption">';
+			$item .= wptexturize( $attachment->post_excerpt );
+			$item .= '</div>'; // close caption
+		}
+		
+		$item .= '</div>'; // close gallery-carousel-item
+
+		$i++;
+	}
+	
+
+	$o .= '<div id="gallery-carousel-'.$instance.'" data-interval="'.apply_filters( 'post_gallery_carousel_interval', 10000 ).'" class="gallery-carousel carousel slide">';
+    $o .= '<div class="carousel-inner">';
+
+    $o .= $item;
+   
+    $o .= '</div>'; // close carousel inner
+    $o .= '<a class="left carousel-control" href="#gallery-carousel-'.$instance.'" data-slide="prev">'.$prevtext.'</a>';
+    $o .= '<a class="right carousel-control" href="#gallery-carousel-'.$instance.'" data-slide="next">'.$nexttext.'</a>';
+    $o .= '</div>'; //close carousel slide
+
+    return $o;
+}
 ?>

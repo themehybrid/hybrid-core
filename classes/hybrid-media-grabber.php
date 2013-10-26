@@ -125,7 +125,7 @@ class Hybrid_Media_Grabber {
 		/* Set the object properties. */
 		$this->args    = apply_filters( 'hybrid_media_grabber_args', wp_parse_args( $args, $defaults ) );
 		$this->content = get_post_field( 'post_content', $this->args['post_id'] );
-		$this->type    = isset( $this->args['type'] ) && in_array( $this->args['type'], array( 'audio', 'video' ) ) ? $this->args['type'] : 'video';
+		$this->type    = isset( $this->args['type'] ) && in_array( $this->args['type'], array( 'audio', 'video', 'gallery' ) ) ? $this->args['type'] : 'video';
 
 		/* Find the media related to the post. */
 		$this->set_media();
@@ -272,6 +272,23 @@ class Hybrid_Media_Grabber {
 
 		/* Need to filter dimensions here to overwrite WP's <div> surrounding the [video] shortcode. */
 		$this->media = do_shortcode( $this->filter_dimensions( $this->original_media ) );
+	}
+
+	/**
+	 * Handles the gallery shortcode and turn it into a carousel.
+	 *
+	 * @access public
+	 * @param  array  $shortcode
+	 * @return void
+	 */
+	public function do_gallery_shortcode_media( $shortcode ) {
+
+
+		$this->original_media = array_shift( $shortcode );
+		
+		$this->original_media = str_replace('[gallery', '[gallery-carousel', $this->original_media);
+
+		$this->media = do_shortcode(  $this->original_media );
 	}
 
 	/**
