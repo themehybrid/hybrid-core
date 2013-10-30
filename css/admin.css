@@ -23,6 +23,12 @@
 	}
 
 /* Widgets page. */
+
+/* Fixes the MP6 Plugin's small container issue that doesn't allow widget controls to expand. */
+.widgets-php div.widget-liquid-right div.widgets-holder-wrap {
+	width: 100%;
+}
+
 .widgets-php .columns-1 {
 	}
 .widgets-php .columns-2 {
