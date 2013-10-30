@@ -112,6 +112,7 @@ function hybrid_comments_end_callback() {
  * trackbacks and pingbacks.
  *
  * @since 0.2.0
+ * @deprecated 2.0.0
  * @access public
  * @global $comment The current comment's DB object.
  * @global $hybrid The global Hybrid object.
@@ -120,40 +121,14 @@ function hybrid_comments_end_callback() {
 function hybrid_avatar() {
 	global $comment, $hybrid;
 
+	_deprecated_function( __FUNCTION__, '2.0.0', 'get_avatar' );
+
 	/* Make sure avatars are allowed before proceeding. */
 	if ( !get_option( 'show_avatars' ) )
 		return false;
 
-	/* Get/set some comment variables. */
-	$comment_type = get_comment_type( $comment->comment_ID );
-	$author = get_comment_author( $comment->comment_ID );
-	$url = get_comment_author_url( $comment->comment_ID );
-	$avatar = '';
-	$default_avatar = '';
-
-	/* Get comment types that are allowed to have an avatar. */
-	$avatar_comment_types = apply_filters( 'get_avatar_comment_types', array( 'comment' ) );
-
-	/* If comment type is in the allowed list, check if it's a pingback or trackback. */
-	if ( in_array( $comment_type, $avatar_comment_types ) ) {
-
-		/* Set a default avatar for pingbacks and trackbacks. */
-		$default_avatar = ( ( 'pingback' == $comment_type || 'trackback' == $comment_type ) ? trailingslashit( HYBRID_IMAGES ) . 'ping.png' : '' );
-
-		/* Allow the default avatar to be filtered by comment type. */
-		$default_avatar = apply_filters( "{$hybrid->prefix}_{$comment_type}_avatar", $default_avatar );
-	}
-
-	/* Set up the avatar size. */
-	$comment_list_args = hybrid_list_comments_args();
-	$size = ( ( $comment_list_args['avatar_size'] ) ? $comment_list_args['avatar_size'] : 80 );
-
 	/* Get the avatar provided by the get_avatar() function. */
-	$avatar = get_avatar( $comment, absint( $size ), $default_avatar, $author );
-
-	/* If URL input, wrap avatar in hyperlink. */
-	if ( !empty( $url ) && !empty( $avatar ) )
-		$avatar = '<a href="' . esc_url( $url ) . '" rel="external nofollow" title="' . esc_attr( $author ) . '">' . $avatar . '</a>';
+	$avatar = get_avatar( $comment, 80, '', get_comment_author( $comment->comment_ID ) );
 
 	/* Display the avatar and allow it to be filtered. Note: Use the get_avatar filter hook where possible. */
 	echo apply_filters( "{$hybrid->prefix}_avatar", $avatar );
