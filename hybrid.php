@@ -313,14 +313,8 @@ class Hybrid {
 		/* Load the Cleaner Caption extension if supported. */
 		require_if_theme_supports( 'cleaner-caption', trailingslashit( HYBRID_EXTENSIONS ) . 'cleaner-caption.php' );
 
-		/* Load the Custom Field Series extension if supported. */
-		require_if_theme_supports( 'custom-field-series', trailingslashit( HYBRID_EXTENSIONS ) . 'custom-field-series.php' );
-
 		/* Load the Loop Pagination extension if supported. */
 		require_if_theme_supports( 'loop-pagination', trailingslashit( HYBRID_EXTENSIONS ) . 'loop-pagination.php' );
-
-		/* Load the Entry Views extension if supported. */
-		require_if_theme_supports( 'entry-views', trailingslashit( HYBRID_EXTENSIONS ) . 'entry-views.php' );
 
 		/* Load the Theme Layouts extension if supported. */
 		require_if_theme_supports( 'theme-layouts', trailingslashit( HYBRID_EXTENSIONS ) . 'theme-layouts.php' );
