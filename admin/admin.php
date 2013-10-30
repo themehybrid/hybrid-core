@@ -42,9 +42,6 @@ function hybrid_admin_setup() {
  */
 function hybrid_admin_load_post_meta_boxes() {
 
-	/* Load the SEO post meta box. */
-	require_if_theme_supports( 'hybrid-core-seo', trailingslashit( HYBRID_ADMIN ) . 'meta-box-post-seo.php' );
-
 	/* Load the post template meta box. */
 	require_if_theme_supports( 'hybrid-core-template-hierarchy', trailingslashit( HYBRID_ADMIN ) . 'meta-box-post-template.php' );
 }

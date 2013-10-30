@@ -200,10 +200,6 @@ class Hybrid {
 	 */
 	function theme_support() {
 
-		/* Remove support for the core SEO component if the WP SEO plugin is installed. */
-		if ( defined( 'WPSEO_VERSION' ) )
-			remove_theme_support( 'hybrid-core-seo' );
-
 		/* Remove support for the the Breadcrumb Trail extension if the plugin is installed. */
 		if ( function_exists( 'breadcrumb_trail' ) )
 			remove_theme_support( 'breadcrumb-trail' );
@@ -259,9 +255,6 @@ class Hybrid {
 
 		/* Load the menus functions if supported. */
 		require_if_theme_supports( 'hybrid-core-menus', trailingslashit( HYBRID_FUNCTIONS ) . 'menus.php' );
-
-		/* Load the core SEO component if supported. */
-		require_if_theme_supports( 'hybrid-core-seo', trailingslashit( HYBRID_FUNCTIONS ) . 'core-seo.php' );
 
 		/* Load the shortcodes if supported. */
 		require_if_theme_supports( 'hybrid-core-shortcodes', trailingslashit( HYBRID_FUNCTIONS ) . 'shortcodes.php' );

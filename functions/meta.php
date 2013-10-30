@@ -22,20 +22,6 @@ add_action( 'init', 'hybrid_register_meta' );
  */
 function hybrid_register_meta() {
 
-	/* Register meta if the theme supports the 'hybrid-core-seo' feature. */
-	if ( current_theme_supports( 'hybrid-core-seo' ) ) {
-
-		/* Register 'Title', 'Description', and 'Keywords' meta for posts. */
-		register_meta( 'post', 'Title', 'hybrid_sanitize_meta' );
-		register_meta( 'post', 'Description', 'hybrid_sanitize_meta' );
-		register_meta( 'post', 'Keywords', 'hybrid_sanitize_meta' );
-
-		/* Register 'Title', 'Description', and 'Keywords' meta for users. */
-		register_meta( 'user', 'Title', 'hybrid_sanitize_meta' );
-		register_meta( 'user', 'Description', 'hybrid_sanitize_meta' );
-		register_meta( 'user', 'Keywords', 'hybrid_sanitize_meta' );
-	}
-
 	/* Register meta if the theme supports the 'hybrid-core-template-hierarchy' feature. */
 	if ( current_theme_supports( 'hybrid-core-template-hierarchy' ) ) {
 
