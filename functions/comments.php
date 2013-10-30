@@ -12,9 +12,6 @@
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
-/* Add a few comment types to the allowed avatar comment types list. */
-add_filter( 'get_avatar_comment_types', 'hybrid_avatar_comment_types' );
-
 /**
  * Arguments for the wp_list_comments_function() used in comments.php. Users can set up a 
  * custom comments callback function by changing $callback to the custom function.  Note that 
@@ -160,27 +157,6 @@ function hybrid_avatar() {
 
 	/* Display the avatar and allow it to be filtered. Note: Use the get_avatar filter hook where possible. */
 	echo apply_filters( "{$hybrid->prefix}_avatar", $avatar );
-}
-
-/**
- * Adds the 'pingback' and 'trackback' comment types to the allowed list of avatar comment types.  By
- * default, WordPress only allows the 'comment' comment type to have an avatar.
- *
- * @since 1.2.0
- * @access public
- * @param array $types List of all comment types allowed to have avatars.
- * @return array $types
- */
-function hybrid_avatar_comment_types( $types ) {
-
-	/* Add the 'pingback' comment type. */
-	$types[] = 'pingback';
-
-	/* Add the 'trackback' comment type. */
-	$types[] = 'trackback';
-
-	/* Return the array of comment types. */
-	return $types;
 }
 
 ?>
