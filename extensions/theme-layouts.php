@@ -19,7 +19,7 @@
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * @package   ThemeLayouts
- * @version   0.5.2
+ * @version   0.5.3
  * @author    Justin Tadlock <justin@justintadlock.com>
  * @copyright Copyright (c) 2010 - 2013, Justin Tadlock
  * @link      http://justintadlock.com
@@ -153,8 +153,15 @@ function theme_layouts_filter_layout( $theme_layout ) {
 		$layout = get_user_layout( get_queried_object_id() );
 
 	/* If a layout was found, set it. */
-	if ( !empty( $layout ) && 'default' !== $layout )
+	if ( !empty( $layout ) && 'default' !== $layout ) {
 		$theme_layout = $layout;
+	}
+
+	/* Else, if no layout option has yet been saved, return the theme default. */
+	elseif ( empty( $theme_layout ) ) {
+		$args = theme_layouts_get_args();
+		$theme_layout = $args['default'];
+	}
 
 	return $theme_layout;
 }
