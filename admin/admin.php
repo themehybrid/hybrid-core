@@ -47,10 +47,11 @@ function hybrid_admin_load_post_meta_boxes() {
 }
 
 /**
- * Registers the framework's 'admin.css' stylesheet file.  The function does not load the stylesheet.  It merely
- * registers it with WordPress.
+ * Registers the framework's `admin-widgets.css` stylesheet file.  The function does not load the stylesheet.  
+ * It merely registers it with WordPress.
  *
- * @since 1.2.0
+ * @since  1.2.0
+ * @access public
  * @return void
  */
 function hybrid_admin_register_styles() {
@@ -58,20 +59,20 @@ function hybrid_admin_register_styles() {
 	/* Use the .min stylesheet if SCRIPT_DEBUG is turned off. */
 	$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
 
-	wp_register_style( 'hybrid-core-admin', trailingslashit( HYBRID_CSS ) . "admin{$suffix}.css", false, '20130515', 'screen' );
+	wp_register_style( 'hybrid-admin-widgets', trailingslashit( HYBRID_CSS ) . "admin-widgets{$suffix}.css" );
 }
 
 /**
- * Loads the admin.css stylesheet for admin-related features.
+ * Loads the `admin-widgets.css` file when viewing the widgets screen.
  *
- * @since 1.2.0
+ * @since  1.2.0
+ * @access public
  * @return void
  */
 function hybrid_admin_enqueue_styles( $hook_suffix ) {
 
-	/* Load admin styles if on the widgets screen and the current theme supports 'hybrid-core-widgets'. */
 	if ( current_theme_supports( 'hybrid-core-widgets' ) && 'widgets.php' == $hook_suffix )
-		wp_enqueue_style( 'hybrid-core-admin' );
+		wp_enqueue_style( 'hybrid-admin-widgets' );
 }
 
 /**
