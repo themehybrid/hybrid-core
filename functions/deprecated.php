@@ -305,6 +305,50 @@ function hybrid_debug_stylesheet() {
 	hybrid_function_removed( __FUNCTION__ );
 }
 
+function hybrid_settings_page_help() {
+	hybrid_function_removed( __FUNCTION__ );
+}
+
+function hybrid_settings_page_init() {
+	hybrid_function_removed( __FUNCTION__ );
+}
+
+function hybrid_settings_page_capability() {
+	hybrid_function_removed( __FUNCTION__ );
+}
+
+function hybrid_get_settings_page_name() {
+	hybrid_function_removed( __FUNCTION__ );
+}
+
+function hybrid_settings_page_add_meta_boxes() {
+	hybrid_function_removed( __FUNCTION__ );
+}
+
+function hybrid_load_settings_page_meta_boxes() {
+	hybrid_function_removed( __FUNCTION__ );
+}
+
+function hybrid_save_theme_settings() {
+	hybrid_function_removed( __FUNCTION__ );
+}
+
+function hybrid_settings_page() {
+	hybrid_function_removed( __FUNCTION__ );
+}
+
+function hybrid_settings_page_enqueue_styles() {
+	hybrid_function_removed( __FUNCTION__ );
+}
+
+function hybrid_settings_page_enqueue_scripts() {
+	hybrid_function_removed( __FUNCTION__ );
+}
+
+function hybrid_settings_page_load_scripts() {
+	hybrid_function_removed( __FUNCTION__ );
+}
+
 /**
  * Message to display for removed functions.
  * @since 0.5.0
