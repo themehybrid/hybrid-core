@@ -357,6 +357,10 @@ function hybrid_get_sidebars() {
 	hybrid_function_removed( __FUNCTION__ );
 }
 
+function hybrid_register_menus() {
+	hybrid_function_removed( __FUNCTION__ );
+}
+
 /**
  * Message to display for removed functions.
  * @since 0.5.0
