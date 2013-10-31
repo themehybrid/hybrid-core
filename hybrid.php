@@ -238,6 +238,9 @@ class Hybrid {
 	 */
 	function functions() {
 
+		/* Load the HTML attributes functions. */
+		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'attr.php' );
+
 		/* Load the comments functions. */
 		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'comments.php' );
 
