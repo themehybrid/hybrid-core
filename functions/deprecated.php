@@ -77,6 +77,29 @@ function get_atomic_template( $template ) {
 	return locate_template( array_reverse( $templates ), true, false );
 }
 
+/**
+ * Dynamic element to wrap the site title in.  If it is the front page, wrap it in an <h1> element.  One other 
+ * pages, wrap it in a <div> element. 
+ *
+ * @since      0.1.0
+ * @deprecated 2.0.0
+ * @access     public
+ * @return     void
+ */
+function hybrid_site_title() {
+	_deprecated_function( __FUNCTION__, '2.0.0', '' );
+
+	/* If viewing the front page of the site, use an <h1> tag.  Otherwise, use a <div> tag. */
+	$tag = ( is_front_page() ) ? 'h1' : 'div';
+
+	/* Get the site title.  If it's not empty, wrap it with the appropriate HTML. */
+	if ( $title = get_bloginfo( 'name' ) )
+		$title = sprintf( '<%1$s id="site-title"><a href="%2$s" title="%3$s" rel="home"><span>%4$s</span></a></%1$s>', tag_escape( $tag ), home_url(), esc_attr( $title ), $title );
+
+	/* Display the site title and apply filters for developers to overwrite. */
+	echo apply_atomic( 'site_title', $title );
+}
+
 /* === Removed Functions (note that functions removed prior to the 1.5 branch are gone). === */
 
 /* Functions removed in the 1.5 branch. */
