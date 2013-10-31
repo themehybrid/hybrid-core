@@ -160,6 +160,9 @@ class Hybrid {
 
 		/* Load the sidebar functions. */
 		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'sidebars.php' );
+
+		/* Load the wish-list functions. */
+		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'wish-list.php' );
 	}
 
 	/**
@@ -249,9 +252,6 @@ class Hybrid {
 
 		/* Load the utility functions. */
 		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'utility.php' );
-
-		/* Load the wish-list functions. */
-		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'wish-list.php' );
 
 		/* Load the theme settings functions if supported. */
 		require_if_theme_supports( 'hybrid-core-theme-settings', trailingslashit( HYBRID_FUNCTIONS ) . 'settings.php' );
