@@ -127,10 +127,6 @@ function hybrid_load_settings_page_meta_boxes() {
 		/* Load the 'About' meta box if it is supported. */
 		if ( in_array( 'about', $supports[0] ) )
 			require_once( trailingslashit( HYBRID_ADMIN ) . 'meta-box-theme-about.php' );
-
-		/* Load the 'Footer' meta box if it is supported. */
-		if ( in_array( 'footer', $supports[0] ) )
-			require_once( trailingslashit( HYBRID_ADMIN ) . 'meta-box-theme-footer.php' );
 	}
 }
 

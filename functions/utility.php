@@ -137,15 +137,13 @@ function hybrid_site_description() {
 /**
  * Standardized function for outputting the footer content.
  *
- * @since 1.4.0
+ * @since  1.4.0
+ * @deprecated 2.0.0
  * @access public
  * @return void
  */
 function hybrid_footer_content() {
-
-	/* Only run the code if the theme supports the Hybrid Core theme settings. */
-	if ( current_theme_supports( 'hybrid-core-theme-settings' ) )
-		echo apply_atomic_shortcode( 'footer_content', hybrid_get_setting( 'footer_insert' ) );
+	_deprecated_function( __FUNCTION__, '2.0.0', '' );
 }
 
 /**
