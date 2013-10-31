@@ -34,10 +34,6 @@ function hybrid_structured_post_formats() {
 	if ( current_theme_supports( 'post-formats', 'aside' ) )
 		add_filter( 'the_content', 'hybrid_aside_infinity', 9 ); // run before wpautop
 
-	/* Add image to content if the user didn't add it. */
-	if ( current_theme_supports( 'post-formats', 'image' ) )
-		add_filter( 'the_content', 'hybrid_image_content' );
-
 	/* Adds the link to the content if it's not in the post. */
 	if ( current_theme_supports( 'post-formats', 'link' ) )
 		add_filter( 'the_content', 'hybrid_link_content', 9 ); // run before wpautop
@@ -174,7 +170,8 @@ function hybrid_get_gallery_image_count() {
 /* === Images === */
 
 /**
- * Adds the post format image to the content if no image is found in the post content.
+ * Adds the post format image to the content if no image is found in the post content.  Note, this is not run 
+ * by default.  To use, add the filter to 'the_content'.
  *
  * @since  1.6.0
  * @access public
