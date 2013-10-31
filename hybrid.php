@@ -157,6 +157,9 @@ class Hybrid {
 
 		/* Load the general template functions. */
 		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'general.php' );
+
+		/* Load the sidebar functions. */
+		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'sidebars.php' );
 	}
 
 	/**
@@ -258,9 +261,6 @@ class Hybrid {
 
 		/* Load the shortcodes if supported. */
 		require_if_theme_supports( 'hybrid-core-shortcodes', trailingslashit( HYBRID_FUNCTIONS ) . 'shortcodes.php' );
-
-		/* Load the sidebars if supported. */
-		require_if_theme_supports( 'hybrid-core-sidebars', trailingslashit( HYBRID_FUNCTIONS ) . 'sidebars.php' );
 
 		/* Load the widgets if supported. */
 		require_if_theme_supports( 'hybrid-core-widgets', trailingslashit( HYBRID_FUNCTIONS ) . 'widgets.php' );
