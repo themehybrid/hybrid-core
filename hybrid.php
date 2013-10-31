@@ -349,6 +349,7 @@ class Hybrid {
 	 * @since 1.0.0
 	 */
 	function default_filters() {
+		global $wp_embed;
 
 		/* Remove bbPress theme compatibility if current theme supports bbPress. */
 		if ( current_theme_supports( 'bbpress' ) )
@@ -363,7 +364,16 @@ class Hybrid {
 
 		/* Make text widgets and term descriptions shortcode aware. */
 		add_filter( 'widget_text', 'do_shortcode' );
-		add_filter( 'term_description', 'do_shortcode' );
+
+		/* Use same default filters as 'the_content' with a little more flexibility. */
+		add_filter( 'hybrid_loop_description', array( $wp_embed, 'run_shortcode' ),   5 );
+		add_filter( 'hybrid_loop_description', array( $wp_embed, 'autoembed'     ),   5 );
+		add_filter( 'hybrid_loop_description',                   'wptexturize',       10 );
+		add_filter( 'hybrid_loop_description',                   'convert_smilies',   15 );
+		add_filter( 'hybrid_loop_description',                   'convert_chars',     20 );
+		add_filter( 'hybrid_loop_description',                   'wpautop',           25 );
+		add_filter( 'hybrid_loop_description',                   'do_shortcode',      30 );
+		add_filter( 'hybrid_loop_description',                   'shortcode_unautop', 35 );
 	}
 }
 
