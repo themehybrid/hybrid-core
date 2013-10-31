@@ -122,6 +122,319 @@ function hybrid_site_description() {
 	echo apply_atomic( 'site_description', $desc );
 }
 
+/**
+ * @since      0.6.0
+ * @deprecated 2.0.0
+ */
+function hybrid_loginout_link_shortcode() {
+	_deprecated_function( __FUNCTION__, '2.0.0', 'wp_loginout' );
+	return wp_loginout( '', false );
+}
+
+/**
+ * @since      0.6.0
+ * @deprecated 2.0.0
+ */
+function hybrid_query_counter_shortcode() {
+	_deprecated_function( __FUNCTION__, '2.0.0', '' );
+	return '';
+}
+
+/**
+ * @since      0.8.0
+ * @deprecated 2.0.0
+ */
+function hybrid_nav_menu_shortcode( $attr ) {
+	_deprecated_function( __FUNCTION__, '2.0.0', 'wp_nav_menu' );
+	return '';
+}
+
+/**
+ * @since      0.7.0
+ * @deprecated 2.0.0
+ */
+function hybrid_entry_edit_link_shortcode( $attr ) {
+	_deprecated_function( __FUNCTION__, '2.0.0', 'edit_post_link' );
+
+	$attr = shortcode_atts( array( 'before' => '', 'after' => '' ), $attr, 'entry-edit-link' );
+
+	ob_start();
+	edit_post_link( null, $attr['before'], $attr['after'] );
+	return ob_get_clean();
+}
+
+/**
+ * @since      0.7.0
+ * @deprecated 2.0.0
+ */
+function hybrid_entry_published_shortcode( $attr ) {
+	_deprecated_function( __FUNCTION__, '2.0.0', 'get_the_date' );
+
+	$attr = shortcode_atts( 
+		array( 
+			'before' => '', 
+			'after' => '', 
+			'format' => get_option( 'date_format' ), 
+			'human_time' => '' 
+		), 
+		$attr, 
+		'entry-published'
+	);
+
+	/* If $human_time is passed in, allow for '%s ago' where '%s' is the return value of human_time_diff(). */
+	if ( !empty( $attr['human_time'] ) )
+		$time = sprintf( $attr['human_time'], human_time_diff( get_the_time( 'U' ), current_time( 'timestamp' ) ) );
+
+	/* Else, just grab the time based on the format. */
+	else
+		$time = get_the_time( $attr['format'] );
+
+	$published = '<time class="published" datetime="' . get_the_time( 'Y-m-d\TH:i:sP' ) . '">' . $time . '</time>';
+
+	return $attr['before'] . $published . $attr['after'];
+}
+
+/**
+ * @since      0.7.0
+ * @deprecated 2.0.0
+ */
+function hybrid_entry_comments_link_shortcode( $attr ) {
+	_deprecated_function( __FUNCTION__, '2.0.0', 'comments_popup_link' );
+
+	$attr = shortcode_atts( 
+		array( 
+			'zero'      => false, 
+			'one'       => false, 
+			'more'      => false, 
+			'css_class' => 'comments-link', 
+			'none'      => '', 
+			'before'    => '', 
+			'after'     => '' 
+		), 
+		$attr,
+		'entry-comments-link'
+	);
+
+	ob_start();
+	echo $attr['before'];
+	comments_popup_link( $attr['zero'], $attr['one'], $attr['more'], $attr['css_class'], $attr['none'] );
+	echo $attr['after'];
+	return ob_get_clean();
+}
+
+/**
+ * @since      0.7.0
+ * @deprecated 2.0.0
+ */
+function hybrid_entry_author_shortcode( $attr ) {
+	_deprecated_function( __FUNCTION__, '2.0.0', 'the_author_posts_link' );
+
+	$post_type = get_post_type();
+
+	if ( post_type_supports( $post_type, 'author' ) ) {
+
+		$attr = shortcode_atts(
+			array( 
+				'before' => '', 
+				'after'  => '' 
+			), 
+			$attr,
+			'entry-author'
+		);
+
+		$author = '<span class="author vcard"><a class="url fn n" rel="author" href="' . esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ) . '" title="' . esc_attr( get_the_author_meta( 'display_name' ) ) . '">' . get_the_author_meta( 'display_name' ) . '</a></span>';
+
+		return $attr['before'] . $author . $attr['after'];
+	}
+
+	return '';
+}
+
+/**
+ * @since      0.7.0
+ * @deprecated 2.0.0
+ */
+function hybrid_entry_terms_shortcode( $attr ) {
+	_deprecated_function( __FUNCTION__, '2.0.0', 'the_terms' );
+
+	$attr = shortcode_atts( 
+		array( 
+			'id'        => get_the_ID(), 
+			'taxonomy'  => 'post_tag', 
+			'separator' => ', ', 
+			'before'    => '', 
+			'after'     => '' 
+		), 
+		$attr, 
+		'entry-terms'
+	);
+
+	$attr['before'] = ( empty( $attr['before'] ) ? '<span class="' . $attr['taxonomy'] . '">' : '<span class="' . $attr['taxonomy'] . '"><span class="before">' . $attr['before'] . '</span>' );
+	$attr['after'] = ( empty( $attr['after'] ) ? '</span>' : '<span class="after">' . $attr['after'] . '</span></span>' );
+
+	return get_the_term_list( $attr['id'], $attr['taxonomy'], $attr['before'], $attr['separator'], $attr['after'] );
+}
+
+/**
+ * @since      0.7.0
+ * @deprecated 2.0.0
+ */
+function hybrid_entry_title_shortcode( $attr ) {
+	_deprecated_function( __FUNCTION__, '2.0.0', 'the_title' );
+
+	$attr = shortcode_atts(
+		array( 
+			'permalink' => true, 
+			'tag'       => is_singular() ? 'h1' : 'h2' 
+		), 
+		$attr,
+		'entry-title'
+	);
+
+	$tag = tag_escape( $attr['tag'] );
+	$class = sanitize_html_class( get_post_type() ) . '-title entry-title';
+
+	if ( false == (bool)$attr['permalink'] )
+		$title = the_title( "<{$tag} class='{$class}'>", "</{$tag}>", false );
+	else
+		$title = the_title( "<{$tag} class='{$class}'><a href='" . get_permalink() . "'>", "</a></{$tag}>", false );
+
+	return $title;
+}
+
+/**
+ * @since      0.8.0
+ * @deprecated 2.0.0
+ */
+function hybrid_entry_shortlink_shortcode( $attr ) {
+	_deprecated_function( __FUNCTION__, '2.0.0', '' );
+	return '';
+}
+
+/**
+ * @since      1.3.0
+ * @deprecated 2.0.0
+ */
+function hybrid_entry_permalink_shortcode( $attr ) {
+	_deprecated_function( __FUNCTION__, '2.0.0', 'get_permalink' );
+
+	$attr = shortcode_atts( array( 'before' => '', 'after' => '' ), $attr, 'entry-permalink' );
+
+	return $attr['before'] . '<a href="' . esc_url( get_permalink() ) . '" class="permalink">' . __( 'Permalink', 'hybrid-core' ) . '</a>' . $attr['after'];
+}
+
+/**
+ * @since      1.3.0
+ * @deprecated 2.0.0
+ */
+function hybrid_post_format_link_shortcode( $attr ) {
+	_deprecated_function( __FUNCTION__, '2.0.0', 'get_post_format_link' );
+
+	$attr = shortcode_atts( array( 'before' => '', 'after' => '' ), $attr, 'post-format-link' );
+	$format = get_post_format();
+	$url = ( empty( $format ) ? get_permalink() : get_post_format_link( $format ) );
+
+	return $attr['before'] . '<a href="' . esc_url( $url ) . '" class="post-format-link">' . get_post_format_string( $format ) . '</a>' . $attr['after'];
+}
+
+/**
+ * @since      0.7.0
+ * @deprecated 2.0.0
+ */
+function hybrid_comment_published_shortcode( $attr ) {
+	_deprecated_function( __FUNCTION__, '2.0.0', 'get_comment_date' );
+
+	$attr = shortcode_atts(
+		array(
+			'human_time' => '',
+			'before'     => '',
+			'after'      => '',
+		),
+		$attr,
+		'comment-published'
+	);
+
+	/* If $human_time is passed in, allow for '%s ago' where '%s' is the return value of human_time_diff(). */
+	if ( !empty( $attr['human_time'] ) )
+		$published = '<time class="published" datetime="' . get_comment_time( 'Y-m-d\TH:i:sP' ) . '">' . sprintf( $attr['human_time'], human_time_diff( get_comment_time( 'U' ), current_time( 'timestamp' ) ) ) . '</time>';
+
+	/* Else, just return the default. */
+	else
+		$published = '<span class="published"><time class="comment-date" datetime="' . get_comment_time( 'Y-m-d\TH:i:sP' ) . '">' . get_comment_date() . '</time></span>';
+
+	return $attr['before'] . $published . $attr['after'];
+}
+
+/**
+ * @since      0.8.0
+ * @deprecated 2.0.0
+ */
+function hybrid_comment_author_shortcode( $attr ) {
+	_deprecated_function( __FUNCTION__, '2.0.0', 'comment_author_link' );
+
+	global $comment;
+
+	$attr = shortcode_atts(
+		array(
+			'before' => '',
+			'after' => '',
+			'tag' => 'span' // @deprecated 1.2.0 Back-compatibility. Please don't use this argument.
+		),
+		$attr,
+		'comment-author'
+	);
+
+	$author = esc_html( get_comment_author( $comment->comment_ID ) );
+	$url = esc_url( get_comment_author_url( $comment->comment_ID ) );
+
+	/* Display link and cite if URL is set. Also, properly cites trackbacks/pingbacks. */
+	if ( $url )
+		$output = '<cite class="fn" title="' . $url . '"><a href="' . $url . '" title="' . esc_attr( $author ) . '" class="url" rel="external nofollow">' . $author . '</a></cite>';
+	else
+		$output = '<cite class="fn">' . $author . '</cite>';
+
+	$output = '<' . tag_escape( $attr['tag'] ) . ' class="comment-author vcard">' . $attr['before'] . apply_filters( 'get_comment_author_link', $output ) . $attr['after'] . '</' . tag_escape( $attr['tag'] ) . '><!-- .comment-author .vcard -->';
+
+	return $output;
+}
+
+/**
+ * @since      0.7.0
+ * @deprecated 2.0.0
+ */
+function hybrid_comment_permalink_shortcode( $attr ) {
+	_deprecated_function( __FUNCTION__, '2.0.0', 'get_comment_link' );
+
+	global $comment;
+
+	$attr = shortcode_atts( array( 'before' => '', 'after' => '' ), $attr, 'comment-permalink' );
+	$link = '<a class="permalink" href="' . esc_url( get_comment_link( $comment->comment_ID ) ) . '">' . __( 'Permalink', 'hybrid-core' ) . '</a>';
+	return $attr['before'] . $link . $attr['after'];
+}
+
+/**
+ * @since      0.7.0
+ * @deprecated 2.0.0
+ */
+function hybrid_comment_edit_link_shortcode( $attr ) {
+	_deprecated_function( __FUNCTION__, '2.0.0', 'edit_comment_link' );
+
+	$attr = shortcode_atts( array( 'before' => '', 'after' => '' ), $attr, 'comment-edit-link' );
+
+	ob_start();
+	edit_comment_link( null, $attr['before'], $attr['after'] );
+	return ob_get_clean();
+}
+
+/**
+ * @since      0.7.0
+ * @deprecated 2.0.0
+ */
+function hybrid_comment_reply_link_shortcode( $attr ) {
+	_deprecated_function( __FUNCTION__, '2.0.0', 'hybrid_get_comment_reply_link' );
+	return hybrid_get_comment_reply_link( $attr );
+}
+
 /* === Removed Functions (note that functions removed prior to the 1.5 branch are gone). === */
 
 /* Functions removed in the 1.5 branch. */
