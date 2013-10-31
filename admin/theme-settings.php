@@ -60,9 +60,6 @@ function hybrid_settings_page_init() {
 		/* Add help tabs to the theme settings page. */
 		add_action( "load-{$hybrid->settings_page}", 'hybrid_settings_page_help' );
 
-		/* Load the theme settings meta boxes. */
-		add_action( "load-{$hybrid->settings_page}", 'hybrid_load_settings_page_meta_boxes' );
-
 		/* Create a hook for adding meta boxes. */
 		add_action( "load-{$hybrid->settings_page}", 'hybrid_settings_page_add_meta_boxes' );
 
@@ -114,20 +111,11 @@ function hybrid_settings_page_add_meta_boxes() {
  * merely loaded with this function.  Meta boxes are only loaded if the feature is supported by the theme.
  *
  * @since 1.2.0
+ * @deprecated 2.0.0
  * @return void
  */
 function hybrid_load_settings_page_meta_boxes() {
-
-	/* Get theme-supported meta boxes for the settings page. */
-	$supports = get_theme_support( 'hybrid-core-theme-settings' );
-
-	/* If there are any supported meta boxes, load them. */
-	if ( is_array( $supports[0] ) ) {
-
-		/* Load the 'About' meta box if it is supported. */
-		if ( in_array( 'about', $supports[0] ) )
-			require_once( trailingslashit( HYBRID_ADMIN ) . 'meta-box-theme-about.php' );
-	}
+	_deprecated_function( __FUNCTION__, '2.0.0', '' );
 }
 
 /**
