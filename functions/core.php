@@ -129,18 +129,6 @@ function apply_atomic_shortcode( $tag = '', $value = '' ) {
 }
 
 /**
- * The theme can save multiple things in a transient to help speed up page load times. We're
- * setting a default of 12 hours or 43,200 seconds (60 * 60 * 12).
- *
- * @since 0.8.0
- * @access public
- * @return int Transient expiration time in seconds.
- */
-function hybrid_get_transient_expiration() {
-	return apply_filters( hybrid_get_prefix() . '_transient_expiration', 43200 );
-}
-
-/**
  * Function for formatting a hook name if needed. It automatically adds the theme's prefix to 
  * the hook, and it will add a context (or any variable) if it's given.
  *

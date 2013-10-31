@@ -435,6 +435,15 @@ function hybrid_comment_reply_link_shortcode( $attr ) {
 	return hybrid_get_comment_reply_link( $attr );
 }
 
+/**
+ * @since      0.8.0
+ * @deprecated 2.0.0
+ */
+function hybrid_get_transient_expiration() {
+	_deprecated_function( __FUNCTION__, '2.0.0', '' );
+	return 43200;
+}
+
 /* === Removed Functions (note that functions removed prior to the 1.5 branch are gone). === */
 
 /* Functions removed in the 1.5 branch. */
