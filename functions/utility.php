@@ -93,27 +93,6 @@ function hybrid_meta_template() {
 }
 
 /**
- * Dynamic element to wrap the site description in.  If it is the front page, wrap it in an <h2> element.  
- * On other pages, wrap it in a <div> element.
- *
- * @since 0.1.0
- * @access public
- * @return void
- */
-function hybrid_site_description() {
-
-	/* If viewing the front page of the site, use an <h2> tag.  Otherwise, use a <div> tag. */
-	$tag = ( is_front_page() ) ? 'h2' : 'div';
-
-	/* Get the site description.  If it's not empty, wrap it with the appropriate HTML. */
-	if ( $desc = get_bloginfo( 'description' ) )
-		$desc = sprintf( '<%1$s id="site-description"><span>%2$s</span></%1$s>', tag_escape( $tag ), $desc );
-
-	/* Display the site description and apply filters for developers to overwrite. */
-	echo apply_atomic( 'site_description', $desc );
-}
-
-/**
  * Standardized function for outputting the footer content.
  *
  * @since  1.4.0
