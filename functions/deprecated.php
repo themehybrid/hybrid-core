@@ -406,6 +406,10 @@ function hybrid_register_menus() {
 	hybrid_function_removed( __FUNCTION__ );
 }
 
+function hybrid_extra_theme_headers() {
+	hybrid_function_removed( __FUNCTION__ );
+}
+
 /**
  * Message to display for removed functions.
  * @since 0.5.0
