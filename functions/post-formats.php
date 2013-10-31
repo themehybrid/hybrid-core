@@ -19,9 +19,6 @@
 /* Add support for structured post formats. */
 add_action( 'wp_loaded', 'hybrid_structured_post_formats', 1 );
 
-/* Filter the post format archive title. */
-add_filter( 'single_term_title', 'hybrid_single_post_format_title' );
-
 /**
  * Theme compatibility for post formats.  This function adds appropriate filters to 'the_content' for 
  * the various post formats that a theme supports.
@@ -56,70 +53,6 @@ function hybrid_structured_post_formats() {
 		/* Auto-add paragraphs to the chat text. */
 		add_filter( 'hybrid_post_format_chat_text', 'wpautop' );
 	}
-}
-
-/**
- * Filters the single post format title, which is used on the term archive page. The purpose of this 
- * function is to replace the singular name with a plural version.
- *
- * @since  1.6.0
- * @access public
- * @param  string $title The term name.
- * @return string
- */
-function hybrid_single_post_format_title( $title ) {
-
-	if ( is_tax( 'post_format' ) ) {
-		$term   = get_queried_object();
-		$plural = hybrid_get_plural_post_format_string( $term->slug );
-		$title  = !empty( $plural ) ? $plural : $title;
-	}
-
-	return $title;
-}
-
-/**
- * Gets the plural version of a post format name.
- *
- * @since  1.6.0
- * @access public
- * @param  string $slug The term slug.
- * @return string
- */
-function hybrid_get_plural_post_format_string( $slug ) {
-
-	$strings = hybrid_get_plural_post_format_strings();
-
-	$slug = hybrid_clean_post_format_slug( $slug );
-
-	return isset( $strings[ $slug ] ) ? $strings[ $slug ] : '';
-}
-
-/**
- * Defines plural versions of the post format names since WordPress only provides a singular version 
- * of each format. Basically, I hate having archive pages labeled with the singular name, so this is 
- * what I created to take care of that problem.
- *
- * @since  1.6.0
- * @access public
- * @return array
- */
-function hybrid_get_plural_post_format_strings() {
-
-	$strings = array(
-	//	'standard' => __( 'Articles',       'hybrid-core' ), // Would this ever be used?
-		'aside'    => __( 'Asides',         'hybrid-core' ),
-		'audio'    => __( 'Audio',          'hybrid-core' ), // Leave as "Audio"?
-		'chat'     => __( 'Chats',          'hybrid-core' ),
-		'image'    => __( 'Images',         'hybrid-core' ),
-		'gallery'  => __( 'Galleries',      'hybrid-core' ),
-		'link'     => __( 'Links',          'hybrid-core' ),
-		'quote'    => __( 'Quotes',         'hybrid-core' ), // Use "Quotations"?
-		'status'   => __( 'Status Updates', 'hybrid-core' ),
-		'video'    => __( 'Videos',         'hybrid-core' ),
-	);
-
-	return apply_filters( 'hybrid_plural_post_format_strings', $strings );
 }
 
 /**

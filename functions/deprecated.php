@@ -410,6 +410,18 @@ function hybrid_extra_theme_headers() {
 	hybrid_function_removed( __FUNCTION__ );
 }
 
+function hybrid_single_post_format_title() {
+	hybrid_function_removed( __FUNCTION__ );
+}
+
+function hybrid_get_plural_post_format_string() {
+	hybrid_function_removed( __FUNCTION__ );
+}
+
+function hybrid_get_plural_post_format_strings() {
+	hybrid_function_removed( __FUNCTION__ );
+}
+
 /**
  * Message to display for removed functions.
  * @since 0.5.0
