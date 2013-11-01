@@ -155,6 +155,9 @@ class Hybrid {
 		/* Load the core framework internationalization functions. */
 		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'i18n.php' );
 
+		/* Load the framework customize functions. */
+		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'customize.php' );
+
 		/* Load the general template functions. */
 		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'general.php' );
 
