@@ -57,4 +57,27 @@ function hybrid_get_content_template() {
 	include( apply_atomic( 'content_template', locate_template( $templates, false, false ) ) );
 }
 
-?>
+/**
+ * A function for loading a menu template.  This works similar to the WordPress `get_*()` template functions. 
+ * It's purpose is for loading a menu template part.  This function looks for menu templates within the 
+ * `menu` sub-folder or the root theme folder.
+ *
+ * @since  2.0.0
+ * @access public
+ * @param  string  $name
+ * @return void
+ */
+function hybrid_get_menu( $name = '' ) {
+
+	$templates = array();
+
+	if ( '' !== $name ) {
+		$templates[] = "menu/{$name}.php";
+		$templates[] = "menu-{$name}.php";
+	}
+
+	$templates[] = 'menu/menu.php';
+	$templates[] = 'menu.php';
+
+	locate_template( $templates, true );
+}
