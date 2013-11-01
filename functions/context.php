@@ -231,6 +231,10 @@ function hybrid_get_body_class( $class = '' ) {
 		}
 	}
 
+	/* Plural/multiple-post view (opposite of singular). */
+	if ( is_home() || is_archive() || is_search() )
+		$classes[] = 'plural';
+
 	/* Paged views. */
 	if ( ( ( $page = $wp_query->get( 'paged' ) ) || ( $page = $wp_query->get( 'page' ) ) ) && $page > 1 )
 		$classes[] = 'paged paged-' . intval( $page );
