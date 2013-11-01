@@ -87,12 +87,12 @@ function hybrid_get_menu( $name = '' ) {
 	$templates = array();
 
 	if ( '' !== $name ) {
-		$templates[] = "menu/{$name}.php";
 		$templates[] = "menu-{$name}.php";
+		$templates[] = "menu/{$name}.php";
 	}
 
-	$templates[] = 'menu/menu.php';
 	$templates[] = 'menu.php';
+	$templates[] = 'menu/menu.php';
 
 	locate_template( $templates, true );
 }
