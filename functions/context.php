@@ -176,11 +176,17 @@ function hybrid_body_class( $class = '' ) {
 function hybrid_get_body_class( $class = '' ) {
 	global $wp_query;
 
-	/* Text direction (which direction does the text flow). */
-	$classes = array( 'wordpress', get_bloginfo( 'text_direction' ), get_locale() );
+	/* WordPress class for uses when WordPress isn't always the only system on the site. */
+	$classes = array( 'wordpress' );
+
+	/* Text direction. */
+	$classes[] = is_rtl() ? 'rtl' : 'ltr';
+
+	/* Locale. */
+	$classes[] = strtolower( str_replace( '_', '-', get_locale() ) );
 
 	/* Check if the current theme is a parent or child theme. */
-	$classes[] = ( is_child_theme() ? 'child-theme' : 'parent-theme' );
+	$classes[] = is_child_theme() ? 'child-theme' : 'parent-theme';
 
 	/* Multisite check adds the 'multisite' class and the blog ID. */
 	if ( is_multisite() ) {
@@ -193,7 +199,7 @@ function hybrid_get_body_class( $class = '' ) {
 	$classes[] = strtolower( gmdate( '\yY \mm \dd \hH l', $time ) );
 
 	/* Is the current user logged in. */
-	$classes[] = ( is_user_logged_in() ) ? 'logged-in' : 'logged-out';
+	$classes[] = is_user_logged_in() ? 'logged-in' : 'logged-out';
 
 	/* WP admin bar. */
 	if ( is_admin_bar_showing() )
@@ -224,7 +230,7 @@ function hybrid_get_body_class( $class = '' ) {
 		/* Post format. */
 		if ( current_theme_supports( 'post-formats' ) && post_type_supports( $post->post_type, 'post-formats' ) ) {
 			$post_format = get_post_format( get_queried_object_id() );
-			$classes[] = ( ( empty( $post_format ) || is_wp_error( $post_format ) ) ? "{$post->post_type}-format-standard" : "{$post->post_type}-format-{$post_format}" );
+			$classes[] = ( empty( $post_format ) || is_wp_error( $post_format ) ) ? "{$post->post_type}-format-standard" : "{$post->post_type}-format-{$post_format}";
 		}
 
 		/* Attachment mime types. */
