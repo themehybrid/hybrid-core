@@ -21,6 +21,9 @@ add_action( 'wp_enqueue_scripts', 'hybrid_enqueue_styles', 5 );
 /* Load the development stylsheet in script debug mode. */
 add_filter( 'stylesheet_uri', 'hybrid_min_stylesheet_uri', 10, 2 );
 
+/* Filters the WP locale stylesheet. */
+add_filter( 'locale_stylesheet_uri', 'hybrid_locale_stylesheet_uri' );
+
 /**
  * Registers stylesheets for the framework.  This function merely registers styles with WordPress using
  * the wp_register_style() function.  It does not load any stylesheets on the site.  If a theme wants to 
@@ -159,4 +162,50 @@ function hybrid_min_stylesheet_uri( $stylesheet_uri, $stylesheet_dir_uri ) {
 	return $stylesheet_uri;
 }
 
-?>
+/**
+ * Filters `locale_stylesheet_uri` with a more robust version for checking locale/language/region/direction 
+ * stylesheets.
+ *
+ * @since  2.0.0
+ * @access public
+ * @param  string  $stylesheet_uri
+ * @return string
+ */
+function hybrid_locale_stylesheet_uri( $stylesheet_uri ) {
+
+	$locale_style = hybrid_get_locale_style();
+
+	return !empty( $locale_style ) ? $locale_style : $stylesheet_uri;
+}
+
+/**
+ * Searches for a locale stylesheet.  This function looks for stylesheets in the `css` folder in the following 
+ * order:  1) $lang-$region.css, 2) $region.css, 3) $lang.css, and 4) $text_direction.css.  It first checks 
+ * the child theme for these files.  If they are not present, it will check the parent theme.  This is much 
+ * more robust than the WordPress locale stylesheet, allowing for multiple variations and a more flexible 
+ * hierarchy.
+ *
+ * @since  2.0.0
+ * @access public
+ * @return string
+ */
+function hybrid_get_locale_style() {
+
+	$locale = strtolower( str_replace( '_', '-', get_locale() ) );
+	$lang   = strtolower( hybrid_get_language() );
+	$region = strtolower( hybrid_get_region() );
+	$styles = array();
+
+	$styles[] = "css/{$locale}.css";
+
+	if ( $region !== $locale )
+		$styles[] = "css/{$region}.css";
+
+	if ( $lang !== $locale )
+		$styles[] = "css/{$lang}.css";
+
+	$styles[] = is_rtl() ? 'css/rtl.css' : 'css/ltr.css';
+
+	return hybrid_locate_theme_file( $styles );
+}
+
