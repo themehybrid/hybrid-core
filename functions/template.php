@@ -31,8 +31,16 @@ function hybrid_get_content_template() {
 	$post_type = get_post_type();
 
 	/* Assume the theme developer is creating an attachment template. */
-	if ( 'attachment' == $post_type )
+	if ( 'attachment' === $post_type ) {
 		remove_filter( 'the_content', 'prepend_attachment' );
+
+		$mime_type = get_post_mime_type();
+
+		list( $type, $subtype ) = false !== strpos( $mime_type, '/' ) ? explode( '/', $mime_type ) : array( $mime_type, '' );
+
+		$templates[] = "content-attachment-{$type}.php";
+		$templates[] = "content/attachment-{$type}.php";
+	}
 
 	/* If the post type supports 'post-formats', get the template based on the format. */
 	if ( post_type_supports( $post_type, 'post-formats' ) ) {
@@ -42,19 +50,26 @@ function hybrid_get_content_template() {
 
 		/* Template based off post type and post format. */
 		$templates[] = "content-{$post_type}-{$post_format}.php";
+		$templates[] = "content/{$post_type}-{$post_format}.php";
 
 		/* Template based off the post format. */
 		$templates[] = "content-{$post_format}.php";
+		$templates[] = "content/{$post_format}.php";
 	}
 
 	/* Template based off the post type. */
 	$templates[] = "content-{$post_type}.php";
+	$templates[] = "content/{$post_type}.php";
 
 	/* Fallback 'content.php' template. */
 	$templates[] = 'content.php';
+	$templates[] = 'content/content.php';
+
+	/* Allow devs to filter the content template hierarchy. */
+	$templates = apply_filters( 'hybrid_content_template_hierarchy', $templates );
 
 	/* Apply filters and return the found content template. */
-	include( apply_atomic( 'content_template', locate_template( $templates, false, false ) ) );
+	include( apply_filters( 'hybrid_content_template', locate_template( $templates, false, false ) ) );
 }
 
 /**
