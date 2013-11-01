@@ -14,9 +14,6 @@
 /* Add extra support for post types. */
 add_action( 'init', 'hybrid_add_post_type_support' );
 
-/* Add extra file headers for themes. */
-add_filter( 'extra_theme_headers', 'hybrid_extra_theme_headers' );
-
 /* Filters the title for untitled posts. */
 add_filter( 'the_title', 'hybrid_untitled_post' );
 
