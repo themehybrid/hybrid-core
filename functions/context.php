@@ -130,22 +130,13 @@ function hybrid_get_context() {
  * developers can filter this to add other attributes.
  *
  * @since  1.6.0
+ * @deprecated 2.0.0
  * @access public
  * @return void
  */
 function hybrid_body_attributes() {
-
-	$attributes = array();
-	$output     = '';
-
-	$attributes['class'] = join( ' ', hybrid_get_body_class() );
-
-	$attributes = apply_atomic( 'body_attributes', $attributes );
-
-	foreach( $attributes as $attr => $value )
-		$output .= !empty( $value ) ? " {$attr}='{$value}'" : " {$attr}";
-
-	echo $output;
+	_deprecated_function( __FUNCTION__, '2.0.0', "hybrid_attr( 'body' )" );
+	hybrid_attr( 'body' );
 }
 
 /**
@@ -260,23 +251,13 @@ function hybrid_get_body_class( $class = '' ) {
  * but developers can filter this to add other attributes.
  *
  * @since  1.6.0
+ * @deprecated 2.0.0
  * @access public
  * @return void
  */
 function hybrid_post_attributes() {
-
-	$attributes = array();
-	$output     = '';
-
-	$attributes['id']    = 'post-' . get_the_ID();
-	$attributes['class'] = join( ' ', hybrid_get_post_class() );
-
-	$attributes = apply_atomic( 'post_attributes', $attributes );
-
-	foreach( $attributes as $attr => $value )
-		$output .= !empty( $value ) ? " {$attr}='{$value}'" : " {$attr}";
-
-	echo $output;
+	_deprecated_function( __FUNCTION__, '2.0.0', "hybrid_attr( 'post' )" );
+	hybrid_attr( 'post' );
 }
 
 /**
@@ -403,23 +384,13 @@ function hybrid_get_post_class( $class = '', $post_id = null ) {
  * but developers can filter this to add other attributes.
  *
  * @since  1.6.0
+ * @deprecated 2.0.0
  * @access public
  * @return void
  */
 function hybrid_comment_attributes() {
-
-	$attributes = array();
-	$output     = '';
-
-	$attributes['id']    = 'comment-' . get_comment_ID();
-	$attributes['class'] = join( ' ', hybrid_get_comment_class() );
-
-	$attributes = apply_atomic( 'comment_attributes', $attributes );
-
-	foreach( $attributes as $attr => $value )
-		$output .= !empty( $value ) ? " {$attr}='{$value}'" : " {$attr}";
-
-	echo $output;
+	_deprecated_function( __FUNCTION__, '2.0.0', "hybrid_attr( 'comment' )" );
+	hybrid_attr( 'comment' );
 }
 
 /**
