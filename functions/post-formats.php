@@ -63,6 +63,33 @@ function hybrid_clean_post_format_slug( $slug ) {
 	return str_replace( 'post-format-', '', $slug );
 }
 
+/**
+ * Outputs a link to the post format archive.
+ *
+ * @since  2.0.0
+ * @access public
+ * @return void
+ */
+function hybrid_post_format_link() {
+	echo hybrid_get_post_format_link();
+}
+
+/**
+ * Generates a link to the current post format's archive.  If the post doesn't have a post format, the link 
+ * will go to the post permalink.
+ *
+ * @since  2.0.0
+ * @access public
+ * @return string
+ */
+function hybrid_get_post_format_link( $attr = array() ) {
+
+	$format = get_post_format();
+	$url    = empty( $format ) ? get_permalink() : get_post_format_link( $format );
+
+	return sprintf( '<a href="%s" class="post-format-link">%s</a>', esc_url( $url ), get_post_format_string( $format ) );
+}
+
 /* === Asides === */
 
 /**
