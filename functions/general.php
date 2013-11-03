@@ -179,29 +179,28 @@ function hybrid_get_loop_title() {
 		$loop_title = post_type_archive_title( '', false );
 
 	elseif ( get_query_var( 'minute' ) && get_query_var( 'hour' ) )
-		$loop_title = get_the_time( _x( 'g:i a', 'minute and hour archives time format', 'hybrid-core' ) );
+		$loop_title = hybrid_single_minute_hour_title( '', false );
 
 	elseif ( get_query_var( 'minute' ) )
-		$loop_title = sprintf( 'Minute %s', get_the_time( _x( 'i', 'minute archives time format', 'hybrid-core' ) ) );
+		$loop_title = hybrid_single_minute_title( '', false );
 
 	elseif ( get_query_var( 'hour' ) )
-		$loop_title = get_the_time( _x( 'g a', 'hour archives time format', 'hybrid-core' ) );
+		$loop_title = hybrid_single_hour_title( '', false );
 
 	elseif ( is_day() )
-		$loop_title = get_the_date();
+		$loop_title = hybrid_single_day_title( '', false );
 
 	elseif ( get_query_var( 'w' ) )
-		/* Translators: 1 is the week number and 2 is the year. */
-		$loop_title = sprintf( __( 'Week %1$s of %2$s', 'hybrid-core' ), get_the_time( _x( 'W', 'weekly archives date format', 'hybrid-core' ) ), get_the_time( _x( 'Y', 'yearly archives date format', 'hybrid-core' ) ) );
+		$loop_title = hybrid_single_week_title( '', false );
 
 	elseif ( is_month() )
 		$loop_title = single_month_title( ' ', false );
 
 	elseif ( is_year() )
-		$loop_title = get_the_date( _x( 'Y', 'yearly archives date format', 'hybrid-core' ) );
+		$loop_title = hybrid_single_year_title( '', false );
 
 	elseif ( is_archive() )
-		$loop_title = __( 'Archives', 'hybrid-core' );
+		$loop_title = hybrid_single_archive_title( '', false );
 
 	return apply_filters( 'hybrid_loop_title', $loop_title );
 }
@@ -255,19 +254,151 @@ function hybrid_get_loop_description() {
 		$loop_desc = __( 'You are browsing the site archives by time.', 'hybrid-core' );
 
 	elseif ( is_day() )
-		$loop_desc = sprintf( __( 'You are browsing the site archives for %s.', 'hybrid-core' ), get_the_date() );
+		$loop_desc = sprintf( __( 'You are browsing the site archives for %s.', 'hybrid-core' ), hybrid_single_day_title( '', false ) );
 
 	elseif ( is_month() )
 		$loop_desc = sprintf( __( 'You are browsing the site archives for %s.', 'hybrid-core' ), single_month_title( ' ', false ) );
 
 	elseif ( is_year() )
-		$loop_desc = sprintf( __( 'You are browsing the site archives for %s.', 'hybrid-core' ), get_the_time( _x( 'Y', 'yearly archives date format', 'hybrid-core' ) ) );
-
-	elseif ( is_date() )
-		$loop_desc = __( 'You are browsing the site archives by date.', 'hybrid-core' );
+		$loop_desc = sprintf( __( 'You are browsing the site archives for %s.', 'hybrid-core' ), hybrid_single_year_title( '', false ) );
 
 	elseif ( is_archive() )
 		$loop_desc = __( 'You are browsing the site archives.', 'hybrid-core' );
 
 	return apply_filters( 'hybrid_loop_description', $loop_desc );
+}
+
+/**
+ * Retrieve the general archive title.
+ *
+ * @since  2.0.0
+ * @access public
+ * @param  string  $prefix
+ * @param  bool    $display
+ * @return string
+ */
+function hybrid_single_archive_title( $prefix = '', $display = true ) {
+
+	$title = $prefix . __( 'Archives', 'hybrid-core' );
+
+	if ( false === $display )
+		return $title;
+
+	echo $title;
+}
+
+/**
+ * Retrieve the year archive title.
+ *
+ * @since  2.0.0
+ * @access public
+ * @param  string  $prefix
+ * @param  bool    $display
+ * @return string
+ */
+function hybrid_single_year_title( $prefix = '', $display = true ) {
+
+	$title = $prefix . get_the_date( _x( 'Y', 'yearly archives date format', 'hybrid-core' ) );
+
+	if ( false === $display )
+		return $title;
+
+	echo $title;
+}
+
+/**
+ * Retrieve the week archive title.
+ *
+ * @since  2.0.0
+ * @access public
+ * @param  string  $prefix
+ * @param  bool    $display
+ * @return string
+ */
+function hybrid_single_week_title( $prefix = '', $display = true ) {
+
+	/* Translators: 1 is the week number and 2 is the year. */
+	$title = $prefix . sprintf( __( 'Week %1$s of %2$s', 'hybrid-core' ), get_the_time( _x( 'W', 'weekly archives date format', 'hybrid-core' ) ), get_the_time( _x( 'Y', 'yearly archives date format', 'hybrid-core' ) ) );
+
+	if ( false === $display )
+		return $title;
+
+	echo $title;
+}
+
+/**
+ * Retrieve the day archive title.
+ *
+ * @since  2.0.0
+ * @access public
+ * @param  string  $prefix
+ * @param  bool    $display
+ * @return string
+ */
+function hybrid_single_day_title( $prefix = '', $display = true ) {
+
+	$title = $prefix . get_the_date( _x( 'F j, Y', 'daily archives date format', 'hybrid-core' ) );
+
+	if ( false === $display )
+		return $title;
+
+	echo $title;
+}
+
+/**
+ * Retrieve the hour archive title.
+ *
+ * @since  2.0.0
+ * @access public
+ * @param  string  $prefix
+ * @param  bool    $display
+ * @return string
+ */
+function hybrid_single_hour_title( $prefix = '', $display = true ) {
+
+	$title = $prefix . get_the_time( _x( 'g a', 'hour archives time format', 'hybrid-core' ) );
+
+	if ( false === $display )
+		return $title;
+
+	echo $title;
+}
+
+/**
+ * Retrieve the minute archive title.
+ *
+ * @since  2.0.0
+ * @access public
+ * @param  string  $prefix
+ * @param  bool    $display
+ * @return string
+ */
+function hybrid_single_minute_title( $prefix = '', $display = true ) {
+
+	/* Translators: Minute archive title. %s is the minute time format. */
+	$title = $prefix . sprintf( __( 'Minute %s', 'hybrid-core' ), get_the_time( _x( 'i', 'minute archives time format', 'hybrid-core' ) ) );
+
+	if ( false === $display )
+		return $title;
+
+	echo $title;
+}
+
+/**
+ * Retrieve the minute + hour archive title.
+ *
+ * @since  2.0.0
+ * @access public
+ * @param  string  $prefix
+ * @param  bool    $display
+ * @return string
+ */
+function hybrid_single_minute_hour_title( $prefix = '', $display = true ) {
+
+	$title = $prefix . get_the_time( _x( 'g:i a', 'minute and hour archives time format', 'hybrid-core' ) );
+
+	if ( false === $display )
+		return $title;
+
+	echo $title;
 }
