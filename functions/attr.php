@@ -318,7 +318,7 @@ function hybrid_attr_post( $attr ) {
 	if ( !empty( $post ) ) {
 
 		$attr['id']        = 'post-' . get_the_ID();
-		$attr['class']     = str_replace( 'hentry ', 'entry ', join( ' ', hybrid_get_post_class() ) );
+		$attr['class']     = join( ' ', get_post_class() );
 		$attr['itemscope'] = 'itemscope';
 
 		if ( 'post' === get_post_type() ) {

@@ -13,6 +13,9 @@
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
+/* Filters the WordPress 'post_class' early. */
+add_filter( 'post_class', 'hybrid_post_class_filter', 5, 3 );
+
 /**
  * Hybrid's main contextual function.  This allows code to be used more than once without running 
  * hundreds of conditional checks within the theme.  It returns an array of contexts based on what 
@@ -126,37 +129,6 @@ function hybrid_get_context() {
 }
 
 /**
- * Outputs the attributes for the <body> element.  By default, this is just the 'class' attribute, but 
- * developers can filter this to add other attributes.
- *
- * @since  1.6.0
- * @deprecated 2.0.0
- * @access public
- * @return void
- */
-function hybrid_body_attributes() {
-	_deprecated_function( __FUNCTION__, '2.0.0', "hybrid_attr( 'body' )" );
-	hybrid_attr( 'body' );
-}
-
-/**
- * Outputs classes for the <body> element depending on page context.
- *
- * @since 0.1.0
- * @access public
- * @param string|array $class Additional classes for more control.
- * @return void
- */
-function hybrid_body_class( $class = '' ) {
-
-	/* Get the body class. */
-	$classes = hybrid_get_body_class( $class );
-
-	/* Print the body class. */
-	echo apply_atomic( 'body_class', join( ' ', $classes ) );
-}
-
-/**
  * Returns classes for the <body> element depending on page context.
  * 
  * @since  1.6.0
@@ -251,167 +223,48 @@ function hybrid_get_body_class( $class = '' ) {
 }
 
 /**
- * Outputs the attributes for the post wrapper.  By default, this is the 'class' and 'id' attributes, 
- * but developers can filter this to add other attributes.
- *
- * @since  1.6.0
- * @deprecated 2.0.0
- * @access public
- * @return void
+ * @since  2.0.0
  */
-function hybrid_post_attributes() {
-	_deprecated_function( __FUNCTION__, '2.0.0', "hybrid_attr( 'post' )" );
-	hybrid_attr( 'post' );
-}
+function hybrid_post_class_filter( $classes, $class, $post_id ) {
 
-/**
- * Outputs the class for the post wrapper.
- *
- * @since  1.6.0
- * @access public
- * @param  string|array $class    Additional classes for more control.
- * @param  int          $post_id  ID of a specific post to get the class for.
- * @return void
- */
-function hybrid_post_class( $class = '', $post_id = null ) {
+	if ( is_admin() )
+		return $classes;
 
-	/* Get the post class. */
-	$classes = hybrid_get_post_class( $class, $post_id );
+	$_classes    = array();
+	$post        = get_post( $post_id );
+	$post_type   = get_post_type();
+	$post_status = get_post_status();
 
-	/* Print the body class. */
-	echo apply_atomic( 'post_class', join( ' ', $classes ) );
-}
+	$remove = array( 'hentry', "type-{$post_type}", "status-{$post_status}", 'post-password-required' );
 
-/**
- * Outputs the class for the post wrapper.  Use hybrid_post_class() instead.
- *
- * @since      0.5.0
- * @deprecated 1.6.0
- * @access     public
- * @param      string|array $class    Additional classes for more control.
- * @param      int          $post_id  ID of a specific post to get the class for.
- * @return     void
- */
-function hybrid_entry_class( $class = '', $post_id = null ) {
+	foreach ( $classes as $key => $class ) {
 
-	/* Get the post class. */
-	$classes = hybrid_get_post_class( $class );
-
-	/* Print the entry class. */
-	echo apply_atomic( 'entry_class', join( ' ', $classes ) );
-}
-
-/**
- * Creates a set of classes for each site entry upon display. Each entry is given the class of 
- * 'hentry'. Posts are given category, tag, and author classes. Alternate post classes of odd, 
- * even, and alt are added.
- *
- * @since  1.6.0
- * @access public
- * @param  string|array $class    Additional classes for more control.
- * @param  int          $post_id  ID of a specific post to get the class for.
- * @return array
- */
-function hybrid_get_post_class( $class = '', $post_id = null ) {
-	static $post_alt;
-
-	$post = get_post( $post_id );
-
-	/* Make sure we have a real post first. */
-	if ( !empty( $post ) ) {
-
-		$post_id = $post->ID;
-
-		/* Add hentry for microformats compliance, the post type, and post status. */
-		$classes = array( 'hentry', $post->post_type, $post->post_status );
-
-		/* Post alt class. */
-		$classes[] = 'post-' . ++$post_alt;
-		$classes[] = ( $post_alt % 2 ) ? 'odd' : 'even alt';
-
-		/* Author class. */
-		$classes[] = 'author-' . sanitize_html_class( get_the_author_meta( 'user_nicename' ), get_the_author_meta( 'ID' ) );
-
-		/* Sticky class (only on home/blog page). */
-		if ( is_home() && is_sticky() && !is_paged() )
-			$classes[] = 'sticky';
-
-		/* Password-protected posts. */
-		if ( post_password_required() )
-			$classes[] = 'protected';
-
-		/* Has excerpt. */
-		if ( post_type_supports( $post->post_type, 'excerpt' ) && has_excerpt() )
-			$classes[] = 'has-excerpt';
-
-		/* Has <!--more--> link. */
-		if ( !is_singular() && false !== strpos( $post->post_content, '<!--more-->' ) )
-			$classes[] = 'has-more-link';
-
-		/* Post format. */
-		if ( current_theme_supports( 'post-formats' ) && post_type_supports( $post->post_type, 'post-formats' ) ) {
-			$post_format = get_post_format( $post_id );
-			$classes[] = ( ( empty( $post_format ) || is_wp_error( $post_format ) ) ? 'format-standard' : "format-{$post_format}" );
-		}
-
-		/* Add category and post tag terms as classes. */
-		if ( 'post' == $post->post_type ) {
-
-			foreach ( array( 'category', 'post_tag' ) as $tax ) {
-
-				foreach ( (array)get_the_terms( $post->ID, $tax ) as $term ) {
-					if ( !empty( $term->slug ) )
-						$classes[] = $tax . '-' . sanitize_html_class( $term->slug, $term->term_id );
-				}
-			}
-		}
+		if ( in_array( $class, $remove ) )
+			unset( $classes[ $key ] );
+		else
+			$classes[ $key ] = str_replace( 'tag-', 'post_tag-', $class );
 	}
 
-	/* If not a post. */
-	else {
-		$classes = array( 'hentry', 'error' );
-	}
+	$_classes[] = 'entry';
+	$_classes[] = $post_type;
+	$_classes[] = $post_status;
 
-	/* User-created classes. */
-	if ( !empty( $class ) ) {
-		if ( !is_array( $class ) )
-			$class = preg_split( '#\s+#', $class );
-		$classes = array_merge( $classes, $class );
-	}
+	/* Author class. */
+	$_classes[] = 'author-' . sanitize_html_class( get_the_author_meta( 'user_nicename' ), get_the_author_meta( 'ID' ) );
 
-	/* Apply the filters for WP's 'post_class'. */
-	return array_unique( apply_filters( 'post_class', $classes, $class, $post_id ) );
-}
+	/* Password-protected posts. */
+	if ( post_password_required() )
+		$_classes[] = 'protected';
 
-/**
- * Outputs the attributes for the comment wrapper.  By default, this is the 'class' and 'id' attributes, 
- * but developers can filter this to add other attributes.
- *
- * @since  1.6.0
- * @deprecated 2.0.0
- * @access public
- * @return void
- */
-function hybrid_comment_attributes() {
-	_deprecated_function( __FUNCTION__, '2.0.0', "hybrid_attr( 'comment' )" );
-	hybrid_attr( 'comment' );
-}
+	/* Has excerpt. */
+	if ( post_type_supports( $post->post_type, 'excerpt' ) && has_excerpt() )
+		$_classes[] = 'has-excerpt';
 
-/**
- * Outputs the class for the current comment wrapper element.
- *
- * @since  0.2.0
- * @access public
- * @global $comment The current comment's DB object.
- * @return void
- */
-function hybrid_comment_class( $class = '' ) {
-	global $hybrid;
+	/* Has <!--more--> link. */
+	if ( !is_singular() && false !== strpos( $post->post_content, '<!--more-->' ) )
+		$_classes[] = 'has-more-link';
 
-	/* Join all the classes into one string and echo them. */
-	$class = join( ' ', hybrid_get_comment_class( $class ) );
-
-	echo apply_filters( "{$hybrid->prefix}_comment_class", $class );
+	return array_map( 'esc_attr', array_unique( array_merge( $_classes, $classes ) ) );
 }
 
 /**
@@ -476,15 +329,82 @@ function hybrid_get_comment_class( $class = '' ) {
 }
 
 /**
- * Function for handling what the browser/search engine title should be. Attempts to handle every 
- * possible situation WordPress throws at it for the best optimization.
- *
- * @since 0.1.0
+ * @since      1.6.0
  * @deprecated 2.0.0
- * @access public
- * @global $wp_query
- * @return void
+ */
+function hybrid_body_attributes() {
+	_deprecated_function( __FUNCTION__, '2.0.0', "hybrid_attr( 'body' )" );
+	hybrid_attr( 'body' );
+}
+
+/**
+ * @since      0.1.0
+ * @deprecated 2.0.0
+ */
+function hybrid_body_class( $class = '' ) {
+	_deprecated_function( __FUNCTION__, '2.0.0', "hybrid_attr( 'body' )" );
+	hybrid_attr( 'body' );
+}
+
+/**
+ * @since      1.6.0
+ * @deprecated 2.0.0
+ */
+function hybrid_post_attributes() {
+	_deprecated_function( __FUNCTION__, '2.0.0', "hybrid_attr( 'post' )" );
+	hybrid_attr( 'post' );
+}
+
+/**
+ * @since      1.6.0
+ * @deprecated 2.0.0
+ */
+function hybrid_post_class( $class = '', $post_id = null ) {
+	_deprecated_function( __FUNCTION__, '2.0.0', "hybrid_attr( 'post' )" );
+	echo join( ' ', get_post_class( $class, $post_id ) );
+}
+
+/**
+ * @since      0.5.0
+ * @deprecated 1.6.0
+ */
+function hybrid_entry_class( $class = '', $post_id = null ) {
+	_deprecated_function( __FUNCTION__, '2.0.0', "hybrid_attr( 'post' )" );
+	echo join( ' ', get_post_class( $class, $post_id ) );
+}
+
+/**
+ * @since      1.6.0
+ * @deprecated 2.0.0
+ */
+function hybrid_get_post_class( $class = '', $post_id = null ) {
+	_deprecated_function( __FUNCTION__, '2.0.0', 'get_post_class' );
+	return get_post_class( $class, $post_id );
+}
+
+/**
+ * @since      1.6.0
+ * @deprecated 2.0.0
+ */
+function hybrid_comment_attributes() {
+	_deprecated_function( __FUNCTION__, '2.0.0', "hybrid_attr( 'comment' )" );
+	hybrid_attr( 'comment' );
+}
+
+/**
+ * @since      0.2.0
+ * @deprecated 2.0.0
+ */
+function hybrid_comment_class( $class = '' ) {
+	_deprecated_function( __FUNCTION__, '2.0.0', "hybrid_attr( 'comment' )" );
+	hybrid_attr( 'comment' );
+}
+
+/**
+ * @since      0.1.0
+ * @deprecated 2.0.0
  */
 function hybrid_document_title() {
+	_deprecated_function( __FUNCTION__, '2.0.0', 'wp_title' );
 	wp_title();
 }
