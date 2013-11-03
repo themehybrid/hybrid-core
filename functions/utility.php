@@ -38,21 +38,6 @@ function hybrid_add_post_type_support() {
 }
 
 /**
- * Generates the relevant template info.  Adds template meta with theme version.  Uses the theme 
- * name and version from style.css.  In 0.6, added the hybrid_meta_template 
- * filter hook.
- *
- * @since 0.4.0
- * @access public
- * @return void
- */
-function hybrid_meta_template() {
-	$theme = wp_get_theme( get_template() );
-	$template = '<meta name="template" content="' . esc_attr( $theme->get( 'Name' ) . ' ' . $theme->get( 'Version' ) ) . '" />' . "\n";
-	echo apply_atomic( 'meta_template', $template );
-}
-
-/**
  * Standardized function for outputting the footer content.
  *
  * @since  1.4.0

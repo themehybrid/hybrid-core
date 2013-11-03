@@ -480,104 +480,11 @@ function hybrid_get_comment_class( $class = '' ) {
  * possible situation WordPress throws at it for the best optimization.
  *
  * @since 0.1.0
+ * @deprecated 2.0.0
  * @access public
  * @global $wp_query
  * @return void
  */
 function hybrid_document_title() {
-	global $wp_query;
-
-	/* Set up some default variables. */
-	$doctitle = '';
-	$separator = ':';
-
-	/* If viewing the front page and posts page of the site. */
-	if ( is_front_page() && is_home() )
-		$doctitle = get_bloginfo( 'name' ) . $separator . ' ' . get_bloginfo( 'description' );
-
-	/* If viewing the posts page or a singular post. */
-	elseif ( is_home() || is_singular() ) {
-
-		$doctitle = get_post_meta( get_queried_object_id(), 'Title', true );
-
-		if ( empty( $doctitle ) && is_front_page() )
-			$doctitle = get_bloginfo( 'name' ) . $separator . ' ' . get_bloginfo( 'description' );
-
-		elseif ( empty( $doctitle ) )
-			$doctitle = single_post_title( '', false );
-	}
-
-	/* If viewing any type of archive page. */
-	elseif ( is_archive() ) {
-
-		/* If viewing a taxonomy term archive. */
-		if ( is_category() || is_tag() || is_tax() ) {
-			$doctitle = single_term_title( '', false );
-		}
-
-		/* If viewing a post type archive. */
-		elseif ( is_post_type_archive() ) {
-			$doctitle = post_type_archive_title( '', false );
-		}
-
-		/* If viewing an author/user archive. */
-		elseif ( is_author() ) {
-			$doctitle = get_user_meta( get_query_var( 'author' ), 'Title', true );
-
-			if ( empty( $doctitle ) )
-				$doctitle = get_the_author_meta( 'display_name', get_query_var( 'author' ) );
-		}
-
-		/* If viewing a date-/time-based archive. */
-		elseif ( is_date () ) {
-			if ( get_query_var( 'minute' ) && get_query_var( 'hour' ) )
-				$doctitle = sprintf( __( 'Archive for %s', 'hybrid-core' ), get_the_time( __( 'g:i a', 'hybrid-core' ) ) );
-
-			elseif ( get_query_var( 'minute' ) )
-				$doctitle = sprintf( __( 'Archive for minute %s', 'hybrid-core' ), get_the_time( __( 'i', 'hybrid-core' ) ) );
-
-			elseif ( get_query_var( 'hour' ) )
-				$doctitle = sprintf( __( 'Archive for %s', 'hybrid-core' ), get_the_time( __( 'g a', 'hybrid-core' ) ) );
-
-			elseif ( is_day() )
-				$doctitle = sprintf( __( 'Archive for %s', 'hybrid-core' ), get_the_time( __( 'F jS, Y', 'hybrid-core' ) ) );
-
-			elseif ( get_query_var( 'w' ) )
-				$doctitle = sprintf( __( 'Archive for week %s of %s', 'hybrid-core' ), get_the_time( __( 'W', 'hybrid-core' ) ), get_the_time( __( 'Y', 'hybrid-core' ) ) );
-
-			elseif ( is_month() )
-				$doctitle = sprintf( __( 'Archive for %s', 'hybrid-core' ), single_month_title( ' ', false) );
-
-			elseif ( is_year() )
-				$doctitle = sprintf( __( 'Archive for %s', 'hybrid-core' ), get_the_time( __( 'Y', 'hybrid-core' ) ) );
-		}
-
-		/* For any other archives. */
-		else {
-			$doctitle = __( 'Archives', 'hybrid-core' );
-		}
-	}
-
-	/* If viewing a search results page. */
-	elseif ( is_search() )
-		$doctitle = sprintf( __( 'Search results for "%s"', 'hybrid-core' ), esc_attr( get_search_query() ) );
-
-	/* If viewing a 404 not found page. */
-	elseif ( is_404() )
-		$doctitle = __( '404 Not Found', 'hybrid-core' );
-
-	/* If the current page is a paged page. */
-	if ( ( ( $page = $wp_query->get( 'paged' ) ) || ( $page = $wp_query->get( 'page' ) ) ) && $page > 1 )
-		$doctitle = sprintf( __( '%1$s Page %2$s', 'hybrid-core' ), $doctitle . $separator, number_format_i18n( $page ) );
-
-	/* Apply the wp_title filters so we're compatible with plugins. */
-	$doctitle = apply_filters( 'wp_title', strip_tags( $doctitle ), $separator, '' );
-
-	/* Trim separator + space from beginning and end in case a plugin adds it. */
-	$doctitle = trim( $doctitle, "{$separator} " );
-
-	/* Print the title to the screen. */
-	echo apply_atomic( 'document_title', esc_attr( $doctitle ) );
+	wp_title();
 }
-
-?>

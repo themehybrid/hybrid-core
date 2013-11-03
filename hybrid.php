@@ -161,6 +161,9 @@ class Hybrid {
 		/* Load the general template functions. */
 		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'general.php' );
 
+		/* Load the <head> functions. */
+		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'head.php' );
+
 		/* Load the sidebar functions. */
 		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'sidebars.php' );
 
@@ -364,9 +367,6 @@ class Hybrid {
 		/* Move the WordPress generator to a better priority. */
 		remove_action( 'wp_head', 'wp_generator' );
 		add_action( 'wp_head', 'wp_generator', 1 );
-
-		/* Add the theme info to the header (lets theme developers give better support). */
-		add_action( 'wp_head', 'hybrid_meta_template', 1 );
 
 		/* Make text widgets and term descriptions shortcode aware. */
 		add_filter( 'widget_text', 'do_shortcode' );
