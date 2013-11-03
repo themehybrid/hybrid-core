@@ -173,7 +173,7 @@ function hybrid_get_loop_title() {
 		$loop_title = get_the_author();
 
 	elseif ( is_search() )
-		$loop_title = get_search_query();
+		$loop_title = hybrid_search_title( '', false );
 
 	elseif ( is_post_type_archive() )
 		$loop_title = post_type_archive_title( '', false );
@@ -396,6 +396,45 @@ function hybrid_single_minute_title( $prefix = '', $display = true ) {
 function hybrid_single_minute_hour_title( $prefix = '', $display = true ) {
 
 	$title = $prefix . get_the_time( _x( 'g:i a', 'minute and hour archives time format', 'hybrid-core' ) );
+
+	if ( false === $display )
+		return $title;
+
+	echo $title;
+}
+
+/**
+ * Retrieve the search results title.
+ *
+ * @since  2.0.0
+ * @access public
+ * @param  string  $prefix
+ * @param  bool    $display
+ * @return string
+ */
+function hybrid_search_title( $prefix = '', $display = true ) {
+
+	/* Translators: %s is the search query. The HTML entities are opening and closing curly quotes. */
+	$title = $prefix . sprintf( __( 'Search results for &#8220;%s&#8221;', 'hybrid-core' ), get_search_query() );
+
+	if ( false === $display )
+		return $title;
+
+	echo $title;
+}
+
+/**
+ * Retrieve the 404 page title.
+ *
+ * @since  2.0.0
+ * @access public
+ * @param  string  $prefix
+ * @param  bool    $display
+ * @return string
+ */
+function hybrid_404_title( $prefix = '', $display = true ) {
+
+	$title = __( '404 Not Found', 'hybrid-core' );
 
 	if ( false === $display )
 		return $title;
