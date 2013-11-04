@@ -117,10 +117,12 @@ class Hybrid {
 		define( 'CHILD_THEME_URI', get_stylesheet_directory_uri() );
 
 		/* Sets the path to the core framework directory. */
-		define( 'HYBRID_DIR', trailingslashit( THEME_DIR ) . basename( dirname( __FILE__ ) ) );
+		if ( !defined( 'HYBRID_DIR' ) )
+			define( 'HYBRID_DIR', trailingslashit( THEME_DIR ) . basename( dirname( __FILE__ ) ) );
 
 		/* Sets the path to the core framework directory URI. */
-		define( 'HYBRID_URI', trailingslashit( THEME_URI ) . basename( dirname( __FILE__ ) ) );
+		if ( !defined( 'HYBRID_URI' ) )
+			define( 'HYBRID_URI', trailingslashit( THEME_URI ) . basename( dirname( __FILE__ ) ) );
 
 		/* Sets the path to the core framework admin directory. */
 		define( 'HYBRID_ADMIN', trailingslashit( HYBRID_DIR ) . 'admin' );
