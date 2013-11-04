@@ -161,6 +161,9 @@ class Hybrid {
 		/* Load the <head> functions. */
 		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'head.php' );
 
+		/* Load media-related functions. */
+		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'media.php' );
+
 		/* Load the sidebar functions. */
 		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'sidebars.php' );
 
@@ -253,8 +256,8 @@ class Hybrid {
 		/* Load the general template functions. */
 		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'template-general.php' );
 
-		/* Load media-related functions. */
-		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'media.php' );
+		/* Load the media template functions. */
+		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'template-media.php' );
 
 		/* Load the metadata functions. */
 		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'meta.php' );
