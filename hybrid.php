@@ -158,9 +158,6 @@ class Hybrid {
 		/* Load the framework customize functions. */
 		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'customize.php' );
 
-		/* Load the general template functions. */
-		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'general.php' );
-
 		/* Load the <head> functions. */
 		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'head.php' );
 
@@ -252,6 +249,9 @@ class Hybrid {
 
 		/* Load the comments functions. */
 		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'template-comments.php' );
+
+		/* Load the general template functions. */
+		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'template-general.php' );
 
 		/* Load media-related functions. */
 		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'media.php' );
