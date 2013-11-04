@@ -10,7 +10,7 @@
  * features.  Themes handle all the markup, style, and scripts while the framework handles the logic.
  *
  * Hybrid Core is a modular system, which means that developers can pick and choose the features they 
- * want to include within their themes.  Most files are only loaded if the theme registers support for the 
+ * want to include within their themes.  Many files are only loaded if the theme registers support for the 
  * feature using the add_theme_support( $feature ) function within their theme.
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the GNU 
@@ -41,7 +41,12 @@
  * the 'after_setup_theme' hook with a priority of 11.  This allows the class to load theme-supported features
  * at the appropriate time, which is on the 'after_setup_theme' hook with a priority of 12.
  *
- * @since 0.7.0
+ * Note that while it is possible to extend this class, it's not usually recommended unless you absolutely 
+ * know what you're doing and expect your sub-class to break on updates.  This class often gets modifications 
+ * between versions.
+ *
+ * @since  0.7.0
+ * @access public
  */
 class Hybrid {
 
@@ -50,7 +55,9 @@ class Hybrid {
 	 * specific hooks within WordPress.  It controls the load order of the required files for running 
 	 * the framework.
 	 *
-	 * @since 1.0.0
+	 * @since  1.0.0
+	 * @access public
+	 * @return void
 	 */
 	function __construct() {
 		global $hybrid;
@@ -59,28 +66,28 @@ class Hybrid {
 		$hybrid = new stdClass;
 
 		/* Define framework, parent theme, and child theme constants. */
-		add_action( 'after_setup_theme', array( &$this, 'constants' ), 1 );
+		add_action( 'after_setup_theme', array( $this, 'constants' ), 1 );
 
-		/* Load the core functions required by the rest of the framework. */
-		add_action( 'after_setup_theme', array( &$this, 'core' ), 2 );
+		/* Load the core functions/classes required by the rest of the framework. */
+		add_action( 'after_setup_theme', array( $this, 'core' ), 2 );
 
 		/* Initialize the framework's default actions and filters. */
-		add_action( 'after_setup_theme', array( &$this, 'default_filters' ), 3 );
+		add_action( 'after_setup_theme', array( $this, 'default_filters' ), 3 );
 
 		/* Language functions and translations setup. */
-		add_action( 'after_setup_theme', array( &$this, 'i18n' ), 4 );
+		add_action( 'after_setup_theme', array( $this, 'i18n' ), 4 );
 
 		/* Handle theme supported features. */
-		add_action( 'after_setup_theme', array( &$this, 'theme_support' ), 12 );
+		add_action( 'after_setup_theme', array( $this, 'theme_support' ), 12 );
 
-		/* Load the framework functions. */
-		add_action( 'after_setup_theme', array( &$this, 'functions' ), 13 );
+		/* Load framework includes. */
+		add_action( 'after_setup_theme', array( $this, 'includes' ), 13 );
 
 		/* Load the framework extensions. */
-		add_action( 'after_setup_theme', array( &$this, 'extensions' ), 14 );
+		add_action( 'after_setup_theme', array( $this, 'extensions' ), 14 );
 
 		/* Load admin files. */
-		add_action( 'wp_loaded', array( &$this, 'admin' ) );
+		add_action( 'wp_loaded', array( $this, 'admin' ) );
 	}
 
 	/**
@@ -88,7 +95,9 @@ class Hybrid {
 	 * Constants prefixed with 'HYBRID_' are for use only within the core framework and don't 
 	 * reference other areas of the parent or child theme.
 	 *
-	 * @since 0.7.0
+	 * @since  0.7.0
+	 * @access public
+	 * @return void
 	 */
 	function constants() {
 
@@ -139,10 +148,13 @@ class Hybrid {
 	}
 
 	/**
-	 * Loads the core framework functions.  These files are needed before loading anything else in the 
-	 * framework because they have required functions for use.
+	 * Loads the core framework files.  These files are needed before loading anything else in the 
+	 * framework because they have required functions for use.  Many of the files run filters that 
+	 * theme authors may wish to remove in their theme setup functions.
 	 *
-	 * @since 1.0.0
+	 * @since  1.0.0
+	 * @access public
+	 * @return void
 	 */
 	function core() {
 
@@ -164,6 +176,9 @@ class Hybrid {
 		/* Load media-related functions. */
 		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'media.php' );
 
+		/* Load the metadata functions. */
+		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'meta.php' );
+
 		/* Load the sidebar functions. */
 		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'sidebars.php' );
 
@@ -181,23 +196,25 @@ class Hybrid {
 	 * framework will fall back on the theme root folder if necessary.  Translation files are expected 
 	 * to be prefixed with the template or stylesheet path (example: 'templatename-en_US.mo').
 	 *
-	 * @since 1.2.0
+	 * @since  1.2.0
+	 * @access public
+	 * @return void
 	 */
 	function i18n() {
 		global $hybrid;
 
 		/* Get parent and child theme textdomains. */
 		$parent_textdomain = hybrid_get_parent_textdomain();
-		$child_textdomain = hybrid_get_child_textdomain();
+		$child_textdomain  = hybrid_get_child_textdomain();
 
 		/* Load the framework textdomain. */
 		$hybrid->textdomain_loaded['hybrid-core'] = hybrid_load_framework_textdomain( 'hybrid-core' );
 
 		/* Load theme textdomain. */
-		$hybrid->textdomain_loaded[$parent_textdomain] = load_theme_textdomain( $parent_textdomain );
+		$hybrid->textdomain_loaded[ $parent_textdomain ] = load_theme_textdomain( $parent_textdomain );
 
 		/* Load child theme textdomain. */
-		$hybrid->textdomain_loaded[$child_textdomain] = is_child_theme() ? load_child_theme_textdomain( $child_textdomain ) : false;
+		$hybrid->textdomain_loaded[ $child_textdomain ] = is_child_theme() ? load_child_theme_textdomain( $child_textdomain ) : false;
 
 		/* Get the user's locale. */
 		$locale = get_locale();
@@ -214,7 +231,9 @@ class Hybrid {
 	 * Removes theme supported features from themes in the case that a user has a plugin installed
 	 * that handles the functionality.
 	 *
-	 * @since 1.3.0
+	 * @since  1.3.0
+	 * @access public
+	 * @return void
 	 */
 	function theme_support() {
 
@@ -240,15 +259,20 @@ class Hybrid {
 	}
 
 	/**
-	 * Loads the framework functions.  Many of these functions are needed to properly run the 
-	 * framework.  Some components are only loaded if the theme supports them.
+	 * Loads the framework files supported by themes and template-related functions/classes.  Functionality 
+	 * in these files should not be expected within the theme setup function.
 	 *
-	 * @since 0.7.0
+	 * @since  2.0.0
+	 * @access public
+	 * @return void
 	 */
-	function functions() {
+	function includes() {
 
 		/* Load the HTML attributes functions. */
 		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'attr.php' );
+
+		/* Load the template functions. */
+		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'template.php' );
 
 		/* Load the comments functions. */
 		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'template-comments.php' );
@@ -262,17 +286,11 @@ class Hybrid {
 		/* Load the post template functions. */
 		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'template-post.php' );
 
-		/* Load the metadata functions. */
-		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'meta.php' );
-
 		/* Load the media meta class. */
 		require_once( trailingslashit( HYBRID_CLASSES ) . 'hybrid-media-meta.php' );
 
 		/* Load the media grabber class. */
 		require_once( trailingslashit( HYBRID_CLASSES ) . 'hybrid-media-grabber.php' );
-
-		/* Load the template functions. */
-		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'template.php' );
 
 		/* Load the theme settings functions if supported. */
 		require_if_theme_supports( 'hybrid-core-theme-settings', trailingslashit( HYBRID_FUNCTIONS ) . 'settings.php' );
@@ -302,7 +320,9 @@ class Hybrid {
 	 * framework.  Themes must use add_theme_support( $extension ) to use a specific extension 
 	 * within the theme.  This should be declared on 'after_setup_theme' no later than a priority of 11.
 	 *
-	 * @since 0.7.0
+	 * @since  0.7.0
+	 * @access public
+	 * @return void
 	 */
 	function extensions() {
 
@@ -343,7 +363,9 @@ class Hybrid {
 	/**
 	 * Load admin files for the framework.
 	 *
-	 * @since 0.7.0
+	 * @since  0.7.0
+	 * @access public
+	 * @return void
 	 */
 	function admin() {
 
@@ -361,7 +383,9 @@ class Hybrid {
 	/**
 	 * Adds the default framework actions and filters.
 	 *
-	 * @since 1.0.0
+	 * @since  1.0.0
+	 * @access public
+	 * @return void
 	 */
 	function default_filters() {
 		global $wp_embed;
@@ -388,5 +412,3 @@ class Hybrid {
 		add_filter( 'hybrid_loop_description',                   'shortcode_unautop', 35 );
 	}
 }
-
-?>
