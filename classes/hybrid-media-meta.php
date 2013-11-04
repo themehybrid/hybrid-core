@@ -1,10 +1,27 @@
 <?php
 /**
- * Class for getting and formatting attachment metadata, particularly for images, audio, and video.
+ * Class for getting and formatting attachment metadata.  The class currently handles attachment metadata for 
+ * the image, audio, and video mime types.  It may handle other types in the future, depending on the direction 
+ * of WordPress core.  The purpose of this class is wrap up the return values of the core WP function 
+ * `wp_get_attachment_metadata()` into a more usuable format for theme authors so that they can easily display 
+ * data related to media in their themes.
  *
- * @todo Documentation.
+ * @package    Hybrid
+ * @subpackage Classes
+ * @author     Justin Tadlock <justin@justintadlock.com>
+ * @copyright  Copyright (c) 2008 - 2013, Justin Tadlock
+ * @link       http://themehybrid.com/hybrid-core
+ * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
+/**
+ * Wrapper function for the Hybrid_Media_Meta class.
+ *
+ * @since  2.0.0
+ * @access public
+ * @param  array   $args
+ * @return string
+ */
 function hybrid_media_meta( $args = array() ) {
 
 	$meta = new Hybrid_Media_Meta( $args );
@@ -12,46 +29,105 @@ function hybrid_media_meta( $args = array() ) {
 	return $meta->display();
 }
 
+/**
+ * Class for getting and formatting attachment metadata.
+ *
+ * @since  2.0.0
+ * @access public
+ */
 class Hybrid_Media_Meta {
 
+	/**
+	 * Arguments passed in.
+	 *
+	 * @since  2.0.0
+	 * @access public
+	 * @var    array
+	 */
 	public $args  = array();
+
+	/**
+	 * Metadata from the wp_get_attachment_metadata() function.
+	 *
+	 * @since  2.0.0
+	 * @access public
+	 * @var    array
+	 */
 	public $meta  = array();
+
+	/**
+	 * Array of items found and formatted.
+	 *
+	 * @since  2.0.0
+	 * @access public
+	 * @var    array
+	 */
 	public $items = array();
 
+	/**
+	 * Sets up and runs the functionality for getting the attachment meta.
+	 *
+	 * @since  2.0.0
+	 * @access public
+	 * @param  array   $args
+	 * @return void
+	 */
 	public function __construct( $args = array() ) {
 
 		$defaults = array(
 			'post_id' => get_the_ID(),
-			'echo'    => true
+			'labels'  => array(),
+			'echo'    => true,
 		);
 
 		$this->args = apply_filters( 'hybrid_media_meta_args', wp_parse_args( $args, $defaults ) );
 
+		/* Get the attachment metadata. */
 		$this->meta = wp_get_attachment_metadata( $this->args['post_id'] );
 
+		/* If the attachment is an image. */
 		if ( wp_attachment_is_image( $this->args['post_id'] ) )
 			$this->image_meta();
 
+		/* If the attachment is audio. */
 		elseif ( hybrid_attachment_is_audio( $this->args['post_id'] ) )
 			$this->audio_meta();
 
+		/* If the attachment is video. */
 		elseif ( hybrid_attachment_is_video( $this->args['post_id'] ) )
 			$this->video_meta();
 	}
 
+	/**
+	 * Returns the array of formatted meta items.
+	 *
+	 * @since  2.0.0
+	 * @access public
+	 * @return array
+	 */
 	public function get_items() {
 		return $this->items;
 	}
 
+	/**
+	 * Returns or outputs a list of formatted attachment meta.
+	 *
+	 * @since  2.0.0
+	 * @access public
+	 * @return string
+	 */
 	public function display() {
 
 		$display = '';
 
+		/* If the items array isn't empty. */
 		if ( !empty( $this->items ) ) {
 
+			/* Format each of the items. */
 			foreach ( $this->items as $item )
 				$display .= sprintf( '<li><span class="prep">%s</span> <span class="data">%s</span></li>', $item[1], $item[0] );
 
+			/* Add the items to a list. */
 			$display = '<ul class="media-meta">' . $display . '</ul>';
 		}
 
@@ -61,6 +137,13 @@ class Hybrid_Media_Meta {
 			return $display;
 	}
 
+	/**
+	 * Adds and formats image metadata for the items array.
+	 *
+	 * @since  2.0.0
+	 * @access public
+	 * @return void
+	 */
 	public function image_meta() {
 
 		/* If there's a width and height. */
@@ -117,6 +200,17 @@ class Hybrid_Media_Meta {
 		}
 	}
 
+	/**
+	 * Adds and formats audio metadata for the items array.
+	 *
+	 * Note that we're purposely leaving out the "transcript/lyrics" metadata in this instance.  This 
+	 * is because it doesn't fit in well with how other metadata works on display.  There's a separate 
+	 * function for that called `hybrid_get_audio_transcript()`.
+	 *
+	 * @since  2.0.0
+	 * @access public
+	 * @return void
+	 */
 	public function audio_meta() {
 
 		/* Formated length of time the audio file runs. */
@@ -154,7 +248,7 @@ class Hybrid_Media_Meta {
 		if ( !empty( $this->meta['filesize'] ) )
 			$this->items['filesize'] = array( size_format( $this->meta['filesize'], 2 ), __( 'File Size', 'hybrid-core' ) );
 
-		/* File type (the metadata for this can be off, so we're just looking at the actual file). */
+		/* File type (the metadata for this can be incorrect, so we're just looking at the actual file). */
 		if ( preg_match( '/^.*?\.(\w+)$/', get_attached_file( $this->args['post_id'] ), $matches ) )
 			$this->items['file_type'] = array( esc_html( strtoupper( $matches[1] ) ), __( 'File Type', 'hybrid-core' ) );
 
@@ -164,6 +258,13 @@ class Hybrid_Media_Meta {
 
 	}
 
+	/**
+	 * Adds and formats video meta data for the items array.
+	 *
+	 * @since  2.0.0
+	 * @access public
+	 * @return void
+	 */
 	public function video_meta() {
 
 		/* Formated length of time the video file runs. */
@@ -182,7 +283,7 @@ class Hybrid_Media_Meta {
 		if ( !empty( $this->meta['filesize'] ) )
 			$this->items['filesize'] = array( size_format( $this->meta['filesize'], 2 ), __( 'File Size', 'hybrid-core' ) );
 
-		/* File type (the metadata for this can be off, so we're just looking at the actual file). */
+		/* File type (the metadata for this can be incorrect, so we're just looking at the actual file). */
 		if ( preg_match( '/^.*?\.(\w+)$/', get_attached_file( $this->args['post_id'] ), $matches ) )
 			$this->items['file_type'] = array( esc_html( strtoupper( $matches[1] ) ), __( 'File Type', 'hybrid-core' ) );
 
