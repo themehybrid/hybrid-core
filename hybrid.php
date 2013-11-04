@@ -265,6 +265,9 @@ class Hybrid {
 		/* Load the metadata functions. */
 		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'meta.php' );
 
+		/* Load the media meta class. */
+		require_once( trailingslashit( HYBRID_CLASSES ) . 'hybrid-media-meta.php' );
+
 		/* Load the template functions. */
 		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'template.php' );
 
