@@ -268,6 +268,9 @@ class Hybrid {
 		/* Load the media meta class. */
 		require_once( trailingslashit( HYBRID_CLASSES ) . 'hybrid-media-meta.php' );
 
+		/* Load the media grabber class. */
+		require_once( trailingslashit( HYBRID_CLASSES ) . 'hybrid-media-grabber.php' );
+
 		/* Load the template functions. */
 		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'template.php' );
 
@@ -285,9 +288,6 @@ class Hybrid {
 
 		/* Load the scripts if supported. */
 		require_if_theme_supports( 'hybrid-core-scripts', trailingslashit( HYBRID_FUNCTIONS ) . 'scripts.php' );
-
-		/* Load the media grabber script if supported. */
-		require_if_theme_supports( 'hybrid-core-media-grabber', trailingslashit( HYBRID_CLASSES ) . 'hybrid-media-grabber.php' );
 
 		/* Load the post format functionality if post formats are supported. */
 		require_if_theme_supports( 'post-formats', trailingslashit( HYBRID_FUNCTIONS ) . 'post-formats.php' );
