@@ -170,8 +170,8 @@ class Hybrid {
 		/* Load the styles if supported. */
 		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'styles.php' );
 
-		/* Load the wish-list functions. */
-		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'wish-list.php' );
+		/* Load the utility functions. */
+		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'utility.php' );
 	}
 
 	/**
@@ -267,9 +267,6 @@ class Hybrid {
 
 		/* Load the template functions. */
 		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'template.php' );
-
-		/* Load the utility functions. */
-		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'utility.php' );
 
 		/* Load the theme settings functions if supported. */
 		require_if_theme_supports( 'hybrid-core-theme-settings', trailingslashit( HYBRID_FUNCTIONS ) . 'settings.php' );
