@@ -108,33 +108,3 @@ function hybrid_comments_callback( $comment, $args, $depth ) {
 function hybrid_comments_end_callback() {
 	echo '</li><!-- .comment -->';
 }
-
-/**
- * Displays the avatar for the comment author and wraps it in the comment author's URL if it is
- * available.  Adds a call to HYBRID_IMAGES . "/{$comment_type}.png" for the default avatars for
- * trackbacks and pingbacks.
- *
- * @since 0.2.0
- * @deprecated 2.0.0
- * @access public
- * @global $comment The current comment's DB object.
- * @global $hybrid The global Hybrid object.
- * @return void
- */
-function hybrid_avatar() {
-	global $comment, $hybrid;
-
-	_deprecated_function( __FUNCTION__, '2.0.0', 'get_avatar' );
-
-	/* Make sure avatars are allowed before proceeding. */
-	if ( !get_option( 'show_avatars' ) )
-		return false;
-
-	/* Get the avatar provided by the get_avatar() function. */
-	$avatar = get_avatar( $comment, 80, '', get_comment_author( $comment->comment_ID ) );
-
-	/* Display the avatar and allow it to be filtered. Note: Use the get_avatar filter hook where possible. */
-	echo apply_filters( "{$hybrid->prefix}_avatar", $avatar );
-}
-
-?>

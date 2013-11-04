@@ -213,6 +213,26 @@ function hybrid_get_comment_class( $class = '' ) {
 }
 
 /**
+ * @since      0.2.0
+ * @deprecated 2.0.0
+ */
+function hybrid_avatar() {
+	global $comment, $hybrid;
+
+	_deprecated_function( __FUNCTION__, '2.0.0', 'get_avatar' );
+
+	/* Make sure avatars are allowed before proceeding. */
+	if ( !get_option( 'show_avatars' ) )
+		return false;
+
+	/* Get the avatar provided by the get_avatar() function. */
+	$avatar = get_avatar( $comment, 80, '', get_comment_author( $comment->comment_ID ) );
+
+	/* Display the avatar and allow it to be filtered. Note: Use the get_avatar filter hook where possible. */
+	echo apply_filters( 'hybrid_avatar', $avatar );
+}
+
+/**
  * @since      0.1.0
  * @deprecated 2.0.0
  */
