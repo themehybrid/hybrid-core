@@ -123,6 +123,105 @@ function hybrid_site_description() {
 }
 
 /**
+ * @since      1.6.0
+ * @deprecated 2.0.0
+ */
+function hybrid_body_attributes() {
+	_deprecated_function( __FUNCTION__, '2.0.0', "hybrid_attr( 'body' )" );
+	hybrid_attr( 'body' );
+}
+
+/**
+ * @since      0.1.0
+ * @deprecated 2.0.0
+ */
+function hybrid_body_class( $class = '' ) {
+	_deprecated_function( __FUNCTION__, '2.0.0', "hybrid_attr( 'body' )" );
+	hybrid_attr( 'body' );
+}
+
+/**
+ * @since      1.6.0
+ * @deprecated 2.0.0
+ */
+function hybrid_get_body_class( $class = '' ) {
+	_deprecated_function( __FUNCTION__, '2.0.0', 'get_body_class' );
+	return get_body_class( $class );
+}
+
+/**
+ * @since      1.6.0
+ * @deprecated 2.0.0
+ */
+function hybrid_post_attributes() {
+	_deprecated_function( __FUNCTION__, '2.0.0', "hybrid_attr( 'post' )" );
+	hybrid_attr( 'post' );
+}
+
+/**
+ * @since      1.6.0
+ * @deprecated 2.0.0
+ */
+function hybrid_post_class( $class = '', $post_id = null ) {
+	_deprecated_function( __FUNCTION__, '2.0.0', "hybrid_attr( 'post' )" );
+	echo join( ' ', get_post_class( $class, $post_id ) );
+}
+
+/**
+ * @since      0.5.0
+ * @deprecated 1.6.0
+ */
+function hybrid_entry_class( $class = '', $post_id = null ) {
+	_deprecated_function( __FUNCTION__, '2.0.0', "hybrid_attr( 'post' )" );
+	echo join( ' ', get_post_class( $class, $post_id ) );
+}
+
+/**
+ * @since      1.6.0
+ * @deprecated 2.0.0
+ */
+function hybrid_get_post_class( $class = '', $post_id = null ) {
+	_deprecated_function( __FUNCTION__, '2.0.0', 'get_post_class' );
+	return get_post_class( $class, $post_id );
+}
+
+/**
+ * @since      1.6.0
+ * @deprecated 2.0.0
+ */
+function hybrid_comment_attributes() {
+	_deprecated_function( __FUNCTION__, '2.0.0', "hybrid_attr( 'comment' )" );
+	hybrid_attr( 'comment' );
+}
+
+/**
+ * @since      0.2.0
+ * @deprecated 2.0.0
+ */
+function hybrid_comment_class( $class = '' ) {
+	_deprecated_function( __FUNCTION__, '2.0.0', "hybrid_attr( 'comment' )" );
+	hybrid_attr( 'comment' );
+}
+
+/**
+ * @since      1.6.0
+ * @deprecated 2.0.0
+ */
+function hybrid_get_comment_class( $class = '' ) {
+	_deprecated_function( __FUNCTION__, '2.0.0', 'get_comment_class' );
+	return get_comment_class( $class );
+}
+
+/**
+ * @since      0.1.0
+ * @deprecated 2.0.0
+ */
+function hybrid_document_title() {
+	_deprecated_function( __FUNCTION__, '2.0.0', 'wp_title' );
+	wp_title();
+}
+
+/**
  * @since      0.6.0
  * @deprecated 2.0.0
  */
