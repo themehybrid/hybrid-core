@@ -13,8 +13,11 @@
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
+/* Filters the WordPress 'body_class' early. */
+add_filter( 'body_class', 'hybrid_body_class_filter', 0, 2 );
+
 /* Filters the WordPress 'post_class' early. */
-add_filter( 'post_class', 'hybrid_post_class_filter', 5, 3 );
+add_filter( 'post_class', 'hybrid_post_class_filter', 0, 3 );
 
 /**
  * Hybrid's main contextual function.  This allows code to be used more than once without running 
@@ -129,15 +132,9 @@ function hybrid_get_context() {
 }
 
 /**
- * Returns classes for the <body> element depending on page context.
- * 
- * @since  1.6.0
- * @access public
- * @param  string|array $class Additional classes for more control.
- * @return array
+ * @since  2.0.0
  */
-function hybrid_get_body_class( $class = '' ) {
-	global $wp_query;
+function hybrid_body_class_filter( $classes, $class ) {
 
 	/* WordPress class for uses when WordPress isn't always the only system on the site. */
 	$classes = array( 'wordpress' );
@@ -176,6 +173,10 @@ function hybrid_get_body_class( $class = '' ) {
 	if ( get_header_image() || ( display_header_text() && get_header_textcolor() ) )
 		$classes[] = 'custom-header';
 
+	/* Plural/multiple-post view (opposite of singular). */
+	if ( is_home() || is_archive() || is_search() )
+		$classes[] = 'plural';
+
 	/* Merge base contextual classes with $classes. */
 	$classes = array_merge( $classes, hybrid_get_context() );
 
@@ -203,23 +204,25 @@ function hybrid_get_body_class( $class = '' ) {
 		}
 	}
 
-	/* Plural/multiple-post view (opposite of singular). */
-	if ( is_home() || is_archive() || is_search() )
-		$classes[] = 'plural';
-
 	/* Paged views. */
-	if ( ( ( $page = $wp_query->get( 'paged' ) ) || ( $page = $wp_query->get( 'page' ) ) ) && $page > 1 )
-		$classes[] = 'paged paged-' . intval( $page );
+	if ( is_paged() ) {
+		$classes[] = 'paged';
+		$classes[] = 'paged-' . intval( get_query_var( 'paged' ) );
+	}
+
+	/* Singular post paged views using <!-- nextpage -->. */
+	elseif ( is_singular() && 1 < get_query_var( 'page' ) ) {
+		$classes[] = 'paged';
+		$classes[] = 'paged-' . intval( get_query_var( 'page' ) );
+	}
 
 	/* Input class. */
 	if ( !empty( $class ) ) {
-		if ( !is_array( $class ) )
-			$class = preg_split( '#\s+#', $class );
+		$class   = is_array( $class ) ? $class : preg_split( '#\s+#', $class );
 		$classes = array_merge( $classes, $class );
 	}
 
-	/* Apply the filters for WP's 'body_class'. */
-	return array_unique( apply_filters( 'body_class', $classes, $class ) );
+	return array_map( 'esc_attr', $classes );
 }
 
 /**
@@ -344,6 +347,15 @@ function hybrid_body_attributes() {
 function hybrid_body_class( $class = '' ) {
 	_deprecated_function( __FUNCTION__, '2.0.0', "hybrid_attr( 'body' )" );
 	hybrid_attr( 'body' );
+}
+
+/**
+ * @since      1.6.0
+ * @deprecated 2.0.0
+ */
+function hybrid_get_body_class( $class = '' ) {
+	_deprecated_function( __FUNCTION__, '2.0.0', 'get_body_class' );
+	return get_body_class( $class );
 }
 
 /**

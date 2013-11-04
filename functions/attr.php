@@ -94,7 +94,7 @@ function hybrid_get_attr( $slug, $context = '', $attributes = array() ) {
  */
 function hybrid_attr_body( $attr ) {
 
-	$attr['class']     = join( ' ', hybrid_get_body_class() );
+	$attr['class']     = join( ' ', get_body_class() );
 	$attr['dir']       = is_rtl() ? 'rtl' : 'ltr';
 	$attr['itemscope'] = 'itemscope';
 	$attr['itemtype']  = 'http://schema.org/WebPage';
