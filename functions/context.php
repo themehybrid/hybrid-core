@@ -19,6 +19,9 @@ add_filter( 'body_class', 'hybrid_body_class_filter', 0, 2 );
 /* Filters the WordPress 'post_class' early. */
 add_filter( 'post_class', 'hybrid_post_class_filter', 0, 3 );
 
+/* Filters the WordPress 'comment_class' early. */
+add_filter( 'comment_class', 'hybrid_comment_class_filter', 0, 3 );
+
 /**
  * Hybrid's main contextual function.  This allows code to be used more than once without running 
  * hundreds of conditional checks within the theme.  It returns an array of contexts based on what 
@@ -271,30 +274,18 @@ function hybrid_post_class_filter( $classes, $class, $post_id ) {
 }
 
 /**
- * Sets a class for each comment. Sets alt, odd/even, and author/user classes. Adds author, user, 
- * and reader classes. Needs more work because WP, by default, assigns even/odd backwards 
- * (Odd should come first, even second).
- *
- * @since  1.6.0
- * @access public
- * @global $comment The current comment's DB object
- * @return void
+ * @since  2.0.0
  */
-function hybrid_get_comment_class( $class = '' ) {
-	global $comment;
+function hybrid_comment_class_filter( $classes, $class, $comment_id ) {
 
-	/* Gets default WP comment classes. */
-	$classes = get_comment_class( $class );
-
-	/* Get the comment type. */
-	$comment_type = get_comment_type();
+	$comment = get_comment( $comment_id );
 
 	/* If the comment type is 'pingback' or 'trackback', add the 'ping' comment class. */
-	if ( 'pingback' == $comment_type || 'trackback' == $comment_type )
+	if ( in_array( $comment->comment_type, array( 'pingback', 'trackback' ) ) )
 		$classes[] = 'ping';
 
 	/* User classes to match user role and user. */
-	if ( $comment->user_id > 0 ) {
+	if ( 0 < $comment->user_id ) {
 
 		/* Create new user object. */
 		$user = new WP_User( $comment->user_id );
@@ -304,31 +295,16 @@ function hybrid_get_comment_class( $class = '' ) {
 			foreach ( $user->roles as $role )
 				$classes[] = sanitize_html_class( "role-{$role}" );
 		}
-
-		/* Set a class with the user's name. */
-		$classes[] = sanitize_html_class( "user-{$user->user_nicename}", "user-{$user->ID}" );
-	}
-
-	/* If not a registered user */
-	else {
-		$classes[] = 'reader';
-	}
-
-	/* Comment by the entry/post author. */
-	if ( $post = get_post( get_the_ID() ) ) {
-		if ( $comment->user_id == $post->post_author )
-			$classes[] = 'entry-author';
 	}
 
 	/* Get comment types that are allowed to have an avatar. */
-	$avatar_comment_types = apply_filters( 'get_avatar_comment_types', array( 'comment' ) );
+	$avatar_types = apply_filters( 'get_avatar_comment_types', array( 'comment' ) );
 
 	/* If avatars are enabled and the comment types can display avatars, add the 'has-avatar' class. */
-	if ( get_option( 'show_avatars' ) && in_array( $comment->comment_type, $avatar_comment_types ) )
+	if ( get_option( 'show_avatars' ) && in_array( $comment->comment_type, $avatar_types ) )
 		$classes[] = 'has-avatar';
 
-	/* Make sure comment classes doesn't have any duplicates. */
-	return array_unique( $classes );
+	return array_map( 'esc_attr', array_unique( $classes ) );
 }
 
 /**
@@ -410,6 +386,15 @@ function hybrid_comment_attributes() {
 function hybrid_comment_class( $class = '' ) {
 	_deprecated_function( __FUNCTION__, '2.0.0', "hybrid_attr( 'comment' )" );
 	hybrid_attr( 'comment' );
+}
+
+/**
+ * @since      1.6.0
+ * @deprecated 2.0.0
+ */
+function hybrid_get_comment_class( $class = '' ) {
+	_deprecated_function( __FUNCTION__, '2.0.0', 'get_comment_class' );
+	return get_comment_class( $class );
 }
 
 /**

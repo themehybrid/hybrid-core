@@ -480,7 +480,7 @@ function hybrid_attr_entry_terms( $attr, $context ) {
 function hybrid_attr_comment( $attr ) {
 
 	$attr['id']    = 'comment-' . get_comment_ID();
-	$attr['class'] = str_replace( 'entry-author', '', join( ' ', hybrid_get_comment_class() ) );
+	$attr['class'] = join( ' ', get_comment_class() );
 
 	if ( in_array( get_comment_type(), array( '', 'comment' ) ) ) {
 
