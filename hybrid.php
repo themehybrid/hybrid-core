@@ -414,6 +414,11 @@ if ( !class_exists( 'Hybrid' ) ) {
 			add_filter( 'hybrid_loop_description',                   'wpautop',           25 );
 			add_filter( 'hybrid_loop_description',                   'do_shortcode',      30 );
 			add_filter( 'hybrid_loop_description',                   'shortcode_unautop', 35 );
+
+			/* Filters for the audio transcript. */
+			add_filter( 'hybrid_audio_transcript', 'wptexturize',   10 );
+			add_filter( 'hybrid_audio_transcript', 'convert_chars', 20 );
+			add_filter( 'hybrid_audio_transcript', 'wpautop',       25 );
 		}
 	}
 }

@@ -123,7 +123,8 @@ function hybrid_get_audio_transcript( $post_id = 0 ) {
 		$post_id = get_the_ID();
 
 	/* Set up some default variables and get the image metadata. */
-	$meta = wp_get_attachment_metadata( $post_id );
+	$lyrics = '';
+	$meta   = wp_get_attachment_metadata( $post_id );
 
 	/* Look for the 'unsynchronised_lyric' tag. */
 	if ( isset( $meta['unsynchronised_lyric'] ) )
@@ -133,11 +134,8 @@ function hybrid_get_audio_transcript( $post_id = 0 ) {
 	elseif ( isset( $meta['unsychronised_lyric'] ) )
 		$lyrics = $meta['unsychronised_lyric'];
 
-	/* If lyrics were found, run them through some of WP's text filters to make 'em purty. */
-	if ( !empty( $lyrics ) )
-		return wptexturize( convert_chars( wpautop( $lyrics ) ) );
-
-	return '';
+	/* Apply filters for the transcript. */
+	return apply_filters( 'hybrid_audio_transcript', $lyrics );
 }
 
 /**
