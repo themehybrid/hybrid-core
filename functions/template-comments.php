@@ -13,6 +13,36 @@
  */
 
 /**
+ * @since  2.0.0
+ */
+function hybrid_comment_reply_link( $args = array() ) {
+	echo hybrid_get_comment_reply_link( $args );
+}
+
+/**
+ * Outputs the comment reply link.  Note that WP's `comment_reply_link()` doesn't work outside of 
+ * `wp_list_comments()` without passing in the proper arguments (it isn't meant to).  This function is just a 
+ * wrapper for `comment_reply_link()`, which adds in the arguments automatically.
+ *
+ * @since  2.0.0
+ * @access public
+ * @return void
+ */
+function hybrid_get_comment_reply_link( $attr = array() ) {
+
+	if ( !get_option( 'thread_comments' ) || in_array( get_comment_type(), array( 'pingback', 'trackback' ) ) )
+		return '';
+
+	$defaults = array(
+		'depth'     => intval( $GLOBALS['comment_depth'] ),
+		'max_depth' => get_option( 'thread_comments_depth' ),
+	);
+	$attr = shortcode_atts( $defaults, $attr, 'comment-reply-link' );
+
+	echo get_comment_reply_link( $attr );
+}
+
+/**
  * Arguments for the wp_list_comments_function() used in comments.php. Users can set up a 
  * custom comments callback function by changing $callback to the custom function.  Note that 
  * $style should remain 'ol' since this is hardcoded into the theme and is the semantically correct

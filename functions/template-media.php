@@ -11,6 +11,42 @@
  */
 
 /**
+ * Checks if the current post has a mime type of 'audio'.
+ *
+ * @since  1.6.0
+ * @access public
+ * @param  int    $post_id
+ * @return bool
+ */
+function hybrid_attachment_is_audio( $post_id = 0 ) {
+
+	$post_id = empty( $post_id ) ? get_the_ID() : $post_id;
+
+	$mime = get_post_mime_type( $post_id );
+	$mime_type = explode( '/', $mime );
+
+	return 'audio' == array_shift( $mime_type ) ? true : false;
+}
+
+/**
+ * Checks if the current post has a mime type of 'video'.
+ *
+ * @since  1.6.0
+ * @access public
+ * @param  int    $post_id
+ * @return bool
+ */
+function hybrid_attachment_is_video( $post_id = 0 ) {
+
+	$post_id = empty( $post_id ) ? get_the_ID() : $post_id;
+
+	$mime = get_post_mime_type( $post_id );
+	$mime_type = explode( '/', $mime );
+
+	return 'video' == array_shift( $mime_type ) ? true : false;
+}
+
+/**
  * Loads the correct function for handling attachments.  Checks the attachment mime type to call 
  * correct function. Image attachments are not loaded with this function.  The functionality for them 
  * should be handled by the theme's attachment or image attachment file.

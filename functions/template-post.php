@@ -10,6 +10,19 @@
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
+/**
+ * Checks if a post has any content. Useful if you need to check if the user has written any content 
+ * before performing any actions.
+ *
+ * @since  1.6.0
+ * @access public
+ * @param  int    $id  The ID of the post.
+ * @return bool
+ */
+function hybrid_post_has_content( $id = 0 ) {
+	$post = get_post( $id );
+	return !empty( $post->post_content ) ? true : false;
+}
 
 /**
  * Outputs a link to the post format archive.
