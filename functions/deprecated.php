@@ -150,6 +150,14 @@ function hybrid_get_body_class( $class = '' ) {
 }
 
 /**
+ * @since      1.4.0
+ * @deprecated 2.0.0
+ */
+function hybrid_footer_content() {
+	_deprecated_function( __FUNCTION__, '2.0.0', '' );
+}
+
+/**
  * @since      1.6.0
  * @deprecated 2.0.0
  */

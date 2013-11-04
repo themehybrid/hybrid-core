@@ -38,18 +38,6 @@ function hybrid_add_post_type_support() {
 }
 
 /**
- * Standardized function for outputting the footer content.
- *
- * @since  1.4.0
- * @deprecated 2.0.0
- * @access public
- * @return void
- */
-function hybrid_footer_content() {
-	_deprecated_function( __FUNCTION__, '2.0.0', '' );
-}
-
-/**
  * Checks if a post of any post type has a custom template.  This is the equivalent of WordPress' 
  * is_page_template() function with the exception that it works for all post types.
  *
