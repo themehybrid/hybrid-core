@@ -259,6 +259,9 @@ class Hybrid {
 		/* Load the media template functions. */
 		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'template-media.php' );
 
+		/* Load the post template functions. */
+		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'template-post.php' );
+
 		/* Load the metadata functions. */
 		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'meta.php' );
 
