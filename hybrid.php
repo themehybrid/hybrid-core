@@ -251,7 +251,7 @@ class Hybrid {
 		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'attr.php' );
 
 		/* Load the comments functions. */
-		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'comments.php' );
+		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'template-comments.php' );
 
 		/* Load media-related functions. */
 		require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'media.php' );
