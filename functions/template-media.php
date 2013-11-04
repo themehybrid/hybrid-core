@@ -47,6 +47,100 @@ function hybrid_attachment_is_video( $post_id = 0 ) {
 }
 
 /**
+ * Retrieves an attachment ID based on an attachment file URL.
+ *
+ * @copyright Pippin Williamson
+ * @license   http://www.gnu.org/licenses/gpl-2.0.html
+ * @link      http://pippinsplugins.com/retrieve-attachment-id-from-image-url/
+ *
+ * @since  2.0.0
+ * @access public
+ * @param  string  $url
+ * @return int
+ */
+function hybrid_get_attachment_id_from_url( $url ) {
+	global $wpdb;
+
+	$prefix = $wpdb->prefix;
+
+	$posts = $wpdb->get_col( $wpdb->prepare( "SELECT ID FROM " . $prefix . "posts" . " WHERE guid='%s';", $url ) ); 
+ 
+	return array_shift( $posts );
+}
+
+/**
+ * Returns a set of image attachment links based on size.
+ *
+ * @since  2.0.0
+ * @access public
+ * @return string
+ */
+function hybrid_get_image_size_links() {
+
+	/* If not viewing an image attachment page, return. */
+	if ( !wp_attachment_is_image( get_the_ID() ) )
+		return;
+
+	/* Set up an empty array for the links. */
+	$links = array();
+
+	/* Get the intermediate image sizes and add the full size to the array. */
+	$sizes   = get_intermediate_image_sizes();
+	$sizes[] = 'full';
+
+	/* Loop through each of the image sizes. */
+	foreach ( $sizes as $size ) {
+
+		/* Get the image source, width, height, and whether it's intermediate. */
+		$image = wp_get_attachment_image_src( get_the_ID(), $size );
+
+		/* Add the link to the array if there's an image and if $is_intermediate (4th array value) is true or full size. */
+		if ( !empty( $image ) && ( true === $image[3] || 'full' == $size ) ) {
+
+			/* Translators: Media dimensions - 1 is width and 2 is height. */
+			$label = sprintf( __( '%1$s &#215; %2$s', 'hybrid-core' ), number_format_i18n( absint( $image[1] ) ), number_format_i18n( absint( $image[2] ) ) );
+
+			$links[] = sprintf( '<a class="image-size-link">%s</a>', $label );
+		}
+	}
+
+	/* Join the links in a string and return. */
+	return join( ' <span class="sep">/</span> ', $links );
+}
+
+/**
+ * Gets the "transcript" for an audio attachment.  This is typically saved as "unsynchronised_lyric", which is 
+ * the ID3 tag sanitized by WordPress.
+ *
+ * @since  2.0.0
+ * @access public
+ * @param  int     $post_id
+ * @return string
+ */
+function hybrid_get_audio_transcript( $post_id = 0 ) {
+
+	if ( empty( $post_id ) )
+		$post_id = get_the_ID();
+
+	/* Set up some default variables and get the image metadata. */
+	$meta = wp_get_attachment_metadata( $post_id );
+
+	/* Look for the 'unsynchronised_lyric' tag. */
+	if ( isset( $meta['unsynchronised_lyric'] ) )
+		$lyrics = $meta['unsynchronised_lyric'];
+
+	/* Seen this misspelling of the id3 tag. */
+	elseif ( isset( $meta['unsychronised_lyric'] ) )
+		$lyrics = $meta['unsychronised_lyric'];
+
+	/* If lyrics were found, run them through some of WP's text filters to make 'em purty. */
+	if ( !empty( $lyrics ) )
+		return wptexturize( convert_chars( wpautop( $lyrics ) ) );
+
+	return '';
+}
+
+/**
  * Loads the correct function for handling attachments.  Checks the attachment mime type to call 
  * correct function. Image attachments are not loaded with this function.  The functionality for them 
  * should be handled by the theme's attachment or image attachment file.
