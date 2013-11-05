@@ -74,8 +74,13 @@ function hybrid_theme_link() {
  */
 function hybrid_get_theme_link() {
 	$theme = wp_get_theme( get_template() );
+	$uri   = $theme->get( 'ThemeURI' );
+	$name  = $theme->display( 'Name', false, true );
 
-	return sprintf( '<a class="theme-link" href="%s">%s</a>', esc_url( $theme->get( 'ThemeURI' ) ), $theme->display( 'Name', false, true ) ); 
+	/* Translators: Theme name. */
+	$title = sprintf( __( '%s WordPress Theme', 'hybrid-core' ), $name );
+
+	return sprintf( '<a class="theme-link" href="%s" title="%s">%s</a>', esc_url( $uri ), esc_attr( $title ), $name );
 }
 
 /**
@@ -102,8 +107,13 @@ function hybrid_get_child_theme_link() {
 		return '';
 
 	$theme = wp_get_theme();
+	$uri   = $theme->get( 'ThemeURI' );
+	$name  = $theme->display( 'Name', false, true );
 
-	return sprintf( '<a class="theme-link" href="%s">%s</a>', esc_url( $theme->get( 'ThemeURI' ) ), $theme->display( 'Name', false, true ) ); 
+	/* Translators: Theme name. */
+	$title = sprintf( __( '%s WordPress Theme', 'hybrid-core' ), $name );
+
+	return sprintf( '<a class="child-link" href="%s" title="%s">%s</a>', esc_url( $uri ), esc_attr( $title ), $name );
 }
 
 /**
