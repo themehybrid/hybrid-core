@@ -402,8 +402,8 @@ function hybrid_attr_entry_published( $attr ) {
 	$attr['class']    = 'entry-published updated';
 	$attr['datetime'] = get_the_time( 'Y-m-d\TH:i:sP' );
 
-	/* Translators: Post time "title" attribute. */
-	$attr['title']    = get_the_time( _x( 'l, j F Y, g:i a', 'post time format', 'hybrid-core' ) );
+	/* Translators: Post date/time "title" attribute. */
+	$attr['title']    = get_the_time( _x( 'l, F j, Y, g:i a', 'post time format', 'hybrid-core' ) );
 
 	return $attr;
 }
@@ -523,8 +523,8 @@ function hybrid_attr_comment_published( $attr ) {
 	$attr['class']    = 'comment-published';
 	$attr['datetime'] = get_comment_time( 'Y-m-d\TH:i:sP' );
 
-	/* Translators: Comment time "title" attribute. */
-	$attr['title']    = get_comment_time( _x( 'l, j F Y, g:i a', 'comment time format', 'hybrid-core' ) );
+	/* Translators: Comment date/time "title" attribute. */
+	$attr['title']    = get_the_time( _x( 'l, F j, Y, g:i a', 'comment time format', 'hybrid-core' ) );
 	$attr['itemprop'] = 'commentTime';
 
 	return $attr;
