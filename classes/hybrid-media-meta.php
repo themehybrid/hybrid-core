@@ -158,7 +158,7 @@ class Hybrid_Media_Meta {
 
 		/* If a timestamp exists, add it to the $items array. */
 		if ( !empty( $this->meta['image_meta']['created_timestamp'] ) )
-			$this->items['created_timestamp'] = array( date_i18n( get_option( 'date_format' ), strtotime( $this->meta['image_meta']['created_timestamp'] ) ), __( 'Date', 'hybrid-core' ) );
+			$this->items['created_timestamp'] = array( date_i18n( get_option( 'date_format' ), $this->meta['image_meta']['created_timestamp'] ), __( 'Date', 'hybrid-core' ) );
 
 		/* If a camera exists, add it to the $items array. */
 		if ( !empty( $this->meta['image_meta']['camera'] ) )
@@ -235,7 +235,7 @@ class Hybrid_Media_Meta {
 
 		/* Year. */
 		if ( !empty( $this->meta['year'] ) )
-			$this->items['year'] = array( date_i18n( 'Y', strtotime( $this->meta['year'] ) ), __( 'Year', 'hybrid-core' ) );
+			$this->items['year'] = array( date_i18n( 'Y', $this->meta['year'] ), __( 'Year', 'hybrid-core' ) );
 
 		/* Genre. */
 		if ( !empty( $this->meta['genre'] ) )
