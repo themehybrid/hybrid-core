@@ -145,8 +145,14 @@ function hybrid_body_class_filter( $classes, $class ) {
 	/* Text direction. */
 	$classes[] = is_rtl() ? 'rtl' : 'ltr';
 
-	/* Locale. */
-	$classes[] = strtolower( str_replace( '_', '-', get_locale() ) );
+	/* Locale and language. */
+	$locale = get_locale();
+	$lang   = hybrid_get_language( $locale );
+
+	if ( $locale !== $lang )
+		$classes[] = $lang;
+
+	$classes[] = strtolower( str_replace( '_', '-', $locale ) );
 
 	/* Check if the current theme is a parent or child theme. */
 	$classes[] = is_child_theme() ? 'child-theme' : 'parent-theme';
