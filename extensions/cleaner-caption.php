@@ -58,7 +58,7 @@ function cleaner_caption( $output, $attr, $content ) {
 	$attr = apply_filters( 'cleaner_caption_args', $attr );
 
 	/* Merge the defaults with user input. */
-	$attr = shortcode_atts( $defaults, $attr );
+	$attr = shortcode_atts( $defaults, $attr, 'caption' );
 
 	/* If the width is less than 1 or there is no caption, return the content wrapped between the [caption] tags. */
 	if ( 1 > $attr['width'] || empty( $attr['caption'] ) )
