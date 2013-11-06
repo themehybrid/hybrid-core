@@ -30,7 +30,7 @@ function hybrid_image_size_names_choose( $sizes ) {
 
 	/* Loop through each of the intermediate sizes, adding them to the $add_sizes array. */
 	foreach ( $intermediate_sizes as $size )
-		$add_sizes[$size] = $size;
+		$add_sizes[ $size ] = 'post-thumbnail' === $size ? __( 'Post Thumbnail', 'hybrid-core' ) : $size;
 
 	/* Merge the original array, keeping it intact, with the new array of image sizes. */
 	$sizes = array_merge( $add_sizes, $sizes );
