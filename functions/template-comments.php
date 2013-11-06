@@ -31,20 +31,23 @@ function hybrid_comment_reply_link( $args = array() ) {
  *
  * @since  2.0.0
  * @access public
- * @return void
+ * @param  array  $args
+ * @return string
  */
-function hybrid_get_comment_reply_link( $attr = array() ) {
+function hybrid_get_comment_reply_link( $args = array() ) {
 
 	if ( !get_option( 'thread_comments' ) || in_array( get_comment_type(), array( 'pingback', 'trackback' ) ) )
 		return '';
 
-	$defaults = array(
-		'depth'     => intval( $GLOBALS['comment_depth'] ),
-		'max_depth' => get_option( 'thread_comments_depth' ),
+	$args = wp_parse_args(
+		$args,
+		array(
+			'depth'     => intval( $GLOBALS['comment_depth'] ),
+			'max_depth' => get_option( 'thread_comments_depth' ),
+		)
 	);
-	$attr = shortcode_atts( $defaults, $attr, 'comment-reply-link' );
 
-	echo get_comment_reply_link( $attr );
+	return get_comment_reply_link( $args );
 }
 
 /**
