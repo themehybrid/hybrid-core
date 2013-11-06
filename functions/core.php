@@ -1,8 +1,8 @@
 <?php
 /**
- * The core functions file for the Hybrid framework. Functions defined here are generally
- * used across the entire framework to make various tasks faster. This file should be loaded
- * prior to any other files because its functions are needed to run the framework.
+ * The core functions file for the Hybrid framework. Functions defined here are generally used across the 
+ * entire framework to make various tasks faster. This file should be loaded prior to any other files 
+ * because its functions are needed to run the framework.
  *
  * @package    HybridCore
  * @subpackage Functions
@@ -19,7 +19,8 @@
  *
  * @since  2.0.0
  * @access public
- * @param  string  $prefix
+ * @global object $hybrid The global Hybrid object.
+ * @param  string $prefix
  * @return void
  */
 function hybrid_set_prefix( $prefix ) {
@@ -34,10 +35,9 @@ function hybrid_set_prefix( $prefix ) {
  * plugin to make it easier to use hooks across multiple themes without having to figure out
  * each theme's hooks (assuming other themes used the same system).
  *
- * @since 0.7.0
+ * @since  0.7.0
  * @access public
- * @uses get_template() Defines the theme prefix based on the theme directory.
- * @global object $hybrid The global Hybrid object.
+ * @global object $hybrid         The global Hybrid object.
  * @return string $hybrid->prefix The prefix of the theme.
  */
 function hybrid_get_prefix() {
@@ -60,14 +60,12 @@ function hybrid_get_prefix() {
  *
  * @author Justin Tadlock <justin@justintadlock.com>
  * @author Ptah Dunbar <pt@ptahd.com>
- * @link http://ptahdunbar.com/wordpress/smarter-hooks-context-sensitive-hooks
+ * @link   http://ptahdunbar.com/wordpress/smarter-hooks-context-sensitive-hooks
  *
- * @since 0.7.0
+ * @since  0.7.0
  * @access public
- * @uses hybrid_get_prefix() Gets the theme prefix.
- * @uses hybrid_get_context() Gets the context of the current page.
- * @param string $tag Usually the location of the hook but defines what the base hook is.
- * @param mixed $arg,... Optional additional arguments which are passed on to the functions hooked to the action.
+ * @param  string $tag     Usually the location of the hook but defines what the base hook is.
+ * @param  mixed  $arg,... Optional additional arguments which are passed on to the functions hooked to the action.
  */
 function do_atomic( $tag = '', $arg = '' ) {
 
@@ -97,14 +95,12 @@ function do_atomic( $tag = '', $arg = '' ) {
  * that to give extra hooks such as 'hybrid_singular_entry_meta', 'hybrid_singular-post_entry_meta', 
  * and 'hybrid_singular-post-ID_entry_meta'.
  *
- * @since 0.7.0
+ * @since  0.7.0
  * @access public
- * @uses hybrid_get_prefix() Gets the theme prefix.
- * @uses hybrid_get_context() Gets the context of the current page.
- * @param string $tag Usually the location of the hook but defines what the base hook is.
- * @param mixed $value The value on which the filters hooked to $tag are applied on.
- * @param mixed $var,... Additional variables passed to the functions hooked to $tag.
- * @return mixed $value The value after it has been filtered.
+ * @param  string $tag     Usually the location of the hook but defines what the base hook is.
+ * @param  mixed  $value   The value on which the filters hooked to $tag are applied on.
+ * @param  mixed  $var,... Additional variables passed to the functions hooked to $tag.
+ * @return mixed  $value   The value after it has been filtered.
  */
 function apply_atomic( $tag = '', $value = '' ) {
 
@@ -134,11 +130,11 @@ function apply_atomic( $tag = '', $value = '' ) {
  * context-aware functionality alongside shortcodes. Rather than adding a lot of code to the 
  * function itself, developers can create individual functions to handle shortcodes.
  *
- * @since 0.7.0
+ * @since  0.7.0
  * @access public
- * @param string $tag Usually the location of the hook but defines what the base hook is.
- * @param mixed $value The value to be filtered.
- * @return mixed $value The value after it has been filtered.
+ * @param  string $tag   Usually the location of the hook but defines what the base hook is.
+ * @param  mixed  $value The value to be filtered.
+ * @return mixed  $value The value after it has been filtered.
  */
 function apply_atomic_shortcode( $tag = '', $value = '' ) {
 	return do_shortcode( apply_atomic( $tag, $value ) );
@@ -148,10 +144,10 @@ function apply_atomic_shortcode( $tag = '', $value = '' ) {
  * Function for formatting a hook name if needed. It automatically adds the theme's prefix to 
  * the hook, and it will add a context (or any variable) if it's given.
  *
- * @since 0.7.0
+ * @since  0.7.0
  * @access public
- * @param string $tag The basic name of the hook (e.g., 'before_header').
- * @param string $context A specific context/value to be added to the hook.
+ * @param  string $tag     The basic name of the hook (e.g., 'before_header').
+ * @param  string $context A specific context/value to be added to the hook.
  */
 function hybrid_format_hook( $tag, $context = '' ) {
 	return hybrid_get_prefix() . ( ( !empty( $context ) ) ? "_{$context}" : "" ). "_{$tag}";
@@ -161,10 +157,10 @@ function hybrid_format_hook( $tag, $context = '' ) {
  * Function for setting the content width of a theme.  This does not check if a content width has been set; it 
  * simply overwrites whatever the content width is.
  *
- * @since 1.2.0
+ * @since  1.2.0
  * @access public
- * @global int $content_width The width for the theme's content area.
- * @param int $width Numeric value of the width to set.
+ * @global int    $content_width The width for the theme's content area.
+ * @param  int    $width         Numeric value of the width to set.
  */
 function hybrid_set_content_width( $width = '' ) {
 	global $content_width;
@@ -175,15 +171,13 @@ function hybrid_set_content_width( $width = '' ) {
 /**
  * Function for getting the theme's content width.
  *
- * @since 1.2.0
+ * @since  1.2.0
  * @access public
- * @global int $content_width The width for the theme's content area.
- * @return int $content_width
+ * @global int    $content_width The width for the theme's content area.
+ * @return int    $content_width
  */
 function hybrid_get_content_width() {
 	global $content_width;
 
 	return $content_width;
 }
-
-?>
