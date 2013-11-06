@@ -227,7 +227,7 @@ function hybrid_get_the_post_format_chat( $content ) {
 function hybrid_chat_content( $content ) {
 
 	/* If this isn't a chat, return. */
-	if ( !has_post_format( 'chat' ) )
+	if ( !has_post_format( 'chat' ) || post_password_required() )
 		return $content;
 
 	/* Open the chat transcript div and give it a unique ID based on the post ID. */
