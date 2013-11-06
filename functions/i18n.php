@@ -99,7 +99,7 @@ function hybrid_get_parent_textdomain() {
 
 		$textdomain = $theme->get( 'TextDomain' ) ? $theme->get( 'TextDomain' ) : get_template();
 
-		$hybrid->parent_textdomain = sanitize_key( apply_filters( hybrid_get_prefix() . '_parent_textdomain', $textdomain ) );
+		$hybrid->parent_textdomain = sanitize_key( apply_filters( 'hybrid_parent_textdomain', $textdomain ) );
 	}
 
 	/* Return the expected textdomain of the parent theme. */
@@ -133,7 +133,7 @@ function hybrid_get_child_textdomain() {
 
 		$textdomain = $theme->get( 'TextDomain' ) ? $theme->get( 'TextDomain' ) : get_stylesheet();
 
-		$hybrid->child_textdomain = sanitize_key( apply_filters( hybrid_get_prefix() . '_child_textdomain', $textdomain ) );
+		$hybrid->child_textdomain = sanitize_key( apply_filters( 'hybrid_child_textdomain', $textdomain ) );
 	}
 
 	/* Return the expected textdomain of the child theme. */
