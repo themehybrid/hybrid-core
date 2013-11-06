@@ -13,7 +13,12 @@
  */
 
 /**
+ * Outputs the comment reply link.  Only use outside of `wp_list_comments()`.
+ *
  * @since  2.0.0
+ * @access public
+ * @param  array   $args
+ * @return void
  */
 function hybrid_comment_reply_link( $args = array() ) {
 	echo hybrid_get_comment_reply_link( $args );
