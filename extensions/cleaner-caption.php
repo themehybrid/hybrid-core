@@ -45,9 +45,9 @@ function cleaner_caption( $output, $attr, $content ) {
 
 	/* Set up the default arguments. */
 	$defaults = array(
-		'id' => '',
-		'align' => 'alignnone',
-		'width' => '',
+		'id'      => '',
+		'align'   => 'alignnone',
+		'width'   => '',
 		'caption' => ''
 	);
 
@@ -65,7 +65,7 @@ function cleaner_caption( $output, $attr, $content ) {
 		return $content;
 
 	/* Set up the attributes for the caption <div>. */
-	$attributes  = ( !empty( $attr['id'] ) ? ' id="' . esc_attr( $attr['id'] ) . '"' : '' );
+	$attributes  = !empty( $attr['id'] ) ? ' id="' . esc_attr( $attr['id'] ) . '"' : '';
 	$attributes .= ' class="wp-caption ' . esc_attr( $attr['align'] ) . '"';
 
 	/* Caption width filter hook from WP core. */
@@ -90,5 +90,3 @@ function cleaner_caption( $output, $attr, $content ) {
 	/* Return the formatted, clean caption. */
 	return apply_filters( 'cleaner_caption', $output );
 }
-
-?>
