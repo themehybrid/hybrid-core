@@ -13,6 +13,22 @@
  */
 
 /**
+ * Allows theme developers to set a definite prefix for their theme.  If this isn't set, the framework
+ * will assume the prefix is the value of `get_template()`.  This should be called early, such as in 
+ * the theme setup function.
+ *
+ * @since  2.0.0
+ * @access public
+ * @param  string  $prefix
+ * @return void
+ */
+function hybrid_set_prefix( $prefix ) {
+	global $hybrid;
+
+	$hybrid->prefix = sanitize_key( apply_filters( 'hybrid_prefix', $prefix ) );
+}
+
+/**
  * Defines the theme prefix. This allows developers to infinitely change the theme. In theory,
  * one could use the Hybrid core to create their own theme or filter 'hybrid_prefix' with a 
  * plugin to make it easier to use hooks across multiple themes without having to figure out
