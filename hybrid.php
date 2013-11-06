@@ -241,6 +241,9 @@ if ( !class_exists( 'Hybrid' ) ) {
 		 */
 		function theme_support() {
 
+			/* Adds core WordPress HTML5 support. */
+			add_theme_support( 'html5', array( 'search-form', 'comment-form', 'comment-list' ) );
+
 			/* Remove support for the the Breadcrumb Trail extension if the plugin is installed. */
 			if ( function_exists( 'breadcrumb_trail' ) )
 				remove_theme_support( 'breadcrumb-trail' );
