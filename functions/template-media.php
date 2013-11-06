@@ -2,12 +2,12 @@
 /**
  * Media template functions.
  *
- * @package HybridCore
+ * @package    HybridCore
  * @subpackage Functions
- * @author Justin Tadlock <justin@justintadlock.com>
- * @copyright Copyright (c) 2008 - 2013, Justin Tadlock
- * @link http://themehybrid.com/hybrid-core
- * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @author     Justin Tadlock <justin@justintadlock.com>
+ * @copyright  Copyright (c) 2008 - 2013, Justin Tadlock
+ * @link       http://themehybrid.com/hybrid-core
+ * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 /**
@@ -20,12 +20,12 @@
  */
 function hybrid_attachment_is_audio( $post_id = 0 ) {
 
-	$post_id = empty( $post_id ) ? get_the_ID() : $post_id;
+	$post_id   = empty( $post_id ) ? get_the_ID() : $post_id;
+	$mime_type = get_post_mime_type( $post_id );
 
-	$mime = get_post_mime_type( $post_id );
-	$mime_type = explode( '/', $mime );
+	list( $type, $subtype ) = false !== strpos( $mime_type, '/' ) ? explode( '/', $mime_type ) : array( $mime_type, '' );
 
-	return 'audio' == array_shift( $mime_type ) ? true : false;
+	return 'audio' === $type ? true : false;
 }
 
 /**
@@ -38,12 +38,12 @@ function hybrid_attachment_is_audio( $post_id = 0 ) {
  */
 function hybrid_attachment_is_video( $post_id = 0 ) {
 
-	$post_id = empty( $post_id ) ? get_the_ID() : $post_id;
+	$post_id   = empty( $post_id ) ? get_the_ID() : $post_id;
+	$mime_type = get_post_mime_type( $post_id );
 
-	$mime = get_post_mime_type( $post_id );
-	$mime_type = explode( '/', $mime );
+	list( $type, $subtype ) = false !== strpos( $mime_type, '/' ) ? explode( '/', $mime_type ) : array( $mime_type, '' );
 
-	return 'video' == array_shift( $mime_type ) ? true : false;
+	return 'video' === $type ? true : false;
 }
 
 /**
@@ -146,36 +146,35 @@ function hybrid_get_audio_transcript( $post_id = 0 ) {
  * Ideally, all attachments would be appropriately handled within their templates. However, this could 
  * lead to messy template files.
  *
- * @since 0.5.0
+ * @since  0.5.0
  * @access public
- * @uses get_post_mime_type() Gets the mime type of the attachment.
- * @uses wp_get_attachment_url() Gets the URL of the attachment file.
  * @return void
  */
 function hybrid_attachment() {
 	$file = wp_get_attachment_url();
 	$mime = get_post_mime_type();
-	$mime_type = explode( '/', $mime );
+
+	$mime_type = false !== strpos( $mime, '/' ) ? explode( '/', $mime ) : array( $mime, '' );
 
 	/* Loop through each mime type. If a function exists for it, call it. Allow users to filter the display. */
 	foreach ( $mime_type as $type ) {
 		if ( function_exists( "hybrid_{$type}_attachment" ) )
 			$attachment = call_user_func( "hybrid_{$type}_attachment", $mime, $file );
 
-		$attachment = apply_atomic( "{$type}_attachment", $attachment );
+		$attachment = apply_filters( "hybrid_{$type}_attachment", $attachment );
 	}
 
-	echo apply_atomic( 'attachment', $attachment );
+	echo apply_filters( 'hybrid_attachment', $attachment );
 }
 
 /**
  * Handles application attachments on their attachment pages.  Uses the <object> tag to embed media 
  * on those pages.
  *
- * @since 0.3.0
+ * @since  0.3.0
  * @access public
- * @param string $mime attachment mime type
- * @param string $file attachment file URL
+ * @param  string $mime attachment mime type
+ * @param  string $file attachment file URL
  * @return string
  */
 function hybrid_application_attachment( $mime = '', $file = '' ) {
@@ -191,10 +190,10 @@ function hybrid_application_attachment( $mime = '', $file = '' ) {
  * Handles text attachments on their attachment pages.  Uses the <object> element to embed media 
  * in the pages.
  *
- * @since 0.3.0
+ * @since  0.3.0
  * @access public
- * @param string $mime attachment mime type
- * @param string $file attachment file URL
+ * @param  string $mime attachment mime type
+ * @param  string $file attachment file URL
  * @return string
  */
 function hybrid_text_attachment( $mime = '', $file = '' ) {
@@ -210,12 +209,10 @@ function hybrid_text_attachment( $mime = '', $file = '' ) {
  * Handles audio attachments on their attachment pages.  Puts audio/mpeg and audio/wma files into 
  * an <object> element.
  *
- * @todo Test out and support more audio types.
- *
- * @since 0.2.2
+ * @since  0.2.2
  * @access public
- * @param string $mime attachment mime type
- * @param string $file attachment file URL
+ * @param  string $mime attachment mime type
+ * @param  string $file attachment file URL
  * @return string
  */
 function hybrid_audio_attachment( $mime = '', $file = '' ) {
@@ -225,12 +222,12 @@ function hybrid_audio_attachment( $mime = '', $file = '' ) {
 /**
  * Handles video attachments on attachment pages.  Add other video types to the <object> element.
  *
- * @since 0.2.2
+ * @since  0.2.2
  * @access public
- * @param string $mime attachment mime type
- * @param string $file attachment file URL
+ * @param  string $mime attachment mime type
+ * @param  string $file attachment file URL
  * @return string
  */
-function hybrid_video_attachment( $mime = false, $file = false ) {
+function hybrid_video_attachment( $mime = '', $file = '' ) {
 	return do_shortcode( '[video src="' . esc_url( $file ) . '"]' );
 }
