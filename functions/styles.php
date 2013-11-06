@@ -105,7 +105,7 @@ function hybrid_get_styles() {
 
 	/* Default styles available. */
 	$styles = array(
-		'one-five'   => array( 'version' => '20130523' ),
+		'one-five'   => array( 'version' => '20131105' ),
 		'gallery'    => array( 'version' => '20130526' ),
 	);
 
