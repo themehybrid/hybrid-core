@@ -29,7 +29,7 @@ function hybrid_site_link() {
  * @return string
  */
 function hybrid_get_site_link() {
-	return '<a class="site-link" href="' . home_url() . '" rel="home">' . get_bloginfo( 'name' ) . '</a>';
+	return sprintf( '<a class="site-link" href="%s" rel="home">%s</a>', esc_url( home_url() ), get_bloginfo( 'name' ) );
 }
 
 /**
@@ -51,7 +51,7 @@ function hybrid_wp_link() {
  * @return string
  */
 function hybrid_get_wp_link() {
-	return '<a class="wp-link" href="http://wordpress.org" title="' . esc_attr__( 'State-of-the-art semantic personal publishing platform', 'hybrid-core' ) . '">' . __( 'WordPress', 'hybrid-core' ) . '</a>';
+	return sprintf( '<a class="wp-link" href="http://wordpress.org" title="%s">%s</a>', esc_attr__( 'State-of-the-art semantic personal publishing platform', 'hybrid-core' ), __( 'WordPress', 'hybrid-core' ) );
 }
 
 /**
