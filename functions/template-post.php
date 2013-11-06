@@ -43,7 +43,7 @@ function hybrid_post_format_link() {
  * @access public
  * @return string
  */
-function hybrid_get_post_format_link( $attr = array() ) {
+function hybrid_get_post_format_link() {
 
 	$format = get_post_format();
 	$url    = empty( $format ) ? get_permalink() : get_post_format_link( $format );
