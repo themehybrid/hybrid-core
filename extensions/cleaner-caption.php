@@ -65,9 +65,15 @@ function cleaner_caption( $output, $attr, $content ) {
 		return $content;
 
 	/* Set up the attributes for the caption <div>. */
-	$attributes = ( !empty( $attr['id'] ) ? ' id="' . esc_attr( $attr['id'] ) . '"' : '' );
+	$attributes  = ( !empty( $attr['id'] ) ? ' id="' . esc_attr( $attr['id'] ) . '"' : '' );
 	$attributes .= ' class="wp-caption ' . esc_attr( $attr['align'] ) . '"';
-	$attributes .= ' style="max-width: ' . esc_attr( $attr['width'] ) . 'px"';
+
+	/* Caption width filter hook from WP core. */
+	$caption_width = apply_filters( 'img_caption_shortcode_width', $attr['width'], $attr, $content );
+
+	/* If there's a width, add the inline style for it. */
+	if ( 0 < $caption_width )
+		$attributes .= ' style="max-width: ' . esc_attr( $caption_width ) . 'px"';
 
 	/* Open the caption <div>. */
 	$output = '<figure' . $attributes .'>';
