@@ -27,7 +27,7 @@ function hybrid_comment_reply_link( $args = array() ) {
 /**
  * Outputs the comment reply link.  Note that WP's `comment_reply_link()` doesn't work outside of 
  * `wp_list_comments()` without passing in the proper arguments (it isn't meant to).  This function is just a 
- * wrapper for `comment_reply_link()`, which adds in the arguments automatically.
+ * wrapper for `get_comment_reply_link()`, which adds in the arguments automatically.
  *
  * @since  2.0.0
  * @access public
@@ -56,7 +56,7 @@ function hybrid_get_comment_reply_link( $args = array() ) {
  * $style should remain 'ol' since this is hardcoded into the theme and is the semantically correct
  * element to use for listing comments.
  *
- * @since 0.7.0
+ * @since  0.7.0
  * @access public
  * @return array $args Arguments for listing comments.
  */
@@ -72,7 +72,7 @@ function hybrid_list_comments_args() {
 	);
 
 	/* Return the arguments and allow devs to overwrite them. */
-	return apply_atomic( 'list_comments_args', $args );
+	return apply_filters( 'hybrid_list_comments_args', $args );
 }
 
 /**
@@ -84,17 +84,15 @@ function hybrid_list_comments_args() {
  * The templates are saved in $hybrid->comment_template[$comment_type], so each comment template
  * is only located once if it is needed. Following comments will use the saved template.
  *
- * @since 0.2.3
+ * @since  0.2.3
  * @access public
- * @param $comment The comment object.
- * @param $args Array of arguments passed from wp_list_comments().
- * @param $depth What level the particular comment is.
+ * @param  $comment The comment object.
+ * @param  $args    Array of arguments passed from wp_list_comments().
+ * @param  $depth   What level the particular comment is.
  * @return void
  */
 function hybrid_comments_callback( $comment, $args, $depth ) {
 	global $hybrid;
-	$GLOBALS['comment'] = $comment;
-	$GLOBALS['comment_depth'] = $depth;
 
 	/* Get the comment type of the current comment. */
 	$comment_type = get_comment_type( $comment->comment_ID );
@@ -139,7 +137,7 @@ function hybrid_comments_callback( $comment, $args, $depth ) {
  * Needs to be used in conjunction with hybrid_comments_callback(). Not needed but used just in 
  * case something is changed.
  *
- * @since 0.2.3
+ * @since  0.2.3
  * @access public
  * @return void
  */
