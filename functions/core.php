@@ -62,12 +62,12 @@ function hybrid_get_prefix() {
  * @author Ptah Dunbar <pt@ptahd.com>
  * @link   http://ptahdunbar.com/wordpress/smarter-hooks-context-sensitive-hooks
  *
- * @since  0.7.0
+ * @since  2.0.0
  * @access public
  * @param  string $tag     Usually the location of the hook but defines what the base hook is.
  * @param  mixed  $arg,... Optional additional arguments which are passed on to the functions hooked to the action.
  */
-function do_atomic( $tag = '', $arg = '' ) {
+function hybrid_do_atomic( $tag = '', $arg = '' ) {
 
 	if ( empty( $tag ) )
 		return false;
@@ -95,14 +95,14 @@ function do_atomic( $tag = '', $arg = '' ) {
  * that to give extra hooks such as 'hybrid_singular_entry_meta', 'hybrid_singular-post_entry_meta', 
  * and 'hybrid_singular-post-ID_entry_meta'.
  *
- * @since  0.7.0
+ * @since  2.0.0
  * @access public
  * @param  string $tag     Usually the location of the hook but defines what the base hook is.
  * @param  mixed  $value   The value on which the filters hooked to $tag are applied on.
  * @param  mixed  $var,... Additional variables passed to the functions hooked to $tag.
  * @return mixed  $value   The value after it has been filtered.
  */
-function apply_atomic( $tag = '', $value = '' ) {
+function hybrid_apply_atomic( $tag = '', $value = '' ) {
 
 	if ( empty( $tag ) )
 		return false;
@@ -130,13 +130,13 @@ function apply_atomic( $tag = '', $value = '' ) {
  * context-aware functionality alongside shortcodes. Rather than adding a lot of code to the 
  * function itself, developers can create individual functions to handle shortcodes.
  *
- * @since  0.7.0
+ * @since  2.0.0
  * @access public
  * @param  string $tag   Usually the location of the hook but defines what the base hook is.
  * @param  mixed  $value The value to be filtered.
  * @return mixed  $value The value after it has been filtered.
  */
-function apply_atomic_shortcode( $tag = '', $value = '' ) {
+function hybrid_apply_atomic_shortcode( $tag = '', $value = '' ) {
 	return do_shortcode( apply_atomic( $tag, $value ) );
 }
 

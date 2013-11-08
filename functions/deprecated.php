@@ -78,6 +78,33 @@ function get_atomic_template( $template ) {
 }
 
 /**
+ * @since      0.7.0
+ * @deprecated 2.0.0
+ */
+function do_atomic( $tag = '', $arg = '' ) {
+	_deprecated_function( __FUNCTION__, '2.0.0', 'hybrid_do_atomic' );
+	hybrid_do_atomic( $tag, $arg );
+}
+
+/**
+ * @since      0.7.0
+ * @deprecated 2.0.0
+ */
+function apply_atomic( $tag = '', $value = '' ) {
+	_deprecated_function( __FUNCTION__, '2.0.0', 'hybrid_apply_atomic' );
+	return hybrid_apply_atomic( $tag, $value );
+}
+
+/**
+ * @since      0.7.0
+ * @deprecated 2.0.0
+ */
+function apply_atomic_shortcode( $tag = '', $value = '' ) {
+	_deprecated_function( __FUNCTION__, '2.0.0', 'hybrid_apply_atomic_shortcode' );
+	return hybrid_apply_atomic_shortcode( $tag, $value );
+}
+
+/**
  * Dynamic element to wrap the site title in.  If it is the front page, wrap it in an <h1> element.  One other 
  * pages, wrap it in a <div> element. 
  *
