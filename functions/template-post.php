@@ -51,6 +51,59 @@ function hybrid_get_post_format_link() {
 	return sprintf( '<a href="%s" class="post-format-link">%s</a>', esc_url( $url ), get_post_format_string( $format ) );
 }
 
+/**
+ * Outputs a post's taxonomy terms.
+ *
+ * @since  2.0.0
+ * @access public
+ * @param  array   $args
+ * @return void
+ */
+function hybrid_post_terms( $args = array() ) {
+	echo hybrid_get_post_terms( $args );
+}
+
+/**
+ * This template tag is meant to replace template tags like `the_category()`, `the_terms()`, etc.  These core 
+ * WordPress template tags don't offer proper translation and RTL support without having to write a lot of 
+ * messy code within the theme's templates.  This is why theme developers often have to resort to custom 
+ * functions to handle this (even the default WordPress themes do this).  Particularly, the core functions 
+ * don't allow for theme developers to add the terms as placeholders in the accompanying text (ex: "Posted in %s"). 
+ * This funcion is a wrapper for the WordPress `get_the_terms_list()` function.  It uses that to build a 
+ * better post terms list.
+ *
+ * @since  2.0.0
+ * @access public
+ * @param  array   $args
+ * @return string
+ */
+function hybrid_get_post_terms( $args = array() ) {
+
+	$html = '';
+
+	$defaults = array(
+		'post_id'  => get_the_ID(),
+		'taxonomy' => 'category',
+		'text'     => '%s',
+		'before'   => '<span %s>',
+		'after'    => '</span>',
+		/* Translators: Separates tags, categories, etc. when displaying a post. */
+		'sep'      => _x( ', ', 'taxonomy terms separator', 'hybrid-core' )
+	);
+
+	$args = wp_parse_args( $args, $defaults );
+
+	$terms = get_the_term_list( $args['post_id'], $args['taxonomy'], '', $args['sep'], '' );
+
+	if ( !empty( $terms ) ) {
+		$html .= sprintf( $args['before'], hybrid_get_attr( 'entry-terms', 'category' ) );
+		$html .= sprintf( $args['text'], $terms );
+		$html .= $args['after'];
+	}
+
+	return $html;
+}
+
 /* === Galleries === */
 
 /**
