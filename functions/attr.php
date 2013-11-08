@@ -6,6 +6,13 @@
  * handles attributes for many more elements.  The biggest benefit of using this is to provide richer 
  * microdata while being forward compatible with the ever-changing Web.  Currently, the default microdata 
  * vocabulary supported is Schema.org.
+ *
+ * @package    HybridCore
+ * @subpackage Functions
+ * @author     Justin Tadlock <justin@justintadlock.com>
+ * @copyright  Copyright (c) 2008 - 2013, Justin Tadlock
+ * @link       http://themehybrid.com/hybrid-core
+ * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 /* Attributes for major structural elements. */
@@ -13,8 +20,6 @@ add_filter( 'hybrid_attr_body',    'hybrid_attr_body',    5    );
 add_filter( 'hybrid_attr_header',  'hybrid_attr_header',  5    );
 add_filter( 'hybrid_attr_footer',  'hybrid_attr_footer',  5    );
 add_filter( 'hybrid_attr_content', 'hybrid_attr_content', 5    );
-add_filter( 'hybrid_attr_comment', 'hybrid_attr_comment', 5    );
-add_filter( 'hybrid_attr_post',    'hybrid_attr_post',    5    );
 add_filter( 'hybrid_attr_sidebar', 'hybrid_attr_sidebar', 5, 2 );
 add_filter( 'hybrid_attr_menu',    'hybrid_attr_menu',    5, 2 );
 
@@ -28,14 +33,17 @@ add_filter( 'hybrid_attr_loop-title',       'hybrid_attr_loop_title',       5 );
 add_filter( 'hybrid_attr_loop-description', 'hybrid_attr_loop_description', 5 );
 
 /* Post-specific attributes. */
-add_filter( 'hybrid_attr_entry-title',     'hybrid_attr_entry_title',     5 );
-add_filter( 'hybrid_attr_entry-author',    'hybrid_attr_entry_author',    5 );
-add_filter( 'hybrid_attr_entry-published', 'hybrid_attr_entry_published', 5 );
-add_filter( 'hybrid_attr_entry-content',   'hybrid_attr_entry_content',   5 );
-add_filter( 'hybrid_attr_entry-summary',   'hybrid_attr_entry_summary',   5 );
+add_filter( 'hybrid_attr_post',            'hybrid_attr_post',            5    );
+add_filter( 'hybrid_attr_entry',           'hybrid_attr_post',            5    ); // Alternate for "post".
+add_filter( 'hybrid_attr_entry-title',     'hybrid_attr_entry_title',     5    );
+add_filter( 'hybrid_attr_entry-author',    'hybrid_attr_entry_author',    5    );
+add_filter( 'hybrid_attr_entry-published', 'hybrid_attr_entry_published', 5    );
+add_filter( 'hybrid_attr_entry-content',   'hybrid_attr_entry_content',   5    );
+add_filter( 'hybrid_attr_entry-summary',   'hybrid_attr_entry_summary',   5    );
 add_filter( 'hybrid_attr_entry-terms',     'hybrid_attr_entry_terms',     5, 2 );
 
 /* Comment specific attributes. */
+add_filter( 'hybrid_attr_comment',           'hybrid_attr_comment',           5 );
 add_filter( 'hybrid_attr_comment-author',    'hybrid_attr_comment_author',    5 );
 add_filter( 'hybrid_attr_comment-published', 'hybrid_attr_comment_published', 5 );
 add_filter( 'hybrid_attr_comment-permalink', 'hybrid_attr_comment_permalink', 5 );
@@ -44,7 +52,7 @@ add_filter( 'hybrid_attr_comment-content',   'hybrid_attr_comment_content',   5 
 /**
  * Outputs an HTML element's attributes.
  *
- * @since  0.1.0
+ * @since  2.0.0
  * @access public
  * @param  string  $slug        The slug/ID of the element (e.g., 'sidebar').
  * @param  string  $context     A specific context (e.g., 'primary').
@@ -61,7 +69,7 @@ function hybrid_attr( $slug, $context = '', $attributes = array() ) {
  * want without having to edit every template file in the theme.  So, one could support microformats instead 
  * of microdata, if desired.
  *
- * @since  0.1.0
+ * @since  2.0.0
  * @access public
  * @param  string  $slug        The slug/ID of the element (e.g., 'sidebar').
  * @param  string  $context     A specific context (e.g., 'primary').
@@ -87,7 +95,7 @@ function hybrid_get_attr( $slug, $context = '', $attributes = array() ) {
 /**
  * <body> element attributes.
  *
- * @since  0.1.0
+ * @since  2.0.0
  * @access public
  * @param  array   $attr
  * @return array
@@ -105,7 +113,7 @@ function hybrid_attr_body( $attr ) {
 /**
  * Page <header> element attributes.
  *
- * @since  0.1.0
+ * @since  2.0.0
  * @access public
  * @param  array   $attr
  * @return array
@@ -123,7 +131,7 @@ function hybrid_attr_header( $attr ) {
 /**
  * Page <footer> element attributes.
  *
- * @since  0.1.0
+ * @since  2.0.0
  * @access public
  * @param  array   $attr
  * @return array
@@ -141,7 +149,7 @@ function hybrid_attr_footer( $attr ) {
 /**
  * Main content container of the page attributes.
  *
- * @since  0.1.0
+ * @since  2.0.0
  * @access public
  * @param  array   $attr
  * @return array
@@ -158,7 +166,7 @@ function hybrid_attr_content( $attr ) {
 		$attr['itemtype']  = 'http://schema.org/Blog';
 	}
 
-	else if ( is_search() ) {
+	elseif ( is_search() ) {
 		$attr['itemscope'] = 'itemscope';
 		$attr['itemtype']  = 'http://schema.org/SearchResultsPage';
 	}
@@ -169,7 +177,7 @@ function hybrid_attr_content( $attr ) {
 /**
  * Sidebar attributes.
  *
- * @since  0.1.0
+ * @since  2.0.0
  * @access public
  * @param  array   $attr
  * @param  string  $context
@@ -191,7 +199,7 @@ function hybrid_attr_sidebar( $attr, $context ) {
 /**
  * Nav menu attributes.
  *
- * @since  0.1.0
+ * @since  2.0.0
  * @access public
  * @param  array   $attr
  * @param  string  $context
@@ -200,7 +208,7 @@ function hybrid_attr_sidebar( $attr, $context ) {
 function hybrid_attr_menu( $attr, $context ) {
 
 	if ( !empty( $context ) )
-		$attr['id']        = "menu-{$context}";
+		$attr['id'] = "menu-{$context}";
 
 	$attr['class']     = 'menu';
 	$attr['role']      = 'navigation';
@@ -215,7 +223,7 @@ function hybrid_attr_menu( $attr, $context ) {
 /**
  * Site title attributes.
  *
- * @since  0.1.0
+ * @since  2.0.0
  * @access public
  * @param  array   $attr
  * @param  string  $context
@@ -232,7 +240,7 @@ function hybrid_attr_site_title( $attr ) {
 /**
  * Site description attributes.
  *
- * @since  0.1.0
+ * @since  2.0.0
  * @access public
  * @param  array   $attr
  * @param  string  $context
@@ -251,7 +259,7 @@ function hybrid_attr_site_description( $attr ) {
 /**
  * Loop meta attributes.
  *
- * @since  0.1.0
+ * @since  2.0.0
  * @access public
  * @param  array   $attr
  * @param  string  $context
@@ -269,7 +277,7 @@ function hybrid_attr_loop_meta( $attr ) {
 /**
  * Loop title attributes.
  *
- * @since  0.1.0
+ * @since  2.0.0
  * @access public
  * @param  array   $attr
  * @param  string  $context
@@ -286,7 +294,7 @@ function hybrid_attr_loop_title( $attr ) {
 /**
  * Loop description attributes.
  *
- * @since  0.1.0
+ * @since  2.0.0
  * @access public
  * @param  array   $attr
  * @param  string  $context
@@ -305,7 +313,7 @@ function hybrid_attr_loop_description( $attr ) {
 /**
  * Post <article> element attributes.
  *
- * @since  0.1.0
+ * @since  2.0.0
  * @access public
  * @param  array   $attr
  * @return array
@@ -348,8 +356,8 @@ function hybrid_attr_post( $attr ) {
 
 	} else {
 
-		$attr['id']        = 'post-0';
-		$attr['class']     = str_replace( 'hentry ', 'entry ', join( ' ', hybrid_get_post_class() ) );
+		$attr['id']    = 'post-0';
+		$attr['class'] = join( ' ', get_post_class() );
 	}
 
 	return $attr;
@@ -358,7 +366,7 @@ function hybrid_attr_post( $attr ) {
 /**
  * Post title attributes.
  *
- * @since  0.1.0
+ * @since  2.0.0
  * @access public
  * @param  array   $attr
  * @return array
@@ -374,7 +382,7 @@ function hybrid_attr_entry_title( $attr ) {
 /**
  * Post author attributes.
  *
- * @since  0.1.0
+ * @since  2.0.0
  * @access public
  * @param  array   $attr
  * @return array
@@ -392,7 +400,7 @@ function hybrid_attr_entry_author( $attr ) {
 /**
  * Post time/published attributes.
  *
- * @since  0.1.0
+ * @since  2.0.0
  * @access public
  * @param  array   $attr
  * @return array
@@ -411,7 +419,7 @@ function hybrid_attr_entry_published( $attr ) {
 /**
  * Post content (not excerpt) attributes.
  *
- * @since  0.1.0
+ * @since  2.0.0
  * @access public
  * @param  array   $attr
  * @return array
@@ -427,7 +435,7 @@ function hybrid_attr_entry_content( $attr ) {
 /**
  * Post summary/excerpt attributes.
  *
- * @since  0.1.0
+ * @since  2.0.0
  * @access public
  * @param  array   $attr
  * @return array
@@ -443,7 +451,7 @@ function hybrid_attr_entry_summary( $attr ) {
 /**
  * Post terms (tags, categories, etc.) attributes.
  *
- * @since  0.1.0
+ * @since  2.0.0
  * @access public
  * @param  array   $attr
  * @param  string  $context
@@ -472,7 +480,7 @@ function hybrid_attr_entry_terms( $attr, $context ) {
 /**
  * Comment wrapper attributes.
  *
- * @since  0.1.0
+ * @since  2.0.0
  * @access public
  * @param  array   $attr
  * @return array
@@ -495,7 +503,7 @@ function hybrid_attr_comment( $attr ) {
 /**
  * Comment author attributes.
  *
- * @since  0.1.0
+ * @since  2.0.0
  * @access public
  * @param  array   $attr
  * @return array
@@ -513,7 +521,7 @@ function hybrid_attr_comment_author( $attr ) {
 /**
  * Comment time/published attributes.
  *
- * @since  0.1.0
+ * @since  2.0.0
  * @access public
  * @param  array   $attr
  * @return array
@@ -524,7 +532,7 @@ function hybrid_attr_comment_published( $attr ) {
 	$attr['datetime'] = get_comment_time( 'Y-m-d\TH:i:sP' );
 
 	/* Translators: Comment date/time "title" attribute. */
-	$attr['title']    = get_the_time( _x( 'l, F j, Y, g:i a', 'comment time format', 'hybrid-core' ) );
+	$attr['title']    = get_comment_time( _x( 'l, F j, Y, g:i a', 'comment time format', 'hybrid-core' ) );
 	$attr['itemprop'] = 'commentTime';
 
 	return $attr;
@@ -533,7 +541,7 @@ function hybrid_attr_comment_published( $attr ) {
 /**
  * Comment permalink attributes.
  *
- * @since  0.1.0
+ * @since  2.0.0
  * @access public
  * @param  array   $attr
  * @return array
@@ -550,7 +558,7 @@ function hybrid_attr_comment_permalink( $attr ) {
 /**
  * Comment content/text attributes.
  *
- * @since  0.1.0
+ * @since  2.0.0
  * @access public
  * @param  array   $attr
  * @return array
@@ -562,4 +570,3 @@ function hybrid_attr_comment_content( $attr ) {
 
 	return $attr;
 }
-
