@@ -253,6 +253,15 @@ object {
 	margin-bottom: 1.5rem;
 }
 
+/* === Forms === */
+
+input,
+textarea,
+button,
+select {
+	font-family: inherit;
+}
+
 input, 
 textarea {
 	box-sizing: content-box;
