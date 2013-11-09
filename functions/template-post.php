@@ -82,13 +82,14 @@ function hybrid_get_post_terms( $args = array() ) {
 	$html = '';
 
 	$defaults = array(
-		'post_id'  => get_the_ID(),
-		'taxonomy' => 'category',
-		'text'     => '%s',
-		'before'   => '<span %s>',
-		'after'    => '</span>',
+		'post_id'    => get_the_ID(),
+		'taxonomy'   => 'category',
+		'text'       => '%s',
+		'before'     => '',
+		'after'      => '',
+		'items_wrap' => '<span %s>%s</span>',
 		/* Translators: Separates tags, categories, etc. when displaying a post. */
-		'sep'      => _x( ', ', 'taxonomy terms separator', 'hybrid-core' )
+		'sep'        => _x( ', ', 'taxonomy terms separator', 'hybrid-core' )
 	);
 
 	$args = wp_parse_args( $args, $defaults );
@@ -96,8 +97,8 @@ function hybrid_get_post_terms( $args = array() ) {
 	$terms = get_the_term_list( $args['post_id'], $args['taxonomy'], '', $args['sep'], '' );
 
 	if ( !empty( $terms ) ) {
-		$html .= sprintf( $args['before'], hybrid_get_attr( 'entry-terms', 'category' ) );
-		$html .= sprintf( $args['text'], $terms );
+		$html .= $args['before'];
+		$html .= sprintf( $args['items_wrap'], hybrid_get_attr( 'entry-terms', $args['taxonomy'] ), sprintf( $args['text'], $terms ) );
 		$html .= $args['after'];
 	}
 
