@@ -630,7 +630,7 @@ function theme_layouts_customize_register( $wp_customize ) {
 			'layout',
 			array(
 				'title'      => esc_html__( 'Layout', 'theme-layouts' ),
-				'priority'   => 190,
+				'priority'   => 30,
 				'capability' => 'edit_theme_options'
 			)
 		);
