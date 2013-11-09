@@ -121,3 +121,29 @@ function hybrid_locate_theme_file( $file_names ) {
 
 	return $located;
 }
+
+/**
+ * Converts a hex color to RGB.  Returns the RGB values as an array.
+ *
+ * @since  2.0.0
+ * @access public
+ * @param  string  $hex
+ * @return array
+ */
+function hybrid_hex_to_rgb( $hex ) {
+
+	/* Remove "#" if it was added. */
+	$color = trim( $hex, '#' );
+
+	/* If the color is three characters, convert it to six. */
+        if ( 3 === strlen( $color ) )
+		$color = $color[0] . $color[0] . $color[1] . $color[1] . $color[2] . $color[2];
+
+	/* Get the red, green, and blue values. */
+	$red   = hexdec( $color[0] . $color[1] );
+	$green = hexdec( $color[2] . $color[3] );
+	$blue  = hexdec( $color[4] . $color[5] );
+
+	/* Return the RGB colors as an array. */
+	return array( 'r' => $red, 'g' => $green, 'b' => $blue );
+}
