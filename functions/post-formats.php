@@ -75,8 +75,10 @@ function hybrid_clean_post_format_slug( $slug ) {
  */
 function hybrid_aside_infinity( $content ) {
 
-	if ( has_post_format( 'aside' ) && !is_singular() )
-		$content .= ' <a class="permalink" href="' . get_permalink() . '" title="' . the_title_attribute( array( 'echo' => false ) ) . '">&#8734;</a>';
+	if ( has_post_format( 'aside' ) && !is_singular() ) {
+		$infinity = '<a class="permalink" href="' . get_permalink() . '" title="' . the_title_attribute( array( 'echo' => false ) ) . '">&#8734;</a>';
+		$content .= ' ' . apply_filters( 'hybrid_aside_infinity', $infinity );
+	}
 
 	return $content;
 }
