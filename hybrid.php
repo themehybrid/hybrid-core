@@ -186,7 +186,10 @@ if ( !class_exists( 'Hybrid' ) ) {
 			/* Load the sidebar functions. */
 			require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'sidebars.php' );
 
-			/* Load the styles if supported. */
+			/* Load the scripts functions. */
+			require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'scripts.php' );
+
+			/* Load the styles functions. */
 			require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'styles.php' );
 
 			/* Load the utility functions. */
@@ -310,9 +313,6 @@ if ( !class_exists( 'Hybrid' ) ) {
 
 			/* Load the template hierarchy if supported. */
 			require_if_theme_supports( 'hybrid-core-template-hierarchy', trailingslashit( HYBRID_FUNCTIONS ) . 'template-hierarchy.php' );
-
-			/* Load the scripts if supported. */
-			require_if_theme_supports( 'hybrid-core-scripts', trailingslashit( HYBRID_FUNCTIONS ) . 'scripts.php' );
 
 			/* Load the post format functionality if post formats are supported. */
 			require_if_theme_supports( 'post-formats', trailingslashit( HYBRID_FUNCTIONS ) . 'post-formats.php' );
