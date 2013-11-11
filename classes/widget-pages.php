@@ -28,7 +28,7 @@ class Hybrid_Widget_Pages extends WP_Widget {
 
 		/* Set up the widget options. */
 		$widget_options = array(
-			'classname'   => 'pages',
+			'classname'   => 'widget-pages widget_pages',
 			'description' => esc_html__( 'An advanced widget that gives you total control over the output of your page links.', 'hybrid-core' )
 		);
 

@@ -28,7 +28,7 @@ class Hybrid_Widget_Nav_Menu extends WP_Widget {
 
 		/* Set up the widget options. */
 		$widget_options = array(
-			'classname'   => 'nav-menu',
+			'classname'   => 'widget-nav-menu widget_nav_menu',
 			'description' => esc_html__( 'An advanced widget that gives you total control over the output of your menus.', 'hybrid-core' )
 		);
 
