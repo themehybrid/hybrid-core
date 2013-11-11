@@ -365,8 +365,10 @@ class Hybrid_Media_Grabber {
 	 */
 	public function filter_dimensions( $html ) {
 
+		$_html = strip_tags( $html, '<object><embed><iframe><video>' );
+
 		/* Find the attributes of the media. */
-		$atts = wp_kses_hair( $html, array( 'http', 'https' ) );
+		$atts = wp_kses_hair( $_html, array( 'http', 'https' ) );
 
 		/* Loop through the media attributes and add them in key/value pairs. */
 		foreach ( $atts as $att )
