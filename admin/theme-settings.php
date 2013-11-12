@@ -203,7 +203,7 @@ final class Hybrid_Theme_Settings{
 			<form method="post" action="options.php">
 				<?php settings_fields( "{$this->prefix}_theme_settings" ); ?>
 				<?php do_settings_sections( $this->settings_page ); ?>
-				<?php submit_button( esc_attr__( 'Update Settings', 'hybrid-core' ), 'primary' ); ?>
+				<?php submit_button( '', 'primary' ); ?>
 			</form>
 
 		</div><!-- wrap -->
