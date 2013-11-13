@@ -80,15 +80,9 @@ function hybrid_enqueue_styles() {
 	if ( !is_array( $supports[0] ) )
 		return;
 
-	/* Get framework styles. */
-	$styles = hybrid_get_styles();
-
 	/* Loop through each of the core framework styles and enqueue them if supported. */
-	foreach ( $supports[0] as $style ) {
-
-		if ( isset( $styles[$style] ) )
-			wp_enqueue_style( $style );
-	}
+	foreach ( $supports[0] as $style )
+		wp_enqueue_style( $style );
 }
 
 /**
