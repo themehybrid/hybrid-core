@@ -126,7 +126,7 @@ function hybrid_apply_atomic( $tag = '', $value = '' ) {
 }
 
 /**
- * Wraps the output of apply_atomic() in a call to do_shortcode(). This allows developers to use 
+ * Wraps the output of hybrid_apply_atomic() in a call to do_shortcode(). This allows developers to use 
  * context-aware functionality alongside shortcodes. Rather than adding a lot of code to the 
  * function itself, developers can create individual functions to handle shortcodes.
  *
@@ -137,7 +137,7 @@ function hybrid_apply_atomic( $tag = '', $value = '' ) {
  * @return mixed  $value The value after it has been filtered.
  */
 function hybrid_apply_atomic_shortcode( $tag = '', $value = '' ) {
-	return do_shortcode( apply_atomic( $tag, $value ) );
+	return do_shortcode( hybrid_apply_atomic( $tag, $value ) );
 }
 
 /**
