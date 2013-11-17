@@ -117,6 +117,58 @@ function hybrid_get_child_theme_link() {
 }
 
 /**
+ * Outputs the site title. 
+ *
+ * @since  0.1.0
+ * @access public
+ * @return void
+ */
+function hybrid_site_title() {
+	echo hybrid_get_site_title();
+}
+
+/**
+ * Returns the linked site title wrapped in an `<h2>` tag.
+ *
+ * @since  2.0.0
+ * @access public
+ * @return string
+ */
+function hybrid_get_site_title() {
+
+	if ( $title = get_bloginfo( 'name' ) )
+		$title = sprintf( '<h1 %s><a href="%s" rel="home">%s</a></h1>', hybrid_get_attr( 'site-title' ), home_url(), $title );
+
+	return apply_filters( 'hybrid_site_title', $title );
+}
+
+/**
+ * Outputs the site description.
+ *
+ * @since  0.1.0
+ * @access public
+ * @return void
+ */
+function hybrid_site_description() {
+	echo hybrid_get_site_description();
+}
+
+/**
+ * Returns the site description wrapped in an `<h2>` tag.
+ *
+ * @since  2.0.0
+ * @access public
+ * @return string
+ */
+function hybrid_get_site_description() {
+
+	if ( $desc = get_bloginfo( 'description' ) )
+		$desc = sprintf( '<h2 %s>%s</h2>', hybrid_get_attr( 'site-description' ), $desc );
+
+	return apply_filters( 'hybrid_site_description', $desc );
+}
+
+/**
  * Outputs the loop title.
  *
  * @since  2.0.0
