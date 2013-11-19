@@ -1,6 +1,7 @@
 <?php
 /**
- * Template functions related to posts.
+ * Template functions related to posts.  The functions in this file are for handling template tags or features 
+ * of template tags that WordPress core does not currently handle.
  *
  * @package    HybridCore
  * @subpackage Functions

@@ -1,6 +1,7 @@
 <?php
 /**
- * General template functions.
+ * General template functions.  These functions are for use throughout the theme's various template files.  
+ * Their main purpose is to handle many of the template tags that are currently lacking in core WordPress.
  *
  * @package    HybridCore
  * @subpackage Functions

@@ -135,7 +135,15 @@ function hybrid_get_context() {
 }
 
 /**
+ * Filters the WordPress body class with a better set of classes that are more consistently handled and 
+ * are backwards compatible with the original body class functionality that existed prior to WordPress 
+ * core adopting this feature.
+ *
  * @since  2.0.0
+ * @access public
+ * @param  array        $classes
+ * @param  string|array $class
+ * @return array
  */
 function hybrid_body_class_filter( $classes, $class ) {
 
@@ -239,7 +247,16 @@ function hybrid_body_class_filter( $classes, $class ) {
 }
 
 /**
+ * Filters the WordPress post class with a better set of classes that are more consistently handled and 
+ * are backwards compatible with the original post class functionality that existed prior to WordPress 
+ * core adopting this feature.
+ *
  * @since  2.0.0
+ * @access public
+ * @param  array        $classes
+ * @param  string|array $class
+ * @param  int          $post_id
+ * @return array
  */
 function hybrid_post_class_filter( $classes, $class, $post_id ) {
 
@@ -284,7 +301,14 @@ function hybrid_post_class_filter( $classes, $class, $post_id ) {
 }
 
 /**
+ * Adds custom classes to the WordPress comment class.
+ *
  * @since  2.0.0
+ * @access public
+ * @param  array        $classes
+ * @param  string|array $class
+ * @param  int          $comment_id
+ * @return array
  */
 function hybrid_comment_class_filter( $classes, $class, $comment_id ) {
 

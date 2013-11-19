@@ -1,6 +1,7 @@
 <?php
 /**
- * Media template functions.
+ * Media template functions. These functions are meant to handle various features needed in theme templates 
+ * for media and attachments.
  *
  * @package    HybridCore
  * @subpackage Functions
