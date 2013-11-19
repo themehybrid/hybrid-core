@@ -110,5 +110,3 @@ function hybrid_unregister_widgets() {
 	unregister_widget( 'WP_Widget_Search' );
 	unregister_widget( 'WP_Widget_Tag_Cloud' );
 }
-
-?>

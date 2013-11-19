@@ -313,5 +313,3 @@ function hybrid_chat_row_id( $chat_author ) {
 	/* Return the array key for the chat author and add "1" to avoid an ID of "0". */
 	return absint( array_search( $chat_author, $_hybrid_post_chat_ids ) ) + 1;
 }
-
-?>

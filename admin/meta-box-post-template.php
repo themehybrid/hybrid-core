@@ -140,5 +140,3 @@ function hybrid_meta_box_post_save_template( $post_id, $post = '' ) {
 	elseif ( current_user_can( 'edit_post_meta', $post_id ) && $new_meta_value && $new_meta_value != $meta_value )
 		update_post_meta( $post_id, $meta_key, $new_meta_value );
 }
-
-?>

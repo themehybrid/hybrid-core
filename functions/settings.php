@@ -69,5 +69,3 @@ function hybrid_get_setting( $option = '' ) {
 function hybrid_get_default_theme_settings() {
 	return apply_filters( hybrid_get_prefix() . '_default_theme_settings', array() );
 }
-
-?>

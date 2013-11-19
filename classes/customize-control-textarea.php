@@ -39,5 +39,3 @@ class Hybrid_Customize_Control_Textarea extends WP_Customize_Control {
 		</label>
 	<?php }
 }
-
-?>

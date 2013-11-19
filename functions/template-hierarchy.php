@@ -240,5 +240,3 @@ function hybrid_comments_template( $template ) {
 	/* Return the found template. */
 	return locate_template( $templates );
 }
-
-?>

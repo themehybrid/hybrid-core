@@ -60,5 +60,3 @@ function hybrid_enqueue_scripts() {
 	if ( isset( $supports[0] ) && in_array( 'mobile-toggle', $supports[0] ) )
 		wp_enqueue_script( 'mobile-toggle' );
 }
-
-?>

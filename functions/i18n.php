@@ -444,4 +444,3 @@ function hybrid_get_region( $locale = '' ) {
 
 	return preg_replace( '/.*?_(.*?)$/i', '$1', $locale );
 }
-

@@ -202,4 +202,3 @@ function hybrid_get_locale_style() {
 
 	return hybrid_locate_theme_file( $styles );
 }
-

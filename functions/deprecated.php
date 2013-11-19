@@ -860,5 +860,3 @@ function hybrid_get_plural_post_format_strings() {
 function hybrid_function_removed( $func = '' ) {
 	die( sprintf( __( '<code>%1$s</code> &mdash; This function has been removed or replaced by another function.', 'hybrid-core' ), $func ) );
 }
-
-?>

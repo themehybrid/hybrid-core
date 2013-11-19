@@ -139,5 +139,3 @@ function hybrid_get_post_templates( $post_type = 'post' ) {
 	/* Return array of post templates. */
 	return $hybrid->post_templates[ $post_type ];
 }
-
-?>

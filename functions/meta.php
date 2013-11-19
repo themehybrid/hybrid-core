@@ -48,5 +48,3 @@ function hybrid_register_meta() {
 function hybrid_sanitize_meta( $meta_value, $meta_key, $meta_type ) {
 	return strip_tags( $meta_value );
 }
-
-?>
