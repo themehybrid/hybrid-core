@@ -13,10 +13,10 @@
  */
 
 /* Register Hybrid Core scripts. */
-add_action( 'wp_enqueue_scripts', 'hybrid_register_scripts', 1 );
+add_action( 'wp_enqueue_scripts', 'hybrid_register_scripts', 0 );
 
 /* Load Hybrid Core scripts. */
-add_action( 'wp_enqueue_scripts', 'hybrid_enqueue_scripts' );
+add_action( 'wp_enqueue_scripts', 'hybrid_enqueue_scripts', 5 );
 
 /**
  * Registers JavaScript files for the framework.  This function merely registers scripts with WordPress using

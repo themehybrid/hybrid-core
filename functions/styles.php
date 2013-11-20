@@ -13,16 +13,16 @@
  */
 
 /* Register Hybrid Core styles. */
-add_action( 'wp_enqueue_scripts', 'hybrid_register_styles', 1 );
+add_action( 'wp_enqueue_scripts', 'hybrid_register_styles', 0 );
 
 /* Load Hybrid Core styles. */
 add_action( 'wp_enqueue_scripts', 'hybrid_enqueue_styles', 5 );
 
 /* Load the development stylsheet in script debug mode. */
-add_filter( 'stylesheet_uri', 'hybrid_min_stylesheet_uri', 10, 2 );
+add_filter( 'stylesheet_uri', 'hybrid_min_stylesheet_uri', 5, 2 );
 
 /* Filters the WP locale stylesheet. */
-add_filter( 'locale_stylesheet_uri', 'hybrid_locale_stylesheet_uri' );
+add_filter( 'locale_stylesheet_uri', 'hybrid_locale_stylesheet_uri', 5 );
 
 /**
  * Registers stylesheets for the framework.  This function merely registers styles with WordPress using
