@@ -14,23 +14,23 @@
  */
 
 /* Filter the date template. */
-add_filter( 'date_template', 'hybrid_date_template' );
+add_filter( 'date_template', 'hybrid_date_template', 5 );
 
 /* Filter the author/user template. */
-add_filter( 'author_template', 'hybrid_user_template' );
+add_filter( 'author_template', 'hybrid_user_template', 5 );
 
 /* Filter the tag and category (taxonomy) templates. */
-add_filter( 'tag_template',      'hybrid_taxonomy_template' );
-add_filter( 'category_template', 'hybrid_taxonomy_template' );
-add_filter( 'taxonomy_template', 'hybrid_taxonomy_template' );
+add_filter( 'tag_template',      'hybrid_taxonomy_template', 5 );
+add_filter( 'category_template', 'hybrid_taxonomy_template', 5 );
+add_filter( 'taxonomy_template', 'hybrid_taxonomy_template', 5 );
 
 /* Filter the single, page, and attachment (singular) templates. */
-add_filter( 'single_template',     'hybrid_singular_template' );
-add_filter( 'page_template',       'hybrid_singular_template' );
-add_filter( 'attachment_template', 'hybrid_singular_template' );
+add_filter( 'single_template',     'hybrid_singular_template', 5 );
+add_filter( 'page_template',       'hybrid_singular_template', 5 );
+add_filter( 'attachment_template', 'hybrid_singular_template', 5 );
 
 /* Filter the comments template. */
-add_filter( 'comments_template', 'hybrid_comments_template' );
+add_filter( 'comments_template', 'hybrid_comments_template', 5 );
 
 /**
  * Overrides WP's default template for date-based archives. Better abstraction of templates than 
