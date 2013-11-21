@@ -12,6 +12,9 @@
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
+/* Default excerpt more. */
+add_filter( 'excerpt_more', 'hybrid_excerpt_more', 5 );
+
 /* Modifies the arguments and output of wp_link_pages(). */
 add_filter( 'wp_link_pages_args', 'hybrid_link_pages_args', 5 );
 add_filter( 'wp_link_pages_link', 'hybrid_link_pages_link', 5 );
@@ -24,6 +27,22 @@ add_filter( 'comment_reply_link',             'hybrid_comment_reply_link_filter'
 add_filter( 'get_avatar',                     'hybrid_get_avatar',                     5 );
 add_filter( 'post_thumbnail_html',            'hybrid_post_thumbnail_html',            5 );
 add_filter( 'comments_popup_link_attributes', 'hybrid_comments_popup_link_attributes', 5 );
+
+/**
+ * Filters the excerpt more output with internationalized text and a link to the post.
+ *
+ * @since  2.0.0
+ * @access public
+ * @param  string  $text
+ * @return string
+ */
+function hybrid_excerpt_more( $text ) {
+
+	if ( 0 !== strpos( $text, '<a' ) )
+		$text = sprintf( ' <a href="%s" class="more-link">%s</a>', get_permalink(), trim( $text ) );
+
+	return $text;
+}
 
 /**
  * Wraps the output of `wp_link_pages()` with `<p class="page-links">` if it's simply wrapped in a 
