@@ -48,7 +48,7 @@ function hybrid_excerpt_more( $text ) {
  * Wraps the output of `wp_link_pages()` with `<p class="page-links">` if it's simply wrapped in a 
  * `<p>` tag.
  *
- * @since  0.1.0
+ * @since  2.0.0
  * @access public
  * @param  array  $args
  * @return array
@@ -62,7 +62,7 @@ function hybrid_link_pages_args( $args ) {
  * Wraps page "links" that aren't actually links (just text) with `<span class="page-numbers">` so that they 
  * can also be styled.  This makes `wp_link_pages()` consistent with the output of `paginate_links()`.
  *
- * @since  0.1.0
+ * @since  2.0.0
  * @access public
  * @param  string  $link
  * @return string
@@ -78,7 +78,7 @@ function hybrid_link_pages_link( $link ) {
 /**
  * Adds microdata to the author posts link.
  *
- * @since  0.1.0
+ * @since  2.0.0
  * @access public
  * @param  string  $link
  * @return string
@@ -100,7 +100,7 @@ function hybrid_the_author_posts_link( $link ) {
 /**
  * Adds microdata to the comment author link.
  *
- * @since  0.1.0
+ * @since  2.0.0
  * @access public
  * @param  string  $link
  * @return string
@@ -124,7 +124,7 @@ function hybrid_get_comment_author_link( $link ) {
 /**
  * Adds microdata to the comment author URL link.
  *
- * @since  0.1.0
+ * @since  2.0.0
  * @access public
  * @param  string  $link
  * @return string
@@ -146,7 +146,7 @@ function hybrid_get_comment_author_url_link( $link ) {
 /**
  * Adds microdata to the comment reply link.
  *
- * @since  0.1.0
+ * @since  2.0.0
  * @access public
  * @param  string  $link
  * @return string
@@ -158,7 +158,7 @@ function hybrid_comment_reply_link_filter( $link ) {
 /**
  * Adds microdata to avatars.
  *
- * @since  0.1.0
+ * @since  2.0.0
  * @access public
  * @param  string  $avatar
  * @return string
@@ -170,7 +170,7 @@ function hybrid_get_avatar( $avatar ) {
 /**
  * Adds microdata to the post thumbnail HTML.
  *
- * @since  0.1.0
+ * @since  2.0.0
  * @access public
  * @param  string  $html
  * @return string
@@ -182,7 +182,7 @@ function hybrid_post_thumbnail_html( $html ) {
 /**
  * Adds microdata to the comments popup link.
  *
- * @since  0.1.0
+ * @since  2.0.0
  * @access public
  * @param  string  $attr
  * @return string
