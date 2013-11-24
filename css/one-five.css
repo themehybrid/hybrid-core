@@ -168,7 +168,7 @@ acronym {
 /* === Big === */
 
 big {
-	font-size: 1.125rem;
+	font-size: 1.125em;
 }
 
 /* === Small, sup, sub === */
@@ -176,7 +176,7 @@ big {
 small, 
 sup, 
 sub {
-	font-size: .875rem;
+	font-size: .8125em;
 }
 
 sup {
