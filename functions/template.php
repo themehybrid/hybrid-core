@@ -94,6 +94,9 @@ function hybrid_get_menu( $name = '' ) {
 	$templates[] = 'menu.php';
 	$templates[] = 'menu/menu.php';
 
+	/* Allow devs to filter the menu template hierarchy. */
+	$templates = apply_filters( 'hybrid_menu_template_hierarchy', $templates );
+
 	locate_template( $templates, true );
 }
 
