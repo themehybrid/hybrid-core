@@ -165,10 +165,10 @@ function hybrid_body_class_filter( $classes, $class ) {
 	/* Check if the current theme is a parent or child theme. */
 	$classes[] = is_child_theme() ? 'child-theme' : 'parent-theme';
 
-	/* Multisite check adds the 'multisite' class and the blog ID. */
+	/* Multisite check adds the 'multisite' class and the site ID. */
 	if ( is_multisite() ) {
 		$classes[] = 'multisite';
-		$classes[] = 'blog-' . get_current_blog_id();
+		$classes[] = 'site-' . get_current_blog_id();
 	}
 
 	/* Date classes. */
