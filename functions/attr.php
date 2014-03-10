@@ -102,7 +102,7 @@ function hybrid_get_attr( $slug, $context = '', $attributes = array() ) {
  */
 function hybrid_attr_body( $attr ) {
 
-	$attr['class']     = join( ' ', get_body_class() );
+	$attr['class']     = $attr['class'] ? $attr['class'] . ' ' . join( ' ', get_body_class() ) : join( ' ', get_body_class() );
 	$attr['dir']       = is_rtl() ? 'rtl' : 'ltr';
 	$attr['itemscope'] = 'itemscope';
 	$attr['itemtype']  = 'http://schema.org/WebPage';
@@ -157,7 +157,7 @@ function hybrid_attr_footer( $attr ) {
 function hybrid_attr_content( $attr ) {
 
 	$attr['id']       = 'content';
-	$attr['class']    = 'content';
+	$attr['class']    = $attr['class'] ? $attr['class'] . ' ' . 'content' : 'content';
 	$attr['role']     = 'main';
 	$attr['itemprop'] = 'mainContentOfPage';
 
@@ -188,7 +188,7 @@ function hybrid_attr_sidebar( $attr, $context ) {
 	if ( !empty( $context ) )
 		$attr['id'] = "sidebar-{$context}";
 
-	$attr['class']     = 'sidebar';
+	$attr['class']     = $attr['class'] ? $attr['class'] . ' ' . 'sidebar' : 'sidebar';
 	$attr['role']      = 'complementary';
 	$attr['itemscope'] = 'itemscope';
 	$attr['itemtype']  = 'http://schema.org/WPSideBar';
@@ -210,7 +210,7 @@ function hybrid_attr_menu( $attr, $context ) {
 	if ( !empty( $context ) )
 		$attr['id'] = "menu-{$context}";
 
-	$attr['class']     = 'menu';
+	$attr['class']     = $attr['class'] ? $attr['class'] . ' ' . 'menu' : 'menu';
 	$attr['role']      = 'navigation';
 	$attr['itemscope'] = 'itemscope';
 	$attr['itemtype']  = 'http://schema.org/SiteNavigationElement';
@@ -267,7 +267,7 @@ function hybrid_attr_site_description( $attr ) {
  */
 function hybrid_attr_loop_meta( $attr ) {
 
-	$attr['class']     = 'loop-meta';
+	$attr['class']     = $attr['class'] ? $attr['class'] . ' ' . 'loop-meta' : 'loop-meta';
 	$attr['itemscope'] = 'itemscope';
 	$attr['itemtype']  = 'http://schema.org/WebPageElement';
 
@@ -285,7 +285,7 @@ function hybrid_attr_loop_meta( $attr ) {
  */
 function hybrid_attr_loop_title( $attr ) {
 
-	$attr['class']     = 'loop-title';
+	$attr['class']     = $attr['class'] ? $attr['class'] . ' ' . 'loop-title' : 'loop-title';
 	$attr['itemprop']  = 'headline';
 
 	return $attr;
@@ -302,7 +302,7 @@ function hybrid_attr_loop_title( $attr ) {
  */
 function hybrid_attr_loop_description( $attr ) {
 
-	$attr['class']     = 'loop-description';
+	$attr['class']     = $attr['class'] ? $attr['class'] . ' ' . 'loop-description' : 'loop-description';
 	$attr['itemprop']  = 'text';
 
 	return $attr;
@@ -326,7 +326,7 @@ function hybrid_attr_post( $attr ) {
 	if ( !empty( $post ) ) {
 
 		$attr['id']        = 'post-' . get_the_ID();
-		$attr['class']     = join( ' ', get_post_class() );
+		$attr['class']     = $attr['class'] ? $attr['class'] . ' ' . join( ' ', get_post_class() ) : join( ' ', get_post_class() );
 		$attr['itemscope'] = 'itemscope';
 
 		if ( 'post' === get_post_type() ) {
@@ -373,7 +373,7 @@ function hybrid_attr_post( $attr ) {
  */
 function hybrid_attr_entry_title( $attr ) {
 
-	$attr['class']    = 'entry-title';
+	$attr['class']    = $attr['class'] ? $attr['class'] . ' ' . 'entry-title' : 'entry-title';
 	$attr['itemprop'] = 'headline';
 
 	return $attr;
@@ -389,7 +389,7 @@ function hybrid_attr_entry_title( $attr ) {
  */
 function hybrid_attr_entry_author( $attr ) {
 
-	$attr['class']     = 'entry-author';
+	$attr['class']     = $attr['class'] ? $attr['class'] . ' ' . 'entry-author' : 'entry-author';
 	$attr['itemprop']  = 'author';
 	$attr['itemscope'] = 'itemscope';
 	$attr['itemtype']  = 'http://schema.org/Person';
@@ -407,7 +407,7 @@ function hybrid_attr_entry_author( $attr ) {
  */
 function hybrid_attr_entry_published( $attr ) {
 
-	$attr['class']    = 'entry-published updated';
+	$attr['class']    = $attr['class'] ? $attr['class'] . ' ' . 'entry-published updated' : 'entry-published updated';
 	$attr['datetime'] = get_the_time( 'Y-m-d\TH:i:sP' );
 
 	/* Translators: Post date/time "title" attribute. */
@@ -426,7 +426,7 @@ function hybrid_attr_entry_published( $attr ) {
  */
 function hybrid_attr_entry_content( $attr ) {
 
-	$attr['class']    = 'entry-content';
+	$attr['class']    = $attr['class'] ? $attr['class'] . ' ' . 'entry-content' : 'entry-content';
 	$attr['itemprop'] = 'articleBody';
 
 	return $attr;
@@ -442,7 +442,7 @@ function hybrid_attr_entry_content( $attr ) {
  */
 function hybrid_attr_entry_summary( $attr ) {
 
-	$attr['class']    = 'entry-summary';
+	$attr['class']    = $attr['class'] ? $attr['class'] . ' ' .  'entry-summary' : 'entry-summary';
 	$attr['itemprop'] = 'description';
 
 	return $attr;
@@ -461,7 +461,7 @@ function hybrid_attr_entry_terms( $attr, $context ) {
 
 	if ( !empty( $context ) ) {
 
-		$attr['class'] = 'entry-terms ' . sanitize_html_class( $context );
+		$attr['class'] = $attr['class'] ? $attr['class'] . ' ' . 'entry-terms ' . sanitize_html_class( $context ) : 'entry-terms ' . sanitize_html_class( $context );
 
 		if ( 'category' === $context )
 			$attr['itemprop'] = 'articleSection';
@@ -488,7 +488,7 @@ function hybrid_attr_entry_terms( $attr, $context ) {
 function hybrid_attr_comment( $attr ) {
 
 	$attr['id']    = 'comment-' . get_comment_ID();
-	$attr['class'] = join( ' ', get_comment_class() );
+	$attr['class'] = $attr['class'] ? $attr['class'] . ' ' . join( ' ', get_comment_class() ) : join( ' ', get_comment_class() );
 
 	if ( in_array( get_comment_type(), array( '', 'comment' ) ) ) {
 
@@ -510,7 +510,7 @@ function hybrid_attr_comment( $attr ) {
  */
 function hybrid_attr_comment_author( $attr ) {
 
-	$attr['class']     = 'comment-author';
+	$attr['class']     = $attr['class'] ? $attr['class'] . ' ' . 'comment-author' : 'comment-author';
 	$attr['itemprop']  = 'creator';
 	$attr['itemscope'] = 'itemscope';
 	$attr['itemtype']  = 'http://schema.org/Person';
@@ -528,7 +528,7 @@ function hybrid_attr_comment_author( $attr ) {
  */
 function hybrid_attr_comment_published( $attr ) {
 
-	$attr['class']    = 'comment-published';
+	$attr['class']    = $attr['class'] ? $attr['class'] . ' ' . 'comment-published' : 'comment-published';
 	$attr['datetime'] = get_comment_time( 'Y-m-d\TH:i:sP' );
 
 	/* Translators: Comment date/time "title" attribute. */
@@ -548,7 +548,7 @@ function hybrid_attr_comment_published( $attr ) {
  */
 function hybrid_attr_comment_permalink( $attr ) {
 
-	$attr['class']    = 'comment-permalink';
+	$attr['class']    = $attr['class'] ? $attr['class'] . ' ' . 'comment-permalink' : 'comment-permalink';
 	$attr['href']     = get_comment_link();
 	$attr['itemprop'] = 'url';
 
@@ -565,7 +565,7 @@ function hybrid_attr_comment_permalink( $attr ) {
  */
 function hybrid_attr_comment_content( $attr ) {
 
-	$attr['class']    = 'comment-content';
+	$attr['class']    = $attr['class'] ? $attr['class'] . ' ' . 'comment-content' : 'comment-content';
 	$attr['itemprop'] = 'commentText';
 
 	return $attr;
