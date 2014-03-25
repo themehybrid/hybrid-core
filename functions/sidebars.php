@@ -29,7 +29,7 @@ function hybrid_register_sidebar( $args ) {
 		'id'            => '',
 		'name'          => '',
 		'description'   => '',
-		'before_widget' => '<section id="%s" class="widget %s">',
+		'before_widget' => '<section id="%1$s" class="widget %2$s">',
 		'after_widget'  => '</section>',
 		'before_title'  => '<h3 class="widget-title">',
 		'after_title'   => '</h3>'
