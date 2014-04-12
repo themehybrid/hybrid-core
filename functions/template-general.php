@@ -470,7 +470,7 @@ function hybrid_search_title( $prefix = '', $display = true ) {
  */
 function hybrid_404_title( $prefix = '', $display = true ) {
 
-	$title = __( '404 Not Found', 'hybrid-core' );
+	$title = $prefix . __( '404 Not Found', 'hybrid-core' );
 
 	if ( false === $display )
 		return $title;
