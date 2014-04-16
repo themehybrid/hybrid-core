@@ -156,7 +156,8 @@ class Hybrid_Media_Grabber {
 	public function set_media() {
 
 		/* Find media in the post content based on WordPress' media-related shortcodes. */
-		$this->do_shortcode_media();
+		if ( empty( $this->media ) )
+			$this->do_shortcode_media();
 
 		/* If no media is found and autoembeds are enabled, check for autoembeds. */
 		if ( empty( $this->media ) && get_option( 'embed_autourls' ) )
@@ -210,12 +211,27 @@ class Hybrid_Media_Grabber {
 			foreach ( $matches as $shortcode ) {
 
 				/* Call the method related to the specific shortcode found and break out of the loop. */
-				if ( in_array( $shortcode[2], array( 'embed', $this->type ) ) ) {
+				if ( in_array( $shortcode[2], array( 'playlist', 'embed', $this->type ) ) ) {
 					call_user_func( array( $this, "do_{$shortcode[2]}_shortcode_media" ), $shortcode );
 					break;
 				}
 			}
 		}
+	}
+
+	/**
+	 * Handles the output of the WordPress playlist feature.  This searches for the [playlist] shortcode 
+	 * if it's used in the content.
+	 *
+	 * @since  2.0.0
+	 * @access public
+	 * @return void
+	 */
+	public function do_playlist_shortcode_media( $shortcode ) {
+
+		$this->original_media = array_shift( $shortcode );
+
+		$this->media = do_shortcode( $this->original_media );
 	}
 
 	/**
