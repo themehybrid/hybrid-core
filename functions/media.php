@@ -23,10 +23,9 @@ add_filter( 'image_size_names_choose', 'hybrid_image_size_names_choose' );
  * @return array
  */
 function hybrid_image_size_names_choose( $sizes ) {
-	global $_wp_additional_image_sizes;
 
 	/* If the theme as set a custom post thumbnail size, give it a nice name. */
-	if ( isset( $_wp_additional_image_sizes['post-thumbnail'] ) )
+	if ( has_image_size( 'post-thumbnail' ) )
 		$sizes['post-thumbnail'] = __( 'Post Thumbnail', 'hybrid-core' );
 
 	/* Return the image size names. */
