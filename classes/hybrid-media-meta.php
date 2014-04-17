@@ -238,7 +238,7 @@ class Hybrid_Media_Meta {
 
 		/* Year. */
 		if ( !empty( $this->meta['year'] ) )
-			$this->items['year'] = array( date_i18n( 'Y', $this->meta['year'] ), $id3_keys['year'] );
+			$this->items['year'] = array( $this->meta['year'], $id3_keys['year'] );
 
 		/* Genre. */
 		if ( !empty( $this->meta['genre'] ) )
