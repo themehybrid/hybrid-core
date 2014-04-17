@@ -213,40 +213,43 @@ class Hybrid_Media_Meta {
 	 */
 	public function audio_meta() {
 
+		/* Get ID3 keys (labels for metadata). */
+		$id3_keys = wp_get_attachment_id3_keys( get_post( $this->args['post_id'] ) );
+
 		/* Formated length of time the audio file runs. */
 		if ( !empty( $this->meta['length_formatted'] ) )
-			$this->items['length_formatted'] = array( $this->meta['length_formatted'], __( 'Run Time', 'hybrid-core' ) );
+			$this->items['length_formatted'] = array( $this->meta['length_formatted'], $id3_keys['length_formatted'] );
 
 		/* Artist. */
 		if ( !empty( $this->meta['artist'] ) )
-			$this->items['artist'] = array( $this->meta['artist'], __( 'Artist', 'hybrid-core' ) );
+			$this->items['artist'] = array( $this->meta['artist'], $id3_keys['artist'] );
 
 		/* Composer. */
 		if ( !empty( $this->meta['composer'] ) )
-			$this->items['composer'] = array( $this->meta['composer'], __( 'Composer', 'hybrid-core' ) );
+			$this->items['composer'] = array( $this->meta['composer'], $id3_keys['composer'] );
 
 		/* Album. */
 		if ( !empty( $this->meta['album'] ) )
-			$this->items['album'] = array( $this->meta['album'], __( 'Album', 'hybrid-core' ) );
+			$this->items['album'] = array( $this->meta['album'], $id3_keys['album'] );
 
 		/* Track number (should also be an album if this is set). */
 		if ( !empty( $this->meta['track_number'] ) )
-			$this->items['track_number'] = array( $this->meta['track_number'], __( 'Track', 'hybrid-core' ) );
+			$this->items['track_number'] = array( $this->meta['track_number'], $id3_keys['track_number'] );
 
 		/* Year. */
 		if ( !empty( $this->meta['year'] ) )
-			$this->items['year'] = array( date_i18n( 'Y', $this->meta['year'] ), __( 'Year', 'hybrid-core' ) );
+			$this->items['year'] = array( date_i18n( 'Y', $this->meta['year'] ), $id3_keys['year'] );
 
 		/* Genre. */
 		if ( !empty( $this->meta['genre'] ) )
-			$this->items['genre'] = array( $this->meta['genre'], __( 'Genre', 'hybrid-core' ) );
+			$this->items['genre'] = array( $this->meta['genre'], $id3_keys['genre'] );
 
 		/* File name.  We're linking this to the actual file URL. */
 		$this->items['file_name'] = array( '<a href="' . esc_url( wp_get_attachment_url( $this->args['post_id'] ) ) . '">' . basename( get_attached_file( $this->args['post_id'] ) ) . '</a>', __( 'File Name', 'hybrid-core' ) );
 
 		/* File size. */
 		if ( !empty( $this->meta['filesize'] ) )
-			$this->items['filesize'] = array( size_format( $this->meta['filesize'], 2 ), __( 'File Size', 'hybrid-core' ) );
+			$this->items['filesize'] = array( size_format( $this->meta['filesize'], 2 ), $id3_keys['filesize'] );
 
 		/* File type (the metadata for this can be incorrect, so we're just looking at the actual file). */
 		if ( preg_match( '/^.*?\.(\w+)$/', get_attached_file( $this->args['post_id'] ), $matches ) )
@@ -254,8 +257,7 @@ class Hybrid_Media_Meta {
 
 		/* Mime type. */
 		if ( !empty( $this->meta['mime_type'] ) )
-			$this->items['mime_type'] = array( $this->meta['mime_type'], __( 'Mime Type', 'hybrid-core' ) );
-
+			$this->items['mime_type'] = array( $this->meta['mime_type'], $id3_keys['mime_type'] );
 	}
 
 	/**
@@ -267,9 +269,12 @@ class Hybrid_Media_Meta {
 	 */
 	public function video_meta() {
 
+		/* Get ID3 keys (labels for metadata). */
+		$id3_keys = wp_get_attachment_id3_keys( get_post( $this->args['post_id'] ) );
+
 		/* Formated length of time the video file runs. */
 		if ( !empty( $this->meta['length_formatted'] ) )
-			$this->items['length_formatted'] = array( $this->meta['length_formatted'], __( 'Run Time', 'hybrid-core' ) );
+			$this->items['length_formatted'] = array( $this->meta['length_formatted'], $id3_keys['length_formatted'] );
 
 		/* Dimensions (width x height in pixels). */
 		if ( !empty( $this->meta['width'] ) && !empty( $this->meta['height'] ) )
@@ -281,7 +286,7 @@ class Hybrid_Media_Meta {
 
 		/* File size. */
 		if ( !empty( $this->meta['filesize'] ) )
-			$this->items['filesize'] = array( size_format( $this->meta['filesize'], 2 ), __( 'File Size', 'hybrid-core' ) );
+			$this->items['filesize'] = array( size_format( $this->meta['filesize'], 2 ), $id3_keys['filesize'] );
 
 		/* File type (the metadata for this can be incorrect, so we're just looking at the actual file). */
 		if ( preg_match( '/^.*?\.(\w+)$/', get_attached_file( $this->args['post_id'] ), $matches ) )
@@ -289,6 +294,6 @@ class Hybrid_Media_Meta {
 
 		/* Mime type. */
 		if ( !empty( $this->meta['mime_type'] ) )
-			$this->items['mime_type'] = array( $this->meta['mime_type'], __( 'Mime Type', 'hybrid-core' ) );
+			$this->items['mime_type'] = array( $this->meta['mime_type'], $id3_keys['mime_type'] );
 	}
 }
