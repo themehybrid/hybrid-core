@@ -26,6 +26,7 @@
  * with the WordPress settings API.
  *
  * @since  1.0.0
+ * @access public
  * @param  string  $setting
  * @return string
  */
@@ -38,6 +39,7 @@ function hybrid_settings_field_id( $setting ) {
  * use with the WordPress settings API.
  *
  * @since  1.0.0
+ * @access public
  * @param  string  $setting
  * @return string
  */

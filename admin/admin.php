@@ -17,13 +17,14 @@ add_action( 'admin_menu', 'hybrid_admin_setup' );
 /**
  * Sets up the adminstration functionality for the framework and themes.
  *
- * @since 1.3.0
+ * @since  1.3.0
+ * @access public
  * @return void
  */
 function hybrid_admin_setup() {
 
 	/* Load the post meta boxes on the new post and edit post screens. */
-	add_action( 'load-post.php', 'hybrid_admin_load_post_meta_boxes' );
+	add_action( 'load-post.php',     'hybrid_admin_load_post_meta_boxes' );
 	add_action( 'load-post-new.php', 'hybrid_admin_load_post_meta_boxes' );
 
 	/* Registers admin stylesheets for the framework. */
@@ -37,7 +38,8 @@ function hybrid_admin_setup() {
  * Loads the core post meta box files on the 'load-post.php' action hook.  Each meta box file is only loaded if 
  * the theme declares support for the feature.
  *
- * @since 1.2.0
+ * @since  1.2.0
+ * @access public
  * @return void
  */
 function hybrid_admin_load_post_meta_boxes() {
@@ -80,9 +82,11 @@ function hybrid_admin_enqueue_styles( $hook_suffix ) {
  * would be used to grab custom singular post (any post type) templates.  It is a recreation of the WordPress
  * page templates function because it doesn't allow for other types of templates.
  *
- * @since 0.7.0
- * @param string $post_type The name of the post type to get templates for.
- * @return array $post_templates The array of templates.
+ * @since  0.7.0
+ * @access public
+ * @global object $hybrid
+ * @param  string $post_type      The name of the post type to get templates for.
+ * @return array  $post_templates The array of templates.
  */
 function hybrid_get_post_templates( $post_type = 'post' ) {
 	global $hybrid;
@@ -109,9 +113,9 @@ function hybrid_get_post_templates( $post_type = 'post' ) {
 
 	/* If a child theme is active, get its files and merge with the parent theme files. */
 	if ( is_child_theme() ) {
-		$child = wp_get_theme();
+		$child       = wp_get_theme();
 		$child_files = (array) $child->get_files( 'php', 1 );
-		$files = array_merge( $files, $child_files );
+		$files       = array_merge( $files, $child_files );
 	}
 
 	/* Loop through each of the PHP files and check if they are post templates. */
