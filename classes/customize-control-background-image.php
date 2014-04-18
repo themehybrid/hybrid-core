@@ -4,13 +4,19 @@
  * multiple default backgrounds for the user to choose from.  To use this, the theme author 
  * should remove the 'background_image' control and add this control in its place.
  *
- * @since     2.0.0
- * @author    Justin Tadlock <justin@justintadlock.com>
- * @copyright Copyright (c) 2013, Justin Tadlock
- * @link      http://justintadlock.com
- * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @package    Hybrid
+ * @subpackage Classes
+ * @author     Justin Tadlock <justin@justintadlock.com>
+ * @copyright  Copyright (c) 2008 - 2014, Justin Tadlock
+ * @link       http://themehybrid.com/hybrid-core
+ * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
+/**
+ * Background image customize control class.
+ *
+ * @since 2.0.0
+ */
 class Hybrid_Customize_Control_Background_Image extends WP_Customize_Background_Image_Control {
 
 	/**
