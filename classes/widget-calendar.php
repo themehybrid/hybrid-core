@@ -28,7 +28,7 @@ class Hybrid_Widget_Calendar extends WP_Widget {
 
 		/* Set up the widget options. */
 		$widget_options = array(
-			'classname'   => 'widget-calendar widget_calendar',
+			'classname'   => 'calendar',
 			'description' => esc_html__( 'An advanced widget that gives you total control over the output of your calendar.', 'hybrid-core' )
 		);
 

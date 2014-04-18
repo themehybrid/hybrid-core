@@ -20,6 +20,15 @@
 class Hybrid_Widget_Nav_Menu extends WP_Widget {
 
 	/**
+	 * Default arguments for the widget settings.
+	 *
+	 * @since  2.0.0
+	 * @access public
+	 * @var    array
+	 */
+	public $defaults = array();
+
+	/**
 	 * Set up the widget's unique name, ID, class, description, and other options.
 	 *
 	 * @since 1.2.0
@@ -28,7 +37,7 @@ class Hybrid_Widget_Nav_Menu extends WP_Widget {
 
 		/* Set up the widget options. */
 		$widget_options = array(
-			'classname'   => 'widget-nav-menu widget_nav_menu',
+			'classname'   => 'nav-menu',
 			'description' => esc_html__( 'An advanced widget that gives you total control over the output of your menus.', 'hybrid-core' )
 		);
 
@@ -45,6 +54,24 @@ class Hybrid_Widget_Nav_Menu extends WP_Widget {
 			$widget_options,                        // $this->widget_options
 			$control_options                        // $this->control_options
 		);
+
+		/* Set up the defaults. */
+		$this->defaults = array(
+			'title'           => esc_attr__( 'Navigation', 'hybrid-core' ),
+			'menu'            => '',
+			'container'       => 'div',
+			'container_id'    => '',
+			'container_class' => '',
+			'menu_id'         => '',
+			'menu_class'      => 'nav-menu',
+			'depth'           => 0,
+			'before'          => '',
+			'after'           => '',
+			'link_before'     => '',
+			'link_after'      => '',
+			'fallback_cb'     => 'wp_page_menu',
+			'theme_location'  => ''
+		);
 	}
 
 	/**
@@ -56,7 +83,7 @@ class Hybrid_Widget_Nav_Menu extends WP_Widget {
 		extract( $sidebar );
 
 		/* Set the $args for wp_nav_menu() to the $instance array. */
-		$args = $instance;
+		$args = wp_parse_args( $instance, $this->defaults );
 
 		/* Overwrite the $echo argument and set it to false. */
 		$args['echo'] = false;
@@ -65,8 +92,8 @@ class Hybrid_Widget_Nav_Menu extends WP_Widget {
 		echo $before_widget;
 
 		/* If a title was input by the user, display it. */
-		if ( !empty( $instance['title'] ) )
-			echo $before_title . apply_filters( 'widget_title',  $instance['title'], $instance, $this->id_base ) . $after_title;
+		if ( !empty( $args['title'] ) )
+			echo $before_title . apply_filters( 'widget_title',  $args['title'], $instance, $this->id_base ) . $after_title;
 
 		/* Output the nav menu. */
 		echo str_replace( array( "\r", "\n", "\t" ), '', wp_nav_menu( $args ) );
@@ -92,6 +119,7 @@ class Hybrid_Widget_Nav_Menu extends WP_Widget {
 		$instance['menu_id']         = strip_tags( $new_instance['menu_id'] );
 		$instance['menu_class']      = strip_tags( $new_instance['menu_class'] );
 		$instance['fallback_cb']     = strip_tags( $new_instance['fallback_cb'] );
+		$instance['theme_location']  = strip_tags( $new_instance['theme_location'] );
 
 		return $instance;
 	}
@@ -103,27 +131,11 @@ class Hybrid_Widget_Nav_Menu extends WP_Widget {
 	 */
 	function form( $instance ) {
 
-		/* Set up the default form values. */
-		$defaults = array(
-			'title'           => esc_attr__( 'Navigation', 'hybrid-core' ),
-			'menu'            => '',
-			'container'       => 'div',
-			'container_id'    => '',
-			'container_class' => '',
-			'menu_id'         => '',
-			'menu_class'      => 'nav-menu',
-			'depth'           => 0,
-			'before'          => '',
-			'after'           => '',
-			'link_before'     => '',
-			'link_after'      => '',
-			'fallback_cb'     => 'wp_page_menu'
-		);
-
 		/* Merge the user-selected arguments with the defaults. */
-		$instance = wp_parse_args( (array) $instance, $defaults );
+		$instance = wp_parse_args( (array) $instance, $this->defaults );
 
-		$container = apply_filters( 'wp_nav_menu_container_allowedtags', array( 'div', 'nav' ) );
+		$container       = apply_filters( 'wp_nav_menu_container_allowedtags', array( 'div', 'nav' ) );
+		$theme_locations = get_registered_nav_menus();
 		?>
 
 		<div class="hybrid-widget-controls columns-2">
@@ -134,6 +146,7 @@ class Hybrid_Widget_Nav_Menu extends WP_Widget {
 		<p>
 			<label for="<?php echo $this->get_field_id( 'menu' ); ?>"><code>menu</code></label> 
 			<select class="widefat" id="<?php echo $this->get_field_id( 'menu' ); ?>" name="<?php echo $this->get_field_name( 'menu' ); ?>">
+				<option value=""></option>
 				<?php foreach ( wp_get_nav_menus() as $menu ) { ?>
 					<option value="<?php echo esc_attr( $menu->term_id ); ?>" <?php selected( $instance['menu'], $menu->term_id ); ?>><?php echo esc_html( $menu->name ); ?></option>
 				<?php } ?>
@@ -159,13 +172,13 @@ class Hybrid_Widget_Nav_Menu extends WP_Widget {
 			<label for="<?php echo $this->get_field_id( 'menu_id' ); ?>"><code>menu_id</code></label>
 			<input type="text" class="smallfat code" id="<?php echo $this->get_field_id( 'menu_id' ); ?>" name="<?php echo $this->get_field_name( 'menu_id' ); ?>" value="<?php echo esc_attr( $instance['menu_id'] ); ?>" />
 		</p>
-		</div>
-
-		<div class="hybrid-widget-controls columns-2 column-last">
 		<p>
 			<label for="<?php echo $this->get_field_id( 'menu_class' ); ?>"><code>menu_class</code></label>
 			<input type="text" class="smallfat code" id="<?php echo $this->get_field_id( 'menu_class' ); ?>" name="<?php echo $this->get_field_name( 'menu_class' ); ?>" value="<?php echo esc_attr( $instance['menu_class'] ); ?>" />
 		</p>
+		</div>
+
+		<div class="hybrid-widget-controls columns-2 column-last">
 		<p>
 			<label for="<?php echo $this->get_field_id( 'depth' ); ?>"><code>depth</code></label>
 			<input type="text" class="smallfat code" id="<?php echo $this->get_field_id( 'depth' ); ?>" name="<?php echo $this->get_field_name( 'depth' ); ?>" value="<?php echo esc_attr( $instance['depth'] ); ?>" />
@@ -190,6 +203,17 @@ class Hybrid_Widget_Nav_Menu extends WP_Widget {
 			<label for="<?php echo $this->get_field_id( 'fallback_cb' ); ?>"><code>fallback_cb</code></label>
 			<input type="text" class="widefat code" id="<?php echo $this->get_field_id( 'fallback_cb' ); ?>" name="<?php echo $this->get_field_name( 'fallback_cb' ); ?>" value="<?php echo esc_attr( $instance['fallback_cb'] ); ?>" />
 		</p>
+		<?php if ( !empty( $theme_locations ) ) { ?>
+			<p>
+				<label for="<?php echo $this->get_field_id( 'theme_location' ); ?>"><code>theme_location</code></label>
+				<select class="widefat" id="<?php echo $this->get_field_id( 'theme_location' ); ?>" name="<?php echo $this->get_field_name( 'theme_location' ); ?>">
+					<option value=""></option>
+					<?php foreach ( $theme_locations as $location => $label ) { ?>
+						<option value="<?php echo esc_attr( $location ); ?>" <?php selected( $instance['theme_location'], $location ); ?>><?php echo esc_html( $label ); ?></option>
+					<?php } ?>
+				</select>
+			</p>
+		<?php } ?>
 		</div>
 		<div style="clear:both;">&nbsp;</div>
 	<?php

@@ -20,6 +20,15 @@
 class Hybrid_Widget_Tags extends WP_Widget {
 
 	/**
+	 * Default arguments for the widget settings.
+	 *
+	 * @since  2.0.0
+	 * @access public
+	 * @var    array
+	 */
+	public $defaults = array();
+
+	/**
 	 * Set up the widget's unique name, ID, class, description, and other options.
 	 *
 	 * @since 1.2.0
@@ -28,7 +37,7 @@ class Hybrid_Widget_Tags extends WP_Widget {
 
 		/* Set up the widget options. */
 		$widget_options = array(
-			'classname'   => 'widget-tags widget_tag_cloud',
+			'classname'   => 'tags',
 			'description' => esc_html__( 'An advanced widget that gives you total control over the output of your tags.', 'hybrid-core' )
 		);
 
@@ -45,6 +54,31 @@ class Hybrid_Widget_Tags extends WP_Widget {
 			$widget_options,             // $this->widget_options
 			$control_options             // $this->control_options
 		);
+
+		/* Set up the defaults. */
+		$this->defaults = array(
+			'title'                      => esc_attr__( 'Tags', 'hybrid-core' ),
+			'order'                      => 'ASC',
+			'orderby'                    => 'name',
+			'format'                     => 'flat',
+			'include'                    => '',
+			'exclude'                    => '',
+			'unit'                       => 'pt',
+			'smallest'                   => 8,
+			'largest'                    => 22,
+			'link'                       => 'view',
+			'number'                     => 25,
+			'separator'                  => ' ',
+			'child_of'                   => '',
+			'parent'                     => '',
+			'taxonomy'                   => array( 'post_tag' ),
+			'hide_empty'                 => 1,
+			'pad_counts'                 => false,
+			'search'                     => '',
+			'name__like'                 => '',
+			'topic_count_text_callback'  => 'default_topic_count_text',
+			'topic_count_scale_callback' => 'default_topic_count_scale',
+		);
 	}
 
 	/**
@@ -56,7 +90,7 @@ class Hybrid_Widget_Tags extends WP_Widget {
 		extract( $sidebar );
 
 		/* Set the $args for wp_tag_cloud() to the $instance array. */
-		$args = $instance;
+		$args = wp_parse_args( $instance, $this->defaults );
 
 		/* Make sure empty callbacks aren't passed for custom functions. */
 		$args['topic_count_text_callback'] = !empty( $args['topic_count_text_callback'] ) ? $args['topic_count_text_callback'] : 'default_topic_count_text';
@@ -72,17 +106,17 @@ class Hybrid_Widget_Tags extends WP_Widget {
 		echo $before_widget;
 
 		/* If a title was input by the user, display it. */
-		if ( !empty( $instance['title'] ) )
-			echo $before_title . apply_filters( 'widget_title',  $instance['title'], $instance, $this->id_base ) . $after_title;
+		if ( !empty( $args['title'] ) )
+			echo $before_title . apply_filters( 'widget_title',  $args['title'], $instance, $this->id_base ) . $after_title;
 
 		/* Get the tag cloud. */
 		$tags = str_replace( array( "\r", "\n", "\t" ), ' ', wp_tag_cloud( $args ) );
 
 		/* If $format should be flat, wrap it in the <p> element. */
-		if ( 'flat' == $instance['format'] ) {
+		if ( 'flat' == $args['format'] ) {
 			$classes = array( 'term-cloud' );
 
-			foreach ( $instance['taxonomy'] as $tax )
+			foreach ( $args['taxonomy'] as $tax )
 				$classes[] = sanitize_html_class( "{$tax}-cloud" );
 
 			$tags = '<p class="' . join( $classes, ' ' ) . '">' . $tags . '</p>';
@@ -141,33 +175,8 @@ class Hybrid_Widget_Tags extends WP_Widget {
 	 */
 	function form( $instance ) {
 
-		/* Set up the default form values. */
-		$defaults = array(
-			'title'                      => esc_attr__( 'Tags', 'hybrid-core' ),
-			'order'                      => 'ASC',
-			'orderby'                    => 'name',
-			'format'                     => 'flat',
-			'include'                    => '',
-			'exclude'                    => '',
-			'unit'                       => 'pt',
-			'smallest'                   => 8,
-			'largest'                    => 22,
-			'link'                       => 'view',
-			'number'                     => 25,
-			'separator'                  => ' ',
-			'child_of'                   => '',
-			'parent'                     => '',
-			'taxonomy'                   => array( 'post_tag' ),
-			'hide_empty'                 => 1,
-			'pad_counts'                 => false,
-			'search'                     => '',
-			'name__like'                 => '',
-			'topic_count_text_callback'  => 'default_topic_count_text',
-			'topic_count_scale_callback' => 'default_topic_count_scale',
-		);
-
 		/* Merge the user-selected arguments with the defaults. */
-		$instance = wp_parse_args( (array) $instance, $defaults );
+		$instance = wp_parse_args( (array) $instance, $this->defaults );
 
 		/* <select> element options. */
 		$taxonomies = get_taxonomies( array( 'show_tagcloud' => true ), 'objects' );

@@ -20,6 +20,15 @@
 class Hybrid_Widget_Archives extends WP_Widget {
 
 	/**
+	 * Default arguments for the widget settings.
+	 *
+	 * @since  2.0.0
+	 * @access public
+	 * @var    array
+	 */
+	public $defaults = array();
+
+	/**
 	 * Set up the widget's unique name, ID, class, description, and other options.
 	 *
 	 * @since 1.2.0
@@ -28,7 +37,7 @@ class Hybrid_Widget_Archives extends WP_Widget {
 
 		/* Set up the widget options. */
 		$widget_options = array(
-			'classname'   => 'widget-archives widget_archive',
+			'classname'   => 'archives',
 			'description' => esc_html__( 'An advanced widget that gives you total control over the output of your archives.', 'hybrid-core' )
 		);
 
@@ -45,6 +54,18 @@ class Hybrid_Widget_Archives extends WP_Widget {
 			$widget_options,                 // $this->widget_options
 			$control_options                 // $this->control_options
 		);
+
+		/* Set up defaults. */
+		$this->defaults = array(
+			'title'           => esc_attr__( 'Archives', 'hybrid-core' ),
+			'limit'           => 10,
+			'type'            => 'monthly',
+			'order'           => 'DESC',
+			'format'          => 'html',
+			'before'          => '',
+			'after'           => '',
+			'show_post_count' => false
+		);
 	}
 
 	/**
@@ -55,12 +76,8 @@ class Hybrid_Widget_Archives extends WP_Widget {
 	function widget( $sidebar, $instance ) {
 		extract( $sidebar );
 
-		$instance['limit']  = !empty( $instance['limit']  ) ? $instance['limit']  : 10;
-		$instance['type']   = !empty( $instance['type']   ) ? $instance['type']   : 'monthly';
-		$instance['format'] = !empty( $instance['format'] ) ? $instance['format'] : 'html';
-
 		/* Set the $args for wp_get_archives() to the $instance array. */
-		$args = $instance;
+		$args = wp_parse_args( $instance, $this->defaults );
 
 		/* Overwrite the $echo argument and set it to false. */
 		$args['echo'] = false;
@@ -69,8 +86,8 @@ class Hybrid_Widget_Archives extends WP_Widget {
 		echo $before_widget;
 
 		/* If a title was input by the user, display it. */
-		if ( !empty( $instance['title'] ) )
-			echo $before_title . apply_filters( 'widget_title',  $instance['title'], $instance, $this->id_base ) . $after_title;
+		if ( !empty( $args['title'] ) )
+			echo $before_title . apply_filters( 'widget_title',  $args['title'], $instance, $this->id_base ) . $after_title;
 
 		/* Get the archives list. */
 		$archives = str_replace( array( "\r", "\n", "\t" ), '', wp_get_archives( $args ) );
@@ -141,20 +158,8 @@ class Hybrid_Widget_Archives extends WP_Widget {
 	 */
 	function form( $instance ) {
 
-		/* Set up the default form values. */
-		$defaults = array(
-			'title'           => esc_attr__( 'Archives', 'hybrid-core' ),
-			'limit'           => 10,
-			'type'            => 'monthly',
-			'order'           => 'DESC',
-			'format'          => 'html',
-			'before'          => '',
-			'after'           => '',
-			'show_post_count' => false
-		);
-
 		/* Merge the user-selected arguments with the defaults. */
-		$instance = wp_parse_args( (array) $instance, $defaults );
+		$instance = wp_parse_args( (array) $instance, $this->defaults );
 
 		/* Create an array of archive types. */
 		$type = array( 

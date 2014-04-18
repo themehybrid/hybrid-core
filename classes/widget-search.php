@@ -21,6 +21,15 @@
 class Hybrid_Widget_Search extends WP_Widget {
 
 	/**
+	 * Default arguments for the widget settings.
+	 *
+	 * @since  2.0.0
+	 * @access public
+	 * @var    array
+	 */
+	public $defaults = array();
+
+	/**
 	 * Set up the widget's unique name, ID, class, description, and other options.
 	 *
 	 * @since 1.2.0
@@ -29,7 +38,7 @@ class Hybrid_Widget_Search extends WP_Widget {
 
 		/* Set up the widget options. */
 		$widget_options = array(
-			'classname'   => 'widget-search widget_search',
+			'classname'   => 'search',
 			'description' => esc_html__( 'An advanced widget that gives you total control over the output of your search form.', 'hybrid-core' )
 		);
 
@@ -46,6 +55,15 @@ class Hybrid_Widget_Search extends WP_Widget {
 			$widget_options,               // $this->widget_options
 			$control_options               // $this->control_options
 		);
+
+		/* Set up the defaults. */
+		$this->defaults = array(
+			'title'         => esc_attr__( 'Search', 'hybrid-core' ),
+			'theme_search'  => false,
+			'search_label'  => '',
+			'search_text'   => '',
+			'search_submit' => ''
+		);
 	}
 
 	/**
@@ -55,6 +73,8 @@ class Hybrid_Widget_Search extends WP_Widget {
 	 */
 	function widget( $sidebar, $instance ) {
 		extract( $sidebar );
+
+		$instance = wp_parse_args( $instance, $this->defaults );
 
 		/* Output the theme's $before_widget wrapper. */
 		echo $before_widget;
@@ -88,7 +108,7 @@ class Hybrid_Widget_Search extends WP_Widget {
 			$search .= '<input class="search-text" type="text" name="s" id="search-text' . esc_attr( $this->id_base ) . '" value="' . $search_text . '" onfocus="if(this.value==this.defaultValue)this.value=\'\';" onblur="if(this.value==\'\')this.value=this.defaultValue;" />';
 
 			/* Search form submit button. */
-			if ( $instance['search_submit'] )
+			if ( !empty( $instance['search_submit'] ) )
 				$search .= '<input class="search-submit button" name="submit" type="submit" id="search-submit' . esc_attr( $this->id_base ). '" value="' . esc_attr( $instance['search_submit'] ) . '" />';
 
 			/* Close the form. */
@@ -127,17 +147,8 @@ class Hybrid_Widget_Search extends WP_Widget {
 	 */
 	function form( $instance ) {
 
-		/* Set up the default form values. */
-		$defaults = array(
-			'title'         => esc_attr__( 'Search', 'hybrid-core' ),
-			'theme_search'  => false,
-			'search_label'  => '',
-			'search_text'   => '',
-			'search_submit' => ''
-		);
-
 		/* Merge the user-selected arguments with the defaults. */
-		$instance = wp_parse_args( (array) $instance, $defaults ); ?>
+		$instance = wp_parse_args( (array) $instance, $this->defaults ); ?>
 
 		<div class="hybrid-widget-controls columns-2">
 		<p>

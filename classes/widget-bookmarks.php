@@ -20,6 +20,15 @@
 class Hybrid_Widget_Bookmarks extends WP_Widget {
 
 	/**
+	 * Default arguments for the widget settings.
+	 *
+	 * @since  2.0.0
+	 * @access public
+	 * @var    array
+	 */
+	public $defaults = array();
+
+	/**
 	 * Set up the widget's unique name, ID, class, description, and other options.
 	 *
 	 * @since 1.2.0
@@ -28,7 +37,7 @@ class Hybrid_Widget_Bookmarks extends WP_Widget {
 
 		/* Set up the widget options. */
 		$widget_options = array(
-			'classname'   => 'widget-bookmarks widget_links',
+			'classname'   => 'bookmarks',
 			'description' => esc_html__( 'An advanced widget that gives you total control over the output of your bookmarks (links).', 'hybrid-core' )
 		);
 
@@ -44,6 +53,33 @@ class Hybrid_Widget_Bookmarks extends WP_Widget {
 			__( 'Bookmarks', 'hybrid-core' ), // $this->name	
 			$widget_options,                  // $this->widget_options
 			$control_options                  // $this->control_options
+		);
+
+		/* Set up the defaults. */
+		$this->defaults = array(
+			'title_li'         => esc_attr__( 'Bookmarks', 'hybrid-core' ),
+			'categorize'       => true,
+			'category_order'   => 'ASC',
+			'category_orderby' => 'name',
+			'category'         => array(),
+			'exclude_category' => array(),
+			'limit'            => -1,
+			'order'            => 'ASC',
+			'orderby'          => 'name',
+			'include'          => array(),
+			'exclude'          => array(),
+			'search'           => '',
+			'hide_invisible'   => true,
+			'show_description' => false,
+			'show_images'      => false,
+			'show_rating'      => false,
+			'show_updated'     => false,
+			'show_private'     => false,
+			'show_name'        => false,
+			'class'            => 'linkcat',
+			'link_before'      => '<span>',
+			'link_after'       => '</span>',
+			'between'          => '<br />',
 		);
 	}
 
@@ -64,7 +100,7 @@ class Hybrid_Widget_Bookmarks extends WP_Widget {
 			$before_widget = str_replace( 'class="', 'class="' . esc_attr( $instance['class'] ) . ' ', $before_widget );
 
 		/* Set the $args for wp_list_bookmarks() to the $instance array. */
-		$args = $instance;
+		$args = wp_parse_args( $instance, $this->defaults );
 
 		/* wp_list_bookmarks() hasn't been updated in WP to use wp_parse_id_list(), so we have to pass strings for includes/excludes. */
 		if ( !empty( $args['category'] ) && is_array( $args['category'] ) )
@@ -145,35 +181,8 @@ class Hybrid_Widget_Bookmarks extends WP_Widget {
 	 */
 	function form( $instance ) {
 
-		/* Set up the default form values. */
-		$defaults = array(
-			'title_li'         => esc_attr__( 'Bookmarks', 'hybrid-core' ),
-			'categorize'       => true,
-			'category_order'   => 'ASC',
-			'category_orderby' => 'name',
-			'category'         => array(),
-			'exclude_category' => array(),
-			'limit'            => -1,
-			'order'            => 'ASC',
-			'orderby'          => 'name',
-			'include'          => array(),
-			'exclude'          => array(),
-			'search'           => '',
-			'hide_invisible'   => true,
-			'show_description' => false,
-			'show_images'      => false,
-			'show_rating'      => false,
-			'show_updated'     => false,
-			'show_private'     => false,
-			'show_name'        => false,
-			'class'            => 'linkcat',
-			'link_before'      => '<span>',
-			'link_after'       => '</span>',
-			'between'          => '<br />',
-		);
-
 		/* Merge the user-selected arguments with the defaults. */
-		$instance = wp_parse_args( (array) $instance, $defaults );
+		$instance = wp_parse_args( (array) $instance, $this->defaults );
 
 		$terms = get_terms( 'link_category' );
 		$bookmarks = get_bookmarks( array( 'hide_invisible' => false ) );

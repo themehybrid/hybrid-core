@@ -20,6 +20,15 @@
 class Hybrid_Widget_Authors extends WP_Widget {
 
 	/**
+	 * Default arguments for the widget settings.
+	 *
+	 * @since  2.0.0
+	 * @access public
+	 * @var    array
+	 */
+	public $defaults = array();
+
+	/**
 	 * Set up the widget's unique name, ID, class, description, and other options.
 	 *
 	 * @since 1.2.0
@@ -28,7 +37,7 @@ class Hybrid_Widget_Authors extends WP_Widget {
 
 		/* Set up the widget options. */
 		$widget_options = array(
-			'classname'   => 'widget-authors',
+			'classname'   => 'authors',
 			'description' => esc_html__( 'An advanced widget that gives you total control over the output of your author lists.', 'hybrid-core' )
 		);
 
@@ -45,6 +54,24 @@ class Hybrid_Widget_Authors extends WP_Widget {
 			$widget_options,                // $this->widget_options
 			$control_options                // $this->control_options
 		);
+
+		/* Set up defaults. */
+		$this->defaults = array(
+			'title'         => esc_attr__( 'Authors', 'hybrid-core' ),
+			'order'         => 'ASC',
+			'orderby'       => 'display_name',
+			'number'        => '',
+			'include'       => '',
+			'exclude'       => '',
+			'optioncount'   => false,
+			'exclude_admin' => false,
+			'show_fullname' => true,
+			'hide_empty'    => true,
+			'style'         => 'list',
+			'html'          => true,
+			'feed'          => '',
+			'feed_image'    => ''
+		);
 	}
 
 	/**
@@ -56,7 +83,7 @@ class Hybrid_Widget_Authors extends WP_Widget {
 		extract( $sidebar );
 
 		/* Set the $args for wp_list_authors() to the $instance array. */
-		$args = $instance;
+		$args = wp_parse_args( $instance, $this->defaults );
 
 		/* Overwrite the $echo argument and set it to false. */
 		$args['echo'] = false;
@@ -65,8 +92,8 @@ class Hybrid_Widget_Authors extends WP_Widget {
 		echo $before_widget;
 
 		/* If a title was input by the user, display it. */
-		if ( !empty( $instance['title'] ) )
-			echo $before_title . apply_filters( 'widget_title',  $instance['title'], $instance, $this->id_base ) . $after_title;
+		if ( !empty( $args['title'] ) )
+			echo $before_title . apply_filters( 'widget_title',  $args['title'], $instance, $this->id_base ) . $after_title;
 
 		/* Get the authors list. */
 		$authors = str_replace( array( "\r", "\n", "\t" ), '', wp_list_authors( $args ) );
@@ -101,6 +128,8 @@ class Hybrid_Widget_Authors extends WP_Widget {
 		$instance['order']   = strip_tags( $new_instance['order'] );
 		$instance['orderby'] = strip_tags( $new_instance['orderby'] );
 		$instance['number']  = strip_tags( $new_instance['number'] );
+		$instance['include'] = strip_tags( $new_instance['include'] );
+		$instance['exclude'] = strip_tags( $new_instance['exclude'] );
 
 		$instance['html']          = ( isset( $new_instance['html'] ) ? 1 : 0 );
 		$instance['optioncount']   = ( isset( $new_instance['optioncount'] ) ? 1 : 0 );
@@ -118,24 +147,8 @@ class Hybrid_Widget_Authors extends WP_Widget {
 	 */
 	function form( $instance ) {
 
-		/* Set up the default form values. */
-		$defaults = array(
-			'title'         => esc_attr__( 'Authors', 'hybrid-core' ),
-			'order'         => 'ASC',
-			'orderby'       => 'display_name',
-			'number'        => '',
-			'optioncount'   => false,
-			'exclude_admin' => false,
-			'show_fullname' => true,
-			'hide_empty'    => true,
-			'style'         => 'list',
-			'html'          => true,
-			'feed'          => '',
-			'feed_image'    => ''
-		);
-
 		/* Merge the user-selected arguments with the defaults. */
-		$instance = wp_parse_args( (array) $instance, $defaults );
+		$instance = wp_parse_args( (array) $instance, $this->defaults );
 
 		$order = array( 
 			'ASC'  => esc_attr__( 'Ascending', 'hybrid-core' ), 
@@ -188,9 +201,17 @@ class Hybrid_Widget_Authors extends WP_Widget {
 				<?php } ?>
 			</select>
 		</p>
+		<p>
+			<label for="<?php echo $this->get_field_id( 'include' ); ?>"><code>include</code></label>
+			<input type="text" class="widefat code" id="<?php echo $this->get_field_id( 'include' ); ?>" name="<?php echo $this->get_field_name( 'include' ); ?>" value="<?php echo esc_attr( $instance['include'] ); ?>" />
+		</p>
 		</div>
 
 		<div class="hybrid-widget-controls columns-2 column-last">
+		<p>
+			<label for="<?php echo $this->get_field_id( 'exclude' ); ?>"><code>exclude</code></label>
+			<input type="text" class="widefat code" id="<?php echo $this->get_field_id( 'exclude' ); ?>" name="<?php echo $this->get_field_name( 'exclude' ); ?>" value="<?php echo esc_attr( $instance['exclude'] ); ?>" />
+		</p>
 		<p>
 			<label for="<?php echo $this->get_field_id( 'feed' ); ?>"><code>feed</code></label>
 			<input type="text" class="widefat code" id="<?php echo $this->get_field_id( 'feed' ); ?>" name="<?php echo $this->get_field_name( 'feed' ); ?>" value="<?php echo esc_attr( $instance['feed'] ); ?>" />
