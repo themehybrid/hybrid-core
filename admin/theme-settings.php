@@ -191,7 +191,6 @@ final class Hybrid_Theme_Settings{
 	public function settings_page() { ?>
 
 		<div class="wrap">
-			<?php screen_icon(); ?>
 
 			<h2><?php
 				/* Translators: %s is the theme name. */
