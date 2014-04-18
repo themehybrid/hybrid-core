@@ -37,7 +37,7 @@ class Hybrid_Widget_Archives extends WP_Widget {
 
 		/* Set up the widget options. */
 		$widget_options = array(
-			'classname'   => 'archives',
+			'classname'   => 'widget-archives widget_archive',
 			'description' => esc_html__( 'An advanced widget that gives you total control over the output of your archives.', 'hybrid-core' )
 		);
 
