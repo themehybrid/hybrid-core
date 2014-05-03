@@ -181,8 +181,14 @@ class Featured_Header {
 
 		/* If a featured header image URL was set, add the width and height values. */
 		if ( !empty( $this->url ) ) {
-			$data->width = $this->width;
-			$data->height = $this->height;
+			/* Sometimes $data is an array and sometimes it's an object. That's weird. */
+			if( is_array( $data ) ) {
+				$data['width']  = $this->width;
+				$data['height'] = $this->height;			
+			} else {
+				$data->width  = $this->width;
+				$data->height = $this->height;
+			}
 		}
 
 		return $data;
@@ -199,7 +205,7 @@ class Featured_Header {
 	 * @return array
 	 */
 	public function image_size_names_choose( $sizes ) {
-		$sizes[ $this->size ] = __( 'Featured Header', 'featured-header' );
+		$sizes[ $this->size ] = __( 'Featured Header', 'mina-olen' );
 
 		return $sizes;
 	}
