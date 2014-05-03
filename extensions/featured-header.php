@@ -205,7 +205,7 @@ class Featured_Header {
 	 * @return array
 	 */
 	public function image_size_names_choose( $sizes ) {
-		$sizes[ $this->size ] = __( 'Featured Header', 'mina-olen' );
+		$sizes[ $this->size ] = __( 'Featured Header', 'featured-header' );
 
 		return $sizes;
 	}
