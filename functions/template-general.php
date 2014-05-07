@@ -118,6 +118,27 @@ function hybrid_get_child_theme_link() {
 }
 
 /**
+ * Gets the "blog" (posts page) page URL.  `home_url()` will not always work for this because it 
+ * returns the front page URL.  Sometimes the blog page URL is set to a different page.  This 
+ * function handles both scenarios.
+ *
+ * @since  2.0.0
+ * @access public
+ * @return string
+ */
+function hybrid_get_blog_url() {
+	$blog_url = '';
+
+	if ( 'posts' === get_option( 'show_on_front' ) )
+		$blog_url = home_url();
+
+	elseif ( 0 < ( $page_for_posts = get_option( 'page_for_posts' ) ) )
+		$blog_url = get_permalink( $page_for_posts );
+
+	return $blog_url;
+}
+
+/**
  * Outputs the site title. 
  *
  * @since  0.1.0
