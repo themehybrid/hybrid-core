@@ -149,7 +149,7 @@ function hybrid_wp_title( $doctitle, $separator, $seplocation ) {
 		$doctitle = sprintf( __( '%1$s Page %2$s', 'hybrid-core' ), $doctitle . $separator, number_format_i18n( absint( $page ) ) );
 
 	/* Trim separator + space from beginning and end. */
-	$doctitle = trim( $doctitle, "{$separator} " );
+	$doctitle = trim( strip_tags( $doctitle ), "{$separator} " );
 
 	return $doctitle;
 }
