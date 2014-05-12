@@ -98,6 +98,82 @@ function hybrid_get_menu( $name = '' ) {
 }
 
 /**
+ * This is a replacement function for the WordPress `get_header()` function. The reason for this function 
+ * over the core function is because the core function does not provide the functionality needed to properly 
+ * implement what's needed, particularly the ability to add header templates to a sub-directory.  
+ * Technically, there's a workaround for that using the `get_header` hook, but it requires keeping a 
+ * an empty `header.php` template in the theme's root, which will get loaded every time a header template 
+ * gets loaded.  That's kind of nasty hack, which leaves us with this function.  This is the **only** 
+ * clean solution currently possible.
+ *
+ * This function maintains compatibility with the core `get_header()` function.  It does so in two ways: 
+ * 1) The `get_header` hook is properly fired and 2) The core naming convention of header templates 
+ * (`header-$name.php` and `header.php`) is preserved and given a higher priority than custom templates.
+ *
+ * @link http://core.trac.wordpress.org/ticket/15086
+ * @link http://core.trac.wordpress.org/ticket/18676
+ *
+ * @since  2.0.0
+ * @access public
+ * @param  string  $name
+ * @return void
+ */
+function hybrid_get_header( $name = null ) {
+
+	do_action( 'get_header', $name ); // Core WordPress hook
+
+	$templates = array();
+
+	if ( '' !== $name ) {
+		$templates[] = "header-{$name}.php";
+		$templates[] = "header/{$name}.php";
+	}
+
+	$templates[] = 'header.php';
+	$templates[] = 'header/header.php';
+
+	locate_template( $templates, true );
+}
+
+/**
+ * This is a replacement function for the WordPress `get_footer()` function. The reason for this function 
+ * over the core function is because the core function does not provide the functionality needed to properly 
+ * implement what's needed, particularly the ability to add footer templates to a sub-directory.  
+ * Technically, there's a workaround for that using the `get_footer` hook, but it requires keeping a 
+ * an empty `footer.php` template in the theme's root, which will get loaded every time a footer template 
+ * gets loaded.  That's kind of nasty hack, which leaves us with this function.  This is the **only** 
+ * clean solution currently possible.
+ *
+ * This function maintains compatibility with the core `get_footer()` function.  It does so in two ways: 
+ * 1) The `get_footer` hook is properly fired and 2) The core naming convention of footer templates 
+ * (`footer-$name.php` and `footer.php`) is preserved and given a higher priority than custom templates.
+ *
+ * @link http://core.trac.wordpress.org/ticket/15086
+ * @link http://core.trac.wordpress.org/ticket/18676
+ *
+ * @since  2.0.0
+ * @access public
+ * @param  string  $name
+ * @return void
+ */
+function hybrid_get_footer( $name = null ) {
+
+	do_action( 'get_footer', $name ); // Core WordPress hook
+
+	$templates = array();
+
+	if ( '' !== $name ) {
+		$templates[] = "footer-{$name}.php";
+		$templates[] = "footer/{$name}.php";
+	}
+
+	$templates[] = 'footer.php';
+	$templates[] = 'footer/footer.php';
+
+	locate_template( $templates, true );
+}
+
+/**
  * This is a replacement function for the WordPress `get_sidebar()` function. The reason for this function 
  * over the core function is because the core function does not provide the functionality needed to properly 
  * implement what's needed, particularly the ability to add sidebar templates to a sub-directory.  
