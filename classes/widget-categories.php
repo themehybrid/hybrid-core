@@ -109,6 +109,10 @@ class Hybrid_Widget_Categories extends WP_Widget {
 		if ( 'list' == $args['style'] )
 			$categories = '<ul class="xoxo categories">' . $categories . '</ul><!-- .xoxo .categories -->';
 
+		/* If no style is given, wrap in a <p> tag for formatting. */
+		else
+			$categories = '<p class="categories style-none">' . $categories . '</p>';
+
 		/* Output the categories list. */
 		echo $categories;
 
