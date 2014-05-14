@@ -215,6 +215,12 @@ class Hybrid_Media_Grabber {
 					call_user_func( array( $this, "do_{$shortcode[2]}_shortcode_media" ), $shortcode );
 					break;
 				}
+
+				/* Check for Jetpack audio/video shortcodes. */
+				elseif ( in_array( $shortcode[2], array( 'blip.tv', 'dailymotion', 'flickr', 'ted', 'vimeo', 'vine', 'youtube', 'wpvideo', 'soundcloud', 'bandcamp' ) ) ) {
+					$this->do_jetpack_shortcode_media( $shortcode );
+					break;
+				}
 			}
 		}
 	}
@@ -281,6 +287,21 @@ class Hybrid_Media_Grabber {
 
 		/* Need to filter dimensions here to overwrite WP's <div> surrounding the [video] shortcode. */
 		$this->media = do_shortcode( $this->filter_dimensions( $this->original_media ) );
+	}
+
+	/**
+	 * Handles the output of audio/video shortcodes included with the Jetpack plugin (or Jetpack 
+	 * Slim) via the Shortcode Embeds feature.
+	 *
+	 * @since  2.0.0
+	 * @access public
+	 * @return void
+	 */
+	public function do_jetpack_shortcode_media( $shortcode ) {
+
+		$this->original_media = array_shift( $shortcode );
+
+		$this->media = do_shortcode( $this->original_media );
 	}
 
 	/**
