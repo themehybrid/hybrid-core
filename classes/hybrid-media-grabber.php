@@ -155,6 +155,10 @@ class Hybrid_Media_Grabber {
 	 */
 	public function set_media() {
 
+		/* Get the media if the post type is an attachment. */
+		if ( 'attachment' === get_post_type( $this->args['post_id'] ) )
+			$this->do_attachment_media();
+
 		/* Find media in the post content based on WordPress' media-related shortcodes. */
 		if ( empty( $this->media ) )
 			$this->do_shortcode_media();
@@ -373,6 +377,22 @@ class Hybrid_Media_Grabber {
 			/* Run the media as a shortcode using WordPress' built-in [audio] and [video] shortcodes. */
 			$this->media = do_shortcode( "[{$this->type} src='{$url}']" );
 		}
+	}
+
+	/**
+	 * If the post type itself is an attachment, run the shortcode for the media type.
+	 *
+	 * @since  2.0.0
+	 * @access public
+	 * @return void
+	 */
+	public function do_attachment_media() {
+
+		/* Gets the URI for the attachment (the media file). */
+		$url = wp_get_attachment_url( $this->args['post_id'] );
+
+		/* Run the media as a shortcode using WordPress' built-in [audio] and [video] shortcodes. */
+		$this->media = do_shortcode( "[{$this->type} src='{$url}']" );
 	}
 
 	/**

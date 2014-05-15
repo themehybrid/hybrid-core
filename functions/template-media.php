@@ -207,28 +207,23 @@ function hybrid_text_attachment( $mime = '', $file = '' ) {
 }
 
 /**
- * Handles audio attachments on their attachment pages.  Puts audio/mpeg and audio/wma files into 
- * an <object> element.
+ * Handles the output of the media for audio attachment posts. This should be used within The Loop.
  *
  * @since  0.2.2
  * @access public
- * @param  string $mime attachment mime type
- * @param  string $file attachment file URL
  * @return string
  */
-function hybrid_audio_attachment( $mime = '', $file = '' ) {
-	return do_shortcode( '[audio src="' . esc_url( $file ) . '"]' );
+function hybrid_audio_attachment() {
+	return hybrid_media_grabber( array( 'type' => 'audio' ) );
 }
 
 /**
- * Handles video attachments on attachment pages.  Add other video types to the <object> element.
+ * Handles the output of the media for video attachment posts. This should be used within The Loop.
  *
  * @since  0.2.2
  * @access public
- * @param  string $mime attachment mime type
- * @param  string $file attachment file URL
  * @return string
  */
-function hybrid_video_attachment( $mime = '', $file = '' ) {
-	return do_shortcode( '[video src="' . esc_url( $file ) . '"]' );
+function hybrid_video_attachment() {
+	return hybrid_media_grabber( array( 'type' => 'video' ) );
 }
