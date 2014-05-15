@@ -259,7 +259,7 @@ if ( !class_exists( 'Hybrid' ) ) {
 				remove_theme_support( 'cleaner-gallery' );
 
 			/* Remove support for the the Get the Image extension if the plugin is installed. */
-			if ( function_exists( 'get_the_image' ) )
+			if ( function_exists( 'get_the_image' ) || class_exists( 'Get_The_Image' ) )
 				remove_theme_support( 'get-the-image' );
 
 			/* Remove support for the Featured Header extension if the class exists. */
