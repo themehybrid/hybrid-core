@@ -58,12 +58,13 @@ function hybrid_get_comment_reply_link( $args = array() ) {
  *
  * @since  0.7.0
  * @access public
- * @return array $args Arguments for listing comments.
+ * @param  array  $args 
+ * @return array
  */
-function hybrid_list_comments_args() {
+function hybrid_list_comments_args( $args = array() ) {
 
 	/* Set the default arguments for listing comments. */
-	$args = array(
+	$defaults = array(
 		'style'        => 'ol',
 		'type'         => 'all',
 		'avatar_size'  => 80,
@@ -72,7 +73,7 @@ function hybrid_list_comments_args() {
 	);
 
 	/* Return the arguments and allow devs to overwrite them. */
-	return apply_filters( 'hybrid_list_comments_args', $args );
+	return apply_filters( 'hybrid_list_comments_args', wp_parse_args( $args, $defaults ) );
 }
 
 /**
