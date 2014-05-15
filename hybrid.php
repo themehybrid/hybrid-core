@@ -251,11 +251,11 @@ if ( !class_exists( 'Hybrid' ) ) {
 			add_theme_support( 'html5', array( 'search-form', 'comment-form', 'comment-list' ) );
 
 			/* Remove support for the the Breadcrumb Trail extension if the plugin is installed. */
-			if ( function_exists( 'breadcrumb_trail' ) )
+			if ( function_exists( 'breadcrumb_trail' ) || class_exists( 'Breadcrumb_Trail' ) )
 				remove_theme_support( 'breadcrumb-trail' );
 
 			/* Remove support for the the Cleaner Gallery extension if the plugin is installed. */
-			if ( function_exists( 'cleaner_gallery' ) )
+			if ( function_exists( 'cleaner_gallery' ) || class_exists( 'Cleaner_Gallery' ) )
 				remove_theme_support( 'cleaner-gallery' );
 
 			/* Remove support for the the Get the Image extension if the plugin is installed. */
