@@ -75,7 +75,7 @@ function hybrid_clean_post_format_slug( $slug ) {
  */
 function hybrid_aside_infinity( $content ) {
 
-	if ( has_post_format( 'aside' ) && !is_singular() ) {
+	if ( has_post_format( 'aside' ) && !is_singular() && !post_password_required() ) {
 		$infinity = '<a class="permalink" href="' . get_permalink() . '" title="' . the_title_attribute( array( 'echo' => false ) ) . '">&#8734;</a>';
 		$content .= ' ' . apply_filters( 'hybrid_aside_infinity', $infinity );
 	}
@@ -96,7 +96,7 @@ function hybrid_aside_infinity( $content ) {
  */
 function hybrid_image_content( $content ) {
 
-	if ( has_post_format( 'image' ) ) {
+	if ( has_post_format( 'image' ) && !post_password_required() ) {
 		preg_match( '/<img.*?>/', $content, $matches );
 
 		if ( empty( $matches ) && current_theme_supports( 'get-the-image' ) )
@@ -141,7 +141,7 @@ function hybrid_link_content( $content ) {
  */
 function hybrid_quote_content( $content ) {
 
-	if ( has_post_format( 'quote' ) ) {
+	if ( has_post_format( 'quote' ) && !post_password_required() ) {
 		preg_match( '/<blockquote.*?>/', $content, $matches );
 
 		if ( empty( $matches ) )
