@@ -29,6 +29,10 @@ add_filter( 'single_template',     'hybrid_singular_template', 5 );
 add_filter( 'page_template',       'hybrid_singular_template', 5 );
 add_filter( 'attachment_template', 'hybrid_singular_template', 5 );
 
+/* Filter the front page template. */
+add_filter( 'front_page_template', 'hybrid_front_page_template', 5 ); // Doesn't work b/c bug with get_query_template().
+add_filter( 'frontpage_template',  'hybrid_front_page_template', 5 );
+
 /* Filter the comments template. */
 add_filter( 'comments_template', 'hybrid_comments_template', 5 );
 
@@ -205,6 +209,25 @@ function hybrid_singular_template( $template ) {
 
 	/* Return the found template. */
 	return locate_template( $templates );
+}
+
+/**
+ * Fix for the front page template handling in WordPress core. Its handling is not logical because it 
+ * forces devs to account for both a page on the front page and posts on the front page.  Theme devs 
+ * must handle both scenarios if they've created a "front-page.php" template.  This filter overwrites 
+ * that and disables the "front-page.php" template if posts are to be shown on the front page.  This 
+ * way, the "front-page.php" template will only ever be used if an actual page is supposed to be 
+ * shown on the front.
+ *
+ * @link   http://www.chipbennett.net/2013/09/14/home-page-and-front-page-and-templates-oh-my/
+ * @since  2.0.0
+ * @access public
+ * @param  string  $template
+ * @return string
+ */
+function hybrid_front_page_template( $template ) {
+
+	return is_home() ? '' : $template;
 }
 
 /**
