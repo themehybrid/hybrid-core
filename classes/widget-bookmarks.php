@@ -7,7 +7,7 @@
  * @package    Hybrid
  * @subpackage Classes
  * @author     Justin Tadlock <justin@justintadlock.com>
- * @copyright  Copyright (c) 2008 - 2013, Justin Tadlock
+ * @copyright  Copyright (c) 2008 - 2014, Justin Tadlock
  * @link       http://themehybrid.com/hybrid-core
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
@@ -31,7 +31,9 @@ class Hybrid_Widget_Bookmarks extends WP_Widget {
 	/**
 	 * Set up the widget's unique name, ID, class, description, and other options.
 	 *
-	 * @since 1.2.0
+	 * @since  1.2.0
+	 * @access public
+	 * @return void
 	 */
 	function __construct() {
 
@@ -49,10 +51,10 @@ class Hybrid_Widget_Bookmarks extends WP_Widget {
 
 		/* Create the widget. */
 		$this->WP_Widget(
-			'hybrid-bookmarks',               // $this->id_base
-			__( 'Bookmarks', 'hybrid-core' ), // $this->name	
-			$widget_options,                  // $this->widget_options
-			$control_options                  // $this->control_options
+			'hybrid-bookmarks',
+			__( 'Bookmarks', 'hybrid-core' ),	
+			$widget_options,
+			$control_options
 		);
 
 		/* Set up the defaults. */
@@ -77,27 +79,30 @@ class Hybrid_Widget_Bookmarks extends WP_Widget {
 			'show_private'     => false,
 			'show_name'        => false,
 			'class'            => 'linkcat',
-			'link_before'      => '<span>',
-			'link_after'       => '</span>',
-			'between'          => '<br />',
+			'link_before'      => '',
+			'link_after'       => '',
+			'between'          => '&thinsp;&ndash;&thinsp;',
 		);
 	}
 
 	/**
 	 * Outputs the widget based on the arguments input through the widget controls.
 	 *
-	 * @since 0.6.0
+	 * @since  0.6.0
+	 * @access public
+	 * @param  array  $sidebar
+	 * @param  array  $instance
+	 * @return void
 	 */
 	function widget( $sidebar, $instance ) {
-		extract( $sidebar );
 
 		/* Set up the $before_widget ID for multiple widgets created by the bookmarks widget. */
 		if ( !empty( $instance['categorize'] ) )
-			$before_widget = preg_replace( '/id="[^"]*"/','id="%id"', $before_widget );
+			$sidebar['before_widget'] = preg_replace( '/id="[^"]*"/','id="%id"', $sidebar['before_widget'] );
 
 		/* Add a class to $before_widget if one is set. */
 		if ( !empty( $instance['class'] ) )
-			$before_widget = str_replace( 'class="', 'class="' . esc_attr( $instance['class'] ) . ' ', $before_widget );
+			$sidebar['before_widget'] = str_replace( 'class="', 'class="' . esc_attr( $instance['class'] ) . ' ', $sidebar['before_widget'] );
 
 		/* Set the $args for wp_list_bookmarks() to the $instance array. */
 		$args = wp_parse_args( $instance, $this->defaults );
@@ -120,10 +125,10 @@ class Hybrid_Widget_Bookmarks extends WP_Widget {
 
 		/* Some arguments must be set to the sidebar arguments to be output correctly. */
 		$args['title_li']        = apply_filters( 'widget_title', ( empty( $args['title_li'] ) ? __( 'Bookmarks', 'hybrid-core' ) : $args['title_li'] ), $instance, $this->id_base );
-		$args['title_before']    = $before_title;
-		$args['title_after']     = $after_title;
-		$args['category_before'] = $before_widget;
-		$args['category_after']  = $after_widget;
+		$args['title_before']    = $sidebar['before_title'];
+		$args['title_after']     = $sidebar['after_title'];
+		$args['category_before'] = $sidebar['before_widget'];
+		$args['category_after']  = $sidebar['after_widget'];
 		$args['category_name']   = '';
 		$args['echo']            = false;
 
@@ -139,92 +144,111 @@ class Hybrid_Widget_Bookmarks extends WP_Widget {
 	}
 
 	/**
-	 * Updates the widget control options for the particular instance of the widget.
+	 * The update callback for the widget control options.  This method is used to sanitize and/or
+	 * validate the options before saving them into the database.
 	 *
-	 * @since 0.6.0
+	 * @since  0.6.0
+	 * @access public
+	 * @param  array  $new_instance
+	 * @param  array  $old_instance
+	 * @return array
 	 */
 	function update( $new_instance, $old_instance ) {
-		$instance = $old_instance;
 
-		/* Set the instance to the new instance. */
-		$instance = $new_instance;
-
+		/* Strip tags. */
 		$instance['title_li'] = strip_tags( $new_instance['title_li'] );
-		$instance['limit']    = strip_tags( $new_instance['limit'] );
-		$instance['class']    = strip_tags( $new_instance['class'] );
-		$instance['search']   = strip_tags( $new_instance['search'] );
+		$instance['search']   = strip_tags( $new_instance['search']   );
 
-		$instance['category_order']   = $new_instance['category_order'];
-		$instance['category_orderby'] = $new_instance['category_orderby'];
-		$instance['orderby']          = $new_instance['orderby'];
-		$instance['order']            = $new_instance['order'];
-		$instance['between']          = $new_instance['between'];
-		$instance['link_before']      = $new_instance['link_before'];
-		$instance['link_after']       = $new_instance['link_after'];
+		/* Arrays of post IDs (integers). */
+		$instance['category']         = array_map( 'absint', $new_instance['category']         );
+		$instance['exclude_category'] = array_map( 'absint', $new_instance['exclude_category'] );
+		$instance['include']          = array_map( 'absint', $new_instance['include']          );
+		$instance['exclude']          = array_map( 'absint', $new_instance['exclude']          );
 
-		$instance['categorize']       = ( isset( $new_instance['categorize'] ) ? 1 : 0 );
-		$instance['hide_invisible']   = ( isset( $new_instance['hide_invisible'] ) ? 1 : 0 );
-		$instance['show_private']     = ( isset( $new_instance['show_private'] ) ? 1 : 0 );
-		$instance['show_rating']      = ( isset( $new_instance['show_rating'] ) ? 1 : 0 );
-		$instance['show_updated']     = ( isset( $new_instance['show_updated'] ) ? 1 : 0 );
-		$instance['show_images']      = ( isset( $new_instance['show_images'] ) ? 1 : 0 );
-		$instance['show_name']        = ( isset( $new_instance['show_name'] ) ? 1 : 0 );
-		$instance['show_description'] = ( isset( $new_instance['show_description'] ) ? 1 : 0 );
+		/* HTML class. */
+		$instance['class'] = sanitize_html_class( $new_instance['class'] );
 
+		/* Integers. */
+		$instance['limit'] = intval( $new_instance['limit'] );
+
+		/* Whitelist options. */
+		$category_order = $order = array( 'ASC', 'DESC' );
+		$category_orderby        = array( 'count', 'ID', 'name', 'slug' );
+		$orderby                 = array( 'id', 'description', 'length', 'name', 'notes', 'owner', 'rand', 'rating', 'rel', 'rss', 'target', 'updated', 'url' );
+
+		$instance['category_order']   = in_array( $new_instance['category_order'],   $category_order )   ? $new_instance['category_order']   : 'ASC';
+		$instance['category_orderby'] = in_array( $new_instance['category_orderby'], $category_orderby ) ? $new_instance['category_orderby'] : 'name';
+		$instance['order']            = in_array( $new_instance['order'],            $order )            ? $new_instance['order']            : 'ASC';
+		$instance['orderby']          = in_array( $new_instance['orderby'],          $orderby )          ? $new_instance['orderby']          : 'name';
+
+		/* Text boxes. Make sure user can use 'unfiltered_html'. */
+		$instance['link_before'] = current_user_can( 'unfiltered_html' ) ? $new_instance['link_before'] : wp_filter_post_kses( $new_instance['link_before'] );
+		$instance['link_after']  = current_user_can( 'unfiltered_html' ) ? $new_instance['link_after']  : wp_filter_post_kses( $new_instance['link_after']  );
+		$instance['between']     = current_user_can( 'unfiltered_html' ) ? $new_instance['between']     : wp_filter_post_kses( $new_instance['between']     );
+
+		/* Checkboxes. */
+		$instance['categorize']       = isset( $new_instance['categorize'] )       ? 1 : 0;
+		$instance['hide_invisible']   = isset( $new_instance['hide_invisible'] )   ? 1 : 0;
+		$instance['show_private']     = isset( $new_instance['show_private'] )     ? 1 : 0;
+		$instance['show_rating']      = isset( $new_instance['show_rating'] )      ? 1 : 0;
+		$instance['show_updated']     = isset( $new_instance['show_updated'] )     ? 1 : 0;
+		$instance['show_images']      = isset( $new_instance['show_images'] )      ? 1 : 0;
+		$instance['show_name']        = isset( $new_instance['show_name'] )        ? 1 : 0;
+		$instance['show_description'] = isset( $new_instance['show_description'] ) ? 1 : 0;
+
+		/* Return sanitized options. */
 		return $instance;
 	}
 
 	/**
 	 * Displays the widget control options in the Widgets admin screen.
 	 *
-	 * @since 0.6.0
+	 * @since  0.6.0
+	 * @access public
+	 * @param  array  $instance
+	 * @param  void
 	 */
 	function form( $instance ) {
 
 		/* Merge the user-selected arguments with the defaults. */
 		$instance = wp_parse_args( (array) $instance, $this->defaults );
 
-		$terms = get_terms( 'link_category' );
+		$terms     = get_terms( 'link_category' );
 		$bookmarks = get_bookmarks( array( 'hide_invisible' => false ) );
 
-		$category_order = array( 
-			'ASC'  => esc_attr__( 'Ascending', 'hybrid-core' ), 
+		$category_order = $order = array( 
+			'ASC'  => esc_attr__( 'Ascending',  'hybrid-core' ), 
 			'DESC' => esc_attr__( 'Descending', 'hybrid-core' ) 
 		);
 
 		$category_orderby = array( 
 			'count' => esc_attr__( 'Count', 'hybrid-core' ), 
-			'ID'    => esc_attr__( 'ID', 'hybrid-core' ), 
-			'name'  => esc_attr__( 'Name', 'hybrid-core' ), 
-			'slug'  => esc_attr__( 'Slug', 'hybrid-core' ) 
-		);
-
-		$order = array( 
-			'ASC'  => esc_attr__( 'Ascending', 'hybrid-core' ), 
-			'DESC' => esc_attr__( 'Descending', 'hybrid-core' ) 
+			'ID'    => esc_attr__( 'ID',    'hybrid-core' ), 
+			'name'  => esc_attr__( 'Name',  'hybrid-core' ), 
+			'slug'  => esc_attr__( 'Slug',  'hybrid-core' ) 
 		);
 
 		$orderby = array( 
-			'id'          => esc_attr__( 'ID', 'hybrid-core' ), 
+			'id'          => esc_attr__( 'ID',          'hybrid-core' ), 
 			'description' => esc_attr__( 'Description', 'hybrid-core' ), 
-			'length'      => esc_attr__( 'Length', 'hybrid-core' ), 
-			'name'        => esc_attr__( 'Name', 'hybrid-core' ), 
-			'notes'       => esc_attr__( 'Notes', 'hybrid-core' ), 
-			'owner'       => esc_attr__( 'Owner', 'hybrid-core' ), 
-			'rand'        => esc_attr__( 'Random', 'hybrid-core' ), 
-			'rating'      => esc_attr__( 'Rating', 'hybrid-core' ), 
-			'rel'         => esc_attr__( 'Rel', 'hybrid-core' ), 
-			'rss'         => esc_attr__( 'RSS', 'hybrid-core' ), 
-			'target'      => esc_attr__( 'Target', 'hybrid-core' ), 
-			'updated'     => esc_attr__( 'Updated', 'hybrid-core' ), 
-			'url'         => esc_attr__( 'URL', 'hybrid-core' ) 
+			'length'      => esc_attr__( 'Length',      'hybrid-core' ), 
+			'name'        => esc_attr__( 'Name',        'hybrid-core' ), 
+			'notes'       => esc_attr__( 'Notes',       'hybrid-core' ), 
+			'owner'       => esc_attr__( 'Owner',       'hybrid-core' ), 
+			'rand'        => esc_attr__( 'Random',      'hybrid-core' ), 
+			'rating'      => esc_attr__( 'Rating',      'hybrid-core' ), 
+			'rel'         => esc_attr__( 'Rel',         'hybrid-core' ), 
+			'rss'         => esc_attr__( 'RSS',         'hybrid-core' ), 
+			'target'      => esc_attr__( 'Target',      'hybrid-core' ), 
+			'updated'     => esc_attr__( 'Updated',     'hybrid-core' ), 
+			'url'         => esc_attr__( 'URL',         'hybrid-core' ) 
 		);
 		?>
 
 		<div class="hybrid-widget-controls columns-3">
 		<p>
 			<label for="<?php echo $this->get_field_id( 'title_li' ); ?>"><?php _e( 'Title:', 'hybrid-core' ); ?></label>
-			<input type="text" class="widefat" id="<?php echo $this->get_field_id( 'title_li' ); ?>" name="<?php echo $this->get_field_name( 'title_li' ); ?>" value="<?php echo esc_attr( $instance['title_li'] ); ?>" />
+			<input type="text" class="widefat" id="<?php echo $this->get_field_id( 'title_li' ); ?>" name="<?php echo $this->get_field_name( 'title_li' ); ?>" value="<?php echo esc_attr( $instance['title_li'] ); ?>" placeholder="<?php echo esc_attr( $this->defaults['title_li'] ); ?>" />
 		</p>
 		<p>
 			<label for="<?php echo $this->get_field_id( 'category_order' ); ?>"><code>category_order</code></label> 
@@ -260,7 +284,7 @@ class Hybrid_Widget_Bookmarks extends WP_Widget {
 		</p>
 		<p>
 			<label for="<?php echo $this->get_field_id( 'class' ); ?>"><code>class</code></label>
-			<input type="text" class="smallfat code" id="<?php echo $this->get_field_id( 'class' ); ?>" name="<?php echo $this->get_field_name( 'class' ); ?>" value="<?php echo esc_attr( $instance['class'] ); ?>" />
+			<input type="text" class="smallfat code" id="<?php echo $this->get_field_id( 'class' ); ?>" name="<?php echo $this->get_field_name( 'class' ); ?>" value="<?php echo esc_attr( $instance['class'] ); ?>" placeholder="linkcat" />
 		</p>
 
 		</div>
@@ -269,7 +293,7 @@ class Hybrid_Widget_Bookmarks extends WP_Widget {
 
 		<p>
 			<label for="<?php echo $this->get_field_id( 'limit' ); ?>"><code>limit</code></label>
-			<input type="text" class="smallfat code" id="<?php echo $this->get_field_id( 'limit' ); ?>" name="<?php echo $this->get_field_name( 'limit' ); ?>" value="<?php echo esc_attr( $instance['limit'] ); ?>" />
+			<input type="number" class="smallfat code" size="5" min="-1" id="<?php echo $this->get_field_id( 'limit' ); ?>" name="<?php echo $this->get_field_name( 'limit' ); ?>" value="<?php echo esc_attr( $instance['limit'] ); ?>" placeholder="-1" />
 		</p>
 		<p>
 			<label for="<?php echo $this->get_field_id( 'order' ); ?>"><code>order</code></label> 
@@ -313,7 +337,7 @@ class Hybrid_Widget_Bookmarks extends WP_Widget {
 		<div class="hybrid-widget-controls columns-3 column-last">
 		<p>
 			<label for="<?php echo $this->get_field_id( 'between' ); ?>"><code>between</code></label>
-			<input type="text" class="smallfat code" id="<?php echo $this->get_field_id( 'between' ); ?>" name="<?php echo $this->get_field_name( 'between' ); ?>" value="<?php echo esc_attr( $instance['between'] ); ?>" />
+			<input type="text" class="smallfat code" id="<?php echo $this->get_field_id( 'between' ); ?>" name="<?php echo $this->get_field_name( 'between' ); ?>" value="<?php echo esc_attr( $instance['between'] ); ?>" placeholder="&thinsp;&ndash;&thinsp;" />
 		</p>
 		<p>
 			<label for="<?php echo $this->get_field_id( 'link_before' ); ?>"><code>link_before</code></label>
@@ -361,5 +385,3 @@ class Hybrid_Widget_Bookmarks extends WP_Widget {
 	<?php
 	}
 }
-
-?>

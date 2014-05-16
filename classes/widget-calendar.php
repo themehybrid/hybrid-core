@@ -7,7 +7,7 @@
  * @package    Hybrid
  * @subpackage Classes
  * @author     Justin Tadlock <justin@justintadlock.com>
- * @copyright  Copyright (c) 2008 - 2013, Justin Tadlock
+ * @copyright  Copyright (c) 2008 - 2014, Justin Tadlock
  * @link       http://themehybrid.com/hybrid-core
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
@@ -31,7 +31,9 @@ class Hybrid_Widget_Calendar extends WP_Widget {
 	/**
 	 * Set up the widget's unique name, ID, class, description, and other options.
 	 *
-	 * @since 1.2.0
+	 * @since  1.2.0
+	 * @access public
+	 * @return void
 	 */
 	function __construct() {
 
@@ -49,10 +51,10 @@ class Hybrid_Widget_Calendar extends WP_Widget {
 
 		/* Create the widget. */
 		$this->WP_Widget(
-			'hybrid-calendar',               // $this->id_base
-			__( 'Calendar', 'hybrid-core' ), // $this->name
-			$widget_options,                 // $this->widget_options
-			$control_options                 // $this->control_options
+			'hybrid-calendar',
+			__( 'Calendar', 'hybrid-core' ),
+			$widget_options,
+			$control_options
 		);
 
 		/* Set up the defaults. */
@@ -65,10 +67,13 @@ class Hybrid_Widget_Calendar extends WP_Widget {
 	/**
 	 * Outputs the widget based on the arguments input through the widget controls.
 	 *
-	 * @since 0.6.0
+	 * @since  0.6.0
+	 * @access public
+	 * @param  array  $sidebar
+	 * @param  array  $instance
+	 * @return void
 	 */
 	function widget( $sidebar, $instance ) {
-		extract( $sidebar );
 
 		/* Set the $args. */
 		$args = wp_parse_args( $instance, $this->defaults );
@@ -76,39 +81,51 @@ class Hybrid_Widget_Calendar extends WP_Widget {
 		/* Get the $initial argument. */
 		$initial = !empty( $args['initial'] ) ? true : false;
 
-		/* Output the theme's widget wrapper. */
-		echo $before_widget;
+		/* Output the sidebar's $before_widget wrapper. */
+		echo $sidebar['before_widget'];
 
 		/* If a title was input by the user, display it. */
 		if ( !empty( $args['title'] ) )
-			echo $before_title . apply_filters( 'widget_title',  $args['title'], $instance, $this->id_base ) . $after_title;
+			echo $sidebar['before_title'] . apply_filters( 'widget_title',  $args['title'], $instance, $this->id_base ) . $sidebar['after_title'];
 
 		/* Display the calendar. */
 		echo '<div class="calendar-wrap">';
 			echo str_replace( array( "\r", "\n", "\t" ), '', get_calendar( $initial, false ) );
 		echo '</div><!-- .calendar-wrap -->';
 
-		/* Close the theme's widget wrapper. */
-		echo $after_widget;
+		/* Close the sidebar's widget wrapper. */
+		echo $sidebar['after_widget'];
 	}
 
 	/**
-	 * Updates the widget control options for the particular instance of the widget.
+	 * The update callback for the widget control options.  This method is used to sanitize and/or
+	 * validate the options before saving them into the database.
 	 *
-	 * @since 0.6.0
+	 * @since  0.6.0
+	 * @access public
+	 * @param  array  $new_instance
+	 * @param  array  $old_instance
+	 * @return array
 	 */
 	function update( $new_instance, $old_instance ) {
 
+		/* Strip tags. */
 		$instance['title'] = strip_tags( $new_instance['title'] );
-		$instance['initial'] = ( isset( $new_instance['initial'] ) ? 1 : 0 );
 
+		/* Checkboxes. */
+		$instance['initial'] = isset( $new_instance['initial'] ) ? 1 : 0;
+
+		/* Return sanitized options. */
 		return $instance;
 	}
 
 	/**
 	 * Displays the widget control options in the Widgets admin screen.
 	 *
-	 * @since 0.6.0
+	 * @since  0.6.0
+	 * @access public
+	 * @param  array  $instance
+	 * @param  void
 	 */
 	function form( $instance ) {
 
@@ -118,7 +135,7 @@ class Hybrid_Widget_Calendar extends WP_Widget {
 		<div class="hybrid-widget-controls columns-1">
 		<p>
 			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:', 'hybrid-core' ); ?></label>
-			<input type="text" class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" value="<?php echo esc_attr( $instance['title'] ); ?>" />
+			<input type="text" class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" value="<?php echo esc_attr( $instance['title'] ); ?>" placeholder="<?php echo esc_attr( $this->defaults['title'] ); ?>" />
 		</p>
 		<p>
 			<input class="checkbox" type="checkbox" <?php checked( $instance['initial'], true ); ?> id="<?php echo $this->get_field_id( 'initial' ); ?>" name="<?php echo $this->get_field_name( 'initial' ); ?>" /> 
@@ -128,5 +145,3 @@ class Hybrid_Widget_Calendar extends WP_Widget {
 	<?php
 	}
 }
-
-?>
