@@ -53,6 +53,57 @@ function hybrid_get_post_format_link() {
 }
 
 /**
+ * Outputs a post's author.
+ *
+ * @since  2.0.0
+ * @access public
+ * @param  array   $args
+ * @return void
+ */
+function hybrid_post_author( $args = array() ) {
+	echo hybrid_get_post_author( $args );
+}
+
+/**
+ * Function for getting the current post's author in The Loop and linking to the author archive page.  
+ * This function was created because core WordPress does not have template tags with proper translation 
+ * and RTL support for this.  An equivalent getter function for `the_author_posts_link()` would 
+ * instantly solve this issue.
+ *
+ * @since  2.0.0
+ * @access public
+ * @param  array   $args
+ * @return string
+ */
+function hybrid_get_post_author( $args = array() ) {
+
+	$html = '';
+
+	$defaults = array(
+		'text'   => '%s',
+		'before' => '',
+		'after'  => '',
+		'wrap'   => '<span %s>%s</span>',
+	);
+
+	$args = wp_parse_args( $args, $defaults );
+
+	/* Output buffering to get the author posts link. */
+	ob_start();
+	the_author_posts_link();
+	$link = ob_get_clean();
+	/* A small piece of my soul just died.  Kittens no longer purr.  Dolphins lost the ability to swim with grace. */
+
+	if ( !empty( $link ) ) {
+		$html .= $args['before'];
+		$html .= sprintf( $args['wrap'], hybrid_get_attr( 'entry-author' ), sprintf( $args['text'], $link ) );
+		$html .= $args['after'];
+	}
+
+	return $html;
+}
+
+/**
  * Outputs a post's taxonomy terms.
  *
  * @since  2.0.0
