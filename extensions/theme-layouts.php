@@ -69,7 +69,7 @@ function theme_layouts_register_meta() {
  * @return mixed $meta_value
  */
 function theme_layouts_sanitize_meta( $meta_value, $meta_key, $meta_type ) {
-	return esc_attr( strip_tags( $meta_value ) );
+	return sanitize_html_class( $meta_value );
 }
 
 /**
