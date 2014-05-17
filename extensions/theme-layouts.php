@@ -30,8 +30,8 @@
 add_action( 'init', 'theme_layouts_register_meta' );
 
 /* Add post type support for theme layouts. */
-add_action( 'init', 'theme_layouts_add_post_type_support' );
-add_action( 'init', 'theme_layouts_remove_post_type_support' );
+add_action( 'init', 'theme_layouts_add_post_type_support',    5 );
+add_action( 'init', 'theme_layouts_remove_post_type_support', 5 );
 
 /* Set up the custom post layouts. */
 add_action( 'admin_init', 'theme_layouts_admin_setup' );
@@ -40,7 +40,7 @@ add_action( 'admin_init', 'theme_layouts_admin_setup' );
 add_action( 'customize_register', 'theme_layouts_customize_register' );
 
 /* Filters the theme layout mod. */
-add_filter( 'theme_mod_theme_layout', 'theme_layouts_filter_layout' );
+add_filter( 'theme_mod_theme_layout', 'theme_layouts_filter_layout', 5 );
 
 /* Filters the body_class hook to add a custom class. */
 add_filter( 'body_class', 'theme_layouts_body_class' );
