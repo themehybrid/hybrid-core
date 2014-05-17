@@ -130,13 +130,17 @@ function theme_layouts_get_layouts() {
  */
 function theme_layouts_get_args() {
 
+	$defaults = array( 
+		'customize' => true, 
+		'post_meta' => true, 
+		'default'   => 'default' 
+	);
+
 	$layouts = get_theme_support( 'theme-layouts' );
 
 	$args = isset( $layouts[1] ) ? $layouts[1] : array();
 
-	$args = wp_parse_args( $args, array( 'customize' => true, 'post_meta' => true, 'default' => 'default' ) );
-
-	return apply_filters( 'theme_layouts_args', $args );
+	return apply_filters( 'theme_layouts_args', wp_parse_args( $args, $defaults ) );
 }
 
 /**
@@ -404,7 +408,7 @@ function theme_layouts_admin_setup() {
 		return;
 
 	/* Load the post meta boxes on the new post and edit post screens. */
-	add_action( 'load-post.php', 'theme_layouts_load_meta_boxes' );
+	add_action( 'load-post.php',     'theme_layouts_load_meta_boxes' );
 	add_action( 'load-post-new.php', 'theme_layouts_load_meta_boxes' );
 
 	/* If the attachment post type supports 'theme-layouts', add form fields for it. */
@@ -432,9 +436,9 @@ function theme_layouts_load_meta_boxes() {
 	add_action( 'add_meta_boxes', 'theme_layouts_add_meta_boxes', 10, 2 );
 
 	/* Saves the post format on the post editing page. */
-	add_action( 'save_post', 'theme_layouts_save_post', 10, 2 );
-	add_action( 'add_attachment', 'theme_layouts_save_post' );
-	add_action( 'edit_attachment', 'theme_layouts_save_post' );
+	add_action( 'save_post',       'theme_layouts_save_post', 10, 2 );
+	add_action( 'add_attachment',  'theme_layouts_save_post'        );
+	add_action( 'edit_attachment', 'theme_layouts_save_post'        );
 }
 
 /**
