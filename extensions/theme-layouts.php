@@ -130,7 +130,9 @@ function theme_layouts_get_args() {
 
 	$args = isset( $layouts[1] ) ? $layouts[1] : array();
 
-	return wp_parse_args( $args, array( 'customize' => true, 'post_meta' => true, 'default' => 'default' ) );
+	$args = wp_parse_args( $args, array( 'customize' => true, 'post_meta' => true, 'default' => 'default' ) );
+
+	return apply_filters( 'theme_layouts_args', $args );
 }
 
 /**
