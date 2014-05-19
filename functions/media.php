@@ -58,6 +58,7 @@ function hybrid_attachment() {
 	$file = wp_get_attachment_url();
 	$mime = get_post_mime_type();
 	$mime_type = explode( '/', $mime );
+	$attachment = '';
 
 	/* Loop through each mime type. If a function exists for it, call it. Allow users to filter the display. */
 	foreach ( $mime_type as $type ) {
