@@ -75,14 +75,14 @@ class Hybrid_Widget_Search extends WP_Widget {
 	 */
 	function widget( $sidebar, $instance ) {
 
-		$instance = wp_parse_args( $instance, $this->defaults );
+		$args = wp_parse_args( $instance, $this->defaults );
 
 		/* Output the sidebar's $before_widget wrapper. */
 		echo $sidebar['before_widget'];
 
 		/* If a title was input by the user, display it. */
 		if ( !empty( $args['title'] ) )
-			echo $sidebar['before_title'] . apply_filters( 'widget_title',  $args['title'], $instance, $this->id_base ) . $sidebar['after_title'];
+			echo $sidebar['before_title'] . apply_filters( 'widget_title', $args['title'], $instance, $this->id_base ) . $sidebar['after_title'];
 
 		/* Get the search form. */
 		get_search_form();
