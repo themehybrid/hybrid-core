@@ -152,8 +152,10 @@ function hybrid_get_audio_transcript( $post_id = 0 ) {
  * @return void
  */
 function hybrid_attachment() {
-	$file = wp_get_attachment_url();
-	$mime = get_post_mime_type();
+
+	$file       = wp_get_attachment_url();
+	$mime       = get_post_mime_type();
+	$attachment = '';
 
 	$mime_type = false !== strpos( $mime, '/' ) ? explode( '/', $mime ) : array( $mime, '' );
 
