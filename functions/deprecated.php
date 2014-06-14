@@ -556,6 +556,92 @@ function hybrid_get_transient_expiration() {
 	return 43200;
 }
 
+/**
+ * @since      1.6.0
+ * @deprecated 2.0.0
+ */
+function hybrid_translate( $domain, $text, $context = null ) {
+
+	$translations = get_translations_for_domain( $domain );
+
+	return $translations->translate( $text, $context );
+}
+
+/**
+ * @since      1.6.0
+ * @deprecated 2.0.0
+ */
+function hybrid_translate_plural( $domain, $single, $plural, $number, $context = null ) {
+
+	$translations = get_translations_for_domain( $domain );
+
+	return $translations->translate_plural( $single, $plural, $number, $context );
+}
+
+/**
+ * @since      1.6.0
+ * @deprecated 2.0.0
+ */
+function hybrid_gettext( $translated, $text, $domain ) {
+	return $translated;
+}
+
+/**
+ * @since      1.6.0
+ * @deprecated 2.0.0
+ */
+function hybrid_gettext_with_context( $translated, $text, $context, $domain ) {
+	return $translated;
+}
+
+/**
+ * @since      1.6.0
+ * @deprecated 2.0.0
+ */
+function hybrid_ngettext( $translated, $single, $plural, $number, $domain ) {
+	return $translated;
+}
+
+/**
+ * @since      1.6.0
+ * @deprecated 2.0.0
+ */
+function hybrid_ngettext_with_context( $translated, $single, $plural, $number, $context, $domain ) {
+	return $translated;
+}
+
+/**
+ * @since      1.6.0
+ * @deprecated 2.0.0
+ */
+function hybrid_extensions_gettext( $translated, $text, $domain ) {
+	return $translated;
+}
+
+/**
+ * @since      1.6.0
+ * @deprecated 2.0.0
+ */
+function hybrid_extensions_gettext_with_context( $translated, $text, $context, $domain ) {
+	return $translated;
+}
+
+/**
+ * @since      1.6.0
+ * @deprecated 2.0.0
+ */
+function hybrid_extensions_ngettext( $translated, $single, $plural, $number, $domain ) {
+	return $translated;
+}
+
+/**
+ * @since      1.6.0
+ * @deprecated 2.0.0
+ */
+function hybrid_extensions_ngettext_with_context( $translated, $single, $plural, $number, $context, $domain ) {
+	return $translated;
+}
+
 /* === Removed Functions (note that functions removed prior to the 1.5 branch are gone). === */
 
 /* Functions removed in the 1.5 branch. */

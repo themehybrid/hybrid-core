@@ -76,9 +76,6 @@ if ( !class_exists( 'Hybrid' ) ) {
 			/* Initialize the framework's default actions and filters. */
 			add_action( 'after_setup_theme', array( $this, 'default_filters' ), 3 );
 
-			/* Language functions and translations setup. */
-			add_action( 'after_setup_theme', array( $this, 'i18n' ), 4 );
-
 			/* Handle theme supported features. */
 			add_action( 'after_setup_theme', array( $this, 'theme_support' ), 12 );
 
@@ -87,6 +84,9 @@ if ( !class_exists( 'Hybrid' ) ) {
 
 			/* Load the framework extensions. */
 			add_action( 'after_setup_theme', array( $this, 'extensions' ), 14 );
+
+			/* Language functions and translations setup. */
+			add_action( 'after_setup_theme', array( $this, 'i18n' ), 25 );
 
 			/* Load admin files. */
 			add_action( 'wp_loaded', array( $this, 'admin' ) );
@@ -217,14 +217,19 @@ if ( !class_exists( 'Hybrid' ) ) {
 			$parent_textdomain = hybrid_get_parent_textdomain();
 			$child_textdomain  = hybrid_get_child_textdomain();
 
-			/* Load the framework textdomain. */
-			$hybrid->textdomain_loaded['hybrid-core'] = hybrid_load_framework_textdomain( 'hybrid-core' );
-
 			/* Load theme textdomain. */
 			$hybrid->textdomain_loaded[ $parent_textdomain ] = load_theme_textdomain( $parent_textdomain );
 
 			/* Load child theme textdomain. */
 			$hybrid->textdomain_loaded[ $child_textdomain ] = is_child_theme() ? load_child_theme_textdomain( $child_textdomain ) : false;
+
+			/* Load the framework textdomain. */
+			$hybrid->textdomain_loaded['hybrid-core'] = hybrid_load_framework_textdomain( 'hybrid-core' );
+
+			/* Load empty textdomain mofiles for extensions (these will be overwritten). */
+			if ( current_theme_supports( 'breadcrumb-trail' ) ) load_textdomain( 'breadcrumb-trail', '' );
+			if ( current_theme_supports( 'post-stylesheets' ) ) load_textdomain( 'post-stylesheets', '' );
+			if ( current_theme_supports( 'theme-layouts'    ) ) load_textdomain( 'theme-layouts',    '' );
 
 			/* Get the user's locale. */
 			$locale = get_locale();
