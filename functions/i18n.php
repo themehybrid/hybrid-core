@@ -64,9 +64,9 @@ function hybrid_override_load_textdomain( $override, $domain, $mofile ) {
  * a text string with the given domain.  The purpose of this function is to simply check if the translation files 
  * are loaded.
  *
- * @since 1.3.0
- * @access private This is only used internally by the framework for checking translations.
- * @param string $domain The textdomain to check translations for.
+ * @since  1.3.0
+ * @access public          This is only used internally by the framework for checking translations.
+ * @param  string  $domain The textdomain to check translations for.
  */
 function hybrid_is_textdomain_loaded( $domain ) {
 	global $hybrid;
@@ -78,18 +78,17 @@ function hybrid_is_textdomain_loaded( $domain ) {
  * Loads an empty MO file for the framework textdomain.  This will be overwritten.  The framework domain 
  * will be merged with the theme domain.
  *
- * @since 1.3.0
- * @access private
- * @uses load_textdomain() Loads an MO file into the domain for the framework.
- * @param string $domain The name of the framework's textdomain.
- * @return true|false Whether the MO file was loaded.
+ * @since  1.3.0
+ * @access public
+ * @param  string $domain The name of the framework's textdomain.
+ * @return bool           Whether the MO file was loaded.
  */
 function hybrid_load_framework_textdomain( $domain ) {
 	return load_textdomain( $domain, '' );
 }
 
 /**
- * @since 0.7.0
+ * @since      0.7.0
  * @deprecated 1.3.0
  */
 function hybrid_get_textdomain() {
@@ -104,11 +103,10 @@ function hybrid_get_textdomain() {
  * Important! Do not use this for translation functions in your theme.  Hardcode your textdomain string.  Your 
  * theme's textdomain should match your theme's folder name.
  *
- * @since 1.3.0
- * @access private
- * @uses get_template() Defines the theme textdomain based on the template directory.
+ * @since  1.3.0
+ * @access public
  * @global object $hybrid The global Hybrid object.
- * @return string $hybrid->textdomain The textdomain of the theme.
+ * @return string         The textdomain of the theme.
  */
 function hybrid_get_parent_textdomain() {
 	global $hybrid;
@@ -134,11 +132,10 @@ function hybrid_get_parent_textdomain() {
  * Important! Do not use this for translation functions in your theme.  Hardcode your textdomain string.  Your 
  * theme's textdomain should match your theme's folder name.
  *
- * @since 1.2.0
- * @access private
- * @uses get_stylesheet() Defines the child theme textdomain based on the stylesheet directory.
+ * @since  1.2.0
+ * @access public
  * @global object $hybrid The global Hybrid object.
- * @return string $hybrid->child_theme_textdomain The textdomain of the child theme.
+ * @return string         The textdomain of the child theme.
  */
 function hybrid_get_child_textdomain() {
 	global $hybrid;
@@ -166,11 +163,11 @@ function hybrid_get_child_textdomain() {
  * of the mofile for translations.  This allows child themes to have a folder called /languages with translations
  * of their parent theme so that the translations aren't lost on a parent theme upgrade.
  *
- * @since 1.3.0
- * @access private
- * @param string $mofile File name of the .mo file.
- * @param string $domain The textdomain currently being filtered.
- * @return $mofile
+ * @since  1.3.0
+ * @access public
+ * @param  string $mofile File name of the .mo file.
+ * @param  string $domain The textdomain currently being filtered.
+ * @return string
  */
 function hybrid_load_textdomain_mofile( $mofile, $domain ) {
 
