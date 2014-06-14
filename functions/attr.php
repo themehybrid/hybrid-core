@@ -24,6 +24,7 @@ add_filter( 'hybrid_attr_sidebar', 'hybrid_attr_sidebar', 5, 2 );
 add_filter( 'hybrid_attr_menu',    'hybrid_attr_menu',    5, 2 );
 
 /* Header attributes. */
+add_filter( 'hybrid_attr_branding',         'hybrid_attr_branding',         5 );
 add_filter( 'hybrid_attr_site-title',       'hybrid_attr_site_title',       5 );
 add_filter( 'hybrid_attr_site-description', 'hybrid_attr_site_description', 5 );
 
@@ -219,6 +220,21 @@ function hybrid_attr_menu( $attr, $context ) {
 }
 
 /* === header === */
+
+/**
+ * Branding (usually a wrapper for title and tagline) attributes.
+ *
+ * @since  2.0.0
+ * @access public
+ * @param  array   $attr
+ * @return array
+ */
+function hybrid_attr_branding( $attr ) {
+
+	$attr['id'] = 'branding';
+
+	return $attr;
+}
 
 /**
  * Site title attributes.
