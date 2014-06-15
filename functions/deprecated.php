@@ -642,6 +642,20 @@ function hybrid_extensions_ngettext_with_context( $translated, $single, $plural,
 	return $translated;
 }
 
+/**
+ * @since      0.6.0
+ * @deprecated 2.0.0
+ */
+function hybrid_register_widgets() {
+}
+
+/**
+ * @since      0.3.2
+ * @deprecated 2.0.0
+ */
+function hybrid_unregister_widgets() {
+}
+
 /* === Removed Functions (note that functions removed prior to the 1.5 branch are gone). === */
 
 /* Functions removed in the 1.5 branch. */
