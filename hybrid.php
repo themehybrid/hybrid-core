@@ -316,9 +316,6 @@ if ( !class_exists( 'Hybrid' ) ) {
 			/* Load the shortcodes if supported. */
 			require_if_theme_supports( 'hybrid-core-shortcodes', trailingslashit( HYBRID_FUNCTIONS ) . 'shortcodes.php' );
 
-			/* Load the widgets if supported. */
-			require_if_theme_supports( 'hybrid-core-widgets', trailingslashit( HYBRID_FUNCTIONS ) . 'widgets.php' );
-
 			/* Load the template hierarchy if supported. */
 			require_if_theme_supports( 'hybrid-core-template-hierarchy', trailingslashit( HYBRID_FUNCTIONS ) . 'template-hierarchy.php' );
 
