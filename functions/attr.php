@@ -214,8 +214,10 @@ function hybrid_attr_menu( $attr, $context ) {
 	$attr['class']      = 'menu';
 	$attr['role']       = 'navigation';
 
-	if ( !empty( $context ) )
+	if ( !empty( $context ) ) {
+		/* Translators: The %s is the menu name. This is used for the 'aria-label' attribute. */
 		$attr['aria-label'] = esc_attr( sprintf( _x( '%s Menu', 'nav menu aria label', 'hybrid-core' ), hybrid_get_menu_location_name( $context ) ) );
+	}
 
 	$attr['itemscope']  = 'itemscope';
 	$attr['itemtype']   = 'http://schema.org/SiteNavigationElement';
