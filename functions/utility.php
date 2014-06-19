@@ -163,3 +163,18 @@ function hybrid_hex_to_rgb( $hex ) {
 	/* Return the RGB colors as an array. */
 	return array( 'r' => $red, 'g' => $green, 'b' => $blue );
 }
+
+/**
+ * Function for grabbing a WP nav menu theme location name.
+ *
+ * @since  2.0.0
+ * @access public
+ * @param  string  $location
+ * @return string
+ */
+function hybrid_get_menu_location_name( $location ) {
+
+	$locations = get_registered_nav_menus();
+
+	return $locations[ $location ];
+}

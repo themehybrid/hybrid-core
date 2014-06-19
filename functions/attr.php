@@ -211,10 +211,14 @@ function hybrid_attr_menu( $attr, $context ) {
 	if ( !empty( $context ) )
 		$attr['id'] = "menu-{$context}";
 
-	$attr['class']     = 'menu';
-	$attr['role']      = 'navigation';
-	$attr['itemscope'] = 'itemscope';
-	$attr['itemtype']  = 'http://schema.org/SiteNavigationElement';
+	$attr['class']      = 'menu';
+	$attr['role']       = 'navigation';
+
+	if ( !empty( $context ) )
+		$attr['aria-label'] = esc_attr( sprintf( _x( '%s Menu', 'nav menu aria label', 'hybrid-core' ), hybrid_get_menu_location_name( $context ) ) );
+
+	$attr['itemscope']  = 'itemscope';
+	$attr['itemtype']   = 'http://schema.org/SiteNavigationElement';
 
 	return $attr;
 }
