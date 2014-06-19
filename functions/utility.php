@@ -179,14 +179,17 @@ function hybrid_get_menu_location_name( $location ) {
 	return $locations[ $location ];
 }
 
-function hybrid_get_sidebar_name( $handle ) {
+/**
+ * Function for grabbing a WP nav menu theme location name.
+ *
+ * @since  2.0.0
+ * @access public
+ * @param  string  $sidebar_id
+ * @return string
+ */
+function hybrid_get_sidebar_name( $sidebar_id ) {
 	global $wp_registered_sidebars;
 
-	if ( isset( $wp_registered_sidebars[ $handle ] ) )
-		return $wp_registered_sidebars[ $handle ]['name'];
+	if ( isset( $wp_registered_sidebars[ $sidebar_id ] ) )
+		return $wp_registered_sidebars[ $sidebar_id ]['name'];
 }
-
-
-
-
-
