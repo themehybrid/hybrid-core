@@ -191,6 +191,12 @@ function hybrid_attr_sidebar( $attr, $context ) {
 
 	$attr['class']     = 'sidebar';
 	$attr['role']      = 'complementary';
+
+	if ( !empty( $context ) ) {
+		/* Translators: The %s is the sidebar name. This is used for the 'aria-label' attribute. */
+		$attr['aria-label'] = esc_attr( sprintf( _x( '%s Sidebar', 'sidebar aria label', 'hybrid-core' ), hybrid_get_sidebar_name( $context ) ) );
+	}
+
 	$attr['itemscope'] = 'itemscope';
 	$attr['itemtype']  = 'http://schema.org/WPSideBar';
 

@@ -178,3 +178,15 @@ function hybrid_get_menu_location_name( $location ) {
 
 	return $locations[ $location ];
 }
+
+function hybrid_get_sidebar_name( $handle ) {
+	global $wp_registered_sidebars;
+
+	if ( isset( $wp_registered_sidebars[ $handle ] ) )
+		return $wp_registered_sidebars[ $handle ]['name'];
+}
+
+
+
+
+
