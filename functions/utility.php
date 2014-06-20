@@ -193,3 +193,14 @@ function hybrid_get_sidebar_name( $sidebar_id ) {
 	if ( isset( $wp_registered_sidebars[ $sidebar_id ] ) )
 		return $wp_registered_sidebars[ $sidebar_id ]['name'];
 }
+
+/**
+ * Helper function for getting the script/style `.min` suffix for minified files.
+ *
+ * @since  2.0.0
+ * @access public
+ * @return string
+ */
+function hybrid_get_min_suffix() {
+	return defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+}
