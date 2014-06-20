@@ -383,7 +383,12 @@ video {
 .assistive-text {
 	position: absolute;
 	top:      -9999em;
-	left:     -9999em;
 }
+
+	.ltr .screen-reader-text,
+	.ltr .assistive-text { left:  -9999em; }
+
+	.rtl .screen-reader-text,
+	.rtl .assistive-text { right: -9999em; }
 
 .sticky, .bypostauthor {}
