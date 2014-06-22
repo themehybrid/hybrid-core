@@ -18,7 +18,7 @@ add_action( 'init', 'hybrid_add_post_type_support' );
 add_filter( 'the_title', 'hybrid_untitled_post' );
 
 /* Filters for single post titles. */
-add_filter( 'single_post_title', 'hybrid_single_post_title', 10, 2 );
+add_filter( 'single_post_title', 'hybrid_single_post_title', 0, 2 );
 
 /**
  * This function is for adding extra support for features not default to the core post types.
