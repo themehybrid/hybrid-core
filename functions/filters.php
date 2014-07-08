@@ -176,7 +176,7 @@ function hybrid_get_avatar( $avatar ) {
  * @return string
  */
 function hybrid_post_thumbnail_html( $html ) {
-	return current_theme_supports( 'get-the-image' ) ? $html : preg_replace( '/(<img.*?)(\/>)/i', '$1itemprop="image" $2', $html );
+	return function_exists( 'get_the_image' ) ? $html : preg_replace( '/(<img.*?)(\/>)/i', '$1itemprop="image" $2', $html );
 }
 
 /**

@@ -99,7 +99,7 @@ function hybrid_image_content( $content ) {
 	if ( has_post_format( 'image' ) && !post_password_required() ) {
 		preg_match( '/<img.*?>/', $content, $matches );
 
-		if ( empty( $matches ) && current_theme_supports( 'get-the-image' ) )
+		if ( empty( $matches ) && function_exists( 'get_the_image' ) )
 			$content = get_the_image( array( 'meta_key' => false, 'size' => 'large', 'link_to_post' => false, 'echo' => false ) ) . $content;
 
 		elseif ( empty( $matches ) )
