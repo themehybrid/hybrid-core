@@ -407,6 +407,9 @@ if ( !class_exists( 'Hybrid' ) ) {
 			/* Make text widgets shortcode aware. */
 			add_filter( 'widget_text', 'do_shortcode' );
 
+			/* Don't strip tags on single post titles. */
+			remove_filter( 'single_post_title', 'strip_tags' );
+
 			/* Use same default filters as 'the_content' with a little more flexibility. */
 			add_filter( 'hybrid_loop_description', array( $wp_embed, 'run_shortcode' ),   5 );
 			add_filter( 'hybrid_loop_description', array( $wp_embed, 'autoembed'     ),   5 );
