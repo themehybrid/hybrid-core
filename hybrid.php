@@ -364,12 +364,6 @@ if ( !class_exists( 'Hybrid' ) ) {
 
 			/* Load the Random Custom Background extension if supported. */
 			require_if_theme_supports( 'random-custom-background', trailingslashit( HYBRID_EXTENSIONS ) . 'random-custom-background.php' );
-
-			/* Load the Color Palette extension if supported. */
-			require_if_theme_supports( 'color-palette', trailingslashit( HYBRID_EXTENSIONS ) . 'color-palette.php' );
-
-			/* Load the Theme Fonts extension if supported. */
-			require_if_theme_supports( 'theme-fonts', trailingslashit( HYBRID_EXTENSIONS ) . 'theme-fonts.php' );
 		}
 
 		/**
