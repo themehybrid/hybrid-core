@@ -111,7 +111,7 @@ function hybrid_wp_title( $doctitle, $separator, $seplocation ) {
 		$doctitle = post_type_archive_title( '', false );
 
 	elseif ( is_author() )
-		$doctitle = get_the_author_meta( 'display_name', get_query_var( 'author' ) );
+		$doctitle = hybrid_single_author_title( '', false );
 
 	elseif ( get_query_var( 'minute' ) && get_query_var( 'hour' ) )
 		$doctitle = hybrid_single_minute_hour_title( '', false );

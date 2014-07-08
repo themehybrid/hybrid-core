@@ -227,7 +227,7 @@ function hybrid_get_loop_title() {
 		$loop_title = single_term_title( '', false );
 
 	elseif ( is_author() )
-		$loop_title = get_the_author();
+		$loop_title = hybrid_single_author_title( '', false );
 
 	elseif ( is_search() )
 		$loop_title = hybrid_search_title( '', false );
@@ -337,6 +337,25 @@ function hybrid_get_loop_description() {
 function hybrid_single_archive_title( $prefix = '', $display = true ) {
 
 	$title = $prefix . __( 'Archives', 'hybrid-core' );
+
+	if ( false === $display )
+		return $title;
+
+	echo $title;
+}
+
+/**
+ * Retrieve the author archive title.
+ *
+ * @since  2.0.0
+ * @access public
+ * @param  string  $prefix
+ * @param  bool    $display
+ * @return string
+ */
+function hybrid_single_author_title( $prefix = '', $display = true ) {
+
+	$title = $prefix . get_the_author_meta( 'display_name', get_query_var( 'author' ) );
 
 	if ( false === $display )
 		return $title;
