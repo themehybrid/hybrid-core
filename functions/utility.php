@@ -180,7 +180,7 @@ function hybrid_get_menu_location_name( $location ) {
 }
 
 /**
- * Function for grabbing a WP nav menu theme location name.
+ * Function for grabbing a dynamic sidebar name.
  *
  * @since  2.0.0
  * @access public
