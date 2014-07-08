@@ -32,8 +32,8 @@ function hybrid_register_scripts() {
 	/* Supported JavaScript. */
 	$supports = get_theme_support( 'hybrid-core-scripts' );
 
-	/* Use the .min script if SCRIPT_DEBUG is turned off. */
-	$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
+	/* Get the minified suffix. */
+	$suffix = hybrid_get_min_suffix();
 
 	/* Register the 'mobile-toggle' script if the current theme supports 'mobile-toggle'. */
 	if ( isset( $supports[0] ) && in_array( 'mobile-toggle', $supports[0] ) )

@@ -38,8 +38,8 @@ function hybrid_register_styles() {
 	/* Get framework styles. */
 	$styles = hybrid_get_styles();
 
-	/* Use the .min stylesheet if SCRIPT_DEBUG is turned off. */
-	$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
+	/* Get the minified suffix. */
+	$suffix = hybrid_get_min_suffix();
 
 	/* Loop through each style and register it. */
 	foreach ( $styles as $style => $args ) {
@@ -94,8 +94,8 @@ function hybrid_enqueue_styles() {
  */
 function hybrid_get_styles() {
 
-	/* Use the .min stylesheet if SCRIPT_DEBUG is turned off. */
-	$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
+	/* Get the minified suffix. */
+	$suffix = hybrid_get_min_suffix();
 
 	/* Default styles available. */
 	$styles = array(
@@ -137,9 +137,11 @@ function hybrid_get_styles() {
  */
 function hybrid_min_stylesheet_uri( $stylesheet_uri, $stylesheet_dir_uri ) {
 
-	/* Use the .min stylesheet if SCRIPT_DEBUG is turned off. */
-	if ( !defined( 'SCRIPT_DEBUG' ) || false === SCRIPT_DEBUG ) {
-		$suffix = '.min';
+	/* Get the minified suffix. */
+	$suffix = hybrid_get_min_suffix();
+
+	/* Use the .min stylesheet if available. */
+	if ( !empty( $suffix ) ) {
 
 		/* Remove the stylesheet directory URI from the file name. */
 		$stylesheet = str_replace( trailingslashit( $stylesheet_dir_uri ), '', $stylesheet_uri );
