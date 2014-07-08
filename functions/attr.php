@@ -55,13 +55,12 @@ add_filter( 'hybrid_attr_comment-content',   'hybrid_attr_comment_content',   5 
  *
  * @since  2.0.0
  * @access public
- * @param  string  $slug        The slug/ID of the element (e.g., 'sidebar').
- * @param  string  $context     A specific context (e.g., 'primary').
- * @param  array   $attributes  Custom attributes to pass in.
+ * @param  string  $slug     The slug/ID of the element (e.g., 'sidebar').
+ * @param  string  $context  A specific context (e.g., 'primary').
  * @return void
  */
-function hybrid_attr( $slug, $context = '', $attributes = array() ) {
-	echo hybrid_get_attr( $slug, $context, $attributes );
+function hybrid_attr( $slug, $context = '' ) {
+	echo hybrid_get_attr( $slug, $context );
 }
 
 /**
@@ -72,15 +71,14 @@ function hybrid_attr( $slug, $context = '', $attributes = array() ) {
  *
  * @since  2.0.0
  * @access public
- * @param  string  $slug        The slug/ID of the element (e.g., 'sidebar').
- * @param  string  $context     A specific context (e.g., 'primary').
- * @param  array   $attributes  Custom attributes to pass in.
+ * @param  string  $slug     The slug/ID of the element (e.g., 'sidebar').
+ * @param  string  $context  A specific context (e.g., 'primary').
  * @return string
  */
-function hybrid_get_attr( $slug, $context = '', $attributes = array() ) {
+function hybrid_get_attr( $slug, $context = '' ) {
 
 	$out    = '';
-	$attr   = apply_filters( "hybrid_attr_{$slug}", $attributes, $context );
+	$attr   = apply_filters( "hybrid_attr_{$slug}", array(), $context );
 
 	if ( empty( $attr ) )
 		$attr['class'] = $slug;
