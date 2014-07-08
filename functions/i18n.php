@@ -1,8 +1,9 @@
 <?php
 /**
- * Internationalization and translation functions.  Because Hybrid Core is a framework made up of various 
- * extensions with different textdomains, it must filter 'gettext' so that a single translation file can 
- * handle all translations.
+ * Internationalization and translation functions. This file provides a few functions for use by theme 
+ * authors.  It also handles properly loading translation files for both the parent and child themes.  Part 
+ * of the functionality below handles consolidating the framework's textdomains with the textdomain of the 
+ * parent theme to avoid having multiple translation files.
  *
  * @package    HybridCore
  * @subpackage Functions
@@ -21,7 +22,7 @@ add_filter( 'load_textdomain_mofile', 'hybrid_load_textdomain_mofile', 10, 2 );
 /**
  * Overrides the load textdomain functionality when 'hybrid-core' is the domain in use.  The purpose of 
  * this is to allow theme translations to handle the framework's strings.  What this function does is 
- * sets the 'hybrid-core' domain's translations to the themes.  That way, we're not loading multiple 
+ * sets the 'hybrid-core' domain's translations to the theme's.  That way, we're not loading multiple 
  * of the same MO files.
  *
  * @since  2.0.0

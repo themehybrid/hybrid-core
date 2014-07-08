@@ -17,7 +17,8 @@ add_action( 'init', 'hybrid_register_meta' );
 /**
  * Registers the framework's custom metadata keys and sets up the sanitize callback function.
  *
- * @since 1.3.0
+ * @since  1.3.0
+ * @access public
  * @return void
  */
 function hybrid_register_meta() {
@@ -39,11 +40,12 @@ function hybrid_register_meta() {
  * If a developer wants to set up a custom method for sanitizing the data, they should use the 
  * "sanitize_{$meta_type}_meta_{$meta_key}" filter hook to do so.
  *
- * @since 1.3.0
- * @param mixed $meta_value The value of the data to sanitize.
- * @param string $meta_key The meta key name.
- * @param string $meta_type The type of metadata (post, comment, user, etc.)
- * @return mixed $meta_value
+ * @since  1.3.0
+ * @access public
+ * @param  mixed   $meta_value  The value of the data to sanitize.
+ * @param  string  $meta_key    The meta key name.
+ * @param  string  $meta_type   The type of metadata (post, comment, user, etc.)
+ * @return mixed   $meta_value
  */
 function hybrid_sanitize_meta( $meta_value, $meta_key, $meta_type ) {
 	return strip_tags( $meta_value );

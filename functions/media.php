@@ -21,7 +21,7 @@ add_filter( 'wp_get_attachment_id3_keys', 'hybrid_attachment_id3_keys', 5, 3 );
  * "add media" modal.  This allows users to insert the image within their post content editor.
  *
  * @since  1.3.0
- * @access private
+ * @access public
  * @param  array   $sizes  Selectable image sizes.
  * @return array
  */

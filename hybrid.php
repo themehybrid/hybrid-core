@@ -404,7 +404,7 @@ if ( !class_exists( 'Hybrid' ) ) {
 			remove_action( 'wp_head', 'wp_generator' );
 			add_action( 'wp_head', 'wp_generator', 1 );
 
-			/* Make text widgets and term descriptions shortcode aware. */
+			/* Make text widgets shortcode aware. */
 			add_filter( 'widget_text', 'do_shortcode' );
 
 			/* Use same default filters as 'the_content' with a little more flexibility. */

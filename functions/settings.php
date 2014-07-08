@@ -20,11 +20,9 @@
  *
  * @since  0.7.0
  * @access public
- * @uses   get_option() Gets an option from the database.
- * @uses   hybrid_get_prefix() Gets the prefix of the theme.
- * @global object $hybrid The global Hybrid object.
- * @param  string $option The specific theme setting the user wants.
- * @return mixed $settings[$option] Specific setting asked for.
+ * @global object  $hybrid  The global Hybrid object.
+ * @param  string  $option  The specific theme setting the user wants.
+ * @return mixed            Specific setting asked for.
  */
 function hybrid_get_setting( $option = '' ) {
 	global $hybrid;

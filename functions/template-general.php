@@ -150,7 +150,7 @@ function hybrid_site_title() {
 }
 
 /**
- * Returns the linked site title wrapped in an `<h2>` tag.
+ * Returns the linked site title wrapped in an `<h1>` tag.
  *
  * @since  2.0.0
  * @access public

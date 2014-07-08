@@ -20,28 +20,25 @@ add_action( 'init', 'hybrid_add_shortcodes' );
  * Creates new shortcodes for use in any shortcode-ready area.  This function uses the add_shortcode() 
  * function to register new shortcodes with WordPress.
  *
- * @since 0.8.0
+ * @since  0.8.0
  * @access public
- * @uses add_shortcode() to create new shortcodes.
- * @link http://codex.wordpress.org/Shortcode_API
  * @return void
  */
 function hybrid_add_shortcodes() {
 
 	/* Add theme-specific shortcodes. */
-	add_shortcode( 'the-year',      'hybrid_the_year_shortcode' );
-	add_shortcode( 'site-link',     'hybrid_site_link_shortcode' );
-	add_shortcode( 'wp-link',       'hybrid_wp_link_shortcode' );
-	add_shortcode( 'theme-link',    'hybrid_theme_link_shortcode' );
-	add_shortcode( 'child-link',    'hybrid_child_link_shortcode' );
+	add_shortcode( 'the-year',   'hybrid_the_year_shortcode' );
+	add_shortcode( 'site-link',  'hybrid_site_link_shortcode' );
+	add_shortcode( 'wp-link',    'hybrid_wp_link_shortcode' );
+	add_shortcode( 'theme-link', 'hybrid_theme_link_shortcode' );
+	add_shortcode( 'child-link', 'hybrid_child_link_shortcode' );
 }
 
 /**
  * Shortcode to display the current year.
  *
- * @since 0.6.0
+ * @since  0.6.0
  * @access public
- * @uses date() Gets the current year.
  * @return string
  */
 function hybrid_the_year_shortcode() {
@@ -51,9 +48,8 @@ function hybrid_the_year_shortcode() {
 /**
  * Shortcode to display a link back to the site.
  *
- * @since 0.6.0
+ * @since  0.6.0
  * @access public
- * @uses get_bloginfo() Gets information about the install.
  * @return string
  */
 function hybrid_site_link_shortcode() {
@@ -63,7 +59,7 @@ function hybrid_site_link_shortcode() {
 /**
  * Shortcode to display a link to WordPress.org.
  *
- * @since 0.6.0
+ * @since  0.6.0
  * @access public
  * @return string
  */
@@ -74,9 +70,8 @@ function hybrid_wp_link_shortcode() {
 /**
  * Shortcode to display a link to the parent theme page.
  *
- * @since 0.6.0
+ * @since  0.6.0
  * @access public
- * @uses get_theme_data() Gets theme (parent theme) information.
  * @return string
  */
 function hybrid_theme_link_shortcode() {
@@ -86,9 +81,8 @@ function hybrid_theme_link_shortcode() {
 /**
  * Shortcode to display a link to the child theme's page.
  *
- * @since 0.6.0
+ * @since  0.6.0
  * @access public
- * @uses get_theme_data() Gets theme (child theme) information.
  * @return string
  */
 function hybrid_child_link_shortcode() {

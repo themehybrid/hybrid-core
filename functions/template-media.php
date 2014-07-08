@@ -182,7 +182,7 @@ function hybrid_attachment() {
  */
 function hybrid_application_attachment( $mime = '', $file = '' ) {
 	$embed_defaults = wp_embed_defaults();
-	$application = '<object class="text" type="' . esc_attr( $mime ) . '" data="' . esc_url( $file ) . '" width="' . esc_attr( $embed_defaults['width'] ) . '" height="' . esc_attr( $embed_defaults['height'] ) . '">';
+	$application  = '<object class="text" type="' . esc_attr( $mime ) . '" data="' . esc_url( $file ) . '" width="' . esc_attr( $embed_defaults['width'] ) . '" height="' . esc_attr( $embed_defaults['height'] ) . '">';
 	$application .= '<param name="src" value="' . esc_url( $file ) . '" />';
 	$application .= '</object>';
 
@@ -201,7 +201,7 @@ function hybrid_application_attachment( $mime = '', $file = '' ) {
  */
 function hybrid_text_attachment( $mime = '', $file = '' ) {
 	$embed_defaults = wp_embed_defaults();
-	$text = '<object class="text" type="' . esc_attr( $mime ) . '" data="' . esc_url( $file ) . '" width="' . esc_attr( $embed_defaults['width'] ) . '" height="' . esc_attr( $embed_defaults['height'] ) . '">';
+	$text  = '<object class="text" type="' . esc_attr( $mime ) . '" data="' . esc_url( $file ) . '" width="' . esc_attr( $embed_defaults['width'] ) . '" height="' . esc_attr( $embed_defaults['height'] ) . '">';
 	$text .= '<param name="src" value="' . esc_url( $file ) . '" />';
 	$text .= '</object>';
 

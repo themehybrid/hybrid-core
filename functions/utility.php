@@ -44,10 +44,10 @@ function hybrid_add_post_type_support() {
  * Checks if a post of any post type has a custom template.  This is the equivalent of WordPress' 
  * is_page_template() function with the exception that it works for all post types.
  *
- * @since 1.2.0
+ * @since  1.2.0
  * @access public
- * @param string $template The name of the template to check for.
- * @return bool Whether the post has a template.
+ * @param  string  $template  The name of the template to check for.
+ * @return bool               Whether the post has a template.
  */
 function hybrid_has_post_template( $template = '' ) {
 
@@ -85,8 +85,11 @@ function hybrid_has_post_template( $template = '' ) {
  */
 function hybrid_untitled_post( $title ) {
 
-	if ( empty( $title ) && !is_singular() && in_the_loop() && !is_admin() )
+	if ( empty( $title ) && !is_singular() && in_the_loop() && !is_admin() ) {
+
+		/* Translators: Used as a placeholder for untitled posts on non-singular views. */
 		$title = __( '(Untitled)', 'hybrid-core' );
+	}
 
 	return $title;
 }

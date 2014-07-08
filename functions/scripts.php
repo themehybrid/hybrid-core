@@ -23,8 +23,8 @@ add_action( 'wp_enqueue_scripts', 'hybrid_enqueue_scripts', 5 );
  * the wp_register_script() function.  It does not load any script files on the site.  If a theme wants to register 
  * its own custom scripts, it should do so on the 'wp_enqueue_scripts' hook.
  *
- * @since 1.2.0
- * @access private
+ * @since  1.2.0
+ * @access public
  * @return void
  */
 function hybrid_register_scripts() {
@@ -43,8 +43,8 @@ function hybrid_register_scripts() {
 /**
  * Tells WordPress to load the scripts needed for the framework using the wp_enqueue_script() function.
  *
- * @since 1.2.0
- * @access private
+ * @since  1.2.0
+ * @access public
  * @return void
  */
 function hybrid_enqueue_scripts() {
