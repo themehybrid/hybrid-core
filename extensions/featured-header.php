@@ -16,9 +16,9 @@
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * @package   FeaturedHeader
- * @version   0.1.2-alpha-1
+ * @version   0.1.2
  * @author    Justin Tadlock <justin@justintadlock.com>
- * @copyright Copyright (c) 2013, Justin Tadlock
+ * @copyright Copyright (c) 2013 - 2014, Justin Tadlock
  * @link      http://justintadlock.com
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
