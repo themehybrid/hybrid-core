@@ -16,9 +16,9 @@
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * @package   CleanerCaption
- * @version   0.3.0-alpha
+ * @version   0.3.0
  * @author    Justin Tadlock <justin@justintadlock.com>
- * @copyright Copyright (c) 2013, Justin Tadlock
+ * @copyright Copyright (c) 2011 - 2014, Justin Tadlock
  * @link      http://justintadlock.com
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
