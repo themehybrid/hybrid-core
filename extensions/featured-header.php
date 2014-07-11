@@ -212,5 +212,3 @@ class Featured_Header {
 }
 
 new Featured_Header();
-
-?>
