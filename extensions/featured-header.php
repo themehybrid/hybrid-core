@@ -35,45 +35,45 @@ class Featured_Header {
 	/**
 	 * Name of the custom header image size added via add_image_size().
 	 *
-	 * @since 0.1.0
+	 * @since  0.1.0
 	 * @access public
-	 * @var string
+	 * @var    string
 	 */
 	public $size = 'featured-header';
 
 	/**
 	 * Width of the custom header image size.
 	 *
-	 * @since 0.1.0
+	 * @since  0.1.0
 	 * @access public
-	 * @var int
+	 * @var    int
 	 */
 	public $width = 0;
 
 	/**
 	 * Height of the custom header image size.
 	 *
-	 * @since 0.1.0
+	 * @since  0.1.0
 	 * @access public
-	 * @var int
+	 * @var    int
 	 */
 	public $height = 0;
 
 	/**
 	 * Whether to hard crop the custom header image size.
 	 *
-	 * @since 0.1.0
+	 * @since  0.1.0
 	 * @access public
-	 * @var bool
+	 * @var    bool
 	 */
 	public $crop = true;
 
 	/**
 	 * The URL of the header image.
 	 *
-	 * @since 0.1.0
+	 * @since  0.1.0
 	 * @access protected
-	 * @var string
+	 * @var    string
 	 */
 	protected $url = '';
 
