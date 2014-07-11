@@ -80,7 +80,7 @@ class Featured_Header {
 	/**
 	 * Constructor.  Sets up needed actions and filters.
 	 *
-	 * @since 0.1.0
+	 * @since  0.1.0
 	 * @access public
 	 * @return void
 	 */
@@ -104,7 +104,7 @@ class Featured_Header {
 	 * Adds an image size using the add_image_size() function based off the dimensions of 
 	 * the theme's 'custom-header dimensions.
 	 *
-	 * @since 0.1.0
+	 * @since  0.1.0
 	 * @access public
 	 * @return void
 	 */
@@ -133,9 +133,9 @@ class Featured_Header {
 	 * Filters the 'theme_mod_header_image' hook.  Checks if there's a featured image with the 
 	 * correct dimensions to replace the header image on single posts.
 	 *
-	 * @since 0.1.0
+	 * @since  0.1.0
 	 * @access public
-	 * @param string $url The URL of the header image.
+	 * @param  string $url The URL of the header image.
 	 * @return string
 	 */
 	public function header_image( $url ) {
@@ -169,15 +169,16 @@ class Featured_Header {
 	 * Filters the 'theme_mod_header_image_data' hook.  This is used to set the header image width 
 	 * and height attributes if a featured header image was found.
 	 *
-	 * @since 0.1.0
+	 * @since  0.1.0
 	 * @access public
-	 * @param object $data Header image data (width, height, url, thumbnail_url).
+	 * @param  object|array $data Header image data (width, height, url, thumbnail_url).
 	 * @return object
 	 */
 	public function header_image_data( $data ) {
 
 		/* If a featured header image URL was set, add the width and height values. */
 		if ( !empty( $this->url ) ) {
+
 			/* Sometimes $data is an array and sometimes it's an object. That's weird. */
 			if( is_array( $data ) ) {
 				$data['width']  = $this->width;
