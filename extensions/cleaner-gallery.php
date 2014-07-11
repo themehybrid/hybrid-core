@@ -76,6 +76,15 @@ final class Cleaner_Gallery {
 	public $mime_types = array();
 
 	/**
+	 * Whether a gallery item has a caption. This changes per image.
+	 *
+	 * @since  1.1.0
+	 * @access public
+	 * @var    bool
+	 */
+	public $has_caption = false;
+
+	/**
 	 *
 	 * @since  1.1.0
 	 * @access public
@@ -104,8 +113,8 @@ final class Cleaner_Gallery {
 			return $output;
 
 		/* Filters to add Schema.org microdata support. */
-		add_filter( 'wp_get_attachment_image_attributes', array( $this, 'attachment_image_attributes' ) );
-		add_filter( 'wp_get_attachment_link',             array( $this, 'get_attachment_link'         ) );
+		add_filter( 'wp_get_attachment_image_attributes', array( $this, 'attachment_image_attributes' ), 5, 2 );
+		add_filter( 'wp_get_attachment_link',             array( $this, 'get_attachment_link'         ), 5    );
 
 		/* Iterate the gallery istance. */
 		$this->gallery_instance++;
@@ -120,7 +129,7 @@ final class Cleaner_Gallery {
 		$children = array(
 			'post_status'      => 'inherit',
 			'post_type'        => 'attachment',
-			'post_mime_type'   => wp_parse_args( $this->args['mime_type'] ),
+			'post_mime_type'   => $this->args['mime_type'],
 			'order'            => $this->args['order'],
 			'orderby'          => $this->args['orderby'],
 			'exclude'          => $this->args['exclude'],
@@ -266,11 +275,14 @@ final class Cleaner_Gallery {
 		/* Open each gallery item. */
 		$output = "\n\t\t\t\t\t<{$this->args['itemtag']} class='gallery-item col-{$this->args['columns']}' itemprop='associatedMedia' itemscope itemtype='{$itemtype}'>";
 
-		/* Get the gallery icon. */
-		$output .= $this->get_gallery_icon( $attachment );
+		/* Get the gallery caption first b/c we need it for 'aria-describedby'. */
+		$caption = $this->get_gallery_caption( $attachment );
 
-		/* Get the gallery caption. */
-		$output .= $this->get_gallery_caption( $attachment );
+		/* Get the gallery icon. */
+		$icon = $this->get_gallery_icon( $attachment );
+
+		/* Add the icon and caption. */
+		$output .= $icon . $caption;
 
 		/* Close individual gallery item. */
 		$output .= "\n\t\t\t\t\t</{$this->args['itemtag']}>";
@@ -349,10 +361,13 @@ final class Cleaner_Gallery {
 		$caption = apply_filters( 'cleaner_gallery_caption', wptexturize( $attachment->post_excerpt ), $attachment->ID, $this->args, $this->gallery_instance );
 
 		/* If image caption is set, format and return. */
-		if ( !empty( $caption ) )
-			return "\n\t\t\t\t\t\t<{$this->args['captiontag']} class='gallery-caption' itemprop='caption'>{$caption}</{$this->args['captiontag']}>";
+		if ( !empty( $caption ) ) {
+			$this->has_caption = true;
+			return "\n\t\t\t\t\t\t" . sprintf( '<%1$s id="%2$s" class="gallery-caption" itemprop="caption">%3$s</%1$s>', $this->args['captiontag'], esc_attr( "figcaption-{$this->args['id']}-{$attachment->ID}" ), $caption );
+		}
 
 		/* Return an empty string if there's no caption. */
+		$this->has_caption = false;
 		return '';
 	}
 
@@ -393,9 +408,13 @@ final class Cleaner_Gallery {
 	 * @since  1.1.0
 	 * @access public
 	 * @param  array  $attr
+	 * @param  object $attachment
 	 * @return array
 	 */
-	public function attachment_image_attributes( $attr ) {
+	public function attachment_image_attributes( $attr, $attachment ) {
+
+		if ( true === $this->has_caption )
+			$attr['aria-describedby'] = esc_attr( "figcaption-{$this->args['id']}-{$attachment->ID}" );
 
 		$attr['itemprop'] = 'thumbnail';
 
