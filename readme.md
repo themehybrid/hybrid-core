@@ -32,7 +32,7 @@ No, Hybrid Core is not a theme.  It is a framework that you drop into your theme
 
 ### Wait. Aren't frameworks parent themes? ###
 
-No, not really, they're not.  Unfortunately, many theme authors have co-opted the term "framework" and applied it to themes intended to be used solely as parent themes.  I suppose you could stretch the term framework to pretty much apply to any base code that you can build from, but this has meant for some confusing terminology in the WordPress community.  We already have a term for what these "framework" themes are &mdash; they're called "parent themes".
+No, not really, they're not.  Unfortunately, many theme authors have co-opted the term "framework" and applied it to themes intended to be used solely as parent themes.  I suppose you could stretch the term framework to pretty much apply to any base code that you can build from, but this has meant for some confusing terminology in the WordPress community.  We already have a term for what these "framework" themes are &mdash; they're called "parent themes".  If you're interested in reading more on this topic, I recommend checking out "[Frameworks? Parent, child, and  grandchild themes?](http://justintadlock.com/archives/2010/08/16/frameworks-parent-child-and-grandchild-themes)" for an in-depth discussion on the subject.
 
 ### So, I can't have child themes? ###
 
@@ -44,7 +44,7 @@ I was one of the original theme authors to help pioneer the parent/child theme m
 
 Certainly.  The code for the framework is handled via its [GitHub Repository](https://github.com/justintadlock/hybrid-core).  You can open tickets, create patches, and send pull requests there.
 
-Please don't make pull requests against the `master` branch.  This is the latest, stable code.  You can make a pull request against one of the other branches.
+Please don't make pull requests against the `master` branch.  This is the latest, stable code.  You can make a pull request against one of the point branches or the `dev` (future release) branch.
 
 ## Copyright and License ##
 
