@@ -46,9 +46,10 @@ function hybrid_override_load_textdomain( $override, $domain, $mofile ) {
 	if ( in_array( $domain, $text_domains ) ) {
 		global $l10n;
 
-		$theme = wp_get_theme( get_template() );
-		$theme_textdomain = $theme->get( 'TextDomain' ) ? $theme->get( 'TextDomain' ) : get_template();
+		/* Get the theme's textdomain. */
+		$theme_textdomain = hybrid_get_parent_textdomain();
 
+		/* If the theme's textdomain is loaded, use its translations instead. */
 		if ( !empty( $theme_textdomain ) && isset( $l10n[ $theme_textdomain ] ) )
 			$l10n[ $domain ] = $l10n[ $theme_textdomain ];
 
