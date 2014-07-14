@@ -8,39 +8,42 @@
  * @package    HybridCore
  * @subpackage Functions
  * @author     Justin Tadlock <justin@justintadlock.com>
- * @copyright  Copyright (c) 2008 - 2013, Justin Tadlock
+ * @copyright  Copyright (c) 2008 - 2014, Justin Tadlock
  * @link       http://themehybrid.com/hybrid-core
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 /* Filter the date template. */
-add_filter( 'date_template', 'hybrid_date_template' );
+add_filter( 'date_template', 'hybrid_date_template', 5 );
 
 /* Filter the author/user template. */
-add_filter( 'author_template', 'hybrid_user_template' );
+add_filter( 'author_template', 'hybrid_user_template', 5 );
 
 /* Filter the tag and category (taxonomy) templates. */
-add_filter( 'tag_template', 'hybrid_taxonomy_template' );
-add_filter( 'category_template', 'hybrid_taxonomy_template' );
-add_filter( 'taxonomy_template', 'hybrid_taxonomy_template' );
+add_filter( 'tag_template',      'hybrid_taxonomy_template', 5 );
+add_filter( 'category_template', 'hybrid_taxonomy_template', 5 );
+add_filter( 'taxonomy_template', 'hybrid_taxonomy_template', 5 );
 
 /* Filter the single, page, and attachment (singular) templates. */
-add_filter( 'single_template', 'hybrid_singular_template' );
-add_filter( 'page_template', 'hybrid_singular_template' );
-add_filter( 'attachment_template', 'hybrid_singular_template' );
+add_filter( 'single_template',     'hybrid_singular_template', 5 );
+add_filter( 'page_template',       'hybrid_singular_template', 5 );
+add_filter( 'attachment_template', 'hybrid_singular_template', 5 );
+
+/* Filter the front page template. */
+add_filter( 'front_page_template', 'hybrid_front_page_template', 5 ); // Doesn't work b/c bug with get_query_template().
+add_filter( 'frontpage_template',  'hybrid_front_page_template', 5 );
 
 /* Filter the comments template. */
-add_filter( 'comments_template', 'hybrid_comments_template' );
+add_filter( 'comments_template', 'hybrid_comments_template', 5 );
 
 /**
  * Overrides WP's default template for date-based archives. Better abstraction of templates than 
  * is_date() allows by checking for the year, month, week, day, hour, and minute.
  *
- * @since 0.6.0
+ * @since  0.6.0
  * @access public
- * @uses locate_template() Checks for template in child and parent theme.
- * @param string $template
- * @return string $template Full path to file.
+ * @param  string $template
+ * @return string $template
  */
 function hybrid_date_template( $template ) {
 	$templates = array();
@@ -91,11 +94,10 @@ function hybrid_date_template( $template ) {
  * is_author() allows by allowing themes to specify templates for a specific author. The hierarchy is 
  * user-$nicename.php, $user-role-$role.php, user.php, author.php, archive.php.
  *
- * @since 0.7.0
+ * @since  0.7.0
  * @access public
- * @uses locate_template() Checks for template in child and parent theme.
- * @param string $template
- * @return string Full path to file.
+ * @param  string $template
+ * @return string
  */
 function hybrid_user_template( $template ) {
 	$templates = array();
@@ -134,10 +136,9 @@ function hybrid_user_template( $template ) {
  * other taxonomies. The hierarchy is taxonomy-$taxonomy-$term.php, taxonomy-$taxonomy.php, 
  * taxonomy.php, archive.php.
  *
- * @since 0.7.0
+ * @since  0.7.0
  * @access public
- * @uses locate_template() Checks for template in child and parent theme.
- * @param string $template
+ * @param  string $template
  * @return string Full path to file.
  */
 function hybrid_taxonomy_template( $template ) {
@@ -146,7 +147,7 @@ function hybrid_taxonomy_template( $template ) {
 	$term = get_queried_object();
 
 	/* Remove 'post-format' from the slug. */
-	$slug = ( ( 'post_format' == $term->taxonomy ) ? str_replace( 'post-format-', '', $term->slug ) : $term->slug );
+	$slug = ( 'post_format' == $term->taxonomy ) ? str_replace( 'post-format-', '', $term->slug ) : $term->slug;
 
 	/* Return the available templates. */
 	return locate_template( array( "taxonomy-{$term->taxonomy}-{$slug}.php", "taxonomy-{$term->taxonomy}.php", 'taxonomy.php', 'archive.php' ) );
@@ -156,13 +157,12 @@ function hybrid_taxonomy_template( $template ) {
  * Overrides the default single (singular post) template.  Post templates can be loaded using a custom 
  * post template, by slug, or by ID.
  *
- * Attachment templates are handled slightly differently. Rather than look for the slug
- * or ID, templates can be loaded by attachment-$mime[0]_$mime[1].php, 
- * attachment-$mime[1].php, or attachment-$mime[0].php.
+ * Attachment templates are handled slightly differently. Rather than look for the slug or ID, templates 
+ * can be loaded by attachment-$mime[0]_$mime[1].php, attachment-$mime[1].php, or attachment-$mime[0].php.
  *
- * @since 0.7.0
+ * @since  0.7.0
  * @access public
- * @param string $template The default WordPress post template.
+ * @param  string $template The default WordPress post template.
  * @return string $template The theme post template after all templates have been checked for.
  */
 function hybrid_singular_template( $template ) {
@@ -212,13 +212,32 @@ function hybrid_singular_template( $template ) {
 }
 
 /**
+ * Fix for the front page template handling in WordPress core. Its handling is not logical because it 
+ * forces devs to account for both a page on the front page and posts on the front page.  Theme devs 
+ * must handle both scenarios if they've created a "front-page.php" template.  This filter overwrites 
+ * that and disables the "front-page.php" template if posts are to be shown on the front page.  This 
+ * way, the "front-page.php" template will only ever be used if an actual page is supposed to be 
+ * shown on the front.
+ *
+ * @link   http://www.chipbennett.net/2013/09/14/home-page-and-front-page-and-templates-oh-my/
+ * @since  2.0.0
+ * @access public
+ * @param  string  $template
+ * @return string
+ */
+function hybrid_front_page_template( $template ) {
+
+	return is_home() ? '' : $template;
+}
+
+/**
  * Overrides the default comments template.  This filter allows for a "comments-{$post_type}.php" 
  * template based on the post type of the current single post view.  If this template is not found, it falls 
  * back to the default "comments.php" template.
  *
- * @since 1.5.0
+ * @since  1.5.0
  * @access public
- * @param string $template The comments template file name.
+ * @param  string $template The comments template file name.
  * @return string $template The theme comments template after all templates have been checked for.
  */
 function hybrid_comments_template( $template ) {
@@ -240,5 +259,3 @@ function hybrid_comments_template( $template ) {
 	/* Return the found template. */
 	return locate_template( $templates );
 }
-
-?>

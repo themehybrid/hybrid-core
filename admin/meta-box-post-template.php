@@ -8,25 +8,28 @@
  * @package    HybridCore
  * @subpackage Admin
  * @author     Justin Tadlock <justin@justintadlock.com>
- * @copyright  Copyright (c) 2008 - 2013, Justin Tadlock
+ * @copyright  Copyright (c) 2008 - 2014, Justin Tadlock
  * @link       http://themehybrid.com/hybrid-core
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 /* Add the post template meta box on the 'add_meta_boxes' hook. */
-add_action( 'add_meta_boxes', 'hybrid_meta_box_post_add_template', 10, 2 );
+add_action( 'add_meta_boxes', 'hybrid_meta_box_post_add_template',    10, 2 );
 add_action( 'add_meta_boxes', 'hybrid_meta_box_post_remove_template', 10, 2 );
 
 /* Save the post template meta box data on the 'save_post' hook. */
-add_action( 'save_post', 'hybrid_meta_box_post_save_template', 10, 2 );
-add_action( 'add_attachment', 'hybrid_meta_box_post_save_template' );
-add_action( 'edit_attachment', 'hybrid_meta_box_post_save_template' );
+add_action( 'save_post',       'hybrid_meta_box_post_save_template', 10, 2 );
+add_action( 'add_attachment',  'hybrid_meta_box_post_save_template'        );
+add_action( 'edit_attachment', 'hybrid_meta_box_post_save_template'        );
 
 /**
  * Adds the post template meta box for all public post types, excluding the 'page' post type since WordPress 
  * core already handles page templates.
  *
- * @since 1.2.0
+ * @since  1.2.0
+ * @access public
+ * @param  string  $post_type
+ * @param  object  $post
  * @return void
  */
 function hybrid_meta_box_post_add_template( $post_type, $post ) {
@@ -48,9 +51,10 @@ function hybrid_meta_box_post_add_template( $post_type, $post ) {
 /**
  * Remove the meta box from some post types.
  *
- * @since 1.3.0
- * @param string $post_type The post type of the current post being edited.
- * @param object $post The current post being edited.
+ * @since  1.3.0
+ * @access public
+ * @param  string $post_type The post type of the current post being edited.
+ * @param  object $post      The current post being edited.
  * @return void
  */ 
 function hybrid_meta_box_post_remove_template( $post_type, $post ) {
@@ -71,7 +75,10 @@ function hybrid_meta_box_post_remove_template( $post_type, $post ) {
 /**
  * Displays the post template meta box.
  *
- * @since 1.2.0
+ * @since  1.2.0
+ * @access public
+ * @param  object  $object
+ * @param  array   $box
  * @return void
  */
 function hybrid_meta_box_post_display_template( $object, $box ) {
@@ -98,11 +105,13 @@ function hybrid_meta_box_post_display_template( $object, $box ) {
 }
 
 /**
- * Saves the post template meta box settings as post metadata.
+ * Saves the post template meta box settings as post metadata. Note that this meta is sanitized using the 
+ * hybrid_sanitize_meta() callback function prior to being saved.
  *
- * @since 1.2.0
- * @param int $post_id The ID of the current post being saved.
- * @param int $post The post object currently being saved.
+ * @since  1.2.0
+ * @access public
+ * @param  int      $post_id The ID of the current post being saved.
+ * @param  object   $post    The post object currently being saved.
  * @return void|int
  */
 function hybrid_meta_box_post_save_template( $post_id, $post = '' ) {
@@ -140,5 +149,3 @@ function hybrid_meta_box_post_save_template( $post_id, $post = '' ) {
 	elseif ( current_user_can( 'edit_post_meta', $post_id ) && $new_meta_value && $new_meta_value != $meta_value )
 		update_post_meta( $post_id, $meta_key, $new_meta_value );
 }
-
-?>

@@ -11,16 +11,13 @@
  * @package    HybridCore
  * @subpackage Functions
  * @author     Justin Tadlock <justin@justintadlock.com>
- * @copyright  Copyright (c) 2008 - 2013, Justin Tadlock
+ * @copyright  Copyright (c) 2008 - 2014, Justin Tadlock
  * @link       http://themehybrid.com/hybrid-core
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 /* Add support for structured post formats. */
 add_action( 'wp_loaded', 'hybrid_structured_post_formats', 1 );
-
-/* Filter the post format archive title. */
-add_filter( 'single_term_title', 'hybrid_single_post_format_title' );
 
 /**
  * Theme compatibility for post formats.  This function adds appropriate filters to 'the_content' for 
@@ -37,10 +34,6 @@ function hybrid_structured_post_formats() {
 	if ( current_theme_supports( 'post-formats', 'aside' ) )
 		add_filter( 'the_content', 'hybrid_aside_infinity', 9 ); // run before wpautop
 
-	/* Add image to content if the user didn't add it. */
-	if ( current_theme_supports( 'post-formats', 'image' ) )
-		add_filter( 'the_content', 'hybrid_image_content' );
-
 	/* Adds the link to the content if it's not in the post. */
 	if ( current_theme_supports( 'post-formats', 'link' ) )
 		add_filter( 'the_content', 'hybrid_link_content', 9 ); // run before wpautop
@@ -56,70 +49,6 @@ function hybrid_structured_post_formats() {
 		/* Auto-add paragraphs to the chat text. */
 		add_filter( 'hybrid_post_format_chat_text', 'wpautop' );
 	}
-}
-
-/**
- * Filters the single post format title, which is used on the term archive page. The purpose of this 
- * function is to replace the singular name with a plural version.
- *
- * @since  1.6.0
- * @access public
- * @param  string $title The term name.
- * @return string
- */
-function hybrid_single_post_format_title( $title ) {
-
-	if ( is_tax( 'post_format' ) ) {
-		$term   = get_queried_object();
-		$plural = hybrid_get_plural_post_format_string( $term->slug );
-		$title  = !empty( $plural ) ? $plural : $title;
-	}
-
-	return $title;
-}
-
-/**
- * Gets the plural version of a post format name.
- *
- * @since  1.6.0
- * @access public
- * @param  string $slug The term slug.
- * @return string
- */
-function hybrid_get_plural_post_format_string( $slug ) {
-
-	$strings = hybrid_get_plural_post_format_strings();
-
-	$slug = hybrid_clean_post_format_slug( $slug );
-
-	return isset( $strings[ $slug ] ) ? $strings[ $slug ] : '';
-}
-
-/**
- * Defines plural versions of the post format names since WordPress only provides a singular version 
- * of each format. Basically, I hate having archive pages labeled with the singular name, so this is 
- * what I created to take care of that problem.
- *
- * @since  1.6.0
- * @access public
- * @return array
- */
-function hybrid_get_plural_post_format_strings() {
-
-	$strings = array(
-	//	'standard' => __( 'Articles',       'hybrid-core' ), // Would this ever be used?
-		'aside'    => __( 'Asides',         'hybrid-core' ),
-		'audio'    => __( 'Audio',          'hybrid-core' ), // Leave as "Audio"?
-		'chat'     => __( 'Chats',          'hybrid-core' ),
-		'image'    => __( 'Images',         'hybrid-core' ),
-		'gallery'  => __( 'Galleries',      'hybrid-core' ),
-		'link'     => __( 'Links',          'hybrid-core' ),
-		'quote'    => __( 'Quotes',         'hybrid-core' ), // Use "Quotations"?
-		'status'   => __( 'Status Updates', 'hybrid-core' ),
-		'video'    => __( 'Videos',         'hybrid-core' ),
-	);
-
-	return apply_filters( 'hybrid_plural_post_format_strings', $strings );
 }
 
 /**
@@ -146,102 +75,19 @@ function hybrid_clean_post_format_slug( $slug ) {
  */
 function hybrid_aside_infinity( $content ) {
 
-	if ( has_post_format( 'aside' ) && !is_singular() )
-		$content .= ' <a class="permalink" href="' . get_permalink() . '" title="' . the_title_attribute( array( 'echo' => false ) ) . '">&#8734;</a>';
+	if ( has_post_format( 'aside' ) && !is_singular() && !post_password_required() ) {
+		$infinity = '<a class="permalink" href="' . get_permalink() . '" title="' . the_title_attribute( array( 'echo' => false ) ) . '">&#8734;</a>';
+		$content .= ' ' . apply_filters( 'hybrid_aside_infinity', $infinity );
+	}
 
 	return $content;
-}
-
-/* === Galleries === */
-
-/**
- * Gets the gallery *item* count.  This is different from getting the gallery *image* count.  By default, 
- * WordPress only allows attachments with the 'image' mime type in galleries.  However, some scripts such 
- * as Cleaner Gallery allow for other mime types.  This is a more accurate count than the 
- * hybrid_get_gallery_image_count() function since it will count all gallery items regardless of mime type.
- *
- * @todo Check for the [gallery] shortcode with the 'mime_type' parameter and use that in get_posts().
- *
- * @since  1.6.0
- * @access public
- * @return int
- */
-function hybrid_get_gallery_item_count() {
-
-	/* Check the post content for galleries. */
-	$galleries = get_post_galleries( get_the_ID(), true );
-
-	/* If galleries were found in the content, get the gallery item count. */
-	if ( !empty( $galleries ) ) {
-		$items = '';
-
-		foreach ( $galleries as $gallery => $gallery_items )
-			$items .= $gallery_items;
-
-		preg_match_all( '#src=([\'"])(.+?)\1#is', $items, $sources, PREG_SET_ORDER );
-
-		if ( !empty( $sources ) )
-			return count( $sources );
-	}
-
-	/* If an item count wasn't returned, get the post attachments. */
-	$attachments = get_posts( 
-		array( 
-			'fields'         => 'ids',
-			'post_parent'    => get_the_ID(), 
-			'post_type'      => 'attachment', 
-			'numberposts'    => -1 
-		) 
-	);
-
-	/* Return the attachment count if items were found. */
-	if ( !empty( $attachments ) )
-		return count( $attachments );
-
-	/* Return 0 for everything else. */
-	return 0;
-}
-
-/**
- * Returns the number of images displayed by the gallery or galleries in a post.
- *
- * @since  1.6.0
- * @access public
- * @return int
- */
-function hybrid_get_gallery_image_count() {
-
-	/* Set up an empty array for images. */
-	$images = array();
-
-	/* Get the images from all post galleries. */
-	$galleries = get_post_galleries_images();
-
-	/* Merge each gallery image into a single array. */
-	foreach ( $galleries as $gallery_images )
-		$images = array_merge( $images, $gallery_images );
-
-	/* If there are no images in the array, just grab the attached images. */
-	if ( empty( $images ) ) {
-		$images = get_posts( 
-			array( 
-				'fields'         => 'ids',
-				'post_parent'    => get_the_ID(), 
-				'post_type'      => 'attachment', 
-				'post_mime_type' => 'image', 
-				'numberposts'    => -1 
-			) 
-		);
-	}
-
-	/* Return the count of the images. */
-	return count( $images );
 }
 
 /* === Images === */
 
 /**
- * Adds the post format image to the content if no image is found in the post content.
+ * Adds the post format image to the content if no image is found in the post content.  Note, this is not run 
+ * by default.  To use, add the filter to 'the_content'.
  *
  * @since  1.6.0
  * @access public
@@ -250,10 +96,10 @@ function hybrid_get_gallery_image_count() {
  */
 function hybrid_image_content( $content ) {
 
-	if ( has_post_format( 'image' ) ) {
+	if ( has_post_format( 'image' ) && !post_password_required() ) {
 		preg_match( '/<img.*?>/', $content, $matches );
 
-		if ( empty( $matches ) && current_theme_supports( 'get-the-image' ) )
+		if ( empty( $matches ) && function_exists( 'get_the_image' ) )
 			$content = get_the_image( array( 'meta_key' => false, 'size' => 'large', 'link_to_post' => false, 'echo' => false ) ) . $content;
 
 		elseif ( empty( $matches ) )
@@ -264,47 +110,6 @@ function hybrid_image_content( $content ) {
 }
 
 /* === Links === */
-
-/**
- * Gets a URL from the content, even if it's not wrapped in an <a> tag.
- *
- * @since  1.6.0
- * @access public
- * @param  string  $content
- * @return string
- */
-function hybrid_get_content_url( $content ) {
-
-	/* Catch links that are not wrapped in an '<a>' tag. */
-	preg_match( '/<a\s[^>]*?href=[\'"](.+?)[\'"]/is', make_clickable( $content ), $matches );
-
-	return !empty( $matches[1] ) ? esc_url_raw( $matches[1] ) : '';
-}
-
-/**
- * Filters 'get_the_post_format_url' to make for a more robust and back-compatible function.  If WP did 
- * not find a URL, check the post content for one.  If nothing is found, return the post permalink.
- *
- * @since  1.6.0
- * @access public
- * @param  string  $url
- * @param  object  $post
- * @note   Setting defaults for the parameters so that this function can become a filter in future WP versions.
- * @return string
- */
-function hybrid_get_the_post_format_url( $url = '', $post = null ) {
-
-	if ( empty( $url ) ) {
-
-		$post = is_null( $post ) ? get_post() : $post;
-
-		$content_url = hybrid_get_content_url( $post->post_content );
-
-		$url = !empty( $content_url ) ? $content_url : get_permalink( $post->ID );
-	}
-
-	return $url;
-}
 
 /**
  * Filters the content of the link format posts.  Wraps the content in the make_clickable() function 
@@ -336,7 +141,7 @@ function hybrid_link_content( $content ) {
  */
 function hybrid_quote_content( $content ) {
 
-	if ( has_post_format( 'quote' ) ) {
+	if ( has_post_format( 'quote' ) && !post_password_required() ) {
 		preg_match( '/<blockquote.*?>/', $content, $matches );
 
 		if ( empty( $matches ) )
@@ -424,7 +229,7 @@ function hybrid_get_the_post_format_chat( $content ) {
 function hybrid_chat_content( $content ) {
 
 	/* If this isn't a chat, return. */
-	if ( !has_post_format( 'chat' ) )
+	if ( !has_post_format( 'chat' ) || post_password_required() )
 		return $content;
 
 	/* Open the chat transcript div and give it a unique ID based on the post ID. */
@@ -508,5 +313,3 @@ function hybrid_chat_row_id( $chat_author ) {
 	/* Return the array key for the chat author and add "1" to avoid an ID of "0". */
 	return absint( array_search( $chat_author, $_hybrid_post_chat_ids ) ) + 1;
 }
-
-?>

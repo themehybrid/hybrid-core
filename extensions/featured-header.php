@@ -16,9 +16,9 @@
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * @package   FeaturedHeader
- * @version   0.1.1
+ * @version   0.1.2
  * @author    Justin Tadlock <justin@justintadlock.com>
- * @copyright Copyright (c) 2013, Justin Tadlock
+ * @copyright Copyright (c) 2013 - 2014, Justin Tadlock
  * @link      http://justintadlock.com
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
@@ -35,52 +35,52 @@ class Featured_Header {
 	/**
 	 * Name of the custom header image size added via add_image_size().
 	 *
-	 * @since 0.1.0
+	 * @since  0.1.0
 	 * @access public
-	 * @var string
+	 * @var    string
 	 */
 	public $size = 'featured-header';
 
 	/**
 	 * Width of the custom header image size.
 	 *
-	 * @since 0.1.0
+	 * @since  0.1.0
 	 * @access public
-	 * @var int
+	 * @var    int
 	 */
 	public $width = 0;
 
 	/**
 	 * Height of the custom header image size.
 	 *
-	 * @since 0.1.0
+	 * @since  0.1.0
 	 * @access public
-	 * @var int
+	 * @var    int
 	 */
 	public $height = 0;
 
 	/**
 	 * Whether to hard crop the custom header image size.
 	 *
-	 * @since 0.1.0
+	 * @since  0.1.0
 	 * @access public
-	 * @var bool
+	 * @var    bool
 	 */
 	public $crop = true;
 
 	/**
 	 * The URL of the header image.
 	 *
-	 * @since 0.1.0
+	 * @since  0.1.0
 	 * @access protected
-	 * @var string
+	 * @var    string
 	 */
 	protected $url = '';
 
 	/**
 	 * Constructor.  Sets up needed actions and filters.
 	 *
-	 * @since 0.1.0
+	 * @since  0.1.0
 	 * @access public
 	 * @return void
 	 */
@@ -104,7 +104,7 @@ class Featured_Header {
 	 * Adds an image size using the add_image_size() function based off the dimensions of 
 	 * the theme's 'custom-header dimensions.
 	 *
-	 * @since 0.1.0
+	 * @since  0.1.0
 	 * @access public
 	 * @return void
 	 */
@@ -125,9 +125,6 @@ class Featured_Header {
 			/* If both the width and height are greater than '0', add the custom image size. */
 			if ( 0 < $this->width && 0 < $this->height ) {
 				add_image_size( $this->size, $this->width, $this->height, $this->crop );
-
-				/* Add translatable featured header image name. */
-				add_filter( 'image_size_names_choose', array( &$this, 'image_size_names_choose' ) );
 			}
 		}
 	}
@@ -136,9 +133,9 @@ class Featured_Header {
 	 * Filters the 'theme_mod_header_image' hook.  Checks if there's a featured image with the 
 	 * correct dimensions to replace the header image on single posts.
 	 *
-	 * @since 0.1.0
+	 * @since  0.1.0
 	 * @access public
-	 * @param string $url The URL of the header image.
+	 * @param  string $url The URL of the header image.
 	 * @return string
 	 */
 	public function header_image( $url ) {
@@ -172,39 +169,28 @@ class Featured_Header {
 	 * Filters the 'theme_mod_header_image_data' hook.  This is used to set the header image width 
 	 * and height attributes if a featured header image was found.
 	 *
-	 * @since 0.1.0
+	 * @since  0.1.0
 	 * @access public
-	 * @param object $data Header image data (width, height, url, thumbnail_url).
+	 * @param  object|array $data Header image data (width, height, url, thumbnail_url).
 	 * @return object
 	 */
 	public function header_image_data( $data ) {
 
 		/* If a featured header image URL was set, add the width and height values. */
 		if ( !empty( $this->url ) ) {
-			$data->width = $this->width;
-			$data->height = $this->height;
+
+			/* Sometimes $data is an array and sometimes it's an object. That's weird. */
+			if( is_array( $data ) ) {
+				$data['width']  = $this->width;
+				$data['height'] = $this->height;			
+			} else {
+				$data->width  = $this->width;
+				$data->height = $this->height;
+			}
 		}
 
 		return $data;
 	}
-
-	/**
-	 * Adds an internationalized version of the Featured Header image size name to the image sizes list 
-	 * when inserting an image from the media gallery into a post.
-	 *
-	 * @since  0.1.1
-	 * @access public
-	 * @link   https://foxnet-themes.fi/2013/07/03/translating-custom-image-sizes/
-	 * @param  array  $sizes
-	 * @return array
-	 */
-	public function image_size_names_choose( $sizes ) {
-		$sizes[ $this->size ] = __( 'Featured Header', 'featured-header' );
-
-		return $sizes;
-	}
 }
 
 new Featured_Header();
-
-?>

@@ -6,7 +6,7 @@
  * @package    Hybrid
  * @subpackage Classes
  * @author     Justin Tadlock <justin@justintadlock.com>
- * @copyright  Copyright (c) 2008 - 2013, Justin Tadlock
+ * @copyright  Copyright (c) 2008 - 2014, Justin Tadlock
  * @link       http://themehybrid.com/hybrid-core
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
@@ -39,5 +39,3 @@ class Hybrid_Customize_Control_Textarea extends WP_Customize_Control {
 		</label>
 	<?php }
 }
-
-?>

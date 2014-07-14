@@ -13,18 +13,6 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
 	display: block;
 }
 
-b, i, hr, u, center, menu, layer, s, strike, font, xmp {
-	margin:          0;
-	padding:         0;
-	vertical-align:  baseline;
-	outline:         none;
-	font-size:       100%;
-	font-weight:     normal;
-	font-style:      normal;
-	background:      transparent;
-	border:          none;
-	text-decoration: none;
-}
 
 html {
 	font-size: 16px;
@@ -34,6 +22,11 @@ body {
 	line-height: 1.5;
 	font-size:   1rem;
 }
+
+	body.rtl {
+		direction:    rtl;
+		unicode-bidi: embed;
+	}
 
 h1, h2, h3, h4, h5, h6 {
 	font-style:  normal;
@@ -47,7 +40,8 @@ h3 { font-size: 1.5rem;   }
 h4 { font-size: 1.375rem; }
 h5 { font-size: 1.25rem;  }
 h6 { font-size: 1.125rem; }
-p, figure {
+
+p, figure {
 	margin: 0 0 1.5rem;
 }
 
@@ -57,13 +51,20 @@ ol, ul {
 
 ul {
 	list-style: disc;
-	margin:     0 0 1.5rem 3rem;
+	margin:     0 0 1.5rem;
 }
 
 ol {
-	list-style-type: decimal;
-	margin: 0 0 1.5rem 3rem;
+	list-style: decimal;
+	margin:     0 0 1.5rem;
 }
+
+	.ltr ul,
+	.ltr ol { margin-left: 3rem; }
+
+	.rtl ul,
+	.rtl ol { margin-right: 3rem; }
+
 
 ol ol { list-style: upper-roman; }
 
@@ -80,40 +81,78 @@ ol ul {
 	margin-bottom: 0;
 }
 
+	.comment-content ul,
+	.comment-content ol { margin-bottom: 1.5rem; }
+
+		.comment-content li ul,
+		.comment-content li ol { margin-bottom: 0; }
+
+
 dl {
 	margin: 0 0 1.5rem;
 }
 
 	dt {
-		margin-left: 0.75rem;
 		font-weight: bold;
 	}
 
-	dd {
+	.ltr dt {
+		margin-left: 0.75rem;
+	}
+	.rtl dt {
+		margin-right: 0.75rem;
+	}
+
+	.ltr dd {
 		margin-left: 1.5rem;
 	}
-
-strong {
-	font-weight: bold;
-}
-
-	strong strong {
-		font-weight: normal;
+	.rtl dd {
+		margin-right: 1.5rem;
 	}
 
-em, 
-cite {
-	font-style: italic;
-}
+	dd + dd { margin-top: 0.75rem; }
 
+	dd + dt { margin-top: 1.5rem; }
+
+/* === <bdo> and direction === */
+
+*[dir="ltr"] { direction: ltr; unicode-bidi: embed; }
+
+*[dir="rtl"] { direction: rtl; unicode-bidi: embed; }
+
+bdo[dir="ltr"] { direction: ltr; unicode-bidi: bidi-override; }
+
+bdo[dir="rtl"] { direction: rtl; unicode-bidi: bidi-override; }
+
+/* === <center> tag === */
+
+center { text-align: center; }
+
+/* === strong, bold, etc. ===*/
+
+b,
+strong { font-weight: 700; }
+
+	b b,
+	strong strong { font-weight: 400; }
+
+/* === Emphasis, italics, etc. === */
+
+i,
+em, 
+mark,
+cite { font-style: italic; }
+
+i i,
 em em, 
-cite cite {
-	font-style: normal;
-}
+mark mark,
+cite cite { font-style: normal; }
+
+/* === Abbreviations, acronymns, etc. === */
 
 abbr[title],
-time[title],
-acronym[title] {
+acronym[title],
+time[title] {
 	cursor: help;
 }
 
@@ -126,14 +165,18 @@ acronym {
 	text-transform: uppercase;
 }
 
+/* === Big === */
+
 big {
-	font-size: 1.125rem;
+	font-size: 1.125em;
 }
+
+/* === Small, sup, sub === */
 
 small, 
 sup, 
 sub {
-	font-size: .875rem;
+	font-size: .8125em;
 }
 
 sup {
@@ -148,50 +191,48 @@ sub {
 	top:            0.3em;
 }
 
+/* === Address === */
+
 address {
 	font-style: italic;
-	margin: 0 0 1.5rem;
+	margin:     0 0 1.5rem;
 }
+
+/* === Quotes === */
 
 blockquote {
 	margin:     0 1.5rem;
 	font-style: italic;
 }
 
+	blockqoute i,
 	blockquote em, 
 	blockquote cite {
 		font-style: normal;
 	}
 
-blockquote, 
-q {
-	quotes: none;
-}
+	.en-us q { quotes: '\201C' '\201D' '\2018' '\2019'; }
 
-blockquote::before, 
-blockquote::after, 
-q::before, 
-q::after {
-	content: '';
-	content: none;
-}
+
+/* === Links === */
 
 a {
 	cursor: pointer;
 }
 
-a img {
-	border: none;
-}
+/* === Code === */
 
 pre {
 	overflow:      auto;
+	word-wrap:     normal;
 	font-family:   monospace;
 	margin-bottom: 1.5rem;
 	padding:       1.5rem;
 }
 
 code {
+	direction:   ltr;
+	text-align:  left;
 	font-family: monospace;
 }
 
@@ -212,6 +253,15 @@ object {
 	margin-bottom: 1.5rem;
 }
 
+/* === Forms === */
+
+input,
+textarea,
+button,
+select {
+	font-family: inherit;
+}
+
 input, 
 textarea {
 	box-sizing: content-box;
@@ -225,7 +275,11 @@ input[type="submit"] {
 	outline: none;
 }
 
-form label {
+form label,
+input[type="submit"],
+input[type="reset"],
+input[type="button"],
+button {
 	cursor: pointer;
 }
 
@@ -244,6 +298,12 @@ hr {
 	height:        1px;
 	margin-bottom: 1.5rem;
 	background:    #999;
+	border:        none;
+}
+
+img {
+	max-width:       100%;
+	height:          auto;
 }
 
 img.wp-smiley {
@@ -295,3 +355,40 @@ blockquote.alignleft,
 blockquote.alignright {
 	width: 33%;
 }
+
+.wp-audio-shortcode,
+.wp-video-shortcode,
+audio,
+video,
+object,
+embed,
+iframe {
+	max-width:     100%;
+	margin-bottom: 1.5rem;
+}
+
+.wp-audio-shortcode,
+.wp-video-shortcode,
+audio,
+video {
+	display:   block;
+	max-width: 100%;
+}
+
+.show-if-js {
+	display: none;
+}
+
+.screen-reader-text,
+.assistive-text {
+	position: absolute;
+	top:      -9999em;
+}
+
+	.ltr .screen-reader-text,
+	.ltr .assistive-text { left:  -9999em; }
+
+	.rtl .screen-reader-text,
+	.rtl .assistive-text { right: -9999em; }
+
+.sticky, .bypostauthor {}

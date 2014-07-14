@@ -10,7 +10,7 @@
  *
  * @author    Justin Tadlock <justin@justintadlock.com>
  * @author    David Chandra <david.warna@gmail.com>
- * @copyright Copyright (c) 2013
+ * @copyright Copyright (c) 2013-2014
  * @link      http://justintadlock.com
  * @link      http://shellcreeper.com
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html

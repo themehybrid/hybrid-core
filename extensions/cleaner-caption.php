@@ -15,12 +15,12 @@
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- * @package CleanerCaption
- * @version 0.2.1
- * @author Justin Tadlock <justin@justintadlock.com>
- * @copyright Copyright (c) 2013, Justin Tadlock
- * @link http://justintadlock.com
- * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @package   CleanerCaption
+ * @version   0.3.0
+ * @author    Justin Tadlock <justin@justintadlock.com>
+ * @copyright Copyright (c) 2011 - 2014, Justin Tadlock
+ * @link      http://justintadlock.com
+ * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 /* Filter the caption shortcode output. */
@@ -45,9 +45,9 @@ function cleaner_caption( $output, $attr, $content ) {
 
 	/* Set up the default arguments. */
 	$defaults = array(
-		'id' => '',
-		'align' => 'alignnone',
-		'width' => '',
+		'id'      => '',
+		'align'   => 'alignnone',
+		'width'   => '',
 		'caption' => ''
 	);
 
@@ -58,16 +58,22 @@ function cleaner_caption( $output, $attr, $content ) {
 	$attr = apply_filters( 'cleaner_caption_args', $attr );
 
 	/* Merge the defaults with user input. */
-	$attr = shortcode_atts( $defaults, $attr );
+	$attr = shortcode_atts( $defaults, $attr, 'caption' );
 
 	/* If the width is less than 1 or there is no caption, return the content wrapped between the [caption] tags. */
 	if ( 1 > $attr['width'] || empty( $attr['caption'] ) )
 		return $content;
 
 	/* Set up the attributes for the caption <div>. */
-	$attributes = ( !empty( $attr['id'] ) ? ' id="' . esc_attr( $attr['id'] ) . '"' : '' );
+	$attributes  = !empty( $attr['id'] ) ? ' id="' . esc_attr( $attr['id'] ) . '"' : '';
 	$attributes .= ' class="wp-caption ' . esc_attr( $attr['align'] ) . '"';
-	$attributes .= ' style="max-width: ' . esc_attr( $attr['width'] ) . 'px"';
+
+	/* Caption width filter hook from WP core. */
+	$caption_width = apply_filters( 'img_caption_shortcode_width', $attr['width'], $attr, $content );
+
+	/* If there's a width, add the inline style for it. */
+	if ( 0 < $caption_width )
+		$attributes .= ' style="max-width: ' . esc_attr( $caption_width ) . 'px"';
 
 	/* Open the caption <div>. */
 	$output = '<figure' . $attributes .'>';
@@ -84,5 +90,3 @@ function cleaner_caption( $output, $attr, $content ) {
 	/* Return the formatted, clean caption. */
 	return apply_filters( 'cleaner_caption', $output );
 }
-
-?>
