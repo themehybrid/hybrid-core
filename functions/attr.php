@@ -189,7 +189,7 @@ function hybrid_attr_sidebar( $attr, $context ) {
 	if ( !empty( $context ) )
 		$attr['id'] = "sidebar-{$context}";
 
-	$attr['class']     = 'sidebar';
+	$attr['class']     = "sidebar sidebar-{$context}";
 	$attr['role']      = 'complementary';
 
 	if ( !empty( $context ) ) {
@@ -217,7 +217,7 @@ function hybrid_attr_menu( $attr, $context ) {
 	if ( !empty( $context ) )
 		$attr['id'] = "menu-{$context}";
 
-	$attr['class']      = 'menu';
+	$attr['class']      = "menu menu-{$context}";
 	$attr['role']       = 'navigation';
 
 	if ( !empty( $context ) ) {
