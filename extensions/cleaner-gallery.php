@@ -93,7 +93,7 @@ final class Cleaner_Gallery {
 	public function __construct() {
 
 		/* Filter the post gallery shortcode output. */
-		add_filter( 'post_gallery', array( $this, 'gallery_shortcode' ), 10, 2 );
+		add_filter( 'post_gallery', array( $this, 'gallery_shortcode' ), 1999, 2 );
 	}
 
 	/**
@@ -107,6 +107,10 @@ final class Cleaner_Gallery {
 	 * @return string
 	 */
 	public function gallery_shortcode( $output, $attr ) {
+
+		/* Something else is overriding post_gallery. */
+		if ( ! empty( $output ) )
+			return $output;
 
 		/* We're not worried about galleries in feeds, so just return the output here. */
 		if ( is_feed() )
