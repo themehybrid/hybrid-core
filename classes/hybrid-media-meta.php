@@ -158,31 +158,33 @@ class Hybrid_Media_Meta {
 
 		/* If a timestamp exists, add it to the $items array. */
 		if ( !empty( $this->meta['image_meta']['created_timestamp'] ) )
-			$this->items['created_timestamp'] = array( date_i18n( get_option( 'date_format' ), $this->meta['image_meta']['created_timestamp'] ), __( 'Date', 'hybrid-core' ) );
+			$this->items['created_timestamp'] = array( date_i18n( get_option( 'date_format' ), strip_tags( $this->meta['image_meta']['created_timestamp'] ) ), __( 'Date', 'hybrid-core' ) );
 
 		/* If a camera exists, add it to the $items array. */
 		if ( !empty( $this->meta['image_meta']['camera'] ) )
-			$this->items['camera'] = array( $this->meta['image_meta']['camera'], __( 'Camera', 'hybrid-core' ) );
+			$this->items['camera'] = array( esc_html( $this->meta['image_meta']['camera'] ), __( 'Camera', 'hybrid-core' ) );
 
 		/* If an aperture exists, add it to the $items array. */
 		if ( !empty( $this->meta['image_meta']['aperture'] ) )
-			$this->items['aperture'] = array( sprintf( '<sup>f</sup>&#8260;<sub>%s</sub>', $this->meta['image_meta']['aperture'] ), __( 'Aperture', 'hybrid-core' ) );
+			$this->items['aperture'] = array( sprintf( '<sup>f</sup>&#8260;<sub>%s</sub>', absint( $this->meta['image_meta']['aperture'] ) ), __( 'Aperture', 'hybrid-core' ) );
 
 		/* If a focal length is set, add it to the $items array. */
 		if ( !empty( $this->meta['image_meta']['focal_length'] ) )
 			/* Translators: Camera focal length. */
-			$this->items['focal_length'] = array( sprintf( __( '%s mm', 'hybrid-core' ), $this->meta['image_meta']['focal_length'] ), __( 'Focal Length', 'hybrid-core' ) );
+			$this->items['focal_length'] = array( sprintf( __( '%s mm', 'hybrid-core' ), absint( $this->meta['image_meta']['focal_length'] ) ), __( 'Focal Length', 'hybrid-core' ) );
 
 		/* If an ISO is set, add it to the $items array. */
 		if ( !empty( $this->meta['image_meta']['iso'] ) ) {
 			$this->items['iso'] = array(
-				$this->meta['image_meta']['iso'], 
+				absint( $this->meta['image_meta']['iso'] ), 
 				'<abbr title="' . __( 'International Organization for Standardization', 'hybrid-core' ) . '">' . __( 'ISO', 'hybrid-core' ) . '</abbr>'
 			);
 		}
 
 		/* If a shutter speed is given, format the float into a fraction and add it to the $items array. */
 		if ( !empty( $this->meta['image_meta']['shutter_speed'] ) ) {
+
+			$this->meta['image_meta']['shutter_speed'] = floatval( $this->meta['image_meta']['shutter_speed'] );
 
 			if ( ( 1 / $this->meta['image_meta']['shutter_speed'] ) > 1 ) {
 				$shutter_speed = '<sup>' . number_format_i18n( 1 ) . '</sup>&#8260;';
@@ -218,38 +220,38 @@ class Hybrid_Media_Meta {
 
 		/* Formated length of time the audio file runs. */
 		if ( !empty( $this->meta['length_formatted'] ) )
-			$this->items['length_formatted'] = array( $this->meta['length_formatted'], $id3_keys['length_formatted'] );
+			$this->items['length_formatted'] = array( esc_html( $this->meta['length_formatted'] ), $id3_keys['length_formatted'] );
 
 		/* Artist. */
 		if ( !empty( $this->meta['artist'] ) )
-			$this->items['artist'] = array( $this->meta['artist'], $id3_keys['artist'] );
+			$this->items['artist'] = array( esc_html( $this->meta['artist'] ), $id3_keys['artist'] );
 
 		/* Composer. */
 		if ( !empty( $this->meta['composer'] ) )
-			$this->items['composer'] = array( $this->meta['composer'], $id3_keys['composer'] );
+			$this->items['composer'] = array( esc_html( $this->meta['composer'] ), $id3_keys['composer'] );
 
 		/* Album. */
 		if ( !empty( $this->meta['album'] ) )
-			$this->items['album'] = array( $this->meta['album'], $id3_keys['album'] );
+			$this->items['album'] = array( esc_html( $this->meta['album'] ), $id3_keys['album'] );
 
 		/* Track number (should also be an album if this is set). */
 		if ( !empty( $this->meta['track_number'] ) )
-			$this->items['track_number'] = array( $this->meta['track_number'], $id3_keys['track_number'] );
+			$this->items['track_number'] = array( absint( $this->meta['track_number'] ), $id3_keys['track_number'] );
 
 		/* Year. */
 		if ( !empty( $this->meta['year'] ) )
-			$this->items['year'] = array( $this->meta['year'], $id3_keys['year'] );
+			$this->items['year'] = array( absint( $this->meta['year'] ), $id3_keys['year'] );
 
 		/* Genre. */
 		if ( !empty( $this->meta['genre'] ) )
-			$this->items['genre'] = array( $this->meta['genre'], $id3_keys['genre'] );
+			$this->items['genre'] = array( esc_html( $this->meta['genre'] ), $id3_keys['genre'] );
 
 		/* File name.  We're linking this to the actual file URL. */
 		$this->items['file_name'] = array( '<a href="' . esc_url( wp_get_attachment_url( $this->args['post_id'] ) ) . '">' . basename( get_attached_file( $this->args['post_id'] ) ) . '</a>', __( 'File Name', 'hybrid-core' ) );
 
 		/* File size. */
 		if ( !empty( $this->meta['filesize'] ) )
-			$this->items['filesize'] = array( size_format( $this->meta['filesize'], 2 ), $id3_keys['filesize'] );
+			$this->items['filesize'] = array( size_format( strip_tags( $this->meta['filesize'] ), 2 ), $id3_keys['filesize'] );
 
 		/* File type (the metadata for this can be incorrect, so we're just looking at the actual file). */
 		if ( preg_match( '/^.*?\.(\w+)$/', get_attached_file( $this->args['post_id'] ), $matches ) )
@@ -257,7 +259,7 @@ class Hybrid_Media_Meta {
 
 		/* Mime type. */
 		if ( !empty( $this->meta['mime_type'] ) )
-			$this->items['mime_type'] = array( $this->meta['mime_type'], $id3_keys['mime_type'] );
+			$this->items['mime_type'] = array( esc_html( $this->meta['mime_type'] ), $id3_keys['mime_type'] );
 	}
 
 	/**
@@ -274,7 +276,7 @@ class Hybrid_Media_Meta {
 
 		/* Formated length of time the video file runs. */
 		if ( !empty( $this->meta['length_formatted'] ) )
-			$this->items['length_formatted'] = array( $this->meta['length_formatted'], $id3_keys['length_formatted'] );
+			$this->items['length_formatted'] = array( esc_html( $this->meta['length_formatted'] ), $id3_keys['length_formatted'] );
 
 		/* Dimensions (width x height in pixels). */
 		if ( !empty( $this->meta['width'] ) && !empty( $this->meta['height'] ) )
@@ -286,7 +288,7 @@ class Hybrid_Media_Meta {
 
 		/* File size. */
 		if ( !empty( $this->meta['filesize'] ) )
-			$this->items['filesize'] = array( size_format( $this->meta['filesize'], 2 ), $id3_keys['filesize'] );
+			$this->items['filesize'] = array( size_format( strip_tags( $this->meta['filesize'] ), 2 ), $id3_keys['filesize'] );
 
 		/* File type (the metadata for this can be incorrect, so we're just looking at the actual file). */
 		if ( preg_match( '/^.*?\.(\w+)$/', get_attached_file( $this->args['post_id'] ), $matches ) )
@@ -294,6 +296,6 @@ class Hybrid_Media_Meta {
 
 		/* Mime type. */
 		if ( !empty( $this->meta['mime_type'] ) )
-			$this->items['mime_type'] = array( $this->meta['mime_type'], $id3_keys['mime_type'] );
+			$this->items['mime_type'] = array( esc_html( $this->meta['mime_type'] ), $id3_keys['mime_type'] );
 	}
 }
