@@ -120,7 +120,7 @@ if ( !class_exists( 'Hybrid' ) ) {
 
 			/* Sets the path to the core framework directory. */
 			if ( !defined( 'HYBRID_DIR' ) )
-				define( 'HYBRID_DIR', trailingslashit( THEME_DIR ) . basename( dirname( __FILE__ ) ) );
+				define( 'HYBRID_DIR', trailingslashit( dirname( __FILE__ ) ) );
 
 			/* Sets the path to the core framework directory URI. */
 			if ( !defined( 'HYBRID_URI' ) )
