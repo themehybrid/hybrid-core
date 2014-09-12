@@ -186,13 +186,17 @@ function hybrid_attr_content( $attr ) {
  */
 function hybrid_attr_sidebar( $attr, $context ) {
 
-	if ( !empty( $context ) )
+	$class = 'sidebar';
+
+	if ( ! empty( $context ) ) {
 		$attr['id'] = "sidebar-{$context}";
+		$class    .= " sidebar-{$context}";
+	}
 
-	$attr['class']     = "sidebar sidebar-{$context}";
-	$attr['role']      = 'complementary';
+	$attr['class'] = $class;
+	$attr['role']  = 'complementary';
 
-	if ( !empty( $context ) ) {
+	if ( ! empty( $context ) ) {
 		/* Translators: The %s is the sidebar name. This is used for the 'aria-label' attribute. */
 		$attr['aria-label'] = esc_attr( sprintf( _x( '%s Sidebar', 'sidebar aria label', 'hybrid-core' ), hybrid_get_sidebar_name( $context ) ) );
 	}
@@ -214,13 +218,17 @@ function hybrid_attr_sidebar( $attr, $context ) {
  */
 function hybrid_attr_menu( $attr, $context ) {
 
-	if ( !empty( $context ) )
+	$class = 'menu';
+
+	if ( ! empty( $context ) ) {
 		$attr['id'] = "menu-{$context}";
+		$class    .= " menu-{$context}";
+	}
 
-	$attr['class']      = "menu menu-{$context}";
-	$attr['role']       = 'navigation';
+	$attr['class'] = $class;
+	$attr['role']  = 'navigation';
 
-	if ( !empty( $context ) ) {
+	if ( ! empty( $context ) ) {
 		/* Translators: The %s is the menu name. This is used for the 'aria-label' attribute. */
 		$attr['aria-label'] = esc_attr( sprintf( _x( '%s Menu', 'nav menu aria label', 'hybrid-core' ), hybrid_get_menu_location_name( $context ) ) );
 	}
