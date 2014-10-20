@@ -465,14 +465,16 @@ class Hybrid_Media_Grabber {
 		$patterns = array(
 			'/(width=[\'"]).+?([\'"])/i',
 			'/(height=[\'"]).+?([\'"])/i',
-			'/(<div.+?style=[\'"].*?width:.+?).+?(px;.+?[\'"].*?>)/i'
+			'/(<div.+?style=[\'"].*?width:.+?).+?(px;.+?[\'"].*?>)/i',
+			'/(<div.+?style=[\'"].*?height:.+?).+?(px;.+?[\'"].*?>)/i'
 		);
 
 		/* Set up the replacements for the 'width' and 'height' attributes. */
 		$replacements = array(
 			'${1}' . $width . '${2}',
 			'${1}' . $height . '${2}',
-			'${1}' . $width . '${2}'
+			'${1}' . $width . '${2}',
+			'${1}' . $height . '${2}',
 		);
 
 		/* Filter the dimensions and return the media HTML. */
