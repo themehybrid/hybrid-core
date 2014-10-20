@@ -55,8 +55,8 @@ function hybrid_meta_charset() {
  * @return void
  */
 function hybrid_doctitle() {
-	printf( "<title>%s</title>\n", wp_title( ':', false ) );
-}
+	?><title><?php wp_title( ':' ); ?></title>
+<?php }
 
 /**
  * Adds the meta viewport to the header.
