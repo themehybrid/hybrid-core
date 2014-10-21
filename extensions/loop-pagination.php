@@ -69,8 +69,21 @@ function loop_pagination( $args = array() ) {
 	);
 
 	/* Add the $base argument to the array if the user is using permalinks. */
-	if ( $wp_rewrite->using_permalinks() && !is_search() )
-		$defaults['base'] = user_trailingslashit( trailingslashit( get_pagenum_link() ) . "{$pagination_base}/%#%" );
+	if ( $wp_rewrite->using_permalinks() && !is_search() ) {
+		if( empty( $_GET ) ){
+			$defaults['base'] = user_trailingslashit( trailingslashit( get_pagenum_link() ) . "{$pagination_base}/%#%" );
+		} else {
+			$clean_url = get_pagenum_link();
+			$parsed_url = parse_url($clean_url);
+			$query = '';
+	
+			if( !empty( $parsed_url['query'] ) ) {
+				$query='?'.$parsed_url['query'];
+				$clean_url = preg_replace( '/\?'.$query.'/', '', $clean_url );
+			}
+			$defaults['base'] = user_trailingslashit( trailingslashit( $clean_url ) . "{$pagination_base}/%#%" ) .$query;
+		}
+	}
 
 	/* Allow developers to overwrite the arguments with a filter. */
 	$args = apply_filters( 'loop_pagination_args', $args );
@@ -109,5 +122,4 @@ function loop_pagination( $args = array() ) {
 	else
 		return $page_links;
 }
-
 ?>
