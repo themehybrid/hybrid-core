@@ -44,6 +44,12 @@ function hybrid_register_sidebar( $args ) {
 	/* Allow developers to filter the sidebar arguments. */
 	$args = apply_filters( 'hybrid_sidebar_args', $args );
 
+	/* Remove action. */
+	remove_action( 'widgets_init', '__return_false', 95 );
+
 	/* Register the sidebar. */
 	return register_sidebar( $args );
 }
+
+/* Compatibility for when a theme doesn't register any sidebars. */
+add_action( 'widgets_init', '__return_false', 95 );
