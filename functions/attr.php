@@ -120,6 +120,7 @@ function hybrid_attr_body( $attr ) {
 function hybrid_attr_header( $attr ) {
 
 	$attr['id']        = 'header';
+	$attr['class']     = 'header';
 	$attr['role']      = 'banner';
 	$attr['itemscope'] = 'itemscope';
 	$attr['itemtype']  = 'http://schema.org/WPHeader';
@@ -138,6 +139,7 @@ function hybrid_attr_header( $attr ) {
 function hybrid_attr_footer( $attr ) {
 
 	$attr['id']        = 'footer';
+	$attr['class']     = 'footer';
 	$attr['role']      = 'contentinfo';
 	$attr['itemscope'] = 'itemscope';
 	$attr['itemtype']  = 'http://schema.org/WPFooter';
@@ -184,13 +186,17 @@ function hybrid_attr_content( $attr ) {
  */
 function hybrid_attr_sidebar( $attr, $context ) {
 
-	if ( !empty( $context ) )
+	$class = 'sidebar';
+
+	if ( ! empty( $context ) ) {
 		$attr['id'] = "sidebar-{$context}";
+		$class    .= " sidebar-{$context}";
+	}
 
-	$attr['class']     = 'sidebar';
-	$attr['role']      = 'complementary';
+	$attr['class'] = $class;
+	$attr['role']  = 'complementary';
 
-	if ( !empty( $context ) ) {
+	if ( ! empty( $context ) ) {
 		/* Translators: The %s is the sidebar name. This is used for the 'aria-label' attribute. */
 		$attr['aria-label'] = esc_attr( sprintf( _x( '%s Sidebar', 'sidebar aria label', 'hybrid-core' ), hybrid_get_sidebar_name( $context ) ) );
 	}
@@ -212,13 +218,17 @@ function hybrid_attr_sidebar( $attr, $context ) {
  */
 function hybrid_attr_menu( $attr, $context ) {
 
-	if ( !empty( $context ) )
+	$class = 'menu';
+
+	if ( ! empty( $context ) ) {
 		$attr['id'] = "menu-{$context}";
+		$class    .= " menu-{$context}";
+	}
 
-	$attr['class']      = 'menu';
-	$attr['role']       = 'navigation';
+	$attr['class'] = $class;
+	$attr['role']  = 'navigation';
 
-	if ( !empty( $context ) ) {
+	if ( ! empty( $context ) ) {
 		/* Translators: The %s is the menu name. This is used for the 'aria-label' attribute. */
 		$attr['aria-label'] = esc_attr( sprintf( _x( '%s Menu', 'nav menu aria label', 'hybrid-core' ), hybrid_get_menu_location_name( $context ) ) );
 	}
@@ -241,7 +251,8 @@ function hybrid_attr_menu( $attr, $context ) {
  */
 function hybrid_attr_branding( $attr ) {
 
-	$attr['id'] = 'branding';
+	$attr['id']    = 'branding';
+	$attr['class'] = 'branding';
 
 	return $attr;
 }
@@ -258,6 +269,7 @@ function hybrid_attr_branding( $attr ) {
 function hybrid_attr_site_title( $attr ) {
 
 	$attr['id']       = 'site-title';
+	$attr['class']    = 'site-title';
 	$attr['itemprop'] = 'headline';
 
 	return $attr;
@@ -275,6 +287,7 @@ function hybrid_attr_site_title( $attr ) {
 function hybrid_attr_site_description( $attr ) {
 
 	$attr['id']       = 'site-description';
+	$attr['class']    = 'site-description';
 	$attr['itemprop'] = 'description';
 
 	return $attr;
