@@ -69,8 +69,10 @@ function loop_pagination( $args = array() ) {
 	);
 
 	/* Add the $base argument to the array if the user is using permalinks. */
-	if ( $wp_rewrite->using_permalinks() && !is_search() )
-		$defaults['base'] = user_trailingslashit( trailingslashit( get_pagenum_link() ) . "{$pagination_base}/%#%" );
+	if ( $wp_rewrite->using_permalinks() && !is_search() ) {
+		$big = 999999999;
+		$defaults['base'] = str_replace( $big, '%#%', get_pagenum_link($big) );
+	}
 
 	/* Allow developers to overwrite the arguments with a filter. */
 	$args = apply_filters( 'loop_pagination_args', $args );
