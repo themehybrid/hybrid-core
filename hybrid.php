@@ -226,11 +226,6 @@ if ( !class_exists( 'Hybrid' ) ) {
 			/* Load the framework textdomain. */
 			$hybrid->textdomain_loaded['hybrid-core'] = hybrid_load_framework_textdomain( 'hybrid-core' );
 
-			/* Load empty textdomain mofiles for extensions (these will be overwritten). */
-			if ( current_theme_supports( 'breadcrumb-trail' ) ) load_textdomain( 'breadcrumb-trail', '' );
-			if ( current_theme_supports( 'post-stylesheets' ) ) load_textdomain( 'post-stylesheets', '' );
-			if ( current_theme_supports( 'theme-layouts'    ) ) load_textdomain( 'theme-layouts',    '' );
-
 			/* Get the user's locale. */
 			$locale = get_locale();
 
