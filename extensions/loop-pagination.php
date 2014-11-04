@@ -14,9 +14,9 @@
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * @package   LoopPagination
- * @version   0.3.0
+ * @version   0.4.0
  * @author    Justin Tadlock <justin@justintadlock.com>
- * @copyright Copyright (c) 2010 - 2013, Justin Tadlock
+ * @copyright Copyright (c) 2010 - 2014, Justin Tadlock
  * @link      http://themehybrid.com/docs/tutorials/loop-pagination
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
@@ -69,8 +69,10 @@ function loop_pagination( $args = array() ) {
 	);
 
 	/* Add the $base argument to the array if the user is using permalinks. */
-	if ( $wp_rewrite->using_permalinks() && !is_search() )
-		$defaults['base'] = user_trailingslashit( trailingslashit( get_pagenum_link() ) . "{$pagination_base}/%#%" );
+	if ( $wp_rewrite->using_permalinks() && !is_search() ) {
+		$big = 999999999;
+		$defaults['base'] = str_replace( $big, '%#%', get_pagenum_link( $big ) );
+	}
 
 	/* Allow developers to overwrite the arguments with a filter. */
 	$args = apply_filters( 'loop_pagination_args', $args );
