@@ -76,3 +76,5 @@ function hybrid_extensions_ngettext() {}
 function hybrid_extensions_ngettext_with_context() {}
 function hybrid_register_widgets() {}
 function hybrid_unregister_widgets() {}
+function hybrid_admin_register_styles() {}
+function hybrid_admin_enqueue_styles() {}
