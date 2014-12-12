@@ -19,7 +19,7 @@
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * @package   ThemeLayouts
- * @version   0.6.0
+ * @version   0.7.0
  * @author    Justin Tadlock <justin@justintadlock.com>
  * @copyright Copyright (c) 2010 - 2014, Justin Tadlock
  * @link      http://justintadlock.com
@@ -360,7 +360,7 @@ function theme_layouts_strings() {
 	/* Set up the default layout strings. */
 	$strings = array(
 		/* Translators: Default theme layout option. */
-		'default' => _x( 'Default', 'theme layout', 'theme-layouts' )
+		'default' => _x( 'Default', 'theme layout', 'hybrid-core' )
 	);
 
 	/* Get theme-supported layouts. */
@@ -455,7 +455,7 @@ function theme_layouts_add_meta_boxes( $post_type, $post ) {
 
 	/* Add the meta box if the post type supports 'post-stylesheets'. */
 	if ( ( post_type_supports( $post_type, 'theme-layouts' ) ) && ( current_user_can( 'edit_post_meta', $post->ID ) || current_user_can( 'add_post_meta', $post->ID ) || current_user_can( 'delete_post_meta', $post->ID ) ) )
-		add_meta_box( 'theme-layouts-post-meta-box', __( 'Layout', 'theme-layouts' ), 'theme_layouts_post_meta_box', $post_type, 'side', 'default' );
+		add_meta_box( 'theme-layouts-post-meta-box', __( 'Layout', 'hybrid-core' ), 'theme_layouts_post_meta_box', $post_type, 'side', 'default' );
 }
 
 /**
@@ -562,7 +562,7 @@ function theme_layouts_attachment_fields_to_edit( $fields, $post ) {
 
 	/* Add the attachment layout field to the $fields array. */
 	$fields['theme-layouts-post-layout'] = array(
-		'label'         => __( 'Layout', 'theme-layouts' ),
+		'label'         => __( 'Layout', 'hybrid-core' ),
 		'input'         => 'html',
 		'html'          => $select,
 		'show_in_edit'  => false,
@@ -647,7 +647,7 @@ function theme_layouts_customize_register( $wp_customize ) {
 		$wp_customize->add_section(
 			'layout',
 			array(
-				'title'      => esc_html__( 'Layout', 'theme-layouts' ),
+				'title'      => esc_html__( 'Layout', 'hybrid-core' ),
 				'priority'   => 30,
 				'capability' => 'edit_theme_options'
 			)
@@ -680,7 +680,7 @@ function theme_layouts_customize_register( $wp_customize ) {
 		$wp_customize->add_control(
 			'theme-layout-control',
 			array(
-				'label'    => esc_html__( 'Global Layout', 'theme-layouts' ),
+				'label'    => esc_html__( 'Global Layout', 'hybrid-core' ),
 				'section'  => 'layout',
 				'settings' => 'theme_layout',
 				'type'     => 'radio',
