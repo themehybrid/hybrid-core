@@ -191,8 +191,13 @@ function hybrid_attr_sidebar( $attr, $context ) {
 	$attr['role']      = 'complementary';
 
 	if ( !empty( $context ) ) {
-		/* Translators: The %s is the sidebar name. This is used for the 'aria-label' attribute. */
-		$attr['aria-label'] = esc_attr( sprintf( _x( '%s Sidebar', 'sidebar aria label', 'hybrid-core' ), hybrid_get_sidebar_name( $context ) ) );
+
+		$sidebar_name = hybrid_get_sidebar_name( $context );
+
+		if ( !empty( $sidebar_name ) ) {
+			/* Translators: The %s is the sidebar name. This is used for the 'aria-label' attribute. */
+			$attr['aria-label'] = esc_attr( sprintf( _x( '%s Sidebar', 'sidebar aria label', 'hybrid-core' ), $sidebar_name ) );
+		}
 	}
 
 	$attr['itemscope'] = 'itemscope';
@@ -219,8 +224,13 @@ function hybrid_attr_menu( $attr, $context ) {
 	$attr['role']       = 'navigation';
 
 	if ( !empty( $context ) ) {
-		/* Translators: The %s is the menu name. This is used for the 'aria-label' attribute. */
-		$attr['aria-label'] = esc_attr( sprintf( _x( '%s Menu', 'nav menu aria label', 'hybrid-core' ), hybrid_get_menu_location_name( $context ) ) );
+
+		$menu_name = hybrid_get_menu_location_name( $context );
+
+		if ( !empty( $menu_name ) ) {
+			/* Translators: The %s is the menu name. This is used for the 'aria-label' attribute. */
+			$attr['aria-label'] = esc_attr( sprintf( _x( '%s Menu', 'nav menu aria label', 'hybrid-core' ), $menu_name ) );
+		}
 	}
 
 	$attr['itemscope']  = 'itemscope';

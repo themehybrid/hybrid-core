@@ -175,18 +175,18 @@ class Breadcrumb_Trail {
 	public function default_labels() {
 
 		$labels = array(
-			'browse'              => __( 'Browse:',                             'breadcrumb-trail' ),
-			'home'                => __( 'Home',                                'breadcrumb-trail' ),
-			'error_404'           => __( '404 Not Found',                       'breadcrumb-trail' ),
-			'archives'            => __( 'Archives',                            'breadcrumb-trail' ),
+			'browse'              => __( 'Browse:',                             'hybrid-core' ),
+			'home'                => __( 'Home',                                'hybrid-core' ),
+			'error_404'           => __( '404 Not Found',                       'hybrid-core' ),
+			'archives'            => __( 'Archives',                            'hybrid-core' ),
 			/* Translators: %s is the search query. The HTML entities are opening and closing curly quotes. */
-			'search'              => __( 'Search results for &#8220;%s&#8221;', 'breadcrumb-trail' ),
+			'search'              => __( 'Search results for &#8220;%s&#8221;', 'hybrid-core' ),
 			/* Translators: %s is the page number. */
-			'paged'               => __( 'Page %s',                             'breadcrumb-trail' ),
+			'paged'               => __( 'Page %s',                             'hybrid-core' ),
 			/* Translators: Minute archive title. %s is the minute time format. */
-			'archive_minute'      => __( 'Minute %s',                           'breadcrumb-trail' ),
+			'archive_minute'      => __( 'Minute %s',                           'hybrid-core' ),
 			/* Translators: Weekly archive title. %s is the week date format. */
-			'archive_week'        => __( 'Week %s',                             'breadcrumb-trail' ),
+			'archive_week'        => __( 'Week %s',                             'hybrid-core' ),
 
 			/* "%s" is replaced with the translated date/time format. */
 			'archive_minute_hour' => '%s',
@@ -713,7 +713,7 @@ class Breadcrumb_Trail {
 
 		/* Add the minute + hour item. */
 		if ( true === $this->args['show_title'] )
-			$this->items[] = sprintf( $this->args['labels']['archive_minute_hour'], get_the_time( _x( 'g:i a', 'minute and hour archives time format', 'breadcrumb-trail' ) ) );
+			$this->items[] = sprintf( $this->args['labels']['archive_minute_hour'], get_the_time( _x( 'g:i a', 'minute and hour archives time format', 'hybrid-core' ) ) );
 	}
 
 	/**
@@ -730,7 +730,7 @@ class Breadcrumb_Trail {
 
 		/* Add the minute item. */
 		if ( true === $this->args['show_title'] )
-			$this->items[] = sprintf( $this->args['labels']['archive_minute'], get_the_time( _x( 'i', 'minute archives time format', 'breadcrumb-trail' ) ) );
+			$this->items[] = sprintf( $this->args['labels']['archive_minute'], get_the_time( _x( 'i', 'minute archives time format', 'hybrid-core' ) ) );
 	}
 
 	/**
@@ -747,7 +747,7 @@ class Breadcrumb_Trail {
 
 		/* Add the hour item. */
 		if ( true === $this->args['show_title'] )
-			$this->items[] = sprintf( $this->args['labels']['archive_hour'], get_the_time( _x( 'g a', 'hour archives time format', 'breadcrumb-trail' ) ) );
+			$this->items[] = sprintf( $this->args['labels']['archive_hour'], get_the_time( _x( 'g a', 'hour archives time format', 'hybrid-core' ) ) );
 	}
 
 	/**
@@ -763,9 +763,9 @@ class Breadcrumb_Trail {
 		$this->do_rewrite_front_items();
 
 		/* Get year, month, and day. */
-		$year  = sprintf( $this->args['labels']['archive_year'],  get_the_time( _x( 'Y', 'yearly archives date format',  'breadcrumb-trail' ) ) );
-		$month = sprintf( $this->args['labels']['archive_month'], get_the_time( _x( 'F', 'monthly archives date format', 'breadcrumb-trail' ) ) );
-		$day   = sprintf( $this->args['labels']['archive_day'],   get_the_time( _x( 'j', 'daily archives date format',   'breadcrumb-trail' ) ) );
+		$year  = sprintf( $this->args['labels']['archive_year'],  get_the_time( _x( 'Y', 'yearly archives date format',  'hybrid-core' ) ) );
+		$month = sprintf( $this->args['labels']['archive_month'], get_the_time( _x( 'F', 'monthly archives date format', 'hybrid-core' ) ) );
+		$day   = sprintf( $this->args['labels']['archive_day'],   get_the_time( _x( 'j', 'daily archives date format',   'hybrid-core' ) ) );
 
 		/* Add the year and month items. */
 		$this->items[] = '<a href="' . get_year_link( get_the_time( 'Y' ) ) . '" title="' . esc_attr( $year ) . '">' . $year . '</a>';
@@ -792,8 +792,8 @@ class Breadcrumb_Trail {
 		$this->do_rewrite_front_items();
 
 		/* Get the year and week. */
-		$year = sprintf( $this->args['labels']['archive_year'],  get_the_time( _x( 'Y', 'yearly archives date format', 'breadcrumb-trail' ) ) );
-		$week = sprintf( $this->args['labels']['archive_week'],  get_the_time( _x( 'W', 'weekly archives date format', 'breadcrumb-trail' ) ) );
+		$year = sprintf( $this->args['labels']['archive_year'],  get_the_time( _x( 'Y', 'yearly archives date format', 'hybrid-core' ) ) );
+		$week = sprintf( $this->args['labels']['archive_week'],  get_the_time( _x( 'W', 'weekly archives date format', 'hybrid-core' ) ) );
 
 		/* Add the year item. */
 		$this->items[] = '<a href="' . get_year_link( get_the_time( 'Y' ) ) . '" title="' . esc_attr( $year ) . '">' . $year . '</a>';
@@ -819,8 +819,8 @@ class Breadcrumb_Trail {
 		$this->do_rewrite_front_items();
 
 		/* Get the year and month. */
-		$year  = sprintf( $this->args['labels']['archive_year'],  get_the_time( _x( 'Y', 'yearly archives date format',  'breadcrumb-trail' ) ) );
-		$month = sprintf( $this->args['labels']['archive_month'], get_the_time( _x( 'F', 'monthly archives date format', 'breadcrumb-trail' ) ) );
+		$year  = sprintf( $this->args['labels']['archive_year'],  get_the_time( _x( 'Y', 'yearly archives date format',  'hybrid-core' ) ) );
+		$month = sprintf( $this->args['labels']['archive_month'], get_the_time( _x( 'F', 'monthly archives date format', 'hybrid-core' ) ) );
 
 		/* Add the year item. */
 		$this->items[] = '<a href="' . get_year_link( get_the_time( 'Y' ) ) . '" title="' . esc_attr( $year ) . '">' . $year . '</a>';
@@ -846,7 +846,7 @@ class Breadcrumb_Trail {
 		$this->do_rewrite_front_items();
 
 		/* Get the year. */
-		$year  = sprintf( $this->args['labels']['archive_year'],  get_the_time( _x( 'Y', 'yearly archives date format',  'breadcrumb-trail' ) ) );
+		$year  = sprintf( $this->args['labels']['archive_year'],  get_the_time( _x( 'Y', 'yearly archives date format',  'hybrid-core' ) ) );
 
 		/* Add the year item. */
 		if ( is_paged() )
@@ -1033,15 +1033,15 @@ class Breadcrumb_Trail {
 
 				/* If using the %year% tag, add a link to the yearly archive. */
 				if ( '%year%' == $tag )
-					$this->items[] = '<a href="' . get_year_link( get_the_time( 'Y', $post_id ) ) . '">' . sprintf( $this->args['labels']['archive_year'], get_the_time( _x( 'Y', 'yearly archives date format',  'breadcrumb-trail' ) ) ) . '</a>';
+					$this->items[] = '<a href="' . get_year_link( get_the_time( 'Y', $post_id ) ) . '">' . sprintf( $this->args['labels']['archive_year'], get_the_time( _x( 'Y', 'yearly archives date format',  'hybrid-core' ) ) ) . '</a>';
 
 				/* If using the %monthnum% tag, add a link to the monthly archive. */
 				elseif ( '%monthnum%' == $tag )
-					$this->items[] = '<a href="' . get_month_link( get_the_time( 'Y', $post_id ), get_the_time( 'm', $post_id ) ) . '">' . sprintf( $this->args['labels']['archive_month'], get_the_time( _x( 'F', 'monthly archives date format', 'breadcrumb-trail' ) ) ) . '</a>';
+					$this->items[] = '<a href="' . get_month_link( get_the_time( 'Y', $post_id ), get_the_time( 'm', $post_id ) ) . '">' . sprintf( $this->args['labels']['archive_month'], get_the_time( _x( 'F', 'monthly archives date format', 'hybrid-core' ) ) ) . '</a>';
 
 				/* If using the %day% tag, add a link to the daily archive. */
 				elseif ( '%day%' == $tag )
-					$this->items[] = '<a href="' . get_day_link( get_the_time( 'Y', $post_id ), get_the_time( 'm', $post_id ), get_the_time( 'd', $post_id ) ) . '">' . sprintf( $this->args['labels']['archive_day'], get_the_time( _x( 'j', 'daily archives date format', 'breadcrumb-trail' ) ) ) . '</a>';
+					$this->items[] = '<a href="' . get_day_link( get_the_time( 'Y', $post_id ), get_the_time( 'm', $post_id ), get_the_time( 'd', $post_id ) ) . '">' . sprintf( $this->args['labels']['archive_day'], get_the_time( _x( 'j', 'daily archives date format', 'hybrid-core' ) ) ) . '</a>';
 
 				/* If using the %author% tag, add a link to the post author archive. */
 				elseif ( '%author%' == $tag )
@@ -1132,7 +1132,7 @@ class bbPress_Breadcrumb_Trail extends Breadcrumb_Trail {
 			$this->items[] = '<a href="' . bbp_get_topic_tag_link() . '">' . bbp_get_topic_tag_name() . '</a>';
 
 			if ( true === $this->args['show_title'] )
-				$this->items[] = __( 'Edit', 'breadcrumb-trail' );
+				$this->items[] = __( 'Edit', 'hybrid-core' );
 		}
 
 		/* If viewing a "view" page. */
@@ -1160,15 +1160,15 @@ class bbPress_Breadcrumb_Trail extends Breadcrumb_Trail {
 
 			/* If viewing a topic split page. */
 			if ( bbp_is_topic_split() && true === $this->args['show_title'] )
-				$this->items[] = __( 'Split', 'breadcrumb-trail' );
+				$this->items[] = __( 'Split', 'hybrid-core' );
 
 			/* If viewing a topic merge page. */
 			elseif ( bbp_is_topic_merge() && true === $this->args['show_title'] )
-				$this->items[] = __( 'Merge', 'breadcrumb-trail' );
+				$this->items[] = __( 'Merge', 'hybrid-core' );
 
 			/* If viewing a topic edit page. */
 			elseif ( bbp_is_topic_edit() && true === $this->args['show_title'] )
-				$this->items[] = __( 'Edit', 'breadcrumb-trail' );
+				$this->items[] = __( 'Edit', 'hybrid-core' );
 		}
 
 		/* If viewing a single reply page. */
@@ -1185,7 +1185,7 @@ class bbPress_Breadcrumb_Trail extends Breadcrumb_Trail {
 				$this->items[] = '<a href="' . bbp_get_reply_url( $reply_id ) . '">' . bbp_get_reply_title( $reply_id ) . '</a>';
 
 				if ( true === $this->args['show_title'] )
-					$this->items[] = __( 'Edit', 'breadcrumb-trail' );
+					$this->items[] = __( 'Edit', 'hybrid-core' );
 
 			} elseif ( true === $this->args['show_title'] ) {
 				$this->items[] = bbp_get_reply_title( $reply_id );
@@ -1216,7 +1216,7 @@ class bbPress_Breadcrumb_Trail extends Breadcrumb_Trail {
 				$this->items[] = '<a href="' . bbp_get_user_profile_url() . '">' . bbp_get_displayed_user_field( 'display_name' ) . '</a>';
 
 				if ( true === $this->args['show_title'] )
-					$this->items[] = __( 'Edit', 'breadcrumb-trail' );
+					$this->items[] = __( 'Edit', 'hybrid-core' );
 			} elseif ( true === $this->args['show_title'] ) {
 				$this->items[] = bbp_get_displayed_user_field( 'display_name' );
 			}

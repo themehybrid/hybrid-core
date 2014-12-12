@@ -35,15 +35,8 @@ add_filter( 'load_textdomain_mofile', 'hybrid_load_textdomain_mofile', 10, 2 );
  */
 function hybrid_override_load_textdomain( $override, $domain, $mofile ) {
 
-	/* Set up array of domains to catch. */
-	$text_domains = array( 'hybrid-core' );
-
-	if ( current_theme_supports( 'breadcrumb-trail' ) ) $text_domains[] = 'breadcrumb-trail';
-	if ( current_theme_supports( 'post-stylesheets' ) ) $text_domains[] = 'post-stylesheets';
-	if ( current_theme_supports( 'theme-layouts'    ) ) $text_domains[] = 'theme-layouts';
-
 	/* Check if the domain is one of our framework domains. */
-	if ( in_array( $domain, $text_domains ) ) {
+	if ( 'hybrid-core' === $domain ) {
 		global $l10n;
 
 		/* Get the theme's textdomain. */

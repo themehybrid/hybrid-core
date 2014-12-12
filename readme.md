@@ -58,6 +58,10 @@ You can see the changes made via the [commit log](https://github.com/justintadlo
 
 ### Changelogs for each release ###
 
+* [2.0.4](https://github.com/justintadlock/hybrid-core/tree/2.0.4)
+* [2.0.3](https://github.com/justintadlock/hybrid-core/tree/2.0.3)
+* [2.0.2](https://github.com/justintadlock/hybrid-core/tree/2.0.2)
+* [2.0.1](https://github.com/justintadlock/hybrid-core/tree/2.0.1)
 * [2.0.0](https://github.com/justintadlock/hybrid-core/commits/2.0)
 * [1.6.2](https://github.com/justintadlock/hybrid-core/tree/1.6.2)
 * [1.6.1](https://github.com/justintadlock/hybrid-core/tree/1.6.1)

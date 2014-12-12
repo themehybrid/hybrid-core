@@ -20,6 +20,78 @@
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
+/* === Deprecated Functions === */
+
+/**
+ * Creates new shortcodes for use in any shortcode-ready area.
+ *
+ * @since      0.8.0
+ * @deprecated 2.0.4
+ * @access     public
+ * @return     void
+ */
+function hybrid_add_shortcodes() {}
+
+/**
+ * Shortcode to display the current year.
+ *
+ * @since      0.6.0
+ * @deprecated 2.0.4
+ * @access     public
+ * @return     string
+ */
+function hybrid_the_year_shortcode() {
+	return date_i18n( 'Y' );
+}
+
+/**
+ * Shortcode to display a link back to the site.
+ *
+ * @since      0.6.0
+ * @deprecated 2.0.4
+ * @access     public
+ * @return     string
+ */
+function hybrid_site_link_shortcode() {
+	return hybrid_get_site_link();
+}
+
+/**
+ * Shortcode to display a link to WordPress.org.
+ *
+ * @since      0.6.0
+ * @deprecated 2.0.4
+ * @access     public
+ * @return     string
+ */
+function hybrid_wp_link_shortcode() {
+	return hybrid_get_wp_link();
+}
+
+/**
+ * Shortcode to display a link to the parent theme page.
+ *
+ * @since      0.6.0
+ * @deprecated 2.0.4
+ * @access     public
+ * @return     string
+ */
+function hybrid_theme_link_shortcode() {
+	return hybrid_get_theme_link();
+}
+
+/**
+ * Shortcode to display a link to the child theme's page.
+ *
+ * @since      0.6.0
+ * @deprecated 2.0.4
+ * @access     public
+ * @return     string
+ */
+function hybrid_child_link_shortcode() {
+	return hybrid_get_child_theme_link();
+}
+
 /* === Removed Functions === */
 
 /* Functions removed in the 2.0 branch. */

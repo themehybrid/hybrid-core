@@ -163,7 +163,7 @@ function hybrid_get_menu_location_name( $location ) {
 
 	$locations = get_registered_nav_menus();
 
-	return $locations[ $location ];
+	return isset( $locations[ $location ] ) ? $locations[ $location ] : '';
 }
 
 /**
@@ -179,6 +179,8 @@ function hybrid_get_sidebar_name( $sidebar_id ) {
 
 	if ( isset( $wp_registered_sidebars[ $sidebar_id ] ) )
 		return $wp_registered_sidebars[ $sidebar_id ]['name'];
+
+	return '';
 }
 
 /**
