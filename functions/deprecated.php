@@ -25,12 +25,13 @@
 /**
  * Creates new shortcodes for use in any shortcode-ready area.
  *
+ * @note       Theme Check chokes on this uncommented. Devs should never call this anyway, but for reference...
  * @since      0.8.0
  * @deprecated 2.0.4
  * @access     public
  * @return     void
  */
-function hybrid_add_shortcodes() {}
+//function hybrid_add_shortcodes() {}
 
 /**
  * Shortcode to display the current year.
