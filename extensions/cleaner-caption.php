@@ -76,13 +76,13 @@ function cleaner_caption( $output, $attr, $content ) {
 		$attributes .= ' style="max-width: ' . esc_attr( $caption_width ) . 'px"';
 
 	/* Open the caption <div>. */
-	$output = '<figure' . $attributes .'>';
+	$output = '<figure' . $attributes .' itemscope itemtype="http://schema.org/ImageObject">';
 
 	/* Allow shortcodes for the content the caption was created for. */
-	$output .= do_shortcode( $content );
+	$output .= do_shortcode( str_replace( '<img', '<img itemprop="contentURL"', $content ) );
 
 	/* Append the caption text. */
-	$output .= '<figcaption class="wp-caption-text">' . $attr['caption'] . '</figcaption>';
+	$output .= '<figcaption class="wp-caption-text" itemprop="caption">' . $attr['caption'] . '</figcaption>';
 
 	/* Close the caption </div>. */
 	$output .= '</figure>';
