@@ -48,7 +48,8 @@ function cleaner_caption( $output, $attr, $content ) {
 		'id'      => '',
 		'align'   => 'alignnone',
 		'width'   => '',
-		'caption' => ''
+		'caption' => '',
+		'class'   => '',
 	);
 
 	/* Allow developers to override the default arguments. */
@@ -64,9 +65,15 @@ function cleaner_caption( $output, $attr, $content ) {
 	if ( 1 > $attr['width'] || empty( $attr['caption'] ) )
 		return $content;
 
+	/* Get the class. */
+	$class = array( "wp-caption-{$attr['align']}" );
+
+	if ( !empty( $attr['class'] ) )
+		$class[] = $attr['class'];
+
 	/* Set up the attributes for the caption <div>. */
 	$attributes  = !empty( $attr['id'] ) ? ' id="' . esc_attr( $attr['id'] ) . '"' : '';
-	$attributes .= ' class="wp-caption ' . esc_attr( $attr['align'] ) . '"';
+	$attributes .= ' class="' . esc_attr( join( ' ', $class ) ) . '"';
 
 	/* Caption width filter hook from WP core. */
 	$caption_width = apply_filters( 'img_caption_shortcode_width', $attr['width'], $attr, $content );
@@ -76,7 +83,7 @@ function cleaner_caption( $output, $attr, $content ) {
 		$attributes .= ' style="max-width: ' . esc_attr( $caption_width ) . 'px"';
 
 	/* Open the caption <div>. */
-	$output = '<figure' . $attributes .'>';
+	$output = sprintf( '<figure %s>', $attributes );
 
 	/* Allow shortcodes for the content the caption was created for. */
 	$output .= do_shortcode( $content );
