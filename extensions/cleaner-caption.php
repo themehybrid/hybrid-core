@@ -66,7 +66,7 @@ function cleaner_caption( $output, $attr, $content ) {
 		return $content;
 
 	/* Get the class. */
-	$class = array( "wp-caption-{$attr['align']}" );
+	$class = array( 'wp-caption', $attr['align'] );
 
 	if ( !empty( $attr['class'] ) )
 		$class[] = $attr['class'];
