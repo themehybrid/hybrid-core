@@ -20,6 +20,9 @@
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
+/* Add notice that `cleaner-caption` is deprecated in Hybrid Core. */
+_deprecated_function( "add_theme_support( 'cleaner-caption' )", '2.1.0', "add_theme_support( 'html5', array( 'caption' ) )" );
+
 /* Filter the caption shortcode output. */
 add_filter( 'img_caption_shortcode', 'cleaner_caption', 10, 3 );
 
@@ -37,7 +40,7 @@ add_filter( 'img_caption_shortcode', 'cleaner_caption', 10, 3 );
  */
 function cleaner_caption( $output, $attr, $content ) {
 
-	_deprecated_function( "add_theme_support( 'cleaner-caption' )", '1.0.0', "add_theme_support( 'html5', array( 'caption' ) )" );
+	_deprecated_function( __FUNCTION__, '1.0.0', 'img_caption_shortcode' );
 
 	return $output;
 }
