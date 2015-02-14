@@ -26,7 +26,7 @@
  * @package   HybridCore
  * @version   2.1.0-dev
  * @author    Justin Tadlock <justin@justintadlock.com>
- * @copyright Copyright (c) 2008 - 2014, Justin Tadlock
+ * @copyright Copyright (c) 2008 - 2015, Justin Tadlock
  * @link      http://themehybrid.com/hybrid-core
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
@@ -246,6 +246,9 @@ if ( !class_exists( 'Hybrid' ) ) {
 		 * @return void
 		 */
 		function theme_support() {
+
+			/* Automatically add <title> to head. */
+			add_theme_support( 'title-tag' );
 
 			/* Adds core WordPress HTML5 support. */
 			add_theme_support( 'html5', array( 'caption', 'comment-form', 'comment-list', 'gallery', 'search-form' ) );

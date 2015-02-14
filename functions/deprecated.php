@@ -15,7 +15,7 @@
  * @package    HybridCore
  * @subpackage Functions
  * @author     Justin Tadlock <justin@justintadlock.com>
- * @copyright  Copyright (c) 2008 - 2014, Justin Tadlock
+ * @copyright  Copyright (c) 2008 - 2015, Justin Tadlock
  * @link       http://themehybrid.com/hybrid-core
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
@@ -23,14 +23,27 @@
 /* === Deprecated Functions === */
 
 /**
+ * Adds the title to the header.
+ *
+ * @since      2.0.0
+ * @deprecated 2.1.0
+ * @access     public
+ * @return     void
+ */
+function hybrid_doctitle() {
+	?><title><?php wp_title( ':' ); ?></title>
+<?php }
+
+/**
  * Creates new shortcodes for use in any shortcode-ready area.
  *
+ * @note       Theme Check chokes on this uncommented. Devs should never call this anyway, but for reference...
  * @since      0.8.0
  * @deprecated 2.0.4
  * @access     public
  * @return     void
  */
-function hybrid_add_shortcodes() {}
+//function hybrid_add_shortcodes() {}
 
 /**
  * Shortcode to display the current year.
