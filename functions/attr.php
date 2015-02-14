@@ -120,6 +120,7 @@ function hybrid_attr_body( $attr ) {
 function hybrid_attr_header( $attr ) {
 
 	$attr['id']        = 'header';
+	$attr['class']     = 'site-header';
 	$attr['role']      = 'banner';
 	$attr['itemscope'] = 'itemscope';
 	$attr['itemtype']  = 'http://schema.org/WPHeader';
@@ -138,6 +139,7 @@ function hybrid_attr_header( $attr ) {
 function hybrid_attr_footer( $attr ) {
 
 	$attr['id']        = 'footer';
+	$attr['class']     = 'site-footer';
 	$attr['role']      = 'contentinfo';
 	$attr['itemscope'] = 'itemscope';
 	$attr['itemtype']  = 'http://schema.org/WPFooter';
@@ -251,7 +253,8 @@ function hybrid_attr_menu( $attr, $context ) {
  */
 function hybrid_attr_branding( $attr ) {
 
-	$attr['id'] = 'branding';
+	$attr['id']    = 'branding';
+	$attr['class'] = 'site-branding';
 
 	return $attr;
 }
@@ -268,6 +271,7 @@ function hybrid_attr_branding( $attr ) {
 function hybrid_attr_site_title( $attr ) {
 
 	$attr['id']       = 'site-title';
+	$attr['class']    = 'site-title';
 	$attr['itemprop'] = 'headline';
 
 	return $attr;
@@ -285,6 +289,7 @@ function hybrid_attr_site_title( $attr ) {
 function hybrid_attr_site_description( $attr ) {
 
 	$attr['id']       = 'site-description';
+	$attr['class']    = 'site-description';
 	$attr['itemprop'] = 'description';
 
 	return $attr;
