@@ -23,6 +23,18 @@
 /* === Deprecated Functions === */
 
 /**
+ * Adds the title to the header.
+ *
+ * @since      2.0.0
+ * @deprecated 2.1.0
+ * @access     public
+ * @return     void
+ */
+function hybrid_doctitle() {
+	?><title><?php wp_title( ':' ); ?></title>
+<?php }
+
+/**
  * Creates new shortcodes for use in any shortcode-ready area.
  *
  * @note       Theme Check chokes on this uncommented. Devs should never call this anyway, but for reference...

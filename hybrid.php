@@ -247,6 +247,9 @@ if ( !class_exists( 'Hybrid' ) ) {
 		 */
 		function theme_support() {
 
+			/* Automatically add <title> to head. */
+			add_theme_support( 'title-tag' );
+
 			/* Adds core WordPress HTML5 support. */
 			add_theme_support( 'html5', array( 'caption', 'comment-form', 'comment-list', 'gallery', 'search-form' ) );
 

@@ -12,7 +12,6 @@
 
 /* Adds common theme items to <head>. */
 add_action( 'wp_head', 'hybrid_meta_charset',  0 );
-add_action( 'wp_head', 'hybrid_doctitle',      0 );
 add_action( 'wp_head', 'hybrid_meta_viewport', 1 );
 add_action( 'wp_head', 'hybrid_meta_template', 1 );
 add_action( 'wp_head', 'hybrid_link_pingback', 3 );
@@ -48,17 +47,6 @@ function hybrid_meta_charset() {
 }
 
 /**
- * Adds the title to the header.
- *
- * @since  2.0.0
- * @access public
- * @return void
- */
-function hybrid_doctitle() {
-	?><title><?php wp_title( ':' ); ?></title>
-<?php }
-
-/**
  * Adds the meta viewport to the header.
  *
  * @since  2.0.0
@@ -81,7 +69,10 @@ function hybrid_link_pingback() {
 }
 
 /**
- * Filters the `wp_title` output early.
+ * Filters the `wp_title` output early. Note that since WordPress 4.1.0 introduced the `_wp_render_title_tag()` 
+ * function, theme authors can no longer control this on their own. In the past, Hybrid Core defaulted to 
+ * a colon, so we're overwriting this regardless of what it was defined as. Later filters on `wp_title` can 
+ * change if needed.  Since core is now defining the separator, this shouldn't be an issue.
  *
  * @since  2.0.0
  * @access publc
@@ -91,6 +82,9 @@ function hybrid_link_pingback() {
  * @return string
  */
 function hybrid_wp_title( $doctitle, $separator, $seplocation ) {
+
+	/* Custom separator for backwards compatibility. */
+	$separator = ':';
 
 	if ( is_front_page() )
 		$doctitle = get_bloginfo( 'name' ) . $separator . ' ' . get_bloginfo( 'description' );
