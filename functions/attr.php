@@ -450,6 +450,7 @@ function hybrid_attr_entry_published( $attr ) {
 
 	$attr['class']    = 'entry-published updated';
 	$attr['datetime'] = get_the_time( 'Y-m-d\TH:i:sP' );
+	$attr['itemprop'] = 'datePublished';
 
 	/* Translators: Post date/time "title" attribute. */
 	$attr['title']    = get_the_time( _x( 'l, F j, Y, g:i a', 'post time format', 'hybrid-core' ) );
