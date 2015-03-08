@@ -186,13 +186,12 @@ function hybrid_attr_content( $attr ) {
  */
 function hybrid_attr_sidebar( $attr, $context ) {
 
-	if ( !empty( $context ) )
-		$attr['id'] = "sidebar-{$context}";
-
-	$attr['class']     = 'sidebar';
-	$attr['role']      = 'complementary';
+	$attr['class'] = 'sidebar';
+	$attr['role']  = 'complementary';
 
 	if ( !empty( $context ) ) {
+		$attr['id']     = "sidebar-{$context}";
+		$attr['class'] .= " sidebar-{$context}";
 
 		$sidebar_name = hybrid_get_sidebar_name( $context );
 
@@ -219,13 +218,12 @@ function hybrid_attr_sidebar( $attr, $context ) {
  */
 function hybrid_attr_menu( $attr, $context ) {
 
-	if ( !empty( $context ) )
-		$attr['id'] = "menu-{$context}";
-
 	$attr['class']      = 'menu';
 	$attr['role']       = 'navigation';
 
 	if ( !empty( $context ) ) {
+		$attr['id']     = "menu-{$context}";
+		$attr['class'] .= " menu-{$context}";
 
 		$menu_name = hybrid_get_menu_location_name( $context );
 
