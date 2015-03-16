@@ -106,14 +106,11 @@ function hybrid_attr_body( $attr ) {
 	$attr['itemscope'] = 'itemscope';
 	$attr['itemtype']  = 'http://schema.org/WebPage';
 
-	if ( is_singular( 'post' ) || is_home() || is_archive() ) {
-		$attr['itemscope'] = '';
-		$attr['itemtype']  = 'http://schema.org/Blog';
-	}
+	if ( is_singular( 'post' ) || is_home() || is_archive() )
+		$attr['itemtype'] = 'http://schema.org/Blog';
 
-	if ( is_search() ) {
-		$attr['itemtype']  = 'http://schema.org/SearchResultsPage';
-	}
+	elseif ( is_search() )
+		$attr['itemtype'] = 'http://schema.org/SearchResultsPage';
 
 	return $attr;
 }
@@ -170,9 +167,8 @@ function hybrid_attr_content( $attr ) {
 	$attr['class']    = 'content';
 	$attr['role']     = 'main';
 
-	if ( ! is_singular( 'post' ) && ! is_home() && ! is_archive() ) {
+	if ( !is_singular( 'post' ) && !is_home() && !is_archive() )
 		$attr['itemprop'] = 'mainContentOfPage';
-	}
 
 	return $attr;
 }
@@ -376,10 +372,9 @@ function hybrid_attr_post( $attr ) {
 
 			$attr['itemtype']  = 'http://schema.org/BlogPosting';
 
-			// Add itemprop if within the main query
-			if ( is_main_query() && ! is_search() ) {
+			/* Add itemprop if within the main query. */
+			if ( is_main_query() && !is_search() )
 				$attr['itemprop'] = 'blogPost';
-			}
 		}
 
 		elseif ( 'attachment' === get_post_type() && wp_attachment_is_image() ) {
