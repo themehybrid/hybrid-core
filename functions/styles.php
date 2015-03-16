@@ -94,34 +94,44 @@ function hybrid_enqueue_styles() {
  */
 function hybrid_get_styles() {
 
-	/* Get the minified suffix. */
-	$suffix = hybrid_get_min_suffix();
-
 	/* Default styles available. */
 	$styles = array(
-		'one-five'   => array( 'version' => '20131105' ),
-		'gallery'    => array( 'version' => '20130526' ),
+		'one-five' => array( 'version' => '20131105' ),
+		'gallery'  => array( 'version' => '20130526' )
 	);
 
 	/* If a child theme is active, add the parent theme's style. */
-	if ( is_child_theme() ) {
-		$parent = wp_get_theme( get_template() );
-
-		/* Get the parent theme stylesheet. */
-		$src = trailingslashit( THEME_URI ) . "style.css";
-
-		/* If a '.min' version of the parent theme stylesheet exists, use it. */
-		if ( !empty( $suffix ) && file_exists( trailingslashit( THEME_DIR ) . "style{$suffix}.css" ) )
-			$src = trailingslashit( THEME_URI ) . "style{$suffix}.css";
-
-		$styles['parent'] = array( 'src' => $src, 'version' => $parent->get( 'Version' ) );
-	}
+	if ( is_child_theme() )
+		$styles['parent'] = array( 'src' => hybrid_get_parent_stylesheet_uri(), 'version' => wp_get_theme( get_template() )->get( 'Version' ) );
 
 	/* Add the active theme style. */
 	$styles['style'] = array( 'src' => get_stylesheet_uri(), 'version' => wp_get_theme()->get( 'Version' ) );
 
 	/* Return the array of styles. */
 	return apply_filters( 'hybrid_styles', $styles );
+}
+
+/**
+ * Returns the parent theme stylesheet URI.  Will return the active theme's stylesheet URI if no child 
+ * theme is active. Be sure to check `is_child_theme()` when using.
+ *
+ * @since  2.1.0
+ * @access public
+ * @return string
+ */
+function hybrid_get_parent_stylesheet_uri() {
+
+	/* Get the minified suffix. */
+	$suffix = hybrid_get_min_suffix();
+
+	/* Get the parent theme stylesheet. */
+	$stylesheet_uri = trailingslashit( THEME_URI ) . 'style.css';
+
+	/* If a '.min' version of the parent theme stylesheet exists, use it. */
+	if ( !empty( $suffix ) && file_exists( trailingslashit( THEME_DIR ) . "style{$suffix}.css" ) )
+		$stylesheet_uri = trailingslashit( THEME_URI ) . "style{$suffix}.css";
+
+	return apply_filters( 'hybrid_get_parent_stylesheet_uri', $stylesheet_uri );
 }
 
 /**
