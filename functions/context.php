@@ -71,8 +71,22 @@ function hybrid_get_context() {
 
 		/* Post type archives. */
 		if ( is_post_type_archive() ) {
-			$post_type = get_post_type_object( get_query_var( 'post_type' ) );
-			$hybrid->context[] = "archive-{$post_type->name}";
+			/**
+			 * The query var 'post_type' can be an array but the function
+			 * get_post_type_object() only accepts strings (single post type)
+			 *
+			 * @see  http://codex.wordpress.org/Class_Reference/WP_Query#Type_Parameters
+			 */
+			$queried_post_types = get_query_var( 'post_type' );
+
+			if ( ! is_array( $queried_post_types ) ) {
+				$queried_post_types = array( $queried_post_types );
+			}
+
+			foreach ( $queried_post_types as $post_type_key ) {
+				$post_type = get_post_type_object( $post_type_key );
+				$hybrid->context[] = "archive-{$post_type->name}";
+			}
 		}
 
 		/* Taxonomy archives. */
