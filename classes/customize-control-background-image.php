@@ -15,7 +15,12 @@
 /**
  * Background image customize control class.
  *
- * @since 2.0.0
+ * Note that this is soft-deprecated in 2.1.0.  If we can come up with a fix for adding default 
+ * backgrounds to WP 4.1+, we'll revisit this.  For now, it's on track to be removed completely.
+ * @link https://github.com/justintadlock/hybrid-core/issues/91
+ *
+ * @since      2.0.0
+ * @deprecated 2.1.0
  */
 class Hybrid_Customize_Control_Background_Image extends WP_Customize_Background_Image_Control {
 
@@ -40,50 +45,5 @@ class Hybrid_Customize_Control_Background_Image extends WP_Customize_Background_
 
 		/* Let WP handle this. */
 		parent::__construct( $manager );
-
-		/* Allow themes to register custom backgrounds. */
-		$this->default_backgrounds = apply_filters( 'hybrid_default_backgrounds', $this->default_backgrounds );
-
-		/* WordPress will only output the 'default' tab if there's a default image. Make sure it gets added. */
-		if ( !$this->setting->default && !empty( $this->default_backgrounds ) )
-			$this->add_tab( 'default', _x( 'Default', 'theme customizer tab', 'hybrid-core' ), array( $this, 'tab_default_background' ) );
-	}
-
-	/**
-	 * Displays the 'default' tab for selecting a background image.  This method plays nicely with the 
-	 * 'default-image' argument for 'custom-background' as well as our custom backgrounds.
-	 *
-	 * @since  2.0.0
-	 * @access public
-	 * @return void
-	 */
-	public function tab_default_background() {
-
-		/* If the theme added a 'default-image', make sure to output it. */
-		if ( $this->setting->default )
-			$this->print_tab_image( $this->setting->default );
-
-		/* Check if the theme added an array of default backgrounds. */
-		if ( !empty( $this->default_backgrounds ) ) {
-
-			/* Get the template and stylesheet directory URIs. */
-			$template   = get_template_directory_uri();
-			$stylesheet = get_stylesheet_directory_uri();
-
-			/* Loop through the backgrounds and print them. */
-			foreach ( $this->default_backgrounds as $background ) {
-
-				/* If no thumbnail was given, use the original. */
-				if ( !isset( $background['thumbnail_url'] ) )
-					$background['thumbnail_url'] = $background['url'];
-
-				/* Use '%s' for parent themes and '%2$s' for child themes. */
-				$url       = sprintf( $background['url'],           $template, $stylesheet );
-				$thumb_url = sprintf( $background['thumbnail_url'], $template, $stylesheet );
-
-				/* Print the image. */
-				$this->print_tab_image( $url, $thumb_url );
-			}
-		}
 	}
 }
