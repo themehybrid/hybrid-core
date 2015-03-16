@@ -71,8 +71,12 @@ function hybrid_get_context() {
 
 		/* Post type archives. */
 		if ( is_post_type_archive() ) {
-			$post_type = get_post_type_object( get_query_var( 'post_type' ) );
-			$hybrid->context[] = "archive-{$post_type->name}";
+			$post_type = get_query_var( 'post_type' );
+
+			if ( is_array( $post_type ) )
+				reset( $post_type );
+
+			$hybrid->context[] = "archive-{$post_type}";
 		}
 
 		/* Taxonomy archives. */
