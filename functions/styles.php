@@ -24,6 +24,9 @@ add_filter( 'stylesheet_uri', 'hybrid_min_stylesheet_uri', 5, 2 );
 /* Filters the WP locale stylesheet. */
 add_filter( 'locale_stylesheet_uri', 'hybrid_locale_stylesheet_uri', 5 );
 
+/* Remove the default emoji styles. We'll handle this in the stylesheet. */
+remove_action( 'wp_print_styles', 'print_emoji_styles' );
+
 /**
  * Registers stylesheets for the framework.  This function merely registers styles with WordPress using
  * the wp_register_style() function.  It does not load any stylesheets on the site.  If a theme wants to 

@@ -306,13 +306,17 @@ img {
 	height:          auto;
 }
 
-img.wp-smiley {
-	max-height: 12px;
-	margin:     0;
+img.wp-smiley,
+img.emoji {
+	display:    inline;
+	box-shadow: none;
+	max-height: 1em;
+	width:      1em;
+	margin:     0 .07em;
 	padding:    0;
 	border:     none;
 	background: transparent;
-	}
+}
 
 .gallery {
 	display:       block;
