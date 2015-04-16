@@ -23,6 +23,18 @@
 /* === Deprecated Functions === */
 
 /**
+ * Returns an array of the core framework's available styles for use in themes.
+ *
+ * @since      1.5.0
+ * @deprecated 2.1.0
+ * @access     public
+ * @return     array
+ */
+function hybrid_get_styles() {
+	return apply_filters( 'hybrid_styles', array() );
+}
+
+/**
  * Adds the title to the header.
  *
  * @since      2.0.0
