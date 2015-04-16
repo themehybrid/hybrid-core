@@ -29,15 +29,8 @@ add_action( 'wp_enqueue_scripts', 'hybrid_enqueue_scripts', 5 );
  */
 function hybrid_register_scripts() {
 
-	/* Supported JavaScript. */
-	$supports = get_theme_support( 'hybrid-core-scripts' );
-
-	/* Get the minified suffix. */
-	$suffix = hybrid_get_min_suffix();
-
-	/* Register the 'mobile-toggle' script if the current theme supports 'mobile-toggle'. */
-	if ( isset( $supports[0] ) && in_array( 'mobile-toggle', $supports[0] ) )
-		wp_register_script( 'mobile-toggle', esc_url( trailingslashit( HYBRID_JS ) . "mobile-toggle{$suffix}.js" ), array( 'jquery' ), '20130528', true );
+	/* Register the 'mobile-toggle' script'. */
+	wp_register_script( 'hybrid-mobile-toggle', esc_url( trailingslashit( HYBRID_JS ) . 'mobile-toggle' . hybrid_get_min_suffix() . '.js' ), array( 'jquery' ), '20130528', true );
 }
 
 /**
@@ -58,5 +51,5 @@ function hybrid_enqueue_scripts() {
 
 	/* Load the 'mobile-toggle' script if the current theme supports 'mobile-toggle'. */
 	if ( isset( $supports[0] ) && in_array( 'mobile-toggle', $supports[0] ) )
-		wp_enqueue_script( 'mobile-toggle' );
+		wp_enqueue_script( 'hybrid-mobile-toggle' );
 }
