@@ -130,10 +130,10 @@ function hybrid_get_blog_url() {
 	$blog_url = '';
 
 	if ( 'posts' === get_option( 'show_on_front' ) )
-		$blog_url = home_url();
+		$blog_url = esc_url( home_url() );
 
 	elseif ( 0 < ( $page_for_posts = get_option( 'page_for_posts' ) ) )
-		$blog_url = get_permalink( $page_for_posts );
+		$blog_url = esc_url( get_permalink( $page_for_posts ) );
 
 	return $blog_url;
 }
@@ -159,7 +159,7 @@ function hybrid_site_title() {
 function hybrid_get_site_title() {
 
 	if ( $title = get_bloginfo( 'name' ) )
-		$title = sprintf( '<h1 %s><a href="%s" rel="home">%s</a></h1>', hybrid_get_attr( 'site-title' ), home_url(), $title );
+		$title = sprintf( '<h1 %s><a href="%s" rel="home">%s</a></h1>', hybrid_get_attr( 'site-title' ), esc_url( home_url() ), $title );
 
 	return apply_filters( 'hybrid_site_title', $title );
 }
