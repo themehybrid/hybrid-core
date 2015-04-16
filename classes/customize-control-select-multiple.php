@@ -47,7 +47,7 @@ class Hybrid_Customize_Control_Select_Multiple extends WP_Customize_Control {
 
 			<select multiple="multiple" <?php $this->link(); ?>>
 				<?php foreach ( $this->choices as $value => $label ) : ?>
-					<option value="<?php echo esc_attr( $value ); ?>" <?php selected( $this->value(), $value ); ?>><?php echo esc_html( $label ); ?></option>
+					<option value="<?php echo esc_attr( $value ); ?>" <?php selected( in_array( $value, (array) $this->value() ) ); ?>><?php echo esc_html( $label ); ?></option>
 				<?php endforeach; ?>
 			</select>
 		</label>
