@@ -27,6 +27,9 @@ function hybrid_load_customize_controls() {
 	/* Loads the textarea customize control class. */
 	require_once( trailingslashit( HYBRID_CLASSES ) . 'customize-control-textarea.php' );
 
+	/* Loads the select multiple customize control class. */
+	require_once( trailingslashit( HYBRID_CLASSES ) . 'customize-control-select-multiple.php' );
+
 	/* Loads the background image customize control class. */
 	require_once( trailingslashit( HYBRID_CLASSES ) . 'customize-control-background-image.php' );
 }
