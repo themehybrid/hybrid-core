@@ -41,7 +41,7 @@ function hybrid_register_styles() {
 	$suffix = hybrid_get_min_suffix();
 
 	/* Register styles for use by themes. */
-	wp_register_style( 'hybrid-reset',    trailingslashit( HYBRID_CSS)  . "reset{$suffix}.css",  null, '20110523'                                       );
+	wp_register_style( 'hybrid-reset',    trailingslashit( HYBRID_CSS)  . "reset{$suffix}.css",    null, '20110523'                                       );
 	wp_register_style( 'hybrid-one-five', trailingslashit( HYBRID_CSS ) . "one-five{$suffix}.css", null, '20131105'                                       );
 	wp_register_style( 'hybrid-gallery',  trailingslashit( HYBRID_CSS ) . "gallery{$suffix}.css",  null, '20130526'                                       );
 	wp_register_style( 'hybrid-parent',   hybrid_get_parent_stylesheet_uri(),                      null, wp_get_theme( get_template() )->get( 'Version' ) );
