@@ -25,10 +25,11 @@
  * Creates a settings field id attribute for use on the theme settings page.  This is a helper function for use
  * with the WordPress settings API.
  *
- * @since  1.0.0
- * @access public
- * @param  string  $setting
- * @return string
+ * @since      1.0.0
+ * @deprecated 2.1.0
+ * @access     public
+ * @param      string  $setting
+ * @return     string
  */
 function hybrid_settings_field_id( $setting ) {
 	return hybrid_get_prefix() . '_theme_settings-' . sanitize_html_class( $setting );
@@ -38,10 +39,11 @@ function hybrid_settings_field_id( $setting ) {
  * Creates a settings field name attribute for use on the theme settings page.  This is a helper function for 
  * use with the WordPress settings API.
  *
- * @since  1.0.0
- * @access public
- * @param  string  $setting
- * @return string
+ * @since      1.0.0
+ * @deprecated 2.1.0
+ * @access     public
+ * @param      string  $setting
+ * @return     string
  */
 function hybrid_settings_field_name( $setting ) {
 	return hybrid_get_prefix() . "_theme_settings[{$setting}]";
@@ -50,8 +52,9 @@ function hybrid_settings_field_name( $setting ) {
 /**
  * Creates a theme settings page for the theme.
  *
- * @since  2.0.0
- * @access public
+ * @since      2.0.0
+ * @deprecated 2.1.0
+ * @access     public
  */
 final class Hybrid_Theme_Settings{
 
@@ -108,6 +111,9 @@ final class Hybrid_Theme_Settings{
 	 * @return void
 	 */
 	public function __construct() {
+
+		/* Deprecated in 2.1.0. */
+		_deprecated_function( __CLASS__, '2.1.0', 'customize_register' )
 
 		/* Add theme settings to the admin menu. */
 		add_action( 'admin_menu', array( $this, 'admin_menu' ), 5 );
