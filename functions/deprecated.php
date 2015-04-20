@@ -47,6 +47,31 @@ function hybrid_doctitle() {
 <?php }
 
 /**
+ * Registers the framework's `admin-widgets.css` stylesheet file.  The function does not load the stylesheet.  
+ * It merely registers it with WordPress.
+ *
+ * @since      1.2.0
+ * @deprecated 2.1.0
+ * @access     public
+ * @return     void
+ */
+function hybrid_admin_register_styles() {
+	_deprecated_function( __FUNCTION__, '2.1.0', null );
+}
+
+/**
+ * Loads the `admin-widgets.css` file when viewing the widgets screen.
+ *
+ * @since      1.2.0
+ * @deprecated 2.1.0
+ * @access     public
+ * @return     void
+ */
+function hybrid_admin_enqueue_styles() {
+	_deprecated_function( __FUNCTION__, '2.1.0', null );
+}
+
+/**
  * Creates new shortcodes for use in any shortcode-ready area.
  *
  * @note       Theme Check chokes on this uncommented. Devs should never call this anyway, but for reference...

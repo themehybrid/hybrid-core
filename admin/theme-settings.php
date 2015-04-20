@@ -113,7 +113,7 @@ final class Hybrid_Theme_Settings{
 	public function __construct() {
 
 		/* Deprecated in 2.1.0. */
-		_deprecated_function( __CLASS__, '2.1.0', 'customize_register' )
+		_deprecated_function( __CLASS__, '2.1.0', 'customize_register' );
 
 		/* Add theme settings to the admin menu. */
 		add_action( 'admin_menu', array( $this, 'admin_menu' ), 5 );
