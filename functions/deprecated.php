@@ -72,6 +72,112 @@ function hybrid_admin_enqueue_styles() {
 }
 
 /**
+ * Creates a settings field id attribute for use on the theme settings page.  This is a helper function for use
+ * with the WordPress settings API.
+ *
+ * @since      1.0.0
+ * @deprecated 2.1.0
+ * @access     public
+ * @param      string  $setting
+ * @return     string
+ */
+function hybrid_settings_field_id( $setting ) {
+	_deprecated_function( __FUNCTION__, '2.1.0', '' );
+	return hybrid_get_prefix() . '_theme_settings-' . sanitize_html_class( $setting );
+}
+
+/**
+ * Creates a settings field name attribute for use on the theme settings page.  This is a helper function for 
+ * use with the WordPress settings API.
+ *
+ * @since      1.0.0
+ * @deprecated 2.1.0
+ * @access     public
+ * @param      string  $setting
+ * @return     string
+ */
+function hybrid_settings_field_name( $setting ) {
+	_deprecated_function( __FUNCTION__, '2.1.0', '' );
+	return hybrid_get_prefix() . "_theme_settings[{$setting}]";
+}
+
+/**
+ * Creates a theme settings page for the theme.
+ *
+ * @since      2.0.0
+ * @deprecated 2.1.0
+ * @access     public
+ */
+final class Hybrid_Theme_Settings{
+
+	public function __construct() {
+
+		/* Deprecated in 2.1.0. */
+		_deprecated_function( __CLASS__, '2.1.0', 'customize_register' );
+	}
+}
+
+/**
+ * Loads the Hybrid theme settings once and allows the input of the specific field the user would 
+ * like to show.  Hybrid theme settings are added with 'autoload' set to 'yes', so the settings are 
+ * only loaded once on each page load.
+ *
+ * @since  0.7.0
+ * @deprecated 2.1.0
+ * @access public
+ * @global object  $hybrid  The global Hybrid object.
+ * @param  string  $option  The specific theme setting the user wants.
+ * @return mixed            Specific setting asked for.
+ */
+function hybrid_get_setting( $option = '' ) {
+	global $hybrid;
+
+	_deprecated_function( __FUNCTION__, '2.1.0', 'get_theme_mod' );
+
+	/* If no specific option was requested, return false. */
+	if ( !$option )
+		return false;
+
+	/* Get the default settings. */
+	$defaults = hybrid_get_default_theme_settings();
+
+	/* If the settings array hasn't been set, call get_option() to get an array of theme settings. */
+	if ( !isset( $hybrid->settings ) || !is_array( $hybrid->settings ) )
+		$hybrid->settings = get_option( hybrid_get_prefix() . '_theme_settings', $defaults );
+
+	/* If the option isn't set but the default is, set the option to the default. */
+	if ( !isset( $hybrid->settings[ $option ] ) && isset( $defaults[ $option ] ) )
+		$hybrid->settings[ $option ] = $defaults[ $option ];
+
+	/* If no option is found at this point, return false. */
+	if ( !isset( $hybrid->settings[ $option ] ) )
+		return false;
+
+	/* If the specific option is an array, return it. */
+	if ( is_array( $hybrid->settings[ $option ] ) )
+		return $hybrid->settings[ $option ];
+
+	/* Strip slashes from the setting and return. */
+	else
+		return wp_kses_stripslashes( $hybrid->settings[ $option ] );
+}
+
+/**
+ * Sets up a default array of theme settings for use with the theme.  Theme developers should filter the 
+ * "{$prefix}_default_theme_settings" hook to define any default theme settings.  WordPress does not 
+ * provide a hook for default settings at this time.
+ *
+ * @since  1.0.0
+ * @deprecated 2.1.0
+ * @access public
+ * @return array $settings The default theme settings.
+ */
+function hybrid_get_default_theme_settings() {
+	_deprecated_function( __FUNCTION__, '2.1.0', 'get_theme_mods' );
+	return apply_filters( hybrid_get_prefix() . '_default_theme_settings', array() );
+}
+
+/**
  * Creates new shortcodes for use in any shortcode-ready area.
  *
  * @note       Theme Check chokes on this uncommented. Devs should never call this anyway, but for reference...

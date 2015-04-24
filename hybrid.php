@@ -370,15 +370,9 @@ if ( !class_exists( 'Hybrid' ) ) {
 		 */
 		function admin() {
 
-			/* Check if in the WordPress admin. */
-			if ( is_admin() ) {
-
-				/* Load the main admin file. */
+			/* Load the main admin file if in admin. */
+			if ( is_admin() )
 				require_once( trailingslashit( HYBRID_ADMIN ) . 'admin.php' );
-
-				/* Load the theme settings feature if supported. */
-				require_if_theme_supports( 'hybrid-core-theme-settings', trailingslashit( HYBRID_ADMIN ) . 'theme-settings.php' );
-			}
 		}
 
 		/**
