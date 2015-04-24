@@ -389,13 +389,6 @@ if ( !class_exists( 'Hybrid' ) ) {
 			if ( current_theme_supports( 'bbpress' ) )
 				remove_action( 'bbp_init', 'bbp_setup_theme_compat', 8 );
 
-			/* Move the WordPress generator to a better priority. */
-			remove_action( 'wp_head', 'wp_generator' );
-			add_action( 'wp_head', 'wp_generator', 1 );
-
-			/* Make text widgets shortcode aware. */
-			add_filter( 'widget_text', 'do_shortcode' );
-
 			/* Don't strip tags on single post titles. */
 			remove_filter( 'single_post_title', 'strip_tags' );
 
