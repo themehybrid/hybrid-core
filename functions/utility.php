@@ -58,11 +58,11 @@ function hybrid_has_post_template( $template = '' ) {
 		$post_template = get_post_meta( get_queried_object_id(), "_wp_{$post->post_type}_template", true );
 
 		/* If a specific template was input, check that the post template matches. */
-		if ( !empty( $template) && ( $template == $post_template ) )
+		if ( !empty( $template ) && $template == $post_template )
 			return true;
 
 		/* If no specific template was input, check if the post has a template. */
-		elseif ( empty( $template) && !empty( $post_template ) )
+		elseif ( empty( $template ) && !empty( $post_template ) )
 			return true;
 	}
 
