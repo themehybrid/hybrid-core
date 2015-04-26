@@ -78,9 +78,6 @@ function hybrid_get_theme_link() {
 	$uri   = $theme->get( 'ThemeURI' );
 	$name  = $theme->display( 'Name', false, true );
 
-	/* Translators: Theme name. */
-	$title = sprintf( __( '%s WordPress Theme', 'hybrid-core' ), $name );
-
 	return sprintf( '<a class="theme-link" href="%s">%s</a>', esc_url( $uri ), $name );
 }
 
@@ -110,9 +107,6 @@ function hybrid_get_child_theme_link() {
 	$theme = wp_get_theme();
 	$uri   = $theme->get( 'ThemeURI' );
 	$name  = $theme->display( 'Name', false, true );
-
-	/* Translators: Theme name. */
-	$title = sprintf( __( '%s WordPress Theme', 'hybrid-core' ), $name );
 
 	return sprintf( '<a class="child-link" href="%s">%s</a>', esc_url( $uri ), $name );
 }
