@@ -42,14 +42,7 @@ function hybrid_register_scripts() {
  */
 function hybrid_enqueue_scripts() {
 
-	/* Supported JavaScript. */
-	$supports = get_theme_support( 'hybrid-core-scripts' );
-
 	/* Load the comment reply script on singular posts with open comments if threaded comments are supported. */
 	if ( is_singular() && get_option( 'thread_comments' ) && comments_open() )
 		wp_enqueue_script( 'comment-reply' );
-
-	/* Load the 'mobile-toggle' script if the current theme supports 'mobile-toggle'. */
-	if ( isset( $supports[0] ) && in_array( 'mobile-toggle', $supports[0] ) )
-		wp_enqueue_script( 'hybrid-mobile-toggle' );
 }
