@@ -24,9 +24,6 @@ add_action( 'customize_register', 'hybrid_load_customize_controls', 1 );
  */
 function hybrid_load_customize_controls() {
 
-	/* Loads the textarea customize control class. */
-	require_once( trailingslashit( HYBRID_CLASSES ) . 'customize-control-textarea.php' );
-
 	/* Loads the select multiple customize control class. */
 	require_once( trailingslashit( HYBRID_CLASSES ) . 'customize-control-select-multiple.php' );
 
