@@ -51,32 +51,6 @@ function hybrid_get_comment_reply_link( $args = array() ) {
 }
 
 /**
- * Arguments for the wp_list_comments_function() used in comments.php. Users can set up a 
- * custom comments callback function by changing $callback to the custom function.  Note that 
- * $style should remain 'ol' since this is hardcoded into the theme and is the semantically correct
- * element to use for listing comments.
- *
- * @since  0.7.0
- * @access public
- * @param  array  $args 
- * @return array
- */
-function hybrid_list_comments_args( $args = array() ) {
-
-	/* Set the default arguments for listing comments. */
-	$defaults = array(
-		'style'        => 'ol',
-		'type'         => 'all',
-		'avatar_size'  => 80,
-		'callback'     => 'hybrid_comments_callback',
-		'end-callback' => 'hybrid_comments_end_callback'
-	);
-
-	/* Return the arguments and allow devs to overwrite them. */
-	return apply_filters( 'hybrid_list_comments_args', wp_parse_args( $args, $defaults ) );
-}
-
-/**
  * Uses the $comment_type to determine which comment template should be used. Once the 
  * template is located, it is loaded for use. Child themes can create custom templates based off
  * the $comment_type. The comment template hierarchy is comment-$comment_type.php, 

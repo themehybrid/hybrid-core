@@ -233,6 +233,32 @@ class Hybrid_Customize_Control_Textarea extends WP_Customize_Control {
 }
 
 /**
+ * Arguments for the wp_list_comments_function() used in comments.php. Users can set up a 
+ * custom comments callback function by changing $callback to the custom function.  Note that 
+ * $style should remain 'ol' since this is hardcoded into the theme and is the semantically correct
+ * element to use for listing comments.
+ *
+ * @since  0.7.0
+ * @access public
+ * @param  array  $args 
+ * @return array
+ */
+function hybrid_list_comments_args( $args = array() ) {
+
+	/* Set the default arguments for listing comments. */
+	$defaults = array(
+		'style'        => 'ol',
+		'type'         => 'all',
+		'avatar_size'  => 80,
+		'callback'     => 'hybrid_comments_callback',
+		'end-callback' => 'hybrid_comments_end_callback'
+	);
+
+	/* Return the arguments and allow devs to overwrite them. */
+	return apply_filters( 'hybrid_list_comments_args', wp_parse_args( $args, $defaults ) );
+}
+
+/**
  * @since      0.7.0
  * @deprecated 1.3.0
  */
