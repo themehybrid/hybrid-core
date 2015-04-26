@@ -29,4 +29,7 @@ function hybrid_load_customize_controls() {
 
 	/* Loads the background image customize control class. */
 	require_once( trailingslashit( HYBRID_CLASSES ) . 'customize-control-background-image.php' );
+
+	/* Loads the background image customize control class. */
+	require_once( trailingslashit( HYBRID_CLASSES ) . 'customize-control-theme-layout.php' );
 }
