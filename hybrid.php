@@ -342,9 +342,6 @@ if ( !class_exists( 'Hybrid' ) ) {
 			/* Load the Get the Image extension if supported. */
 			require_if_theme_supports( 'get-the-image', trailingslashit( HYBRID_EXTENSIONS ) . 'get-the-image.php' );
 
-			/* Load the Loop Pagination extension if supported. */
-			require_if_theme_supports( 'loop-pagination', trailingslashit( HYBRID_EXTENSIONS ) . 'loop-pagination.php' );
-
 			/* Load the Theme Layouts extension if supported. */
 			require_if_theme_supports( 'theme-layouts', trailingslashit( HYBRID_EXTENSIONS ) . 'theme-layouts.php' );
 

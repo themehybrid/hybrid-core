@@ -267,6 +267,26 @@ function hybrid_get_textdomain() {
 	return hybrid_get_parent_textdomain();
 }
 
+/* Add notice that `loop-pagination` is deprecated in Hybrid Core. */
+//_deprecated_function( "add_theme_support( 'loop-pagination' )", '2.1.0', '' );
+
+/**
+ * Loop pagination function for paginating loops with multiple posts.  This should be used on archive, blog, and 
+ * search pages.  It is not for singular views.
+ *
+ * @since      0.1.0
+ * @deprecated 1.0.0
+ * @access     public
+ * @param      array   $args
+ * @return     string
+ */
+function loop_pagination( $args = array() ) {
+
+	_deprecated_function( __FUNCTION__, '2.1.0', 'the_posts_pagination()' );
+
+	return isset( $args['echo'] ) && false === $args['echo'] ? get_the_posts_pagination( $args ) : the_posts_pagination( $args );
+}
+
 /**
  * Creates new shortcodes for use in any shortcode-ready area.
  *
