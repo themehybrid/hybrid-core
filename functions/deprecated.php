@@ -178,6 +178,41 @@ function hybrid_get_default_theme_settings() {
 }
 
 /**
+ * Tells WordPress to load the styles needed for the framework using the wp_enqueue_style() function.
+ *
+ * As of version 2.1.0, this function and the use of `add_theme_support( 'hybrid-core-styles' )` has 
+ * been deprecated. Theme authors should use `wp_enqueue_style()` to enqueue one of the appropriate 
+ * framework styles registered in `hybrid_register_styles()`.
+ *
+ * @since      1.5.0
+ * @deprecated 2.1.0
+ * @access     public
+ * @return     void
+ */
+function hybrid_enqueue_styles() {
+
+	/* Get the theme-supported stylesheets. */
+	$supports = get_theme_support( 'hybrid-core-styles' );
+
+	/* If the theme doesn't add support for any styles, return. */
+	if ( !is_array( $supports[0] ) )
+		return;
+
+	/* Loop through each of the core framework styles and enqueue them if supported. */
+	foreach ( $supports[0] as $style )
+		wp_enqueue_style( "hybrid-{$style}" );
+}
+
+/**
+ * @since      0.7.0
+ * @deprecated 1.3.0
+ */
+function hybrid_get_textdomain() {
+	_deprecated_function( __FUNCTION__, '1.3.0', 'hybrid_get_parent_textdomain' );
+	return hybrid_get_parent_textdomain();
+}
+
+/**
  * Creates new shortcodes for use in any shortcode-ready area.
  *
  * @note       Theme Check chokes on this uncommented. Devs should never call this anyway, but for reference...

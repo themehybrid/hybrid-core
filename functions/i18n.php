@@ -83,15 +83,6 @@ function hybrid_load_framework_textdomain( $domain ) {
 }
 
 /**
- * @since      0.7.0
- * @deprecated 1.3.0
- */
-function hybrid_get_textdomain() {
-	_deprecated_function( __FUNCTION__, '1.3.0', 'hybrid_get_parent_textdomain' );
-	return hybrid_get_parent_textdomain();
-}
-
-/**
  * Gets the parent theme textdomain. This allows the framework to recognize the proper textdomain of the 
  * parent theme.
  *
