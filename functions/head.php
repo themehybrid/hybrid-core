@@ -43,7 +43,7 @@ function hybrid_meta_template() {
  * @return void
  */
 function hybrid_meta_charset() {
-	printf( '<meta charset="%s" />' . "\n", get_bloginfo( 'charset' ) );
+	printf( '<meta charset="%s" />' . "\n", esc_attr( get_bloginfo( 'charset' ) ) );
 }
 
 /**
@@ -65,7 +65,7 @@ function hybrid_meta_viewport() {
  */
 function hybrid_link_pingback() {
 	if ( 'open' === get_option( 'default_ping_status' ) )
-		printf( '<link rel="pingback" href="%s" />' . "\n", get_bloginfo( 'pingback_url' ) );
+		printf( '<link rel="pingback" href="%s" />' . "\n", esc_attr( get_bloginfo( 'pingback_url' ) ) );
 }
 
 /**
@@ -145,5 +145,5 @@ function hybrid_wp_title( $doctitle, $separator, $seplocation ) {
 	/* Trim separator + space from beginning and end. */
 	$doctitle = trim( strip_tags( $doctitle ), "{$separator} " );
 
-	return $doctitle;
+	return esc_html( $doctitle );
 }

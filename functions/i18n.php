@@ -187,7 +187,7 @@ function hybrid_get_language( $locale = '' ) {
 	if ( empty( $locale ) )
 		$locale = get_locale();
 
-	return preg_replace( '/(.*?)_.*?$/i', '$1', $locale );
+	return sanitize_key( preg_replace( '/(.*?)_.*?$/i', '$1', $locale ) );
 }
 
 /**
@@ -204,5 +204,5 @@ function hybrid_get_region( $locale = '' ) {
 	if ( empty( $locale ) )
 		$locale = get_locale();
 
-	return preg_replace( '/.*?_(.*?)$/i', '$1', $locale );
+	return sanitize_key( preg_replace( '/.*?_(.*?)$/i', '$1', $locale ) );
 }

@@ -372,7 +372,7 @@ class Hybrid_Media_Grabber {
 			$post = array_shift( $attached_media );
 
 			/* Gets the URI for the attachment (the media file). */
-			$url = wp_get_attachment_url( $post->ID );
+			$url = esc_url( wp_get_attachment_url( $post->ID ) );
 
 			/* Run the media as a shortcode using WordPress' built-in [audio] and [video] shortcodes. */
 			$this->media = do_shortcode( "[{$this->type} src='{$url}']" );
@@ -389,7 +389,7 @@ class Hybrid_Media_Grabber {
 	public function do_attachment_media() {
 
 		/* Gets the URI for the attachment (the media file). */
-		$url = wp_get_attachment_url( $this->args['post_id'] );
+		$url = esc_url( wp_get_attachment_url( $this->args['post_id'] ) );
 
 		/* Run the media as a shortcode using WordPress' built-in [audio] and [video] shortcodes. */
 		$this->media = do_shortcode( "[{$this->type} src='{$url}']" );

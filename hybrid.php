@@ -209,7 +209,7 @@ if ( !class_exists( 'Hybrid' ) ) {
 			$hybrid->textdomain_loaded['hybrid-core'] = hybrid_load_framework_textdomain( 'hybrid-core' );
 
 			/* Get the user's locale. */
-			$locale = get_locale();
+			$locale = sanitize_key( get_locale() );
 
 			/* Locate a locale-specific functions file. */
 			$locale_functions = locate_template( array( "languages/{$locale}.php", "{$locale}.php" ) );

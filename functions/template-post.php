@@ -280,7 +280,7 @@ function hybrid_get_the_post_format_url( $url = '', $post = null ) {
 
 		$content_url = hybrid_get_content_url( $post->post_content );
 
-		$url = !empty( $content_url ) ? $content_url : get_permalink( $post->ID );
+		$url = !empty( $content_url ) ? esc_url( $content_url ) : esc_url( get_permalink( $post->ID ) );
 	}
 
 	return $url;

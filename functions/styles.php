@@ -38,11 +38,11 @@ function hybrid_register_styles() {
 	$suffix = hybrid_get_min_suffix();
 
 	/* Register styles for use by themes. */
-	wp_register_style( 'hybrid-reset',    trailingslashit( HYBRID_CSS)  . "reset{$suffix}.css",    null, '20110523'                                       );
-	wp_register_style( 'hybrid-one-five', trailingslashit( HYBRID_CSS ) . "one-five{$suffix}.css", null, '20131105'                                       );
-	wp_register_style( 'hybrid-gallery',  trailingslashit( HYBRID_CSS ) . "gallery{$suffix}.css",  null, '20130526'                                       );
-	wp_register_style( 'hybrid-parent',   hybrid_get_parent_stylesheet_uri(),                      null, wp_get_theme( get_template() )->get( 'Version' ) );
-	wp_register_style( 'hybrid-style',    get_stylesheet_uri(),                                    null, wp_get_theme()->get( 'Version' )                 );
+	wp_register_style( 'hybrid-reset',    esc_url( trailingslashit( HYBRID_CSS)  . "reset{$suffix}.css"    ), null, '20110523'                                       );
+	wp_register_style( 'hybrid-one-five', esc_url( trailingslashit( HYBRID_CSS ) . "one-five{$suffix}.css" ), null, '20131105'                                       );
+	wp_register_style( 'hybrid-gallery',  esc_url( trailingslashit( HYBRID_CSS ) . "gallery{$suffix}.css"  ), null, '20130526'                                       );
+	wp_register_style( 'hybrid-parent',   esc_url( hybrid_get_parent_stylesheet_uri()                      ), null, wp_get_theme( get_template() )->get( 'Version' ) );
+	wp_register_style( 'hybrid-style',    get_stylesheet_uri(),                                               null, wp_get_theme()->get( 'Version' )                 );
 }
 
 /**
@@ -95,7 +95,7 @@ function hybrid_min_stylesheet_uri( $stylesheet_uri, $stylesheet_dir_uri ) {
 
 		/* If the stylesheet exists in the stylesheet directory, set the stylesheet URI to the dev stylesheet. */
 		if ( file_exists( trailingslashit( get_stylesheet_directory() ) . $stylesheet ) )
-			$stylesheet_uri = trailingslashit( $stylesheet_dir_uri ) . $stylesheet;
+			$stylesheet_uri = esc_url( trailingslashit( $stylesheet_dir_uri ) . $stylesheet );
 	}
 
 	/* Return the theme stylesheet. */
@@ -115,7 +115,7 @@ function hybrid_locale_stylesheet_uri( $stylesheet_uri ) {
 
 	$locale_style = hybrid_get_locale_style();
 
-	return !empty( $locale_style ) ? $locale_style : $stylesheet_uri;
+	return !empty( $locale_style ) ? esc_url( $locale_style ) : $stylesheet_uri;
 }
 
 /**

@@ -39,7 +39,7 @@ add_filter( 'comments_popup_link_attributes', 'hybrid_comments_popup_link_attrib
 function hybrid_excerpt_more( $text ) {
 
 	if ( 0 !== strpos( $text, '<a' ) )
-		$text = sprintf( ' <a href="%s" class="more-link">%s</a>', get_permalink(), trim( $text ) );
+		$text = sprintf( ' <a href="%s" class="more-link">%s</a>', esc_url( get_permalink() ), trim( $text ) );
 
 	return $text;
 }

@@ -76,7 +76,7 @@ function hybrid_clean_post_format_slug( $slug ) {
 function hybrid_aside_infinity( $content ) {
 
 	if ( has_post_format( 'aside' ) && !is_singular() && !post_password_required() ) {
-		$infinity = '<a class="permalink" href="' . get_permalink() . '">&#8734;</a>';
+		$infinity = '<a class="permalink" href="' . esc_url( get_permalink() ) . '">&#8734;</a>';
 		$content .= ' ' . apply_filters( 'hybrid_aside_infinity', $infinity );
 	}
 
