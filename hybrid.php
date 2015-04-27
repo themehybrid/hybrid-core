@@ -107,24 +107,24 @@ if ( !class_exists( 'Hybrid' ) ) {
 			define( 'HYBRID_VERSION', '2.1.0' );
 
 			/* Sets the path to the parent theme directory. */
-			define( 'THEME_DIR', get_template_directory() );
+			define( 'HYBRID_THEME_DIR', get_template_directory() );
 
 			/* Sets the path to the parent theme directory URI. */
-			define( 'THEME_URI', get_template_directory_uri() );
+			define( 'HYBRID_THEME_URI', get_template_directory_uri() );
 
 			/* Sets the path to the child theme directory. */
-			define( 'CHILD_THEME_DIR', get_stylesheet_directory() );
+			define( 'HYBRID_CHILD_THEME_DIR', get_stylesheet_directory() );
 
 			/* Sets the path to the child theme directory URI. */
-			define( 'CHILD_THEME_URI', get_stylesheet_directory_uri() );
+			define( 'HYBRID_CHILD_THEME_URI', get_stylesheet_directory_uri() );
 
 			/* Sets the path to the core framework directory. */
 			if ( !defined( 'HYBRID_DIR' ) )
-				define( 'HYBRID_DIR', trailingslashit( THEME_DIR ) . basename( dirname( __FILE__ ) ) );
+				define( 'HYBRID_DIR', trailingslashit( HYBRID_THEME_DIR ) . basename( dirname( __FILE__ ) ) );
 
 			/* Sets the path to the core framework directory URI. */
 			if ( !defined( 'HYBRID_URI' ) )
-				define( 'HYBRID_URI', trailingslashit( THEME_URI ) . basename( dirname( __FILE__ ) ) );
+				define( 'HYBRID_URI', trailingslashit( HYBRID_THEME_URI ) . basename( dirname( __FILE__ ) ) );
 
 			/* Sets the path to the core framework admin directory. */
 			define( 'HYBRID_ADMIN', trailingslashit( HYBRID_DIR ) . 'admin' );
@@ -140,9 +140,6 @@ if ( !class_exists( 'Hybrid' ) ) {
 
 			/* Sets the path to the core framework languages directory. */
 			define( 'HYBRID_LANGUAGES', trailingslashit( HYBRID_DIR ) . 'languages' );
-
-			/* Sets the path to the core framework images directory URI. */
-			define( 'HYBRID_IMAGES', trailingslashit( HYBRID_URI ) . 'images' );
 
 			/* Sets the path to the core framework CSS directory URI. */
 			define( 'HYBRID_CSS', trailingslashit( HYBRID_URI ) . 'css' );
