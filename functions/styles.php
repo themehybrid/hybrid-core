@@ -59,11 +59,11 @@ function hybrid_get_parent_stylesheet_uri() {
 	$suffix = hybrid_get_min_suffix();
 
 	/* Get the parent theme stylesheet. */
-	$stylesheet_uri = trailingslashit( THEME_URI ) . 'style.css';
+	$stylesheet_uri = trailingslashit( get_template_directory_uri() ) . 'style.css';
 
 	/* If a '.min' version of the parent theme stylesheet exists, use it. */
-	if ( !empty( $suffix ) && file_exists( trailingslashit( THEME_DIR ) . "style{$suffix}.css" ) )
-		$stylesheet_uri = trailingslashit( THEME_URI ) . "style{$suffix}.css";
+	if ( !empty( $suffix ) && file_exists( trailingslashit( get_template_directory() ) . "style{$suffix}.css" ) )
+		$stylesheet_uri = trailingslashit( get_template_directory_uri() ) . "style{$suffix}.css";
 
 	return apply_filters( 'hybrid_get_parent_stylesheet_uri', $stylesheet_uri );
 }
