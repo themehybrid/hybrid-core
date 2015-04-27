@@ -288,6 +288,30 @@ function loop_pagination( $args = array() ) {
 }
 
 /**
+ * Remove the meta box from some post types.
+ *
+ * @since  1.3.0
+ * @access public
+ * @param  string $post_type The post type of the current post being edited.
+ * @param  object $post      The current post being edited.
+ * @return void
+ */ 
+function hybrid_meta_box_post_remove_template( $post_type, $post ) {
+
+	/* Removes meta box from pages since this is a built-in WordPress feature. */
+	if ( 'page' == $post_type )
+		remove_meta_box( 'hybrid-core-post-template', 'page', 'side' );
+
+	/* Removes meta box from the bbPress 'topic' post type. */
+	elseif ( function_exists( 'bbp_get_topic_post_type' ) && bbp_get_topic_post_type() == $post_type )
+		remove_meta_box( 'hybrid-core-post-template', bbp_get_topic_post_type(), 'side' );
+
+	/* Removes meta box from the bbPress 'reply' post type. */
+	elseif ( function_exists( 'bbp_get_reply_post_type' ) && bbp_get_reply_post_type() == $post_type )
+		remove_meta_box( 'hybrid-core-post-template', bbp_get_reply_post_type(), 'side' );
+}
+
+/**
  * Creates new shortcodes for use in any shortcode-ready area.
  *
  * @note       Theme Check chokes on this uncommented. Devs should never call this anyway, but for reference...
