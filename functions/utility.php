@@ -167,6 +167,21 @@ function hybrid_get_menu_location_name( $location ) {
 }
 
 /**
+ * Function for grabbing a WP nav menu name based on theme location.
+ *
+ * @since  3.0.0
+ * @access public
+ * @param  string  $location
+ * @return string
+ */
+function hybrid_get_menu_name( $location ) {
+
+	$locations = get_nav_menu_locations();
+
+	return isset( $locations[ $location ] ) ? wp_get_nav_menu_object( $locations[ $location ] )->name : '';
+}
+
+/**
  * Function for grabbing a dynamic sidebar name.
  *
  * @since  2.0.0
