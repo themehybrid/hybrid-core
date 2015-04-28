@@ -312,6 +312,192 @@ function hybrid_meta_box_post_remove_template( $post_type, $post ) {
 }
 
 /**
+ * @since      0.1.0
+ * @deprecated 0.2.0 Use theme_layouts_get_layout().
+ */
+function post_layouts_get_layout() {}
+
+/**
+ * @since      0.4.0
+ * @deprecated 1.0.0
+ */
+function theme_layouts_register_meta() {}
+
+/**
+ * @since      0.4.0
+ * @deprecated 1.0.0
+ */
+function theme_layouts_sanitize_meta() {}
+
+/**
+ * @since      0.4.0
+ * @deprecated 1.0.0
+ */
+function theme_layouts_add_post_type_support() {}
+
+/**
+ * @since      0.4.0
+ * @deprecated 1.0.0
+ */
+function theme_layouts_remove_post_type_support() {}
+
+/**
+ * @since      0.5.0
+ * @deprecated 1.0.0
+ */
+function theme_layouts_get_layouts() {}
+
+/**
+ * @since      0.5.0
+ * @deprecated 1.0.0
+ */
+function theme_layouts_get_args() {}
+
+/**
+ * @since      0.5.0
+ * @deprecated 1.0.0
+ */
+function theme_layouts_filter_layout() {}
+
+/**
+ * @since      0.2.0
+ * @deprecated 1.0.0
+ */
+function theme_layouts_get_layout() {}
+
+/**
+ * @since      0.2.0
+ * @deprecated 1.0.0
+ */
+function get_post_layout() {}
+
+/**
+ * @since      0.2.0
+ * @deprecated 1.0.0
+ */
+function set_post_layout() {}
+
+/**
+ * @since      0.4.0
+ * @deprecated 1.0.0
+ */
+function delete_post_layout() {}
+
+/**
+ * @since      0.3.0
+ * @deprecated 1.0.0
+ */
+function has_post_layout() {}
+
+/**
+ * @since      0.3.0
+ * @deprecated 1.0.0
+ */
+function get_user_layout() {}
+
+/**
+ * @since      0.3.0
+ * @deprecated 1.0.0
+ */
+function set_user_layout() {}
+
+/**
+ * @since      0.4.0
+ * @deprecated 1.0.0
+ */
+function delete_user_layout() {}
+
+/**
+ * @since      0.3.0
+ * @deprecated 1.0.0
+ */
+function has_user_layout() {}
+
+/**
+ * @since      0.2.0
+ * @deprecated 1.0.0
+ */
+function theme_layouts_body_class() {}
+
+/**
+ * @since      0.2.0
+ * @deprecated 1.0.0
+ */
+function theme_layouts_strings() {}
+
+/**
+ * @since      0.2.0
+ * @deprecated 1.0.0
+ */
+function theme_layouts_get_string() {}
+
+
+/**
+ * @since      0.2.0
+ * @deprecated 1.0.0
+ */
+function theme_layouts_admin_setup() {}
+
+/**
+ * @since      0.4.0
+ * @deprecated 1.0.0
+ */
+function theme_layouts_load_meta_boxes() {}
+
+/**
+ * @since      0.4.0
+ * @deprecated 1.0.0
+ */
+function theme_layouts_add_meta_boxes() {}
+
+/**
+ * @since      0.2.0
+ * @deprecated 1.0.0
+ */
+function theme_layouts_post_meta_box() {}
+
+/**
+ * @since      0.2.0
+ * @deprecated 1.0.0
+ */
+function theme_layouts_save_post() {}
+
+/**
+ * @since      0.3.0
+ * @deprecated 1.0.0
+ */
+function theme_layouts_attachment_fields_to_edit() {}
+
+/**
+ * @since      0.3.0
+ * @deprecated 1.0.0
+ */
+function theme_layouts_attachment_fields_to_save() {}
+
+/**
+ * @since      0.1.0
+ * @deprecated 1.0.0
+ */
+function theme_layouts_customize_register() {}
+
+/**
+ * @since      0.1.0
+ * @deprecated 1.0.0
+ */
+function theme_layouts_customize_preview_script() {}
+
+/**
+ * Wrapper function for returning the metadata key used for objects that can use layouts.
+ *
+ * @since  0.3.0
+ * @access public
+ * @return string The meta key used for theme layouts.
+ */
+function theme_layouts_get_meta_key() {
+	return apply_filters( 'theme_layouts_meta_key', 'Layout' );
+}
+
+/**
  * Creates new shortcodes for use in any shortcode-ready area.
  *
  * @note       Theme Check chokes on this uncommented. Devs should never call this anyway, but for reference...

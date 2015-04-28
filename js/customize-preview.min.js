@@ -1,0 +1,1 @@
+jQuery(document).ready(function(){wp.customize("theme_layout",function(a){a.bind(function(a){var t=jQuery("body").attr("class").replace(/\slayout-[a-zA-Z0-9_-]*/g,"");jQuery("body").attr("class",t).addClass("layout-"+a)})})});
