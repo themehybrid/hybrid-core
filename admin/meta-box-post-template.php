@@ -37,11 +37,11 @@ function hybrid_meta_box_post_add_template( $post_type, $post ) {
 	$templates = hybrid_get_post_templates( $post_type );
 
 	/* If no post templates were found for this post type, bail. */
-	if ( !empty( $templates ) && 'page' !== $post_type )
+	if ( empty( $templates ) || 'page' === $post_type )
 		return;
 
 	/* Add the meta box. */
-	add_meta_box( 'hybrid-core-post-template', __( 'Template', 'hybrid-core' ), 'hybrid_meta_box_post_display_template', $post_type, 'side', 'default' );
+	add_meta_box( 'hybrid-post-template', __( 'Template', 'hybrid-core' ), 'hybrid_meta_box_post_display_template', $post_type, 'side', 'default' );
 }
 
 /**
