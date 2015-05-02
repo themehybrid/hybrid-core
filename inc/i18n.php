@@ -66,7 +66,7 @@ function hybrid_override_load_textdomain( $override, $domain, $mofile ) {
 function hybrid_is_textdomain_loaded( $domain ) {
 	global $hybrid;
 
-	return ( isset( $hybrid->textdomain_loaded[ $domain ] ) && true === $hybrid->textdomain_loaded[ $domain ] ) ? true : false;
+	return isset( $hybrid->textdomain_loaded[ $domain ] ) && true === $hybrid->textdomain_loaded[ $domain ] ? true : false;
 }
 
 /**
