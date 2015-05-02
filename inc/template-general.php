@@ -52,7 +52,7 @@ function hybrid_wp_link() {
  * @return string
  */
 function hybrid_get_wp_link() {
-	return sprintf( '<a class="wp-link" href="%s">%s</a>', esc_url( __( 'http://wordpress.org', 'hybrid-core' ) ), __( 'WordPress', 'hybrid-core' ) );
+	return sprintf( '<a class="wp-link" href="%s">%s</a>', esc_url( __( 'http://wordpress.org', 'hybrid-core' ) ), esc_html__( 'WordPress', 'hybrid-core' ) );
 }
 
 /**
@@ -78,7 +78,7 @@ function hybrid_get_theme_link() {
 	$uri   = $theme->get( 'ThemeURI' );
 	$name  = $theme->display( 'Name', false, true );
 
-	return sprintf( '<a class="theme-link" href="%s">%s</a>', esc_url( $uri ), $name );
+	return sprintf( '<a class="theme-link" href="%s">%s</a>', esc_url( $uri ), esc_html( $name ) );
 }
 
 /**
@@ -108,7 +108,7 @@ function hybrid_get_child_theme_link() {
 	$uri   = $theme->get( 'ThemeURI' );
 	$name  = $theme->display( 'Name', false, true );
 
-	return sprintf( '<a class="child-link" href="%s">%s</a>', esc_url( $uri ), $name );
+	return sprintf( '<a class="child-link" href="%s">%s</a>', esc_url( $uri ), esc_html( $name ) );
 }
 
 /**
