@@ -117,14 +117,11 @@ if ( !class_exists( 'Hybrid' ) ) {
 			/* Sets the path to the core framework admin directory. */
 			define( 'HYBRID_ADMIN', trailingslashit( HYBRID_DIR ) . 'admin' );
 
-			/* Sets the path to the core framework classes directory. */
-			define( 'HYBRID_CLASSES', trailingslashit( HYBRID_DIR ) . 'classes' );
+			/* Sets the path to the core framework includes directory. */
+			define( 'HYBRID_INC', trailingslashit( HYBRID_DIR ) . 'inc' );
 
 			/* Sets the path to the core framework extensions directory. */
 			define( 'HYBRID_EXTENSIONS', trailingslashit( HYBRID_DIR ) . 'extensions' );
-
-			/* Sets the path to the core framework functions directory. */
-			define( 'HYBRID_FUNCTIONS', trailingslashit( HYBRID_DIR ) . 'functions' );
 
 			/* Sets the path to the core framework customize directory. */
 			define( 'HYBRID_CUSTOMIZE', trailingslashit( HYBRID_DIR ) . 'customize' );
@@ -148,40 +145,40 @@ if ( !class_exists( 'Hybrid' ) ) {
 		function core() {
 
 			/* Load the core framework functions. */
-			require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'core.php' );
+			require_once( trailingslashit( HYBRID_INC ) . 'core.php' );
 
 			/* Load the context-based functions. */
-			require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'context.php' );
+			require_once( trailingslashit( HYBRID_INC ) . 'context.php' );
 
 			/* Load the core framework internationalization functions. */
-			require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'i18n.php' );
+			require_once( trailingslashit( HYBRID_INC ) . 'i18n.php' );
 
 			/* Load the framework customize functions. */
-			require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'customize.php' );
+			require_once( trailingslashit( HYBRID_INC ) . 'customize.php' );
 
 			/* Load the framework filters. */
-			require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'filters.php' );
+			require_once( trailingslashit( HYBRID_INC ) . 'filters.php' );
 
 			/* Load the <head> functions. */
-			require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'head.php' );
+			require_once( trailingslashit( HYBRID_INC ) . 'head.php' );
 
 			/* Load media-related functions. */
-			require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'media.php' );
+			require_once( trailingslashit( HYBRID_INC ) . 'media.php' );
 
 			/* Load the metadata functions. */
-			require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'meta.php' );
+			require_once( trailingslashit( HYBRID_INC ) . 'meta.php' );
 
 			/* Load the sidebar functions. */
-			require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'sidebars.php' );
+			require_once( trailingslashit( HYBRID_INC ) . 'sidebars.php' );
 
 			/* Load the scripts functions. */
-			require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'scripts.php' );
+			require_once( trailingslashit( HYBRID_INC ) . 'scripts.php' );
 
 			/* Load the styles functions. */
-			require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'styles.php' );
+			require_once( trailingslashit( HYBRID_INC ) . 'styles.php' );
 
 			/* Load the utility functions. */
-			require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'utility.php' );
+			require_once( trailingslashit( HYBRID_INC ) . 'utility.php' );
 		}
 
 		/**
@@ -270,40 +267,37 @@ if ( !class_exists( 'Hybrid' ) ) {
 		function includes() {
 
 			/* Load the HTML attributes functions. */
-			require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'attr.php' );
+			require_once( trailingslashit( HYBRID_INC ) . 'attr.php' );
 
 			/* Load the template functions. */
-			require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'template.php' );
+			require_once( trailingslashit( HYBRID_INC ) . 'template.php' );
 
 			/* Load the comments functions. */
-			require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'template-comments.php' );
+			require_once( trailingslashit( HYBRID_INC ) . 'template-comments.php' );
 
 			/* Load the general template functions. */
-			require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'template-general.php' );
+			require_once( trailingslashit( HYBRID_INC ) . 'template-general.php' );
 
 			/* Load the media template functions. */
-			require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'template-media.php' );
+			require_once( trailingslashit( HYBRID_INC ) . 'template-media.php' );
 
 			/* Load the post template functions. */
-			require_once( trailingslashit( HYBRID_FUNCTIONS ) . 'template-post.php' );
+			require_once( trailingslashit( HYBRID_INC ) . 'template-post.php' );
 
 			/* Load the media meta class. */
-			require_once( trailingslashit( HYBRID_CLASSES ) . 'hybrid-media-meta.php' );
+			require_once( trailingslashit( HYBRID_INC ) . 'hybrid-media-meta.php' );
 
 			/* Load the media grabber class. */
-			require_once( trailingslashit( HYBRID_CLASSES ) . 'hybrid-media-grabber.php' );
-
-			/* Load the theme settings functions if supported. */
-			require_if_theme_supports( 'hybrid-core-theme-settings', trailingslashit( HYBRID_FUNCTIONS ) . 'settings.php' );
+			require_once( trailingslashit( HYBRID_INC ) . 'hybrid-media-grabber.php' );
 
 			/* Load the template hierarchy if supported. */
-			require_if_theme_supports( 'hybrid-core-template-hierarchy', trailingslashit( HYBRID_FUNCTIONS ) . 'template-hierarchy.php' );
+			require_if_theme_supports( 'hybrid-core-template-hierarchy', trailingslashit( HYBRID_INC ) . 'template-hierarchy.php' );
 
 			/* Load the post format functionality if post formats are supported. */
-			require_if_theme_supports( 'post-formats', trailingslashit( HYBRID_FUNCTIONS ) . 'post-formats.php' );
+			require_if_theme_supports( 'post-formats', trailingslashit( HYBRID_INC ) . 'post-formats.php' );
 
 			/* Load the deprecated functions if supported. */
-			require_if_theme_supports( 'hybrid-core-deprecated', trailingslashit( HYBRID_FUNCTIONS ) . 'deprecated.php' );
+			require_if_theme_supports( 'hybrid-core-deprecated', trailingslashit( HYBRID_INC ) . 'deprecated.php' );
 		}
 
 		/**
