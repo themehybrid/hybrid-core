@@ -147,7 +147,7 @@ function hybrid_taxonomy_template( $template ) {
 	$term = get_queried_object();
 
 	/* Remove 'post-format' from the slug. */
-	$slug = ( 'post_format' == $term->taxonomy ) ? str_replace( 'post-format-', '', $term->slug ) : $term->slug;
+	$slug = 'post_format' === $term->taxonomy ? hybrid_clean_post_format_slug( $term->slug ) : $term->slug;
 
 	/* Return the available templates. */
 	return locate_template( array( "taxonomy-{$term->taxonomy}-{$slug}.php", "taxonomy-{$term->taxonomy}.php", 'taxonomy.php', 'archive.php' ) );
