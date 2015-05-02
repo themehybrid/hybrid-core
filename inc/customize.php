@@ -28,16 +28,16 @@ add_action( 'customize_register', 'hybrid_customize_register',      5 );
 function hybrid_load_customize_controls() {
 
 	/* Loads the select multiple customize control class. */
-	require_once( trailingslashit( HYBRID_CUSTOMIZE ) . 'customize-control-select-multiple.php' );
+	require_once( trailingslashit( HYBRID_CUSTOMIZE ) . 'control-select-multiple.php' );
 
 	/* Loads the radio image customize control class. */
-	require_once( trailingslashit( HYBRID_CUSTOMIZE ) . 'customize-control-radio-image.php' );
+	require_once( trailingslashit( HYBRID_CUSTOMIZE ) . 'control-radio-image.php' );
 
 	/* Loads the background image customize control class. */
-	require_once( trailingslashit( HYBRID_CUSTOMIZE ) . 'customize-control-background-image.php' );
+	require_once( trailingslashit( HYBRID_CUSTOMIZE ) . 'control-background-image.php' );
 
 	/* Loads the background image customize control class. */
-	require_if_theme_supports( 'theme-layouts', trailingslashit( HYBRID_CUSTOMIZE ) . 'customize-control-theme-layout.php' );
+	require_if_theme_supports( 'theme-layouts', trailingslashit( HYBRID_CUSTOMIZE ) . 'control-theme-layout.php' );
 }
 
 function hybrid_customize_register( $wp_customize ) {

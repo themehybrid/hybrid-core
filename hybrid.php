@@ -285,10 +285,10 @@ if ( !class_exists( 'Hybrid' ) ) {
 			require_once( trailingslashit( HYBRID_INC ) . 'template-post.php' );
 
 			/* Load the media meta class. */
-			require_once( trailingslashit( HYBRID_INC ) . 'hybrid-media-meta.php' );
+			require_once( trailingslashit( HYBRID_INC ) . 'class-media-meta.php' );
 
 			/* Load the media grabber class. */
-			require_once( trailingslashit( HYBRID_INC ) . 'hybrid-media-grabber.php' );
+			require_once( trailingslashit( HYBRID_INC ) . 'class-media-grabber.php' );
 
 			/* Load the template hierarchy if supported. */
 			require_if_theme_supports( 'hybrid-core-template-hierarchy', trailingslashit( HYBRID_INC ) . 'template-hierarchy.php' );
