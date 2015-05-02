@@ -126,6 +126,9 @@ if ( !class_exists( 'Hybrid' ) ) {
 			/* Sets the path to the core framework functions directory. */
 			define( 'HYBRID_FUNCTIONS', trailingslashit( HYBRID_DIR ) . 'functions' );
 
+			/* Sets the path to the core framework customize directory. */
+			define( 'HYBRID_CUSTOMIZE', trailingslashit( HYBRID_DIR ) . 'customize' );
+
 			/* Sets the path to the core framework CSS directory URI. */
 			define( 'HYBRID_CSS', trailingslashit( HYBRID_URI ) . 'css' );
 
