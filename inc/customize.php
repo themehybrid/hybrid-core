@@ -28,16 +28,16 @@ add_action( 'customize_register', 'hybrid_customize_register',      5 );
 function hybrid_load_customize_controls() {
 
 	/* Loads the select multiple customize control class. */
-	require_once( trailingslashit( HYBRID_CUSTOMIZE ) . 'control-select-multiple.php' );
+	require_once( HYBRID_CUSTOMIZE . 'control-select-multiple.php' );
 
 	/* Loads the radio image customize control class. */
-	require_once( trailingslashit( HYBRID_CUSTOMIZE ) . 'control-radio-image.php' );
+	require_once( HYBRID_CUSTOMIZE . 'control-radio-image.php' );
 
 	/* Loads the background image customize control class. */
-	require_once( trailingslashit( HYBRID_CUSTOMIZE ) . 'control-background-image.php' );
+	require_once( HYBRID_CUSTOMIZE . 'control-background-image.php' );
 
 	/* Loads the background image customize control class. */
-	require_if_theme_supports( 'theme-layouts', trailingslashit( HYBRID_CUSTOMIZE ) . 'control-theme-layout.php' );
+	require_if_theme_supports( 'theme-layouts', HYBRID_CUSTOMIZE . 'control-theme-layout.php' );
 }
 
 function hybrid_customize_register( $wp_customize ) {
@@ -90,5 +90,5 @@ function hybrid_customize_register( $wp_customize ) {
 }
 
 function hybrid_enqueue_customize_preview_scripts() {
-	wp_enqueue_script( 'hybrid-customize-preview', esc_url( trailingslashit( HYBRID_JS ) . 'customize-preview' . hybrid_get_min_suffix() . '.js' ), array( 'jquery' ), '20130528', true );
+	wp_enqueue_script( 'hybrid-customize-preview', esc_url( HYBRID_JS . 'customize-preview' . hybrid_get_min_suffix() . '.js' ), array( 'jquery' ), '20130528', true );
 }

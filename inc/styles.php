@@ -38,11 +38,11 @@ function hybrid_register_styles() {
 	$suffix = hybrid_get_min_suffix();
 
 	/* Register styles for use by themes. */
-	wp_register_style( 'hybrid-reset',    esc_url( trailingslashit( HYBRID_CSS)  . "reset{$suffix}.css"    ), null, '20110523'                                       );
-	wp_register_style( 'hybrid-one-five', esc_url( trailingslashit( HYBRID_CSS ) . "one-five{$suffix}.css" ), null, '20131105'                                       );
-	wp_register_style( 'hybrid-gallery',  esc_url( trailingslashit( HYBRID_CSS ) . "gallery{$suffix}.css"  ), null, '20130526'                                       );
-	wp_register_style( 'hybrid-parent',   esc_url( hybrid_get_parent_stylesheet_uri()                      ), null, wp_get_theme( get_template() )->get( 'Version' ) );
-	wp_register_style( 'hybrid-style',    get_stylesheet_uri(),                                               null, wp_get_theme()->get( 'Version' )                 );
+	wp_register_style( 'hybrid-reset',    esc_url( HYBRID_CSS . "reset{$suffix}.css"    ), null, '20110523'                                       );
+	wp_register_style( 'hybrid-one-five', esc_url( HYBRID_CSS . "one-five{$suffix}.css" ), null, '20131105'                                       );
+	wp_register_style( 'hybrid-gallery',  esc_url( HYBRID_CSS . "gallery{$suffix}.css"  ), null, '20130526'                                       );
+	wp_register_style( 'hybrid-parent',   esc_url( hybrid_get_parent_stylesheet_uri()   ), null, wp_get_theme( get_template() )->get( 'Version' ) );
+	wp_register_style( 'hybrid-style',    esc_url( get_stylesheet_uri()                 ), null, wp_get_theme()->get( 'Version' )                 );
 }
 
 /**

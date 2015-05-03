@@ -39,10 +39,10 @@ function hybrid_admin_setup() {
 function hybrid_admin_load_post_meta_boxes() {
 
 	/* Load the post template meta box. */
-	require_if_theme_supports( 'hybrid-core-template-hierarchy', trailingslashit( HYBRID_ADMIN ) . 'meta-box-post-template.php' );
+	require_if_theme_supports( 'hybrid-core-template-hierarchy', HYBRID_ADMIN . 'meta-box-post-template.php' );
 
 	/* Load the layout meta box. */
-	require_if_theme_supports( 'theme-layouts', trailingslashit( HYBRID_ADMIN ) . 'meta-box-post-layout.php' );
+	require_if_theme_supports( 'theme-layouts', HYBRID_ADMIN . 'meta-box-post-layout.php' );
 }
 
 /**
