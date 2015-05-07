@@ -16,7 +16,7 @@
 add_action( 'customize_register', 'hybrid_load_customize_controls', 1 );
 
 /* Register customizer panels, sections, settings, and/or controls. */
-add_action( 'customize_register', 'hybrid_customize_register',      5 );
+add_action( 'customize_register', 'hybrid_customize_register' );
 
 /**
  * Loads framework-specific customize control classes.  Customize control classes extend the WordPress 
