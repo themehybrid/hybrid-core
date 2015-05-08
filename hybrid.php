@@ -246,14 +246,6 @@ if ( !class_exists( 'Hybrid' ) ) {
 			/* Remove support for the the Get the Image extension if the plugin is installed. */
 			if ( function_exists( 'get_the_image' ) || class_exists( 'Get_The_Image' ) )
 				remove_theme_support( 'get-the-image' );
-
-			/* Remove support for the Featured Header extension if the class exists. */
-			if ( class_exists( 'Featured_Header' ) )
-				remove_theme_support( 'featured-header' );
-
-			/* Remove support for the Random Custom Background extension if the class exists. */
-			if ( class_exists( 'Random_Custom_Background' ) )
-				remove_theme_support( 'random-custom-background' );
 		}
 
 		/**
@@ -326,12 +318,6 @@ if ( !class_exists( 'Hybrid' ) ) {
 
 			/* Load the Post Stylesheets extension if supported. */
 			require_if_theme_supports( 'post-stylesheets', HYBRID_EXTENSIONS . 'post-stylesheets.php' );
-
-			/* Load the Featured Header extension if supported. */
-			require_if_theme_supports( 'featured-header', HYBRID_EXTENSIONS . 'featured-header.php' );
-
-			/* Load the Random Custom Background extension if supported. */
-			require_if_theme_supports( 'random-custom-background', HYBRID_EXTENSIONS . 'random-custom-background.php' );
 		}
 
 		/**
