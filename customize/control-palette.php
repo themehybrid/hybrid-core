@@ -27,6 +27,18 @@ class Hybrid_Customize_Control_Palette extends WP_Customize_Control {
 	public $type = 'palette';
 
 	/**
+	 * Enqueue scripts/styles.
+	 *
+	 * @since  3.0.0
+	 * @access public
+	 * @return void
+	 */
+	public function enqueue() {
+		wp_enqueue_script( 'hybrid-customize-controls' );
+		wp_enqueue_style(  'hybrid-customize-controls' );
+	}
+
+	/**
 	 * Displays the control content.
 	 *
 	 * @since  3.0.0
@@ -64,17 +76,5 @@ class Hybrid_Customize_Control_Palette extends WP_Customize_Control {
 			</label>
 
 		<?php endforeach;
-	}
-
-	/**
-	 * Enqueue scripts/styles.
-	 *
-	 * @since  3.0.0
-	 * @access public
-	 * @return void
-	 */
-	public function enqueue() {
-		wp_enqueue_script( 'hybrid-customize-controls' );
-		wp_enqueue_style(  'hybrid-customize-controls' );
 	}
 }
