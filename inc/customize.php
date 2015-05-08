@@ -13,7 +13,7 @@
  */
 
 /* Load custom control classes. */
-add_action( 'customize_register', 'hybrid_load_customize_controls', 1 );
+add_action( 'customize_register', 'hybrid_load_customize_controls', 0 );
 
 /* Register customizer panels, sections, settings, and/or controls. */
 add_action( 'customize_register', 'hybrid_customize_register' );
@@ -22,12 +22,17 @@ add_action( 'customize_register', 'hybrid_customize_register' );
 add_action( 'customize_controls_enqueue_scripts', 'hybrid_register_customize_controls_scripts', 5 );
 add_action( 'customize_controls_enqueue_scripts', 'hybrid_register_customize_controls_styles',  5 );
 
+/* Register/Enqueue customize preview scripts/styles. */
+add_action( 'customize_preview_init', 'hybrid_register_customize_preview_scripts', 5 );
+add_action( 'customize_preview_init', 'hybrid_enqueue_customize_preview_scripts'     );
+
 /**
  * Loads framework-specific customize control classes.  Customize control classes extend the WordPress 
  * WP_Customize_Control class to create unique classes that can be used within the framework.
  *
- * @since 1.4.0
- * @access private
+ * @since  1.4.0
+ * @access public
+ * @return void
  */
 function hybrid_load_customize_controls() {
 
@@ -47,8 +52,16 @@ function hybrid_load_customize_controls() {
 	require_if_theme_supports( 'theme-layouts', HYBRID_CUSTOMIZE . 'control-theme-layout.php' );
 }
 
+/**
+ * Register customizer panels, sections, controls, and/or settings.
+ *
+ * @since  3.0.0
+ * @access public
+ * @return void
+ */
 function hybrid_customize_register( $wp_customize ) {
 
+	/* Bail if no theme layout support. */
 	if ( !current_theme_supports( 'theme-layouts' ) )
 		return;
 
@@ -91,19 +104,51 @@ function hybrid_customize_register( $wp_customize ) {
 				)
 			)
 		);
-
-		add_action( 'customize_preview_init', 'hybrid_enqueue_customize_preview_scripts' );
 	}
 }
 
+/**
+ * Register customizer controls scripts.
+ *
+ * @since  3.0.0
+ * @access public
+ * @return void
+ */
 function hybrid_register_customize_controls_scripts() {
 	wp_register_script( 'hybrid-customize-controls', esc_url( HYBRID_JS . 'customize-controls' . hybrid_get_min_suffix() . '.js' ), array( 'jquery' ), '20150507', true );
 }
 
+/**
+ * Register customizer controls styles.
+ *
+ * @since  3.0.0
+ * @access public
+ * @return void
+ */
 function hybrid_register_customize_controls_styles() {
 	wp_register_style( 'hybrid-customize-controls', esc_url( HYBRID_CSS . 'customize-controls' . hybrid_get_min_suffix() . '.css' ) );
 }
 
+/**
+ * Register customizer preview scripts.
+ *
+ * @since  3.0.0
+ * @access public
+ * @return void
+ */
+function hybrid_register_customize_preview_scripts() {
+	wp_register_script( 'hybrid-customize-preview', esc_url( HYBRID_JS . 'customize-preview' . hybrid_get_min_suffix() . '.js' ), array( 'jquery' ), '20150507', true );
+}
+
+/**
+ * Register customizer preview scripts.
+ *
+ * @since  3.0.0
+ * @access public
+ * @return void
+ */
 function hybrid_enqueue_customize_preview_scripts() {
-	wp_enqueue_script( 'hybrid-customize-preview', esc_url( HYBRID_JS . 'customize-preview' . hybrid_get_min_suffix() . '.js' ), array( 'jquery' ), '20130528', true );
+
+	if ( current_theme_supports( 'theme-layouts' ) )
+		wp_enqueue_script( 'hybrid-customize-preview' );
 }
