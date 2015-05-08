@@ -49,7 +49,7 @@ function hybrid_register_styles() {
  * Returns the parent theme stylesheet URI.  Will return the active theme's stylesheet URI if no child 
  * theme is active. Be sure to check `is_child_theme()` when using.
  *
- * @since  2.1.0
+ * @since  3.0.0
  * @access public
  * @return string
  */

@@ -15,12 +15,12 @@
 /**
  * Background image customize control class.
  *
- * Note that this is soft-deprecated in 2.1.0.  If we can come up with a fix for adding default 
+ * Note that this is soft-deprecated in 3.0.0.  If we can come up with a fix for adding default 
  * backgrounds to WP 4.1+, we'll revisit this.  For now, it's on track to be removed completely.
  * @link https://github.com/justintadlock/hybrid-core/issues/91
  *
  * @since      2.0.0
- * @deprecated 2.1.0
+ * @deprecated 3.0.0
  */
 class Hybrid_Customize_Control_Background_Image extends WP_Customize_Background_Image_Control {
 

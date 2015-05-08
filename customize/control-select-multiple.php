@@ -15,21 +15,21 @@
 /**
  * Multiple select customize control class.
  *
- * @since 2.1.0
+ * @since 3.0.0
  */
 class Hybrid_Customize_Control_Select_Multiple extends WP_Customize_Control {
 
 	/**
 	 * The type of customize control being rendered.
 	 *
-	 * @since 2.1.0
+	 * @since 3.0.0
 	 */
 	public $type = 'select';
 
 	/**
 	 * Displays the control content.
 	 *
-	 * @since 2.1.0
+	 * @since 3.0.0
 	 */
 	public function render_content() {
 

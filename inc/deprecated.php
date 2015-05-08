@@ -26,7 +26,7 @@
  * Returns an array of the core framework's available styles for use in themes.
  *
  * @since      1.5.0
- * @deprecated 2.1.0
+ * @deprecated 3.0.0
  * @access     public
  * @return     array
  */
@@ -38,7 +38,7 @@ function hybrid_get_styles() {
  * Adds the title to the header.
  *
  * @since      2.0.0
- * @deprecated 2.1.0
+ * @deprecated 3.0.0
  * @access     public
  * @return     void
  */
@@ -51,24 +51,24 @@ function hybrid_doctitle() {
  * It merely registers it with WordPress.
  *
  * @since      1.2.0
- * @deprecated 2.1.0
+ * @deprecated 3.0.0
  * @access     public
  * @return     void
  */
 function hybrid_admin_register_styles() {
-	_deprecated_function( __FUNCTION__, '2.1.0', null );
+	_deprecated_function( __FUNCTION__, '3.0.0', null );
 }
 
 /**
  * Loads the `admin-widgets.css` file when viewing the widgets screen.
  *
  * @since      1.2.0
- * @deprecated 2.1.0
+ * @deprecated 3.0.0
  * @access     public
  * @return     void
  */
 function hybrid_admin_enqueue_styles() {
-	_deprecated_function( __FUNCTION__, '2.1.0', null );
+	_deprecated_function( __FUNCTION__, '3.0.0', null );
 }
 
 /**
@@ -76,13 +76,13 @@ function hybrid_admin_enqueue_styles() {
  * with the WordPress settings API.
  *
  * @since      1.0.0
- * @deprecated 2.1.0
+ * @deprecated 3.0.0
  * @access     public
  * @param      string  $setting
  * @return     string
  */
 function hybrid_settings_field_id( $setting ) {
-	_deprecated_function( __FUNCTION__, '2.1.0', '' );
+	_deprecated_function( __FUNCTION__, '3.0.0', '' );
 	return hybrid_get_prefix() . '_theme_settings-' . sanitize_html_class( $setting );
 }
 
@@ -91,13 +91,13 @@ function hybrid_settings_field_id( $setting ) {
  * use with the WordPress settings API.
  *
  * @since      1.0.0
- * @deprecated 2.1.0
+ * @deprecated 3.0.0
  * @access     public
  * @param      string  $setting
  * @return     string
  */
 function hybrid_settings_field_name( $setting ) {
-	_deprecated_function( __FUNCTION__, '2.1.0', '' );
+	_deprecated_function( __FUNCTION__, '3.0.0', '' );
 	return hybrid_get_prefix() . "_theme_settings[{$setting}]";
 }
 
@@ -105,15 +105,15 @@ function hybrid_settings_field_name( $setting ) {
  * Creates a theme settings page for the theme.
  *
  * @since      2.0.0
- * @deprecated 2.1.0
+ * @deprecated 3.0.0
  * @access     public
  */
 final class Hybrid_Theme_Settings{
 
 	public function __construct() {
 
-		/* Deprecated in 2.1.0. */
-		_deprecated_function( __CLASS__, '2.1.0', 'customize_register' );
+		/* Deprecated in 3.0.0. */
+		_deprecated_function( __CLASS__, '3.0.0', 'customize_register' );
 	}
 }
 
@@ -123,7 +123,7 @@ final class Hybrid_Theme_Settings{
  * only loaded once on each page load.
  *
  * @since  0.7.0
- * @deprecated 2.1.0
+ * @deprecated 3.0.0
  * @access public
  * @global object  $hybrid  The global Hybrid object.
  * @param  string  $option  The specific theme setting the user wants.
@@ -132,7 +132,7 @@ final class Hybrid_Theme_Settings{
 function hybrid_get_setting( $option = '' ) {
 	global $hybrid;
 
-	_deprecated_function( __FUNCTION__, '2.1.0', 'get_theme_mod' );
+	_deprecated_function( __FUNCTION__, '3.0.0', 'get_theme_mod' );
 
 	/* If no specific option was requested, return false. */
 	if ( !$option )
@@ -168,24 +168,24 @@ function hybrid_get_setting( $option = '' ) {
  * provide a hook for default settings at this time.
  *
  * @since  1.0.0
- * @deprecated 2.1.0
+ * @deprecated 3.0.0
  * @access public
  * @return array $settings The default theme settings.
  */
 function hybrid_get_default_theme_settings() {
-	_deprecated_function( __FUNCTION__, '2.1.0', 'get_theme_mods' );
+	_deprecated_function( __FUNCTION__, '3.0.0', 'get_theme_mods' );
 	return apply_filters( hybrid_get_prefix() . '_default_theme_settings', array() );
 }
 
 /**
  * Tells WordPress to load the styles needed for the framework using the wp_enqueue_style() function.
  *
- * As of version 2.1.0, this function and the use of `add_theme_support( 'hybrid-core-styles' )` has 
+ * As of version 3.0.0, this function and the use of `add_theme_support( 'hybrid-core-styles' )` has 
  * been deprecated. Theme authors should use `wp_enqueue_style()` to enqueue one of the appropriate 
  * framework styles registered in `hybrid_register_styles()`.
  *
  * @since      1.5.0
- * @deprecated 2.1.0
+ * @deprecated 3.0.0
  * @access     public
  * @return     void
  */
@@ -268,7 +268,7 @@ function hybrid_get_textdomain() {
 }
 
 /* Add notice that `loop-pagination` is deprecated in Hybrid Core. */
-//_deprecated_function( "add_theme_support( 'loop-pagination' )", '2.1.0', '' );
+//_deprecated_function( "add_theme_support( 'loop-pagination' )", '3.0.0', '' );
 
 /**
  * Loop pagination function for paginating loops with multiple posts.  This should be used on archive, blog, and 
@@ -282,7 +282,7 @@ function hybrid_get_textdomain() {
  */
 function loop_pagination( $args = array() ) {
 
-	_deprecated_function( __FUNCTION__, '2.1.0', 'the_posts_pagination()' );
+	_deprecated_function( __FUNCTION__, '3.0.0', 'the_posts_pagination()' );
 
 	return isset( $args['echo'] ) && false === $args['echo'] ? get_the_posts_pagination( $args ) : the_posts_pagination( $args );
 }

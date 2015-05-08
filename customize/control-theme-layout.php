@@ -14,7 +14,7 @@
 /**
  * Theme Layout customize control class.
  *
- * @since  2.1.0
+ * @since  3.0.0
  * @access public
  */
 class Hybrid_Customize_Control_Theme_Layout extends WP_Customize_Control {
@@ -22,7 +22,7 @@ class Hybrid_Customize_Control_Theme_Layout extends WP_Customize_Control {
 	/**
 	 * Set up our control.
 	 *
-	 * @since  2.1.0
+	 * @since  3.0.0
 	 * @access public
 	 * @param  object  $manager
 	 * @param  string  $id
