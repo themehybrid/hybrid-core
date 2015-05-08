@@ -48,28 +48,6 @@ function hybrid_attachment_is_video( $post_id = 0 ) {
 }
 
 /**
- * Retrieves an attachment ID based on an attachment file URL.
- *
- * @copyright Pippin Williamson
- * @license   http://www.gnu.org/licenses/gpl-2.0.html
- * @link      http://pippinsplugins.com/retrieve-attachment-id-from-image-url/
- *
- * @since  2.0.0
- * @access public
- * @param  string  $url
- * @return int
- */
-function hybrid_get_attachment_id_from_url( $url ) {
-	global $wpdb;
-
-	$prefix = $wpdb->prefix;
-
-	$posts = $wpdb->get_col( $wpdb->prepare( "SELECT ID FROM " . $prefix . "posts" . " WHERE guid='%s';", $url ) ); 
- 
-	return array_shift( $posts );
-}
-
-/**
  * Returns a set of image attachment links based on size.
  *
  * @since  2.0.0

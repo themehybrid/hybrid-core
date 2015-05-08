@@ -447,6 +447,15 @@ function hybrid_format_hook( $tag, $context = '' ) {
 }
 
 /**
+ * @since      2.0.0
+ * @deprecated 3.0.0
+ */
+function hybrid_get_attachment_id_from_url( $url ) {
+	_deprecated_function( __FUNCTION__, '3.0.0', 'attachment_url_to_postid' );
+	attachment_url_to_postid( $url );
+}
+
+/**
  * @since      0.1.0
  * @deprecated 0.2.0 Use theme_layouts_get_layout().
  */
