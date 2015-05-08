@@ -12,6 +12,39 @@
  */
 
 /**
+ * Checks if a post of any post type has a custom template.  This is the equivalent of WordPress' 
+ * is_page_template() function with the exception that it works for all post types.
+ *
+ * @since  1.2.0
+ * @access public
+ * @param  string  $template  The name of the template to check for.
+ * @return bool               Whether the post has a template.
+ */
+function hybrid_has_post_template( $template = '' ) {
+
+	/* Assume we're viewing a singular post. */
+	if ( is_singular() ) {
+
+		/* Get the queried object. */
+		$post = get_queried_object();
+
+		/* Get the post template, which is saved as metadata. */
+		$post_template = get_post_meta( get_queried_object_id(), "_wp_{$post->post_type}_template", true );
+
+		/* If a specific template was input, check that the post template matches. */
+		if ( !empty( $template ) && $template == $post_template )
+			return true;
+
+		/* If no specific template was input, check if the post has a template. */
+		elseif ( empty( $template ) && !empty( $post_template ) )
+			return true;
+	}
+
+	/* Return false for everything else. */
+	return false;
+}
+
+/**
  * Checks if a post has any content. Useful if you need to check if the user has written any content 
  * before performing any actions.
  *

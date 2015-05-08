@@ -144,9 +144,6 @@ if ( !class_exists( 'Hybrid' ) ) {
 		 */
 		function core() {
 
-			/* Load the core framework functions. */
-			require_once( HYBRID_INC . 'core.php' );
-
 			/* Load the context-based functions. */
 			require_once( HYBRID_INC . 'context.php' );
 

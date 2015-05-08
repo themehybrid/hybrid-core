@@ -53,3 +53,20 @@ function hybrid_register_sidebar( $args ) {
 
 /* Compatibility for when a theme doesn't register any sidebars. */
 add_action( 'widgets_init', '__return_false', 95 );
+
+/**
+ * Function for grabbing a dynamic sidebar name.
+ *
+ * @since  2.0.0
+ * @access public
+ * @param  string  $sidebar_id
+ * @return string
+ */
+function hybrid_get_sidebar_name( $sidebar_id ) {
+	global $wp_registered_sidebars;
+
+	if ( isset( $wp_registered_sidebars[ $sidebar_id ] ) )
+		return $wp_registered_sidebars[ $sidebar_id ]['name'];
+
+	return '';
+}

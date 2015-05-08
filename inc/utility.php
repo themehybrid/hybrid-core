@@ -38,36 +38,32 @@ function hybrid_add_post_type_support() {
 }
 
 /**
- * Checks if a post of any post type has a custom template.  This is the equivalent of WordPress' 
- * is_page_template() function with the exception that it works for all post types.
+ * Function for setting the content width of a theme.  This does not check if a content width has been set; it 
+ * simply overwrites whatever the content width is.
  *
  * @since  1.2.0
  * @access public
- * @param  string  $template  The name of the template to check for.
- * @return bool               Whether the post has a template.
+ * @global int    $content_width The width for the theme's content area.
+ * @param  int    $width         Numeric value of the width to set.
  */
-function hybrid_has_post_template( $template = '' ) {
+function hybrid_set_content_width( $width = '' ) {
+	global $content_width;
 
-	/* Assume we're viewing a singular post. */
-	if ( is_singular() ) {
+	$content_width = absint( $width );
+}
 
-		/* Get the queried object. */
-		$post = get_queried_object();
+/**
+ * Function for getting the theme's content width.
+ *
+ * @since  1.2.0
+ * @access public
+ * @global int    $content_width The width for the theme's content area.
+ * @return int    $content_width
+ */
+function hybrid_get_content_width() {
+	global $content_width;
 
-		/* Get the post template, which is saved as metadata. */
-		$post_template = get_post_meta( get_queried_object_id(), "_wp_{$post->post_type}_template", true );
-
-		/* If a specific template was input, check that the post template matches. */
-		if ( !empty( $template ) && $template == $post_template )
-			return true;
-
-		/* If no specific template was input, check if the post has a template. */
-		elseif ( empty( $template ) && !empty( $post_template ) )
-			return true;
-	}
-
-	/* Return false for everything else. */
-	return false;
+	return $content_width;
 }
 
 /**
@@ -179,23 +175,6 @@ function hybrid_get_menu_name( $location ) {
 	$locations = get_nav_menu_locations();
 
 	return isset( $locations[ $location ] ) ? wp_get_nav_menu_object( $locations[ $location ] )->name : '';
-}
-
-/**
- * Function for grabbing a dynamic sidebar name.
- *
- * @since  2.0.0
- * @access public
- * @param  string  $sidebar_id
- * @return string
- */
-function hybrid_get_sidebar_name( $sidebar_id ) {
-	global $wp_registered_sidebars;
-
-	if ( isset( $wp_registered_sidebars[ $sidebar_id ] ) )
-		return $wp_registered_sidebars[ $sidebar_id ]['name'];
-
-	return '';
 }
 
 /**
