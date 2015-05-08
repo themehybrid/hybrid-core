@@ -1,6 +1,6 @@
 jQuery( document ).ready( function() {
 
-	/* === Color Palette Control. === */
+	/* === Color Palette Control === */
 
 	jQuery( '.customize-control-palette input:radio:checked' ).parent( 'label' ).addClass( 'selected' );
 
@@ -10,5 +10,11 @@ jQuery( document ).ready( function() {
 			jQuery( this ).parent( 'label' ).addClass( 'selected' );
 		}
 	);
+
+	/* === Radio Image Control === */
+
+	if ( jQuery.isFunction( jQuery.fn.buttonset ) ) {
+		jQuery( '.customize-control-radio-image .buttonset' ).buttonset();
+	}
 
 } ); // jQuery( document ).ready

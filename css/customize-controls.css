@@ -3,7 +3,7 @@
  * @version 20150507
  */
 
-/* === Palette Control. === */
+/* === Palette Control === */
 
 .customize-control-palette label {
 	display: block;
@@ -29,3 +29,13 @@
 			display: table-cell;
 			height:  100%;
 		}
+
+/* === Radio Image Control === */
+
+.customize-control-radio-image img {
+	border: 4px solid transparent;
+}
+
+	.customize-control-radio-image .ui-state-active img {
+		border-color: #00a0d2;
+	}

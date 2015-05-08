@@ -34,6 +34,19 @@ class Hybrid_Customize_Control_Radio_Image extends WP_Customize_Control {
 	public $type = 'radio-image';
 
 	/**
+	 * Loads the jQuery UI Button script and framework scripts/styles.
+	 *
+	 * @since  3.0.0
+	 * @access public
+	 * @return void
+	 */
+	public function enqueue() {
+		wp_enqueue_script( 'jquery-ui-button'          );
+		wp_enqueue_script( 'hybrid-customize-controls' );
+		wp_enqueue_style(  'hybrid-customize-controls' );
+	}
+
+	/**
 	 * Displays the control content.
 	 *
 	 * @since  3.0.0
@@ -54,7 +67,7 @@ class Hybrid_Customize_Control_Radio_Image extends WP_Customize_Control {
 			<span class="description customize-control-description"><?php echo $this->description; ?></span>
 		<?php endif; ?>
 
-		<div id="<?php echo esc_attr( "input_{$this->id}" ); ?>">
+		<div class="buttonset">
 
 			<?php foreach ( $this->choices as $value => $args ) : ?>
 
@@ -67,40 +80,6 @@ class Hybrid_Customize_Control_Radio_Image extends WP_Customize_Control {
 
 			<?php endforeach; ?>
 
-		</div><!-- .image -->
-
-		<script type="text/javascript">
-			jQuery( document ).ready( function() {
-				jQuery( '#<?php echo esc_attr( "input_{$this->id}" ); ?>' ).buttonset();
-			} );
-		</script>
-	<?php }
-
-	/**
-	 * Loads the jQuery UI Button script and hooks our custom styles in.
-	 *
-	 * @since  3.0.0
-	 * @access public
-	 * @return void
-	 */
-	public function enqueue() {
-		wp_enqueue_script( 'jquery-ui-button' );
-
-		add_action( 'customize_controls_print_styles', array( $this, 'print_styles' ) );
-	}
-
-	/**
-	 * Outputs custom styles to give the selected image a visible border.
-	 *
-	 * @since  3.0.0
-	 * @access public
-	 * @return void
-	 */
-	public function print_styles() { ?>
-
-		<style type="text/css" id="hybrid-customize-radio-image-css">
-			.customize-control-radio-image img { border: 4px solid transparent; }
-			.customize-control-radio-image .ui-state-active img { border-color: #00a0d2; }
-		</style>
+		</div><!-- .buttonset -->
 	<?php }
 }
