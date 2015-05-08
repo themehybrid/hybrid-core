@@ -18,6 +18,10 @@ add_action( 'customize_register', 'hybrid_load_customize_controls', 1 );
 /* Register customizer panels, sections, settings, and/or controls. */
 add_action( 'customize_register', 'hybrid_customize_register' );
 
+/* Register customize controls scripts/styles. */
+add_action( 'customize_controls_enqueue_scripts', 'hybrid_register_customize_controls_scripts', 5 );
+add_action( 'customize_controls_enqueue_scripts', 'hybrid_register_customize_controls_styles',  5 );
+
 /**
  * Loads framework-specific customize control classes.  Customize control classes extend the WordPress 
  * WP_Customize_Control class to create unique classes that can be used within the framework.
@@ -32,6 +36,9 @@ function hybrid_load_customize_controls() {
 
 	/* Loads the radio image customize control class. */
 	require_once( HYBRID_CUSTOMIZE . 'control-radio-image.php' );
+
+	/* Loads the color palette customize control class. */
+	require_once( HYBRID_CUSTOMIZE . 'control-palette.php' );
 
 	/* Loads the background image customize control class. */
 	require_once( HYBRID_CUSTOMIZE . 'control-background-image.php' );
@@ -87,6 +94,14 @@ function hybrid_customize_register( $wp_customize ) {
 
 		add_action( 'customize_preview_init', 'hybrid_enqueue_customize_preview_scripts' );
 	}
+}
+
+function hybrid_register_customize_controls_scripts() {
+	wp_register_script( 'hybrid-customize-controls', esc_url( HYBRID_JS . 'customize-controls' . hybrid_get_min_suffix() . '.js' ), array( 'jquery' ), '20150507', true );
+}
+
+function hybrid_register_customize_controls_styles() {
+	wp_register_style( 'hybrid-customize-controls', esc_url( HYBRID_CSS . 'customize-controls' . hybrid_get_min_suffix() . '.css' ) );
 }
 
 function hybrid_enqueue_customize_preview_scripts() {
