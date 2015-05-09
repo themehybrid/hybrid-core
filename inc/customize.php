@@ -68,25 +68,23 @@ function hybrid_customize_register( $wp_customize ) {
 	/* Get layout args. */
 	$args = hybrid_get_layouts_args();
 
-	if ( true === $args['customize'] ) {
+	/* Add the layout section. */
+	$wp_customize->add_section(
+		'layout',
+		array(
+			'title'      => esc_html__( 'Layout', 'hybrid-core' ),
+			'priority'   => 30,
+		)
+	);
 
-		/* Add the layout section. */
-		$wp_customize->add_section(
-			'layout',
-			array(
-				'title'      => esc_html__( 'Layout', 'hybrid-core' ),
-				'priority'   => 30,
-				'capability' => 'edit_theme_options'
-			)
-		);
+	/* Add the customizer settings/controls if supported. */
+	if ( true === $args['customize'] ) {
 
 		/* Add the 'layout' setting. */
 		$wp_customize->add_setting(
 			'theme_layout',
 			array(
 				'default'           => get_theme_mod( 'theme_layout', hybrid_get_default_layout() ),
-				'type'              => 'theme_mod',
-				'capability'        => 'edit_theme_options',
 				'sanitize_callback' => 'sanitize_html_class',
 				'transport'         => 'postMessage'
 			)
@@ -96,11 +94,10 @@ function hybrid_customize_register( $wp_customize ) {
 		$wp_customize->add_control(
 			new Hybrid_Customize_Control_Theme_Layout(
 				$wp_customize,
-				'theme-layout-control',
+				'theme_layout',
 				array(
 					'label'    => esc_html__( 'Global Layout', 'hybrid-core' ),
 					'section'  => 'layout',
-					'settings' => 'theme_layout',
 				)
 			)
 		);
