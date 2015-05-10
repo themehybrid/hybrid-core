@@ -287,6 +287,9 @@ if ( !class_exists( 'Hybrid' ) ) {
 
 			/* Load the deprecated functions if supported. */
 			require_if_theme_supports( 'hybrid-core-deprecated', HYBRID_INC . 'deprecated.php' );
+
+			/* Load the Theme Layouts extension if supported. */
+			require_if_theme_supports( 'theme-layouts', HYBRID_INC . 'layouts.php' );
 		}
 
 		/**
@@ -309,9 +312,6 @@ if ( !class_exists( 'Hybrid' ) ) {
 
 			/* Load the Get the Image extension if supported. */
 			require_if_theme_supports( 'get-the-image', HYBRID_EXTENSIONS . 'get-the-image.php' );
-
-			/* Load the Theme Layouts extension if supported. */
-			require_if_theme_supports( 'theme-layouts', HYBRID_EXTENSIONS . 'theme-layouts.php' );
 
 			/* Load the Post Stylesheets extension if supported. */
 			require_if_theme_supports( 'post-stylesheets', HYBRID_EXTENSIONS . 'post-stylesheets.php' );
