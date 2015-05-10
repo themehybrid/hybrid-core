@@ -73,7 +73,7 @@ function hybrid_customize_register( $wp_customize ) {
 	/* Check if the theme supports the theme layouts customize feature. */
 	if ( current_theme_supports( 'theme-layouts', 'customize' ) ) {
 
-		/* Add the 'layout' setting. */
+		/* Add the layout setting. */
 		$wp_customize->add_setting(
 			'theme_layout',
 			array(
@@ -89,7 +89,6 @@ function hybrid_customize_register( $wp_customize ) {
 				$wp_customize,
 				'theme_layout',
 				array(
-					'type' => 'theme-layout',
 					'label'    => esc_html__( 'Global Layout', 'hybrid-core' ),
 					'section'  => 'layout',
 				)
