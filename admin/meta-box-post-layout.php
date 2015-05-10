@@ -10,10 +10,7 @@ add_action( 'edit_attachment', 'hybrid_save_post_layout'        );
 
 function hybrid_add_post_layout_meta_box( $post_type ) {
 
-	/* Get the extension arguments. */
-	$args = hybrid_get_layouts_args();
-
-	if ( true === $args['post_meta'] && post_type_supports( $post_type, 'theme-layouts' ) && current_user_can( 'edit_theme_options' ) )
+	if ( current_theme_supports( 'theme-layouts', 'post_meta' ) && post_type_supports( $post_type, 'theme-layouts' ) && current_user_can( 'edit_theme_options' ) )
 		add_meta_box( 'hybrid-post-layout', __( 'Layout', 'hybrid-core' ), 'hybrid_post_layout_meta_box', $post_type, 'side', 'default' );
 }
 
@@ -24,10 +21,19 @@ function hybrid_post_layout_meta_box( $post, $box ) {
 
 	$post_layout = !empty( $post_layout ) ? $post_layout : 'default';
 
+	$choices = array();
+
+	/* Loop through each of the layouts and add it to the choices array with proper key/value pairs. */
+	foreach ( hybrid_get_layout_objects() as $layout ) {
+
+		if ( true === $layout->show_in_meta_box )
+			$choices[ $layout->name ] = $layout->label;
+	}
+
 	wp_nonce_field( basename( __FILE__ ), 'hybrid-post-layout-nonce' ); ?>
 
 	<ul>
-		<?php foreach ( hybrid_get_layout_choices() as $value => $label ) : ?>
+		<?php foreach ( $choices as $value => $label ) : ?>
 			<li>
 				<label>
 					<input type="radio" name="hybrid-post-layout" value="<?php echo esc_attr( $value ); ?>" <?php checked( $post_layout, $value ); ?> /> 

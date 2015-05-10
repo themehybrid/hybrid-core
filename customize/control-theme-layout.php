@@ -31,10 +31,14 @@ class Hybrid_Customize_Control_Theme_Layout extends WP_Customize_Control {
 	 */
 	public function __construct( $manager, $id, $args = array() ) {
 
-		$choices = hybrid_get_layout_choices();
+		$choices = array();
 
-		if ( isset( $choices['default'] ) )
-			unset( $choices['default'] );
+		/* Loop through each of the layouts and add it to the choices array with proper key/value pairs. */
+		foreach ( hybrid_get_layout_objects() as $layout ) {
+
+			if ( true === $layout->show_in_customizer )
+				$choices[ $layout->name ] = $layout->label;
+		}
 
 		/* Override specific arguments. */
 		$args['type']    = 'radio';

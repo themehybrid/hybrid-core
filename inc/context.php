@@ -240,6 +240,10 @@ function hybrid_body_class_filter( $classes, $class ) {
 		$classes[] = 'paged-' . intval( get_query_var( 'page' ) );
 	}
 
+	/* Theme layouts. */
+	if ( current_theme_supports( 'theme-layouts' ) )
+		$classes[] = sanitize_html_class( 'layout-' . hybrid_get_layout() );
+
 	/* Input class. */
 	if ( !empty( $class ) ) {
 		$class   = is_array( $class ) ? $class : preg_split( '#\s+#', $class );

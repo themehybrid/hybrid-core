@@ -61,14 +61,7 @@ function hybrid_load_customize_controls() {
  */
 function hybrid_customize_register( $wp_customize ) {
 
-	/* Bail if no theme layout support. */
-	if ( !current_theme_supports( 'theme-layouts' ) )
-		return;
-
-	/* Get layout args. */
-	$args = hybrid_get_layouts_args();
-
-	/* Add the layout section. */
+	/* Always add the layout section so that theme devs can utilize it. */
 	$wp_customize->add_section(
 		'layout',
 		array(
@@ -77,8 +70,8 @@ function hybrid_customize_register( $wp_customize ) {
 		)
 	);
 
-	/* Add the customizer settings/controls if supported. */
-	if ( true === $args['customize'] ) {
+	/* Check if the theme supports the theme layouts customize feature. */
+	if ( current_theme_supports( 'theme-layouts', 'customize' ) ) {
 
 		/* Add the 'layout' setting. */
 		$wp_customize->add_setting(
@@ -96,6 +89,7 @@ function hybrid_customize_register( $wp_customize ) {
 				$wp_customize,
 				'theme_layout',
 				array(
+					'type' => 'theme-layout',
 					'label'    => esc_html__( 'Global Layout', 'hybrid-core' ),
 					'section'  => 'layout',
 				)

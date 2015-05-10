@@ -1,164 +1,139 @@
 <?php
 /**
- * Theme Layouts - A WordPress script for creating dynamic layouts.
+ * Layouts API - An API for themes to build layout options.
  *
  * Theme Layouts was created to allow theme developers to easily style themes with dynamic layout 
- * structures.  It gives users the ability to control how each post (or any post type) is displayed on the 
- * front end of the site.  The layout can also be filtered for any page of a WordPress site.  
+ * structures. This file merely contains the API function calls at theme developers' disposal.
  *
- * The script will filter the WordPress body_class to provide a layout class for the given page.  Themes 
- * must support this hook or its accompanying body_class() function for the Theme Layouts script to work. 
- * Themes must also handle the CSS based on the layout class.  This script merely provides the logic.  The 
- * design should be handled on a theme-by-theme basis.
- *
- * This program is free software; you can redistribute it and/or modify it under the terms of the GNU 
- * General Public License as published by the Free Software Foundation; either version 2 of the License, 
- * or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
- * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- *
- * @package   ThemeLayouts
- * @version   1.0.0-beta-1
- * @author    Justin Tadlock <justin@justintadlock.com>
- * @copyright Copyright (c) 2010 - 2015, Justin Tadlock
- * @link      http://justintadlock.com
- * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @package    HybridCore
+ * @subpackage Includes
+ * @author     Justin Tadlock <justin@justintadlock.com>
+ * @copyright  Copyright (c) 2008 - 2015, Justin Tadlock
+ * @link       http://themehybrid.com/hybrid-core
+ * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
+/* Registers default layouts. */
+add_action( 'init', 'hybrid_register_layouts' );
+
+/* Filters `current_theme_supports( 'theme-layouts', $arg )`. */
+add_filter( 'current_theme_supports-theme-layouts', 'hybrid_theme_layouts_support', 10, 3 );
+
+/* Filters the theme layout mod. */
+add_filter( 'theme_mod_theme_layout', 'hybrid_filter_layout', 5 );
+
 /**
- * Sets up and runs the theme layouts feature.
+ * Registers the default theme layouts.
  *
  * @since  3.0.0
  * @access public
+ * @return void
  */
-final class Hybrid_Theme_Layouts {
+function hybrid_register_layouts() {
 
-	/**
-	 * Holds the instance of this class.
-	 *
-	 * @since  3.0.0
-	 * @access private
-	 * @var    object
-	 */
-	private static $instance;
+	hybrid_register_layout(
+		'default',
+		array(
+			/* Translators: Default theme layout option. */
+			'label'              => _x( 'Default', 'theme layout', 'hybrid-core' ),
+			'show_in_customizer' => false,
+			'_builtin'           => true,
+			'_internal'          => true,
+		)
+	);
 
-	/**
-	 * Sets up the required actions/filters for theme layouts.
-	 *
-	 * @since  3.0.0
-	 * @access public
-	 * @return void
-	 */
-	public function __construct() {
+	/* Hook for registering theme layouts. */
+	do_action( 'hybrid_register_layouts' );
+}
 
-		/* Register metadata with WordPress. */
-		add_action( 'init', array( $this, 'register_meta' ) );
+/**
+ * Function for registering a layout.
+ *
+ * @since  3.0.0
+ * @access public
+ * @param  string  $name
+ * @param  array   $args
+ * @return void
+ */
+function hybrid_register_layout( $name, $args = array() ) {
+	global $hybrid_layouts;
 
-		/* Add post type support for theme layouts. */
-		add_action( 'init', array( $this, 'post_type_support' ), 15 );
+	if ( !hybrid_layout_exists( $name ) ) {
 
-		/* Filters the theme layout mod. */
-		add_filter( 'theme_mod_theme_layout', array( $this, 'filter_layout' ), 5 );
+		$name = sanitize_html_class( $name );
 
-		/* Filters the body_class hook to add a custom class. */
-		add_filter( 'body_class', array( $this, 'body_class' ) );
-	}
+		$defaults = array(
+			'show_in_meta_box'   => true, // Whether to show as an option in the meta box.
+			'show_in_customizer' => true, // Whether to show as an option in the customizer.
+			'label'              => '',   // Internationalized text label.
+			'image'              => '',   // Image URL of the layout design.
+			'_builtin'          => false, // Internal use only! Whether the layout is built in.
+			'_internal'         => false, // Internal use only! Whether the layout is internal (cannot be unregistered).
+		);
 
-	/**
-	 * Registers post and user meta keys.
-	 *
-	 * @since  3.0.0
-	 * @access public
-	 * @return void
-	 */
-	public function register_meta() {
-		register_meta( 'post', hybrid_get_layout_meta_key(), 'sanitize_key' );
-		register_meta( 'user', hybrid_get_layout_meta_key(), 'sanitize_key' );
-	}
+		$args = wp_parse_args( $args, $defaults );
 
-	/**
-	 * Adds post type support for specific post types. Theme and plugin authors can further add 
-	 * support via the `supports` argument when registering their post type or via the 
-	 * `add_post_type_support()` function.
-	 *
-	 * @since  3.0.0
-	 * @access public
-	 * @return void
-	 */
-	public function post_type_support() {
+		$args['name'] = $name;
 
-		/* Core WordPress post types. */
-		add_post_type_support( 'post',              'theme-layouts' );
-		add_post_type_support( 'page',              'theme-layouts' );
-		add_post_type_support( 'attachment',        'theme-layouts' );
-
-		/* Plugin post types. */
-		add_post_type_support( 'forum',             'theme-layouts' );
-		add_post_type_support( 'literature',        'theme-layouts' );
-		add_post_type_support( 'portfolio_item',    'theme-layouts' );
-		add_post_type_support( 'portfolio_project', 'theme-layouts' );
-		add_post_type_support( 'product',           'theme-layouts' );
-		add_post_type_support( 'restaurant_item',   'theme-layouts' );
-	}
-
-	/**
-	 * Default filter on the `theme_mod_theme_layout` hook.  By default, we'll check for per-post 
-	 * or per-author layouts saved as metadata.  If set, we'll filter.  Else, just return the 
-	 * global layout.
-	 *
-	 * @since  3.0.0
-	 * @access public
-	 * @param  string  $theme_layout
-	 * @return string
-	 */
-	public function filter_layout( $theme_layout ) {
-
-		/* If viewing a singular post, get the post layout. */
-		if ( is_singular() )
-			$layout = hybrid_get_post_layout( get_queried_object_id() );
-
-		/* If viewing an author archive, get the user layout. */
-		elseif ( is_author() )
-			$layout = hybrid_get_user_layout( get_queried_object_id() );
-
-		return !empty( $layout ) ? $layout : $theme_layout;
-	}
-
-	/**
-	 * Filters the `<body>` class to add our theme layout class.
-	 *
-	 * @since  3.0.0
-	 * @access public
-	 * @return void
-	 */
-	public function body_class( $classes ) {
-
-		/* Adds the layout to array of body classes. */
-		$classes[] = sanitize_html_class( 'layout-' . hybrid_get_layout() );
-
-		/* Return the $classes array. */
-		return $classes;
-	}
-
-	/**
-	 * Returns the instance.
-	 *
-	 * @since  3.0.0
-	 * @access public
-	 * @return object
-	 */
-	public static function get_instance() {
-
-		if ( !self::$instance )
-			self::$instance = new self;
-
-		return self::$instance;
+		$hybrid_layouts[ $name ] = (object) $args;
 	}
 }
 
-/* Let's roll! */
-Hybrid_Theme_Layouts::get_instance();
+/**
+ * Unregisters a layout.
+ *
+ * @since  3.0.0
+ * @access public
+ * @param  string  $name
+ * @return void
+ */
+function hybrid_unregister_layout( $name ) {
+	global $hybrid_layouts;
+
+	if ( hybrid_layout_exists( $name ) && false === hybrid_get_layout_object( $name )->_internal )
+		unset( $hybrid_layouts[ $name ] );
+}
+
+/**
+ * Checks if a layout exists.
+ *
+ * @since  3.0.0
+ * @access public
+ * @param  string  $name
+ * @return bool
+ */
+function hybrid_layout_exists( $name ) {
+	global $hybrid_layouts;
+
+	return isset( $hybrid_layouts[ $name ] );
+}
+
+/**
+ * Returns an array of registered layout objects.
+ *
+ * @since  3.0.0
+ * @access public
+ * @return array
+ */
+function hybrid_get_layout_objects() {
+	global $hybrid_layouts;
+
+	return (array) $hybrid_layouts;
+}
+
+/**
+ * Returns a layout object if it exists.  Otherwise, `FALSE`.
+ *
+ * @since  3.0.0
+ * @access public
+ * @param  string      $name
+ * @return object|bool
+ */
+function hybrid_get_layout_object( $name ) {
+	global $hybrid_layouts;
+
+	return hybrid_layout_exists( $name ) ? $hybrid_layouts[ $name ] : false;
+}
 
 /**
  * Returns an array of the available theme layouts.
@@ -168,30 +143,7 @@ Hybrid_Theme_Layouts::get_instance();
  * @return array
  */
 function hybrid_get_layouts() {
-	$layouts = get_theme_support( 'theme-layouts' );
-	return isset( $layouts[0] ) ? array_keys( $layouts[0] ) : array_keys( hybrid_get_layout_labels() );
-}
-
-/**
- * Parse the theme layouts arguments and return them.
- *
- * @since  3.0.0
- * @access public
- * @return array
- */
-function hybrid_get_layouts_args() {
-
-	$defaults = array( 
-		'customize' => true, 
-		'post_meta' => true, 
-		'default'   => 'default' 
-	);
-
-	$layouts = get_theme_support( 'theme-layouts' );
-
-	$args = isset( $layouts[1] ) ? $layouts[1] : array();
-
-	return apply_filters( 'hybrid_get_theme_layouts_args', wp_parse_args( $args, $defaults ) );
+	return array_keys( hybrid_get_layout_objects() );
 }
 
 /**
@@ -214,8 +166,9 @@ function hybrid_get_layout() {
  * @return string
  */
 function hybrid_get_default_layout() {
-	$args = hybrid_get_layouts_args();
-	return $args['default'];
+	$support = get_theme_support( 'theme-layouts' );
+
+	return isset( $support[0] ) && isset( $support[0]['default'] ) ? $support[0]['default'] : 'default';
 }
 
 /**
@@ -320,89 +273,53 @@ function hybrid_delete_user_layout( $user_id ) {
 function hybrid_has_user_layout( $layout, $user_id = '' ) {
 
 	if ( !$user_id )
-		$user_id = get_query_var( 'author' );
+		$user_id = absint( get_query_var( 'author' ) );
 
 	return $layout == hybrid_get_user_layout( $user_id ) ? true : false;
 }
 
 /**
- * Prints the layout label to the screen.
+ * Default filter on the `theme_mod_theme_layout` hook.  By default, we'll check for per-post 
+ * or per-author layouts saved as metadata.  If set, we'll filter.  Else, just return the 
+ * global layout.
  *
  * @since  3.0.0
  * @access public
- * @param  string  $layout
- * @return void
- */
-function hybrid_layout_label( $layout ) {
-	echo hybrid_get_layout_label( $layout );
-}
-
-/**
- * Returns the layout label.
- *
- * @since  3.0.0
- * @access public
- * @param  string  $layout
+ * @param  string  $theme_layout
  * @return string
  */
-function hybrid_get_layout_label( $layout ) {
+function hybrid_filter_layout( $theme_layout ) {
 
-	/* Get an array of post layout strings. */
-	$strings = hybrid_get_layout_labels();
+	/* If viewing a singular post, get the post layout. */
+	if ( is_singular() )
+		$layout = hybrid_get_post_layout( get_queried_object_id() );
 
-	/* Return the layout's string if it exists. Else, return the layout slug. */
-	return isset( $strings[ $layout ] ) ? $strings[ $layout ] : $layout;
+	/* If viewing an author archive, get the user layout. */
+	elseif ( is_author() )
+		$layout = hybrid_get_user_layout( get_queried_object_id() );
+
+	return !empty( $layout ) ? $layout : $theme_layout;
 }
 
 /**
- * Returns an array of all layout labels.
+ * Returns an array of the available theme layouts.
  *
  * @since  3.0.0
  * @access public
- * @param  string  $layout
- * @return void
+ * @param  bool   $supports
+ * @param  array  $args
+ * @param  array  $feature
+ * @return bool
  */
-function hybrid_get_layout_labels() {
+function hybrid_theme_layouts_support( $supports, $args, $feature ) {
 
-	/* Set up the default layout strings. */
-	$strings = array(
-		/* Translators: Default theme layout option. */
-		'default' => _x( 'Default', 'theme layout', 'hybrid-core' )
-	);
+	if ( isset( $args[0] ) && in_array( $args[0], array( 'customize', 'post_meta' ) ) ) {
 
-	/* Get theme-supported layouts. */
-	$layouts = get_theme_support( 'theme-layouts' );
+		if ( is_array( $feature[0] ) && isset( $feature[0][ $args[0] ] ) && false === $feature[0][ $args[0] ] )
+			$supports = false;
+	}
 
-	/* Assign the strings passed in by the theme author. */
-	if ( isset( $layouts[0] ) )
-		$strings = array_merge( $layouts[0], $strings );
-
-	/* Allow devs to filter the strings for custom layouts. */
-	return apply_filters( 'hybrid_layout_labels', $strings );
-}
-
-/**
- * Returns an array of layout choices in key (layout) => value (label) pairs. For use in forms to 
- * select the layout.
- *
- * @since  3.0.0
- * @access public
- * @return array
- */
-function hybrid_get_layout_choices() {
-
-	$layouts = hybrid_get_layouts();
-
-	/* Set up an array for the layout choices and add in the 'default' layout. */
-	$layout_choices = array();
-
-	$layout_choices['default'] = hybrid_get_layout_label( 'default' );
-
-	/* Loop through each of the layouts and add it to the choices array with proper key/value pairs. */
-	foreach ( $layouts as $layout )
-		$layout_choices[ $layout ] = hybrid_get_layout_label( $layout );
-
-	return $layout_choices;
+	return $supports;
 }
 
 /**
