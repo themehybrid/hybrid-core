@@ -5,7 +5,7 @@
  * having to resort to custom template tags.  Many of the filters are simply for adding HTML5 microdata.
  *
  * @package    HybridCore
- * @subpackage Functions
+ * @subpackage Includes
  * @author     Justin Tadlock <justin@justintadlock.com>
  * @copyright  Copyright (c) 2008 - 2015, Justin Tadlock
  * @link       http://themehybrid.com/hybrid-core

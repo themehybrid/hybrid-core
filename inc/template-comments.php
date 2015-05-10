@@ -5,7 +5,7 @@
  * customizations.
  *
  * @package    HybridCore
- * @subpackage Functions
+ * @subpackage Includes
  * @author     Justin Tadlock <justin@justintadlock.com>
  * @copyright  Copyright (c) 2008 - 2015, Justin Tadlock
  * @link       http://themehybrid.com/hybrid-core

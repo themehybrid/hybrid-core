@@ -6,7 +6,7 @@
  * easy-to-override system that doesn't involve massive amounts of conditional tags within files.
  *
  * @package    HybridCore
- * @subpackage Functions
+ * @subpackage Includes
  * @author     Justin Tadlock <justin@justintadlock.com>
  * @copyright  Copyright (c) 2008 - 2015, Justin Tadlock
  * @link       http://themehybrid.com/hybrid-core

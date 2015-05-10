@@ -4,7 +4,7 @@
  * that don't really have a home within any other parts of the framework.
  *
  * @package    HybridCore
- * @subpackage Functions
+ * @subpackage Includes
  * @author     Justin Tadlock <justin@justintadlock.com>
  * @copyright  Copyright (c) 2008 - 2015, Justin Tadlock
  * @link       http://themehybrid.com/hybrid-core

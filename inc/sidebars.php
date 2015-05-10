@@ -4,7 +4,7 @@
  * simple function for registering HTML5-ready sidebars instead of the default WordPress unordered lists.
  *
  * @package    HybridCore
- * @subpackage Functions
+ * @subpackage Includes
  * @author     Justin Tadlock <justin@justintadlock.com>
  * @copyright  Copyright (c) 2008 - 2015, Justin Tadlock
  * @link       http://themehybrid.com/hybrid-core
