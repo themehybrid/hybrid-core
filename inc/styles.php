@@ -15,8 +15,9 @@
 /* Register Hybrid Core styles. */
 add_action( 'wp_enqueue_scripts', 'hybrid_register_styles', 0 );
 
-/* Load the development stylsheet in script debug mode. */
+/* Active theme style filters. */
 add_filter( 'stylesheet_uri', 'hybrid_min_stylesheet_uri', 5, 2 );
+add_filter( 'stylesheet_uri', 'hybrid_style_filter',       15   );
 
 /* Filters the WP locale stylesheet. */
 add_filter( 'locale_stylesheet_uri', 'hybrid_locale_stylesheet_uri', 5 );
@@ -149,4 +150,90 @@ function hybrid_get_locale_style() {
 	$styles[] = is_rtl() ? 'css/rtl.css' : 'css/ltr.css';
 
 	return hybrid_locate_theme_file( $styles );
+}
+
+/**
+ * Filters the 'stylesheet_uri' and checks if a post has a style that should overwrite the theme's 
+ * primary `style.css`.
+ *
+ * @since  3.0.0
+ * @access public
+ * @param  string  $stylesheet_uri
+ * @return string
+ */
+function hybrid_style_filter( $stylesheet_uri ) {
+
+	if ( is_singular() ) {
+
+		$style = hybrid_get_post_style( get_queried_object_id() );
+
+		if ( $style && $style_uri = hybrid_locate_theme_file( array( $style ) ) )
+			$stylesheet_uri = $style_uri;
+	}
+
+	return $stylesheet_uri;
+}
+
+/**
+ * Gets a post style.
+ *
+ * @since  3.0.0
+ * @access public
+ * @param  int     $post_id
+ * @return bool
+ */
+function hybrid_get_post_style( $post_id ) {
+	return get_post_meta( $post_id, hybrid_get_style_meta_key(), true );
+}
+
+/**
+ * Sets a post style.
+ *
+ * @since  3.0.0
+ * @access public
+ * @param  int     $post_id
+ * @param  string  $layout
+ * @return bool
+ */
+function hybrid_set_post_style( $post_id, $style ) {
+	return update_post_meta( $post_id, hybrid_get_style_meta_key(), $style );
+}
+
+/**
+ * Deletes a post style.
+ *
+ * @since  3.0.0
+ * @access public
+ * @param  int     $post_id
+ * @return bool
+ */
+function hybrid_delete_post_style( $post_id ) {
+	return delete_post_meta( $post_id, hybrid_get_style_meta_key() );
+}
+
+/**
+ * Checks a post if it has a specific style.
+ *
+ * @since  3.0.0
+ * @access public
+ * @param  int     $post_id
+ * @return bool
+ */
+function hybrid_has_post_style( $style, $post_id = '' ) {
+
+	if ( empty( $post_id ) )
+		$post_id = get_the_ID();
+
+	return $style === hybrid_get_post_style( $post_id ) ? true : false;
+}
+
+/**
+ * Wrapper function for returning the metadata key used for objects that can use styles.
+ *
+ * @since  3.0.0
+ * @access public
+ * @return string
+ */
+function hybrid_get_style_meta_key() {
+	return apply_filters( 'hybrid_style_meta_key', 'Stylesheet' );
 }

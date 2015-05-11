@@ -43,6 +43,9 @@ function hybrid_admin_load_post_meta_boxes() {
 
 	/* Load the layout meta box. */
 	require_if_theme_supports( 'theme-layouts', HYBRID_ADMIN . 'meta-box-post-layout.php' );
+
+	/* Load the post style meta box. */
+	require_once( HYBRID_ADMIN . 'meta-box-post-style.php' );
 }
 
 /**
@@ -110,4 +113,56 @@ function hybrid_get_post_templates( $post_type = 'post' ) {
 
 	/* Return array of post templates. */
 	return $hybrid->post_templates[ $post_type ];
+}
+
+/**
+ * Gets the stylesheet files within the parent or child theme and checks if they have the 'Style Name' 
+ * header. If any files are found, they are returned in an array.
+ *
+ * @since  3.0.0
+ * @access public
+ * @global object  $hybrid
+ * @return array
+ */
+function hybrid_get_post_styles( $post_type = 'post' ) {
+	global $hybrid;
+
+	/* If stylesheets have already been loaded, return them. */
+	if ( !empty( $hyrid->post_stylesheets ) && isset( $hybrid->post_stylesheets[ $post_type ] ) )
+		return $hybrid->post_stylesheets[ $post_type ];
+
+	/* Set up an empty styles array. */
+	$hybrid->post_stylesheets[ $post_type ] = array();
+
+	/* Get the theme object. */
+	$theme = wp_get_theme();
+
+	/* Get the theme CSS files two levels deep. */
+	$files = (array) $theme->get_files( 'css', 2, true );
+
+	/* Loop through each of the CSS files and check if they are styles. */
+	foreach ( $files as $file => $path ) {
+
+		/* Get file data based on the 'Style Name' header. */
+		$headers = get_file_data(
+			$path, 
+			array( 
+				'Style Name'         => 'Style Name',
+				"{$post_type} Style" => "{$post_type} Style"
+			) 
+		);
+
+		/* Add the CSS filename and template name to the array. */
+		if ( !empty( $headers['Style Name'] ) )
+			$hybrid->post_stylesheets[ $post_type ][ $file ] = $headers['Style Name'];
+
+		elseif ( !empty( $headers["{$post_type} Style"] ) )
+			$hybrid->post_stylesheets[ $post_type ][ $file ] = $headers["{$post_type} Style"];
+	}
+
+	/* Flip the array of styles. */
+	$hybrid->post_stylesheets[ $post_type ] = array_flip( $hybrid->post_stylesheets[ $post_type ] );
+
+	/* Return array of styles. */
+	return $hybrid->post_stylesheets[ $post_type ];
 }

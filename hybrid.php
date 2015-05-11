@@ -313,9 +313,6 @@ if ( !class_exists( 'Hybrid' ) ) {
 
 			/* Load the Get the Image extension if supported. */
 			require_if_theme_supports( 'get-the-image', HYBRID_EXTENSIONS . 'get-the-image.php' );
-
-			/* Load the Post Stylesheets extension if supported. */
-			require_if_theme_supports( 'post-stylesheets', HYBRID_EXTENSIONS . 'post-stylesheets.php' );
 		}
 
 		/**
