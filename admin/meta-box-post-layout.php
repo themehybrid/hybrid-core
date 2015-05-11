@@ -51,7 +51,7 @@ function hybrid_post_layout_meta_box( $post, $box ) {
 	$choices = array();
 
 	/* Loop through each of the layouts and add it to the choices array with proper key/value pairs. */
-	foreach ( hybrid_get_layout_objects() as $layout ) {
+	foreach ( hybrid_get_layouts() as $layout ) {
 
 		if ( true === $layout->show_in_meta_box )
 			$choices[ $layout->name ] = $layout->label;

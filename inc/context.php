@@ -242,7 +242,7 @@ function hybrid_body_class_filter( $classes, $class ) {
 
 	/* Theme layouts. */
 	if ( current_theme_supports( 'theme-layouts' ) )
-		$classes[] = sanitize_html_class( 'layout-' . hybrid_get_layout() );
+		$classes[] = sanitize_html_class( 'layout-' . hybrid_get_theme_layout() );
 
 	/* Input class. */
 	if ( !empty( $class ) ) {

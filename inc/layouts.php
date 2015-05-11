@@ -14,13 +14,24 @@
  */
 
 /* Registers default layouts. */
-add_action( 'init', 'hybrid_register_layouts' );
+add_action( 'init', 'hybrid_register_layouts', 95 );
 
 /* Filters `current_theme_supports( 'theme-layouts', $arg )`. */
 add_filter( 'current_theme_supports-theme-layouts', 'hybrid_theme_layouts_support', 10, 3 );
 
 /* Filters the theme layout mod. */
 add_filter( 'theme_mod_theme_layout', 'hybrid_filter_layout', 5 );
+
+/**
+ * Returns the instance of the Hybrid_Layouts object. Use this function to access the object.
+ *
+ * @since  3.0.0
+ * @access public
+ * @return object
+ */
+function hybrid_layouts() {
+	return Hybrid_Layouts::get_instance();
+}
 
 /**
  * Registers the default theme layouts.
@@ -49,6 +60,7 @@ function hybrid_register_layouts() {
 /**
  * Function for registering a layout.
  *
+ * @see    Hybrid_Layouts::register()
  * @since  3.0.0
  * @access public
  * @param  string  $name
@@ -56,56 +68,33 @@ function hybrid_register_layouts() {
  * @return void
  */
 function hybrid_register_layout( $name, $args = array() ) {
-	global $hybrid_layouts;
-
-	if ( !hybrid_layout_exists( $name ) ) {
-
-		$name = sanitize_html_class( $name );
-
-		$defaults = array(
-			'show_in_meta_box'   => true, // Whether to show as an option in the meta box.
-			'show_in_customizer' => true, // Whether to show as an option in the customizer.
-			'label'              => '',   // Internationalized text label.
-			'image'              => '',   // Image URL of the layout design.
-			'_builtin'          => false, // Internal use only! Whether the layout is built in.
-			'_internal'         => false, // Internal use only! Whether the layout is internal (cannot be unregistered).
-		);
-
-		$args = wp_parse_args( $args, $defaults );
-
-		$args['name'] = $name;
-
-		$hybrid_layouts[ $name ] = (object) $args;
-	}
+	hybrid_layouts()->register( $name, $args );
 }
 
 /**
  * Unregisters a layout.
  *
+ * @see    Hybrid_Layouts::unregister()
  * @since  3.0.0
  * @access public
  * @param  string  $name
  * @return void
  */
 function hybrid_unregister_layout( $name ) {
-	global $hybrid_layouts;
-
-	if ( hybrid_layout_exists( $name ) && false === hybrid_get_layout_object( $name )->_internal )
-		unset( $hybrid_layouts[ $name ] );
+	hybrid_layouts()->unregister( $name );
 }
 
 /**
  * Checks if a layout exists.
  *
+ * @see    Hybrid_Layouts::exists()
  * @since  3.0.0
  * @access public
  * @param  string  $name
  * @return bool
  */
 function hybrid_layout_exists( $name ) {
-	global $hybrid_layouts;
-
-	return isset( $hybrid_layouts[ $name ] );
+	return hybrid_layouts()->exists( $name );
 }
 
 /**
@@ -115,35 +104,21 @@ function hybrid_layout_exists( $name ) {
  * @access public
  * @return array
  */
-function hybrid_get_layout_objects() {
-	global $hybrid_layouts;
-
-	return (array) $hybrid_layouts;
+function hybrid_get_layouts() {
+	return hybrid_layouts()->layouts;
 }
 
 /**
  * Returns a layout object if it exists.  Otherwise, `FALSE`.
  *
+ * @see    Hybrid_Layouts::get()
  * @since  3.0.0
  * @access public
  * @param  string      $name
  * @return object|bool
  */
-function hybrid_get_layout_object( $name ) {
-	global $hybrid_layouts;
-
-	return hybrid_layout_exists( $name ) ? $hybrid_layouts[ $name ] : false;
-}
-
-/**
- * Returns an array of the available theme layouts.
- *
- * @since  3.0.0
- * @access public
- * @return array
- */
-function hybrid_get_layouts() {
-	return array_keys( hybrid_get_layout_objects() );
+function hybrid_get_layout( $name ) {
+	return hybrid_layouts()->get( $name );
 }
 
 /**
@@ -154,7 +129,7 @@ function hybrid_get_layouts() {
  * @access public
  * @return string
  */
-function hybrid_get_layout() {
+function hybrid_get_theme_layout() {
 	return get_theme_mod( 'theme_layout', hybrid_get_default_layout() );
 }
 
@@ -298,7 +273,7 @@ function hybrid_filter_layout( $theme_layout ) {
 	elseif ( is_author() )
 		$layout = hybrid_get_user_layout( get_queried_object_id() );
 
-	return !empty( $layout ) ? $layout : $theme_layout;
+	return !empty( $layout ) && 'default' !== $layout ? $layout : $theme_layout;
 }
 
 /**

@@ -289,7 +289,8 @@ if ( !class_exists( 'Hybrid' ) ) {
 			require_if_theme_supports( 'hybrid-core-deprecated', HYBRID_INC . 'deprecated.php' );
 
 			/* Load the Theme Layouts extension if supported. */
-			require_if_theme_supports( 'theme-layouts', HYBRID_INC . 'layouts.php' );
+			require_if_theme_supports( 'theme-layouts', HYBRID_INC . 'class-layouts.php' );
+			require_if_theme_supports( 'theme-layouts', HYBRID_INC . 'layouts.php'       );
 		}
 
 		/**

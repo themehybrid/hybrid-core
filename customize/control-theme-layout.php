@@ -34,7 +34,7 @@ class Hybrid_Customize_Control_Theme_Layout extends WP_Customize_Control {
 		$choices = array();
 
 		/* Loop through each of the layouts and add it to the choices array with proper key/value pairs. */
-		foreach ( hybrid_get_layout_objects() as $layout ) {
+		foreach ( hybrid_get_layouts() as $layout ) {
 
 			if ( true === $layout->show_in_customizer )
 				$choices[ $layout->name ] = $layout->label;
