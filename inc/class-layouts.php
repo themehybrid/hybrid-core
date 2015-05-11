@@ -44,8 +44,9 @@ class Hybrid_Layouts {
 	 * @access public
 	 * @param  string  $name
 	 * @param  array   $args  {
-	 *     @type bool    $show_in_meta_box
-	 *     @type bool    $show_in_customizer
+	 *     @type bool    $is_global_layout
+	 *     @type bool    $is_post_layout
+	 *     @type bool    $is_user_layout
 	 *     @type string  $label
 	 *     @type string  $image
 	 *     @type bool    $_builtin
@@ -60,12 +61,13 @@ class Hybrid_Layouts {
 			$name = sanitize_html_class( $name );
 
 			$defaults = array(
-				'show_in_meta_box'   => true,  // Whether to show as an option in the meta box.
-				'show_in_customizer' => true,  // Whether to show as an option in the customizer.
-				'label'              => $name, // Internationalized text label.
-				'image'              => '',    // Image URL of the layout design.
-				'_builtin'          => false,  // Internal use only! Whether the layout is built in.
-				'_internal'         => false,  // Internal use only! Whether the layout is internal (cannot be unregistered).
+				'is_global_layout' => true,  // Whether to show as an option in the customizer.
+				'is_post_layout'   => true,  // Whether to show as an option in the meta box.
+				'is_user_layout'   => true,  // Whether to show as an option in user profile (not implemented).
+				'label'            => $name, // Internationalized text label.
+				'image'            => '',    // Image URL of the layout design.
+				'_builtin'         => false, // Internal use only! Whether the layout is built in.
+				'_internal'        => false, // Internal use only! Whether the layout is internal (cannot be unregistered).
 			);
 
 			$args = wp_parse_args( $args, $defaults );
