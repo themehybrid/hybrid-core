@@ -456,6 +456,15 @@ function hybrid_get_attachment_id_from_url( $url ) {
 }
 
 /**
+ * @since      1.3.0
+ * @deprecated 3.0.0
+ */
+function hybrid_sanitize_meta( $meta_value ) {
+	_deprecated_function( __FUNCTION__, '3.0.0', 'strip_tags' );
+	return strip_tags( $meta_value );
+}
+
+/**
  * @since      0.1.0
  * @deprecated 0.2.0 Use theme_layouts_get_layout().
  */
