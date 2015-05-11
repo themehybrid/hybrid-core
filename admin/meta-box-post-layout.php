@@ -1,4 +1,14 @@
 <?php
+/**
+ * Adds the layout meta box to the post editing screen for post types that support `theme-layouts`.
+ *
+ * @package    HybridCore
+ * @subpackage Admin
+ * @author     Justin Tadlock <justin@justintadlock.com>
+ * @copyright  Copyright (c) 2008 - 2015, Justin Tadlock
+ * @link       http://themehybrid.com/hybrid-core
+ * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ */
 
 /* Add the layout meta box on the 'add_meta_boxes' hook. */
 add_action( 'add_meta_boxes', 'hybrid_add_post_layout_meta_box', 10, 2 );
@@ -8,12 +18,29 @@ add_action( 'save_post',       'hybrid_save_post_layout', 10, 2 );
 add_action( 'add_attachment',  'hybrid_save_post_layout'        );
 add_action( 'edit_attachment', 'hybrid_save_post_layout'        );
 
+/**
+ * Adds the layout meta box.
+ *
+ * @since  3.0.0
+ * @access public
+ * @param  string  $post_type
+ * @param  object  $post
+ * @return void
+ */
 function hybrid_add_post_layout_meta_box( $post_type ) {
 
 	if ( current_theme_supports( 'theme-layouts', 'post_meta' ) && post_type_supports( $post_type, 'theme-layouts' ) && current_user_can( 'edit_theme_options' ) )
 		add_meta_box( 'hybrid-post-layout', __( 'Layout', 'hybrid-core' ), 'hybrid_post_layout_meta_box', $post_type, 'side', 'default' );
 }
-
+/**
+ * Callback function for displaying the layout meta box.
+ *
+ * @since  3.0.0
+ * @access public
+ * @param  object  $object
+ * @param  array   $box
+ * @return void
+ */
 function hybrid_post_layout_meta_box( $post, $box ) {
 
 	/* Get the current post's layout. */
@@ -44,6 +71,15 @@ function hybrid_post_layout_meta_box( $post, $box ) {
 	</ul>
 <?php }
 
+/**
+ * Saves the post layout when submitted via the layout meta box.
+ *
+ * @since  3.0.0
+ * @access public
+ * @param  int      $post_id The ID of the current post being saved.
+ * @param  object   $post    The post object currently being saved.
+ * @return void|int
+ */
 function hybrid_save_post_layout( $post_id, $post = '' ) {
 
 	/* Fix for attachment save issue in WordPress 3.5. @link http://core.trac.wordpress.org/ticket/21963 */
