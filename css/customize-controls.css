@@ -33,8 +33,14 @@
 /* === Radio Image Control === */
 
 .customize-control-radio-image img {
-	border: 4px solid transparent;
+	padding: 1px;
+	border:  4px solid transparent;
 }
+
+	.customize-control-radio-image img:hover,
+	.customize-control-radio-image img:focus {
+		border-color: #ddd;
+	}
 
 	.customize-control-radio-image .ui-state-active img {
 		border-color: #00a0d2;
