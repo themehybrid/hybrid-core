@@ -77,7 +77,7 @@ function hybrid_customize_register( $wp_customize ) {
 		$wp_customize->add_setting(
 			'theme_layout',
 			array(
-				'default'           => get_theme_mod( 'theme_layout', hybrid_get_default_layout() ),
+				'default'           => hybrid_get_theme_layout(),
 				'sanitize_callback' => 'sanitize_html_class',
 				'transport'         => 'postMessage'
 			)
