@@ -17,7 +17,7 @@
  * @since  3.0.0
  * @access public
  */
-class Hybrid_Customize_Control_Theme_Layout extends WP_Customize_Control {
+class Hybrid_Customize_Control_Theme_Layout extends Hybrid_Customize_Control_Radio_Image {
 
 	/**
 	 * Set up our control.
@@ -36,12 +36,15 @@ class Hybrid_Customize_Control_Theme_Layout extends WP_Customize_Control {
 		/* Loop through each of the layouts and add it to the choices array with proper key/value pairs. */
 		foreach ( hybrid_get_layouts() as $layout ) {
 
-			if ( 'theme_layout' !== $id || true === $layout->is_global_layout )
-				$choices[ $layout->name ] = $layout->label;
+			if ( 'theme_layout' !== $id || true === $layout->is_global_layout ) {
+				$choices[ $layout->name ] = array(
+					'label' => $layout->label,
+					'url'   => sprintf( $layout->image, get_template_directory_uri(), get_stylesheet_directory_uri() )
+				);
+			}
 		}
 
 		/* Override specific arguments. */
-		$args['type']    = 'radio';
 		$args['choices'] = $choices;
 
 		/* Let WP handle this. */

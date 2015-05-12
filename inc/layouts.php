@@ -53,8 +53,15 @@ function hybrid_register_layouts() {
 		)
 	);
 
-	/* Hook for registering theme layouts. */
+	/* Hook for registering theme layouts. Theme should always register on this hook. */
 	do_action( 'hybrid_register_layouts' );
+
+	/* Get the default layout. */
+	$default = hybrid_get_default_layout();
+
+	/* Assign the default layout's image to the "default" layout. */
+	if ( 'default' !== $default && hybrid_layout_exists( $default ) )
+		hybrid_get_layout( 'default' )->image = hybrid_get_layout( $default )->image;
 }
 
 /**
