@@ -36,12 +36,9 @@ function hybrid_meta_box_post_add_template( $post_type, $post ) {
 	/* Get the post templates. */
 	$templates = hybrid_get_post_templates( $post_type );
 
-	/* If no post templates were found for this post type, bail. */
-	if ( empty( $templates ) || 'page' === $post_type )
-		return;
-
-	/* Add the meta box. */
-	add_meta_box( 'hybrid-post-template', __( 'Template', 'hybrid-core' ), 'hybrid_meta_box_post_display_template', $post_type, 'side', 'default' );
+	/* If there's templates, add the meta box. */
+	if ( !empty( $templates ) && 'page' !== $post_type )
+		add_meta_box( 'hybrid-post-template', __( 'Template', 'hybrid-core' ), 'hybrid_meta_box_post_display_template', $post_type, 'side', 'default' );
 }
 
 /**
@@ -53,30 +50,23 @@ function hybrid_meta_box_post_add_template( $post_type, $post ) {
  * @param  array   $box
  * @return void
  */
-function hybrid_meta_box_post_display_template( $object, $box ) {
-
-	/* Get the post type object. */
-	$post_type_object = get_post_type_object( $object->post_type );
+function hybrid_meta_box_post_display_template( $post, $box ) {
 
 	/* Get a list of available custom templates for the post type. */
-	$templates = hybrid_get_post_templates( $object->post_type );
+	$templates = hybrid_get_post_templates( $post->post_type );
 
-	wp_nonce_field( basename( __FILE__ ), 'hybrid-core-post-meta-box-template' ); ?>
+	wp_nonce_field( basename( __FILE__ ), 'hybrid-post-template-nonce' ); ?>
 
 	<p>
-		<?php if ( 0 != count( $templates ) ) : ?>
+		<select name="hybrid-post-template" class="widefat">
 
-			<select name="hybrid-post-template" id="hybrid-post-template" class="widefat">
+			<option value=""></option>
 
-				<option value=""></option>
+			<?php foreach ( $templates as $label => $template ) : ?>
+				<option value="<?php echo esc_attr( $template ); ?>" <?php selected( esc_attr( get_post_meta( $post->ID, "_wp_{$post->post_type}_template", true ) ), esc_attr( $template ) ); ?>><?php echo esc_html( $label ); ?></option>
+			<?php endforeach; ?>
 
-				<?php foreach ( $templates as $label => $template ) : ?>
-					<option value="<?php echo esc_attr( $template ); ?>" <?php selected( esc_attr( get_post_meta( $object->ID, "_wp_{$post_type_object->name}_template", true ) ), esc_attr( $template ) ); ?>><?php echo esc_html( $label ); ?></option>
-				<?php endforeach; ?>
-
-			</select>
-
-		<?php endif; ?>
+		</select>
 	</p>
 <?php }
 
@@ -97,7 +87,7 @@ function hybrid_meta_box_post_save_template( $post_id, $post = '' ) {
 		$post = get_post();
 
 	/* Verify the nonce before proceeding. */
-	if ( !isset( $_POST['hybrid-core-post-meta-box-template'] ) || !wp_verify_nonce( $_POST['hybrid-core-post-meta-box-template'], basename( __FILE__ ) ) )
+	if ( !isset( $_POST['hybrid-post-template-nonce'] ) || !wp_verify_nonce( $_POST['hybrid-post-template-nonce'], basename( __FILE__ ) ) )
 		return $post_id;
 
 	/* Return here if the template is not set. There's a chance it won't be if the post type doesn't have any templates. */
@@ -105,7 +95,7 @@ function hybrid_meta_box_post_save_template( $post_id, $post = '' ) {
 		return $post_id;
 
 	/* Get the posted meta value. */
-	$new_meta_value = strip_tags( $_POST['hybrid-post-template'] );
+	$new_meta_value = sanitize_text_field( $_POST['hybrid-post-template'] );
 
 	/* Set the $meta_key variable based off the post type name. */
 	$meta_key = "_wp_{$post->post_type}_template";
