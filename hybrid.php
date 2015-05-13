@@ -338,10 +338,6 @@ if ( !class_exists( 'Hybrid' ) ) {
 		 */
 		function default_filters() {
 
-			/* Remove bbPress theme compatibility if current theme supports bbPress. */
-			if ( current_theme_supports( 'bbpress' ) )
-				remove_action( 'bbp_init', 'bbp_setup_theme_compat', 8 );
-
 			/* Don't strip tags on single post titles. */
 			remove_filter( 'single_post_title', 'strip_tags' );
 
