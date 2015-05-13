@@ -12,6 +12,19 @@
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
+/* Don't strip tags on single post titles. */
+remove_filter( 'single_post_title', 'strip_tags' );
+
+/* Use same default filters as 'the_content' with a little more flexibility. */
+add_filter( 'hybrid_archive_description', array( $GLOBALS['wp_embed'], 'run_shortcode' ),   5  );
+add_filter( 'hybrid_archive_description', array( $GLOBALS['wp_embed'], 'autoembed'     ),   5  );
+add_filter( 'hybrid_archive_description',                               'wptexturize',       10 );
+add_filter( 'hybrid_archive_description',                               'convert_smilies',   15 );
+add_filter( 'hybrid_archive_description',                               'convert_chars',     20 );
+add_filter( 'hybrid_archive_description',                               'wpautop',           25 );
+add_filter( 'hybrid_archive_description',                               'do_shortcode',      30 );
+add_filter( 'hybrid_archive_description',                               'shortcode_unautop', 35 );
+
 /* Default excerpt more. */
 add_filter( 'excerpt_more', 'hybrid_excerpt_more', 5 );
 

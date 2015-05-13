@@ -16,6 +16,11 @@ add_filter( 'image_size_names_choose', 'hybrid_image_size_names_choose' );
 /* Adds ID3 tags for media display. */
 add_filter( 'wp_get_attachment_id3_keys', 'hybrid_attachment_id3_keys', 5, 3 );
 
+/* Filters for the audio transcript. */
+add_filter( 'hybrid_audio_transcript', 'wptexturize',   10 );
+add_filter( 'hybrid_audio_transcript', 'convert_chars', 20 );
+add_filter( 'hybrid_audio_transcript', 'wpautop',       25 );
+
 /**
  * Adds theme "post-thumbnail" size plus an internationalized version of the image size name to the 
  * "add media" modal.  This allows users to insert the image within their post content editor.
