@@ -66,46 +66,25 @@ function hybrid_get_post_templates( $post_type = 'post' ) {
 	if ( !empty( $hybrid->post_templates ) && isset( $hybrid->post_templates[ $post_type ] ) )
 		return $hybrid->post_templates[ $post_type ];
 
-	/* Else, set up an empty array to house the templates. */
-	else
-		$hybrid->post_templates = array();
-
-	/* Set up an empty post templates array. */
+	/* Set up an empty array to house the templates. */
 	$post_templates = array();
 
-	/* Get the post type object. */
-	$post_type_object = get_post_type_object( $post_type );
-
-	/* Get the theme (parent theme if using a child theme) object. */
-	$theme = wp_get_theme( get_template() );
-
 	/* Get the theme PHP files one level deep. */
-	$files = (array) $theme->get_files( 'php', 1 );
+	$files = wp_get_theme( get_template() )->get_files( 'php', 1 );
 
 	/* If a child theme is active, get its files and merge with the parent theme files. */
-	if ( is_child_theme() ) {
-		$child       = wp_get_theme();
-		$child_files = (array) $child->get_files( 'php', 1 );
-		$files       = array_merge( $files, $child_files );
-	}
+	if ( is_child_theme() )
+		$files = array_merge( $files, wp_get_theme()->get_files( 'php', 1 ) );
 
 	/* Loop through each of the PHP files and check if they are post templates. */
 	foreach ( $files as $file => $path ) {
 
 		/* Get file data based on the post type singular name (e.g., "Post Template", "Book Template", etc.). */
-		$headers = get_file_data(
-			$path,
-			array( 
-				"{$post_type_object->name} Template" => "{$post_type_object->name} Template",
-			)
-		);
-
-		/* Continue loop if the header is empty. */
-		if ( empty( $headers["{$post_type_object->name} Template"] ) )
-			continue;
+		$headers = get_file_data( $path, array( "{$post_type} Template" => "{$post_type} Template" ) );
 
 		/* Add the PHP filename and template name to the array. */
-		$post_templates[ $file ] = $headers["{$post_type_object->name} Template"];
+		if ( !empty( $headers["{$post_type} Template"] ) )
+			$post_templates[ $file ] = $headers["{$post_type} Template"];
 	}
 
 	/* Add the templates to the global $hybrid object. */
@@ -128,17 +107,18 @@ function hybrid_get_post_styles( $post_type = 'post' ) {
 	global $hybrid;
 
 	/* If stylesheets have already been loaded, return them. */
-	if ( !empty( $hyrid->post_stylesheets ) && isset( $hybrid->post_stylesheets[ $post_type ] ) )
-		return $hybrid->post_stylesheets[ $post_type ];
+	if ( !empty( $hyrid->post_styles ) && isset( $hybrid->post_styles[ $post_type ] ) )
+		return $hybrid->post_styles[ $post_type ];
 
 	/* Set up an empty styles array. */
-	$hybrid->post_stylesheets[ $post_type ] = array();
-
-	/* Get the theme object. */
-	$theme = wp_get_theme();
+	$hybrid->post_styles[ $post_type ] = array();
 
 	/* Get the theme CSS files two levels deep. */
-	$files = (array) $theme->get_files( 'css', 2, true );
+	$files = wp_get_theme( get_template() )->get_files( 'css', 2 );
+
+	/* If a child theme is active, get its files and merge with the parent theme files. */
+	if ( is_child_theme() )
+		$files = array_merge( $files, wp_get_theme()->get_files( 'css', 2 ) );
 
 	/* Loop through each of the CSS files and check if they are styles. */
 	foreach ( $files as $file => $path ) {
@@ -154,15 +134,15 @@ function hybrid_get_post_styles( $post_type = 'post' ) {
 
 		/* Add the CSS filename and template name to the array. */
 		if ( !empty( $headers['Style Name'] ) )
-			$hybrid->post_stylesheets[ $post_type ][ $file ] = $headers['Style Name'];
+			$hybrid->post_styles[ $post_type ][ $file ] = $headers['Style Name'];
 
 		elseif ( !empty( $headers["{$post_type} Style"] ) )
-			$hybrid->post_stylesheets[ $post_type ][ $file ] = $headers["{$post_type} Style"];
+			$hybrid->post_styles[ $post_type ][ $file ] = $headers["{$post_type} Style"];
 	}
 
 	/* Flip the array of styles. */
-	$hybrid->post_stylesheets[ $post_type ] = array_flip( $hybrid->post_stylesheets[ $post_type ] );
+	$hybrid->post_styles[ $post_type ] = array_flip( $hybrid->post_styles[ $post_type ] );
 
 	/* Return array of styles. */
-	return $hybrid->post_stylesheets[ $post_type ];
+	return $hybrid->post_styles[ $post_type ];
 }
