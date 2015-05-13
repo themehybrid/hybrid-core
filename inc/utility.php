@@ -17,6 +17,10 @@ add_action( 'init', 'hybrid_add_post_type_support', 15 );
 /* Filters the title for untitled posts. */
 add_filter( 'the_title', 'hybrid_untitled_post' );
 
+/* Filters the archive title and description. */
+add_filter( 'get_the_archive_title',       'hybrid_archive_title_filter',       5 );
+add_filter( 'get_the_archive_description', 'hybrid_archive_description_filter', 5 );
+
 /**
  * This function is for adding extra support for features not default to the core post types.
  * Excerpts are added to the 'page' post type.  Comments and trackbacks are added for the
@@ -198,4 +202,93 @@ function hybrid_get_menu_name( $location ) {
  */
 function hybrid_get_min_suffix() {
 	return defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+}
+
+/**
+ * Filters `get_the_archve_title` to add better archive titles than core.
+ *
+ * @since  3.0.0
+ * @access public
+ * @param  string  $title
+ * @return string
+ */
+function hybrid_archive_title_filter( $title ) {
+
+	if ( is_home() && !is_front_page() )
+		$title = get_post_field( 'post_title', get_queried_object_id() );
+
+	elseif ( is_category() ) 
+		$title = single_cat_title( '', false );
+
+	elseif ( is_tag() )
+		$title = single_tag_title( '', false );
+
+	elseif ( is_tax() )
+		$title = single_term_title( '', false );
+
+	elseif ( is_author() )
+		$title = hybrid_get_single_author_title();
+
+	elseif ( is_search() )
+		$title = hybrid_get_search_title();
+
+	elseif ( is_post_type_archive() )
+		$title = post_type_archive_title( '', false );
+
+	elseif ( get_query_var( 'minute' ) && get_query_var( 'hour' ) )
+		$title = hybrid_get_single_minute_hour_title();
+
+	elseif ( get_query_var( 'minute' ) )
+		$title = hybrid_get_single_minute_title();
+
+	elseif ( get_query_var( 'hour' ) )
+		$title = hybrid_get_single_hour_title();
+
+	elseif ( is_day() )
+		$title = hybrid_get_single_day_title();
+
+	elseif ( get_query_var( 'w' ) )
+		$title = hybrid_get_single_week_title();
+
+	elseif ( is_month() )
+		$title = single_month_title( ' ', false );
+
+	elseif ( is_year() )
+		$title = hybrid_get_single_year_title();
+
+	elseif ( is_archive() )
+		$title = hybrid_get_single_archive_title();
+
+	return apply_filters( 'hybrid_archive_title', $title );
+}
+
+/**
+ * Filters `get_the_archve_description` to add better archive descriptions than core.
+ *
+ * @since  3.0.0
+ * @access public
+ * @param  string  $desc
+ * @return string
+ */
+function hybrid_archive_description_filter( $desc ) {
+
+	if ( is_home() && !is_front_page() )
+		$desc = get_post_field( 'post_content', get_queried_object_id(), 'raw' );
+
+	elseif ( is_category() )
+		$desc = get_term_field( 'description', get_queried_object_id(), 'category', 'raw' );
+
+	elseif ( is_tag() )
+		$desc = get_term_field( 'description', get_queried_object_id(), 'post_tag', 'raw' );
+
+	elseif ( is_tax() )
+		$desc = get_term_field( 'description', get_queried_object_id(), get_query_var( 'taxonomy' ), 'raw' );
+
+	elseif ( is_author() )
+		$desc = get_the_author_meta( 'description', get_query_var( 'author' ) );
+
+	elseif ( is_post_type_archive() )
+		$desc = get_post_type_object( get_query_var( 'post_type' ) )->description;
+
+	return apply_filters( 'hybrid_archive_description', $desc );
 }

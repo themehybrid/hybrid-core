@@ -30,9 +30,9 @@ add_filter( 'hybrid_attr_site-title',       'hybrid_attr_site_title',       5 );
 add_filter( 'hybrid_attr_site-description', 'hybrid_attr_site_description', 5 );
 
 /* Loop attributes. */
-add_filter( 'hybrid_attr_loop-meta',        'hybrid_attr_loop_meta',        5 );
-add_filter( 'hybrid_attr_loop-title',       'hybrid_attr_loop_title',       5 );
-add_filter( 'hybrid_attr_loop-description', 'hybrid_attr_loop_description', 5 );
+add_filter( 'hybrid_attr_archive-header',      'hybrid_attr_archive_header',      5 );
+add_filter( 'hybrid_attr_archive-title',       'hybrid_attr_archive_title',       5 );
+add_filter( 'hybrid_attr_archive-description', 'hybrid_attr_archive_description', 5 );
 
 /* Post-specific attributes. */
 add_filter( 'hybrid_attr_post',            'hybrid_attr_post',            5    );
@@ -313,17 +313,17 @@ function hybrid_attr_site_description( $attr ) {
 /* === loop === */
 
 /**
- * Loop meta attributes.
+ * Archive header attributes.
  *
- * @since  2.0.0
+ * @since  3.0.0
  * @access public
  * @param  array   $attr
  * @param  string  $context
  * @return array
  */
-function hybrid_attr_loop_meta( $attr ) {
+function hybrid_attr_archive_header( $attr ) {
 
-	$attr['class']     = 'loop-meta';
+	$attr['class']     = 'archive-header';
 	$attr['itemscope'] = 'itemscope';
 	$attr['itemtype']  = 'http://schema.org/WebPageElement';
 
@@ -331,34 +331,34 @@ function hybrid_attr_loop_meta( $attr ) {
 }
 
 /**
- * Loop title attributes.
+ * Archive title attributes.
  *
- * @since  2.0.0
+ * @since  3.0.0
  * @access public
  * @param  array   $attr
  * @param  string  $context
  * @return array
  */
-function hybrid_attr_loop_title( $attr ) {
+function hybrid_attr_archive_title( $attr ) {
 
-	$attr['class']     = 'loop-title';
+	$attr['class']     = 'archive-title';
 	$attr['itemprop']  = 'headline';
 
 	return $attr;
 }
 
 /**
- * Loop description attributes.
+ * Archive description attributes.
  *
- * @since  2.0.0
+ * @since  3.0.0
  * @access public
  * @param  array   $attr
  * @param  string  $context
  * @return array
  */
-function hybrid_attr_loop_description( $attr ) {
+function hybrid_attr_archive_description( $attr ) {
 
-	$attr['class']     = 'loop-description';
+	$attr['class']     = 'archive-description';
 	$attr['itemprop']  = 'text';
 
 	return $attr;

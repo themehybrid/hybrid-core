@@ -39,6 +39,66 @@ function loop_pagination( $args = array() ) {
 	return isset( $args['echo'] ) && false === $args['echo'] ? get_the_posts_pagination( $args ) : the_posts_pagination( $args );
 }
 
+/**
+ * Outputs the loop title.
+ *
+ * @since      2.0.0
+ * @deprecated 3.0.0
+ * @access     public
+ * @return     void
+ */
+function hybrid_loop_title() {
+	_deprecated_function( __FUNCTION__, '3.0.0', 'the_archive_title()' );
+
+	the_archive_title();
+}
+
+/**
+ * Gets the loop title.  This function should only be used on archive-type pages, such as archive, blog, and 
+ * search results pages.  It outputs the title of the page.
+ *
+ * @link       http://core.trac.wordpress.org/ticket/21995
+ * @since      2.0.0
+ * @deprecated 3.0.0
+ * @access     public
+ * @return     string
+ */
+function hybrid_get_loop_title() {
+	_deprecated_function( __FUNCTION__, '3.0.0', 'get_the_archive_title()' );
+
+	return get_the_archive_title();
+}
+
+/**
+ * Outputs the loop description.
+ *
+ * @since      2.0.0
+ * @deprecated 3.0.0
+ * @access     public
+ * @return     void
+ */
+function hybrid_loop_description() {
+	_deprecated_function( __FUNCTION__, '3.0.0', 'the_archive_description()' );
+
+	the_archive_description();
+}
+
+/**
+ * Gets the loop description.  This function should only be used on archive-type pages, such as archive, blog, and 
+ * search results pages.  It outputs the description of the page.
+ *
+ * @link       http://core.trac.wordpress.org/ticket/21995
+ * @since      2.0.0
+ * @deprecated 3.0.0
+ * @access     public
+ * @return     string
+ */
+function hybrid_get_loop_description() {
+	_deprecated_function( __FUNCTION__, '3.0.0', 'get_the_archive_description()' );
+
+	return get_the_archive_description();
+}
+
 /* === Removed Functions === */
 
 /* Fuctions removed in the 3.0 branch. */
@@ -100,6 +160,9 @@ function hybrid_site_link_shortcode() {}
 function hybrid_wp_link_shortcode() {}
 function hybrid_theme_link_shortcode() {}
 function hybrid_child_link_shortcode() {}
+function hybrid_attr_loop_meta() {}
+function hybrid_attr_loop_title() {}
+function hybrid_attr_loop_description() {}
 
 /* Functions removed in the 2.0 branch. */
 

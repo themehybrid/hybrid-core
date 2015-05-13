@@ -347,14 +347,14 @@ if ( !class_exists( 'Hybrid' ) ) {
 			remove_filter( 'single_post_title', 'strip_tags' );
 
 			/* Use same default filters as 'the_content' with a little more flexibility. */
-			add_filter( 'hybrid_loop_description', array( $wp_embed, 'run_shortcode' ),   5 );
-			add_filter( 'hybrid_loop_description', array( $wp_embed, 'autoembed'     ),   5 );
-			add_filter( 'hybrid_loop_description',                   'wptexturize',       10 );
-			add_filter( 'hybrid_loop_description',                   'convert_smilies',   15 );
-			add_filter( 'hybrid_loop_description',                   'convert_chars',     20 );
-			add_filter( 'hybrid_loop_description',                   'wpautop',           25 );
-			add_filter( 'hybrid_loop_description',                   'do_shortcode',      30 );
-			add_filter( 'hybrid_loop_description',                   'shortcode_unautop', 35 );
+			add_filter( 'hybrid_archive_description', array( $wp_embed, 'run_shortcode' ),   5 );
+			add_filter( 'hybrid_archive_description', array( $wp_embed, 'autoembed'     ),   5 );
+			add_filter( 'hybrid_archive_description',                   'wptexturize',       10 );
+			add_filter( 'hybrid_archive_description',                   'convert_smilies',   15 );
+			add_filter( 'hybrid_archive_description',                   'convert_chars',     20 );
+			add_filter( 'hybrid_archive_description',                   'wpautop',           25 );
+			add_filter( 'hybrid_archive_description',                   'do_shortcode',      30 );
+			add_filter( 'hybrid_archive_description',                   'shortcode_unautop', 35 );
 
 			/* Filters for the audio transcript. */
 			add_filter( 'hybrid_audio_transcript', 'wptexturize',   10 );
