@@ -174,12 +174,9 @@ class Hybrid_Media_Meta {
 			$this->items['focal_length'] = array( sprintf( esc_html__( '%s mm', 'hybrid-core' ), absint( $this->meta['image_meta']['focal_length'] ) ), esc_html__( 'Focal Length', 'hybrid-core' ) );
 
 		/* If an ISO is set, add it to the $items array. */
-		if ( !empty( $this->meta['image_meta']['iso'] ) ) {
-			$this->items['iso'] = array(
-				absint( $this->meta['image_meta']['iso'] ), 
-				'<abbr title="' . esc_html__( 'International Organization for Standardization', 'hybrid-core' ) . '">' . esc_html__( 'ISO', 'hybrid-core' ) . '</abbr>'
-			);
-		}
+		if ( !empty( $this->meta['image_meta']['iso'] ) )
+			/* Translators: ISO is an abbreviation for International Organization for Standardization. */
+			$this->items['iso'] = array( absint( $this->meta['image_meta']['iso'] ), esc_html__( 'ISO', 'hybrid-core' ) );
 
 		/* If a shutter speed is given, format the float into a fraction and add it to the $items array. */
 		if ( !empty( $this->meta['image_meta']['shutter_speed'] ) ) {
