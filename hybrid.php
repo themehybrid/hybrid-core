@@ -118,7 +118,7 @@ if ( !class_exists( 'Hybrid' ) ) {
 			define( 'HYBRID_INC', trailingslashit( HYBRID_DIR . 'inc' ) );
 
 			/* Sets the path to the core framework extensions directory. */
-			define( 'HYBRID_EXTENSIONS', trailingslashit( HYBRID_DIR . 'extensions' ) );
+			define( 'HYBRID_EXT', trailingslashit( HYBRID_DIR . 'ext' ) );
 
 			/* Sets the path to the core framework customize directory. */
 			define( 'HYBRID_CUSTOMIZE', trailingslashit( HYBRID_DIR . 'customize' ) );
@@ -303,13 +303,13 @@ if ( !class_exists( 'Hybrid' ) ) {
 		function extensions() {
 
 			/* Load the Breadcrumb Trail extension if supported. */
-			require_if_theme_supports( 'breadcrumb-trail', HYBRID_EXTENSIONS . 'breadcrumb-trail.php' );
+			require_if_theme_supports( 'breadcrumb-trail', HYBRID_EXT . 'breadcrumb-trail.php' );
 
 			/* Load the Cleaner Gallery extension if supported. */
-			require_if_theme_supports( 'cleaner-gallery', HYBRID_EXTENSIONS . 'cleaner-gallery.php' );
+			require_if_theme_supports( 'cleaner-gallery', HYBRID_EXT . 'cleaner-gallery.php' );
 
 			/* Load the Get the Image extension if supported. */
-			require_if_theme_supports( 'get-the-image', HYBRID_EXTENSIONS . 'get-the-image.php' );
+			require_if_theme_supports( 'get-the-image', HYBRID_EXT . 'get-the-image.php' );
 		}
 
 		/**
