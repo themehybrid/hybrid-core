@@ -75,7 +75,7 @@ function hybrid_register_layouts() {
  * @return void
  */
 function hybrid_register_layout( $name, $args = array() ) {
-	hybrid_layouts()->register( $name, $args );
+	hybrid_layouts()->register_layout( $name, $args );
 }
 
 /**
@@ -88,7 +88,7 @@ function hybrid_register_layout( $name, $args = array() ) {
  * @return void
  */
 function hybrid_unregister_layout( $name ) {
-	hybrid_layouts()->unregister( $name );
+	hybrid_layouts()->unregister_layout( $name );
 }
 
 /**
@@ -101,7 +101,7 @@ function hybrid_unregister_layout( $name ) {
  * @return bool
  */
 function hybrid_layout_exists( $name ) {
-	return hybrid_layouts()->exists( $name );
+	return hybrid_layouts()->layout_exists( $name );
 }
 
 /**
@@ -125,7 +125,7 @@ function hybrid_get_layouts() {
  * @return object|bool
  */
 function hybrid_get_layout( $name ) {
-	return hybrid_layouts()->get( $name );
+	return hybrid_layouts()->get_layout( $name );
 }
 
 /**

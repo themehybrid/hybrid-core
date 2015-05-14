@@ -54,9 +54,9 @@ class Hybrid_Layouts {
 	 * }
 	 * @return void
 	 */
-	public function register( $name, $args = array() ) {
+	public function register_layout( $name, $args = array() ) {
 
-		if ( ! $this->exists( $name ) ) {
+		if ( ! $this->layout_exists( $name ) ) {
 
 			$name = sanitize_html_class( $name );
 
@@ -86,9 +86,9 @@ class Hybrid_Layouts {
 	 * @param  string  $name
 	 * @return void
 	 */
-	public function unregister( $name ) {
+	public function unregister_layout( $name ) {
 
-		if ( $this->exists( $name ) && false === $this->get( $name )->_internal )
+		if ( $this->layout_exists( $name ) && false === $this->get( $name )->_internal )
 			unset( $this->layouts[ $name ] );
 	}
 
@@ -100,7 +100,7 @@ class Hybrid_Layouts {
 	 * @param  string  $name
 	 * @return bool
 	 */
-	public function exists( $name ) {
+	public function layout_exists( $name ) {
 
 		return isset( $this->layouts[ $name ] );
 	}
@@ -113,9 +113,9 @@ class Hybrid_Layouts {
 	 * @param  string  $name
 	 * @return object|bool
 	 */
-	public function get( $name ) {
+	public function get_layout( $name ) {
 
-		return $this->exists( $name ) ? $this->layouts[ $name ] : false;
+		return $this->layout_exists( $name ) ? $this->layouts[ $name ] : false;
 	}
 
 	/**
