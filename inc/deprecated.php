@@ -163,6 +163,7 @@ function hybrid_child_link_shortcode() {}
 function hybrid_attr_loop_meta() {}
 function hybrid_attr_loop_title() {}
 function hybrid_attr_loop_description() {}
+function hybrid_admin_setup() {}
 
 /* Functions removed in the 2.0 branch. */
 

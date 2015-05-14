@@ -11,26 +11,13 @@
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
-/* Add the admin setup function to the 'admin_menu' hook. */
-add_action( 'admin_menu', 'hybrid_admin_setup' );
+/* Load the post meta boxes on the new post and edit post screens. */
+add_action( 'load-post.php',     'hybrid_admin_load_post_meta_boxes' );
+add_action( 'load-post-new.php', 'hybrid_admin_load_post_meta_boxes' );
 
 /* Register scripts and styles. */
 add_action( 'admin_enqueue_scripts', 'hybrid_admin_register_scripts', 0 );
 add_action( 'admin_enqueue_scripts', 'hybrid_admin_register_styles',  0 );
-
-/**
- * Sets up the adminstration functionality for the framework and themes.
- *
- * @since  1.3.0
- * @access public
- * @return void
- */
-function hybrid_admin_setup() {
-
-	/* Load the post meta boxes on the new post and edit post screens. */
-	add_action( 'load-post.php',     'hybrid_admin_load_post_meta_boxes' );
-	add_action( 'load-post-new.php', 'hybrid_admin_load_post_meta_boxes' );
-}
 
 /**
  * Loads the core post meta box files on the 'load-post.php' action hook.  Each meta box file is only loaded if 
