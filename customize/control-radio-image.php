@@ -75,7 +75,7 @@ class Hybrid_Customize_Control_Radio_Image extends WP_Customize_Control {
 
 				<label for="<?php echo esc_attr( "{$this->id}-{$value}" ); ?>">
 					<span class="screen-reader-text"><?php echo esc_html( $args['label'] ); ?></span>
-					<img src="<?php echo esc_url( sprintf( $args['url'], get_template_directory_uri(), get_stylesheet_directory_uri() ) ); ?>" alt="<?php echo esc_attr( $args['label'] ); ?>" title="<?php echo esc_attr( $args['label'] ); ?>" />
+					<img src="<?php echo esc_url( sprintf( $args['url'], get_template_directory_uri(), get_stylesheet_directory_uri() ) ); ?>" alt="<?php echo esc_attr( $args['label'] ); ?>" />
 				</label>
 
 			<?php endforeach; ?>
