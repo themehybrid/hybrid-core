@@ -29,8 +29,29 @@ add_action( 'edit_attachment', 'hybrid_save_post_layout'        );
  */
 function hybrid_add_post_layout_meta_box( $post_type ) {
 
-	if ( current_theme_supports( 'theme-layouts', 'post_meta' ) && post_type_supports( $post_type, 'theme-layouts' ) && current_user_can( 'edit_theme_options' ) )
+	if ( current_theme_supports( 'theme-layouts', 'post_meta' ) && post_type_supports( $post_type, 'theme-layouts' ) && current_user_can( 'edit_theme_options' ) ) {
+
+		/* Add meta box. */
 		add_meta_box( 'hybrid-post-layout', __( 'Layout', 'hybrid-core' ), 'hybrid_post_layout_meta_box', $post_type, 'side', 'default' );
+
+		/* Load scripts/styles. */
+		add_action( 'admin_enqueue_scripts', 'hybrid_post_layout_enqueue', 5 );
+	}
+}
+
+/**
+ * Loads the scripts/styles for the layout meta box.
+ *
+ * @since  3.0.0
+ * @access public
+ * @param  string  $post_type
+ * @param  object  $post
+ * @return void
+ */
+function hybrid_post_layout_enqueue() {
+	wp_enqueue_script( 'jquery-ui-button' );
+	wp_enqueue_script( 'hybrid-admin'     );
+	wp_enqueue_style(  'hybrid-admin'     );
 }
 
 /**
@@ -49,27 +70,25 @@ function hybrid_post_layout_meta_box( $post, $box ) {
 
 	$post_layout = !empty( $post_layout ) ? $post_layout : 'default';
 
-	$choices = array();
-
-	/* Loop through each of the layouts and add it to the choices array with proper key/value pairs. */
-	foreach ( hybrid_get_layouts() as $layout ) {
-
-		if ( true === $layout->is_post_layout )
-			$choices[ $layout->name ] = $layout->label;
-	}
-
 	wp_nonce_field( basename( __FILE__ ), 'hybrid-post-layout-nonce' ); ?>
 
-	<ul>
-		<?php foreach ( $choices as $value => $label ) : ?>
-			<li>
-				<label>
-					<input type="radio" name="hybrid-post-layout" value="<?php echo esc_attr( $value ); ?>" <?php checked( $post_layout, $value ); ?> /> 
-					<?php echo esc_html( $label ); ?>
+	<div class="buttonset">
+
+		<?php foreach ( hybrid_get_layouts() as $layout ) : ?>
+
+			<?php if ( true === $layout->is_post_layout && $layout->image ) : ?>
+
+				<input type="radio" value="<?php echo esc_attr( $layout->name ); ?>" name="hybrid-post-layout" id="<?php echo esc_attr( "hybrid-post-layout-{$layout->name}" ); ?>" <?php checked( $post_layout, $layout->name ); ?> /> 
+
+				<label for="<?php echo esc_attr( "hybrid-post-layout-{$layout->name}" ); ?>">
+					<span class="screen-reader-text"><?php echo esc_html( $layout->label ); ?></span>
+					<img src="<?php echo esc_url( sprintf( $layout->image, get_template_directory_uri(), get_stylesheet_directory_uri() ) ); ?>" alt="<?php echo esc_attr( $layout->label ); ?>" />
 				</label>
-			</li>
+
+			<?php endif; ?>
+
 		<?php endforeach; ?>
-	</ul>
+	</div>
 <?php }
 
 /**

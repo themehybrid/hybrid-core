@@ -1,0 +1,19 @@
+/**
+ * Admin Stylesheet.
+ */
+
+/* === Radio Image Control (Post Layout) === */
+
+#hybrid-post-layout img {
+	padding: 1px;
+	border:  4px solid transparent;
+}
+
+	#hybrid-post-layout img:hover,
+	#hybrid-post-layout img:focus {
+		border-color: #ddd;
+	}
+
+	#hybrid-post-layout .ui-state-active img {
+		border-color: #00a0d2;
+	}
