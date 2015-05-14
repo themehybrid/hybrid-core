@@ -77,7 +77,7 @@ function hybrid_get_image_size_links() {
 		if ( !empty( $image ) && ( true === $image[3] || 'full' == $size ) ) {
 
 			/* Translators: Media dimensions - 1 is width and 2 is height. */
-			$label = sprintf( __( '%1$s &#215; %2$s', 'hybrid-core' ), number_format_i18n( absint( $image[1] ) ), number_format_i18n( absint( $image[2] ) ) );
+			$label = sprintf( esc_html__( '%1$s &#215; %2$s', 'hybrid-core' ), number_format_i18n( absint( $image[1] ) ), number_format_i18n( absint( $image[2] ) ) );
 
 			$links[] = sprintf( '<a class="image-size-link">%s</a>', $label );
 		}

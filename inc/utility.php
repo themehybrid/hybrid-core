@@ -97,7 +97,7 @@ function hybrid_untitled_post( $title ) {
 	if ( empty( $title ) && !is_singular() && in_the_loop() && !is_admin() ) {
 
 		/* Translators: Used as a placeholder for untitled posts on non-singular views. */
-		$title = __( '(Untitled)', 'hybrid-core' );
+		$title = esc_html__( '(Untitled)', 'hybrid-core' );
 	}
 
 	return $title;

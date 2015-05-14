@@ -151,33 +151,33 @@ class Hybrid_Media_Meta {
 
 			$this->items['dimensions'] = array(
 				/* Translators: Media dimensions - 1 is width and 2 is height. */
-				'<a href="' . esc_url( wp_get_attachment_url() ) . '">' . sprintf( __( '%1$s &#215; %2$s', 'hybrid-core' ), number_format_i18n( absint( $this->meta['width'] ) ), number_format_i18n( absint( $this->meta['height'] ) ) ) . '</a>',
-				__( 'Dimensions', 'hybrid-core' )
+				'<a href="' . esc_url( wp_get_attachment_url() ) . '">' . sprintf( esc_html__( '%1$s &#215; %2$s', 'hybrid-core' ), number_format_i18n( absint( $this->meta['width'] ) ), number_format_i18n( absint( $this->meta['height'] ) ) ) . '</a>',
+				esc_html__( 'Dimensions', 'hybrid-core' )
 			);
 		}
 
 		/* If a timestamp exists, add it to the $items array. */
 		if ( !empty( $this->meta['image_meta']['created_timestamp'] ) )
-			$this->items['created_timestamp'] = array( date_i18n( get_option( 'date_format' ), strip_tags( $this->meta['image_meta']['created_timestamp'] ) ), __( 'Date', 'hybrid-core' ) );
+			$this->items['created_timestamp'] = array( date_i18n( get_option( 'date_format' ), strip_tags( $this->meta['image_meta']['created_timestamp'] ) ), esc_html__( 'Date', 'hybrid-core' ) );
 
 		/* If a camera exists, add it to the $items array. */
 		if ( !empty( $this->meta['image_meta']['camera'] ) )
-			$this->items['camera'] = array( esc_html( $this->meta['image_meta']['camera'] ), __( 'Camera', 'hybrid-core' ) );
+			$this->items['camera'] = array( esc_html( $this->meta['image_meta']['camera'] ), esc_html__( 'Camera', 'hybrid-core' ) );
 
 		/* If an aperture exists, add it to the $items array. */
 		if ( !empty( $this->meta['image_meta']['aperture'] ) )
-			$this->items['aperture'] = array( sprintf( '<sup>f</sup>&#8260;<sub>%s</sub>', absint( $this->meta['image_meta']['aperture'] ) ), __( 'Aperture', 'hybrid-core' ) );
+			$this->items['aperture'] = array( sprintf( '<sup>f</sup>&#8260;<sub>%s</sub>', absint( $this->meta['image_meta']['aperture'] ) ), esc_html__( 'Aperture', 'hybrid-core' ) );
 
 		/* If a focal length is set, add it to the $items array. */
 		if ( !empty( $this->meta['image_meta']['focal_length'] ) )
 			/* Translators: Camera focal length. */
-			$this->items['focal_length'] = array( sprintf( __( '%s mm', 'hybrid-core' ), absint( $this->meta['image_meta']['focal_length'] ) ), __( 'Focal Length', 'hybrid-core' ) );
+			$this->items['focal_length'] = array( sprintf( esc_html__( '%s mm', 'hybrid-core' ), absint( $this->meta['image_meta']['focal_length'] ) ), esc_html__( 'Focal Length', 'hybrid-core' ) );
 
 		/* If an ISO is set, add it to the $items array. */
 		if ( !empty( $this->meta['image_meta']['iso'] ) ) {
 			$this->items['iso'] = array(
 				absint( $this->meta['image_meta']['iso'] ), 
-				'<abbr title="' . __( 'International Organization for Standardization', 'hybrid-core' ) . '">' . __( 'ISO', 'hybrid-core' ) . '</abbr>'
+				'<abbr title="' . esc_html__( 'International Organization for Standardization', 'hybrid-core' ) . '">' . esc_html__( 'ISO', 'hybrid-core' ) . '</abbr>'
 			);
 		}
 
@@ -198,7 +198,7 @@ class Hybrid_Media_Meta {
 			}
 
 			/* Translators: Camera shutter speed. "sec" is an abbreviation for "seconds". */
-			$this->items['shutter_speed'] = array( sprintf( __( '%s sec', 'hybrid-core' ), $shutter_speed ), __( 'Shutter Speed', 'hybrid-core' ) );
+			$this->items['shutter_speed'] = array( sprintf( esc_html__( '%s sec', 'hybrid-core' ), $shutter_speed ), esc_html__( 'Shutter Speed', 'hybrid-core' ) );
 		}
 	}
 
@@ -281,10 +281,10 @@ class Hybrid_Media_Meta {
 		/* Dimensions (width x height in pixels). */
 		if ( !empty( $this->meta['width'] ) && !empty( $this->meta['height'] ) )
 			/* Translators: Media dimensions - 1 is width and 2 is height. */
-			$this->items['dimensions'] = array( sprintf( __( '%1$s &#215; %2$s', 'hybrid-core' ), number_format_i18n( absint( $this->meta['width'] ) ), number_format_i18n( absint( $this->meta['height'] ) ) ), __( 'Dimensions', 'hybrid-core' ) );
+			$this->items['dimensions'] = array( sprintf( esc_html__( '%1$s &#215; %2$s', 'hybrid-core' ), number_format_i18n( absint( $this->meta['width'] ) ), number_format_i18n( absint( $this->meta['height'] ) ) ), esc_html__( 'Dimensions', 'hybrid-core' ) );
 
 		/* File name.  We're linking this to the actual file URL. */
-		$this->items['file_name'] = array( '<a href="' . esc_url( wp_get_attachment_url( $this->args['post_id'] ) ) . '">' . basename( get_attached_file( $this->args['post_id'] ) ) . '</a>', __( 'File Name', 'hybrid-core' ) );
+		$this->items['file_name'] = array( '<a href="' . esc_url( wp_get_attachment_url( $this->args['post_id'] ) ) . '">' . basename( get_attached_file( $this->args['post_id'] ) ) . '</a>', esc_html__( 'File Name', 'hybrid-core' ) );
 
 		/* File size. */
 		if ( !empty( $this->meta['filesize'] ) )
@@ -292,7 +292,7 @@ class Hybrid_Media_Meta {
 
 		/* File type (the metadata for this can be incorrect, so we're just looking at the actual file). */
 		if ( preg_match( '/^.*?\.(\w+)$/', get_attached_file( $this->args['post_id'] ), $matches ) )
-			$this->items['file_type'] = array( esc_html( strtoupper( $matches[1] ) ), __( 'File Type', 'hybrid-core' ) );
+			$this->items['file_type'] = array( esc_html( strtoupper( $matches[1] ) ), esc_html__( 'File Type', 'hybrid-core' ) );
 
 		/* Mime type. */
 		if ( !empty( $this->meta['mime_type'] ) )

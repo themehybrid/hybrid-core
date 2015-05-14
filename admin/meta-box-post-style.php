@@ -32,7 +32,7 @@ function hybrid_add_post_style_meta_box( $post_type, $post ) {
 	$styles = hybrid_get_post_styles( $post_type );
 
 	if ( !empty( $styles ) && current_user_can( 'edit_theme_options' ) )
-		add_meta_box( 'hybrid-post-style', __( 'Stylesheet', 'hybrid-core' ), 'hybrid_post_style_meta_box', $post_type, 'side', 'default' );
+		add_meta_box( 'hybrid-post-style', esc_html__( 'Style', 'hybrid-core' ), 'hybrid_post_style_meta_box', $post_type, 'side', 'default' );
 }
 
 /**

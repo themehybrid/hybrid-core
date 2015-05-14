@@ -32,7 +32,7 @@ function hybrid_add_post_layout_meta_box( $post_type ) {
 	if ( current_theme_supports( 'theme-layouts', 'post_meta' ) && post_type_supports( $post_type, 'theme-layouts' ) && current_user_can( 'edit_theme_options' ) ) {
 
 		/* Add meta box. */
-		add_meta_box( 'hybrid-post-layout', __( 'Layout', 'hybrid-core' ), 'hybrid_post_layout_meta_box', $post_type, 'side', 'default' );
+		add_meta_box( 'hybrid-post-layout', esc_html__( 'Layout', 'hybrid-core' ), 'hybrid_post_layout_meta_box', $post_type, 'side', 'default' );
 
 		/* Load scripts/styles. */
 		add_action( 'admin_enqueue_scripts', 'hybrid_post_layout_enqueue', 5 );

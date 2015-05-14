@@ -34,7 +34,7 @@ function hybrid_image_size_names_choose( $sizes ) {
 
 	/* If the theme as set a custom post thumbnail size, give it a nice name. */
 	if ( has_image_size( 'post-thumbnail' ) )
-		$sizes['post-thumbnail'] = __( 'Post Thumbnail', 'hybrid-core' );
+		$sizes['post-thumbnail'] = esc_html__( 'Post Thumbnail', 'hybrid-core' );
 
 	/* Return the image size names. */
 	return $sizes;
@@ -55,20 +55,20 @@ function hybrid_attachment_id3_keys( $fields, $attachment, $context ) {
 
 	if ( 'display' === $context ) {
 
-		$fields['filesize']         = __( 'File Size', 'hybrid-core' );
-		$fields['mime_type']        = __( 'Mime Type', 'hybrid-core' );
-		$fields['length_formatted'] = __( 'Run Time',  'hybrid-core' );
+		$fields['filesize']         = esc_html__( 'File Size', 'hybrid-core' );
+		$fields['mime_type']        = esc_html__( 'Mime Type', 'hybrid-core' );
+		$fields['length_formatted'] = esc_html__( 'Run Time',  'hybrid-core' );
 	}
 
 	if ( hybrid_attachment_is_audio( $attachment->ID ) ) {
 
-		$fields['genre']        = __( 'Genre',    'hybrid-core' );
-		$fields['year']         = __( 'Year',     'hybrid-core' );
-		$fields['composer']     = __( 'Composer', 'hybrid-core' );
-		$fields['track_number'] = __( 'Track',    'hybrid-core' );
+		$fields['genre']        = esc_html__( 'Genre',    'hybrid-core' );
+		$fields['year']         = esc_html__( 'Year',     'hybrid-core' );
+		$fields['composer']     = esc_html__( 'Composer', 'hybrid-core' );
+		$fields['track_number'] = esc_html__( 'Track',    'hybrid-core' );
 
 		if ( 'display' === $context )
-			$fields['unsynchronised_lyric'] = __( 'Lyrics', 'hybrid-core' );
+			$fields['unsynchronised_lyric'] = esc_html__( 'Lyrics', 'hybrid-core' );
 	}
 
 	return $fields;
