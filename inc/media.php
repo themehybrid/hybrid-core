@@ -13,9 +13,6 @@
 /* Add all image sizes to the image editor to insert into post. */
 add_filter( 'image_size_names_choose', 'hybrid_image_size_names_choose' );
 
-/* Adds ID3 tags for media display. */
-add_filter( 'wp_get_attachment_id3_keys', 'hybrid_attachment_id3_keys', 5, 3 );
-
 /* Filters for the audio transcript. */
 add_filter( 'hybrid_audio_transcript', 'wptexturize',   10 );
 add_filter( 'hybrid_audio_transcript', 'convert_chars', 20 );
@@ -38,38 +35,4 @@ function hybrid_image_size_names_choose( $sizes ) {
 
 	/* Return the image size names. */
 	return $sizes;
-}
-
-/**
- * Creates custom labels for ID3 tags that are used on the front end of the site when displaying 
- * media within the theme, typically on attachment pages.
- *
- * @since  2.0.0
- * @access public
- * @param  array   $fields
- * @param  object  $attachment
- * @param  string  $context
- * @return array
- */
-function hybrid_attachment_id3_keys( $fields, $attachment, $context ) {
-
-	if ( 'display' === $context ) {
-
-		$fields['filesize']         = esc_html__( 'File Size', 'hybrid-core' );
-		$fields['mime_type']        = esc_html__( 'Mime Type', 'hybrid-core' );
-		$fields['length_formatted'] = esc_html__( 'Run Time',  'hybrid-core' );
-	}
-
-	if ( hybrid_attachment_is_audio( $attachment->ID ) ) {
-
-		$fields['genre']        = esc_html__( 'Genre',    'hybrid-core' );
-		$fields['year']         = esc_html__( 'Year',     'hybrid-core' );
-		$fields['composer']     = esc_html__( 'Composer', 'hybrid-core' );
-		$fields['track_number'] = esc_html__( 'Track',    'hybrid-core' );
-
-		if ( 'display' === $context )
-			$fields['unsynchronised_lyric'] = esc_html__( 'Lyrics', 'hybrid-core' );
-	}
-
-	return $fields;
 }
