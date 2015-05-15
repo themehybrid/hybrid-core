@@ -165,6 +165,7 @@ function hybrid_attr_loop_title() {}
 function hybrid_attr_loop_description() {}
 function hybrid_admin_setup() {}
 function hybrid_attachment_id3_keys() {}
+function hybrid_image_size_names_choose() {}
 
 /* Functions removed in the 2.0 branch. */
 
