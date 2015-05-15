@@ -15,18 +15,63 @@
  */
 
 /**
- * Wrapper function for the Hybrid_Media_Meta class.
- *
  * @since  2.0.0
  * @access public
  * @param  array   $args
  * @return string
  */
-function hybrid_media_meta( $args = array() ) {
+function hybrid_media_meta( $meta_key, $args = array() ) {
+	echo hybrid_get_media_meta( $meta_key, $args );
+}
 
-	$meta = new Hybrid_Media_Meta( $args );
+/**
+ * @since  3.0.0
+ */
+function hybrid_get_media_meta( $meta_key, $args = array() ) {
 
-	return $meta->display();
+	$args = wp_parse_args( $args, array( 'text' => '%s', 'before' => '', 'after' => '', 'wrap' => '<span %s>%s</span>' ) );
+
+	$meta = Hybrid_Media_Factory::get_instance()->get_meta( get_the_ID() )->$meta_key;
+
+	return $meta ? $args['before'] . sprintf( $args['wrap'], 'class="data"', sprintf( $args['text'], $meta ) ) . $args['after'] : '';
+}
+
+/**
+ * Creates and houses media meta objects.  Don't access this class directly.  Utilize the 
+ * `hybrid_media_meta()` or `hybrid_get_media_meta()` functions.
+ *
+ * @since  3.0.0
+ */
+class Hybrid_Media_Factory {
+
+	/**
+	 * @since  3.0.0
+	 */
+	public $media_objects = array();
+
+	/**
+	 * @since  3.0.0
+	 */
+	public function get_meta( $post_id ) {
+
+		if ( !isset( $this->media_objects[ $post_id ] ) )
+			$this->media_objects[ $post_id ] = new Hybrid_Media_Meta( $post_id );
+
+		return $this->media_objects[ $post_id ];
+	}
+
+	/**
+	 * @since  3.0.0
+	 */
+	public static function get_instance() {
+
+		static $instance = null;
+
+		if ( is_null( $instance ) )
+			$instance = new Hybrid_Media_Factory;
+
+		return $instance;
+	}
 }
 
 /**
@@ -44,7 +89,7 @@ class Hybrid_Media_Meta {
 	 * @access public
 	 * @var    array
 	 */
-	public $args  = array();
+	public $post_id  = 0;
 
 	/**
 	 * Metadata from the wp_get_attachment_metadata() function.
@@ -56,13 +101,99 @@ class Hybrid_Media_Meta {
 	public $meta  = array();
 
 	/**
-	 * Array of items found and formatted.
-	 *
-	 * @since  2.0.0
-	 * @access public
-	 * @var    array
+	 * @since  3.0.0
 	 */
-	public $items = array();
+	public $dimensions = '';
+
+	/**
+	 * @since  3.0.0
+	 */
+	public $created_timestamp = '';
+
+	/**
+	 * @since  3.0.0
+	 */
+	public $date = '';
+
+	/**
+	 * @since  3.0.0
+	 */
+	public $camera = '';
+
+	/**
+	 * @since  3.0.0
+	 */
+	public $aperture = '';
+
+	/**
+	 * @since  3.0.0
+	 */
+	public $focal_length = '';
+
+	/**
+	 * @since  3.0.0
+	 */
+	public $iso = '';
+
+	/**
+	 * @since  3.0.0
+	 */
+	public $shutter_speed = '';
+
+	/**
+	 * @since  3.0.0
+	 */
+	public $length_formatted = '';
+
+	/**
+	 * @since  3.0.0
+	 */
+	public $artist = '';
+
+	/**
+	 * @since  3.0.0
+	 */
+	public $composer = '';
+
+	/**
+	 * @since  3.0.0
+	 */
+	public $album = '';
+
+	/**
+	 * @since  3.0.0
+	 */
+	public $track_number = '';
+
+	/**
+	 * @since  3.0.0
+	 */
+	public $year = '';
+
+	/**
+	 * @since  3.0.0
+	 */
+	public $genre = '';
+
+	/**
+	 * @since  3.0.0
+	 */
+	public $file_name = '';
+
+	/**
+	 * @since  3.0.0
+	 */
+	public $file_size = '';
+
+	/**
+	 * @since  3.0.0
+	 */
+	public $file_type = '';
+
+	/**
+	 * @since  3.0.0
+	 */
+	public $mime_type = '';
 
 	/**
 	 * Sets up and runs the functionality for getting the attachment meta.
@@ -72,69 +203,22 @@ class Hybrid_Media_Meta {
 	 * @param  array   $args
 	 * @return void
 	 */
-	public function __construct( $args = array() ) {
+	public function __construct( $post_id ) {
 
-		$defaults = array(
-			'post_id' => get_the_ID(),
-			'labels'  => array(),
-			'echo'    => true,
-		);
-
-		$this->args = apply_filters( 'hybrid_media_meta_args', wp_parse_args( $args, $defaults ) );
-
-		/* Get the attachment metadata. */
-		$this->meta = wp_get_attachment_metadata( $this->args['post_id'] );
+		$this->post_id  = $post_id;
+		$this->meta     = wp_get_attachment_metadata( $this->post_id );
 
 		/* If the attachment is an image. */
-		if ( wp_attachment_is_image( $this->args['post_id'] ) )
+		if ( wp_attachment_is_image( $this->post_id ) )
 			$this->image_meta();
 
 		/* If the attachment is audio. */
-		elseif ( hybrid_attachment_is_audio( $this->args['post_id'] ) )
+		elseif ( hybrid_attachment_is_audio( $this->post_id ) )
 			$this->audio_meta();
 
 		/* If the attachment is video. */
-		elseif ( hybrid_attachment_is_video( $this->args['post_id'] ) )
+		elseif ( hybrid_attachment_is_video( $this->post_id ) )
 			$this->video_meta();
-	}
-
-	/**
-	 * Returns the array of formatted meta items.
-	 *
-	 * @since  2.0.0
-	 * @access public
-	 * @return array
-	 */
-	public function get_items() {
-		return $this->items;
-	}
-
-	/**
-	 * Returns or outputs a list of formatted attachment meta.
-	 *
-	 * @since  2.0.0
-	 * @access public
-	 * @return string
-	 */
-	public function display() {
-
-		$display = '';
-
-		/* If the items array isn't empty. */
-		if ( !empty( $this->items ) ) {
-
-			/* Format each of the items. */
-			foreach ( $this->items as $item )
-				$display .= sprintf( '<li><span class="prep">%s</span> <span class="data">%s</span></li>', $item[1], $item[0] );
-
-			/* Add the items to a list. */
-			$display = '<ul class="media-meta">' . $display . '</ul>';
-		}
-
-		if ( true === $this->args['echo'] )
-			echo $display;
-		else
-			return $display;
 	}
 
 	/**
@@ -146,37 +230,134 @@ class Hybrid_Media_Meta {
 	 */
 	public function image_meta() {
 
+		$this->dimensions();
+		$this->created_timestamp();
+		$this->camera();
+		$this->aperture();
+		$this->focal_length();
+		$this->iso();
+		$this->shutter_speed();
+	}
+
+	/**
+	 * Adds and formats audio metadata for the items array.
+	 *
+	 * Note that we're purposely leaving out the "transcript/lyrics" metadata in this instance.  This 
+	 * is because it doesn't fit in well with how other metadata works on display.  There's a separate 
+	 * function for that called `hybrid_get_audio_transcript()`.
+	 *
+	 * @since  2.0.0
+	 * @access public
+	 * @return void
+	 */
+	public function audio_meta() {
+
+		$this->length_formatted();
+		$this->artist();
+		$this->composer();
+		$this->album();
+		$this->track_number();
+		$this->year();
+		$this->genre();
+		$this->file_name();
+		$this->file_size();
+		$this->file_type();
+		$this->mime_type();
+	}
+
+	/**
+	 * Adds and formats video meta data for the items array.
+	 *
+	 * @since  2.0.0
+	 * @access public
+	 * @return void
+	 */
+	public function video_meta() {
+
+		$this->length_formatted();
+		$this->dimensions();
+		$this->file_name();
+		$this->file_size();
+		$this->file_type();
+		$this->mime_type();
+	}
+
+	/**
+	 * @since  3.0.0
+	 */
+	public function dimensions() {
+
 		/* If there's a width and height. */
 		if ( !empty( $this->meta['width'] ) && !empty( $this->meta['height'] ) ) {
 
-			$this->items['dimensions'] = array(
-				/* Translators: Media dimensions - 1 is width and 2 is height. */
-				'<a href="' . esc_url( wp_get_attachment_url() ) . '">' . sprintf( esc_html__( '%1$s &#215; %2$s', 'hybrid-core' ), number_format_i18n( absint( $this->meta['width'] ) ), number_format_i18n( absint( $this->meta['height'] ) ) ) . '</a>',
-				esc_html__( 'Dimensions', 'hybrid-core' )
+			/* Translators: Media dimensions - 1 is width and 2 is height. */
+			$dimensions = sprintf(
+				esc_html__( '%1$s &#215; %2$s', 'hybrid-core' ),
+				number_format_i18n( absint( $this->meta['width'] ) ), 
+				number_format_i18n( absint( $this->meta['height'] ) )
+			);
+
+			$this->dimensions = sprintf( '<a href="%s">%s</a>', esc_url( wp_get_attachment_url() ), $dimensions );
+		}
+	}
+
+	/**
+	 * @since  3.0.0
+	 */
+	public function created_timestamp() {
+
+		if ( !empty( $this->meta['image_meta']['created_timestamp'] ) ) {
+
+			$this->date = $this->created_timestamp = date_i18n(
+				get_option( 'date_format' ),
+				strip_tags( $this->meta['image_meta']['created_timestamp'] )
 			);
 		}
+	}
 
-		/* If a timestamp exists, add it to the $items array. */
-		if ( !empty( $this->meta['image_meta']['created_timestamp'] ) )
-			$this->items['created_timestamp'] = array( date_i18n( get_option( 'date_format' ), strip_tags( $this->meta['image_meta']['created_timestamp'] ) ), esc_html__( 'Date', 'hybrid-core' ) );
+	/**
+	 * @since  3.0.0
+	 */
+	public function camera() {
 
-		/* If a camera exists, add it to the $items array. */
 		if ( !empty( $this->meta['image_meta']['camera'] ) )
-			$this->items['camera'] = array( esc_html( $this->meta['image_meta']['camera'] ), esc_html__( 'Camera', 'hybrid-core' ) );
+			$this->camera = esc_html( $this->meta['image_meta']['camera'] );
+	}
 
-		/* If an aperture exists, add it to the $items array. */
+	/**
+	 * @since  3.0.0
+	 */
+	public function aperture() {
+
 		if ( !empty( $this->meta['image_meta']['aperture'] ) )
-			$this->items['aperture'] = array( sprintf( '<sup>f</sup>&#8260;<sub>%s</sub>', absint( $this->meta['image_meta']['aperture'] ) ), esc_html__( 'Aperture', 'hybrid-core' ) );
+			$this->aperture = sprintf( '<sup>f</sup>&#8260;<sub>%s</sub>', absint( $this->meta['image_meta']['aperture'] ) );
+	}
 
-		/* If a focal length is set, add it to the $items array. */
-		if ( !empty( $this->meta['image_meta']['focal_length'] ) )
-			/* Translators: Camera focal length. */
-			$this->items['focal_length'] = array( sprintf( esc_html__( '%s mm', 'hybrid-core' ), absint( $this->meta['image_meta']['focal_length'] ) ), esc_html__( 'Focal Length', 'hybrid-core' ) );
+	/**
+	 * @since  3.0.0
+	 */
+	public function focal_length() {
 
-		/* If an ISO is set, add it to the $items array. */
+		if ( !empty( $this->meta['image_meta']['focal_length'] ) ) {
+
+			/* Translators: %s is the camera focal length in millimeters. */
+			$this->focal_length = sprintf( esc_html__( '%s mm', 'hybrid-core' ), absint( $this->meta['image_meta']['focal_length'] ) );
+		}
+	}
+
+	/**
+	 * @since  3.0.0
+	 */
+	public function iso() {
+
 		if ( !empty( $this->meta['image_meta']['iso'] ) )
-			/* Translators: ISO is an abbreviation for International Organization for Standardization. */
-			$this->items['iso'] = array( absint( $this->meta['image_meta']['iso'] ), esc_html__( 'ISO', 'hybrid-core' ) );
+			$this->iso = absint( $this->meta['image_meta']['iso'] );
+	}
+
+	/**
+	 * @since  3.0.0
+	 */
+	public function shutter_speed() {
 
 		/* If a shutter speed is given, format the float into a fraction and add it to the $items array. */
 		if ( !empty( $this->meta['image_meta']['shutter_speed'] ) ) {
@@ -194,105 +375,110 @@ class Hybrid_Media_Meta {
 				$shutter_speed = $this->meta['image_meta']['shutter_speed'];
 			}
 
-			/* Translators: Camera shutter speed. "sec" is an abbreviation for "seconds". */
-			$this->items['shutter_speed'] = array( sprintf( esc_html__( '%s sec', 'hybrid-core' ), $shutter_speed ), esc_html__( 'Shutter Speed', 'hybrid-core' ) );
+			/* Translators: %s is the camera shutter speed. "sec" is an abbreviation for "seconds". */
+			$this->shutter_speed = sprintf( esc_html__( '%s sec', 'hybrid-core' ), $shutter_speed );
 		}
 	}
 
 	/**
-	 * Adds and formats audio metadata for the items array.
-	 *
-	 * Note that we're purposely leaving out the "transcript/lyrics" metadata in this instance.  This 
-	 * is because it doesn't fit in well with how other metadata works on display.  There's a separate 
-	 * function for that called `hybrid_get_audio_transcript()`.
-	 *
-	 * @since  2.0.0
-	 * @access public
-	 * @return void
+	 * @since  3.0.0
 	 */
-	public function audio_meta() {
+	public function length_formatted() {
 
-		/* Get ID3 keys (labels for metadata). */
-		$id3_keys = wp_get_attachment_id3_keys( get_post( $this->args['post_id'] ) );
-
-		/* Formated length of time the audio file runs. */
 		if ( !empty( $this->meta['length_formatted'] ) )
-			$this->items['length_formatted'] = array( esc_html( $this->meta['length_formatted'] ), $id3_keys['length_formatted'] );
-
-		/* Artist. */
-		if ( !empty( $this->meta['artist'] ) )
-			$this->items['artist'] = array( esc_html( $this->meta['artist'] ), $id3_keys['artist'] );
-
-		/* Composer. */
-		if ( !empty( $this->meta['composer'] ) )
-			$this->items['composer'] = array( esc_html( $this->meta['composer'] ), $id3_keys['composer'] );
-
-		/* Album. */
-		if ( !empty( $this->meta['album'] ) )
-			$this->items['album'] = array( esc_html( $this->meta['album'] ), $id3_keys['album'] );
-
-		/* Track number (should also be an album if this is set). */
-		if ( !empty( $this->meta['track_number'] ) )
-			$this->items['track_number'] = array( absint( $this->meta['track_number'] ), $id3_keys['track_number'] );
-
-		/* Year. */
-		if ( !empty( $this->meta['year'] ) )
-			$this->items['year'] = array( absint( $this->meta['year'] ), $id3_keys['year'] );
-
-		/* Genre. */
-		if ( !empty( $this->meta['genre'] ) )
-			$this->items['genre'] = array( esc_html( $this->meta['genre'] ), $id3_keys['genre'] );
-
-		/* File name.  We're linking this to the actual file URL. */
-		$this->items['file_name'] = array( '<a href="' . esc_url( wp_get_attachment_url( $this->args['post_id'] ) ) . '">' . basename( get_attached_file( $this->args['post_id'] ) ) . '</a>', __( 'File Name', 'hybrid-core' ) );
-
-		/* File size. */
-		if ( !empty( $this->meta['filesize'] ) )
-			$this->items['filesize'] = array( size_format( strip_tags( $this->meta['filesize'] ), 2 ), $id3_keys['filesize'] );
-
-		/* File type (the metadata for this can be incorrect, so we're just looking at the actual file). */
-		if ( preg_match( '/^.*?\.(\w+)$/', get_attached_file( $this->args['post_id'] ), $matches ) )
-			$this->items['file_type'] = array( esc_html( strtoupper( $matches[1] ) ), __( 'File Type', 'hybrid-core' ) );
-
-		/* Mime type. */
-		if ( !empty( $this->meta['mime_type'] ) )
-			$this->items['mime_type'] = array( esc_html( $this->meta['mime_type'] ), $id3_keys['mime_type'] );
+			$this->length_formatted = esc_html( $this->meta['length_formatted'] );
 	}
 
 	/**
-	 * Adds and formats video meta data for the items array.
-	 *
-	 * @since  2.0.0
-	 * @access public
-	 * @return void
+	 * @since  3.0.0
 	 */
-	public function video_meta() {
+	public function artist() {
 
-		/* Get ID3 keys (labels for metadata). */
-		$id3_keys = wp_get_attachment_id3_keys( get_post( $this->args['post_id'] ) );
+		if ( !empty( $this->meta['artist'] ) )
+			$this->artist = esc_html( $this->meta['artist'] );
+	}
 
-		/* Formated length of time the video file runs. */
-		if ( !empty( $this->meta['length_formatted'] ) )
-			$this->items['length_formatted'] = array( esc_html( $this->meta['length_formatted'] ), $id3_keys['length_formatted'] );
+	/**
+	 * @since  3.0.0
+	 */
+	public function composer() {
 
-		/* Dimensions (width x height in pixels). */
-		if ( !empty( $this->meta['width'] ) && !empty( $this->meta['height'] ) )
-			/* Translators: Media dimensions - 1 is width and 2 is height. */
-			$this->items['dimensions'] = array( sprintf( esc_html__( '%1$s &#215; %2$s', 'hybrid-core' ), number_format_i18n( absint( $this->meta['width'] ) ), number_format_i18n( absint( $this->meta['height'] ) ) ), esc_html__( 'Dimensions', 'hybrid-core' ) );
+		if ( !empty( $this->meta['composer'] ) )
+			$this->composer = esc_html( $this->meta['composer'] );
+	}
 
-		/* File name.  We're linking this to the actual file URL. */
-		$this->items['file_name'] = array( '<a href="' . esc_url( wp_get_attachment_url( $this->args['post_id'] ) ) . '">' . basename( get_attached_file( $this->args['post_id'] ) ) . '</a>', esc_html__( 'File Name', 'hybrid-core' ) );
+	/**
+	 * @since  3.0.0
+	 */
+	public function album() {
 
-		/* File size. */
+		if ( !empty( $this->meta['album'] ) )
+			$this->album = esc_html( $this->meta['album'] );
+	}
+
+	/**
+	 * @since  3.0.0
+	 */
+	public function track_number() {
+
+		if ( !empty( $this->meta['track_number'] ) )
+			$this->track_number = absint( $this->meta['track_number'] );
+	}
+
+	/**
+	 * @since  3.0.0
+	 */
+	public function year() {
+
+		if ( !empty( $this->meta['year'] ) )
+			$this->year = absint( $this->meta['year'] );
+	}
+
+	/**
+	 * @since  3.0.0
+	 */
+	public function genre() {
+
+		if ( !empty( $this->meta['genre'] ) )
+			$this->genre = esc_html( $this->meta['genre'] );
+	}
+
+	/**
+	 * @since  3.0.0
+	 */
+	public function file_name() {
+
+		$this->file_name = sprintf(
+			'<a href="%s">%s</a>',
+			esc_url( wp_get_attachment_url( $this->post_id ) ),
+			basename( get_attached_file( $this->post_id ) )
+		);
+	}
+
+	/**
+	 * @since  3.0.0
+	 */
+	public function file_size() {
+
 		if ( !empty( $this->meta['filesize'] ) )
-			$this->items['filesize'] = array( size_format( strip_tags( $this->meta['filesize'] ), 2 ), $id3_keys['filesize'] );
+			$this->filesize = size_format( strip_tags( $this->meta['filesize'] ), 2 );
+	}
 
-		/* File type (the metadata for this can be incorrect, so we're just looking at the actual file). */
-		if ( preg_match( '/^.*?\.(\w+)$/', get_attached_file( $this->args['post_id'] ), $matches ) )
-			$this->items['file_type'] = array( esc_html( strtoupper( $matches[1] ) ), esc_html__( 'File Type', 'hybrid-core' ) );
+	/**
+	 * @since  3.0.0
+	 */
+	public function file_type() {
 
-		/* Mime type. */
+		if ( preg_match( '/^.*?\.(\w+)$/', get_attached_file( $this->post_id ), $matches ) )
+			$this->file_type = esc_html( strtoupper( $matches[1] ) );
+	}
+
+	/**
+	 * @since  3.0.0
+	 */
+	public function mime_type() {
+
 		if ( !empty( $this->meta['mime_type'] ) )
-			$this->items['mime_type'] = array( esc_html( $this->meta['mime_type'] ), $id3_keys['mime_type'] );
+			$this->mime_type = esc_html( $this->meta['mime_type'] );
 	}
 }
