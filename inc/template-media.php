@@ -11,6 +11,11 @@
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
+/* Filters for the audio transcript. */
+add_filter( 'hybrid_audio_transcript', 'wptexturize',   10 );
+add_filter( 'hybrid_audio_transcript', 'convert_chars', 20 );
+add_filter( 'hybrid_audio_transcript', 'wpautop',       25 );
+
 /**
  * Checks if the current post has a mime type of 'audio'.
  *

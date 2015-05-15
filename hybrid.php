@@ -156,9 +156,6 @@ if ( !class_exists( 'Hybrid' ) ) {
 			/* Load the <head> functions. */
 			require_once( HYBRID_INC . 'head.php' );
 
-			/* Load media-related functions. */
-			require_once( HYBRID_INC . 'media.php' );
-
 			/* Load the metadata functions. */
 			require_once( HYBRID_INC . 'meta.php' );
 
