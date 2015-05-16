@@ -11,11 +11,6 @@
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
-/* Filters for the audio transcript. */
-add_filter( 'hybrid_audio_transcript', 'wptexturize',   10 );
-add_filter( 'hybrid_audio_transcript', 'convert_chars', 20 );
-add_filter( 'hybrid_audio_transcript', 'wpautop',       25 );
-
 /**
  * Prints media meta directly to the screen.  The `$property` parameter can be any of the public 
  * properties in the `Hybrid_Media_Meta` object.
@@ -161,24 +156,7 @@ function hybrid_get_image_size_links() {
  * @return string
  */
 function hybrid_get_audio_transcript( $post_id = 0 ) {
-
-	if ( empty( $post_id ) )
-		$post_id = get_the_ID();
-
-	/* Set up some default variables and get the image metadata. */
-	$lyrics = '';
-	$meta   = wp_get_attachment_metadata( $post_id );
-
-	/* Look for the 'unsynchronised_lyric' tag. */
-	if ( isset( $meta['unsynchronised_lyric'] ) )
-		$lyrics = $meta['unsynchronised_lyric'];
-
-	/* Seen this misspelling of the id3 tag. */
-	elseif ( isset( $meta['unsychronised_lyric'] ) )
-		$lyrics = $meta['unsychronised_lyric'];
-
-	/* Apply filters for the transcript. */
-	return apply_filters( 'hybrid_audio_transcript', $lyrics );
+	return hybrid_get_media_meta( 'lyrics', array( 'wrap' => '', 'post_id' => $post_id ? $post_id : get_the_ID() ) );
 }
 
 /**

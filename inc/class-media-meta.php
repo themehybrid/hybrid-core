@@ -286,6 +286,11 @@ class Hybrid_Media_Meta {
 	 */
 	public function audio_meta() {
 
+		/* Filters for the audio transcript. */
+		add_filter( 'hybrid_audio_transcript', 'wptexturize',   10 );
+		add_filter( 'hybrid_audio_transcript', 'convert_chars', 20 );
+		add_filter( 'hybrid_audio_transcript', 'wpautop',       25 );
+
 		$this->length_formatted();
 		$this->lyrics();
 		$this->artist();
@@ -433,7 +438,7 @@ class Hybrid_Media_Meta {
 			$this->lyrics = $this->meta['unsychronised_lyric'];
 
 		/* Apply filters for the transcript. */
-		return apply_filters( 'hybrid_audio_transcript', $this->lyrics );
+		$this->lyrics = apply_filters( 'hybrid_audio_transcript', $this->lyrics );
 	}
 
 	/**
