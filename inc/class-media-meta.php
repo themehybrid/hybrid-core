@@ -62,15 +62,15 @@ class Hybrid_Media_Meta {
 
 		/* If the attachment is an image. */
 		if ( wp_attachment_is_image( $this->post_id ) )
-			$this->image_meta();
+			$this->set_image_meta();
 
 		/* If the attachment is audio. */
 		elseif ( hybrid_attachment_is_audio( $this->post_id ) )
-			$this->audio_meta();
+			$this->set_audio_meta();
 
 		/* If the attachment is video. */
 		elseif ( hybrid_attachment_is_video( $this->post_id ) )
-			$this->video_meta();
+			$this->set_video_meta();
 	}
 
 	/**
@@ -91,23 +91,23 @@ class Hybrid_Media_Meta {
 	/**
 	 * Adds and formats image metadata for the items array.
 	 *
-	 * @since  2.0.0
+	 * @since  3.0.0
 	 * @access public
 	 * @return void
 	 */
-	public function image_meta() {
+	public function set_image_meta() {
 
-		$this->dimensions();
-		$this->created_timestamp();
-		$this->camera();
-		$this->aperture();
-		$this->focal_length();
-		$this->iso();
-		$this->shutter_speed();
-		$this->file_name();
-		$this->file_size();
-		$this->file_type();
-		$this->mime_type();
+		$this->set_dimensions();
+		$this->set_created_timestamp();
+		$this->set_camera();
+		$this->set_aperture();
+		$this->set_focal_length();
+		$this->set_iso();
+		$this->set_shutter_speed();
+		$this->set_file_name();
+		$this->set_file_size();
+		$this->set_file_type();
+		$this->set_mime_type();
 	}
 
 	/**
@@ -117,46 +117,46 @@ class Hybrid_Media_Meta {
 	 * is because it doesn't fit in well with how other metadata works on display.  There's a separate 
 	 * function for that called `hybrid_get_audio_transcript()`.
 	 *
-	 * @since  2.0.0
+	 * @since  3.0.0
 	 * @access public
 	 * @return void
 	 */
-	public function audio_meta() {
+	public function set_audio_meta() {
 
 		/* Filters for the audio transcript. */
 		add_filter( 'hybrid_audio_transcript', 'wptexturize',   10 );
 		add_filter( 'hybrid_audio_transcript', 'convert_chars', 20 );
 		add_filter( 'hybrid_audio_transcript', 'wpautop',       25 );
 
-		$this->length_formatted();
-		$this->lyrics();
-		$this->artist();
-		$this->composer();
-		$this->album();
-		$this->track_number();
-		$this->year();
-		$this->genre();
-		$this->file_name();
-		$this->file_size();
-		$this->file_type();
-		$this->mime_type();
+		$this->set_length_formatted();
+		$this->set_lyrics();
+		$this->set_artist();
+		$this->set_composer();
+		$this->set_album();
+		$this->set_track_number();
+		$this->set_year();
+		$this->set_genre();
+		$this->set_file_name();
+		$this->set_file_size();
+		$this->set_file_type();
+		$this->set_mime_type();
 	}
 
 	/**
 	 * Adds and formats video meta data for the items array.
 	 *
-	 * @since  2.0.0
+	 * @since  3.0.0
 	 * @access public
 	 * @return void
 	 */
-	public function video_meta() {
+	public function set_video_meta() {
 
-		$this->length_formatted();
-		$this->dimensions();
-		$this->file_name();
-		$this->file_size();
-		$this->file_type();
-		$this->mime_type();
+		$this->set_length_formatted();
+		$this->set_dimensions();
+		$this->set_file_name();
+		$this->set_file_size();
+		$this->set_file_type();
+		$this->set_mime_type();
 	}
 
 	/**
@@ -166,7 +166,7 @@ class Hybrid_Media_Meta {
 	 * @access public
 	 * @return void
 	 */
-	public function dimensions() {
+	public function set_dimensions() {
 
 		/* If there's a width and height. */
 		if ( !empty( $this->meta['width'] ) && !empty( $this->meta['height'] ) ) {
@@ -189,7 +189,7 @@ class Hybrid_Media_Meta {
 	 * @access public
 	 * @return void
 	 */
-	public function created_timestamp() {
+	public function set_created_timestamp() {
 
 		if ( !empty( $this->meta['image_meta']['created_timestamp'] ) ) {
 
@@ -207,7 +207,7 @@ class Hybrid_Media_Meta {
 	 * @access public
 	 * @return void
 	 */
-	public function camera() {
+	public function set_camera() {
 
 		if ( !empty( $this->meta['image_meta']['camera'] ) )
 			$this->camera = esc_html( $this->meta['image_meta']['camera'] );
@@ -220,7 +220,7 @@ class Hybrid_Media_Meta {
 	 * @access public
 	 * @return void
 	 */
-	public function aperture() {
+	public function set_aperture() {
 
 		if ( !empty( $this->meta['image_meta']['aperture'] ) )
 			$this->aperture = sprintf( '<sup>f</sup>&#8260;<sub>%s</sub>', absint( $this->meta['image_meta']['aperture'] ) );
@@ -233,7 +233,7 @@ class Hybrid_Media_Meta {
 	 * @access public
 	 * @return void
 	 */
-	public function focal_length() {
+	public function set_focal_length() {
 
 		if ( !empty( $this->meta['image_meta']['focal_length'] ) )
 			$this->focal_length = absint( $this->meta['image_meta']['focal_length'] );
@@ -246,7 +246,7 @@ class Hybrid_Media_Meta {
 	 * @access public
 	 * @return void
 	 */
-	public function iso() {
+	public function set_iso() {
 
 		if ( !empty( $this->meta['image_meta']['iso'] ) )
 			$this->iso = absint( $this->meta['image_meta']['iso'] );
@@ -259,7 +259,7 @@ class Hybrid_Media_Meta {
 	 * @access public
 	 * @return void
 	 */
-	public function shutter_speed() {
+	public function set_shutter_speed() {
 
 		/* If a shutter speed is given, format the float into a fraction and add it to the $items array. */
 		if ( !empty( $this->meta['image_meta']['shutter_speed'] ) ) {
@@ -287,7 +287,7 @@ class Hybrid_Media_Meta {
 	 * @access public
 	 * @return void
 	 */
-	public function length_formatted() {
+	public function set_length_formatted() {
 
 		if ( !empty( $this->meta['length_formatted'] ) )
 			$this->length_formatted = esc_html( $this->meta['length_formatted'] );
@@ -300,7 +300,7 @@ class Hybrid_Media_Meta {
 	 * @access public
 	 * @return void
 	 */
-	public function lyrics() {
+	public function set_lyrics() {
 
 		/* Look for the 'unsynchronised_lyric' tag. */
 		if ( isset( $this->meta['unsynchronised_lyric'] ) )
@@ -321,7 +321,7 @@ class Hybrid_Media_Meta {
 	 * @access public
 	 * @return void
 	 */
-	public function artist() {
+	public function set_artist() {
 
 		if ( !empty( $this->meta['artist'] ) )
 			$this->artist = esc_html( $this->meta['artist'] );
@@ -334,7 +334,7 @@ class Hybrid_Media_Meta {
 	 * @access public
 	 * @return void
 	 */
-	public function composer() {
+	public function set_composer() {
 
 		if ( !empty( $this->meta['composer'] ) )
 			$this->composer = esc_html( $this->meta['composer'] );
@@ -347,7 +347,7 @@ class Hybrid_Media_Meta {
 	 * @access public
 	 * @return void
 	 */
-	public function album() {
+	public function set_album() {
 
 		if ( !empty( $this->meta['album'] ) )
 			$this->album = esc_html( $this->meta['album'] );
@@ -360,7 +360,7 @@ class Hybrid_Media_Meta {
 	 * @access public
 	 * @return void
 	 */
-	public function track_number() {
+	public function set_track_number() {
 
 		if ( !empty( $this->meta['track_number'] ) )
 			$this->track_number = absint( $this->meta['track_number'] );
@@ -373,7 +373,7 @@ class Hybrid_Media_Meta {
 	 * @access public
 	 * @return int
 	 */
-	public function year() {
+	public function set_year() {
 
 		if ( !empty( $this->meta['year'] ) )
 			$this->year = absint( $this->meta['year'] );
@@ -386,7 +386,7 @@ class Hybrid_Media_Meta {
 	 * @access public
 	 * @return void
 	 */
-	public function genre() {
+	public function set_genre() {
 
 		if ( !empty( $this->meta['genre'] ) )
 			$this->genre = esc_html( $this->meta['genre'] );
@@ -399,7 +399,7 @@ class Hybrid_Media_Meta {
 	 * @access public
 	 * @return void
 	 */
-	public function file_name() {
+	public function set_file_name() {
 
 		$this->file_name = sprintf(
 			'<a href="%s">%s</a>',
@@ -415,7 +415,7 @@ class Hybrid_Media_Meta {
 	 * @access public
 	 * @return void
 	 */
-	public function file_size() {
+	public function set_file_size() {
 
 		if ( !empty( $this->meta['filesize'] ) )
 			$this->file_size = $this->filesize = size_format( strip_tags( $this->meta['filesize'] ), 2 );
@@ -428,7 +428,7 @@ class Hybrid_Media_Meta {
 	 * @access public
 	 * @return void
 	 */
-	public function file_type() {
+	public function set_file_type() {
 
 		if ( preg_match( '/^.*?\.(\w+)$/', get_attached_file( $this->post_id ), $matches ) )
 			$this->file_type = esc_html( strtoupper( $matches[1] ) );
@@ -441,7 +441,7 @@ class Hybrid_Media_Meta {
 	 * @access public
 	 * @return void
 	 */
-	public function mime_type() {
+	public function set_mime_type() {
 
 		$mime = get_post_mime_type( $this->post_id );
 
