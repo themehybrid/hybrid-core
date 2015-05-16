@@ -268,7 +268,8 @@ if ( !class_exists( 'Hybrid' ) ) {
 			require_once( HYBRID_INC . 'template-post.php' );
 
 			/* Load the media meta class. */
-			require_once( HYBRID_INC . 'class-media-meta.php' );
+			require_once( HYBRID_INC . 'class-media-meta.php'         );
+			require_once( HYBRID_INC . 'class-media-meta-factory.php' );
 
 			/* Load the media grabber class. */
 			require_once( HYBRID_INC . 'class-media-grabber.php' );
