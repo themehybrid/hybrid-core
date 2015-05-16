@@ -45,185 +45,7 @@ class Hybrid_Media_Meta {
 	 */
 	protected $meta  = array();
 
-	/**
-	 * Name of the file linked to the permalink for the file.
-	 *
-	 * @since  3.0.0
-	 * @access public
-	 * @var    string
-	 */
-	public $file_name = '';
-
-	/**
-	 * Type of file.
-	 *
-	 * @since  3.0.0
-	 * @access public
-	 * @var    string
-	 */
-	public $file_type = '';
-
-	/**
-	 * Mime type for the file.
-	 *
-	 * @since  3.0.0
-	 * @access public
-	 * @var    string
-	 */
-	public $mime_type = '';
-
-	/**
-	 * Image/Video meta. Media width + height dimensions.
-	 *
-	 * @since  3.0.0
-	 * @access public
-	 * @var    string
-	 */
-	public $dimensions = '';
-
-	/**
-	 * Image meta.  Date the image was created.
-	 *
-	 * @since  3.0.0
-	 * @access public
-	 * @var    string
-	 */
-	public $created_timestamp = '';
-
-	/**
-	 * Alias for `$date`.
-	 *
-	 * @since  3.0.0
-	 * @access public
-	 * @var    string
-	 */
-	public $date = '';
-
-	/**
-	 * Image meta.  Name of the camera used to capture the image.
-	 *
-	 * @since  3.0.0
-	 * @access public
-	 * @var    string
-	 */
-	public $camera = '';
-
-	/**
-	 * Image meta.  Camera aperture in the form of `f/{$aperture}`.
-	 *
-	 * @since  3.0.0
-	 * @access public
-	 * @var    string
-	 */
-	public $aperture = '';
-
-	/**
-	 * Image meta. Camera focal length in millimeters.
-	 *
-	 * @since  3.0.0
-	 * @access public
-	 * @var    int
-	 */
-	public $focal_length = 0;
-
-	/**
-	 * Image meta. ISO metadata for image.
-	 *
-	 * @since  3.0.0
-	 * @access public
-	 * @var    int
-	 */
-	public $iso = 0;
-
-	/**
-	 * Image meta. Camera shutter speed in seconds (i18n number format).
-	 *
-	 * @since  3.0.0
-	 * @access public
-	 * @var    string
-	 */
-	public $shutter_speed = '';
-
-	/**
-	 * Audio meta. Lyrics/transcript for an audio file.
-	 *
-	 * @since  3.0.0
-	 * @access public
-	 * @var    string
-	 */
-	public $lyrics = '';
-
-	/**
-	 * Audio/Video meta. The "run time" of a file.
-	 *
-	 * @since  3.0.0
-	 * @access public
-	 * @var    string
-	 */
-	public $length_formatted = '';
-
-	/**
-	 * Audio meta. Name of the artist.
-	 *
-	 * @since  3.0.0
-	 * @access public
-	 * @var    string
-	 */
-	public $artist = '';
-
-	/**
-	 * Audio meta. Name of the composer.
-	 *
-	 * @since  3.0.0
-	 * @access public
-	 * @var    string
-	 */
-	public $composer = '';
-
-	/**
-	 * Audio meta. Name of the album.
-	 *
-	 * @since  3.0.0
-	 * @access public
-	 * @var    string
-	 */
-	public $album = '';
-
-	/**
-	 * Audio meta. Track number for the `$album`.
-	 *
-	 * @since  3.0.0
-	 * @access public
-	 * @var    int
-	 */
-	public $track_number = 0;
-
-	/**
-	 * Audio meta. Year the album was released.
-	 *
-	 * @since  3.0.0
-	 * @access public
-	 * @var    int
-	 */
-	public $year = 0;
-
-	/**
-	 * Audio meta. Genre the audio file belongs to.
-	 *
-	 * @since  3.0.0
-	 * @access public
-	 * @var    string
-	 */
-	public $genre = '';
-
-	/**
-	 * Audio/Video meta. Size of the file.
-	 *
-	 * @since  3.0.0
-	 * @access public
-	 * @var    string
-	 */
-	public $file_size = '';
+	/* ====== Magic Methods ====== */
 
 	/**
 	 * Sets up and runs the functionality for getting the attachment meta.
@@ -250,6 +72,21 @@ class Hybrid_Media_Meta {
 		elseif ( hybrid_attachment_is_video( $this->post_id ) )
 			$this->video_meta();
 	}
+
+	/**
+	 * Magic method for getting media object properties.  Let's keep from failing if a theme 
+	 * author attempts to access a property that doesn't exist.
+	 *
+	 * @since  3.0.0
+	 * @access public
+	 * @return mixed
+	 */
+	public function __get( $property ) {
+
+		return isset( $this->$property ) ? $this->$property : null;
+	}
+
+	/* ====== Public Methods ====== */
 
 	/**
 	 * Adds and formats image metadata for the items array.
@@ -323,7 +160,11 @@ class Hybrid_Media_Meta {
 	}
 
 	/**
+	 * Image/Video meta. Media width + height dimensions.
+	 *
 	 * @since  3.0.0
+	 * @access public
+	 * @return void
 	 */
 	public function dimensions() {
 
@@ -342,7 +183,11 @@ class Hybrid_Media_Meta {
 	}
 
 	/**
+	 * Image meta.  Date the image was created.
+	 *
 	 * @since  3.0.0
+	 * @access public
+	 * @return void
 	 */
 	public function created_timestamp() {
 
@@ -356,7 +201,11 @@ class Hybrid_Media_Meta {
 	}
 
 	/**
+	 * Image meta.  Name of the camera used to capture the image.
+	 *
 	 * @since  3.0.0
+	 * @access public
+	 * @return void
 	 */
 	public function camera() {
 
@@ -365,7 +214,11 @@ class Hybrid_Media_Meta {
 	}
 
 	/**
+	 * Image meta.  Camera aperture in the form of `f/{$aperture}`.
+	 *
 	 * @since  3.0.0
+	 * @access public
+	 * @return void
 	 */
 	public function aperture() {
 
@@ -374,7 +227,11 @@ class Hybrid_Media_Meta {
 	}
 
 	/**
+	 * Image meta. Camera focal length in millimeters.
+	 *
 	 * @since  3.0.0
+	 * @access public
+	 * @return void
 	 */
 	public function focal_length() {
 
@@ -383,7 +240,11 @@ class Hybrid_Media_Meta {
 	}
 
 	/**
+	 * Image meta. ISO metadata for image.
+	 *
 	 * @since  3.0.0
+	 * @access public
+	 * @return void
 	 */
 	public function iso() {
 
@@ -392,7 +253,11 @@ class Hybrid_Media_Meta {
 	}
 
 	/**
+	 * Image meta. Camera shutter speed in seconds (i18n number format).
+	 *
 	 * @since  3.0.0
+	 * @access public
+	 * @return void
 	 */
 	public function shutter_speed() {
 
@@ -416,7 +281,11 @@ class Hybrid_Media_Meta {
 	}
 
 	/**
+	 * Audio/Video meta. The "run time" of a file.
+	 *
 	 * @since  3.0.0
+	 * @access public
+	 * @return void
 	 */
 	public function length_formatted() {
 
@@ -425,7 +294,11 @@ class Hybrid_Media_Meta {
 	}
 
 	/**
+	 * Audio meta. Lyrics/transcript for an audio file.
+	 *
 	 * @since  3.0.0
+	 * @access public
+	 * @return void
 	 */
 	public function lyrics() {
 
@@ -442,7 +315,11 @@ class Hybrid_Media_Meta {
 	}
 
 	/**
+	 * Audio meta. Name of the artist.
+	 *
 	 * @since  3.0.0
+	 * @access public
+	 * @return void
 	 */
 	public function artist() {
 
@@ -451,7 +328,11 @@ class Hybrid_Media_Meta {
 	}
 
 	/**
+	 * Audio meta. Name of the composer.
+	 *
 	 * @since  3.0.0
+	 * @access public
+	 * @return void
 	 */
 	public function composer() {
 
@@ -460,7 +341,11 @@ class Hybrid_Media_Meta {
 	}
 
 	/**
+	 * Audio meta. Name of the album.
+	 *
 	 * @since  3.0.0
+	 * @access public
+	 * @return void
 	 */
 	public function album() {
 
@@ -469,7 +354,11 @@ class Hybrid_Media_Meta {
 	}
 
 	/**
+	 * Audio meta. Track number for the `$album`.
+	 *
 	 * @since  3.0.0
+	 * @access public
+	 * @return void
 	 */
 	public function track_number() {
 
@@ -478,7 +367,11 @@ class Hybrid_Media_Meta {
 	}
 
 	/**
+	 * Audio meta. Year the album was released.
+	 *
 	 * @since  3.0.0
+	 * @access public
+	 * @return int
 	 */
 	public function year() {
 
@@ -487,7 +380,11 @@ class Hybrid_Media_Meta {
 	}
 
 	/**
+	 * Audio meta. Genre the audio file belongs to.
+	 *
 	 * @since  3.0.0
+	 * @access public
+	 * @return void
 	 */
 	public function genre() {
 
@@ -496,7 +393,11 @@ class Hybrid_Media_Meta {
 	}
 
 	/**
+	 * Name of the file linked to the permalink for the file.
+	 *
 	 * @since  3.0.0
+	 * @access public
+	 * @return void
 	 */
 	public function file_name() {
 
@@ -508,7 +409,11 @@ class Hybrid_Media_Meta {
 	}
 
 	/**
+	 * Audio/Video meta. Size of the file.
+	 *
 	 * @since  3.0.0
+	 * @access public
+	 * @return void
 	 */
 	public function file_size() {
 
@@ -517,7 +422,11 @@ class Hybrid_Media_Meta {
 	}
 
 	/**
+	 * Type of file.
+	 *
 	 * @since  3.0.0
+	 * @access public
+	 * @return void
 	 */
 	public function file_type() {
 
@@ -526,7 +435,11 @@ class Hybrid_Media_Meta {
 	}
 
 	/**
+	 * Mime type for the file.
+	 *
 	 * @since  3.0.0
+	 * @access public
+	 * @return void
 	 */
 	public function mime_type() {
 
