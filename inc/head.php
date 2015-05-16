@@ -11,29 +11,13 @@
  */
 
 /* Adds common theme items to <head>. */
-add_action( 'wp_head', 'hybrid_meta_charset',  0 );
-add_action( 'wp_head', 'hybrid_meta_viewport', 1 );
-add_action( 'wp_head', 'hybrid_meta_template', 1 );
-add_action( 'wp_head', 'hybrid_link_pingback', 3 );
+add_action( 'wp_head', 'hybrid_meta_charset',   0 );
+add_action( 'wp_head', 'hybrid_meta_viewport',  1 );
+add_action( 'wp_head', 'hybrid_meta_generator', 1 );
+add_action( 'wp_head', 'hybrid_link_pingback',  3 );
 
 /* Filter the WordPress title. */
 add_filter( 'wp_title', 'hybrid_wp_title', 1, 3 );
-
-/**
- * Generates the relevant template info.  Adds template meta with theme version.  Uses the theme 
- * name and version from style.css.
- * filter hook.
- *
- * @since  0.4.0
- * @access public
- * @return void
- */
-function hybrid_meta_template() {
-	$theme    = wp_get_theme( get_template() );
-	$template = sprintf( '<meta name="template" content="%s %s" />' . "\n", esc_attr( $theme->get( 'Name' ) ), esc_attr( $theme->get( 'Version' ) ) );
-
-	echo apply_filters( 'hybrid_meta_template', $template );
-}
 
 /**
  * Adds the meta charset to the header.
@@ -54,6 +38,21 @@ function hybrid_meta_charset() {
  */
 function hybrid_meta_viewport() {
 	echo '<meta name="viewport" content="width=device-width, initial-scale=1" />' . "\n";
+}
+
+/**
+ * Adds the theme generator meta tag.  This is particularly useful for checking theme users' version 
+ * when handling support requests.
+ *
+ * @since  3.0.0
+ * @access public
+ * @return void
+ */
+function hybrid_meta_generator() {
+	$theme     = wp_get_theme( get_template() );
+	$generator = sprintf( '<meta name="generator" content="%s %s" />' . "\n", esc_attr( $theme->get( 'Name' ) ), esc_attr( $theme->get( 'Version' ) ) );
+
+	echo apply_filters( 'hybrid_meta_generator', $generator );
 }
 
 /**
