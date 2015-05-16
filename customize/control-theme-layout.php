@@ -31,23 +31,22 @@ class Hybrid_Customize_Control_Theme_Layout extends Hybrid_Customize_Control_Rad
 	 */
 	public function __construct( $manager, $id, $args = array() ) {
 
-		$choices = array();
+		// Array of allowed layouts. Pass via `$args['layouts']`.
+		$allowed = !empty( $args['layouts'] ) ? $args['layouts'] : array_keys( hybrid_get_layouts() );
 
-		/* Loop through each of the layouts and add it to the choices array with proper key/value pairs. */
+		// Loop through each of the layouts and add it to the choices array with proper key/value pairs.
 		foreach ( hybrid_get_layouts() as $layout ) {
 
-			if ( ( 'theme_layout' !== $id || true === $layout->is_global_layout ) && $layout->image ) {
-				$choices[ $layout->name ] = array(
+			if ( in_array( $layout->name, $allowed ) && ! ( 'theme_layout' === $id && false === $layout->is_global_layout ) && $layout->image ) {
+
+				$args['choices'][ $layout->name ] = array(
 					'label' => $layout->label,
 					'url'   => sprintf( $layout->image, get_template_directory_uri(), get_stylesheet_directory_uri() )
 				);
 			}
 		}
 
-		/* Override specific arguments. */
-		$args['choices'] = $choices;
-
-		/* Let WP handle this. */
+		// Let WP handle this.
 		parent::__construct( $manager, $id, $args );
 	}
 }
