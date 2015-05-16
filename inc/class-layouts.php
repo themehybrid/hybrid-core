@@ -61,13 +61,14 @@ class Hybrid_Layouts {
 			$name = sanitize_html_class( $name );
 
 			$defaults = array(
-				'is_global_layout' => true,  // Whether to show as an option in the customizer.
-				'is_post_layout'   => true,  // Whether to show as an option in the meta box.
-				'is_user_layout'   => true,  // Whether to show as an option in user profile (not implemented).
-				'label'            => $name, // Internationalized text label.
-				'image'            => '',    // Image URL of the layout design.
-				'_builtin'         => false, // Internal use only! Whether the layout is built in.
-				'_internal'        => false, // Internal use only! Whether the layout is internal (cannot be unregistered).
+				'is_global_layout' => true,    // Whether to show as an option in the customizer.
+				'is_post_layout'   => true,    // Whether to show as an option in the meta box.
+				'is_user_layout'   => true,    // Whether to show as an option in user profile (not implemented).
+				'label'            => $name,   // Internationalized text label.
+				'image'            => '',      // Image URL of the layout design.
+				'post_types'       => array(), // Array of post types layout works with.
+				'_builtin'         => false,   // Internal use only! Whether the layout is built in.
+				'_internal'        => false,   // Internal use only! Whether the layout is internal (cannot be unregistered).
 			);
 
 			$args = wp_parse_args( $args, $defaults );

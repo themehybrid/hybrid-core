@@ -76,7 +76,7 @@ function hybrid_post_layout_meta_box( $post, $box ) {
 
 		<?php foreach ( hybrid_get_layouts() as $layout ) : ?>
 
-			<?php if ( true === $layout->is_post_layout && $layout->image ) : ?>
+			<?php if ( true === $layout->is_post_layout && $layout->image && ! ( !empty( $layout->post_types ) && !in_array( $post->post_type, $layout->post_types ) ) ) : ?>
 
 				<input type="radio" value="<?php echo esc_attr( $layout->name ); ?>" name="hybrid-post-layout" id="<?php echo esc_attr( "hybrid-post-layout-{$layout->name}" ); ?>" <?php checked( $post_layout, $layout->name ); ?> /> 
 
