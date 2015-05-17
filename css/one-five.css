@@ -45,19 +45,12 @@ p, figure {
 	margin: 0 0 1.5rem;
 }
 
-ol, ul {
-	list-style: none;
-}
-
 ul {
 	list-style: disc;
 	margin:     0 0 1.5rem;
 }
 
-ol {
-	list-style: decimal;
-	margin:     0 0 1.5rem;
-}
+ol { margin: 0 0 1.5rem; }
 
 	.ltr ul,
 	.ltr ol { margin-left: 3rem; }
@@ -65,14 +58,28 @@ ol {
 	.rtl ul,
 	.rtl ol { margin-right: 3rem; }
 
-
-ol ol { list-style: upper-roman; }
-
-	ol ol ol { list-style: lower-roman; }
-
-		ol ol ol ol { list-style: upper-alpha; }
-
-			ol ol ol ol ol { list-style: lower-alpha; }
+	ol.disc,                 ul.disc                 { list-style: disc;                 }
+	ol.armenian,             ul.armenian             { list-style: armenian;             }
+	ol.circle,               ul.circle               { list-style: circle;               }
+	ol.cjk-ideographic,      ul.cjk-ideographic      { list-style: cjk-ideographic;      }
+	ol.decimal,              ul.decimal              { list-style: decimal;              }
+	ol.decimal-leading-zero, ul.decimal-leading-zero { list-style: decimal-leading-zero; }
+	ol.georgian,             ul.georgian             { list-style: georgian;             }
+	ol.hebrew,               ul.hebrew               { list-style: hebrew;               }
+	ol.hiragana,             ul.hiragana             { list-style: hiragana;             }
+	ol.hiragana-iroha,       ul.hiragana-iroha       { list-style: hiragana-iroha;       }
+	ol.katakana,             ul.katakana             { list-style: katakana;             }
+	ol.kataka-iroha,         ul.katakana-iroha       { list-style: katakana-iroha;       }
+	ol.lower-alpa,           ul.lower-alpha          { list-style: lower-alpha;          }
+	ol.lower-greek,          ul.lower-greek          { list-style: lower-greek;          }
+	ol.lower-latin,          ul.lower-latin          { list-style: lower-latin;          }
+	ol.lower-roman,          ul.lower-roman          { list-style: lower-roman;          }
+	ol.none,                 ul.none                 { list-style: none;                 }
+	ol.square,               ul.square               { list-style: square;               }
+	ol.upper-alpha,          ul.upper-alpha          { list-style: upper-alpha;          }
+	ol.upper-latin,          ul.upper-latin          { list-style: upper-latin;          }
+	ol.upper-roman,          ul.upper-roman          { list-style: upper-roman;          }
+	ol.initial,              ul.initial              { list-style: initial;              }
 
 ul ul, 
 ol ol, 
