@@ -146,7 +146,6 @@ class Hybrid_Media_Meta {
 	 */
 	protected function media_filters() {
 
-		// Add common media meta filters.
 		add_filter( 'hybrid_media_meta_escape_file_name', array( $this, 'file_name' ), 5 );
 		add_filter( 'hybrid_media_meta_escape_filesize',  array( $this, 'file_size' ), 5 );
 		add_filter( 'hybrid_media_meta_escape_file_size', array( $this, 'file_size' ), 5 ); // alias for filesize
@@ -206,11 +205,7 @@ class Hybrid_Media_Meta {
 	 */
 	protected function video_filters() {
 
-		$this->set_dimensions();
-		$this->set_file_name();
-		$this->set_file_size();
-		$this->set_file_type();
-		$this->set_mime_type();
+		add_filter( 'hybrid_media_meta_escape_dimensions', array( $this, 'dimensions' ), 5 );
 	}
 
 	/* ====== Public Methods ====== */
