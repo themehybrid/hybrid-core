@@ -45,6 +45,24 @@ class Hybrid_Media_Meta {
 	 */
 	protected $meta  = array();
 
+	/**
+	 * Type of media for the current attachment.
+	 *
+	 * @since  3.0.0
+	 * @access protected
+	 * @var    string  image|audio|video
+	 */
+	protected $type = '';
+
+	/**
+	 * Allowed media types.
+	 *
+	 * @since  3.0.0
+	 * @access public
+	 * @var    array
+	 */
+	protected $allowed_types = array( 'image', 'audio', 'video' );
+
 	/* ====== Magic Methods ====== */
 
 	/**
@@ -60,17 +78,27 @@ class Hybrid_Media_Meta {
 		$this->post_id  = $post_id;
 		$this->meta     = wp_get_attachment_metadata( $this->post_id );
 
-		/* If the attachment is an image. */
+		// If the attachment is an image.
 		if ( wp_attachment_is_image( $this->post_id ) )
-			$this->set_image_meta();
+			$this->type = 'image';
 
-		/* If the attachment is audio. */
+		// If the attachment is audio.
 		elseif ( hybrid_attachment_is_audio( $this->post_id ) )
-			$this->set_audio_meta();
+			$this->type = 'audio';
 
-		/* If the attachment is video. */
+		// If the attachment is video.
 		elseif ( hybrid_attachment_is_video( $this->post_id ) )
-			$this->set_video_meta();
+			$this->type = 'video';
+
+		// If we have a type that's in the whitelist, run filters.
+		if ( $this->type && in_array( $this->type, $this->allowed_types ) ) {
+
+			// Run common media filters for any media type.
+			$this->media_filters();
+
+			// Run type-specific filters.
+			call_user_func( array( $this, "{$this->type}_filters" ) );
+		}
 	}
 
 	/**
@@ -79,84 +107,142 @@ class Hybrid_Media_Meta {
 	 *
 	 * @since  3.0.0
 	 * @access public
+	 * @param  string  $property
 	 * @return mixed
 	 */
 	public function __get( $property ) {
 
-		return isset( $this->$property ) ? $this->$property : null;
+		return isset( $this->property ) ? $this->property : $this->get( $property );
+	}
+
+	/* ====== Protected Methods ====== */
+
+	/**
+	 * Function for escaping properties when there is not a specific method for handling them 
+	 * within the class.
+	 *
+	 * @since  3.0.0
+	 * @access protected
+	 * @param  string|int  $value
+	 * @param  string      $property
+	 * @return string|int
+	 */
+	protected function escape( $value, $property ) {
+
+		if ( has_filter( "hybrid_media_meta_escape_{$property}" ) )
+			return apply_filters( "hybrid_media_meta_escape_{$property}", $value, $this->type );
+
+		return is_numeric( $value ) ? intval( $value ) : esc_html( $value );
+	}
+
+	/**
+	 * Adds filters for common media meta.
+	 *
+	 * Properties: file_name, filesize, file_type, mime_type
+	 *
+	 * @since  3.0.0
+	 * @access protected
+	 * @return void
+	 */
+	protected function media_filters() {
+
+		// Add common media meta filters.
+		add_filter( 'hybrid_media_meta_escape_file_name', array( $this, 'file_name' ), 5 );
+		add_filter( 'hybrid_media_meta_escape_filesize',  array( $this, 'file_size' ), 5 );
+		add_filter( 'hybrid_media_meta_escape_file_size', array( $this, 'file_size' ), 5 ); // alias for filesize
+		add_filter( 'hybrid_media_meta_escape_file_type', array( $this, 'file_type' ), 5 );
+		add_filter( 'hybrid_media_meta_escape_mime_type', array( $this, 'mime_type' ), 5 );
+	}
+
+	/**
+	 * Adds filters for image meta.
+	 *
+	 * Properties: aperture, camera, caption, copyright, credit, created_timestamp, dimensions, 
+	 *             focal_length, iso, shutter_speed
+	 *
+	 * @since  3.0.0
+	 * @access protected
+	 * @return void
+	 */
+	protected function image_filters() {
+
+		add_filter( 'hybrid_media_meta_escape_dimensions',        array( $this, 'dimensions'        ), 5 );
+		add_filter( 'hybrid_media_meta_escape_created_timestamp', array( $this, 'created_timestamp' ), 5 );
+		add_filter( 'hybrid_media_meta_escape_aperture',          array( $this, 'aperture'          ), 5 );
+		add_filter( 'hybrid_media_meta_escape_shutter_speed',     array( $this, 'shutter_speed'     ), 5 );
+		add_filter( 'hybrid_media_meta_escape_focal_length',      'absint',                            5 );
+		add_filter( 'hybrid_media_meta_escape_iso',               'absint',                            5 );
+	}
+
+	/**
+	 * Adds filters for audio meta.
+	 *
+	 * Properties: album, artist, composer, genre, length_formatted, lyrics, track_number, year
+	 *
+	 * @since  3.0.0
+	 * @access protected
+	 * @return void
+	 */
+	protected function audio_filters() {
+
+		add_filter( 'hybrid_media_meta_escape_track_number', 'absint' );
+		add_filter( 'hybrid_media_meta_escape_year',         'absint' );
+
+		// Filters for the audio transcript.
+		add_filter( 'hybrid_media_meta_escape_lyrics', array( $this, 'lyrics' ), 5 );
+		add_filter( 'hybrid_media_meta_escape_lyrics', 'wptexturize',            10 );
+		add_filter( 'hybrid_media_meta_escape_lyrics', 'convert_chars',          15 );
+		add_filter( 'hybrid_media_meta_escape_lyrics', 'wpautop',                20 );
+	}
+
+	/**
+	 * Adds filters for video meta.
+	 *
+	 * Properties: dimensions, length-formatted
+	 *
+	 * @since  3.0.0
+	 * @access protected
+	 * @return void
+	 */
+	protected function video_filters() {
+
+		$this->set_dimensions();
+		$this->set_file_name();
+		$this->set_file_size();
+		$this->set_file_type();
+		$this->set_mime_type();
 	}
 
 	/* ====== Public Methods ====== */
 
 	/**
-	 * Adds and formats image metadata for the items array.
+	 * Method for grabbing meta formatted metadata by key.
 	 *
 	 * @since  3.0.0
 	 * @access public
-	 * @return void
+	 * @param  string  $property
+	 * @return mixed
 	 */
-	public function set_image_meta() {
+	public function get( $property ) {
 
-		$this->set_dimensions();
-		$this->set_created_timestamp();
-		$this->set_camera();
-		$this->set_aperture();
-		$this->set_focal_length();
-		$this->set_iso();
-		$this->set_shutter_speed();
-		$this->set_file_name();
-		$this->set_file_size();
-		$this->set_file_type();
-		$this->set_mime_type();
-	}
+		// If the property exists in the meta array.
+		if ( isset( $this->meta[ $property ] ) )
+			return $this->escape( $this->meta[ $property ], $property );
 
-	/**
-	 * Adds and formats audio metadata for the items array.
-	 *
-	 * Note that we're purposely leaving out the "transcript/lyrics" metadata in this instance.  This 
-	 * is because it doesn't fit in well with how other metadata works on display.  There's a separate 
-	 * function for that called `hybrid_get_audio_transcript()`.
-	 *
-	 * @since  3.0.0
-	 * @access public
-	 * @return void
-	 */
-	public function set_audio_meta() {
+		// If the property exists in the image meta array.
+		elseif ( 'image' === $this->type && isset( $this->meta['image_meta'][ $property ] ) )
+			return $this->escape( $this->meta['image_meta'][ $property ], $property );
 
-		/* Filters for the audio transcript. */
-		add_filter( 'hybrid_audio_transcript', 'wptexturize',   10 );
-		add_filter( 'hybrid_audio_transcript', 'convert_chars', 20 );
-		add_filter( 'hybrid_audio_transcript', 'wpautop',       25 );
+		// If the property exists in the video's audio meta array.
+		elseif ( 'video' === $this->type && isset( $this->meta['audio'][ $property ] ) )
+			return $this->escape( $this->meta['audio'][ $property ], $property );
 
-		$this->set_length_formatted();
-		$this->set_lyrics();
-		$this->set_artist();
-		$this->set_composer();
-		$this->set_album();
-		$this->set_track_number();
-		$this->set_year();
-		$this->set_genre();
-		$this->set_file_name();
-		$this->set_file_size();
-		$this->set_file_type();
-		$this->set_mime_type();
-	}
+		// If a filter exists for the property.
+		elseif ( has_filter( "hybrid_media_meta_escape_{$property}" ) )
+			return $this->escape( null, $property );
 
-	/**
-	 * Adds and formats video meta data for the items array.
-	 *
-	 * @since  3.0.0
-	 * @access public
-	 * @return void
-	 */
-	public function set_video_meta() {
-
-		$this->set_length_formatted();
-		$this->set_dimensions();
-		$this->set_file_name();
-		$this->set_file_size();
-		$this->set_file_type();
-		$this->set_mime_type();
+		// Return null if all else fails.
+		return null;
 	}
 
 	/**
@@ -164,22 +250,23 @@ class Hybrid_Media_Meta {
 	 *
 	 * @since  3.0.0
 	 * @access public
-	 * @return void
+	 * @param  string  $dimensions
+	 * @return string
 	 */
-	public function set_dimensions() {
+	public function dimensions( $dimensions ) {
 
-		/* If there's a width and height. */
+		// If there's a width and height.
 		if ( !empty( $this->meta['width'] ) && !empty( $this->meta['height'] ) ) {
 
-			/* Translators: Media dimensions - 1 is width and 2 is height. */
 			$dimensions = sprintf(
+				// Translators: Media dimensions - 1 is width and 2 is height.
 				esc_html__( '%1$s &#215; %2$s', 'hybrid-core' ),
 				number_format_i18n( absint( $this->meta['width'] ) ), 
 				number_format_i18n( absint( $this->meta['height'] ) )
 			);
-
-			$this->dimensions = sprintf( '<a href="%s">%s</a>', esc_url( wp_get_attachment_url() ), $dimensions );
 		}
+
+		return $dimensions;
 	}
 
 	/**
@@ -187,30 +274,20 @@ class Hybrid_Media_Meta {
 	 *
 	 * @since  3.0.0
 	 * @access public
-	 * @return void
+	 * @param  string  $timestamp
+	 * @return string
 	 */
-	public function set_created_timestamp() {
+	public function created_timestamp( $timestamp ) {
 
 		if ( !empty( $this->meta['image_meta']['created_timestamp'] ) ) {
 
-			$this->date = $this->created_timestamp = date_i18n(
+			$timestamp = date_i18n(
 				get_option( 'date_format' ),
 				strip_tags( $this->meta['image_meta']['created_timestamp'] )
 			);
 		}
-	}
 
-	/**
-	 * Image meta.  Name of the camera used to capture the image.
-	 *
-	 * @since  3.0.0
-	 * @access public
-	 * @return void
-	 */
-	public function set_camera() {
-
-		if ( !empty( $this->meta['image_meta']['camera'] ) )
-			$this->camera = esc_html( $this->meta['image_meta']['camera'] );
+		return $timestamp;
 	}
 
 	/**
@@ -218,38 +295,15 @@ class Hybrid_Media_Meta {
 	 *
 	 * @since  3.0.0
 	 * @access public
-	 * @return void
+	 * @param  string  $aperture
+	 * @return string
 	 */
-	public function set_aperture() {
+	public function aperture( $aperture ) {
 
 		if ( !empty( $this->meta['image_meta']['aperture'] ) )
-			$this->aperture = sprintf( '<sup>f</sup>&#8260;<sub>%s</sub>', absint( $this->meta['image_meta']['aperture'] ) );
-	}
+			$aperture = sprintf( '<sup>f</sup>&#8260;<sub>%s</sub>', absint( $this->meta['image_meta']['aperture'] ) );
 
-	/**
-	 * Image meta. Camera focal length in millimeters.
-	 *
-	 * @since  3.0.0
-	 * @access public
-	 * @return void
-	 */
-	public function set_focal_length() {
-
-		if ( !empty( $this->meta['image_meta']['focal_length'] ) )
-			$this->focal_length = absint( $this->meta['image_meta']['focal_length'] );
-	}
-
-	/**
-	 * Image meta. ISO metadata for image.
-	 *
-	 * @since  3.0.0
-	 * @access public
-	 * @return void
-	 */
-	public function set_iso() {
-
-		if ( !empty( $this->meta['image_meta']['iso'] ) )
-			$this->iso = absint( $this->meta['image_meta']['iso'] );
+		return $aperture;
 	}
 
 	/**
@@ -257,40 +311,28 @@ class Hybrid_Media_Meta {
 	 *
 	 * @since  3.0.0
 	 * @access public
-	 * @return void
+	 * @param  string  $shutter
+	 * @return string
 	 */
-	public function set_shutter_speed() {
+	public function shutter_speed( $shutter ) {
 
-		/* If a shutter speed is given, format the float into a fraction and add it to the $items array. */
+		// If a shutter speed is given, format the float into a fraction.
 		if ( !empty( $this->meta['image_meta']['shutter_speed'] ) ) {
 
-			$out = $speed = floatval( strip_tags( $this->meta['image_meta']['shutter_speed'] ) );
+			$shutter = $speed = floatval( strip_tags( $this->meta['image_meta']['shutter_speed'] ) );
 
 			if ( ( 1 / $speed ) > 1 ) {
-				$out = sprintf( '<sup>%s</sup>&#8260;', number_format_i18n( 1 ) );
+				$shutter = sprintf( '<sup>%s</sup>&#8260;', number_format_i18n( 1 ) );
 
 				if ( number_format( ( 1 / $speed ), 1 ) ==  number_format( ( 1 / $speed ), 0 ) )
-					$out .= sprintf( '<sub>%s</sub>', number_format_i18n( ( 1 / $speed ), 0, '.', '' ) );
+					$shutter .= sprintf( '<sub>%s</sub>', number_format_i18n( ( 1 / $speed ), 0, '.', '' ) );
 
 				else
-					$out .= sprintf( '<sub>%s</sub>', number_format_i18n( ( 1 / $speed ), 1, '.', '' ) );
+					$shutter .= sprintf( '<sub>%s</sub>', number_format_i18n( ( 1 / $speed ), 1, '.', '' ) );
 			}
-
-			$this->shutter_speed = $out;
 		}
-	}
 
-	/**
-	 * Audio/Video meta. The "run time" of a file.
-	 *
-	 * @since  3.0.0
-	 * @access public
-	 * @return void
-	 */
-	public function set_length_formatted() {
-
-		if ( !empty( $this->meta['length_formatted'] ) )
-			$this->length_formatted = esc_html( $this->meta['length_formatted'] );
+		return $shutter;
 	}
 
 	/**
@@ -300,96 +342,17 @@ class Hybrid_Media_Meta {
 	 * @access public
 	 * @return void
 	 */
-	public function set_lyrics() {
+	public function lyrics( $lyrics ) {
 
-		/* Look for the 'unsynchronised_lyric' tag. */
+		// Look for the 'unsynchronised_lyric' tag.
 		if ( isset( $this->meta['unsynchronised_lyric'] ) )
-			$this->lyrics = $this->meta['unsynchronised_lyric'];
+			$lyrics = $this->meta['unsynchronised_lyric'];
 
-		/* Seen this misspelling of the id3 tag. */
+		// Seen this misspelling of the id3 tag.
 		elseif ( isset( $this->meta['unsychronised_lyric'] ) )
-			$this->lyrics = $this->meta['unsychronised_lyric'];
+			$lyrics = $this->meta['unsychronised_lyric'];
 
-		/* Apply filters for the transcript. */
-		$this->lyrics = apply_filters( 'hybrid_audio_transcript', $this->lyrics );
-	}
-
-	/**
-	 * Audio meta. Name of the artist.
-	 *
-	 * @since  3.0.0
-	 * @access public
-	 * @return void
-	 */
-	public function set_artist() {
-
-		if ( !empty( $this->meta['artist'] ) )
-			$this->artist = esc_html( $this->meta['artist'] );
-	}
-
-	/**
-	 * Audio meta. Name of the composer.
-	 *
-	 * @since  3.0.0
-	 * @access public
-	 * @return void
-	 */
-	public function set_composer() {
-
-		if ( !empty( $this->meta['composer'] ) )
-			$this->composer = esc_html( $this->meta['composer'] );
-	}
-
-	/**
-	 * Audio meta. Name of the album.
-	 *
-	 * @since  3.0.0
-	 * @access public
-	 * @return void
-	 */
-	public function set_album() {
-
-		if ( !empty( $this->meta['album'] ) )
-			$this->album = esc_html( $this->meta['album'] );
-	}
-
-	/**
-	 * Audio meta. Track number for the `$album`.
-	 *
-	 * @since  3.0.0
-	 * @access public
-	 * @return void
-	 */
-	public function set_track_number() {
-
-		if ( !empty( $this->meta['track_number'] ) )
-			$this->track_number = absint( $this->meta['track_number'] );
-	}
-
-	/**
-	 * Audio meta. Year the album was released.
-	 *
-	 * @since  3.0.0
-	 * @access public
-	 * @return int
-	 */
-	public function set_year() {
-
-		if ( !empty( $this->meta['year'] ) )
-			$this->year = absint( $this->meta['year'] );
-	}
-
-	/**
-	 * Audio meta. Genre the audio file belongs to.
-	 *
-	 * @since  3.0.0
-	 * @access public
-	 * @return void
-	 */
-	public function set_genre() {
-
-		if ( !empty( $this->meta['genre'] ) )
-			$this->genre = esc_html( $this->meta['genre'] );
+		return strip_tags( $lyrics );
 	}
 
 	/**
@@ -397,11 +360,11 @@ class Hybrid_Media_Meta {
 	 *
 	 * @since  3.0.0
 	 * @access public
-	 * @return void
+	 * @return string
 	 */
-	public function set_file_name() {
+	public function file_name() {
 
-		$this->file_name = sprintf(
+		return sprintf(
 			'<a href="%s">%s</a>',
 			esc_url( wp_get_attachment_url( $this->post_id ) ),
 			basename( get_attached_file( $this->post_id ) )
@@ -413,12 +376,12 @@ class Hybrid_Media_Meta {
 	 *
 	 * @since  3.0.0
 	 * @access public
-	 * @return void
+	 * @param  int    $file_size
+	 * @return int
 	 */
-	public function set_file_size() {
+	public function file_size( $file_size ) {
 
-		if ( !empty( $this->meta['filesize'] ) )
-			$this->file_size = $this->filesize = size_format( strip_tags( $this->meta['filesize'] ), 2 );
+		return !empty( $this->meta['filesize'] ) ? size_format( strip_tags( $this->meta['filesize'] ), 2 ) : $file_size;
 	}
 
 	/**
@@ -426,12 +389,15 @@ class Hybrid_Media_Meta {
 	 *
 	 * @since  3.0.0
 	 * @access public
-	 * @return void
+	 * @param  string  $file_type
+	 * @return string
 	 */
-	public function set_file_type() {
+	public function file_type( $file_type ) {
 
 		if ( preg_match( '/^.*?\.(\w+)$/', get_attached_file( $this->post_id ), $matches ) )
-			$this->file_type = esc_html( strtoupper( $matches[1] ) );
+			$file_type = esc_html( strtoupper( $matches[1] ) );
+
+		return $file_type;
 	}
 
 	/**
@@ -439,16 +405,16 @@ class Hybrid_Media_Meta {
 	 *
 	 * @since  3.0.0
 	 * @access public
-	 * @return void
+	 * @param  string  $mime_type
+	 * @return string
 	 */
-	public function set_mime_type() {
+	public function mime_type( $mime_type ) {
 
-		$mime = get_post_mime_type( $this->post_id );
+		$mime_type = get_post_mime_type( $this->post_id );
 
-		if ( !empty( $mime ) )
-			$this->mime_type = esc_html( $mime );
+		if ( empty( $mime_type ) && !empty( $this->meta['mime_type'] ) )
+			$mime_type = $this->meta['mime_type'];
 
-		elseif ( !empty( $this->meta['mime_type'] ) )
-			$this->mime_type = esc_html( $this->meta['mime_type'] );
+		return esc_html( $mime_type );
 	}
 }

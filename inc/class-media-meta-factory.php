@@ -28,10 +28,23 @@ class Hybrid_Media_Meta_Factory {
 	 * Array of media meta objects created via `Hybrid_Media_Meta`.
 	 *
 	 * @since  3.0.0
-	 * @access public
+	 * @access protected
 	 * @var    array
 	 */
-	public $media = array();
+	protected $media = array();
+
+	/**
+	 * Creates a new `Hybrid_Media_Meta` object and stores it in the `$media` array by 
+	 * post ID.
+	 *
+	 * @since  3.0.0
+	 * @access protected
+	 * @param  int       $post_id
+	 */
+	protected function create_media_meta( $post_id ) {
+
+		$this->media[ $post_id ] = new Hybrid_Media_Meta( $post_id );
+	}
 
 	/**
 	 * Gets a specific `Hybrid_Media_Meta` object by post (attachment) ID.
@@ -41,26 +54,13 @@ class Hybrid_Media_Meta_Factory {
 	 * @param  int     $post_id
 	 * @return object
 	 */
-	public function get( $post_id ) {
+	public function get_media_meta( $post_id ) {
 
 		// If the media meta object doesn't exist, create it.
 		if ( !isset( $this->media[ $post_id ] ) )
-			$this->create( $post_id );
+			$this->create_media_meta( $post_id );
 
 		return $this->media[ $post_id ];
-	}
-
-	/**
-	 * Creates a new `Hybrid_Media_Meta` object and stores it in the `$media` array by 
-	 * post ID.
-	 *
-	 * @since  3.0.0
-	 * @access public
-	 * @param  int     $post_id
-	 */
-	public function create( $post_id ) {
-
-		$this->media[ $post_id ] = new Hybrid_Media_Meta( $post_id );
 	}
 
 	/**

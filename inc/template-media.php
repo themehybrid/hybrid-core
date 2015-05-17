@@ -50,7 +50,7 @@ function hybrid_get_media_meta( $property, $args = array() ) {
 	$args = wp_parse_args( $args, $defaults );
 
 	// Get the media metadata.
-	$meta = hybrid_media_meta_factory()->get( $args['post_id'] )->$property;
+	$meta = hybrid_media_meta_factory()->get_media_meta( $args['post_id'] )->get( $property );
 
 	// Return the formatted meta or an empty string.
 	return $meta ? $args['before'] . sprintf( $args['wrap'], 'class="data"', sprintf( $args['text'], $meta ) ) . $args['after'] : '';
