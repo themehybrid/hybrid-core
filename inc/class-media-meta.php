@@ -184,8 +184,8 @@ class Hybrid_Media_Meta {
 	 */
 	protected function audio_filters() {
 
-		add_filter( 'hybrid_media_meta_escape_track_number', 'absint' );
-		add_filter( 'hybrid_media_meta_escape_year',         'absint' );
+		add_filter( 'hybrid_media_meta_escape_track_number', 'absint', 5 );
+		add_filter( 'hybrid_media_meta_escape_year',         'absint', 5 );
 
 		// Filters for the audio transcript.
 		add_filter( 'hybrid_media_meta_escape_lyrics', array( $this, 'lyrics' ), 5 );
