@@ -225,24 +225,22 @@ class Hybrid_Media_Meta {
 	 */
 	public function get( $property ) {
 
+		$value = null;
+
 		// If the property exists in the meta array.
 		if ( isset( $this->meta[ $property ] ) )
-			return $this->escape( $this->meta[ $property ], $property );
+			$value = $this->meta[ $property ];
 
 		// If the property exists in the image meta array.
 		elseif ( 'image' === $this->type && isset( $this->meta['image_meta'][ $property ] ) )
-			return $this->escape( $this->meta['image_meta'][ $property ], $property );
+			$value = $this->meta['image_meta'][ $property ];
 
 		// If the property exists in the video's audio meta array.
 		elseif ( 'video' === $this->type && isset( $this->meta['audio'][ $property ] ) )
-			return $this->escape( $this->meta['audio'][ $property ], $property );
+			$value = $this->meta['audio'][ $property ];
 
-		// If a filter exists for the property.
-		elseif ( has_filter( "hybrid_media_meta_escape_{$property}" ) )
-			return $this->escape( null, $property );
-
-		// Return null if all else fails.
-		return null;
+		// Escape and return.
+		return $this->escape( $value, $property );
 	}
 
 	/**
