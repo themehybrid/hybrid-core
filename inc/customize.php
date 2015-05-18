@@ -12,43 +12,39 @@
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
-/* Load custom control classes. */
-add_action( 'customize_register', 'hybrid_load_customize_controls', 0 );
+# Load custom control classes.
+add_action( 'customize_register', 'hybrid_load_customize_classes', 0 );
 
-/* Register customizer panels, sections, settings, and/or controls. */
+# Register customizer panels, sections, settings, and/or controls.
 add_action( 'customize_register', 'hybrid_customize_register' );
 
-/* Register customize controls scripts/styles. */
+# Register customize controls scripts/styles.
 add_action( 'customize_controls_enqueue_scripts', 'hybrid_customize_controls_register_scripts', 5 );
 add_action( 'customize_controls_enqueue_scripts', 'hybrid_customize_controls_register_styles',  5 );
 
-/* Register/Enqueue customize preview scripts/styles. */
+# Register/Enqueue customize preview scripts/styles.
 add_action( 'customize_preview_init', 'hybrid_customize_preview_register_scripts', 5 );
 add_action( 'customize_preview_init', 'hybrid_customize_preview_enqueue_scripts'     );
 
 /**
- * Loads framework-specific customize control classes.  Customize control classes extend the WordPress 
- * WP_Customize_Control class to create unique classes that can be used within the framework.
+ * Loads framework-specific customize classes.  These are classes that extend the core `WP_Customize_*`
+ * classes to provide theme authors access to functionality that core doesn't handle out of the box.
  *
- * @since  1.4.0
+ * @since  3.0.0
  * @access public
  * @return void
  */
-function hybrid_load_customize_controls() {
+function hybrid_load_customize_classes() {
 
-	/* Loads the select multiple customize control class. */
-	require_once( HYBRID_CUSTOMIZE . 'control-select-multiple.php' );
+	// Load customize setting classes.
+	require_once( HYBRID_CUSTOMIZE . 'setting-image-data.php' );
 
-	/* Loads the radio image customize control class. */
-	require_once( HYBRID_CUSTOMIZE . 'control-radio-image.php' );
-
-	/* Loads the color palette customize control class. */
-	require_once( HYBRID_CUSTOMIZE . 'control-palette.php' );
-
-	/* Loads the background image customize control class. */
+	// Load customize control classes.
+	require_once( HYBRID_CUSTOMIZE . 'control-palette.php'          );
+	require_once( HYBRID_CUSTOMIZE . 'control-radio-image.php'      );
+	require_once( HYBRID_CUSTOMIZE . 'control-select-multiple.php'  );
 	require_once( HYBRID_CUSTOMIZE . 'control-background-image.php' );
 
-	/* Loads the background image customize control class. */
 	require_if_theme_supports( 'theme-layouts', HYBRID_CUSTOMIZE . 'control-theme-layout.php' );
 }
 
