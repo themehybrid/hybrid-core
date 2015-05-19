@@ -76,6 +76,16 @@ class Hybrid_Layouts {
 			$args['name'] = $name;
 
 			$this->layouts[ $name ] = (object) $args;
+
+			// If layout has post types, make sure the post type supports `theme-layouts`.
+			if ( !empty( $args['post_types'] ) ) {
+
+				foreach ( $args['post_types'] as $post_type ) {
+
+					if ( !post_type_supports( $post_type, 'theme-layouts' ) )
+						add_post_type_support( $post_type, 'theme-layouts' );
+				}
+			}
 		}
 	}
 
