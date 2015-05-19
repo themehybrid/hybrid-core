@@ -13,11 +13,48 @@
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
+# Load the locale functions file(s).
+add_action( 'after_setup_theme', 'hybrid_load_locale_functions', 0 );
+
 # Overrides the load textdomain function for the 'hybrid-core' domain.
 add_filter( 'override_load_textdomain', 'hybrid_override_load_textdomain', 5, 3 );
 
 # Filter the textdomain mofile to allow child themes to load the parent theme translation.
 add_filter( 'load_textdomain_mofile', 'hybrid_load_textdomain_mofile', 10, 2 );
+
+/**
+ * Loads a `/languages/{$locale}.php` file for specific locales.  `$locale` should be an all lowercase 
+ * and hyphenated (as opposed to an underscore) file name.  So, an `en_US` locale would be `en-us.php`. 
+ * Also note that the child theme locale file will load **before** the parent theme locale file.  This 
+ * is standard practice in core WP for allowing pluggable functions if a theme author so desires.
+ *
+ * @since  3.0.0
+ * @access public
+ * @return void
+ */
+function hybrid_load_locale_functions() {
+
+	// Get the site's locale.
+	$locale = strtolower( str_replace( '_', '-', get_locale() ) );
+
+	// Load child theme language file first.
+	if ( is_child_theme() ) {
+
+		// Look for `/languages/{$locale}.php`.
+		$child_locale_functions = trailingslashit( get_stylesheet_directory() ) . "languages/{$locale}.php";
+
+		// Load file if it exists.
+		if ( file_exists( $child_locale_functions ) )
+			require_once( $child_locale_functions );
+	}
+
+	// Look for `/languages/{$locale}.php`.
+	$locale_functions = trailingslashit( get_stylesheet_directory() ) . "languages/{$locale}.php";
+
+	// Load file if it exists.
+	if ( file_exists( $locale_functions ) )
+		require_once( $locale_functions );
+}
 
 /**
  * Overrides the load textdomain functionality when 'hybrid-core' is the domain in use.  The purpose of 

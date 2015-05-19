@@ -68,10 +68,13 @@ if ( !class_exists( 'Hybrid' ) ) {
 			$hybrid = new stdClass;
 
 			// Define framework, parent theme, and child theme constants.
-			add_action( 'after_setup_theme', array( $this, 'constants' ), 1 );
+			add_action( 'after_setup_theme', array( $this, 'constants' ), -95 );
 
 			// Load the core functions/classes required by the rest of the framework.
-			add_action( 'after_setup_theme', array( $this, 'core' ), 2 );
+			add_action( 'after_setup_theme', array( $this, 'core' ), -95 );
+
+			// Load translations.
+			add_action( 'after_setup_theme', array( $this, 'i18n' ), 5 );
 
 			// Handle theme supported features.
 			add_action( 'after_setup_theme', array( $this, 'theme_support' ), 12 );
@@ -81,9 +84,6 @@ if ( !class_exists( 'Hybrid' ) ) {
 
 			// Load the framework extensions.
 			add_action( 'after_setup_theme', array( $this, 'extensions' ), 14 );
-
-			// Language functions and translations setup.
-			add_action( 'after_setup_theme', array( $this, 'i18n' ), 25 );
 
 			// Load admin files.
 			add_action( 'wp_loaded', array( $this, 'admin' ) );
@@ -173,11 +173,10 @@ if ( !class_exists( 'Hybrid' ) ) {
 		}
 
 		/**
-		 * Loads both the parent and child theme translation files.  If a locale-based functions file exists
-		 * in either the parent or child theme (child overrides parent), it will also be loaded.  All translation 
-		 * and locale functions files are expected to be within the theme's '/languages' folder, but the 
-		 * framework will fall back on the theme root folder if necessary.  Translation files are expected 
-		 * to be prefixed with the template or stylesheet path (example: 'templatename-en_US.mo').
+		 * Loads both the parent and child theme translation files.  All translations are expected 
+		 * to be within the theme's '/languages' folder, but the framework will fall back on the 
+		 * theme root folder if necessary.  Translation files are expected to be prefixed with the 
+		 * textdomain defined in the `style.css` header.
 		 *
 		 * @since  1.2.0
 		 * @access public
@@ -198,16 +197,6 @@ if ( !class_exists( 'Hybrid' ) ) {
 
 			// Load the framework textdomain.
 			$hybrid->textdomain_loaded['hybrid-core'] = hybrid_load_framework_textdomain( 'hybrid-core' );
-
-			// Get the user's locale.
-			$locale = sanitize_key( get_locale() );
-
-			// Locate a locale-specific functions file.
-			$locale_functions = locate_template( array( "languages/{$locale}.php", "{$locale}.php" ) );
-
-			// If the locale file exists and is readable, load it.
-			if ( !empty( $locale_functions ) && is_readable( $locale_functions ) )
-				require_once( $locale_functions );
 		}
 
 		/**
