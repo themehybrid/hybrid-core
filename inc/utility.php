@@ -11,13 +11,13 @@
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
-/* Add extra support for post types. */
+# Add extra support for post types.
 add_action( 'init', 'hybrid_add_post_type_support', 15 );
 
-/* Filters the title for untitled posts. */
+# Filters the title for untitled posts.
 add_filter( 'the_title', 'hybrid_untitled_post' );
 
-/* Filters the archive title and description. */
+# Filters the archive title and description.
 add_filter( 'get_the_archive_title',       'hybrid_archive_title_filter',       5 );
 add_filter( 'get_the_archive_description', 'hybrid_archive_description_filter', 5 );
 
@@ -33,14 +33,14 @@ add_filter( 'get_the_archive_description', 'hybrid_archive_description_filter', 
  */
 function hybrid_add_post_type_support() {
 
-	/* Add support for excerpts to the 'page' post type. */
+	// Add support for excerpts to the 'page' post type.
 	add_post_type_support( 'page', array( 'excerpt' ) );
 
-	/* Add thumbnail support for audio and video attachments. */
+	// Add thumbnail support for audio and video attachments.
 	add_post_type_support( 'attachment:audio', 'thumbnail' );
 	add_post_type_support( 'attachment:video', 'thumbnail' );
 
-	/* Add theme layouts support to core and custom post types. */
+	// Add theme layouts support to core and custom post types.
 	add_post_type_support( 'post',              'theme-layouts' );
 	add_post_type_support( 'page',              'theme-layouts' );
 	add_post_type_support( 'attachment',        'theme-layouts' );
@@ -96,7 +96,7 @@ function hybrid_untitled_post( $title ) {
 
 	if ( empty( $title ) && !is_singular() && in_the_loop() && !is_admin() ) {
 
-		/* Translators: Used as a placeholder for untitled posts on non-singular views. */
+		// Translators: Used as a placeholder for untitled posts on non-singular views.
 		$title = esc_html__( '(Untitled)', 'hybrid-core' );
 	}
 
@@ -118,16 +118,16 @@ function hybrid_locate_theme_file( $file_names ) {
 
 	$located = '';
 
-	/* Loops through each of the given file names. */
+	// Loops through each of the given file names.
 	foreach ( (array) $file_names as $file ) {
 
-		/* If the file exists in the stylesheet (child theme) directory. */
+		// If the file exists in the stylesheet (child theme) directory.
 		if ( is_child_theme() && file_exists( trailingslashit( get_stylesheet_directory() ) . $file ) ) {
 			$located = trailingslashit( get_stylesheet_directory_uri() ) . $file;
 			break;
 		}
 
-		/* If the file exists in the template (parent theme) directory. */
+		// If the file exists in the template (parent theme) directory.
 		elseif ( file_exists( trailingslashit( get_template_directory() ) . $file ) ) {
 			$located = trailingslashit( get_template_directory_uri() ) . $file;
 			break;
@@ -147,19 +147,19 @@ function hybrid_locate_theme_file( $file_names ) {
  */
 function hybrid_hex_to_rgb( $hex ) {
 
-	/* Remove "#" if it was added. */
+	// Remove "#" if it was added.
 	$color = trim( $hex, '#' );
 
-	/* If the color is three characters, convert it to six. */
+	// If the color is three characters, convert it to six.
         if ( 3 === strlen( $color ) )
 		$color = $color[0] . $color[0] . $color[1] . $color[1] . $color[2] . $color[2];
 
-	/* Get the red, green, and blue values. */
+	// Get the red, green, and blue values.
 	$red   = hexdec( $color[0] . $color[1] );
 	$green = hexdec( $color[2] . $color[3] );
 	$blue  = hexdec( $color[4] . $color[5] );
 
-	/* Return the RGB colors as an array. */
+	// Return the RGB colors as an array.
 	return array( 'r' => $red, 'g' => $green, 'b' => $blue );
 }
 

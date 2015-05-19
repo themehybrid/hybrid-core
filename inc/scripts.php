@@ -12,10 +12,10 @@
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
-/* Register Hybrid Core scripts. */
+# Register Hybrid Core scripts.
 add_action( 'wp_enqueue_scripts', 'hybrid_register_scripts', 0 );
 
-/* Load Hybrid Core scripts. */
+# Load Hybrid Core scripts.
 add_action( 'wp_enqueue_scripts', 'hybrid_enqueue_scripts', 5 );
 
 /**
@@ -29,7 +29,7 @@ add_action( 'wp_enqueue_scripts', 'hybrid_enqueue_scripts', 5 );
  */
 function hybrid_register_scripts() {
 
-	/* Register the 'mobile-toggle' script'. */
+	// Register the 'mobile-toggle' script'.
 	wp_register_script( 'hybrid-mobile-toggle', esc_url( HYBRID_JS . 'mobile-toggle' . hybrid_get_min_suffix() . '.js' ), array( 'jquery' ), '20130528', true );
 }
 
@@ -42,7 +42,7 @@ function hybrid_register_scripts() {
  */
 function hybrid_enqueue_scripts() {
 
-	/* Load the comment reply script on singular posts with open comments if threaded comments are supported. */
+	// Load the comment reply script on singular posts with open comments if threaded comments are supported.
 	if ( is_singular() && get_option( 'thread_comments' ) && comments_open() )
 		wp_enqueue_script( 'comment-reply' );
 }

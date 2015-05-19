@@ -270,7 +270,7 @@ function hybrid_single_week_title() {
  */
 function hybrid_get_single_week_title() {
 
-	/* Translators: 1 is the week number and 2 is the year. */
+	// Translators: 1 is the week number and 2 is the year.
 	return sprintf( esc_html__( 'Week %1$s of %2$s', 'hybrid-core' ), get_the_time( esc_html_x( 'W', 'weekly archives date format', 'hybrid-core' ) ), get_the_time( esc_html_x( 'Y', 'yearly archives date format', 'hybrid-core' ) ) );
 }
 
@@ -338,7 +338,7 @@ function hybrid_single_minute_title() {
  */
 function hybrid_get_single_minute_title() {
 
-	/* Translators: Minute archive title. %s is the minute time format. */
+	// Translators: Minute archive title. %s is the minute time format.
 	return sprintf( esc_html__( 'Minute %s', 'hybrid-core' ), get_the_time( esc_html_x( 'i', 'minute archives time format', 'hybrid-core' ) ) );
 }
 
@@ -384,7 +384,7 @@ function hybrid_search_title() {
  */
 function hybrid_get_search_title() {
 
-	/* Translators: %s is the search query. The HTML entities are opening and closing curly quotes. */
+	// Translators: %s is the search query. The HTML entities are opening and closing curly quotes.
 	return sprintf( esc_html__( 'Search results for &#8220;%s&#8221;', 'hybrid-core' ), get_search_query() );
 }
 

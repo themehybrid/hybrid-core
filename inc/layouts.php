@@ -13,13 +13,13 @@
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
-/* Registers default layouts. */
+# Registers default layouts.
 add_action( 'init', 'hybrid_register_layouts', 95 );
 
-/* Filters `current_theme_supports( 'theme-layouts', $arg )`. */
+# Filters `current_theme_supports( 'theme-layouts', $arg )`.
 add_filter( 'current_theme_supports-theme-layouts', 'hybrid_theme_layouts_support', 10, 3 );
 
-/* Filters the theme layout mod. */
+# Filters the theme layout mod.
 add_filter( 'theme_mod_theme_layout', 'hybrid_filter_layout', 5 );
 
 /**
@@ -45,7 +45,7 @@ function hybrid_register_layouts() {
 	hybrid_register_layout(
 		'default',
 		array(
-			/* Translators: Default theme layout option. */
+			// Translators: Default theme layout option.
 			'label'            => esc_html_x( 'Default', 'theme layout', 'hybrid-core' ),
 			'is_global_layout' => false,
 			'_builtin'         => true,
@@ -53,7 +53,7 @@ function hybrid_register_layouts() {
 		)
 	);
 
-	/* Hook for registering theme layouts. Theme should always register on this hook. */
+	// Hook for registering theme layouts. Theme should always register on this hook.
 	do_action( 'hybrid_register_layouts' );
 }
 
@@ -265,11 +265,11 @@ function hybrid_has_user_layout( $layout, $user_id = '' ) {
  */
 function hybrid_filter_layout( $theme_layout ) {
 
-	/* If viewing a singular post, get the post layout. */
+	// If viewing a singular post, get the post layout.
 	if ( is_singular() )
 		$layout = hybrid_get_post_layout( get_queried_object_id() );
 
-	/* If viewing an author archive, get the user layout. */
+	// If viewing an author archive, get the user layout.
 	elseif ( is_author() )
 		$layout = hybrid_get_user_layout( get_queried_object_id() );
 

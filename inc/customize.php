@@ -1,8 +1,6 @@
 <?php
 /**
- * Functions for registering and setting theme settings that tie into the WordPress theme customizer.  
- * This file loads additional classes and adds settings to the customizer for the built-in Hybrid Core 
- * settings.
+ * Loads customizer-related files (see `/inc/customize`) and sets up customizer functionality.
  *
  * @package    HybridCore
  * @subpackage Includes
@@ -57,7 +55,7 @@ function hybrid_load_customize_classes() {
  */
 function hybrid_customize_register( $wp_customize ) {
 
-	/* Always add the layout section so that theme devs can utilize it. */
+	// Always add the layout section so that theme devs can utilize it.
 	$wp_customize->add_section(
 		'layout',
 		array(
@@ -66,10 +64,10 @@ function hybrid_customize_register( $wp_customize ) {
 		)
 	);
 
-	/* Check if the theme supports the theme layouts customize feature. */
+	// Check if the theme supports the theme layouts customize feature.
 	if ( current_theme_supports( 'theme-layouts', 'customize' ) ) {
 
-		/* Add the layout setting. */
+		// Add the layout setting.
 		$wp_customize->add_setting(
 			'theme_layout',
 			array(
@@ -79,7 +77,7 @@ function hybrid_customize_register( $wp_customize ) {
 			)
 		);
 
-		/* Add the layout control. */
+		// Add the layout control.
 		$wp_customize->add_control(
 			new Hybrid_Customize_Control_Theme_Layout(
 				$wp_customize,

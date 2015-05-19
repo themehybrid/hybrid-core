@@ -69,40 +69,40 @@ function hybrid_get_comment_reply_link( $args = array() ) {
 function hybrid_comments_callback( $comment, $args, $depth ) {
 	global $hybrid;
 
-	/* Get the comment type of the current comment. */
+	// Get the comment type of the current comment.
 	$comment_type = get_comment_type( $comment->comment_ID );
 
-	/* Create an empty array if the comment template array is not set. */
+	// Create an empty array if the comment template array is not set.
 	if ( !isset( $hybrid->comment_template) || !is_array( $hybrid->comment_template ) )
 		$hybrid->comment_template = array();
 
-	/* Check if a template has been provided for the specific comment type.  If not, get the template. */
+	// Check if a template has been provided for the specific comment type.  If not, get the template.
 	if ( !isset( $hybrid->comment_template[$comment_type] ) ) {
 
-		/* Create an array of template files to look for. */
+		// Create an array of template files to look for.
 		$templates = array( "comment-{$comment_type}.php", "comment/{$comment_type}.php" );
 
-		/* If the comment type is a 'pingback' or 'trackback', allow the use of 'comment-ping.php'. */
+		// If the comment type is a 'pingback' or 'trackback', allow the use of 'comment-ping.php'.
 		if ( 'pingback' == $comment_type || 'trackback' == $comment_type ) {
 			$templates[] = 'comment-ping.php';
 			$templates[] = 'comment/ping.php';
 		}
 
-		/* Add the fallback 'comment.php' template. */
+		// Add the fallback 'comment.php' template.
 		$templates[] = 'comment/comment.php';
 		$templates[] = 'comment.php';
 
-		/* Allow devs to filter the template hierarchy. */
+		// Allow devs to filter the template hierarchy.
 		$templates = apply_filters( 'hybrid_comment_template_hierarchy', $templates, $comment_type );
 
-		/* Locate the comment template. */
+		// Locate the comment template.
 		$template = locate_template( $templates );
 
-		/* Set the template in the comment template array. */
+		// Set the template in the comment template array.
 		$hybrid->comment_template[ $comment_type ] = $template;
 	}
 
-	/* If a template was found, load the template. */
+	// If a template was found, load the template.
 	if ( !empty( $hybrid->comment_template[ $comment_type ] ) )
 		require( $hybrid->comment_template[ $comment_type ] );
 }

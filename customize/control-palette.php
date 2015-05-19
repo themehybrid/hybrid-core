@@ -47,7 +47,7 @@ class Hybrid_Customize_Control_Palette extends WP_Customize_Control {
 	 */
 	public function render_content() {
 
-		/* If no choices are provided, bail. */
+		// If no choices are provided, bail.
 		if ( empty( $this->choices ) )
 			return; ?>
 

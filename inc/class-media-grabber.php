@@ -98,14 +98,14 @@ class Hybrid_Media_Grabber {
 	public function __construct( $args = array() ) {
 		global $wp_embed, $content_width;
 
-		/* Use WP's embed functionality to handle the [embed] shortcode and autoembeds. */
+		// Use WP's embed functionality to handle the [embed] shortcode and autoembeds.
 		add_filter( 'hybrid_media_grabber_embed_shortcode_media', array( $wp_embed, 'run_shortcode' ) );
 		add_filter( 'hybrid_media_grabber_autoembed_media',       array( $wp_embed, 'autoembed' ) );
 
-		/* Don't return a link if embeds don't work. Need media or nothing at all. */
+		// Don't return a link if embeds don't work. Need media or nothing at all.
 		add_filter( 'embed_maybe_make_link', '__return_false' );
 
-		/* Set up the default arguments. */
+		// Set up the default arguments.
 		$defaults = array(
 			'post_id'     => get_the_ID(),   // post ID (assumes within The Loop by default)
 			'type'        => 'video',        // audio|video
@@ -115,12 +115,12 @@ class Hybrid_Media_Grabber {
 			'width'       => $content_width, // Custom width. Defaults to the theme's content width.
 		);
 
-		/* Set the object properties. */
+		// Set the object properties.
 		$this->args    = apply_filters( 'hybrid_media_grabber_args', wp_parse_args( $args, $defaults ) );
 		$this->content = get_post_field( 'post_content', $this->args['post_id'] );
 		$this->type    = isset( $this->args['type'] ) && in_array( $this->args['type'], array( 'audio', 'video' ) ) ? $this->args['type'] : 'video';
 
-		/* Find the media related to the post. */
+		// Find the media related to the post.
 		$this->set_media();
 	}
 
@@ -155,42 +155,42 @@ class Hybrid_Media_Grabber {
 	 */
 	public function set_media() {
 
-		/* Get the media if the post type is an attachment. */
+		// Get the media if the post type is an attachment.
 		if ( 'attachment' === get_post_type( $this->args['post_id'] ) )
 			$this->do_attachment_media();
 
-		/* Find media in the post content based on WordPress' media-related shortcodes. */
+		// Find media in the post content based on WordPress' media-related shortcodes.
 		if ( empty( $this->media ) )
 			$this->do_shortcode_media();
 
-		/* If no media is found and autoembeds are enabled, check for autoembeds. */
+		// If no media is found and autoembeds are enabled, check for autoembeds.
 		if ( empty( $this->media ) && get_option( 'embed_autourls' ) )
 			$this->do_autoembed_media();
 
-		/* If no media is found, check for media HTML within the post content. */
+		// If no media is found, check for media HTML within the post content.
 		if ( empty( $this->media ) )
 			$this->do_embedded_media();
 
-		/* If no media is found, check for media attached to the post. */
+		// If no media is found, check for media attached to the post.
 		if ( empty( $this->media ) )
 			$this->do_attached_media();
 
-		/* If media is found, let's run a few things. */
+		// If media is found, let's run a few things.
 		if ( !empty( $this->media ) ) {
 
-			/* Add the before HTML. */
+			// Add the before HTML.
 			if ( isset( $this->args['before'] ) )
 				$this->media = $this->args['before'] . $this->media;
 
-			/* Add the after HTML. */
+			// Add the after HTML.
 			if ( isset( $this->args['after'] ) )
 				$this->media .= $this->args['after'];
 
-			/* Split the media from the content. */
+			// Split the media from the content.
 			if ( true === $this->args['split_media'] && !empty( $this->original_media ) )
 				add_filter( 'the_content', array( $this, 'split_media' ), 5 );
 
-			/* Filter the media dimensions. */
+			// Filter the media dimensions.
 			$this->media = $this->filter_dimensions( $this->media );
 		}
 	}
@@ -206,21 +206,21 @@ class Hybrid_Media_Grabber {
 	 */
 	public function do_shortcode_media() {
 
-		/* Finds matches for shortcodes in the content. */
+		// Finds matches for shortcodes in the content.
 		preg_match_all( '/' . get_shortcode_regex() . '/s', $this->content, $matches, PREG_SET_ORDER );
 
-		/* If matches are found, loop through them and check if they match one of WP's media shortcodes. */
+		// If matches are found, loop through them and check if they match one of WP's media shortcodes.
 		if ( !empty( $matches ) ) {
 
 			foreach ( $matches as $shortcode ) {
 
-				/* Call the method related to the specific shortcode found and break out of the loop. */
+				// Call the method related to the specific shortcode found and break out of the loop.
 				if ( in_array( $shortcode[2], array( 'playlist', 'embed', $this->type ) ) ) {
 					call_user_func( array( $this, "do_{$shortcode[2]}_shortcode_media" ), $shortcode );
 					break;
 				}
 
-				/* Check for Jetpack audio/video shortcodes. */
+				// Check for Jetpack audio/video shortcodes.
 				elseif ( in_array( $shortcode[2], array( 'blip.tv', 'dailymotion', 'flickr', 'ted', 'vimeo', 'vine', 'youtube', 'wpvideo', 'soundcloud', 'bandcamp' ) ) ) {
 					$this->do_jetpack_shortcode_media( $shortcode );
 					break;
@@ -289,7 +289,7 @@ class Hybrid_Media_Grabber {
 
 		$this->original_media = array_shift( $shortcode );
 
-		/* Need to filter dimensions here to overwrite WP's <div> surrounding the [video] shortcode. */
+		// Need to filter dimensions here to overwrite WP's <div> surrounding the [video] shortcode.
 		$this->media = do_shortcode( $this->filter_dimensions( $this->original_media ) );
 	}
 
@@ -319,12 +319,12 @@ class Hybrid_Media_Grabber {
 
 		preg_match_all( '|^\s*(https?://[^\s"]+)\s*$|im', $this->content, $matches, PREG_SET_ORDER );
 
-		/* If URL matches are found, loop through them to see if we can get an embed. */
+		// If URL matches are found, loop through them to see if we can get an embed.
 		if ( is_array( $matches ) ) {
 
 			foreach ( $matches as $value ) {
 
-				/* Let WP work its magic with the 'autoembed' method. */
+				// Let WP work its magic with the 'autoembed' method.
 				$embed = trim( apply_filters( 'hybrid_media_grabber_autoembed_media', $value[0] ) );
 
 				if ( !empty( $embed ) ) {
@@ -362,19 +362,19 @@ class Hybrid_Media_Grabber {
 	 */
 	public function do_attached_media() {
 
-		/* Gets media attached to the post by mime type. */
+		// Gets media attached to the post by mime type.
 		$attached_media = get_attached_media( $this->type, $this->args['post_id'] );
 
-		/* If media is found. */
+		// If media is found.
 		if ( !empty( $attached_media ) ) {
 
-			/* Get the first attachment/post object found for the post. */
+			// Get the first attachment/post object found for the post.
 			$post = array_shift( $attached_media );
 
-			/* Gets the URI for the attachment (the media file). */
+			// Gets the URI for the attachment (the media file).
 			$url = esc_url( wp_get_attachment_url( $post->ID ) );
 
-			/* Run the media as a shortcode using WordPress' built-in [audio] and [video] shortcodes. */
+			// Run the media as a shortcode using WordPress' built-in [audio] and [video] shortcodes.
 			$this->media = do_shortcode( "[{$this->type} src='{$url}']" );
 		}
 	}
@@ -388,10 +388,10 @@ class Hybrid_Media_Grabber {
 	 */
 	public function do_attachment_media() {
 
-		/* Gets the URI for the attachment (the media file). */
+		// Gets the URI for the attachment (the media file).
 		$url = esc_url( wp_get_attachment_url( $this->args['post_id'] ) );
 
-		/* Run the media as a shortcode using WordPress' built-in [audio] and [video] shortcodes. */
+		// Run the media as a shortcode using WordPress' built-in [audio] and [video] shortcodes.
 		$this->media = do_shortcode( "[{$this->type} src='{$url}']" );
 	}
 
@@ -424,28 +424,28 @@ class Hybrid_Media_Grabber {
 
 		$_html = strip_tags( $html, '<object><embed><iframe><video>' );
 
-		/* Find the attributes of the media. */
+		// Find the attributes of the media.
 		$atts = wp_kses_hair( $_html, array( 'http', 'https' ) );
 
-		/* Loop through the media attributes and add them in key/value pairs. */
+		// Loop through the media attributes and add them in key/value pairs.
 		foreach ( $atts as $att )
 			$media_atts[ $att['name'] ] = $att['value'];
 
-		/* If no dimensions are found, just return the HTML. */
+		// If no dimensions are found, just return the HTML.
 		if ( empty( $media_atts ) || !isset( $media_atts['width'] ) || !isset( $media_atts['height'] ) )
 			return $html;
 
-		/* Set the max width. */
+		// Set the max width.
 		$max_width = $this->args['width'];
 
-		/* Set the max height based on the max width and original width/height ratio. */
+		// Set the max height based on the max width and original width/height ratio.
 		$max_height = round( $max_width / ( $media_atts['width'] / $media_atts['height'] ) );
 
-		/* Fix for Spotify embeds. */
+		// Fix for Spotify embeds.
 		if ( !empty( $media_atts['src'] ) && preg_match( '#https?://(embed)\.spotify\.com/.*#i', $media_atts['src'], $matches ) )
 			list( $max_width, $max_height ) = $this->spotify_dimensions( $media_atts );
 
-		/* Calculate new media dimensions. */
+		// Calculate new media dimensions.
 		$dimensions = wp_expand_dimensions( 
 			$media_atts['width'], 
 			$media_atts['height'], 
@@ -453,7 +453,7 @@ class Hybrid_Media_Grabber {
 			$max_height
 		);
 
-		/* Allow devs to filter the final width and height of the media. */
+		// Allow devs to filter the final width and height of the media.
 		list( $width, $height ) = apply_filters( 
 			'hybrid_media_grabber_dimensions', 
 			$dimensions,                       // width/height array
@@ -461,7 +461,7 @@ class Hybrid_Media_Grabber {
 			$this                              // media grabber object
 		);
 
-		/* Set up the patterns for the 'width' and 'height' attributes. */
+		// Set up the patterns for the 'width' and 'height' attributes.
 		$patterns = array(
 			'/(width=[\'"]).+?([\'"])/i',
 			'/(height=[\'"]).+?([\'"])/i',
@@ -469,7 +469,7 @@ class Hybrid_Media_Grabber {
 			'/(<div.+?style=[\'"].*?height:.+?).+?(px;.+?[\'"].*?>)/i'
 		);
 
-		/* Set up the replacements for the 'width' and 'height' attributes. */
+		// Set up the replacements for the 'width' and 'height' attributes.
 		$replacements = array(
 			'${1}' . $width . '${2}',
 			'${1}' . $height . '${2}',
@@ -477,7 +477,7 @@ class Hybrid_Media_Grabber {
 			'${1}' . $height . '${2}',
 		);
 
-		/* Filter the dimensions and return the media HTML. */
+		// Filter the dimensions and return the media HTML.
 		return preg_replace( $patterns, $replacements, $html );
 	}
 

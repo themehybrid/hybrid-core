@@ -11,7 +11,7 @@
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
-/* Register meta on the 'init' hook. */
+# Register meta on the 'init' hook.
 add_action( 'init', 'hybrid_register_meta', 15 );
 
 /**
@@ -23,7 +23,7 @@ add_action( 'init', 'hybrid_register_meta', 15 );
  */
 function hybrid_register_meta() {
 
-	/* Register meta if the theme supports the 'hybrid-core-template-hierarchy' feature. */
+	// Register meta if the theme supports the 'hybrid-core-template-hierarchy' feature.
 	if ( current_theme_supports( 'hybrid-core-template-hierarchy' ) ) {
 
 		foreach ( get_post_types( array( 'public' => true ) ) as $post_type ) {
@@ -32,12 +32,12 @@ function hybrid_register_meta() {
 		}
 	}
 
-	/* Theme layouts meta. */
+	// Theme layouts meta.
 	if ( current_theme_supports( 'theme-layouts' ) ) {
 		register_meta( 'post', hybrid_get_layout_meta_key(), 'sanitize_html_class', '__return_false' );
 		register_meta( 'user', hybrid_get_layout_meta_key(), 'sanitize_html_class', '__return_false' );
 	}
 
-	/* Post styles meta. */
+	// Post styles meta.
 	register_meta( 'post', hybrid_get_style_meta_key(), 'sanitize_text_field', '__return_false' );
 }

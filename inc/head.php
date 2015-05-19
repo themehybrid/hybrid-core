@@ -10,13 +10,13 @@
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
-/* Adds common theme items to <head>. */
+# Adds common theme items to <head>.
 add_action( 'wp_head', 'hybrid_meta_charset',   0 );
 add_action( 'wp_head', 'hybrid_meta_viewport',  1 );
 add_action( 'wp_head', 'hybrid_meta_generator', 1 );
 add_action( 'wp_head', 'hybrid_link_pingback',  3 );
 
-/* Filter the WordPress title. */
+# Filter the WordPress title.
 add_filter( 'wp_title', 'hybrid_wp_title', 1, 3 );
 
 /**
@@ -82,7 +82,7 @@ function hybrid_link_pingback() {
  */
 function hybrid_wp_title( $doctitle, $separator, $seplocation ) {
 
-	/* Custom separator for backwards compatibility. */
+	// Custom separator for backwards compatibility.
 	$separator = ':';
 
 	if ( is_front_page() )
@@ -136,12 +136,12 @@ function hybrid_wp_title( $doctitle, $separator, $seplocation ) {
 	elseif ( is_404() )
 		$doctitle = hybrid_get_404_title();
 
-	/* If the current page is a paged page. */
+	// If the current page is a paged page.
 	if ( ( ( $page = get_query_var( 'paged' ) ) || ( $page = get_query_var( 'page' ) ) ) && $page > 1 )
-		/* Translators: 1 is the page title. 2 is the page number. */
+		// Translators: 1 is the page title. 2 is the page number.
 		$doctitle = sprintf( __( '%1$s Page %2$s', 'hybrid-core' ), $doctitle . $separator, number_format_i18n( absint( $page ) ) );
 
-	/* Trim separator + space from beginning and end. */
+	// Trim separator + space from beginning and end.
 	$doctitle = trim( strip_tags( $doctitle ), "{$separator} " );
 
 	return esc_html( $doctitle );

@@ -12,10 +12,10 @@
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
-/* Don't strip tags on single post titles. */
+# Don't strip tags on single post titles.
 remove_filter( 'single_post_title', 'strip_tags' );
 
-/* Use same default filters as 'the_content' with a little more flexibility. */
+# Use same default filters as 'the_content' with a little more flexibility.
 add_filter( 'hybrid_archive_description', array( $GLOBALS['wp_embed'], 'run_shortcode' ),   5  );
 add_filter( 'hybrid_archive_description', array( $GLOBALS['wp_embed'], 'autoembed'     ),   5  );
 add_filter( 'hybrid_archive_description',                               'wptexturize',       10 );
@@ -25,14 +25,14 @@ add_filter( 'hybrid_archive_description',                               'wpautop
 add_filter( 'hybrid_archive_description',                               'do_shortcode',      30 );
 add_filter( 'hybrid_archive_description',                               'shortcode_unautop', 35 );
 
-/* Default excerpt more. */
+# Default excerpt more.
 add_filter( 'excerpt_more', 'hybrid_excerpt_more', 5 );
 
-/* Modifies the arguments and output of wp_link_pages(). */
+# Modifies the arguments and output of wp_link_pages().
 add_filter( 'wp_link_pages_args', 'hybrid_link_pages_args', 5 );
 add_filter( 'wp_link_pages_link', 'hybrid_link_pages_link', 5 );
 
-/* Filters to add microdata support to common template tags. */
+# Filters to add microdata support to common template tags.
 add_filter( 'the_author_posts_link',          'hybrid_the_author_posts_link',          5 );
 add_filter( 'get_comment_author_link',        'hybrid_get_comment_author_link',        5 );
 add_filter( 'get_comment_author_url_link',    'hybrid_get_comment_author_url_link',    5 );

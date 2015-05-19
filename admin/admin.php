@@ -11,11 +11,11 @@
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
-/* Load the post meta boxes on the new post and edit post screens. */
+# Load the post meta boxes on the new post and edit post screens.
 add_action( 'load-post.php',     'hybrid_admin_load_post_meta_boxes' );
 add_action( 'load-post-new.php', 'hybrid_admin_load_post_meta_boxes' );
 
-/* Register scripts and styles. */
+# Register scripts and styles.
 add_action( 'admin_enqueue_scripts', 'hybrid_admin_register_scripts', 0 );
 add_action( 'admin_enqueue_scripts', 'hybrid_admin_register_styles',  0 );
 
@@ -29,13 +29,13 @@ add_action( 'admin_enqueue_scripts', 'hybrid_admin_register_styles',  0 );
  */
 function hybrid_admin_load_post_meta_boxes() {
 
-	/* Load the post template meta box. */
+	// Load the post template meta box.
 	require_if_theme_supports( 'hybrid-core-template-hierarchy', HYBRID_ADMIN . 'meta-box-post-template.php' );
 
-	/* Load the layout meta box. */
+	// Load the layout meta box.
 	require_if_theme_supports( 'theme-layouts', HYBRID_ADMIN . 'meta-box-post-layout.php' );
 
-	/* Load the post style meta box. */
+	// Load the post style meta box.
 	require_once( HYBRID_ADMIN . 'meta-box-post-style.php' );
 }
 
@@ -75,35 +75,35 @@ function hybrid_admin_register_styles() {
 function hybrid_get_post_templates( $post_type = 'post' ) {
 	global $hybrid;
 
-	/* If templates have already been called, just return them. */
+	// If templates have already been called, just return them.
 	if ( !empty( $hybrid->post_templates ) && isset( $hybrid->post_templates[ $post_type ] ) )
 		return $hybrid->post_templates[ $post_type ];
 
-	/* Set up an empty array to house the templates. */
+	// Set up an empty array to house the templates.
 	$post_templates = array();
 
-	/* Get the theme PHP files one level deep. */
+	// Get the theme PHP files one level deep.
 	$files = wp_get_theme( get_template() )->get_files( 'php', 1 );
 
-	/* If a child theme is active, get its files and merge with the parent theme files. */
+	// If a child theme is active, get its files and merge with the parent theme files.
 	if ( is_child_theme() )
 		$files = array_merge( $files, wp_get_theme()->get_files( 'php', 1 ) );
 
-	/* Loop through each of the PHP files and check if they are post templates. */
+	// Loop through each of the PHP files and check if they are post templates.
 	foreach ( $files as $file => $path ) {
 
-		/* Get file data based on the post type singular name (e.g., "Post Template", "Book Template", etc.). */
+		// Get file data based on the post type singular name (e.g., "Post Template", "Book Template", etc.).
 		$headers = get_file_data( $path, array( "{$post_type} Template" => "{$post_type} Template" ) );
 
-		/* Add the PHP filename and template name to the array. */
+		// Add the PHP filename and template name to the array.
 		if ( !empty( $headers["{$post_type} Template"] ) )
 			$post_templates[ $file ] = $headers["{$post_type} Template"];
 	}
 
-	/* Add the templates to the global $hybrid object. */
+	// Add the templates to the global $hybrid object.
 	$hybrid->post_templates[ $post_type ] = array_flip( $post_templates );
 
-	/* Return array of post templates. */
+	// Return array of post templates.
 	return $hybrid->post_templates[ $post_type ];
 }
 
@@ -119,24 +119,24 @@ function hybrid_get_post_templates( $post_type = 'post' ) {
 function hybrid_get_post_styles( $post_type = 'post' ) {
 	global $hybrid;
 
-	/* If stylesheets have already been loaded, return them. */
+	// If stylesheets have already been loaded, return them.
 	if ( !empty( $hyrid->post_styles ) && isset( $hybrid->post_styles[ $post_type ] ) )
 		return $hybrid->post_styles[ $post_type ];
 
-	/* Set up an empty styles array. */
+	// Set up an empty styles array.
 	$hybrid->post_styles[ $post_type ] = array();
 
-	/* Get the theme CSS files two levels deep. */
+	// Get the theme CSS files two levels deep.
 	$files = wp_get_theme( get_template() )->get_files( 'css', 2 );
 
-	/* If a child theme is active, get its files and merge with the parent theme files. */
+	// If a child theme is active, get its files and merge with the parent theme files.
 	if ( is_child_theme() )
 		$files = array_merge( $files, wp_get_theme()->get_files( 'css', 2 ) );
 
-	/* Loop through each of the CSS files and check if they are styles. */
+	// Loop through each of the CSS files and check if they are styles.
 	foreach ( $files as $file => $path ) {
 
-		/* Get file data based on the 'Style Name' header. */
+		// Get file data based on the 'Style Name' header.
 		$headers = get_file_data(
 			$path, 
 			array( 
@@ -145,7 +145,7 @@ function hybrid_get_post_styles( $post_type = 'post' ) {
 			) 
 		);
 
-		/* Add the CSS filename and template name to the array. */
+		// Add the CSS filename and template name to the array.
 		if ( !empty( $headers['Style Name'] ) )
 			$hybrid->post_styles[ $post_type ][ $file ] = $headers['Style Name'];
 
@@ -153,9 +153,9 @@ function hybrid_get_post_styles( $post_type = 'post' ) {
 			$hybrid->post_styles[ $post_type ][ $file ] = $headers["{$post_type} Style"];
 	}
 
-	/* Flip the array of styles. */
+	// Flip the array of styles.
 	$hybrid->post_styles[ $post_type ] = array_flip( $hybrid->post_styles[ $post_type ] );
 
-	/* Return array of styles. */
+	// Return array of styles.
 	return $hybrid->post_styles[ $post_type ];
 }

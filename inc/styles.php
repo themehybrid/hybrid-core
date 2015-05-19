@@ -12,17 +12,17 @@
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
-/* Register Hybrid Core styles. */
+# Register Hybrid Core styles.
 add_action( 'wp_enqueue_scripts', 'hybrid_register_styles', 0 );
 
-/* Active theme style filters. */
+# Active theme style filters.
 add_filter( 'stylesheet_uri', 'hybrid_min_stylesheet_uri', 5, 2 );
 add_filter( 'stylesheet_uri', 'hybrid_style_filter',       15   );
 
-/* Filters the WP locale stylesheet. */
+# Filters the WP locale stylesheet.
 add_filter( 'locale_stylesheet_uri', 'hybrid_locale_stylesheet_uri', 5 );
 
-/* Remove the default emoji styles. We'll handle this in the stylesheet. */
+# Remove the default emoji styles. We'll handle this in the stylesheet.
 remove_action( 'wp_print_styles', 'print_emoji_styles' );
 
 /**
@@ -38,7 +38,7 @@ function hybrid_register_styles() {
 
 	$suffix = hybrid_get_min_suffix();
 
-	/* Register styles for use by themes. */
+	// Register styles for use by themes.
 	wp_register_style( 'hybrid-one-five', esc_url( HYBRID_CSS . "one-five{$suffix}.css" ), null, '20150516'                                       );
 	wp_register_style( 'hybrid-gallery',  esc_url( HYBRID_CSS . "gallery{$suffix}.css"  ), null, '20130526'                                       );
 	wp_register_style( 'hybrid-parent',   esc_url( hybrid_get_parent_stylesheet_uri()   ), null, wp_get_theme( get_template() )->get( 'Version' ) );
@@ -55,13 +55,13 @@ function hybrid_register_styles() {
  */
 function hybrid_get_parent_stylesheet_uri() {
 
-	/* Get the minified suffix. */
+	// Get the minified suffix.
 	$suffix = hybrid_get_min_suffix();
 
-	/* Get the parent theme stylesheet. */
+	// Get the parent theme stylesheet.
 	$stylesheet_uri = trailingslashit( get_template_directory_uri() ) . 'style.css';
 
-	/* If a '.min' version of the parent theme stylesheet exists, use it. */
+	// If a '.min' version of the parent theme stylesheet exists, use it.
 	if ( !empty( $suffix ) && file_exists( trailingslashit( get_template_directory() ) . "style{$suffix}.css" ) )
 		$stylesheet_uri = trailingslashit( get_template_directory_uri() ) . "style{$suffix}.css";
 
@@ -81,24 +81,24 @@ function hybrid_get_parent_stylesheet_uri() {
  */
 function hybrid_min_stylesheet_uri( $stylesheet_uri, $stylesheet_dir_uri ) {
 
-	/* Get the minified suffix. */
+	// Get the minified suffix.
 	$suffix = hybrid_get_min_suffix();
 
-	/* Use the .min stylesheet if available. */
+	// Use the .min stylesheet if available.
 	if ( !empty( $suffix ) ) {
 
-		/* Remove the stylesheet directory URI from the file name. */
+		// Remove the stylesheet directory URI from the file name.
 		$stylesheet = str_replace( trailingslashit( $stylesheet_dir_uri ), '', $stylesheet_uri );
 
-		/* Change the stylesheet name to 'style.min.css'. */
+		// Change the stylesheet name to 'style.min.css'.
 		$stylesheet = str_replace( '.css', "{$suffix}.css", $stylesheet );
 
-		/* If the stylesheet exists in the stylesheet directory, set the stylesheet URI to the dev stylesheet. */
+		// If the stylesheet exists in the stylesheet directory, set the stylesheet URI to the dev stylesheet.
 		if ( file_exists( trailingslashit( get_stylesheet_directory() ) . $stylesheet ) )
 			$stylesheet_uri = esc_url( trailingslashit( $stylesheet_dir_uri ) . $stylesheet );
 	}
 
-	/* Return the theme stylesheet. */
+	// Return the theme stylesheet.
 	return $stylesheet_uri;
 }
 
@@ -133,7 +133,7 @@ function hybrid_get_locale_style() {
 
 	$styles = array();
 
-	/* Get the locale, language, and region. */
+	// Get the locale, language, and region.
 	$locale = strtolower( str_replace( '_', '-', get_locale() ) );
 	$lang   = strtolower( hybrid_get_language() );
 	$region = strtolower( hybrid_get_region() );

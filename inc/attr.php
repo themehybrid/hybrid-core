@@ -15,7 +15,7 @@
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
-/* Attributes for major structural elements. */
+# Attributes for major structural elements.
 add_filter( 'hybrid_attr_body',    'hybrid_attr_body',    5    );
 add_filter( 'hybrid_attr_header',  'hybrid_attr_header',  5    );
 add_filter( 'hybrid_attr_footer',  'hybrid_attr_footer',  5    );
@@ -23,18 +23,18 @@ add_filter( 'hybrid_attr_content', 'hybrid_attr_content', 5    );
 add_filter( 'hybrid_attr_sidebar', 'hybrid_attr_sidebar', 5, 2 );
 add_filter( 'hybrid_attr_menu',    'hybrid_attr_menu',    5, 2 );
 
-/* Header attributes. */
+# Header attributes.
 add_filter( 'hybrid_attr_head',             'hybrid_attr_head',             5 );
 add_filter( 'hybrid_attr_branding',         'hybrid_attr_branding',         5 );
 add_filter( 'hybrid_attr_site-title',       'hybrid_attr_site_title',       5 );
 add_filter( 'hybrid_attr_site-description', 'hybrid_attr_site_description', 5 );
 
-/* Loop attributes. */
+# Loop attributes.
 add_filter( 'hybrid_attr_archive-header',      'hybrid_attr_archive_header',      5 );
 add_filter( 'hybrid_attr_archive-title',       'hybrid_attr_archive_title',       5 );
 add_filter( 'hybrid_attr_archive-description', 'hybrid_attr_archive_description', 5 );
 
-/* Post-specific attributes. */
+# Post-specific attributes.
 add_filter( 'hybrid_attr_post',            'hybrid_attr_post',            5    );
 add_filter( 'hybrid_attr_entry',           'hybrid_attr_post',            5    ); // Alternate for "post".
 add_filter( 'hybrid_attr_entry-title',     'hybrid_attr_entry_title',     5    );
@@ -44,7 +44,7 @@ add_filter( 'hybrid_attr_entry-content',   'hybrid_attr_entry_content',   5    )
 add_filter( 'hybrid_attr_entry-summary',   'hybrid_attr_entry_summary',   5    );
 add_filter( 'hybrid_attr_entry-terms',     'hybrid_attr_entry_terms',     5, 2 );
 
-/* Comment specific attributes. */
+# Comment specific attributes.
 add_filter( 'hybrid_attr_comment',           'hybrid_attr_comment',           5 );
 add_filter( 'hybrid_attr_comment-author',    'hybrid_attr_comment_author',    5 );
 add_filter( 'hybrid_attr_comment-published', 'hybrid_attr_comment_published', 5 );
@@ -196,7 +196,7 @@ function hybrid_attr_sidebar( $attr, $context ) {
 		$sidebar_name = hybrid_get_sidebar_name( $context );
 
 		if ( !empty( $sidebar_name ) ) {
-			/* Translators: The %s is the sidebar name. This is used for the 'aria-label' attribute. */
+			// Translators: The %s is the sidebar name. This is used for the 'aria-label' attribute.
 			$attr['aria-label'] = esc_attr( sprintf( _x( '%s Sidebar', 'sidebar aria label', 'hybrid-core' ), $sidebar_name ) );
 		}
 	}
@@ -229,7 +229,7 @@ function hybrid_attr_menu( $attr, $context ) {
 		$menu_name = hybrid_get_menu_location_name( $context );
 
 		if ( !empty( $menu_name ) ) {
-			/* Translators: The %s is the menu name. This is used for the 'aria-label' attribute. */
+			// Translators: The %s is the menu name. This is used for the 'aria-label' attribute.
 			$attr['aria-label'] = esc_attr( sprintf( _x( '%s Menu', 'nav menu aria label', 'hybrid-core' ), $menu_name ) );
 		}
 	}
@@ -378,7 +378,7 @@ function hybrid_attr_post( $attr ) {
 
 	$post = get_post();
 
-	/* Make sure we have a real post first. */
+	// Make sure we have a real post first.
 	if ( !empty( $post ) ) {
 
 		$attr['id']        = 'post-' . get_the_ID();
@@ -470,7 +470,7 @@ function hybrid_attr_entry_published( $attr ) {
 	$attr['datetime'] = get_the_time( 'Y-m-d\TH:i:sP' );
 	$attr['itemprop'] = 'datePublished';
 
-	/* Translators: Post date/time "title" attribute. */
+	// Translators: Post date/time "title" attribute.
 	$attr['title']    = get_the_time( _x( 'l, F j, Y, g:i a', 'post time format', 'hybrid-core' ) );
 
 	return $attr;
@@ -595,7 +595,7 @@ function hybrid_attr_comment_published( $attr ) {
 	$attr['class']    = 'comment-published';
 	$attr['datetime'] = get_comment_time( 'Y-m-d\TH:i:sP' );
 
-	/* Translators: Comment date/time "title" attribute. */
+	// Translators: Comment date/time "title" attribute.
 	$attr['title']    = get_comment_time( _x( 'l, F j, Y, g:i a', 'comment time format', 'hybrid-core' ) );
 	$attr['itemprop'] = 'commentTime';
 

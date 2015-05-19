@@ -24,7 +24,7 @@
  */
 function hybrid_register_sidebar( $args ) {
 
-	/* Set up some default sidebar arguments. */
+	// Set up some default sidebar arguments.
 	$defaults = array(
 		'id'            => '',
 		'name'          => '',
@@ -35,23 +35,23 @@ function hybrid_register_sidebar( $args ) {
 		'after_title'   => '</h3>'
 	);
 
-	/* Allow developers to filter the default sidebar arguments. */
+	// Allow developers to filter the default sidebar arguments.
 	$defaults = apply_filters( 'hybrid_sidebar_defaults', $defaults );
 
-	/* Parse the arguments. */
+	// Parse the arguments.
 	$args = wp_parse_args( $args, $defaults );
 
-	/* Allow developers to filter the sidebar arguments. */
+	// Allow developers to filter the sidebar arguments.
 	$args = apply_filters( 'hybrid_sidebar_args', $args );
 
-	/* Remove action. */
+	// Remove action.
 	remove_action( 'widgets_init', '__return_false', 95 );
 
-	/* Register the sidebar. */
+	// Register the sidebar.
 	return register_sidebar( $args );
 }
 
-/* Compatibility for when a theme doesn't register any sidebars. */
+# Compatibility for when a theme doesn't register any sidebars.
 add_action( 'widgets_init', '__return_false', 95 );
 
 /**

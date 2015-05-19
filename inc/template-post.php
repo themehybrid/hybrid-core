@@ -22,25 +22,25 @@
  */
 function hybrid_has_post_template( $template = '' ) {
 
-	/* Assume we're viewing a singular post. */
+	// Assume we're viewing a singular post.
 	if ( is_singular() ) {
 
-		/* Get the queried object. */
+		// Get the queried object.
 		$post = get_queried_object();
 
-		/* Get the post template, which is saved as metadata. */
+		// Get the post template, which is saved as metadata.
 		$post_template = get_post_meta( get_queried_object_id(), "_wp_{$post->post_type}_template", true );
 
-		/* If a specific template was input, check that the post template matches. */
+		// If a specific template was input, check that the post template matches.
 		if ( !empty( $template ) && $template == $post_template )
 			return true;
 
-		/* If no specific template was input, check if the post has a template. */
+		// If no specific template was input, check if the post has a template.
 		elseif ( empty( $template ) && !empty( $post_template ) )
 			return true;
 	}
 
-	/* Return false for everything else. */
+	// Return false for everything else.
 	return false;
 }
 
@@ -121,11 +121,11 @@ function hybrid_get_post_author( $args = array() ) {
 
 	$args = wp_parse_args( $args, $defaults );
 
-	/* Output buffering to get the author posts link. */
+	// Output buffering to get the author posts link.
 	ob_start();
 	the_author_posts_link();
 	$link = ob_get_clean();
-	/* A small piece of my soul just died.  Kittens no longer purr.  Dolphins lost the ability to swim with grace. */
+	// A small piece of my soul just died.  Kittens no longer purr.  Dolphins lost the ability to swim with grace.
 
 	if ( !empty( $link ) ) {
 		$html .= $args['before'];
@@ -173,7 +173,7 @@ function hybrid_get_post_terms( $args = array() ) {
 		'before'     => '',
 		'after'      => '',
 		'items_wrap' => '<span %s>%s</span>',
-		/* Translators: Separates tags, categories, etc. when displaying a post. */
+		// Translators: Separates tags, categories, etc. when displaying a post.
 		'sep'        => _x( ', ', 'taxonomy terms separator', 'hybrid-core' )
 	);
 
@@ -206,10 +206,10 @@ function hybrid_get_post_terms( $args = array() ) {
  */
 function hybrid_get_gallery_item_count() {
 
-	/* Check the post content for galleries. */
+	// Check the post content for galleries.
 	$galleries = get_post_galleries( get_the_ID(), true );
 
-	/* If galleries were found in the content, get the gallery item count. */
+	// If galleries were found in the content, get the gallery item count.
 	if ( !empty( $galleries ) ) {
 		$items = '';
 
@@ -222,7 +222,7 @@ function hybrid_get_gallery_item_count() {
 			return count( $sources );
 	}
 
-	/* If an item count wasn't returned, get the post attachments. */
+	// If an item count wasn't returned, get the post attachments.
 	$attachments = get_posts( 
 		array( 
 			'fields'         => 'ids',
@@ -232,11 +232,11 @@ function hybrid_get_gallery_item_count() {
 		) 
 	);
 
-	/* Return the attachment count if items were found. */
+	// Return the attachment count if items were found.
 	if ( !empty( $attachments ) )
 		return count( $attachments );
 
-	/* Return 0 for everything else. */
+	// Return 0 for everything else.
 	return 0;
 }
 
@@ -249,17 +249,17 @@ function hybrid_get_gallery_item_count() {
  */
 function hybrid_get_gallery_image_count() {
 
-	/* Set up an empty array for images. */
+	// Set up an empty array for images.
 	$images = array();
 
-	/* Get the images from all post galleries. */
+	// Get the images from all post galleries.
 	$galleries = get_post_galleries_images();
 
-	/* Merge each gallery image into a single array. */
+	// Merge each gallery image into a single array.
 	foreach ( $galleries as $gallery_images )
 		$images = array_merge( $images, $gallery_images );
 
-	/* If there are no images in the array, just grab the attached images. */
+	// If there are no images in the array, just grab the attached images.
 	if ( empty( $images ) ) {
 		$images = get_posts( 
 			array( 
@@ -272,7 +272,7 @@ function hybrid_get_gallery_image_count() {
 		);
 	}
 
-	/* Return the count of the images. */
+	// Return the count of the images.
 	return count( $images );
 }
 
@@ -288,7 +288,7 @@ function hybrid_get_gallery_image_count() {
  */
 function hybrid_get_content_url( $content ) {
 
-	/* Catch links that are not wrapped in an '<a>' tag. */
+	// Catch links that are not wrapped in an '<a>' tag.
 	preg_match( '/<a\s[^>]*?href=[\'"](.+?)[\'"]/is', make_clickable( $content ), $matches );
 
 	return !empty( $matches[1] ) ? esc_url_raw( $matches[1] ) : '';

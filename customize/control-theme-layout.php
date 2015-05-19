@@ -46,7 +46,7 @@ class Hybrid_Customize_Control_Theme_Layout extends Hybrid_Customize_Control_Rad
 			}
 		}
 
-		// Let WP handle this.
+		// Let the parent class handle the rest.
 		parent::__construct( $manager, $id, $args );
 	}
 }

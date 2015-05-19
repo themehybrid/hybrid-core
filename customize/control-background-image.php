@@ -43,7 +43,7 @@ class Hybrid_Customize_Control_Background_Image extends WP_Customize_Background_
 	 */
 	public function __construct( $manager ) {
 
-		/* Let WP handle this. */
+		// Let WP handle this.
 		parent::__construct( $manager );
 	}
 }
