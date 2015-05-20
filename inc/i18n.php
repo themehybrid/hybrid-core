@@ -37,23 +37,17 @@ function hybrid_load_locale_functions() {
 	// Get the site's locale.
 	$locale = strtolower( str_replace( '_', '-', get_locale() ) );
 
-	// Load child theme language file first.
-	if ( is_child_theme() ) {
+	// Define locale functions files.
+	$stylesheet_locale_functions = trailingslashit( get_stylesheet_directory() ) . "languages/{$locale}.php";
+	$template_locale_functions   = trailingslashit( get_template_directory()   ) . "languages/{$locale}.php";
 
-		// Look for `/languages/{$locale}.php`.
-		$child_locale_functions = trailingslashit( get_stylesheet_directory() ) . "languages/{$locale}.php";
+	// If file exists in active/child theme.
+	if ( file_exists( $stylesheet_locale_functions ) )
+		require_once( $stylesheet_locale_functions );
 
-		// Load file if it exists.
-		if ( file_exists( $child_locale_functions ) )
-			require_once( $child_locale_functions );
-	}
-
-	// Look for `/languages/{$locale}.php`.
-	$locale_functions = trailingslashit( get_stylesheet_directory() ) . "languages/{$locale}.php";
-
-	// Load file if it exists.
-	if ( file_exists( $locale_functions ) )
-		require_once( $locale_functions );
+	// If file exists in parent theme.
+	if ( is_child_theme() && file_exists( $template_locale_functions ) )
+		require_once( $template_locale_functions );
 }
 
 /**
