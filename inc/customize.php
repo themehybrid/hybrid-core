@@ -38,6 +38,7 @@ function hybrid_load_customize_classes() {
 	require_once( HYBRID_CUSTOMIZE . 'setting-image-data.php' );
 
 	// Load customize control classes.
+	require_once( HYBRID_CUSTOMIZE . 'control-dropdown-terms.php'   );
 	require_once( HYBRID_CUSTOMIZE . 'control-palette.php'          );
 	require_once( HYBRID_CUSTOMIZE . 'control-radio-image.php'      );
 	require_once( HYBRID_CUSTOMIZE . 'control-select-multiple.php'  );
