@@ -75,7 +75,7 @@ function hybrid_theme_link() {
  */
 function hybrid_get_theme_link() {
 	$theme = wp_get_theme( get_template() );
-	$uri   = $theme->get( 'ThemeURI' );
+	$uri   = $theme->display( 'ThemeURI' );
 	$name  = $theme->display( 'Name', false, true );
 
 	return sprintf( '<a class="theme-link" href="%s">%s</a>', esc_url( $uri ), esc_html( $name ) );
@@ -105,7 +105,7 @@ function hybrid_get_child_theme_link() {
 		return '';
 
 	$theme = wp_get_theme();
-	$uri   = $theme->get( 'ThemeURI' );
+	$uri   = $theme->display( 'ThemeURI' );
 	$name  = $theme->display( 'Name', false, true );
 
 	return sprintf( '<a class="child-link" href="%s">%s</a>', esc_url( $uri ), esc_html( $name ) );
