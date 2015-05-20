@@ -290,16 +290,13 @@ if ( !class_exists( 'Hybrid' ) ) {
 		function extensions() {
 
 			// Load the Breadcrumb Trail extension if supported.
-			if ( current_theme_supports( 'breadcrumb-trail' ) && file_exists( HYBRID_EXT . 'breadcrumb-trail.php' ) )
-				require_once( HYBRID_EXT . 'breadcrumb-trail.php' );
+			require_if_theme_supports( 'breadcrumb-trail', HYBRID_EXT . 'breadcrumb-trail.php' );
 
 			// Load the Cleaner Gallery extension if supported.
-			if ( current_theme_supports( 'cleaner-gallery' ) && file_exists( HYBRID_EXT . 'cleaner-gallery.php' ) )
-				require_once( HYBRID_EXT . 'cleaner-gallery.php' );
+			require_if_theme_supports( 'cleaner-gallery', HYBRID_EXT . 'cleaner-gallery.php' );
 
 			// Load the Get the Image extension if supported.
-			if ( current_theme_supports( 'get-the-image' ) && file_exists( HYBRID_EXT . 'get-the-image.php' ) )
-				require_once( HYBRID_EXT . 'get-the-image.php' );
+			require_if_theme_supports( 'get-the-image', HYBRID_EXT . 'get-the-image.php' );
 		}
 
 		/**
