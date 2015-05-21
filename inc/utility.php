@@ -205,6 +205,24 @@ function hybrid_get_min_suffix() {
 }
 
 /**
+ * Utility function for including a file if a theme feature is supported and the file exists.  Note 
+ * that this should not be used in place of the core `require_if_theme_supports()` function.  We need 
+ * this particular function for checking if the file exists first, which the core function does not 
+ * handle at the moment.
+ *
+ * @since  3.0.0
+ * @access public
+ * @param  string  $feature
+ * @param  string  $file
+ * @return void
+ */
+function hybrid_require_if_theme_supports( $feature, $file ) {
+
+	if ( current_theme_supports( $feature ) && file_exists( $file ) )
+		require_once( $file );
+}
+
+/**
  * Filters `get_the_archve_title` to add better archive titles than core.
  *
  * @since  3.0.0
