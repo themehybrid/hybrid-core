@@ -85,22 +85,6 @@ function hybrid_override_load_textdomain( $override, $domain, $mofile ) {
 }
 
 /**
- * Checks if a textdomain's translation files have been loaded.  This function behaves differently from 
- * WordPress core's is_textdomain_loaded(), which will return true after any translation function is run over 
- * a text string with the given domain.  The purpose of this function is to simply check if the translation files 
- * are loaded.
- *
- * @since  1.3.0
- * @access public          This is only used internally by the framework for checking translations.
- * @param  string  $domain The textdomain to check translations for.
- */
-function hybrid_is_textdomain_loaded( $domain ) {
-	global $hybrid;
-
-	return isset( $hybrid->textdomain_loaded[ $domain ] ) && true === $hybrid->textdomain_loaded[ $domain ] ? true : false;
-}
-
-/**
  * Loads an empty MO file for the framework textdomain.  This will be overwritten.  The framework domain 
  * will be merged with the theme domain.
  *
@@ -109,7 +93,7 @@ function hybrid_is_textdomain_loaded( $domain ) {
  * @param  string $domain The name of the framework's textdomain.
  * @return bool           Whether the MO file was loaded.
  */
-function hybrid_load_framework_textdomain( $domain ) {
+function hybrid_load_framework_textdomain( $domain = 'hybrid-core' ) {
 	return load_textdomain( $domain, '' );
 }
 

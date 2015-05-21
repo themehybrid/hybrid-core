@@ -168,6 +168,7 @@ function hybrid_attachment_id3_keys() {}
 function hybrid_image_size_names_choose() {}
 function hybrid_meta_template() {}
 function hybrid_load_customize_controls() {}
+function hybrid_is_textdomain_loaded() {}
 
 /* Functions removed in the 2.0 branch. */
 
