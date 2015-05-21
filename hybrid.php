@@ -61,7 +61,7 @@ if ( !class_exists( 'Hybrid' ) ) {
 		 * @access public
 		 * @return void
 		 */
-		function __construct() {
+		public function __construct() {
 			global $hybrid;
 
 			// Set up an empty class for the global $hybrid object.
@@ -98,7 +98,7 @@ if ( !class_exists( 'Hybrid' ) ) {
 		 * @access public
 		 * @return void
 		 */
-		function constants() {
+		public function constants() {
 
 			// Sets the framework version number.
 			define( 'HYBRID_VERSION', '3.0.0' );
@@ -139,7 +139,7 @@ if ( !class_exists( 'Hybrid' ) ) {
 		 * @access public
 		 * @return void
 		 */
-		function core() {
+		public function core() {
 
 			// Load the context-based functions.
 			require_once( HYBRID_INC . 'context.php' );
@@ -182,7 +182,7 @@ if ( !class_exists( 'Hybrid' ) ) {
 		 * @access public
 		 * @return void
 		 */
-		function i18n() {
+		public function i18n() {
 
 			// Load theme textdomain.
 			load_theme_textdomain( hybrid_get_parent_textdomain() );
@@ -203,7 +203,7 @@ if ( !class_exists( 'Hybrid' ) ) {
 		 * @access public
 		 * @return void
 		 */
-		function theme_support() {
+		public function theme_support() {
 
 			// Automatically add <title> to head.
 			add_theme_support( 'title-tag' );
@@ -232,7 +232,7 @@ if ( !class_exists( 'Hybrid' ) ) {
 		 * @access public
 		 * @return void
 		 */
-		function includes() {
+		public function includes() {
 
 			// Load the HTML attributes functions.
 			require_once( HYBRID_INC . 'attr.php' );
@@ -283,7 +283,7 @@ if ( !class_exists( 'Hybrid' ) ) {
 		 * @access public
 		 * @return void
 		 */
-		function extensions() {
+		public function extensions() {
 
 			// Load the Breadcrumb Trail extension if supported.
 			require_if_theme_supports( 'breadcrumb-trail', HYBRID_EXT . 'breadcrumb-trail.php' );
@@ -302,7 +302,7 @@ if ( !class_exists( 'Hybrid' ) ) {
 		 * @access public
 		 * @return void
 		 */
-		function admin() {
+		public function admin() {
 
 			// Load the main admin file if in admin.
 			if ( is_admin() )
