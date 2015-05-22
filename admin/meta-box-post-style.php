@@ -84,7 +84,7 @@ function hybrid_save_post_style( $post_id, $post = '' ) {
 	$meta_value = hybrid_get_post_style( $post_id );
 
 	// Get the submitted post style.
-	$new_meta_value = sanitize_text_field( $_POST['hybrid-post-style'] );
+	$new_meta_value = isset( $_POST['hybrid-post-style'] ) ? sanitize_text_field( $_POST['hybrid-post-style'] ) : '';
 
 	// If there is no new meta value but an old value exists, delete it.
 	if ( '' == $new_meta_value && $meta_value )

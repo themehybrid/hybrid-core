@@ -114,7 +114,7 @@ function hybrid_save_post_layout( $post_id, $post = '' ) {
 	$meta_value = hybrid_get_post_layout( $post_id );
 
 	// Get the submitted post layout.
-	$new_meta_value = sanitize_key( $_POST['hybrid-post-layout'] );
+	$new_meta_value = isset( $_POST['hybrid-post-layout'] ) ? sanitize_key( $_POST['hybrid-post-layout'] ) : '';
 
 	// If there is no new meta value but an old value exists, delete it.
 	if ( '' == $new_meta_value && $meta_value )
