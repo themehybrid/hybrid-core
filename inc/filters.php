@@ -81,11 +81,7 @@ function hybrid_link_pages_args( $args ) {
  * @return string
  */
 function hybrid_link_pages_link( $link ) {
-
-	if ( 0 !== strpos( $link, '<a' ) )
-		$link = "<span class='page-numbers'>{$link}</span>";
-
-	return $link;
+	return 0 !== strpos( $link, '<a' ) ? "<span class='page-numbers'>{$link}</span>" : $link;
 }
 
 /**
@@ -102,6 +98,7 @@ function hybrid_the_author_posts_link( $link ) {
 		"/(<a.*?)(>)/i",
 		'/(<a.*?>)(.*?)(<\/a>)/i'
 	);
+
 	$replace = array(
 		'$1 class="url fn n" itemprop="url"$2',
 		'$1<span itemprop="name">$2</span>$3'
@@ -120,18 +117,19 @@ function hybrid_the_author_posts_link( $link ) {
  */
 function hybrid_get_comment_author_link( $link ) {
 
-	$patterns = array(
+	$pattern = array(
 		'/(class=[\'"])(.+?)([\'"])/i',
 		"/(<a.*?)(>)/i",
 		'/(<a.*?>)(.*?)(<\/a>)/i'
 	);
-	$replaces = array(
+
+	$replace = array(
 		'$1$2 fn n$3',
 		'$1 itemprop="url"$2',
 		'$1<span itemprop="name">$2</span>$3'
 	);
 
-	return preg_replace( $patterns, $replaces, $link );
+	return preg_replace( $pattern, $replace, $link );
 }
 
 /**
@@ -144,16 +142,16 @@ function hybrid_get_comment_author_link( $link ) {
  */
 function hybrid_get_comment_author_url_link( $link ) {
 
-	$patterns = array(
+	$pattern = array(
 		'/(class=[\'"])(.+?)([\'"])/i',
 		"/(<a.*?)(>)/i"
 	);
-	$replaces = array(
+	$replace = array(
 		'$1$2 fn n$3',
 		'$1 itemprop="url"$2'
 	);
 
-	return preg_replace( $patterns, $replaces, $link );
+	return preg_replace( $pattern, $replace, $link );
 }
 
 /**

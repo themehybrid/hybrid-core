@@ -64,7 +64,7 @@ function hybrid_meta_generator() {
  */
 function hybrid_link_pingback() {
 	if ( 'open' === get_option( 'default_ping_status' ) )
-		printf( '<link rel="pingback" href="%s" />' . "\n", esc_attr( get_bloginfo( 'pingback_url' ) ) );
+		printf( '<link rel="pingback" href="%s" />' . "\n", esc_url( get_bloginfo( 'pingback_url' ) ) );
 }
 
 /**
