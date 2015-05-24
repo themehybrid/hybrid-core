@@ -95,7 +95,7 @@ function hybrid_meta_box_post_save_template( $post_id, $post = '' ) {
 		return $post_id;
 
 	// Get the posted meta value.
-	$new_meta_value = isset( $_POST['hybrid-post-template'] ) ? sanitize_text_field( $_POST['hybrid-post-template'] ) : '';
+	$new_meta_value = sanitize_text_field( $_POST['hybrid-post-template'] );
 
 	// Set the $meta_key variable based off the post type name.
 	$meta_key = "_wp_{$post->post_type}_template";
