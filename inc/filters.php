@@ -163,7 +163,7 @@ function hybrid_get_comment_author_url_link( $link ) {
  * @return string
  */
 function hybrid_comment_reply_link_filter( $link ) {
-	return preg_replace( '/(<a\s)/i', '$1itemprop="replyToUrl"', $link );
+	return preg_replace( '/(<a\s)/i', '$1itemprop="replyToUrl" ', $link );
 }
 
 /**
