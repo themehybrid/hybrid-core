@@ -71,6 +71,25 @@ function hybrid_media_meta_factory() {
 }
 
 /**
+ * Splits the attachment mime type into two distinct parts: type / subtype (e.g., image / png). 
+ * Returns an array of the parts.
+ *
+ * @since  3.0.0
+ * @access public
+ * @param  int    $post_id
+ * @return array
+ */
+function hybrid_get_attachment_types( $post_id = 0 ) {
+
+	$post_id   = empty( $post_id ) ? get_the_ID() : $post_id;
+	$mime_type = get_post_mime_type( $post_id );
+
+	list( $type, $subtype ) = false !== strpos( $mime_type, '/' ) ? explode( '/', $mime_type ) : array( $mime_type, '' );
+
+	return (object) array( 'type' => $type, 'subtype' => $subtype );
+}
+
+/**
  * Returns the main attachment mime type.  For example, `image` when the file has an `image / jpeg` 
  * mime type.
  *
@@ -80,13 +99,7 @@ function hybrid_media_meta_factory() {
  * @return string
  */
 function hybrid_get_attachment_type( $post_id = 0 ) {
-
-	$post_id   = empty( $post_id ) ? get_the_ID() : $post_id;
-	$mime_type = get_post_mime_type( $post_id );
-
-	list( $type, $subtype ) = false !== strpos( $mime_type, '/' ) ? explode( '/', $mime_type ) : array( $mime_type, '' );
-
-	return $type;
+	return hybrid_get_attachment_types( $post_id )->type;
 }
 
 /**
@@ -99,13 +112,7 @@ function hybrid_get_attachment_type( $post_id = 0 ) {
  * @return string
  */
 function hybrid_get_attachment_subtype( $post_id = 0 ) {
-
-	$post_id   = empty( $post_id ) ? get_the_ID() : $post_id;
-	$mime_type = get_post_mime_type( $post_id );
-
-	list( $type, $subtype ) = false !== strpos( $mime_type, '/' ) ? explode( '/', $mime_type ) : array( $mime_type, '' );
-
-	return $subtype;
+	return hybrid_get_attachment_types( $post_id )->subtype;
 }
 
 /**
