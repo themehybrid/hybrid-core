@@ -34,9 +34,7 @@ function hybrid_get_content_template() {
 	if ( 'attachment' === $post_type ) {
 		remove_filter( 'the_content', 'prepend_attachment' );
 
-		$mime_type = get_post_mime_type();
-
-		list( $type, $subtype ) = false !== strpos( $mime_type, '/' ) ? explode( '/', $mime_type ) : array( $mime_type, '' );
+		$type = hybrid_get_attachment_type();
 
 		$templates[] = "content-attachment-{$type}.php";
 		$templates[] = "content/attachment-{$type}.php";

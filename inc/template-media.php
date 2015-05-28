@@ -199,21 +199,11 @@ function hybrid_get_audio_transcript( $post_id = 0 ) {
  */
 function hybrid_attachment() {
 
-	$file       = wp_get_attachment_url();
-	$mime       = get_post_mime_type();
-	$attachment = '';
+	$type = hybrid_get_attachment_type();
 
-	$mime_type = false !== strpos( $mime, '/' ) ? explode( '/', $mime ) : array( $mime, '' );
+	$attachment = function_exists( "hybrid_{$type}_attachment" ) ? call_user_func( "hybrid_{$type}_attachment", get_post_mime_type(), wp_get_attachment_url() ) : '';
 
-	// Loop through each mime type. If a function exists for it, call it. Allow users to filter the display.
-	foreach ( $mime_type as $type ) {
-		if ( function_exists( "hybrid_{$type}_attachment" ) )
-			$attachment = call_user_func( "hybrid_{$type}_attachment", $mime, $file );
-
-		$attachment = apply_filters( "hybrid_{$type}_attachment", $attachment );
-	}
-
-	echo apply_filters( 'hybrid_attachment', $attachment );
+	echo apply_filters( 'hybrid_attachment', apply_filters( "hybrid_{$type}_attachment", $attachment ) );
 }
 
 /**

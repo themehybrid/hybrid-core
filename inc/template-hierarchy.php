@@ -180,11 +180,15 @@ function hybrid_singular_template( $template ) {
 	// If viewing an attachment page, handle the files by mime type.
 	if ( is_attachment() ) {
 		// Split the mime_type into two distinct parts.
-		$type = explode( '/', get_post_mime_type() );
+		$type    = hybrid_get_attachment_type();
+		$subtype = hybrid_get_attachment_subtype();
 
-		$templates[] = "attachment-{$type[0]}_{$type[1]}.php";
-		$templates[] = "attachment-{$type[1]}.php";
-		$templates[] = "attachment-{$type[0]}.php";
+		if ( $subtype ) {
+			$templates[] = "attachment-{$type}-{$subtype}.php";
+			$templates[] = "attachment-{$subtype}.php";
+		}
+
+		$templates[] = "attachment-{$type}.php";
 	}
 
 	// If viewing any other type of singular page.

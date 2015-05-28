@@ -77,18 +77,7 @@ class Hybrid_Media_Meta {
 
 		$this->post_id  = $post_id;
 		$this->meta     = wp_get_attachment_metadata( $this->post_id );
-
-		// If the attachment is an image.
-		if ( wp_attachment_is_image( $this->post_id ) )
-			$this->type = 'image';
-
-		// If the attachment is audio.
-		elseif ( hybrid_attachment_is_audio( $this->post_id ) )
-			$this->type = 'audio';
-
-		// If the attachment is video.
-		elseif ( hybrid_attachment_is_video( $this->post_id ) )
-			$this->type = 'video';
+		$this->type     = hybrid_get_attachment_type();
 
 		// If we have a type that's in the whitelist, run filters.
 		if ( $this->type && in_array( $this->type, $this->allowed_types ) ) {
