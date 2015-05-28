@@ -40,12 +40,6 @@ You can't create child themes for Hybrid Core because it's not a theme.  However
 
 I was one of the original theme authors to help pioneer the parent/child theme movement.  I'm a big believer in child themes being the absolute best way to make theme customizations.  Therefore, Hybrid Core is built with this idea in mind.  As you learn more about the framework, you'll understand how it makes child theme development even better.
 
-### Can I contribute to Hybrid Core? ###
-
-Certainly.  The code for the framework is handled via its [GitHub Repository](https://github.com/justintadlock/hybrid-core).  You can open tickets, create patches, and send pull requests there.
-
-Please don't make pull requests against the `master` branch.  This is the latest, stable code.  You can make a pull request against one of the point branches or the `dev` (future release) branch.
-
 ## Copyright and License ##
 
 This project is licensed under the [GNU GPL](http://www.gnu.org/licenses/old-licenses/gpl-2.0.html), version 2 or later.
