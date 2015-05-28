@@ -46,7 +46,7 @@ function hybrid_load_customize_classes() {
 	require_once( HYBRID_CUSTOMIZE . 'control-select-multiple.php'   );
 	require_once( HYBRID_CUSTOMIZE . 'control-background-image.php'  );
 
-	require_if_theme_supports( 'theme-layouts', HYBRID_CUSTOMIZE . 'control-theme-layout.php' );
+	require_if_theme_supports( 'theme-layouts', HYBRID_CUSTOMIZE . 'control-layout.php' );
 }
 
 /**
@@ -82,7 +82,7 @@ function hybrid_customize_register( $wp_customize ) {
 
 		// Add the layout control.
 		$wp_customize->add_control(
-			new Hybrid_Customize_Control_Theme_Layout(
+			new Hybrid_Customize_Control_Layout(
 				$wp_customize,
 				'theme_layout',
 				array(

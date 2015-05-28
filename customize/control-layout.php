@@ -17,7 +17,7 @@
  * @since  3.0.0
  * @access public
  */
-class Hybrid_Customize_Control_Theme_Layout extends Hybrid_Customize_Control_Radio_Image {
+class Hybrid_Customize_Control_Layout extends Hybrid_Customize_Control_Radio_Image {
 
 	/**
 	 * Set up our control.
