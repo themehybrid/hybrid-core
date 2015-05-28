@@ -71,6 +71,44 @@ function hybrid_media_meta_factory() {
 }
 
 /**
+ * Returns the main attachment mime type.  For example, `image` when the file has an `image / jpeg` 
+ * mime type.
+ *
+ * @since  3.0.0
+ * @access public
+ * @param  int    $post_id
+ * @return string
+ */
+function hybrid_get_attachment_type( $post_id = 0 ) {
+
+	$post_id   = empty( $post_id ) ? get_the_ID() : $post_id;
+	$mime_type = get_post_mime_type( $post_id );
+
+	list( $type, $subtype ) = false !== strpos( $mime_type, '/' ) ? explode( '/', $mime_type ) : array( $mime_type, '' );
+
+	return $type;
+}
+
+/**
+ * Returns the attachment mime subtype.  For example, `jpeg` when the file has an `image / jpeg` 
+ * mime type.
+ *
+ * @since  3.0.0
+ * @access public
+ * @param  int    $post_id
+ * @return string
+ */
+function hybrid_get_attachment_subtype( $post_id = 0 ) {
+
+	$post_id   = empty( $post_id ) ? get_the_ID() : $post_id;
+	$mime_type = get_post_mime_type( $post_id );
+
+	list( $type, $subtype ) = false !== strpos( $mime_type, '/' ) ? explode( '/', $mime_type ) : array( $mime_type, '' );
+
+	return $subtype;
+}
+
+/**
  * Checks if the current post has a mime type of 'audio'.
  *
  * @since  1.6.0
@@ -79,13 +117,7 @@ function hybrid_media_meta_factory() {
  * @return bool
  */
 function hybrid_attachment_is_audio( $post_id = 0 ) {
-
-	$post_id   = empty( $post_id ) ? get_the_ID() : $post_id;
-	$mime_type = get_post_mime_type( $post_id );
-
-	list( $type, $subtype ) = false !== strpos( $mime_type, '/' ) ? explode( '/', $mime_type ) : array( $mime_type, '' );
-
-	return 'audio' === $type ? true : false;
+	return 'audio' === hybrid_get_attachment_type( $post_id ) ? true : false;
 }
 
 /**
@@ -97,13 +129,7 @@ function hybrid_attachment_is_audio( $post_id = 0 ) {
  * @return bool
  */
 function hybrid_attachment_is_video( $post_id = 0 ) {
-
-	$post_id   = empty( $post_id ) ? get_the_ID() : $post_id;
-	$mime_type = get_post_mime_type( $post_id );
-
-	list( $type, $subtype ) = false !== strpos( $mime_type, '/' ) ? explode( '/', $mime_type ) : array( $mime_type, '' );
-
-	return 'video' === $type ? true : false;
+	return 'video' === hybrid_get_attachment_type( $post_id ) ? true : false;
 }
 
 /**
