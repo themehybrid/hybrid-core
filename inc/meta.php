@@ -28,7 +28,7 @@ function hybrid_register_meta() {
 
 		foreach ( get_post_types( array( 'public' => true ) ) as $post_type ) {
 			if ( 'page' !== $post_type )
-				register_meta( 'post', "_wp_{$post_type}_template", 'sanitize_html_class', '__return_false' );
+				register_meta( 'post', "_wp_{$post_type}_template", 'sanitize_text_field', '__return_false' );
 		}
 	}
 
