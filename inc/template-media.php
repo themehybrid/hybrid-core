@@ -207,7 +207,7 @@ function hybrid_attachment() {
 }
 
 /**
- * Handles application attachments on their attachment pages.  Uses the <object> tag to embed media 
+ * Handles application attachments on their attachment pages.  Uses the `<object>` tag to embed media 
  * on those pages.
  *
  * @since  0.3.0
@@ -218,15 +218,18 @@ function hybrid_attachment() {
  */
 function hybrid_application_attachment( $mime = '', $file = '' ) {
 	$embed_defaults = wp_embed_defaults();
-	$application  = '<object class="text" type="' . esc_attr( $mime ) . '" data="' . esc_url( $file ) . '" width="' . esc_attr( $embed_defaults['width'] ) . '" height="' . esc_attr( $embed_defaults['height'] ) . '">';
-	$application .= '<param name="src" value="' . esc_url( $file ) . '" />';
-	$application .= '</object>';
 
-	return $application;
+	return sprintf(
+		'<object type="%1$s" data="%2$s" width="%3$s" height="%4$s"><param name="src" value="%2$s" /></object>',
+		esc_attr( $mime ),
+		esc_url( $file ),
+		absint( $embed_defaults['width'] ),
+		absint( $embed_defaults['height'] )
+	);
 }
 
 /**
- * Handles text attachments on their attachment pages.  Uses the <object> element to embed media 
+ * Handles text attachments on their attachment pages.  Uses the `<object>` element to embed media 
  * in the pages.
  *
  * @since  0.3.0
@@ -237,11 +240,14 @@ function hybrid_application_attachment( $mime = '', $file = '' ) {
  */
 function hybrid_text_attachment( $mime = '', $file = '' ) {
 	$embed_defaults = wp_embed_defaults();
-	$text  = '<object class="text" type="' . esc_attr( $mime ) . '" data="' . esc_url( $file ) . '" width="' . esc_attr( $embed_defaults['width'] ) . '" height="' . esc_attr( $embed_defaults['height'] ) . '">';
-	$text .= '<param name="src" value="' . esc_url( $file ) . '" />';
-	$text .= '</object>';
 
-	return $text;
+	return sprintf(
+		'<object type="%1$s" data="%2$s" width="%3$s" height="%4$s"><param name="src" value="%2$s" /></object>',
+		esc_attr( $mime ),
+		esc_url( $file ),
+		absint( $embed_defaults['width'] ),
+		absint( $embed_defaults['height'] )
+	);
 }
 
 /**
