@@ -16,6 +16,9 @@
 # Load the locale functions file(s).
 add_action( 'after_setup_theme', 'hybrid_load_locale_functions', 0 );
 
+# Load translations for theme, child theme, and framework.
+add_action( 'after_setup_theme', 'hybrid_load_textdomains', 5 );
+
 # Overrides the load textdomain function for the 'hybrid-core' domain.
 add_filter( 'override_load_textdomain', 'hybrid_override_load_textdomain', 5, 3 );
 
@@ -38,8 +41,8 @@ function hybrid_load_locale_functions() {
 	$locale = strtolower( str_replace( '_', '-', get_locale() ) );
 
 	// Define locale functions files.
-	$stylesheet_locale_functions = trailingslashit( get_stylesheet_directory() ) . "languages/{$locale}.php";
-	$template_locale_functions   = trailingslashit( get_template_directory()   ) . "languages/{$locale}.php";
+	$stylesheet_locale_functions = trailingslashit( get_stylesheet_directory() ) . hybrid_get_parent_domain_path() . "/{$locale}.php";
+	$template_locale_functions   = trailingslashit( get_template_directory()   ) . hybrid_get_child_domain_path()  . "/{$locale}.php";
 
 	// If file exists in active/child theme.
 	if ( file_exists( $stylesheet_locale_functions ) )
@@ -48,6 +51,29 @@ function hybrid_load_locale_functions() {
 	// If file exists in parent theme.
 	if ( is_child_theme() && file_exists( $template_locale_functions ) )
 		require_once( $template_locale_functions );
+}
+
+/**
+ * Loads the theme, child theme, and framework textdomains automatically. No need for theme authors 
+ * to do this. This also utilizes the `Domain Path` header from `style.css`.  It defaults to the 
+ * `languages` folder.  Theme authors should define this as `/lang`, `/languages` or some other 
+ * variation of their choosing.
+ *
+ * @since  3.0.0
+ * @access public
+ * @return void
+ */
+function hybrid_load_textdomains() {
+
+	// Load theme textdomain.
+	load_theme_textdomain( hybrid_get_parent_textdomain(), trailingslashit( get_template_directory() ) . hybrid_get_parent_domain_path() );
+
+	// Load child theme textdomain.
+	if ( is_child_theme() )
+		load_child_theme_textdomain( hybrid_get_child_textdomain(), trailingslashit( get_stylesheet_directory() ) . hybrid_get_child_domain_path() );
+
+	// Load the framework textdomain.
+	hybrid_load_framework_textdomain();
 }
 
 /**
@@ -160,6 +186,36 @@ function hybrid_get_child_textdomain() {
 }
 
 /**
+ * Returns the parent theme domain path.  No slash.
+ *
+ * @since  3.0.0
+ * @access public
+ * @return string
+ */
+function hybrid_get_parent_domain_path() {
+	$theme = wp_get_theme( get_template() );
+
+	return $theme->get( 'DomainPath' ) ? trim( $theme->get( 'DomainPath' ), '/' ) : 'languages';
+}
+
+/**
+ * Returns the child theme domain path.  No slash.
+ *
+ * @since  3.0.0
+ * @access public
+ * @return string
+ */
+function hybrid_get_child_domain_path() {
+
+	if ( !is_child_theme() )
+		return '';
+
+	$theme = wp_get_theme();
+
+	return $theme->get( 'DomainPath' ) ? trim( $theme->get( 'DomainPath' ), '/' ) : 'languages';
+}
+
+/**
  * Filters the 'load_textdomain_mofile' filter hook so that we can change the directory and file name 
  * of the mofile for translations.  This allows child themes to have a folder called /languages with translations
  * of their parent theme so that the translations aren't lost on a parent theme upgrade.
@@ -175,16 +231,20 @@ function hybrid_load_textdomain_mofile( $mofile, $domain ) {
 	// If the $domain is for the parent or child theme, search for a $domain-$locale.mo file.
 	if ( $domain == hybrid_get_parent_textdomain() || $domain == hybrid_get_child_textdomain() ) {
 
-		// Check for a $domain-$locale.mo file in the parent and child theme root and /languages folder.
+		// Get the locale.
 		$locale = get_locale();
-		$locate_mofile = locate_template( array( "languages/{$domain}-{$locale}.mo", "{$domain}-{$locale}.mo" ) );
 
-		// If a mofile was found based on the given format, set $mofile to that file name.
-		if ( !empty( $locate_mofile ) )
-			$mofile = $locate_mofile;
+		// Get just the theme path and file name for the mofile.
+		$mofile_short = str_replace( "{$locale}.mo", "{$domain}-{$locale}.mo", $mofile );
+		$mofile_short = str_replace( array( trailingslashit( get_template_directory() ), trailingslashit( get_stylesheet_directory() ) ), '', $mofile_short );
+
+		// Attempt to find the correct mofile.
+		$locate_mofile = locate_template( array( $mofile_short ) );
+
+		// Return the mofile.
+		return $locate_mofile ? $locate_mofile : $mofile;
 	}
 
-	// Return the $mofile string.
 	return $mofile;
 }
 

@@ -73,9 +73,6 @@ if ( !class_exists( 'Hybrid' ) ) {
 			// Load the core functions/classes required by the rest of the framework.
 			add_action( 'after_setup_theme', array( $this, 'core' ), -95 );
 
-			// Load translations.
-			add_action( 'after_setup_theme', array( $this, 'i18n' ), 5 );
-
 			// Handle theme supported features.
 			add_action( 'after_setup_theme', array( $this, 'theme_support' ), 12 );
 
@@ -170,29 +167,6 @@ if ( !class_exists( 'Hybrid' ) ) {
 
 			// Load the utility functions.
 			require_once( HYBRID_INC . 'utility.php' );
-		}
-
-		/**
-		 * Loads both the parent and child theme translation files.  All translations are expected 
-		 * to be within the theme's '/languages' folder, but the framework will fall back on the 
-		 * theme root folder if necessary.  Translation files are expected to be prefixed with the 
-		 * textdomain defined in the `style.css` header.
-		 *
-		 * @since  1.2.0
-		 * @access public
-		 * @return void
-		 */
-		public function i18n() {
-
-			// Load theme textdomain.
-			load_theme_textdomain( hybrid_get_parent_textdomain() );
-
-			// Load child theme textdomain.
-			if ( is_child_theme() )
-				load_child_theme_textdomain( hybrid_get_child_textdomain() );
-
-			// Load the framework textdomain.
-			hybrid_load_framework_textdomain();
 		}
 
 		/**
