@@ -198,7 +198,7 @@ function hybrid_body_class_filter( $classes, $class ) {
 		$classes[] = 'display-header-text';
 
 	// Plural/multiple-post view (opposite of singular).
-	if ( is_home() || is_archive() || is_search() )
+	if ( hybrid_is_plural() )
 		$classes[] = 'plural';
 
 	// Merge base contextual classes with $classes.
