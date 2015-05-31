@@ -1,12 +1,7 @@
 <?php
 /**
- * Functions and filters for handling the output of post formats.  Most of this file is for continuing the 
- * use of previous Hybrid Core functionality related to post formats as well as fixing the backwards-
- * compatibility issues that WordPress 3.6 created with its new post format functionality.
- *
- * This file is only loaded if themes declare support for 'post-formats'.  If a theme declares support for 
- * 'post-formats', the content filters will not run for the individual formats that the theme 
- * supports.
+ * Functions and filters for handling the output of post formats.  This file is only loaded if 
+ * themes declare support for `post-formats`.
  *
  * @package    HybridCore
  * @subpackage Includes
@@ -17,13 +12,12 @@
  */
 
 # Add support for structured post formats.
-add_action( 'wp_loaded', 'hybrid_structured_post_formats', 1 );
+add_action( 'wp_loaded', 'hybrid_structured_post_formats', 0 );
 
 /**
  * Theme compatibility for post formats.  This function adds appropriate filters to 'the_content' for 
  * the various post formats that a theme supports.
  *
- * @note   This function may change drastically in the future depending on the direction of the WP post format UI.
  * @since  1.6.0
  * @access public
  * @return void
@@ -38,7 +32,7 @@ function hybrid_structured_post_formats() {
 	if ( current_theme_supports( 'post-formats', 'link' ) )
 		add_filter( 'the_content', 'hybrid_link_content', 9 ); // run before wpautop
 
-	// Wraps <blockquote> around quote posts.
+	// Wraps `<blockquote>` around quote posts.
 	if ( current_theme_supports( 'post-formats', 'quote' ) )
 		add_filter( 'the_content', 'hybrid_quote_content' );
 
@@ -52,7 +46,7 @@ function hybrid_structured_post_formats() {
  *
  * @since  1.6.0
  * @access public
- * @param  string $slug The slug of the post format.
+ * @param  string  $slug
  * @return string
  */
 function hybrid_clean_post_format_slug( $slug ) {
@@ -66,15 +60,13 @@ function hybrid_clean_post_format_slug( $slug ) {
  *
  * @since  1.6.0
  * @access public
- * @param  string $content The post content.
- * @return string $content
+ * @param  string $content
+ * @return string
  */
 function hybrid_aside_infinity( $content ) {
 
-	if ( has_post_format( 'aside' ) && !is_singular() && !post_password_required() ) {
-		$infinity = '<a class="permalink" href="' . esc_url( get_permalink() ) . '">&#8734;</a>';
-		$content .= ' ' . apply_filters( 'hybrid_aside_infinity', $infinity );
-	}
+	if ( has_post_format( 'aside' ) && !is_singular() && !post_password_required() )
+		$content .= apply_filters( 'hybrid_aside_infinity', sprintf( ' <a class="permalink" href="%s">&#8734;</a>', esc_url( get_permalink() ) ) );
 
 	return $content;
 }
@@ -108,17 +100,17 @@ function hybrid_image_content( $content ) {
 /* === Links === */
 
 /**
- * Filters the content of the link format posts.  Wraps the content in the make_clickable() function 
+ * Filters the content of the link format posts.  Wraps the content in the `make_clickable()` function 
  * so that users can enter just a URL into the post content editor.
  *
  * @since  1.6.0
  * @access public
- * @param  string $content The post content.
- * @return string $content
+ * @param  string $content
+ * @return string
  */
 function hybrid_link_content( $content ) {
 
-	if ( has_post_format( 'link' ) && !preg_match( '/<a\s[^>]*?href=[\'"](.+?)[\'"]/is', $content ) )
+	if ( has_post_format( 'link' ) && !post_password_required() && !preg_match( '/<a\s[^>]*?href=[\'"](.+?)[\'"]/is', $content ) )
 		$content = make_clickable( $content );
 
 	return $content;
@@ -132,8 +124,8 @@ function hybrid_link_content( $content ) {
  *
  * @since  1.6.0
  * @access public
- * @param  string $content The post content.
- * @return string $content
+ * @param  string $content
+ * @return string
  */
 function hybrid_quote_content( $content ) {
 
