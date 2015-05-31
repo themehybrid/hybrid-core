@@ -238,6 +238,7 @@ if ( !class_exists( 'Hybrid' ) ) {
 
 			// Load the post format functionality if post formats are supported.
 			require_if_theme_supports( 'post-formats', HYBRID_INC . 'post-formats.php' );
+			require_if_theme_supports( 'post-formats', HYBRID_INC . 'class-chat.php'   );
 
 			// Load the deprecated functions if supported.
 			require_if_theme_supports( 'hybrid-core-deprecated', HYBRID_INC . 'deprecated.php' );

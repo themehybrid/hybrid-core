@@ -169,6 +169,8 @@ function hybrid_image_size_names_choose() {}
 function hybrid_meta_template() {}
 function hybrid_load_customize_controls() {}
 function hybrid_is_textdomain_loaded() {}
+function hybrid_get_the_post_format_chat() {}
+function hybrid_chat_row_id() {}
 
 /* Functions removed in the 2.0 branch. */
 
