@@ -193,7 +193,7 @@ function hybrid_get_site_description() {
  * @return bool
  */
 function hybrid_is_plural() {
-	return apply_filters( 'hybrid_is_plural', is_home() || is_archive() || is_search() ? true : false );
+	return apply_filters( 'hybrid_is_plural', is_home() || is_archive() || is_search() );
 }
 
 /**

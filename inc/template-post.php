@@ -55,7 +55,7 @@ function hybrid_has_post_template( $template = '' ) {
  */
 function hybrid_post_has_content( $id = 0 ) {
 	$post = get_post( $id );
-	return !empty( $post->post_content ) ? true : false;
+	return !empty( $post->post_content );
 }
 
 /**
