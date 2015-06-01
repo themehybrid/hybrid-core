@@ -30,7 +30,7 @@ add_filter( 'theme_mod_theme_layout', 'hybrid_filter_layout', 5 );
  * @return object
  */
 function hybrid_layouts() {
-	return Hybrid_Layouts::get_instance();
+	return Hybrid_Layout_Factory::get_instance();
 }
 
 /**

@@ -1,6 +1,8 @@
 <?php
 /**
- * Class for handling layouts. See `inc/layouts.php` for API functions.
+ * Layout factory class.  This is a singleton factory class for handling the registering and 
+ * storing of `Hybrid_Layout` objects.  Theme authors should utilize the API functions found 
+ * in `inc/layouts.php`.
  *
  * @package    HybridCore
  * @subpackage Includes
@@ -11,13 +13,13 @@
  */
 
 /**
- * Hybrid Layouts class. This is the backbone of the Layouts API.  Theme authors should utilize the 
- * appropriate functions for accessing the `Hybrid_Layouts` object.
+ * Hybrid Layout Factory class. This is the backbone of the Layouts API.  Theme authors should 
+ * utilize the appropriate functions for accessing the `Hybrid_Layout_Factory` object.
  *
  * @since  3.0.0
  * @access public
  */
-class Hybrid_Layouts {
+class Hybrid_Layout_Factory {
 
 	/**
 	 * Array of layout objects.
@@ -40,52 +42,20 @@ class Hybrid_Layouts {
 	/**
 	 * Register a new layout object
 	 *
+	 * @see    Hybrid_Layout::__construct()
 	 * @since  3.0.0
 	 * @access public
 	 * @param  string  $name
-	 * @param  array   $args  {
-	 *     @type bool    $is_global_layout
-	 *     @type bool    $is_post_layout
-	 *     @type bool    $is_user_layout
-	 *     @type string  $label
-	 *     @type string  $image
-	 *     @type bool    $_builtin
-	 *     @type bool    $_internal
-	 * }
+	 * @param  array   $args
 	 * @return void
 	 */
 	public function register_layout( $name, $args = array() ) {
 
 		if ( ! $this->layout_exists( $name ) ) {
 
-			$name = sanitize_html_class( $name );
+			$layout = new Hybrid_Layout( $name, $args );
 
-			$defaults = array(
-				'is_global_layout' => true,    // Whether to show as an option in the customizer.
-				'is_post_layout'   => true,    // Whether to show as an option in the meta box.
-				'is_user_layout'   => true,    // Whether to show as an option in user profile (not implemented).
-				'label'            => $name,   // Internationalized text label.
-				'image'            => '',      // Image URL of the layout design.
-				'post_types'       => array(), // Array of post types layout works with.
-				'_builtin'         => false,   // Internal use only! Whether the layout is built in.
-				'_internal'        => false,   // Internal use only! Whether the layout is internal (cannot be unregistered).
-			);
-
-			$args = wp_parse_args( $args, $defaults );
-
-			$args['name'] = $name;
-
-			$this->layouts[ $name ] = (object) $args;
-
-			// If layout has post types, make sure the post type supports `theme-layouts`.
-			if ( !empty( $args['post_types'] ) ) {
-
-				foreach ( $args['post_types'] as $post_type ) {
-
-					if ( !post_type_supports( $post_type, 'theme-layouts' ) )
-						add_post_type_support( $post_type, 'theme-layouts' );
-				}
-			}
+			$this->layouts[ $layout->name ] = $layout;
 		}
 	}
 
@@ -141,7 +111,7 @@ class Hybrid_Layouts {
 		static $instance = null;
 
 		if ( is_null( $instance ) )
-			$instance = new Hybrid_Layouts;
+			$instance = new Hybrid_Layout_Factory;
 
 		return $instance;
 	}
