@@ -17,7 +17,7 @@ add_action( 'wp_head', 'hybrid_meta_generator', 1 );
 add_action( 'wp_head', 'hybrid_link_pingback',  3 );
 
 # Filter the WordPress title.
-add_filter( 'wp_title', 'hybrid_wp_title', 1, 3 );
+add_filter( 'wp_title', 'hybrid_wp_title', 0 );
 
 /**
  * Adds the meta charset to the header.
@@ -76,11 +76,9 @@ function hybrid_link_pingback() {
  * @since  2.0.0
  * @access publc
  * @param  string  $title
- * @param  string  $separator
- * @param  string  $seplocation
  * @return string
  */
-function hybrid_wp_title( $doctitle, $separator, $seplocation ) {
+function hybrid_wp_title( $doctitle ) {
 
 	// Custom separator for backwards compatibility.
 	$separator = ':';
@@ -142,7 +140,5 @@ function hybrid_wp_title( $doctitle, $separator, $seplocation ) {
 		$doctitle = sprintf( __( '%1$s Page %2$s', 'hybrid-core' ), $doctitle . $separator, number_format_i18n( absint( $page ) ) );
 
 	// Trim separator + space from beginning and end.
-	$doctitle = trim( strip_tags( $doctitle ), "{$separator} " );
-
-	return esc_html( $doctitle );
+	return trim( strip_tags( $doctitle ), "{$separator} " );
 }

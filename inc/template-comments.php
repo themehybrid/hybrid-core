@@ -77,7 +77,7 @@ function hybrid_comments_callback( $comment, $args, $depth ) {
 		$hybrid->comment_template = array();
 
 	// Check if a template has been provided for the specific comment type.  If not, get the template.
-	if ( !isset( $hybrid->comment_template[$comment_type] ) ) {
+	if ( !isset( $hybrid->comment_template[ $comment_type ] ) ) {
 
 		// Create an array of template files to look for.
 		$templates = array( "comment-{$comment_type}.php", "comment/{$comment_type}.php" );

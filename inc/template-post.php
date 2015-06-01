@@ -50,11 +50,11 @@ function hybrid_has_post_template( $template = '' ) {
  *
  * @since  1.6.0
  * @access public
- * @param  int    $id  The ID of the post.
+ * @param  int    $post_id
  * @return bool
  */
-function hybrid_post_has_content( $id = 0 ) {
-	$post = get_post( $id );
+function hybrid_post_has_content( $post_id = 0 ) {
+	$post = get_post( $post_id );
 	return !empty( $post->post_content );
 }
 
@@ -80,7 +80,7 @@ function hybrid_post_format_link() {
 function hybrid_get_post_format_link() {
 
 	$format = get_post_format();
-	$url    = empty( $format ) ? get_permalink() : get_post_format_link( $format );
+	$url    = $format ? get_permalink() : get_post_format_link( $format );
 
 	return sprintf( '<a href="%s" class="post-format-link">%s</a>', esc_url( $url ), get_post_format_string( $format ) );
 }
@@ -302,7 +302,6 @@ function hybrid_get_content_url( $content ) {
  * @access public
  * @param  string  $url
  * @param  object  $post
- * @note   Setting defaults for the parameters so that this function can become a filter in future WP versions.
  * @return string
  */
 function hybrid_get_the_post_format_url( $url = '', $post = null ) {
@@ -313,7 +312,7 @@ function hybrid_get_the_post_format_url( $url = '', $post = null ) {
 
 		$content_url = hybrid_get_content_url( $post->post_content );
 
-		$url = !empty( $content_url ) ? esc_url( $content_url ) : esc_url( get_permalink( $post->ID ) );
+		$url = $content_url ? esc_url( $content_url ) : esc_url( get_permalink( $post->ID ) );
 	}
 
 	return $url;
