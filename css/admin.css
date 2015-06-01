@@ -14,8 +14,11 @@
 #hybrid-post-layout .ui-button-text { padding: 0; }
 
 #hybrid-post-layout img {
-	padding: 1px;
-	border:  4px solid transparent;
+	box-sizing: border-box;
+	max-width:  100%;
+	height:     auto;
+	padding:    1px;
+	border:     4px solid transparent;
 }
 
 	#hybrid-post-layout img:hover,
