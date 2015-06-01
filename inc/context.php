@@ -301,8 +301,12 @@ function hybrid_post_class_filter( $classes, $class, $post_id ) {
 		$_classes[] = 'has-excerpt';
 
 	// Has <!--more--> link.
-	if ( !is_singular() && false !== strpos( $post->post_content, '<!--more-->' ) )
+	if ( !is_singular() && false !== strpos( $post->post_content, '<!--more' ) )
 		$_classes[] = 'has-more-link';
+
+	// Has <!--nextpage--> links.
+	if ( false !== strpos( $post->post_content, '<!--nextpage' ) )
+		$_classes[] = 'has-pages';
 
 	return array_map( 'esc_attr', array_unique( array_merge( $_classes, $classes ) ) );
 }
