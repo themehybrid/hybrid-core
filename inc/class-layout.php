@@ -90,7 +90,7 @@ class Hybrid_Layout {
 	 */
 	public function __construct( $name, $args = array() ) {
 
-		$name = sanitize_html_class( $name );
+		$name = sanitize_key( $name );
 
 		$defaults = array(
 			'is_global_layout' => true,    // Whether to show as an option in the customizer.

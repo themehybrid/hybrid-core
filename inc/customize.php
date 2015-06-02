@@ -75,7 +75,7 @@ function hybrid_customize_register( $wp_customize ) {
 			'theme_layout',
 			array(
 				'default'           => hybrid_get_theme_layout(),
-				'sanitize_callback' => 'sanitize_html_class',
+				'sanitize_callback' => 'sanitize_key',
 				'transport'         => 'postMessage'
 			)
 		);

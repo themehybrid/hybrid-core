@@ -34,8 +34,8 @@ function hybrid_register_meta() {
 
 	// Theme layouts meta.
 	if ( current_theme_supports( 'theme-layouts' ) ) {
-		register_meta( 'post', hybrid_get_layout_meta_key(), 'sanitize_html_class', '__return_false' );
-		register_meta( 'user', hybrid_get_layout_meta_key(), 'sanitize_html_class', '__return_false' );
+		register_meta( 'post', hybrid_get_layout_meta_key(), 'sanitize_key', '__return_false' );
+		register_meta( 'user', hybrid_get_layout_meta_key(), 'sanitize_key', '__return_false' );
 	}
 
 	// Post styles meta.
