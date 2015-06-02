@@ -13,34 +13,26 @@
 
 /**
  * Checks if a post of any post type has a custom template.  This is the equivalent of WordPress' 
- * is_page_template() function with the exception that it works for all post types.
+ * `is_page_template()` function with the exception that it works for all post types.
  *
  * @since  1.2.0
  * @access public
  * @param  string  $template  The name of the template to check for.
- * @return bool               Whether the post has a template.
+ * @return bool
  */
 function hybrid_has_post_template( $template = '' ) {
 
-	// Assume we're viewing a singular post.
-	if ( is_singular() ) {
+	// Get the post template, which is saved as metadata.
+	$post_template = get_post_meta( get_the_ID(), '_wp_' . get_post_type() . '_template', true );
 
-		// Get the queried object.
-		$post = get_queried_object();
+	// If a specific template was input, check that the post template matches.
+	if ( $template && $template === $post_template )
+		return true;
 
-		// Get the post template, which is saved as metadata.
-		$post_template = get_post_meta( get_queried_object_id(), "_wp_{$post->post_type}_template", true );
+	// If no specific template was input, check if the post has a template.
+	elseif ( ! $template && $post_template )
+		return true;
 
-		// If a specific template was input, check that the post template matches.
-		if ( !empty( $template ) && $template == $post_template )
-			return true;
-
-		// If no specific template was input, check if the post has a template.
-		elseif ( empty( $template ) && !empty( $post_template ) )
-			return true;
-	}
-
-	// Return false for everything else.
 	return false;
 }
 
