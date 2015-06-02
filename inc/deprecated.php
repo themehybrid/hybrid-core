@@ -104,6 +104,7 @@ function hybrid_get_loop_description() {
 /* Fuctions removed in the 3.0 branch. */
 
 // class Hybrid_Customize_Control_Textarea extends WP_Customize_Control {}
+// class Hybrid_Customize_Control_Background_Image extends WP_Customize_Background_Image_Control {}
 class Hybrid_Theme_Settings{}
 function hybrid_get_styles() {}
 function hybrid_doctitle() {}
