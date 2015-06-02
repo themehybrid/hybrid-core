@@ -41,7 +41,7 @@ class Hybrid_Layout {
 	 */
 	public function __get( $property ) {
 
-		return $this->get( $property );
+		return isset( $this->args[ $property ] ) ? $this->args[ $property ] : null;
 	}
 
 	/**
@@ -55,7 +55,7 @@ class Hybrid_Layout {
 	 */
 	public function __set( $property, $value ) {
 
-		$this->set( $property, $value );
+		$this->args[ $property ] = $value;
 	}
 
 	/**
@@ -69,6 +69,28 @@ class Hybrid_Layout {
 	public function __isset( $property ) {
 
 		return isset( $this->args[ $property ] );
+	}
+
+	/**
+	 * Don't allow properties to be unset.
+	 *
+	 * @since  3.0.0
+	 * @access public
+	 * @param  string  $property
+	 * @return void
+	 */
+	public function __unset( $property ) {}
+
+	/**
+	 * Magic method to use in case someone tries to output the layout object as a string.
+	 * We'll just return the layout name.
+	 *
+	 * @since  3.0.0
+	 * @access public
+	 * @return string
+	 */
+	public function __toString() {
+		return $this->name;
 	}
 
 	/**
@@ -108,35 +130,6 @@ class Hybrid_Layout {
 		$this->args['name'] = $name;
 
 		$this->add_post_type_support();
-	}
-
-	/* ====== Public Methods ====== */
-
-	/**
-	 * Method for grabbing a layout argument.
-	 *
-	 * @since  3.0.0
-	 * @access public
-	 * @param  string  $property
-	 * @return mixed
-	 */
-	public function get( $property ) {
-
-		return isset( $this->args[ $property ] ) ? $this->args[ $property ] : null;
-	}
-
-	/**
-	 * Method for setting a layout argument.
-	 *
-	 * @since  3.0.0
-	 * @access public
-	 * @param  string  $property
-	 * @param  mixed   $value
-	 * @return void
-	 */
-	public function set( $property, $value ) {
-
-		$this->args[ $property ] = $value;
 	}
 
 	/* ====== Protected Methods ====== */
