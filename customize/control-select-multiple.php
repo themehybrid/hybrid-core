@@ -24,31 +24,66 @@ class Hybrid_Customize_Control_Select_Multiple extends WP_Customize_Control {
 	 *
 	 * @since 3.0.0
 	 */
-	public $type = 'select';
+	public $type = 'select-multiple';
 
 	/**
-	 * Displays the control content.
+	 * Loads the framework scripts/styles.
 	 *
-	 * @since 3.0.0
+	 * @since  3.0.0
+	 * @access public
+	 * @return void
 	 */
-	public function render_content() {
+	public function enqueue() {
+		wp_enqueue_script( 'hybrid-customize-controls' );
+	}
 
-		if ( empty( $this->choices ) )
-			return; ?>
+	/**
+	 * Add custom parameters to pass to the JS via JSON.
+	 *
+	 * @since  3.0.0
+	 * @access public
+	 * @return void
+	 */
+	public function to_json() {
+		parent::to_json();
+
+		$this->json['choices'] = $this->choices;
+		$this->json['link']    = $this->get_link();
+		$this->json['value']   = (array) $this->value();
+		$this->json['id']      = $this->id;
+	}
+
+	/**
+	 * Underscore JS template to handle the control's output.
+	 *
+	 * @since  3.0.0
+	 * @access public
+	 * @return void
+	 */
+	public function content_template() { ?>
+
+		<# if ( ! data.choices ) {
+			return;
+		} #>
 
 		<label>
-			<?php if ( !empty( $this->label ) ) : ?>
-				<span class="customize-control-title"><?php echo esc_html( $this->label ); ?></span>
-			<?php endif; ?>
 
-			<?php if ( !empty( $this->description ) ) : ?>
-				<span class="description customize-control-description"><?php echo $this->description; ?></span>
-			<?php endif; ?>
+			<# if ( data.label ) { #>
+				<span class="customize-control-title">{{{ data.label }}}</span>
+			<# } #>
 
-			<select multiple="multiple" <?php $this->link(); ?>>
-				<?php foreach ( $this->choices as $value => $label ) : ?>
-					<option value="<?php echo esc_attr( $value ); ?>" <?php selected( in_array( $value, (array) $this->value() ) ); ?>><?php echo esc_html( $label ); ?></option>
-				<?php endforeach; ?>
+			<# if ( data.description ) { #>
+				<span class="description customize-control-description">{{{ data.description }}}</span>
+			<# } #>
+
+			<select multiple="multiple" {{{ data.link }}} >
+
+				<# for ( value in data.choices ) { #>
+
+					<option value="{{{ value }}}" <# if ( -1 !== data.value.indexOf( value ) ) { #> selected="selected" <# } #>>{{{ data.choices[ value ] }}}</option>
+
+				<# } #>
+
 			</select>
 		</label>
 	<?php }

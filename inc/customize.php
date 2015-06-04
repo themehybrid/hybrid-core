@@ -48,9 +48,10 @@ function hybrid_load_customize_classes( $wp_customize ) {
 	require_if_theme_supports( 'theme-layouts', HYBRID_CUSTOMIZE . 'control-layout.php' );
 
 	// Register JS control types.
-	$wp_customize->register_control_type( 'Hybrid_Customize_Control_Palette'       );
-	$wp_customize->register_control_type( 'Hybrid_Customize_Control_Radio_Image'   );
-	$wp_customize->register_control_type( 'Hybrid_Customize_Control_Select_Group'  );
+	$wp_customize->register_control_type( 'Hybrid_Customize_Control_Palette'         );
+	$wp_customize->register_control_type( 'Hybrid_Customize_Control_Radio_Image'     );
+	$wp_customize->register_control_type( 'Hybrid_Customize_Control_Select_Group'    );
+	$wp_customize->register_control_type( 'Hybrid_Customize_Control_Select_Multiple' );
 }
 
 /**
@@ -61,6 +62,23 @@ function hybrid_load_customize_classes( $wp_customize ) {
  * @return void
  */
 function hybrid_customize_register( $wp_customize ) {
+
+$wp_customize->add_setting(
+	'example_multiple',
+	array( 'default' => get_theme_mod( 'example_multiple', array( 'banana', 'melon' ) ) )
+);
+
+$wp_customize->add_control(
+    new Hybrid_Customize_Control_Select_Multiple(
+        $wp_customize,
+        'example_multiple',
+        array(
+            'label'    => 'Example',
+            'section'  => 'title_tagline',
+            'choices'  => array( 'apple' => 'Apple', 'banana' => 'Banana', 'citrus' => 'Citrus', 'melon' => 'Melon' )
+        )
+    )
+);
 
 	// Always add the layout section so that theme devs can utilize it.
 	$wp_customize->add_section(
