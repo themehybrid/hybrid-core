@@ -6,8 +6,22 @@ jQuery( document ).ready( function() {
 
 	jQuery( '.customize-control-palette input:radio' ).change(
 		function() {
+
+			// Switch the `.selected` class on the label wrapping the selected radio input.
 			jQuery( this ).parents( '.customize-control-palette' ).find( 'label.selected' ).removeClass( 'selected' );
 			jQuery( this ).parent( 'label' ).addClass( 'selected' );
+
+			// Get the name of the setting.
+			var setting = jQuery( this ).attr( 'data-customize-setting-link' );
+
+			// Get the value of the currently-checked radio input.
+			var palette = jQuery( this ).val();
+
+			// Set the new value.
+			wp.customize( setting, function( obj ) {
+
+				obj.set( palette );
+			} );
 		}
 	);
 
