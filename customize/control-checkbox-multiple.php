@@ -43,40 +43,59 @@ class Hybrid_Customize_Control_Checkbox_Multiple extends WP_Customize_Control {
 	}
 
 	/**
-	 * Displays the control content.
+	 * Add custom parameters to pass to the JS via JSON.
 	 *
 	 * @since  3.0.0
 	 * @access public
 	 * @return void
 	 */
-	public function render_content() {
+	public function to_json() {
+		parent::to_json();
 
-		if ( empty( $this->choices ) )
-			return; ?>
+		$this->json['multi_values'] = !is_array( $this->value() ) ? explode( ',', $this->value() ) : $this->value();
+		$this->json['string_value'] =  is_array( $this->value() ) ? implode( ',', $this->value() ) : $this->value();
 
-		<?php if ( !empty( $this->label ) ) : ?>
-			<span class="customize-control-title"><?php echo esc_html( $this->label ); ?></span>
-		<?php endif; ?>
+		$this->json['choices'] = $this->choices;
+		$this->json['link']    = $this->get_link();
+		$this->json['id']      = $this->id;
+	}
 
-		<?php if ( !empty( $this->description ) ) : ?>
-			<span class="description customize-control-description"><?php echo $this->description; ?></span>
-		<?php endif; ?>
+	/**
+	 * Underscore JS template to handle the control's output.
+	 *
+	 * @since  3.0.0
+	 * @access public
+	 * @return void
+	 */
+	public function content_template() { ?>
 
-		<?php $multi_values = !is_array( $this->value() ) ? explode( ',', $this->value() ) : $this->value(); ?>
+		<# if ( ! data.choices ) {
+			return;
+		} #>
+
+		<# if ( data.label ) { #>
+			<span class="customize-control-title">{{{ data.label }}}</span>
+		<# } #>
+
+		<# if ( data.description ) { #>
+			<span class="description customize-control-description">{{{ data.description }}}</span>
+		<# } #>
 
 		<ul>
-			<?php foreach ( $this->choices as $value => $label ) : ?>
 
-				<li>
-					<label>
-						<input type="checkbox" value="<?php echo esc_attr( $value ); ?>" <?php checked( in_array( $value, $multi_values ) ); ?> /> 
-						<?php echo esc_html( $label ); ?>
-					</label>
-				</li>
+			<# for ( value in data.choices ) { #>
 
-			<?php endforeach; ?>
+			<li>
+				<label>
+					<input type="checkbox" value="{{{ value }}}" <# if ( -1 !== data.multi_values.indexOf( value ) ) { #> checked="checked" <# } #> /> 
+					{{{ data.choices[ value ] }}}
+				</label>
+			</li>
+
+			<# } #>
 		</ul>
 
-		<input type="hidden" <?php $this->link(); ?> value="<?php echo esc_attr( implode( ',', $multi_values ) ); ?>" />
+		<input type="hidden" {{{ data.link }}} value="{{{ data.string_value }}}" />
+
 	<?php }
 }

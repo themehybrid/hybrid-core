@@ -48,10 +48,11 @@ function hybrid_load_customize_classes( $wp_customize ) {
 	require_if_theme_supports( 'theme-layouts', HYBRID_CUSTOMIZE . 'control-layout.php' );
 
 	// Register JS control types.
-	$wp_customize->register_control_type( 'Hybrid_Customize_Control_Palette'         );
-	$wp_customize->register_control_type( 'Hybrid_Customize_Control_Radio_Image'     );
-	$wp_customize->register_control_type( 'Hybrid_Customize_Control_Select_Group'    );
-	$wp_customize->register_control_type( 'Hybrid_Customize_Control_Select_Multiple' );
+	$wp_customize->register_control_type( 'Hybrid_Customize_Control_Checkbox_Multiple' );
+	$wp_customize->register_control_type( 'Hybrid_Customize_Control_Palette'           );
+	$wp_customize->register_control_type( 'Hybrid_Customize_Control_Radio_Image'       );
+	$wp_customize->register_control_type( 'Hybrid_Customize_Control_Select_Group'      );
+	$wp_customize->register_control_type( 'Hybrid_Customize_Control_Select_Multiple'   );
 }
 
 /**

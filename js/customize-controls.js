@@ -51,17 +51,36 @@ jQuery( document ).ready( function() {
 
 	/* === Checkbox Multiple Control === */
 
-	jQuery( '.customize-control-checkbox-multiple input[type="checkbox"]' ).on(
-		'change',
+	jQuery( '.customize-control-checkbox-multiple input[type="checkbox"]' ).change(
 		function() {
 
+			// Get all of the checkbox values and join them in a comma-separated string.
 			checkbox_values = jQuery( this ).parents( '.customize-control' ).find( 'input[type="checkbox"]:checked' ).map(
 				function() {
 					return this.value;
 				}
 			).get().join( ',' );
 
-			jQuery( this ).parents( '.customize-control' ).find( 'input[type="hidden"]' ).val( checkbox_values ).trigger( 'change' );
+			// Get the hidden input element (where we're storing comma-separated values).
+			var hidden = jQuery( this ).parents( '.customize-control' ).find( 'input[type="hidden"]' );
+
+			// Update the hidden input value with the comma-separated checkbox values.
+			jQuery( hidden ).val( checkbox_values );
+
+			// Set the new value.
+			wp.customize(
+				jQuery( hidden ).attr( 'data-customize-setting-link' ),
+				function( obj ) {
+
+					var value = jQuery( hidden ).val();
+
+					if ( null === value ) {
+						obj.set( '' );
+					} else {
+						obj.set( value );
+					}
+				}
+			);
 		}
 	);
 
