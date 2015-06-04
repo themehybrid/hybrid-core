@@ -30,47 +30,75 @@ class Hybrid_Customize_Control_Select_Group extends WP_Customize_Control {
 	public $type = 'select-group';
 
 	/**
-	 * Displays the control content.
+	 * Add custom parameters to pass to the JS via JSON.
 	 *
 	 * @since  3.0.0
 	 * @access public
 	 * @return void
 	 */
-	public function render_content() {
+	public function to_json() {
+		parent::to_json();
 
-		if ( empty( $this->choices ) )
-			return; ?>
+		$choices = $group = array();
+
+		foreach ( $this->choices as $choice => $maybe_group ) {
+
+			if ( is_array( $maybe_group ) )
+				$group[ $choice ] = $maybe_group;
+			else
+				$choices[ $choice ] = $maybe_group;
+		}
+
+		$this->json['choices'] = $choices;
+		$this->json['group']   = $group;
+		$this->json['link']    = $this->get_link();
+		$this->json['value']   = $this->value();
+		$this->json['id']      = $this->id;
+	}
+
+	/**
+	 * Underscore JS template to handle the control's output.
+	 *
+	 * @since  3.0.0
+	 * @access public
+	 * @return void
+	 */
+	public function content_template() { ?>
+
+		<# if ( ! data.choices && ! data.group ) {
+			return;
+		} #>
 
 		<label>
-			<?php if ( !empty( $this->label ) ) : ?>
-				<span class="customize-control-title"><?php echo esc_html( $this->label ); ?></span>
-			<?php endif; ?>
 
-			<?php if ( !empty( $this->description ) ) : ?>
-				<span class="description customize-control-description"><?php echo $this->description; ?></span>
-			<?php endif; ?>
+			<# if ( data.label ) { #>
+				<span class="customize-control-title">{{{ data.label }}}</span>
+			<# } #>
 
-			<select <?php $this->link(); ?>>
+			<# if ( data.description ) { #>
+				<span class="description customize-control-description">{{{ data.description }}}</span>
+			<# } #>
 
-				<?php foreach ( $this->choices as $value => $maybe_group ) : ?>
+			<select {{{ data.link }}} >
 
-					<?php if ( is_array( $maybe_group ) ) : // If we have an `<optgroup>`. ?>
+				<# for ( value in data.choices ) { #>
 
-						<optgroup label="<?php echo esc_attr( $maybe_group['label'] ); ?>">
+					<option value="{{{ value }}}" <# if ( value === data.value ) { #> selected="selected" <# } #>>{{{ data.choices[ value ] }}}</option>
 
-							<?php foreach ( $maybe_group['choices'] as $choice_value => $choice_label ) : ?>
-								<option value="<?php echo esc_attr( $choice_value ); ?>" <?php selected( $choice_value, $this->value() ); ?>><?php echo esc_html( $choice_label ); ?></option>
-							<?php endforeach; ?>
+				<# } #>
 
-						</optgroup>
+				<# for ( key in data.group ) { #>
 
-					<?php else : // Assume regular `<option>`. ?>
+					<optgroup label="{{{ data.group[ key ]['label'] }}}">
 
-						<option value="<?php echo esc_attr( $value ); ?>" <?php selected( $value, $this->value() ); ?>><?php echo esc_html( $maybe_group ); ?></option>
+						<# for ( optgroup_value in data.group[ key ]['choices'] ) { #>
 
-					<?php endif; // End check for `<optgroup>`. ?>
+							<option value="{{{ optgroup_value }}}" <# if ( optgroup_value === data.value ) { #> selected="selected" <# } #>>{{{ data.group[ key ]['choices'][ optgroup_value ] }}}</option>
 
-				<?php endforeach; // End loop through choices. ?>
+						<# } #>
+
+					</optgroup>
+				<# } #>
 			</select>
 		</label>
 	<?php }

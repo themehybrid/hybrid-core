@@ -65,4 +65,21 @@ jQuery( document ).ready( function() {
 		}
 	);
 
+	/* === Select Group Control === */
+
+	// Handles setting the new value in the customizer.
+	jQuery( '.customize-control-select-group select' ).change(
+		function() {
+			var choice = jQuery( this );
+
+			// Set the new value.
+			wp.customize(
+				jQuery( choice ).attr( 'data-customize-setting-link' ),
+				function( obj ) {
+					obj.set( jQuery( choice ).val() );
+				}
+			);
+		}
+	);
+
 } ); // jQuery( document ).ready
