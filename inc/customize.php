@@ -35,6 +35,7 @@ add_action( 'customize_preview_init', 'hybrid_customize_preview_enqueue_scripts'
 function hybrid_load_customize_classes( $wp_customize ) {
 
 	// Load customize setting classes.
+	require_once( HYBRID_CUSTOMIZE . 'setting-array-map.php'  );
 	require_once( HYBRID_CUSTOMIZE . 'setting-image-data.php' );
 
 	// Load customize control classes.
@@ -80,7 +81,7 @@ function hybrid_customize_register( $wp_customize ) {
 		$wp_customize->add_setting(
 			'theme_layout',
 			array(
-				'default'           => hybrid_get_theme_layout(),
+				'default'           => hybrid_get_default_layout(),
 				'sanitize_callback' => 'sanitize_key',
 				'transport'         => 'postMessage'
 			)
