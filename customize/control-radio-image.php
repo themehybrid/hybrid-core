@@ -47,38 +47,57 @@ class Hybrid_Customize_Control_Radio_Image extends WP_Customize_Control {
 	}
 
 	/**
-	 * Displays the control content.
+	 * Add custom parameters to pass to the JS via JSON.
 	 *
 	 * @since  3.0.0
 	 * @access public
 	 * @return void
 	 */
-	public function render_content() {
+	public function to_json() {
+		parent::to_json();
 
-		// If no choices are provided, bail.
-		if ( empty( $this->choices ) )
-			return; ?>
+		// We need to make sure we have the correct image URL.
+		foreach ( $this->choices as $value => $args )
+			$this->choices[ $value ]['url'] = esc_url( sprintf( $args['url'], get_template_directory_uri(), get_stylesheet_directory_uri() ) );
 
-		<?php if ( !empty( $this->label ) ) : ?>
-			<span class="customize-control-title"><?php echo esc_html( $this->label ); ?></span>
-		<?php endif; ?>
+		$this->json['choices'] = $this->choices;
+		$this->json['link']    = $this->get_link();
+		$this->json['value']   = $this->value();
+		$this->json['id']      = $this->id;
+	}
 
-		<?php if ( !empty( $this->description ) ) : ?>
-			<span class="description customize-control-description"><?php echo $this->description; ?></span>
-		<?php endif; ?>
+	/**
+	 * Underscore JS template to handle the control's output.
+	 *
+	 * @since  3.0.0
+	 * @access public
+	 * @return void
+	 */
+	public function content_template() { ?>
+
+		<# if ( ! data.choices ) {
+			return;
+		} #>
+
+		<# if ( data.label ) { #>
+			<span class="customize-control-title">{{{ data.label }}}</span>
+		<# } #>
+
+		<# if ( data.description ) { #>
+			<span class="description customize-control-description">{{{ data.description }}}</span>
+		<# } #>
 
 		<div class="buttonset">
 
-			<?php foreach ( $this->choices as $value => $args ) : ?>
+			<# for ( key in data.choices ) { #>
 
-				<input type="radio" value="<?php echo esc_attr( $value ); ?>" name="<?php echo esc_attr( "_customize-radio-{$this->id}" ); ?>" id="<?php echo esc_attr( "{$this->id}-{$value}" ); ?>" <?php $this->link(); ?> <?php checked( $this->value(), $value ); ?> /> 
+				<input type="radio" value="{{{ key }}}" name="_customize-{{{ data.type }}}-{{{ data.id }}}" id="{{{ data.id }}}-{{{ key }}}" {{{ data.link }}} <# if ( key === data.value ) { #> checked="checked" <# } #> /> 
 
-				<label for="<?php echo esc_attr( "{$this->id}-{$value}" ); ?>">
-					<span class="screen-reader-text"><?php echo esc_html( $args['label'] ); ?></span>
-					<img src="<?php echo esc_url( sprintf( $args['url'], get_template_directory_uri(), get_stylesheet_directory_uri() ) ); ?>" alt="<?php echo esc_attr( $args['label'] ); ?>" />
+				<label for="{{{ data.id }}}-{{{ key }}}">
+					<span class="screen-reader-text">{{{ data.choices[ key ]['label'] }}}</span>
+					<img src="{{{ data.choices[ key ]['url'] }}}" alt="{{{ data.choices[ key ]['label'] }}}" />
 				</label>
-
-			<?php endforeach; ?>
+			<# } #>
 
 		</div><!-- .buttonset -->
 	<?php }
