@@ -21,8 +21,9 @@ class Hybrid_Customize_Control_Palette extends WP_Customize_Control {
 	/**
 	 * The type of customize control being rendered.
 	 *
-	 * @since 3.0.0
-	 * @var   string
+	 * @since  3.0.0
+	 * @access public
+	 * @var    string
 	 */
 	public $type = 'palette';
 
@@ -81,11 +82,9 @@ class Hybrid_Customize_Control_Palette extends WP_Customize_Control {
 			<span class="description customize-control-description">{{{ data.description }}}</span>
 		<# } #>
 
-		<# var name = '_customize-' + data.type + '-' + data.id; #>
-
 		<# for ( palette in data.choices ) { #>
 			<label>
-				<input type="radio" value="{{ palette }}" name="{{ name }}" {{{ data.link }}} <# if ( palette === data.value ) { #> checked="checked" <# } #> /> 
+				<input type="radio" value="{{ palette }}" name="_customize-{{{ data.type }}}-{{{ data.id }}}" {{{ data.link }}} <# if ( palette === data.value ) { #> checked="checked" <# } #> /> 
 
 				<span class="palette-label">{{ data.choices[ palette ]['label'] }}</span>
 

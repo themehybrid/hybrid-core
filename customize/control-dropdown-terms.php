@@ -16,23 +16,26 @@
 /**
  * Dropdown terms customize control class.
  *
- * @since 3.0.0
+ * @since  3.0.0
+ * @access public
  */
 class Hybrid_Customize_Control_Dropdown_Terms extends WP_Customize_Control {
 
 	/**
 	 * The type of customize control being rendered.
 	 *
-	 * @since 3.0.0
-	 * @var   string
+	 * @since  3.0.0
+	 * @access public
+	 * @var    string
 	 */
 	public $type = 'dropdown-terms';
 
 	/**
 	 * Custom arguments to pass into `wp_dropdown_categories()`.
 	 *
-	 * @since 3.0.0
-	 * @var   string
+	 * @since  3.0.0
+	 * @access public
+	 * @var    string
 	 */
 	public $args = array();
 

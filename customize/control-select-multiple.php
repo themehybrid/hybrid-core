@@ -15,14 +15,17 @@
 /**
  * Multiple select customize control class.
  *
- * @since 3.0.0
+ * @since  3.0.0
+ * @access public
  */
 class Hybrid_Customize_Control_Select_Multiple extends WP_Customize_Control {
 
 	/**
 	 * The type of customize control being rendered.
 	 *
-	 * @since 3.0.0
+	 * @since  3.0.0
+	 * @access public
+	 * @var    string
 	 */
 	public $type = 'select-multiple';
 
@@ -76,7 +79,7 @@ class Hybrid_Customize_Control_Select_Multiple extends WP_Customize_Control {
 				<span class="description customize-control-description">{{{ data.description }}}</span>
 			<# } #>
 
-			<select multiple="multiple" {{{ data.link }}} >
+			<select multiple="multiple" {{{ data.link }}}>
 
 				<# for ( value in data.choices ) { #>
 

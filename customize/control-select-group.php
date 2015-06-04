@@ -90,7 +90,7 @@ class Hybrid_Customize_Control_Select_Group extends WP_Customize_Control {
 				<span class="description customize-control-description">{{{ data.description }}}</span>
 			<# } #>
 
-			<select {{{ data.link }}} >
+			<select {{{ data.link }}}>
 
 				<# for ( value in data.choices ) { #>
 

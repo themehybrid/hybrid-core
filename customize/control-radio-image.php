@@ -28,8 +28,9 @@ class Hybrid_Customize_Control_Radio_Image extends WP_Customize_Control {
 	/**
 	 * The type of customize control being rendered.
 	 *
-	 * @since 3.0.0
-	 * @var   string
+	 * @since  3.0.0
+	 * @access public
+	 * @var    string
 	 */
 	public $type = 'radio-image';
 
