@@ -30,6 +30,17 @@ class Hybrid_Customize_Control_Select_Group extends WP_Customize_Control {
 	public $type = 'select-group';
 
 	/**
+	 * Enqueue scripts/styles.
+	 *
+	 * @since  3.0.0
+	 * @access public
+	 * @return void
+	 */
+	public function enqueue() {
+		wp_enqueue_script( 'hybrid-customize-controls' );
+	}
+
+	/**
 	 * Add custom parameters to pass to the JS via JSON.
 	 *
 	 * @since  3.0.0
