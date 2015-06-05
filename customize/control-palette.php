@@ -75,7 +75,7 @@ class Hybrid_Customize_Control_Palette extends WP_Customize_Control {
 		} #>
 
 		<# if ( data.label ) { #>
-			<span class="customize-control-title">{{{ data.label }}}</span>
+			<span class="customize-control-title">{{ data.label }}</span>
 		<# } #>
 
 		<# if ( data.description ) { #>
@@ -84,7 +84,7 @@ class Hybrid_Customize_Control_Palette extends WP_Customize_Control {
 
 		<# for ( palette in data.choices ) { #>
 			<label>
-				<input type="radio" value="{{ palette }}" name="_customize-{{{ data.type }}}-{{{ data.id }}}" {{{ data.link }}} <# if ( palette === data.value ) { #> checked="checked" <# } #> /> 
+				<input type="radio" value="{{ palette }}" name="_customize-{{ data.type }}-{{ data.id }}" {{{ data.link }}} <# if ( palette === data.value ) { #> checked="checked" <# } #> /> 
 
 				<span class="palette-label">{{ data.choices[ palette ]['label'] }}</span>
 

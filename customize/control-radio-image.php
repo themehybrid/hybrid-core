@@ -81,7 +81,7 @@ class Hybrid_Customize_Control_Radio_Image extends WP_Customize_Control {
 		} #>
 
 		<# if ( data.label ) { #>
-			<span class="customize-control-title">{{{ data.label }}}</span>
+			<span class="customize-control-title">{{ data.label }}</span>
 		<# } #>
 
 		<# if ( data.description ) { #>
@@ -92,11 +92,11 @@ class Hybrid_Customize_Control_Radio_Image extends WP_Customize_Control {
 
 			<# for ( key in data.choices ) { #>
 
-				<input type="radio" value="{{{ key }}}" name="_customize-{{{ data.type }}}-{{{ data.id }}}" id="{{{ data.id }}}-{{{ key }}}" {{{ data.link }}} <# if ( key === data.value ) { #> checked="checked" <# } #> /> 
+				<input type="radio" value="{{ key }}" name="_customize-{{ data.type }}-{{ data.id }}" id="{{ data.id }}-{{ key }}" {{{ data.link }}} <# if ( key === data.value ) { #> checked="checked" <# } #> /> 
 
-				<label for="{{{ data.id }}}-{{{ key }}}">
-					<span class="screen-reader-text">{{{ data.choices[ key ]['label'] }}}</span>
-					<img src="{{{ data.choices[ key ]['url'] }}}" alt="{{{ data.choices[ key ]['label'] }}}" />
+				<label for="{{ data.id }}-{{ key }}">
+					<span class="screen-reader-text">{{ data.choices[ key ]['label'] }}</span>
+					<img src="{{ data.choices[ key ]['url'] }}" alt="{{ data.choices[ key ]['label'] }}" />
 				</label>
 			<# } #>
 

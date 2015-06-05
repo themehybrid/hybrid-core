@@ -72,7 +72,7 @@ class Hybrid_Customize_Control_Select_Multiple extends WP_Customize_Control {
 		<label>
 
 			<# if ( data.label ) { #>
-				<span class="customize-control-title">{{{ data.label }}}</span>
+				<span class="customize-control-title">{{ data.label }}</span>
 			<# } #>
 
 			<# if ( data.description ) { #>
@@ -83,7 +83,7 @@ class Hybrid_Customize_Control_Select_Multiple extends WP_Customize_Control {
 
 				<# for ( value in data.choices ) { #>
 
-					<option value="{{{ value }}}" <# if ( -1 !== data.value.indexOf( value ) ) { #> selected="selected" <# } #>>{{{ data.choices[ value ] }}}</option>
+					<option value="{{ value }}" <# if ( -1 !== data.value.indexOf( value ) ) { #> selected="selected" <# } #>>{{ data.choices[ value ] }}</option>
 
 				<# } #>
 

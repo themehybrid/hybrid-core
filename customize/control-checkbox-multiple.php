@@ -74,7 +74,7 @@ class Hybrid_Customize_Control_Checkbox_Multiple extends WP_Customize_Control {
 		} #>
 
 		<# if ( data.label ) { #>
-			<span class="customize-control-title">{{{ data.label }}}</span>
+			<span class="customize-control-title">{{ data.label }}</span>
 		<# } #>
 
 		<# if ( data.description ) { #>
@@ -87,15 +87,15 @@ class Hybrid_Customize_Control_Checkbox_Multiple extends WP_Customize_Control {
 
 			<li>
 				<label>
-					<input type="checkbox" value="{{{ value }}}" <# if ( -1 !== data.multi_values.indexOf( value ) ) { #> checked="checked" <# } #> /> 
-					{{{ data.choices[ value ] }}}
+					<input type="checkbox" value="{{ value }}" <# if ( -1 !== data.multi_values.indexOf( value ) ) { #> checked="checked" <# } #> /> 
+					{{ data.choices[ value ] }}
 				</label>
 			</li>
 
 			<# } #>
 		</ul>
 
-		<input type="hidden" {{{ data.link }}} value="{{{ data.string_value }}}" />
+		<input type="hidden" {{{ data.link }}} value="{{ data.string_value }}" />
 
 	<?php }
 }
