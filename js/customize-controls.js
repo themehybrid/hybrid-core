@@ -1,128 +1,101 @@
-jQuery( document ).ready( function() {
+/* === Checkbox Multiple Control === */
 
-	/* === Color Palette Control === */
+wp.customize.controlConstructor['checkbox-multiple'] = wp.customize.Control.extend( {
+	ready: function() {
+		var control = this;
 
-	jQuery( '.customize-control-palette input:radio:checked' ).parent( 'label' ).addClass( 'selected' );
+		this.container.on( 'change', 'input:checkbox',
+			function() {
 
-	jQuery( '.customize-control-palette input:radio' ).change(
-		function() {
+				// Get all of the checkbox values.
+				var checkbox_values = jQuery( 'input[type="checkbox"]:checked', control.container ).map(
+					function() {
+						return this.value;
+					}
+				).get();
 
-			// Switch the `.selected` class on the label wrapping the selected radio input.
-			jQuery( this ).parents( '.customize-control-palette' ).find( 'label.selected' ).removeClass( 'selected' );
-			jQuery( this ).parent( 'label' ).addClass( 'selected' );
-
-			// Get the name of the setting.
-			var setting = jQuery( this ).attr( 'data-customize-setting-link' );
-
-			// Get the value of the currently-checked radio input.
-			var palette = jQuery( this ).val();
-
-			// Set the new value.
-			wp.customize( setting, function( obj ) {
-
-				obj.set( palette );
-			} );
-		}
-	);
-
-	/* === Radio Image Control === */
-
-	// Check if the `buttonset()` function exists. If it does, use it for radio images.
-	if ( jQuery.isFunction( jQuery.fn.buttonset ) ) {
-		jQuery( '.customize-control-radio-image .buttonset' ).buttonset();
+				// Set the value.
+				if ( null === checkbox_values ) {
+					control.setting.set( '' );
+				} else {
+					control.setting.set( checkbox_values );
+				}
+			}
+		);
 	}
+} );
 
-	// Handles setting the new value in the customizer.
-	jQuery( '.customize-control-radio-image input:radio' ).change(
-		function() {
-			// Get the name of the setting.
-			var setting = jQuery( this ).attr( 'data-customize-setting-link' );
+/* === Palette Control === */
 
-			// Get the value of the currently-checked radio input.
-			var image = jQuery( this ).val();
+wp.customize.controlConstructor['palette'] = wp.customize.Control.extend( {
+	ready: function() {
 
-			// Set the new value.
-			wp.customize( setting, function( obj ) {
+		var control = this;
 
-				obj.set( image );
-			} );
+		jQuery( 'input:radio:checked', control.container ).parent( 'label' ).addClass( 'selected' );
+
+		this.container.on( 'change', 'input:radio',
+			function() {
+
+				jQuery( 'label.selected', control.container ).removeClass( 'selected' );
+				jQuery( this ).parent( 'label' ).addClass( 'selected' );
+
+				control.setting.set( jQuery( this ).val() );
+			}
+		);
+	}
+} );
+
+/* === Radio Image Control === */
+
+wp.customize.controlConstructor['radio-image'] = wp.customize.Control.extend( {
+	ready: function() {
+
+		var control = this;
+
+		// Check if the `buttonset()` function exists. If it does, use it for radio images.
+		if ( jQuery.isFunction( jQuery.fn.buttonset ) ) {
+			jQuery( '.buttonset', control.container ).buttonset();
 		}
-	);
 
-	/* === Checkbox Multiple Control === */
+		this.container.on( 'change', 'input:radio',
+			function() {
+				control.setting.set( jQuery( this ).val() );
+			}
+		);
+	}
+} );
 
-	jQuery( '.customize-control-checkbox-multiple input[type="checkbox"]' ).change(
-		function() {
+/* === Select Group Control === */
 
-			// Get all of the checkbox values and join them in a comma-separated string.
-			checkbox_values = jQuery( this ).parents( '.customize-control' ).find( 'input[type="checkbox"]:checked' ).map(
-				function() {
-					return this.value;
+wp.customize.controlConstructor['select-group'] = wp.customize.Control.extend( {
+	ready: function() {
+		var control = this;
+
+		this.container.on( 'change', 'select',
+			function() {
+				control.setting.set( jQuery( this ).val() );
+			}
+		);
+	}
+} );
+
+/* === Select Multiple Control === */
+
+wp.customize.controlConstructor['select-multiple'] = wp.customize.Control.extend( {
+	ready: function() {
+		var control = this;
+
+		this.container.on( 'change', 'select',
+			function() {
+				var value = jQuery( this ).val();
+
+				if ( null === value ) {
+					control.setting.set( '' );
+				} else {
+					control.setting.set( value );
 				}
-			).get().join( ',' );
-
-			// Get the hidden input element (where we're storing comma-separated values).
-			var hidden = jQuery( this ).parents( '.customize-control' ).find( 'input[type="hidden"]' );
-
-			// Update the hidden input value with the comma-separated checkbox values.
-			jQuery( hidden ).val( checkbox_values );
-
-			// Set the new value.
-			wp.customize(
-				jQuery( hidden ).attr( 'data-customize-setting-link' ),
-				function( obj ) {
-
-					var value = jQuery( hidden ).val();
-
-					if ( null === value ) {
-						obj.set( '' );
-					} else {
-						obj.set( value );
-					}
-				}
-			);
-		}
-	);
-
-	/* === Select Group Control === */
-
-	// Handles setting the new value in the customizer.
-	jQuery( '.customize-control-select-group select' ).change(
-		function() {
-			var choice = jQuery( this );
-
-			// Set the new value.
-			wp.customize(
-				jQuery( choice ).attr( 'data-customize-setting-link' ),
-				function( obj ) {
-					obj.set( jQuery( choice ).val() );
-				}
-			);
-		}
-	);
-
-	/* === Select Multiple Control === */
-
-	// Handles setting the new value in the customizer.
-	jQuery( '.customize-control-select-multiple select' ).change(
-		function() {
-			var choice = jQuery( this );
-
-			// Set the new value.
-			wp.customize(
-				jQuery( choice ).attr( 'data-customize-setting-link' ),
-				function( obj ) {
-
-					var value = jQuery( choice ).val();
-
-					if ( null === value ) {
-						obj.set( '' );
-					} else {
-						obj.set( value );
-					}
-				}
-			);
-		}
-	);
-
-} ); // jQuery( document ).ready
+			}
+		);
+	}
+} );

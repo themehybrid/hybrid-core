@@ -52,9 +52,7 @@ class Hybrid_Customize_Control_Checkbox_Multiple extends WP_Customize_Control {
 	public function to_json() {
 		parent::to_json();
 
-		$this->json['multi_values'] = !is_array( $this->value() ) ? explode( ',', $this->value() ) : $this->value();
-		$this->json['string_value'] =  is_array( $this->value() ) ? implode( ',', $this->value() ) : $this->value();
-
+		$this->json['value']   = !is_array( $this->value() ) ? explode( ',', $this->value() ) : $this->value();
 		$this->json['choices'] = $this->choices;
 		$this->json['link']    = $this->get_link();
 		$this->json['id']      = $this->id;
@@ -83,19 +81,17 @@ class Hybrid_Customize_Control_Checkbox_Multiple extends WP_Customize_Control {
 
 		<ul>
 
-			<# for ( value in data.choices ) { #>
+			<# for ( key in data.choices ) { #>
 
 			<li>
 				<label>
-					<input type="checkbox" value="{{ value }}" <# if ( -1 !== data.multi_values.indexOf( value ) ) { #> checked="checked" <# } #> /> 
-					{{ data.choices[ value ] }}
+					<input type="checkbox" value="{{ key }}" <# if ( -1 !== data.value.indexOf( key ) ) { #> checked="checked" <# } #> /> 
+					{{ data.choices[ key ] }}
 				</label>
 			</li>
 
 			<# } #>
 		</ul>
-
-		<input type="hidden" {{{ data.link }}} value="{{ data.string_value }}" />
 
 	<?php }
 }
