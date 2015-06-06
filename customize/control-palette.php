@@ -49,12 +49,10 @@ class Hybrid_Customize_Control_Palette extends WP_Customize_Control {
 	public function to_json() {
 		parent::to_json();
 
-		$colors = array();
-
+		// Make sure the colors have a hash.
 		foreach ( $this->choices as $choice => $value )
-			$colors[ $choice ] = array_map( 'maybe_hash_hex_color', $value['colors'] );
+			$this->choices[ $choice ]['colors'] = array_map( 'maybe_hash_hex_color', $value['colors'] );
 
-		$this->json['colors']  = $colors;
 		$this->json['choices'] = $this->choices;
 		$this->json['link']    = $this->get_link();
 		$this->json['value']   = $this->value();
@@ -90,9 +88,9 @@ class Hybrid_Customize_Control_Palette extends WP_Customize_Control {
 
 				<div class="palette-block">
 
-					<# for ( color in data.colors[ palette ] ) { #>
+					<# for ( color in data.choices[ palette ]['colors'] ) { #>
 
-						<span class="palette-color" style="background-color: {{ data.colors[ palette ][ color ] }}">&nbsp;</span>
+						<span class="palette-color" style="background-color: {{ data.choices[ palette ]['colors'][ color ] }}">&nbsp;</span>
 					<# } #>
 
 				</div>
