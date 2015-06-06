@@ -35,14 +35,13 @@ class Hybrid_Customize_Control_Radio_Image extends WP_Customize_Control {
 	public $type = 'radio-image';
 
 	/**
-	 * Loads the jQuery UI Button script and framework scripts/styles.
+	 * Loads the framework scripts/styles.
 	 *
 	 * @since  3.0.0
 	 * @access public
 	 * @return void
 	 */
 	public function enqueue() {
-		wp_enqueue_script( 'jquery-ui-button'          );
 		wp_enqueue_script( 'hybrid-customize-controls' );
 		wp_enqueue_style(  'hybrid-customize-controls' );
 	}
@@ -88,18 +87,15 @@ class Hybrid_Customize_Control_Radio_Image extends WP_Customize_Control {
 			<span class="description customize-control-description">{{{ data.description }}}</span>
 		<# } #>
 
-		<div class="buttonset">
+		<# for ( key in data.choices ) { #>
 
-			<# for ( key in data.choices ) { #>
+			<label>
+				<input type="radio" value="{{ key }}" name="_customize-{{ data.type }}-{{ data.id }}" {{{ data.link }}} <# if ( key === data.value ) { #> checked="checked" <# } #> /> 
 
-				<input type="radio" value="{{ key }}" name="_customize-{{ data.type }}-{{ data.id }}" id="{{ data.id }}-{{ key }}" {{{ data.link }}} <# if ( key === data.value ) { #> checked="checked" <# } #> /> 
+				<span class="screen-reader-text">{{ data.choices[ key ]['label'] }}</span>
 
-				<label for="{{ data.id }}-{{ key }}">
-					<span class="screen-reader-text">{{ data.choices[ key ]['label'] }}</span>
-					<img src="{{ data.choices[ key ]['url'] }}" alt="{{ data.choices[ key ]['label'] }}" />
-				</label>
-			<# } #>
-
-		</div><!-- .buttonset -->
+				<img src="{{ data.choices[ key ]['url'] }}" alt="{{ data.choices[ key ]['label'] }}" />
+			</label>
+		<# } #>
 	<?php }
 }

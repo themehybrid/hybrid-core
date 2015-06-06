@@ -53,12 +53,7 @@ wp.customize.controlConstructor['radio-image'] = wp.customize.Control.extend( {
 
 		var control = this;
 
-		// Check if the `buttonset()` function exists. If it does, use it for radio images.
-		if ( jQuery.isFunction( jQuery.fn.buttonset ) ) {
-			jQuery( '.buttonset', control.container ).buttonset();
-		}
-
-		this.container.on( 'change', 'input:radio',
+		control.container.on( 'change', 'input:radio',
 			function() {
 				control.setting.set( jQuery( this ).val() );
 			}

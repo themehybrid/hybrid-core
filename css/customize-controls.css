@@ -32,14 +32,13 @@
 
 /* === Radio Image Control === */
 
-.customize-control-radio-image .ui-button {
-	margin:        0;
-	border-radius: 0;
-	border:        none;
-	background:    transparent;
+.customize-control-radio-image input[type="radio"] {
+	clip:     rect(1px, 1px, 1px, 1px);
+	height:   1px;
+	overflow: hidden;
+	position: absolute !important;
+	width:    1px;
 }
-
-.customize-control-radio-image .ui-button-text { padding: 0; }
 
 .customize-control-radio-image img {
 	box-sizing: border-box;
@@ -51,9 +50,9 @@
 
 	.customize-control-radio-image img:hover,
 	.customize-control-radio-image img:focus {
-		border-color: #ddd;
+		border-color: #ccc;
 	}
 
-	.customize-control-radio-image .ui-state-active img {
+	.customize-control-radio-image input:checked + span + img {
 		border-color: #00a0d2;
 	}
