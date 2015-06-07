@@ -80,18 +80,14 @@ class Hybrid_Customize_Control_Checkbox_Multiple extends WP_Customize_Control {
 		<# } #>
 
 		<ul>
-
 			<# _.each( data.choices, function( label, choice ) { #>
-
-			<li>
-				<label>
-					<input type="checkbox" value="{{ choice }}" <# if ( -1 !== data.value.indexOf( choice ) ) { #> checked="checked" <# } #> /> 
-					{{ label }}
-				</label>
-			</li>
-
+				<li>
+					<label>
+						<input type="checkbox" value="{{ choice }}" <# if ( -1 !== data.value.indexOf( choice ) ) { #> checked="checked" <# } #> /> 
+						{{ label }}
+					</label>
+				</li>
 			<# } ) #>
 		</ul>
-
 	<?php }
 }

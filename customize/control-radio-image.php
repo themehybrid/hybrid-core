@@ -88,7 +88,6 @@ class Hybrid_Customize_Control_Radio_Image extends WP_Customize_Control {
 		<# } #>
 
 		<# _.each( data.choices, function( args, choice ) { #>
-
 			<label>
 				<input type="radio" value="{{ choice }}" name="_customize-{{ data.type }}-{{ data.id }}" {{{ data.link }}} <# if ( choice === data.value ) { #> checked="checked" <# } #> /> 
 
