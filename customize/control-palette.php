@@ -80,21 +80,22 @@ class Hybrid_Customize_Control_Palette extends WP_Customize_Control {
 			<span class="description customize-control-description">{{{ data.description }}}</span>
 		<# } #>
 
-		<# for ( palette in data.choices ) { #>
+		<# _.each( data.choices, function( palette, choice ) { #>
 			<label>
-				<input type="radio" value="{{ palette }}" name="_customize-{{ data.type }}-{{ data.id }}" {{{ data.link }}} <# if ( palette === data.value ) { #> checked="checked" <# } #> /> 
 
-				<span class="palette-label">{{ data.choices[ palette ]['label'] }}</span>
+				<input type="radio" value="{{ choice }}" name="_customize-{{ data.type }}-{{ data.id }}" {{{ data.link }}} <# if ( choice === data.value ) { #> checked="checked" <# } #> /> 
+
+				<span class="palette-label">{{ palette.label }}</span>
 
 				<div class="palette-block">
 
-					<# for ( color in data.choices[ palette ]['colors'] ) { #>
+					<# _.each( palette.colors, function( color ) { #>
 
-						<span class="palette-color" style="background-color: {{ data.choices[ palette ]['colors'][ color ] }}">&nbsp;</span>
-					<# } #>
+						<span class="palette-color" style="background-color: {{ color }}">&nbsp;</span>
+					<# } ) #>
 
 				</div>
 			</label> 
-		<# } #>
+		<# } ) #>
 	<?php }
 }

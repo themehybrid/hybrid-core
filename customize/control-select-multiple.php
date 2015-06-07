@@ -81,11 +81,11 @@ class Hybrid_Customize_Control_Select_Multiple extends WP_Customize_Control {
 
 			<select multiple="multiple" {{{ data.link }}}>
 
-				<# for ( value in data.choices ) { #>
+				<# _.each( data.choices, function( label, choice ) { #>
 
-					<option value="{{ value }}" <# if ( -1 !== data.value.indexOf( value ) ) { #> selected="selected" <# } #>>{{ data.choices[ value ] }}</option>
+					<option value="{{ choice }}" <# if ( -1 !== data.value.indexOf( choice ) ) { #> selected="selected" <# } #>>{{ label }}</option>
 
-				<# } #>
+				<# } ) #>
 
 			</select>
 		</label>

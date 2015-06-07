@@ -92,24 +92,24 @@ class Hybrid_Customize_Control_Select_Group extends WP_Customize_Control {
 
 			<select {{{ data.link }}}>
 
-				<# for ( value in data.choices ) { #>
+				<# _.each( data.choices, function( label, choice ) { #>
 
-					<option value="{{ value }}" <# if ( value === data.value ) { #> selected="selected" <# } #>>{{ data.choices[ value ] }}</option>
+					<option value="{{ choice }}" <# if ( choice === data.value ) { #> selected="selected" <# } #>>{{ label }}</option>
 
-				<# } #>
+				<# } ) #>
 
-				<# for ( key in data.group ) { #>
+				<# _.each( data.group, function( group ) { #>
 
-					<optgroup label="{{ data.group[ key ]['label'] }}">
+					<optgroup label="{{ group.label }}">
 
-						<# for ( optgroup_value in data.group[ key ]['choices'] ) { #>
+						<# _.each( group.choices, function( label, choice ) { #>
 
-							<option value="{{ optgroup_value }}" <# if ( optgroup_value === data.value ) { #> selected="selected" <# } #>>{{ data.group[ key ]['choices'][ optgroup_value ] }}</option>
+							<option value="{{ choice }}" <# if ( choice === data.value ) { #> selected="selected" <# } #>>{{ label }}</option>
 
-						<# } #>
+						<# } ) #>
 
 					</optgroup>
-				<# } #>
+				<# } ) #>
 			</select>
 		</label>
 	<?php }

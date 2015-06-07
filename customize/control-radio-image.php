@@ -87,15 +87,15 @@ class Hybrid_Customize_Control_Radio_Image extends WP_Customize_Control {
 			<span class="description customize-control-description">{{{ data.description }}}</span>
 		<# } #>
 
-		<# for ( key in data.choices ) { #>
+		<# _.each( data.choices, function( args, choice ) { #>
 
 			<label>
-				<input type="radio" value="{{ key }}" name="_customize-{{ data.type }}-{{ data.id }}" {{{ data.link }}} <# if ( key === data.value ) { #> checked="checked" <# } #> /> 
+				<input type="radio" value="{{ choice }}" name="_customize-{{ data.type }}-{{ data.id }}" {{{ data.link }}} <# if ( choice === data.value ) { #> checked="checked" <# } #> /> 
 
-				<span class="screen-reader-text">{{ data.choices[ key ]['label'] }}</span>
+				<span class="screen-reader-text">{{ args.label }}</span>
 
-				<img src="{{ data.choices[ key ]['url'] }}" alt="{{ data.choices[ key ]['label'] }}" />
+				<img src="{{ args.url }}" alt="{{ args.label }}" />
 			</label>
-		<# } #>
+		<# } ) #>
 	<?php }
 }
