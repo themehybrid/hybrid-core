@@ -28,6 +28,15 @@ class Hybrid_Customize_Control_Palette extends WP_Customize_Control {
 	public $type = 'palette';
 
 	/**
+	 * The default customizer section this control is attached to.
+	 *
+	 * @since  3.0.0
+	 * @access public
+	 * @var    string
+	 */
+	public $section = 'colors';
+
+	/**
 	 * Enqueue scripts/styles.
 	 *
 	 * @since  3.0.0
