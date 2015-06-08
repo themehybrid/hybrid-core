@@ -69,8 +69,8 @@ function hybrid_customize_register( $wp_customize ) {
 	$wp_customize->add_section(
 		'layout',
 		array(
-			'title'      => esc_html__( 'Layout', 'hybrid-core' ),
-			'priority'   => 30,
+			'title'    => esc_html__( 'Layout', 'hybrid-core' ),
+			'priority' => 30,
 		)
 	);
 
@@ -92,10 +92,7 @@ function hybrid_customize_register( $wp_customize ) {
 			new Hybrid_Customize_Control_Layout(
 				$wp_customize,
 				'theme_layout',
-				array(
-					'label'    => esc_html__( 'Global Layout', 'hybrid-core' ),
-					'section'  => 'layout',
-				)
+				array( 'label' => esc_html__( 'Global Layout', 'hybrid-core' ) )
 			)
 		);
 	}

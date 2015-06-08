@@ -20,6 +20,15 @@
 class Hybrid_Customize_Control_Layout extends Hybrid_Customize_Control_Radio_Image {
 
 	/**
+	 * The default customizer section this control is attached to.
+	 *
+	 * @since  3.0.0
+	 * @access public
+	 * @var    string
+	 */
+	public $section = 'layout';
+
+	/**
 	 * Set up our control.
 	 *
 	 * @since  3.0.0
