@@ -44,14 +44,10 @@ function hybrid_add_post_layout_meta_box( $post_type ) {
  *
  * @since  3.0.0
  * @access public
- * @param  string  $post_type
- * @param  object  $post
  * @return void
  */
 function hybrid_post_layout_enqueue() {
-	wp_enqueue_script( 'jquery-ui-button' );
-	wp_enqueue_script( 'hybrid-admin'     );
-	wp_enqueue_style(  'hybrid-admin'     );
+	wp_enqueue_style( 'hybrid-admin' );
 }
 
 /**
@@ -78,10 +74,11 @@ function hybrid_post_layout_meta_box( $post, $box ) {
 
 			<?php if ( true === $layout->is_post_layout && $layout->image && ! ( !empty( $layout->post_types ) && !in_array( $post->post_type, $layout->post_types ) ) ) : ?>
 
-				<input type="radio" value="<?php echo esc_attr( $layout->name ); ?>" name="hybrid-post-layout" id="<?php echo esc_attr( "hybrid-post-layout-{$layout->name}" ); ?>" <?php checked( $post_layout, $layout->name ); ?> />
+				<label>
+					<input type="radio" value="<?php echo esc_attr( $layout->name ); ?>" name="hybrid-post-layout" <?php checked( $post_layout, $layout->name ); ?> />
 
-				<label for="<?php echo esc_attr( "hybrid-post-layout-{$layout->name}" ); ?>">
 					<span class="screen-reader-text"><?php echo esc_html( $layout->label ); ?></span>
+
 					<img src="<?php echo esc_url( sprintf( $layout->image, get_template_directory_uri(), get_stylesheet_directory_uri() ) ); ?>" alt="<?php echo esc_attr( $layout->label ); ?>" />
 				</label>
 

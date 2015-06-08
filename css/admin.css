@@ -4,14 +4,13 @@
 
 /* === Radio Image Control (Post Layout) === */
 
-#hybrid-post-layout .ui-button {
-	margin:        0;
-	border-radius: 0;
-	border:        none;
-	background:    transparent;
+#hybrid-post-layout input[type="radio"] {
+	clip:     rect(1px, 1px, 1px, 1px);
+	height:   1px;
+	overflow: hidden;
+	position: absolute !important;
+	width:    1px;
 }
-
-#hybrid-post-layout .ui-button-text { padding: 0; }
 
 #hybrid-post-layout img {
 	box-sizing: border-box;
@@ -26,6 +25,6 @@
 		border-color: #ddd;
 	}
 
-	#hybrid-post-layout .ui-state-active img {
+	#hybrid-post-layout input:checked + span + img {
 		border-color: #00a0d2;
 	}

@@ -99,6 +99,16 @@ function hybrid_get_loop_description() {
 	return get_the_archive_description();
 }
 
+/**
+ * Registers admin scripts.
+ *
+ * @note   Temp. deprecated. We might need in future.
+ * @since  3.0.0
+ * @access public
+ * @return void
+ */
+function hybrid_admin_register_scripts() {}
+
 /* === Removed Functions === */
 
 /* Fuctions removed in the 3.0 branch. */
