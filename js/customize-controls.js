@@ -1,4 +1,4 @@
-( function( api ) {
+( function( $, api ) {
 
 	/* === Checkbox Multiple Control === */
 
@@ -6,11 +6,11 @@
 		ready: function() {
 			var control = this;
 
-			control.container.on( 'change', 'input:checkbox',
+			$( 'input:checkbox', control.container ).change(
 				function() {
 
 					// Get all of the checkbox values.
-					var checkbox_values = jQuery( 'input[type="checkbox"]:checked', control.container ).map(
+					var checkbox_values = $( 'input[type="checkbox"]:checked', control.container ).map(
 						function() {
 							return this.value;
 						}
@@ -34,16 +34,16 @@
 			var control = this;
 
 			// Adds a `.selected` class to the label of checked inputs.
-			jQuery( 'input:radio:checked', control.container ).parent( 'label' ).addClass( 'selected' );
+			$( 'input:radio:checked', control.container ).parent( 'label' ).addClass( 'selected' );
 
-			control.container.on( 'change', 'input:radio',
+			$( 'input:radio', control.container ).change(
 				function() {
 
 					// Removes the `.selected` class from other labels and adds it to the new one.
-					jQuery( 'label.selected', control.container ).removeClass( 'selected' );
-					jQuery( this ).parent( 'label' ).addClass( 'selected' );
+					$( 'label.selected', control.container ).removeClass( 'selected' );
+					$( this ).parent( 'label' ).addClass( 'selected' );
 
-					control.setting.set( jQuery( this ).val() );
+					control.setting.set( $( this ).val() );
 				}
 			);
 		}
@@ -55,9 +55,9 @@
 		ready: function() {
 			var control = this;
 
-			control.container.on( 'change', 'input:radio',
+			$( 'input:radio', control.container ).change(
 				function() {
-					control.setting.set( jQuery( this ).val() );
+					control.setting.set( $( this ).val() );
 				}
 			);
 		}
@@ -69,9 +69,9 @@
 		ready: function() {
 			var control = this;
 
-			control.container.on( 'change', 'select',
+			$( 'select', control.container ).change(
 				function() {
-					control.setting.set( jQuery( this ).val() );
+					control.setting.set( $( this ).val() );
 				}
 			);
 		}
@@ -83,9 +83,9 @@
 		ready: function() {
 			var control = this;
 
-			control.container.on( 'change', 'select',
+			$( 'select', control.container ).change(
 				function() {
-					var value = jQuery( this ).val();
+					var value = $( this ).val();
 
 					if ( null === value ) {
 						control.setting.set( '' );
@@ -97,4 +97,4 @@
 		}
 	} );
 
-} )( wp.customize );
+} )( jQuery, wp.customize );
