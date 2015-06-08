@@ -39,10 +39,10 @@ function hybrid_register_styles() {
 	$suffix = hybrid_get_min_suffix();
 
 	// Register styles for use by themes.
-	wp_register_style( 'hybrid-one-five', esc_url( HYBRID_CSS . "one-five{$suffix}.css" ) );
-	wp_register_style( 'hybrid-gallery',  esc_url( HYBRID_CSS . "gallery{$suffix}.css"  ) );
-	wp_register_style( 'hybrid-parent',   esc_url( hybrid_get_parent_stylesheet_uri()   ) );
-	wp_register_style( 'hybrid-style',    esc_url( get_stylesheet_uri()                 ) );
+	wp_register_style( 'hybrid-one-five', HYBRID_CSS . "one-five{$suffix}.css" );
+	wp_register_style( 'hybrid-gallery',  HYBRID_CSS . "gallery{$suffix}.css"  );
+	wp_register_style( 'hybrid-parent',   hybrid_get_parent_stylesheet_uri()   );
+	wp_register_style( 'hybrid-style',    get_stylesheet_uri()                 );
 }
 
 /**

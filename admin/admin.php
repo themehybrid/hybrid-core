@@ -46,7 +46,7 @@ function hybrid_admin_load_post_meta_boxes() {
  * @return void
  */
 function hybrid_admin_register_styles() {
-	wp_register_style( 'hybrid-admin', esc_url( HYBRID_CSS . 'admin.css' ) );
+	wp_register_style( 'hybrid-admin', HYBRID_CSS . 'admin.css' );
 }
 
 /**

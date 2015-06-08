@@ -30,7 +30,7 @@ add_action( 'wp_enqueue_scripts', 'hybrid_enqueue_scripts', 5 );
 function hybrid_register_scripts() {
 
 	// Register the 'mobile-toggle' script'.
-	wp_register_script( 'hybrid-mobile-toggle', esc_url( HYBRID_JS . 'mobile-toggle' . hybrid_get_min_suffix() . '.js' ), array( 'jquery' ), '20130528', true );
+	wp_register_script( 'hybrid-mobile-toggle', HYBRID_JS . 'mobile-toggle' . hybrid_get_min_suffix() . '.js', array( 'jquery' ), '20130528', true );
 }
 
 /**
