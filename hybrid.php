@@ -100,31 +100,31 @@ if ( !class_exists( 'Hybrid' ) ) {
 			// Sets the framework version number.
 			define( 'HYBRID_VERSION', '3.0.0' );
 
+			// Theme directory paths.
+			define( 'HYBRID_PARENT', trailingslashit( get_template_directory()   ) );
+			define( 'HYBRID_CHILD',  trailingslashit( get_stylesheet_directory() ) );
+
+			// Theme directory URIs.
+			define( 'HYBRID_PARENT_URI', trailingslashit( get_template_directory_uri()   ) );
+			define( 'HYBRID_CHILD_URI',  trailingslashit( get_stylesheet_directory_uri() ) );
+
 			// Sets the path to the core framework directory.
 			if ( !defined( 'HYBRID_DIR' ) )
-				define( 'HYBRID_DIR', trailingslashit( trailingslashit( get_template_directory() ) . basename( dirname( __FILE__ ) ) ) );
+				define( 'HYBRID_DIR', trailingslashit( HYBRID_PARENT . basename( dirname( __FILE__ ) ) ) );
 
 			// Sets the path to the core framework directory URI.
 			if ( !defined( 'HYBRID_URI' ) )
-				define( 'HYBRID_URI', trailingslashit( trailingslashit( get_template_directory_uri() ) . basename( dirname( __FILE__ ) ) ) );
+				define( 'HYBRID_URI', trailingslashit( HYBRID_PARENT_URI . basename( dirname( __FILE__ ) ) ) );
 
-			// Sets the path to the core framework admin directory.
-			define( 'HYBRID_ADMIN', trailingslashit( HYBRID_DIR . 'admin' ) );
-
-			// Sets the path to the core framework includes directory.
-			define( 'HYBRID_INC', trailingslashit( HYBRID_DIR . 'inc' ) );
-
-			// Sets the path to the core framework extensions directory.
-			define( 'HYBRID_EXT', trailingslashit( HYBRID_DIR . 'ext' ) );
-
-			// Sets the path to the core framework customize directory.
+			// Core framework directory paths.
+			define( 'HYBRID_ADMIN',     trailingslashit( HYBRID_DIR . 'admin'     ) );
+			define( 'HYBRID_INC',       trailingslashit( HYBRID_DIR . 'inc'       ) );
+			define( 'HYBRID_EXT',       trailingslashit( HYBRID_DIR . 'ext'       ) );
 			define( 'HYBRID_CUSTOMIZE', trailingslashit( HYBRID_DIR . 'customize' ) );
 
-			// Sets the path to the core framework CSS directory URI.
+			// Core framework directory URIs.
 			define( 'HYBRID_CSS', trailingslashit( HYBRID_URI . 'css' ) );
-
-			// Sets the path to the core framework JavaScript directory URI.
-			define( 'HYBRID_JS', trailingslashit( HYBRID_URI . 'js' ) );
+			define( 'HYBRID_JS',  trailingslashit( HYBRID_URI . 'js'  ) );
 		}
 
 		/**

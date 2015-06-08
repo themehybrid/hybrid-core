@@ -41,8 +41,8 @@ function hybrid_load_locale_functions() {
 	$locale = strtolower( str_replace( '_', '-', get_locale() ) );
 
 	// Define locale functions files.
-	$stylesheet_locale_functions = trailingslashit( get_stylesheet_directory() ) . hybrid_get_parent_domain_path() . "/{$locale}.php";
-	$template_locale_functions   = trailingslashit( get_template_directory()   ) . hybrid_get_child_domain_path()  . "/{$locale}.php";
+	$stylesheet_locale_functions = HYBRID_CHILD  . hybrid_get_child_domain_path()   . "/{$locale}.php";
+	$template_locale_functions   = HYBRID_PARENT . hybrid_get_parent_domain_path()  . "/{$locale}.php";
 
 	// If file exists in active/child theme.
 	if ( file_exists( $stylesheet_locale_functions ) )
@@ -66,11 +66,11 @@ function hybrid_load_locale_functions() {
 function hybrid_load_textdomains() {
 
 	// Load theme textdomain.
-	load_theme_textdomain( hybrid_get_parent_textdomain(), trailingslashit( get_template_directory() ) . hybrid_get_parent_domain_path() );
+	load_theme_textdomain( hybrid_get_parent_textdomain(), HYBRID_PARENT . hybrid_get_parent_domain_path() );
 
 	// Load child theme textdomain.
 	if ( is_child_theme() )
-		load_child_theme_textdomain( hybrid_get_child_textdomain(), trailingslashit( get_stylesheet_directory() ) . hybrid_get_child_domain_path() );
+		load_child_theme_textdomain( hybrid_get_child_textdomain(), HYBRID_CHILD . hybrid_get_child_domain_path() );
 
 	// Load the framework textdomain.
 	hybrid_load_framework_textdomain();
@@ -236,7 +236,7 @@ function hybrid_load_textdomain_mofile( $mofile, $domain ) {
 
 		// Get just the theme path and file name for the mofile.
 		$mofile_short = str_replace( "{$locale}.mo", "{$domain}-{$locale}.mo", $mofile );
-		$mofile_short = str_replace( array( trailingslashit( get_template_directory() ), trailingslashit( get_stylesheet_directory() ) ), '', $mofile_short );
+		$mofile_short = str_replace( array( HYBRID_PARENT, HYBRID_CHILD ), '', $mofile_short );
 
 		// Attempt to find the correct mofile.
 		$locate_mofile = locate_template( array( $mofile_short ) );

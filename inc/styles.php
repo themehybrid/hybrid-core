@@ -59,11 +59,11 @@ function hybrid_get_parent_stylesheet_uri() {
 	$suffix = hybrid_get_min_suffix();
 
 	// Get the parent theme stylesheet.
-	$stylesheet_uri = trailingslashit( get_template_directory_uri() ) . 'style.css';
+	$stylesheet_uri = HYBRID_PARENT_URI . 'style.css';
 
 	// If a '.min' version of the parent theme stylesheet exists, use it.
-	if ( !empty( $suffix ) && file_exists( trailingslashit( get_template_directory() ) . "style{$suffix}.css" ) )
-		$stylesheet_uri = trailingslashit( get_template_directory_uri() ) . "style{$suffix}.css";
+	if ( !empty( $suffix ) && file_exists( HYBRID_PARENT . "style{$suffix}.css" ) )
+		$stylesheet_uri = HYBRID_PARENT_URI . "style{$suffix}.css";
 
 	return apply_filters( 'hybrid_get_parent_stylesheet_uri', $stylesheet_uri );
 }
@@ -94,7 +94,7 @@ function hybrid_min_stylesheet_uri( $stylesheet_uri, $stylesheet_dir_uri ) {
 		$stylesheet = str_replace( '.css', "{$suffix}.css", $stylesheet );
 
 		// If the stylesheet exists in the stylesheet directory, set the stylesheet URI to the dev stylesheet.
-		if ( file_exists( trailingslashit( get_stylesheet_directory() ) . $stylesheet ) )
+		if ( file_exists( HYBRID_CHILD . $stylesheet ) )
 			$stylesheet_uri = esc_url( trailingslashit( $stylesheet_dir_uri ) . $stylesheet );
 	}
 

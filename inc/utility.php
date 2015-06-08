@@ -122,14 +122,14 @@ function hybrid_locate_theme_file( $file_names ) {
 	foreach ( (array) $file_names as $file ) {
 
 		// If the file exists in the stylesheet (child theme) directory.
-		if ( is_child_theme() && file_exists( trailingslashit( get_stylesheet_directory() ) . $file ) ) {
-			$located = trailingslashit( get_stylesheet_directory_uri() ) . $file;
+		if ( is_child_theme() && file_exists( HYBRID_CHILD . $file ) ) {
+			$located = HYBRID_CHILD_URI . $file;
 			break;
 		}
 
 		// If the file exists in the template (parent theme) directory.
-		elseif ( file_exists( trailingslashit( get_template_directory() ) . $file ) ) {
-			$located = trailingslashit( get_template_directory_uri() ) . $file;
+		elseif ( file_exists( HYBRID_PARENT . $file ) ) {
+			$located = HYBRID_PARENT_URI . $file;
 			break;
 		}
 	}
