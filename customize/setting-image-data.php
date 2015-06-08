@@ -1,9 +1,9 @@
 <?php
 /**
- * Custom class for saving image data in an array. Only supports the 'theme_mod' type. This is for use 
- * with an image setting in which the image URL is saved.  This customizer setting class uses the theme 
- * mod name and appends `_data` to the end.  So, if the theme mod is `example_image`, an additional 
- * theme mod will be created called `example_image_data`.  The original will have the URL, but the new 
+ * Custom class for saving image data in an array. Only supports the 'theme_mod' type. This is for use
+ * with an image setting in which the image URL is saved.  This customizer setting class uses the theme
+ * mod name and appends `_data` to the end.  So, if the theme mod is `example_image`, an additional
+ * theme mod will be created called `example_image_data`.  The original will have the URL, but the new
  * mod will be an array of data for the image.
  *
  * @author     Justin Tadlock <justin@justintadlock.com>

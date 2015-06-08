@@ -41,7 +41,7 @@ function hybrid_meta_viewport() {
 }
 
 /**
- * Adds the theme generator meta tag.  This is particularly useful for checking theme users' version 
+ * Adds the theme generator meta tag.  This is particularly useful for checking theme users' version
  * when handling support requests.
  *
  * @since  3.0.0
@@ -68,9 +68,9 @@ function hybrid_link_pingback() {
 }
 
 /**
- * Filters the `wp_title` output early. Note that since WordPress 4.1.0 introduced the `_wp_render_title_tag()` 
- * function, theme authors can no longer control this on their own. In the past, Hybrid Core defaulted to 
- * a colon, so we're overwriting this regardless of what it was defined as. Later filters on `wp_title` can 
+ * Filters the `wp_title` output early. Note that since WordPress 4.1.0 introduced the `_wp_render_title_tag()`
+ * function, theme authors can no longer control this on their own. In the past, Hybrid Core defaulted to
+ * a colon, so we're overwriting this regardless of what it was defined as. Later filters on `wp_title` can
  * change if needed.  Since core is now defining the separator, this shouldn't be an issue.
  *
  * @since  2.0.0
@@ -89,7 +89,7 @@ function hybrid_wp_title( $doctitle ) {
 	elseif ( is_home() || is_singular() )
 		$doctitle = single_post_title( '', false );
 
-	elseif ( is_category() ) 
+	elseif ( is_category() )
 		$doctitle = single_cat_title( '', false );
 
 	elseif ( is_tag() )

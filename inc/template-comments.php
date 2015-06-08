@@ -1,7 +1,7 @@
 <?php
 /**
- * Functions for handling how comments are displayed and used on the site. This allows more precise 
- * control over their display and makes more filter and action hooks available to developers to use in their 
+ * Functions for handling how comments are displayed and used on the site. This allows more precise
+ * control over their display and makes more filter and action hooks available to developers to use in their
  * customizations.
  *
  * @package    HybridCore
@@ -25,8 +25,8 @@ function hybrid_comment_reply_link( $args = array() ) {
 }
 
 /**
- * Outputs the comment reply link.  Note that WP's `comment_reply_link()` doesn't work outside of 
- * `wp_list_comments()` without passing in the proper arguments (it isn't meant to).  This function is just a 
+ * Outputs the comment reply link.  Note that WP's `comment_reply_link()` doesn't work outside of
+ * `wp_list_comments()` without passing in the proper arguments (it isn't meant to).  This function is just a
  * wrapper for `get_comment_reply_link()`, which adds in the arguments automatically.
  *
  * @since  2.0.0
@@ -51,9 +51,9 @@ function hybrid_get_comment_reply_link( $args = array() ) {
 }
 
 /**
- * Uses the $comment_type to determine which comment template should be used. Once the 
+ * Uses the $comment_type to determine which comment template should be used. Once the
  * template is located, it is loaded for use. Child themes can create custom templates based off
- * the $comment_type. The comment template hierarchy is comment-$comment_type.php, 
+ * the $comment_type. The comment template hierarchy is comment-$comment_type.php,
  * comment.php.
  *
  * The templates are saved in $hybrid->comment_template[$comment_type], so each comment template
@@ -108,8 +108,8 @@ function hybrid_comments_callback( $comment, $args, $depth ) {
 }
 
 /**
- * Ends the display of individual comments. Uses the callback parameter for wp_list_comments(). 
- * Needs to be used in conjunction with hybrid_comments_callback(). Not needed but used just in 
+ * Ends the display of individual comments. Uses the callback parameter for wp_list_comments().
+ * Needs to be used in conjunction with hybrid_comments_callback(). Not needed but used just in
  * case something is changed.
  *
  * @since  0.2.3

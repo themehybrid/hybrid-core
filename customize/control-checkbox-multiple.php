@@ -1,8 +1,8 @@
 <?php
 /**
- * The multiple checkbox customize control allows theme authors to add theme options that have 
- * multiple choices.  Note that the value returned is a comma-delineated string rather than 
- * an array of values.  In your `sanitize_callback` function for the specific customize setting, 
+ * The multiple checkbox customize control allows theme authors to add theme options that have
+ * multiple choices.  Note that the value returned is a comma-delineated string rather than
+ * an array of values.  In your `sanitize_callback` function for the specific customize setting,
  * you can turn that back into an array with `explode( ',', $value )` before it gets saved into
  * the DB.  The same goes or the JS as well.  You'll get a comma-delineated string.
  *
@@ -83,7 +83,7 @@ class Hybrid_Customize_Control_Checkbox_Multiple extends WP_Customize_Control {
 			<# _.each( data.choices, function( label, choice ) { #>
 				<li>
 					<label>
-						<input type="checkbox" value="{{ choice }}" <# if ( -1 !== data.value.indexOf( choice ) ) { #> checked="checked" <# } #> /> 
+						<input type="checkbox" value="{{ choice }}" <# if ( -1 !== data.value.indexOf( choice ) ) { #> checked="checked" <# } #> />
 						{{ label }}
 					</label>
 				</li>

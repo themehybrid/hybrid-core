@@ -1,10 +1,10 @@
 <?php
 /**
- * HTML attribute functions and filters.  The purposes of this is to provide a way for theme/plugin devs 
- * to hook into the attributes for specific HTML elements and create new or modify existing attributes.  
- * This is sort of like `body_class()`, `post_class()`, and `comment_class()` on steroids.  Plus, it 
- * handles attributes for many more elements.  The biggest benefit of using this is to provide richer 
- * microdata while being forward compatible with the ever-changing Web.  Currently, the default microdata 
+ * HTML attribute functions and filters.  The purposes of this is to provide a way for theme/plugin devs
+ * to hook into the attributes for specific HTML elements and create new or modify existing attributes.
+ * This is sort of like `body_class()`, `post_class()`, and `comment_class()` on steroids.  Plus, it
+ * handles attributes for many more elements.  The biggest benefit of using this is to provide richer
+ * microdata while being forward compatible with the ever-changing Web.  Currently, the default microdata
  * vocabulary supported is Schema.org.
  *
  * @package    HybridCore
@@ -65,9 +65,9 @@ function hybrid_attr( $slug, $context = '' ) {
 }
 
 /**
- * Gets an HTML element's attributes.  This function is actually meant to be filtered by theme authors, plugins, 
- * or advanced child theme users.  The purpose is to allow folks to modify, remove, or add any attributes they 
- * want without having to edit every template file in the theme.  So, one could support microformats instead 
+ * Gets an HTML element's attributes.  This function is actually meant to be filtered by theme authors, plugins,
+ * or advanced child theme users.  The purpose is to allow folks to modify, remove, or add any attributes they
+ * want without having to edit every template file in the theme.  So, one could support microformats instead
  * of microdata, if desired.
  *
  * @since  2.0.0

@@ -2,11 +2,11 @@
 /**
  * Hybrid Media Grabber - A script for grabbing media related to a post.
  *
- * Hybrid Media Grabber is a script for pulling media either from the post content or attached to the 
- * post.  It's an attempt to consolidate the various methods that users have used over the years to 
- * embed media into their posts.  This script was written so that theme developers could grab that 
- * media and use it in interesting ways within their themes.  For example, a theme could get a video 
- * and display it on archive pages alongside the post excerpt or pull it out of the content to display 
+ * Hybrid Media Grabber is a script for pulling media either from the post content or attached to the
+ * post.  It's an attempt to consolidate the various methods that users have used over the years to
+ * embed media into their posts.  This script was written so that theme developers could grab that
+ * media and use it in interesting ways within their themes.  For example, a theme could get a video
+ * and display it on archive pages alongside the post excerpt or pull it out of the content to display
  * it above the post on single post views.
  *
  * @package    Hybrid
@@ -196,8 +196,8 @@ class Hybrid_Media_Grabber {
 	}
 
 	/**
-	 * WordPress has a few shortcodes for handling embedding media:  [audio], [video], and [embed].  This 
-	 * method figures out the shortcode used in the content.  Once it's found, the appropriate method for 
+	 * WordPress has a few shortcodes for handling embedding media:  [audio], [video], and [embed].  This
+	 * method figures out the shortcode used in the content.  Once it's found, the appropriate method for
 	 * the shortcode is executed.
 	 *
 	 * @since  1.6.0
@@ -230,7 +230,7 @@ class Hybrid_Media_Grabber {
 	}
 
 	/**
-	 * Handles the output of the WordPress playlist feature.  This searches for the [playlist] shortcode 
+	 * Handles the output of the WordPress playlist feature.  This searches for the [playlist] shortcode
 	 * if it's used in the content.
 	 *
 	 * @since  2.0.0
@@ -294,7 +294,7 @@ class Hybrid_Media_Grabber {
 	}
 
 	/**
-	 * Handles the output of audio/video shortcodes included with the Jetpack plugin (or Jetpack 
+	 * Handles the output of audio/video shortcodes included with the Jetpack plugin (or Jetpack
 	 * Slim) via the Shortcode Embeds feature.
 	 *
 	 * @since  2.0.0
@@ -337,7 +337,7 @@ class Hybrid_Media_Grabber {
 	}
 
 	/**
-	 * Grabs media embbeded into the content within <iframe>, <object>, <embed>, and other HTML methods for 
+	 * Grabs media embbeded into the content within <iframe>, <object>, <embed>, and other HTML methods for
 	 * embedding media.
 	 *
 	 * @since  1.6.0
@@ -353,7 +353,7 @@ class Hybrid_Media_Grabber {
 	}
 
 	/**
-	 * Gets media attached to the post.  Then, uses the WordPress [audio] or [video] shortcode to handle 
+	 * Gets media attached to the post.  Then, uses the WordPress [audio] or [video] shortcode to handle
 	 * the HTML output of the media.
 	 *
 	 * @since  1.6.0
@@ -396,7 +396,7 @@ class Hybrid_Media_Grabber {
 	}
 
 	/**
-	 * Removes the found media from the content.  The purpose of this is so that themes can retrieve the 
+	 * Removes the found media from the content.  The purpose of this is so that themes can retrieve the
 	 * media from the content and display it elsewhere on the page based on its design.
 	 *
 	 * @since  1.6.0
@@ -412,7 +412,7 @@ class Hybrid_Media_Grabber {
 	}
 
 	/**
-	 * Method for filtering the media's 'width' and 'height' attributes so that the theme can handle the 
+	 * Method for filtering the media's 'width' and 'height' attributes so that the theme can handle the
 	 * dimensions how it sees fit.
 	 *
 	 * @since  1.6.0
@@ -446,16 +446,16 @@ class Hybrid_Media_Grabber {
 			list( $max_width, $max_height ) = $this->spotify_dimensions( $media_atts );
 
 		// Calculate new media dimensions.
-		$dimensions = wp_expand_dimensions( 
-			$media_atts['width'], 
-			$media_atts['height'], 
+		$dimensions = wp_expand_dimensions(
+			$media_atts['width'],
+			$media_atts['height'],
 			$max_width,
 			$max_height
 		);
 
 		// Allow devs to filter the final width and height of the media.
-		list( $width, $height ) = apply_filters( 
-			'hybrid_media_grabber_dimensions', 
+		list( $width, $height ) = apply_filters(
+			'hybrid_media_grabber_dimensions',
 			$dimensions,                       // width/height array
 			$media_atts,                       // media HTML attributes
 			$this                              // media grabber object
@@ -482,8 +482,8 @@ class Hybrid_Media_Grabber {
 	}
 
 	/**
-	 * Fix for Spotify embeds because they're the only embeddable service that doesn't work that well 
-	 * with custom-sized embeds.  So, we need to adjust this the best we can.  Right now, the only 
+	 * Fix for Spotify embeds because they're the only embeddable service that doesn't work that well
+	 * with custom-sized embeds.  So, we need to adjust this the best we can.  Right now, the only
 	 * embed size that works for full-width embeds is the "compact" player (height of 80).
 	 *
 	 * @since  1.6.0

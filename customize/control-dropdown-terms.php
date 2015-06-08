@@ -1,8 +1,8 @@
 <?php
 /**
- * A dropdown taxonomy terms `<select>` customizer control class.  This control is built on top of 
- * the core `wp_dropdown_categories()` function (works for any taxonomy).  By passing in a custom 
- * `$args` parameter, which is passed to `wp_dropdown_categories()`, you can alter the output of the 
+ * A dropdown taxonomy terms `<select>` customizer control class.  This control is built on top of
+ * the core `wp_dropdown_categories()` function (works for any taxonomy).  By passing in a custom
+ * `$args` parameter, which is passed to `wp_dropdown_categories()`, you can alter the output of the
  * dropdown select.
  *
  * @package    Hybrid

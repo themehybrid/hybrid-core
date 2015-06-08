@@ -1,7 +1,7 @@
 <?php
 /**
- * Layout class.  This class is for creating new layout objects.  Layout registration is handled via 
- * the `Hybrid_Layout_Factory` class in `class-layout-factory.php`.  Theme authors should utilize 
+ * Layout class.  This class is for creating new layout objects.  Layout registration is handled via
+ * the `Hybrid_Layout_Factory` class in `class-layout-factory.php`.  Theme authors should utilize
  * the API functions in `inc/layouts.php`.
  *
  * @package    HybridCore
@@ -135,7 +135,7 @@ class Hybrid_Layout {
 	/* ====== Protected Methods ====== */
 
 	/**
-	 * Adds post type support for `theme-layouts` in the event that the layout has been 
+	 * Adds post type support for `theme-layouts` in the event that the layout has been
 	 * explicitly set for one or more post types.
 	 *
 	 * @since  3.0.0

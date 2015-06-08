@@ -1,6 +1,6 @@
 <?php
 /**
- * Customizer setting class for handling an array or comma-separated list of values.  This takes the 
+ * Customizer setting class for handling an array or comma-separated list of values.  This takes the
  * given `sanitize_callback` and runs it over each element in the array via the `array_map()` function.
  *
  * @author     Justin Tadlock <justin@justintadlock.com>
@@ -27,8 +27,8 @@ class Hybrid_Customize_Setting_Array_Map extends WP_Customize_Setting {
 	public $sanitize_callback = 'sanitize_text_field';
 
 	/**
-	 * Sanitize the array values.  This method overwrites the parent `sanitize()` method and 
-	 * runs `array_map()` over the multiple values.  Expected input is an array of values or 
+	 * Sanitize the array values.  This method overwrites the parent `sanitize()` method and
+	 * runs `array_map()` over the multiple values.  Expected input is an array of values or
 	 * a comma-separated list of values.
 	 *
 	 * @since  3.0.0
@@ -44,7 +44,7 @@ class Hybrid_Customize_Setting_Array_Map extends WP_Customize_Setting {
 	}
 
 	/**
-	 * Callback function for `array_map()`.  Uses the defined `sanitize_callback` to filter 
+	 * Callback function for `array_map()`.  Uses the defined `sanitize_callback` to filter
 	 * each element of the array.
 	 *
 	 * @since  3.0.0

@@ -1,6 +1,6 @@
 <?php
 /**
- * Customize control class to handle theme layouts.  By default, it simply outputs a custom set of 
+ * Customize control class to handle theme layouts.  By default, it simply outputs a custom set of
  * radio inputs.  Theme authors can extend this class and do something even cooler.
  *
  * @package    Hybrid

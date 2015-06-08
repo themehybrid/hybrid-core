@@ -2,16 +2,16 @@
 /**
  * Cleaner Gallery - A valid image gallery script for WordPress.
  *
- * Cleaner Gallery was created to clean up the invalid HTML and remove the inline styles of the default 
- * implementation of the WordPress [gallery] shortcode.  This has the obvious benefits of creating 
- * sites with clean, valid code.  But, it also allows developers to more easily create custom styles for 
+ * Cleaner Gallery was created to clean up the invalid HTML and remove the inline styles of the default
+ * implementation of the WordPress [gallery] shortcode.  This has the obvious benefits of creating
+ * sites with clean, valid code.  But, it also allows developers to more easily create custom styles for
  * galleries within their themes.
  *
- * This program is free software; you can redistribute it and/or modify it under the terms of the GNU 
- * General Public License as published by the Free Software Foundation; either version 2 of the License, 
+ * This program is free software; you can redistribute it and/or modify it under the terms of the GNU
+ * General Public License as published by the Free Software Foundation; either version 2 of the License,
  * or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * @package   CleanerGallery
@@ -48,7 +48,7 @@ final class Cleaner_Gallery {
 	public $args = array();
 
 	/**
-	 * Instance of the gallery for this post. Used so that galleries don't have duplicate IDs 
+	 * Instance of the gallery for this post. Used so that galleries don't have duplicate IDs
 	 * when there's multiple galleries in a post.
 	 *
 	 * @since  1.1.0
@@ -97,7 +97,7 @@ final class Cleaner_Gallery {
 	}
 
 	/**
-	 * Filter for the 'post_gallery' hook, which is run when WordPress' [gallery] shortcode is 
+	 * Filter for the 'post_gallery' hook, which is run when WordPress' [gallery] shortcode is
 	 * executed.  This is the main function that handles the output of the new gallery.
 	 *
 	 * @since  1.1.0
@@ -246,7 +246,7 @@ final class Cleaner_Gallery {
 	}
 
 	/**
-	 * Formats and returns the gallery item.  The gallery item is composed of both the gallery 
+	 * Formats and returns the gallery item.  The gallery item is composed of both the gallery
 	 * icon (image) and gallery caption.
 	 *
 	 * @since  1.1.0

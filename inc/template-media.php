@@ -1,6 +1,6 @@
 <?php
 /**
- * Media template functions. These functions are meant to handle various features needed in theme templates 
+ * Media template functions. These functions are meant to handle various features needed in theme templates
  * for media and attachments.
  *
  * @package    HybridCore
@@ -12,7 +12,7 @@
  */
 
 /**
- * Prints media meta directly to the screen.  The `$property` parameter can be any of the public 
+ * Prints media meta directly to the screen.  The `$property` parameter can be any of the public
  * properties in the `Hybrid_Media_Meta` object.
  *
  * @see    Hybrid_Media_Meta
@@ -27,7 +27,7 @@ function hybrid_media_meta( $property, $args = array() ) {
 }
 
 /**
- * Returns media meta from a media meta object.  The `$property` parameter can be any of the public 
+ * Returns media meta from a media meta object.  The `$property` parameter can be any of the public
  * properties in the `Hybrid_Media_Meta` object.
  *
  * @see    Hybrid_Media_Meta
@@ -57,8 +57,8 @@ function hybrid_get_media_meta( $property, $args = array() ) {
 }
 
 /**
- * Returns an instance of the `Hybrid_Media_Meta_Factory` singleton.  While theme authors can access 
- * this function directly, it's best to use the `hybrid_media_meta()` and `hybrid_get_media_meta()` 
+ * Returns an instance of the `Hybrid_Media_Meta_Factory` singleton.  While theme authors can access
+ * this function directly, it's best to use the `hybrid_media_meta()` and `hybrid_get_media_meta()`
  * functions for printing/getting media meta object data.
  *
  * @see    Hybrid_Media_Meta_Factory
@@ -71,7 +71,7 @@ function hybrid_media_meta_factory() {
 }
 
 /**
- * Splits the attachment mime type into two distinct parts: type / subtype (e.g., image / png). 
+ * Splits the attachment mime type into two distinct parts: type / subtype (e.g., image / png).
  * Returns an array of the parts.
  *
  * @since  3.0.0
@@ -90,7 +90,7 @@ function hybrid_get_attachment_types( $post_id = 0 ) {
 }
 
 /**
- * Returns the main attachment mime type.  For example, `image` when the file has an `image / jpeg` 
+ * Returns the main attachment mime type.  For example, `image` when the file has an `image / jpeg`
  * mime type.
  *
  * @since  3.0.0
@@ -103,7 +103,7 @@ function hybrid_get_attachment_type( $post_id = 0 ) {
 }
 
 /**
- * Returns the attachment mime subtype.  For example, `jpeg` when the file has an `image / jpeg` 
+ * Returns the attachment mime subtype.  For example, `jpeg` when the file has an `image / jpeg`
  * mime type.
  *
  * @since  3.0.0
@@ -180,7 +180,7 @@ function hybrid_get_image_size_links() {
 }
 
 /**
- * Gets the "transcript" for an audio attachment.  This is typically saved as "unsynchronised_lyric", which is 
+ * Gets the "transcript" for an audio attachment.  This is typically saved as "unsynchronised_lyric", which is
  * the ID3 tag sanitized by WordPress.
  *
  * @since  2.0.0
@@ -193,11 +193,11 @@ function hybrid_get_audio_transcript( $post_id = 0 ) {
 }
 
 /**
- * Loads the correct function for handling attachments.  Checks the attachment mime type to call 
- * correct function. Image attachments are not loaded with this function.  The functionality for them 
+ * Loads the correct function for handling attachments.  Checks the attachment mime type to call
+ * correct function. Image attachments are not loaded with this function.  The functionality for them
  * should be handled by the theme's attachment or image attachment file.
  *
- * Ideally, all attachments would be appropriately handled within their templates. However, this could 
+ * Ideally, all attachments would be appropriately handled within their templates. However, this could
  * lead to messy template files.
  *
  * @since  0.5.0
@@ -214,7 +214,7 @@ function hybrid_attachment() {
 }
 
 /**
- * Handles application attachments on their attachment pages.  Uses the `<object>` tag to embed media 
+ * Handles application attachments on their attachment pages.  Uses the `<object>` tag to embed media
  * on those pages.
  *
  * @since  0.3.0
@@ -236,7 +236,7 @@ function hybrid_application_attachment( $mime = '', $file = '' ) {
 }
 
 /**
- * Handles text attachments on their attachment pages.  Uses the `<object>` element to embed media 
+ * Handles text attachments on their attachment pages.  Uses the `<object>` element to embed media
  * in the pages.
  *
  * @since  0.3.0

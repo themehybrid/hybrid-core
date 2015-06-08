@@ -1,6 +1,6 @@
 <?php
 /**
- * Metadata functions used in the core framework.  This file registers meta keys for use in WordPress 
+ * Metadata functions used in the core framework.  This file registers meta keys for use in WordPress
  * in a safe manner by setting up a custom sanitize callback.
  *
  * @package    HybridCore

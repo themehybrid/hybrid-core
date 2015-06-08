@@ -1,7 +1,7 @@
 <?php
 /**
- * Filters for theme-related WordPress features.  These filters are for handling adding or modifying the 
- * output of common WordPress template tags to make for a richer theme development experience without 
+ * Filters for theme-related WordPress features.  These filters are for handling adding or modifying the
+ * output of common WordPress template tags to make for a richer theme development experience without
  * having to resort to custom template tags.  Many of the filters are simply for adding HTML5 microdata.
  *
  * @package    HybridCore
@@ -58,7 +58,7 @@ function hybrid_excerpt_more( $text ) {
 }
 
 /**
- * Wraps the output of `wp_link_pages()` with `<p class="page-links">` if it's simply wrapped in a 
+ * Wraps the output of `wp_link_pages()` with `<p class="page-links">` if it's simply wrapped in a
  * `<p>` tag.
  *
  * @since  2.0.0
@@ -72,7 +72,7 @@ function hybrid_link_pages_args( $args ) {
 }
 
 /**
- * Wraps page "links" that aren't actually links (just text) with `<span class="page-numbers">` so that they 
+ * Wraps page "links" that aren't actually links (just text) with `<span class="page-numbers">` so that they
  * can also be styled.  This makes `wp_link_pages()` consistent with the output of `paginate_links()`.
  *
  * @since  2.0.0

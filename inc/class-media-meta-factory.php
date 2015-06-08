@@ -1,9 +1,9 @@
 <?php
 /**
- * Media metadata factory class. This is a singleton factory class for creating and storing 
+ * Media metadata factory class. This is a singleton factory class for creating and storing
  * `Hybrid_Media_Meta` objects.
  *
- * Theme authors need not access this class directly.  Instead, utilize the template tags in the 
+ * Theme authors need not access this class directly.  Instead, utilize the template tags in the
  * `/inc/template-media.php` file.
  *
  * @package    Hybrid
@@ -15,7 +15,7 @@
  */
 
 /**
- * Singleton factory class that registers and instantiates `Hybrid_Media_Meta` classes. Use the 
+ * Singleton factory class that registers and instantiates `Hybrid_Media_Meta` classes. Use the
  * `hybrid_media_factory()` function to get the instance.
  *
  * @since  3.0.0
@@ -34,7 +34,7 @@ class Hybrid_Media_Meta_Factory {
 	protected $media = array();
 
 	/**
-	 * Creates a new `Hybrid_Media_Meta` object and stores it in the `$media` array by 
+	 * Creates a new `Hybrid_Media_Meta` object and stores it in the `$media` array by
 	 * post ID.
 	 *
 	 * @since  3.0.0

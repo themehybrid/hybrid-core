@@ -1,9 +1,9 @@
 <?php
 /**
- * The radio image customize control extends the WP_Customize_Control class.  This class allows 
+ * The radio image customize control extends the WP_Customize_Control class.  This class allows
  * developers to create a list of image radio inputs.
  *
- * Note, the `$choices` array is slightly different than normal and should be in the form of 
+ * Note, the `$choices` array is slightly different than normal and should be in the form of
  * `array(
  *	$value => array( 'url' => $image_url, 'label' => $text_label ),
  *	$value => array( 'url' => $image_url, 'label' => $text_label ),
@@ -89,7 +89,7 @@ class Hybrid_Customize_Control_Radio_Image extends WP_Customize_Control {
 
 		<# _.each( data.choices, function( args, choice ) { #>
 			<label>
-				<input type="radio" value="{{ choice }}" name="_customize-{{ data.type }}-{{ data.id }}" {{{ data.link }}} <# if ( choice === data.value ) { #> checked="checked" <# } #> /> 
+				<input type="radio" value="{{ choice }}" name="_customize-{{ data.type }}-{{ data.id }}" {{{ data.link }}} <# if ( choice === data.value ) { #> checked="checked" <# } #> />
 
 				<span class="screen-reader-text">{{ args.label }}</span>
 

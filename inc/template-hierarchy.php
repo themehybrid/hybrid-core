@@ -1,8 +1,8 @@
 <?php
 /**
- * The framework has its own template hierarchy that can be used instead of the default WordPress 
- * template hierarchy.  It is not much different than the default.  It was built to extend the default by 
- * making it smarter and more flexible.  The goal is to give theme developers and end users an 
+ * The framework has its own template hierarchy that can be used instead of the default WordPress
+ * template hierarchy.  It is not much different than the default.  It was built to extend the default by
+ * making it smarter and more flexible.  The goal is to give theme developers and end users an
  * easy-to-override system that doesn't involve massive amounts of conditional tags within files.
  *
  * @package    HybridCore
@@ -37,7 +37,7 @@ add_filter( 'frontpage_template',  'hybrid_front_page_template', 5 );
 add_filter( 'comments_template', 'hybrid_comments_template', 5 );
 
 /**
- * Overrides WP's default template for date-based archives. Better abstraction of templates than 
+ * Overrides WP's default template for date-based archives. Better abstraction of templates than
  * is_date() allows by checking for the year, month, week, day, hour, and minute.
  *
  * @since  0.6.0
@@ -90,8 +90,8 @@ function hybrid_date_template( $template ) {
 }
 
 /**
- * Overrides WP's default template for author-based archives. Better abstraction of templates than 
- * is_author() allows by allowing themes to specify templates for a specific author. The hierarchy is 
+ * Overrides WP's default template for author-based archives. Better abstraction of templates than
+ * is_author() allows by allowing themes to specify templates for a specific author. The hierarchy is
  * user-$nicename.php, $user-role-$role.php, user.php, author.php, archive.php.
  *
  * @since  0.7.0
@@ -131,9 +131,9 @@ function hybrid_user_template( $template ) {
 }
 
 /**
- * Overrides WP's default template for category- and tag-based archives. This allows better 
- * organization of taxonomy template files by making categories and post tags work the same way as 
- * other taxonomies. The hierarchy is taxonomy-$taxonomy-$term.php, taxonomy-$taxonomy.php, 
+ * Overrides WP's default template for category- and tag-based archives. This allows better
+ * organization of taxonomy template files by making categories and post tags work the same way as
+ * other taxonomies. The hierarchy is taxonomy-$taxonomy-$term.php, taxonomy-$taxonomy.php,
  * taxonomy.php, archive.php.
  *
  * @since  0.7.0
@@ -154,10 +154,10 @@ function hybrid_taxonomy_template( $template ) {
 }
 
 /**
- * Overrides the default single (singular post) template.  Post templates can be loaded using a custom 
+ * Overrides the default single (singular post) template.  Post templates can be loaded using a custom
  * post template, by slug, or by ID.
  *
- * Attachment templates are handled slightly differently. Rather than look for the slug or ID, templates 
+ * Attachment templates are handled slightly differently. Rather than look for the slug or ID, templates
  * can be loaded by attachment-$mime[0]_$mime[1].php, attachment-$mime[1].php, or attachment-$mime[0].php.
  *
  * @since  0.7.0
@@ -216,11 +216,11 @@ function hybrid_singular_template( $template ) {
 }
 
 /**
- * Fix for the front page template handling in WordPress core. Its handling is not logical because it 
- * forces devs to account for both a page on the front page and posts on the front page.  Theme devs 
- * must handle both scenarios if they've created a "front-page.php" template.  This filter overwrites 
- * that and disables the "front-page.php" template if posts are to be shown on the front page.  This 
- * way, the "front-page.php" template will only ever be used if an actual page is supposed to be 
+ * Fix for the front page template handling in WordPress core. Its handling is not logical because it
+ * forces devs to account for both a page on the front page and posts on the front page.  Theme devs
+ * must handle both scenarios if they've created a "front-page.php" template.  This filter overwrites
+ * that and disables the "front-page.php" template if posts are to be shown on the front page.  This
+ * way, the "front-page.php" template will only ever be used if an actual page is supposed to be
  * shown on the front.
  *
  * @link   http://www.chipbennett.net/2013/09/14/home-page-and-front-page-and-templates-oh-my/
@@ -235,8 +235,8 @@ function hybrid_front_page_template( $template ) {
 }
 
 /**
- * Overrides the default comments template.  This filter allows for a "comments-{$post_type}.php" 
- * template based on the post type of the current single post view.  If this template is not found, it falls 
+ * Overrides the default comments template.  This filter allows for a "comments-{$post_type}.php"
+ * template based on the post type of the current single post view.  If this template is not found, it falls
  * back to the default "comments.php" template.
  *
  * @since  1.5.0

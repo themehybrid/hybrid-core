@@ -1,7 +1,7 @@
 <?php
 /**
- * The multiple select customize control extends the WP_Customize_Control class.  This class allows 
- * developers to create a `<select>` form field with the `multiple` attribute within the WordPress 
+ * The multiple select customize control extends the WP_Customize_Control class.  This class allows
+ * developers to create a `<select>` form field with the `multiple` attribute within the WordPress
  * theme customizer.
  *
  * @package    Hybrid

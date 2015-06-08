@@ -1,6 +1,6 @@
 <?php
 /**
- * Theme administration functions used with other components of the framework admin.  This file is for 
+ * Theme administration functions used with other components of the framework admin.  This file is for
  * setting up any basic features and holding additional admin helper functions.
  *
  * @package    HybridCore
@@ -20,7 +20,7 @@ add_action( 'admin_enqueue_scripts', 'hybrid_admin_register_scripts', 0 );
 add_action( 'admin_enqueue_scripts', 'hybrid_admin_register_styles',  0 );
 
 /**
- * Loads the core post meta box files on the 'load-post.php' action hook.  Each meta box file is only loaded if 
+ * Loads the core post meta box files on the 'load-post.php' action hook.  Each meta box file is only loaded if
  * the theme declares support for the feature.
  *
  * @since  1.2.0
@@ -62,7 +62,7 @@ function hybrid_admin_register_styles() {
 }
 
 /**
- * Function for getting an array of available custom templates with a specific header. Ideally, this function 
+ * Function for getting an array of available custom templates with a specific header. Ideally, this function
  * would be used to grab custom singular post (any post type) templates.  It is a recreation of the WordPress
  * page templates function because it doesn't allow for other types of templates.
  *
@@ -108,7 +108,7 @@ function hybrid_get_post_templates( $post_type = 'post' ) {
 }
 
 /**
- * Gets the stylesheet files within the parent or child theme and checks if they have the 'Style Name' 
+ * Gets the stylesheet files within the parent or child theme and checks if they have the 'Style Name'
  * header. If any files are found, they are returned in an array.
  *
  * @since  3.0.0
@@ -138,11 +138,11 @@ function hybrid_get_post_styles( $post_type = 'post' ) {
 
 		// Get file data based on the 'Style Name' header.
 		$headers = get_file_data(
-			$path, 
-			array( 
+			$path,
+			array(
 				'Style Name'         => 'Style Name',
 				"{$post_type} Style" => "{$post_type} Style"
-			) 
+			)
 		);
 
 		// Add the CSS filename and template name to the array.
