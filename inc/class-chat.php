@@ -1,6 +1,6 @@
 <?php
 /**
- * Class that takes chat text and turns it into a nice, HTML-formatted transcript.  This is meant to 
+ * Class that takes chat text and turns it into a nice, HTML-formatted transcript.  This is meant to
  * be used alongside the "chat" post format.
  *
  * @package    Hybrid
@@ -32,8 +32,8 @@ class Hybrid_Chat {
 	public $authors = array();
 
 	/**
-	 * Holds the array of stanzas in the chat.  Stanzas are groups of text.  Generally, these 
-	 * will belong to different speakers, but multiple stanzas, back-to-back can belong to 
+	 * Holds the array of stanzas in the chat.  Stanzas are groups of text.  Generally, these
+	 * will belong to different speakers, but multiple stanzas, back-to-back can belong to
 	 * a single author.
 	 *
 	 * @since  3.0.0
@@ -167,7 +167,7 @@ class Hybrid_Chat {
 	}
 
 	/**
-	 * Gets an ID based on the author name.  This keeps track of how many authors there are so 
+	 * Gets an ID based on the author name.  This keeps track of how many authors there are so
 	 * that chats with multiple people will have a unique ID based on the person.
 	 *
 	 * @since  3.0.0

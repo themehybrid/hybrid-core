@@ -2,17 +2,17 @@
 /**
  * Get the Image - An advanced post image script for WordPress.
  *
- * Get the Image was created to be a highly-intuitive image script that displays post-specific images (an 
- * image-based representation of a post).  The script handles old-style post images via custom fields for 
- * backwards compatibility.  It also supports WordPress' built-in featured image functionality.  On top of 
- * those things, it can automatically set attachment images as the post image or scan the post content for 
+ * Get the Image was created to be a highly-intuitive image script that displays post-specific images (an
+ * image-based representation of a post).  The script handles old-style post images via custom fields for
+ * backwards compatibility.  It also supports WordPress' built-in featured image functionality.  On top of
+ * those things, it can automatically set attachment images as the post image or scan the post content for
  * the first image element used.  It can also fall back to a given default image.
  *
- * This program is free software; you can redistribute it and/or modify it under the terms of the GNU 
- * General Public License as published by the Free Software Foundation; either version 2 of the License, 
+ * This program is free software; you can redistribute it and/or modify it under the terms of the GNU
+ * General Public License as published by the Free Software Foundation; either version 2 of the License,
  * or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * @package   GetTheImage
@@ -33,7 +33,7 @@ add_action( 'updated_post_meta', 'get_the_image_delete_cache_by_meta', 10, 2 );
 add_action( 'added_post_meta',   'get_the_image_delete_cache_by_meta', 10, 2 );
 
 /**
- * The main image function for displaying an image.  This is a wrapper for the Get_The_Image class. Use this 
+ * The main image function for displaying an image.  This is a wrapper for the Get_The_Image class. Use this
  * function in themes rather than the class.
  *
  * @since  0.1.0
@@ -53,8 +53,8 @@ function get_the_image( $args = array() ) {
 
 
 /**
- * Class for getting images related to a post.  Only use this class in your projects if you absolutely know 
- * what you're doing and expect your code to break in future versions.  Use the the `get_the_image()` 
+ * Class for getting images related to a post.  Only use this class in your projects if you absolutely know
+ * what you're doing and expect your code to break in future versions.  Use the the `get_the_image()`
  * wrapper function instead.  That's the reason it exists.
  *
  * @since  1.0.0
@@ -72,8 +72,8 @@ final class Get_The_Image {
 	public $args  = array();
 
 	/**
-	 * Image arguments array filled by the class.  This is used to store data about the image (src, 
-	 * width, height, etc.).  In some scenarios, it may not be set, particularly when getting the 
+	 * Image arguments array filled by the class.  This is used to store data about the image (src,
+	 * width, height, etc.).  In some scenarios, it may not be set, particularly when getting the
 	 * raw image HTML.
 	 *
 	 * @since  1.0.0
@@ -92,7 +92,7 @@ final class Get_The_Image {
 	public $image = '';
 
 	/**
-	 * Original image HTML.  This is set when splitting an image from the content.  By default, this 
+	 * Original image HTML.  This is set when splitting an image from the content.  By default, this
 	 * is only used when 'scan_raw' is set.
 	 *
 	 * @since  1.0.0
@@ -409,8 +409,8 @@ final class Get_The_Image {
 	}
 
 	/**
-	 * Gets the first image attached to the post.  If the post itself is an attachment image, that will 
-	 * be the image used.  This method also works with sub-attachments (images for audio/video attachments 
+	 * Gets the first image attached to the post.  If the post itself is an attachment image, that will
+	 * be the image used.  This method also works with sub-attachments (images for audio/video attachments
 	 * are a good example).
 	 *
 	 * @since  1.0.0
@@ -451,8 +451,8 @@ final class Get_The_Image {
 	}
 
 	/**
-	 * Scans the post content for an image.  It first scans and checks for an image with the 
-	 * "wp-image-xxx" ID.  If that exists, it'll grab the actual image attachment.  If not, it looks 
+	 * Scans the post content for an image.  It first scans and checks for an image with the
+	 * "wp-image-xxx" ID.  If that exists, it'll grab the actual image attachment.  If not, it looks
 	 * for the image source.
 	 *
 	 * @since  1.0.0
@@ -490,17 +490,17 @@ final class Get_The_Image {
 	}
 
 	/**
-	 * Scans the post content for a complete image.  This method will attempt to grab the complete 
-	 * HTML for an image.  If an image is found, pretty much all arguments passed in may be ignored 
-	 * in favor of getting the actual image used in the post content.  It works with both captions 
-	 * and linked images.  However, it can't account for all possible HTML wrappers for images used 
+	 * Scans the post content for a complete image.  This method will attempt to grab the complete
+	 * HTML for an image.  If an image is found, pretty much all arguments passed in may be ignored
+	 * in favor of getting the actual image used in the post content.  It works with both captions
+	 * and linked images.  However, it can't account for all possible HTML wrappers for images used
 	 * in all setups.
 	 *
-	 * This method was created for use with the WordPress "image" post format where theme authors 
-	 * might want to pull the whole image from the content as the user added it.  It's also meant 
+	 * This method was created for use with the WordPress "image" post format where theme authors
+	 * might want to pull the whole image from the content as the user added it.  It's also meant
 	 * to be used (not required) with the `split_content` option.
 	 *
-	 * Note: This option should not be used if returning the image as an array.  If that's desired, 
+	 * Note: This option should not be used if returning the image as an array.  If that's desired,
 	 * use the `scan` option instead.
 	 *
 	 * @since  1.0.0
@@ -583,8 +583,8 @@ final class Get_The_Image {
 	}
 
 	/**
-	 * Allows developers to create a custom callback function.  If the `callback` argument is set, theme 
-	 * developers are expected to **always** return an array.  Even if nothing is found, return an empty 
+	 * Allows developers to create a custom callback function.  If the `callback` argument is set, theme
+	 * developers are expected to **always** return an array.  Even if nothing is found, return an empty
 	 * array.
 	 *
 	 * @since  1.0.0
@@ -607,7 +607,7 @@ final class Get_The_Image {
 	}
 
 	/**
-	 * Handles an image attachment.  Other methods rely on this method for getting the image data since 
+	 * Handles an image attachment.  Other methods rely on this method for getting the image data since
 	 * most images are actually attachments.
 	 *
 	 * @since  1.0.0
@@ -632,11 +632,11 @@ final class Get_The_Image {
 
 		/* Set the image args. */
 		$this->image_args = array(
-			'src'     => $image[0], 
+			'src'     => $image[0],
 			'width'   => $image[1],
 			'height'  => $image[2],
-			'alt'     => $alt, 
-			'caption' => $caption 
+			'alt'     => $alt,
+			'caption' => $caption
 		);
 
 		// Get the image srcset sizes.
@@ -670,7 +670,7 @@ final class Get_The_Image {
 	}
 
 	/**
-	 * Formats the image HTML.  This method is only called if the `$image` property isn't set.  It uses 
+	 * Formats the image HTML.  This method is only called if the `$image` property isn't set.  It uses
 	 * the `$image_args` property to set up the image.
 	 *
 	 * @since  1.0.0
@@ -758,10 +758,10 @@ final class Get_The_Image {
 	}
 
 	/**
-	 * Saves the image source as metadata.  Saving the image as meta is actually quite a bit quicker 
-	 * if the user doesn't have a persistent caching plugin available.  However, it doesn't play as 
-	 * nicely with custom image sizes used across multiple themes where one might want to resize images. 
-	 * This option should be reserved for advanced users only.  Don't use in publicly-distributed 
+	 * Saves the image source as metadata.  Saving the image as meta is actually quite a bit quicker
+	 * if the user doesn't have a persistent caching plugin available.  However, it doesn't play as
+	 * nicely with custom image sizes used across multiple themes where one might want to resize images.
+	 * This option should be reserved for advanced users only.  Don't use in publicly-distributed
 	 * themes.
 	 *
 	 * @since  1.0.0
@@ -787,9 +787,9 @@ final class Get_The_Image {
 	}
 
 	/**
-	 * Saves the image attachment as the WordPress featured image.  This is useful for setting the 
-	 * featured image for the post in the case that the user forgot to (win for client work!).  It 
-	 * should not be used in publicly-distributed themes where you don't know how the user will be 
+	 * Saves the image attachment as the WordPress featured image.  This is useful for setting the
+	 * featured image for the post in the case that the user forgot to (win for client work!).  It
+	 * should not be used in publicly-distributed themes where you don't know how the user will be
 	 * setting up their site.
 	 *
 	 * @since  1.0.0
@@ -848,7 +848,7 @@ function get_the_image_delete_cache_by_post( $post_id ) {
 }
 
 /**
- * Deletes the image cache for a specific post when the 'added_post_meta', 'deleted_post_meta', 
+ * Deletes the image cache for a specific post when the 'added_post_meta', 'deleted_post_meta',
  * or 'updated_post_meta' hooks are called.
  *
  * @since  0.7.0

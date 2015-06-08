@@ -1,8 +1,8 @@
 <?php
 /**
- * Functions for making various theme elements context-aware.  Controls things such as the smart 
- * and logical body, post, and comment CSS classes as well as context-based action and filter hooks.  
- * The functions also integrate with WordPress' implementations of body_class, post_class, and 
+ * Functions for making various theme elements context-aware.  Controls things such as the smart
+ * and logical body, post, and comment CSS classes as well as context-based action and filter hooks.
+ * The functions also integrate with WordPress' implementations of body_class, post_class, and
  * comment_class, so your theme won't have any trouble with plugin integration.
  *
  * @package    HybridCore
@@ -23,8 +23,8 @@ add_filter( 'post_class', 'hybrid_post_class_filter', 0, 3 );
 add_filter( 'comment_class', 'hybrid_comment_class_filter', 0, 3 );
 
 /**
- * Hybrid's main contextual function.  This allows code to be used more than once without running 
- * hundreds of conditional checks within the theme.  It returns an array of contexts based on what 
+ * Hybrid's main contextual function.  This allows code to be used more than once without running
+ * hundreds of conditional checks within the theme.  It returns an array of contexts based on what
  * page a visitor is currently viewing on the site.  This function is useful for making dynamic/contextual
  * classes, action and filter hooks, and handling the templating system.
  *
@@ -138,8 +138,8 @@ function hybrid_get_context() {
 }
 
 /**
- * Filters the WordPress body class with a better set of classes that are more consistently handled and 
- * are backwards compatible with the original body class functionality that existed prior to WordPress 
+ * Filters the WordPress body class with a better set of classes that are more consistently handled and
+ * are backwards compatible with the original body class functionality that existed prior to WordPress
  * core adopting this feature.
  *
  * @since  2.0.0
@@ -254,8 +254,8 @@ function hybrid_body_class_filter( $classes, $class ) {
 }
 
 /**
- * Filters the WordPress post class with a better set of classes that are more consistently handled and 
- * are backwards compatible with the original post class functionality that existed prior to WordPress 
+ * Filters the WordPress post class with a better set of classes that are more consistently handled and
+ * are backwards compatible with the original post class functionality that existed prior to WordPress
  * core adopting this feature.
  *
  * @since  2.0.0

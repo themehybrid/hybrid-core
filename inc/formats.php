@@ -1,6 +1,6 @@
 <?php
 /**
- * Functions and filters for handling the output of post formats.  This file is only loaded if 
+ * Functions and filters for handling the output of post formats.  This file is only loaded if
  * themes declare support for `post-formats`.
  *
  * @package    HybridCore
@@ -15,7 +15,7 @@
 add_action( 'wp_loaded', 'hybrid_structured_post_formats', 0 );
 
 /**
- * Theme compatibility for post formats.  This function adds appropriate filters to 'the_content' for 
+ * Theme compatibility for post formats.  This function adds appropriate filters to 'the_content' for
  * the various post formats that a theme supports.
  *
  * @since  1.6.0
@@ -74,7 +74,7 @@ function hybrid_aside_infinity( $content ) {
 /* === Images === */
 
 /**
- * Adds the post format image to the content if no image is found in the post content.  Note, this is not run 
+ * Adds the post format image to the content if no image is found in the post content.  Note, this is not run
  * by default.  To use, add the filter to 'the_content'.
  *
  * @since  1.6.0
@@ -100,7 +100,7 @@ function hybrid_image_content( $content ) {
 /* === Links === */
 
 /**
- * Filters the content of the link format posts.  Wraps the content in the `make_clickable()` function 
+ * Filters the content of the link format posts.  Wraps the content in the `make_clickable()` function
  * so that users can enter just a URL into the post content editor.
  *
  * @since  1.6.0
@@ -119,7 +119,7 @@ function hybrid_link_content( $content ) {
 /* === Quotes === */
 
 /**
- * Checks if the quote post has a <blockquote> tag within the content.  If not, wraps the entire post 
+ * Checks if the quote post has a <blockquote> tag within the content.  If not, wraps the entire post
  * content with one.
  *
  * @since  1.6.0
@@ -142,7 +142,7 @@ function hybrid_quote_content( $content ) {
 /* === Chats === */
 
 /**
- * This function filters the post content when viewing a post with the "chat" post format. 
+ * This function filters the post content when viewing a post with the "chat" post format.
  *
  * @since  1.6.0
  * @access public

@@ -1,6 +1,6 @@
 <?php
 /**
- * Template functions related to posts.  The functions in this file are for handling template tags or features 
+ * Template functions related to posts.  The functions in this file are for handling template tags or features
  * of template tags that WordPress core does not currently handle.
  *
  * @package    HybridCore
@@ -12,7 +12,7 @@
  */
 
 /**
- * Checks if a post of any post type has a custom template.  This is the equivalent of WordPress' 
+ * Checks if a post of any post type has a custom template.  This is the equivalent of WordPress'
  * `is_page_template()` function with the exception that it works for all post types.
  *
  * @since  1.2.0
@@ -37,7 +37,7 @@ function hybrid_has_post_template( $template = '' ) {
 }
 
 /**
- * Checks if a post has any content. Useful if you need to check if the user has written any content 
+ * Checks if a post has any content. Useful if you need to check if the user has written any content
  * before performing any actions.
  *
  * @since  1.6.0
@@ -62,7 +62,7 @@ function hybrid_post_format_link() {
 }
 
 /**
- * Generates a link to the current post format's archive.  If the post doesn't have a post format, the link 
+ * Generates a link to the current post format's archive.  If the post doesn't have a post format, the link
  * will go to the post permalink.
  *
  * @since  2.0.0
@@ -90,9 +90,9 @@ function hybrid_post_author( $args = array() ) {
 }
 
 /**
- * Function for getting the current post's author in The Loop and linking to the author archive page.  
- * This function was created because core WordPress does not have template tags with proper translation 
- * and RTL support for this.  An equivalent getter function for `the_author_posts_link()` would 
+ * Function for getting the current post's author in The Loop and linking to the author archive page.
+ * This function was created because core WordPress does not have template tags with proper translation
+ * and RTL support for this.  An equivalent getter function for `the_author_posts_link()` would
  * instantly solve this issue.
  *
  * @since  2.0.0
@@ -141,12 +141,12 @@ function hybrid_post_terms( $args = array() ) {
 }
 
 /**
- * This template tag is meant to replace template tags like `the_category()`, `the_terms()`, etc.  These core 
- * WordPress template tags don't offer proper translation and RTL support without having to write a lot of 
- * messy code within the theme's templates.  This is why theme developers often have to resort to custom 
- * functions to handle this (even the default WordPress themes do this).  Particularly, the core functions 
- * don't allow for theme developers to add the terms as placeholders in the accompanying text (ex: "Posted in %s"). 
- * This funcion is a wrapper for the WordPress `get_the_terms_list()` function.  It uses that to build a 
+ * This template tag is meant to replace template tags like `the_category()`, `the_terms()`, etc.  These core
+ * WordPress template tags don't offer proper translation and RTL support without having to write a lot of
+ * messy code within the theme's templates.  This is why theme developers often have to resort to custom
+ * functions to handle this (even the default WordPress themes do this).  Particularly, the core functions
+ * don't allow for theme developers to add the terms as placeholders in the accompanying text (ex: "Posted in %s").
+ * This funcion is a wrapper for the WordPress `get_the_terms_list()` function.  It uses that to build a
  * better post terms list.
  *
  * @since  2.0.0
@@ -185,9 +185,9 @@ function hybrid_get_post_terms( $args = array() ) {
 /* === Galleries === */
 
 /**
- * Gets the gallery *item* count.  This is different from getting the gallery *image* count.  By default, 
- * WordPress only allows attachments with the 'image' mime type in galleries.  However, some scripts such 
- * as Cleaner Gallery allow for other mime types.  This is a more accurate count than the 
+ * Gets the gallery *item* count.  This is different from getting the gallery *image* count.  By default,
+ * WordPress only allows attachments with the 'image' mime type in galleries.  However, some scripts such
+ * as Cleaner Gallery allow for other mime types.  This is a more accurate count than the
  * hybrid_get_gallery_image_count() function since it will count all gallery items regardless of mime type.
  *
  * @todo Check for the [gallery] shortcode with the 'mime_type' parameter and use that in get_posts().
@@ -215,13 +215,13 @@ function hybrid_get_gallery_item_count() {
 	}
 
 	// If an item count wasn't returned, get the post attachments.
-	$attachments = get_posts( 
-		array( 
+	$attachments = get_posts(
+		array(
 			'fields'         => 'ids',
-			'post_parent'    => get_the_ID(), 
-			'post_type'      => 'attachment', 
-			'numberposts'    => -1 
-		) 
+			'post_parent'    => get_the_ID(),
+			'post_type'      => 'attachment',
+			'numberposts'    => -1
+		)
 	);
 
 	// Return the attachment count if items were found.
@@ -253,14 +253,14 @@ function hybrid_get_gallery_image_count() {
 
 	// If there are no images in the array, just grab the attached images.
 	if ( empty( $images ) ) {
-		$images = get_posts( 
-			array( 
+		$images = get_posts(
+			array(
 				'fields'         => 'ids',
-				'post_parent'    => get_the_ID(), 
-				'post_type'      => 'attachment', 
-				'post_mime_type' => 'image', 
-				'numberposts'    => -1 
-			) 
+				'post_parent'    => get_the_ID(),
+				'post_type'      => 'attachment',
+				'post_mime_type' => 'image',
+				'numberposts'    => -1
+			)
 		);
 	}
 
@@ -287,7 +287,7 @@ function hybrid_get_content_url( $content ) {
 }
 
 /**
- * Filters 'get_the_post_format_url' to make for a more robust and back-compatible function.  If WP did 
+ * Filters 'get_the_post_format_url' to make for a more robust and back-compatible function.  If WP did
  * not find a URL, check the post content for one.  If nothing is found, return the post permalink.
  *
  * @since  1.6.0

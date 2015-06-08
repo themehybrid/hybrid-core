@@ -1,7 +1,7 @@
 <?php
 /**
- * The group select customize control extends the WP_Customize_Control class.  This class allows 
- * developers to create a `<select>` form field with the `<optgroup>` elements mixed in.  They 
+ * The group select customize control extends the WP_Customize_Control class.  This class allows
+ * developers to create a `<select>` form field with the `<optgroup>` elements mixed in.  They
  * can also utilize regular `<option>` choices.
  *
  * @package    Hybrid

@@ -2,7 +2,7 @@
 /**
  * Layouts API - An API for themes to build layout options.
  *
- * Theme Layouts was created to allow theme developers to easily style themes with dynamic layout 
+ * Theme Layouts was created to allow theme developers to easily style themes with dynamic layout
  * structures. This file merely contains the API function calls at theme developers' disposal.
  *
  * @package    HybridCore
@@ -122,7 +122,7 @@ function hybrid_get_layout( $name ) {
 }
 
 /**
- * Gets the theme layout.  This is the global theme layout defined. Other functions filter the 
+ * Gets the theme layout.  This is the global theme layout defined. Other functions filter the
  * available `theme_mod_theme_layout` hook to overwrite this.
  *
  * @since  3.0.0
@@ -254,8 +254,8 @@ function hybrid_has_user_layout( $layout, $user_id = '' ) {
 }
 
 /**
- * Default filter on the `theme_mod_theme_layout` hook.  By default, we'll check for per-post 
- * or per-author layouts saved as metadata.  If set, we'll filter.  Else, just return the 
+ * Default filter on the `theme_mod_theme_layout` hook.  By default, we'll check for per-post
+ * or per-author layouts saved as metadata.  If set, we'll filter.  Else, just return the
  * global layout.
  *
  * @since  3.0.0

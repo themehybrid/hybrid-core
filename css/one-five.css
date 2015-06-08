@@ -9,7 +9,7 @@ html, body, div, span, object, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, ab
 	text-decoration: none;
 }
 
-article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section, main { 
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section, main {
 	display: block;
 }
 
@@ -81,9 +81,9 @@ ol { margin: 0 0 1.5rem; }
 	ol.upper-roman,          ul.upper-roman          { list-style: upper-roman;          }
 	ol.initial,              ul.initial              { list-style: initial;              }
 
-ul ul, 
-ol ol, 
-ul ol, 
+ul ul,
+ol ol,
+ul ol,
 ol ul {
 	margin-bottom: 0;
 }
@@ -146,12 +146,12 @@ strong { font-weight: 700; }
 /* === Emphasis, italics, etc. === */
 
 i,
-em, 
+em,
 mark,
 cite { font-style: italic; }
 
 i i,
-em em, 
+em em,
 mark mark,
 cite cite { font-style: normal; }
 
@@ -180,8 +180,8 @@ big {
 
 /* === Small, sup, sub === */
 
-small, 
-sup, 
+small,
+sup,
 sub {
 	font-size: .8125em;
 }
@@ -213,7 +213,7 @@ blockquote {
 }
 
 	blockqoute i,
-	blockquote em, 
+	blockquote em,
 	blockquote cite {
 		font-style: normal;
 	}
@@ -243,15 +243,15 @@ code {
 	font-family: monospace;
 }
 
-ins, 
+ins,
 dfn {
 	font-style:      italic;
 	text-decoration: none;
 	border-bottom:   1px solid #999;
 }
 
-del, 
-s, 
+del,
+s,
 strike {
 	text-decoration: line-through;
 }
@@ -269,7 +269,7 @@ select {
 	font-family: inherit;
 }
 
-input, 
+input,
 textarea {
 	box-sizing: content-box;
 }
@@ -296,7 +296,7 @@ table {
 	margin-bottom:   1.5rem;
 }
 
-	th, 
+	th,
 	td {
 		text-align: left;
 	}
@@ -331,19 +331,19 @@ img.emoji {
 	margin-bottom: 1.5rem;
 }
 
-.alignleft, 
+.alignleft,
 .left {
 	float:        left;
 	margin-right: 1.5rem;
 }
 
-.alignright, 
+.alignright,
 .right {
 	float:       right;
 	margin-left: 1.5rem;
 }
 
-.aligncenter, 
+.aligncenter,
 .center {
 	display: block;
 	margin:  0 auto 1.5rem;
@@ -357,12 +357,12 @@ img.emoji {
 	clear: both;
 }
 
-img.alignleft, 
+img.alignleft,
 img.alignright {
 	display: inline;
 }
 
-blockquote.alignleft, 
+blockquote.alignleft,
 blockquote.alignright {
 	width: 33%;
 }

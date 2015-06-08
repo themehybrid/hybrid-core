@@ -1,10 +1,10 @@
 <?php
 /**
- * Media metadata class. This class is for getting and formatting attachment media file metadata. This 
- * is for metadata about the actual file and not necessarily any post metadata.  Currently, only 
+ * Media metadata class. This class is for getting and formatting attachment media file metadata. This
+ * is for metadata about the actual file and not necessarily any post metadata.  Currently, only
  * image, audio, and video files are handled.
  *
- * Theme authors need not access this class directly.  Instead, utilize the template tags in the 
+ * Theme authors need not access this class directly.  Instead, utilize the template tags in the
  * `/inc/template-media.php` file.
  *
  * @package    Hybrid
@@ -16,10 +16,10 @@
  */
 
 /**
- * Gets attachment media file metadata.  Each piece of meta will be escaped and formatted when 
+ * Gets attachment media file metadata.  Each piece of meta will be escaped and formatted when
  * returned so that theme authors can properly utilize it within their themes.
  *
- * Theme authors shouldn't access this class directly.  Instead, utilize the `hybrid_media_meta()` 
+ * Theme authors shouldn't access this class directly.  Instead, utilize the `hybrid_media_meta()`
  * and `hybrid_get_media_meta()` functions.
  *
  * @since  3.0.0
@@ -91,7 +91,7 @@ class Hybrid_Media_Meta {
 	}
 
 	/**
-	 * Magic method for getting media object properties.  Let's keep from failing if a theme 
+	 * Magic method for getting media object properties.  Let's keep from failing if a theme
 	 * author attempts to access a property that doesn't exist.
 	 *
 	 * @since  3.0.0
@@ -107,7 +107,7 @@ class Hybrid_Media_Meta {
 	/* ====== Protected Methods ====== */
 
 	/**
-	 * Function for escaping properties when there is not a specific method for handling them 
+	 * Function for escaping properties when there is not a specific method for handling them
 	 * within the class.
 	 *
 	 * @since  3.0.0
@@ -145,7 +145,7 @@ class Hybrid_Media_Meta {
 	/**
 	 * Adds filters for image meta.
 	 *
-	 * Properties: aperture, camera, caption, copyright, credit, created_timestamp, dimensions, 
+	 * Properties: aperture, camera, caption, copyright, credit, created_timestamp, dimensions,
 	 *             focal_length, iso, shutter_speed
 	 *
 	 * @since  3.0.0
@@ -243,7 +243,7 @@ class Hybrid_Media_Meta {
 			$dimensions = sprintf(
 				// Translators: Media dimensions - 1 is width and 2 is height.
 				esc_html__( '%1$s &#215; %2$s', 'hybrid-core' ),
-				number_format_i18n( absint( $this->meta['width'] ) ), 
+				number_format_i18n( absint( $this->meta['width'] ) ),
 				number_format_i18n( absint( $this->meta['height'] ) )
 			);
 		}
