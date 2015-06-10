@@ -117,7 +117,7 @@ class Hybrid_Media_Grabber {
 
 		// Set the object properties.
 		$this->args    = apply_filters( 'hybrid_media_grabber_args', wp_parse_args( $args, $defaults ) );
-		$this->content = get_post_field( 'post_content', $this->args['post_id'] );
+		$this->content = get_post_field( 'post_content', $this->args['post_id'], 'raw' );
 		$this->type    = isset( $this->args['type'] ) && in_array( $this->args['type'], array( 'audio', 'video' ) ) ? $this->args['type'] : 'video';
 
 		// Find the media related to the post.
@@ -133,7 +133,9 @@ class Hybrid_Media_Grabber {
 	 */
 	public function __destruct() {
 		remove_filter( 'embed_maybe_make_link', '__return_false' );
+		remove_filter( 'the_content', array( $this, 'split_media' ), 5 );
 	}
+
 
 	/**
 	 * Basic method for returning the media found.
@@ -406,9 +408,7 @@ class Hybrid_Media_Grabber {
 	 */
 	public function split_media( $content ) {
 
-		remove_filter( 'the_content', array( $this, 'split_media' ), 5 );
-
-		return str_replace( $this->original_media, '', $content );
+		return get_the_ID() === $this->args['post_id'] ? str_replace( $this->original_media, '', $content ) : $content;
 	}
 
 	/**
