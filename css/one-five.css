@@ -45,6 +45,12 @@ p, figure {
 	margin: 0 0 1.5rem;
 }
 
+p:empty {
+	margin:      0;
+	padding:     0;
+	line-height: 0;
+}
+
 ul {
 	list-style: disc;
 	margin:     0 0 1.5rem;
