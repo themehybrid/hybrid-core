@@ -77,7 +77,7 @@ function hybrid_get_theme_link() {
 	$theme   = wp_get_theme( get_template() );
 	$allowed = array( 'abbr' => array( 'title' => true ), 'acronym' => array( 'title' => true ), 'code' => true, 'em' => true, 'strong' => true );
 
-	// Note: URI is escaped via `$theme->display()`, which calls `WP_Theme::markup_header()`.
+	// Note: URI is escaped via `WP_Theme::markup_header()`.
 	return sprintf( '<a class="theme-link" href="%s">%s</a>', $theme->display( 'ThemeURI' ), wp_kses( $theme->display( 'Name' ), $allowed ) );
 }
 
@@ -107,7 +107,7 @@ function hybrid_get_child_theme_link() {
 	$theme   = wp_get_theme();
 	$allowed = array( 'abbr' => array( 'title' => true ), 'acronym' => array( 'title' => true ), 'code' => true, 'em' => true, 'strong' => true );
 
-	// Note: URI is escaped via `$theme->display()`, which calls `WP_Theme::markup_header()`.
+	// Note: URI is escaped via `WP_Theme::markup_header()`.
 	return sprintf( '<a class="child-link" href="%s">%s</a>', $theme->display( 'ThemeURI' ), wp_kses( $theme->display( 'Name' ), $allowed ) );
 }
 

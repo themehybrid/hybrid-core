@@ -35,20 +35,14 @@ function hybrid_register_sidebar( $args ) {
 		'after_title'   => '</h3>'
 	);
 
-	// Allow developers to filter the default sidebar arguments.
-	$defaults = apply_filters( 'hybrid_sidebar_defaults', $defaults );
-
 	// Parse the arguments.
-	$args = wp_parse_args( $args, $defaults );
-
-	// Allow developers to filter the sidebar arguments.
-	$args = apply_filters( 'hybrid_sidebar_args', $args );
+	$args = wp_parse_args( $args, apply_filters( 'hybrid_sidebar_defaults', $defaults ) );
 
 	// Remove action.
 	remove_action( 'widgets_init', '__return_false', 95 );
 
 	// Register the sidebar.
-	return register_sidebar( $args );
+	return register_sidebar( apply_filters( 'hybrid_sidebar_args', $args ) );
 }
 
 # Compatibility for when a theme doesn't register any sidebars.

@@ -41,16 +41,16 @@ function hybrid_load_locale_functions() {
 	$locale = strtolower( str_replace( '_', '-', get_locale() ) );
 
 	// Define locale functions files.
-	$stylesheet_locale_functions = HYBRID_CHILD  . hybrid_get_child_domain_path()   . "/{$locale}.php";
-	$template_locale_functions   = HYBRID_PARENT . hybrid_get_parent_domain_path()  . "/{$locale}.php";
+	$stylesheet_functions = HYBRID_CHILD  . hybrid_get_child_domain_path()   . "/{$locale}.php";
+	$template_functions   = HYBRID_PARENT . hybrid_get_parent_domain_path()  . "/{$locale}.php";
 
-	// If file exists in active/child theme.
-	if ( file_exists( $stylesheet_locale_functions ) )
-		require_once( $stylesheet_locale_functions );
+	// If file exists in child theme.
+	if ( is_child_theme() && file_exists( $stylesheet_functions ) )
+		require_once( $stylesheet_functions );
 
 	// If file exists in parent theme.
-	if ( is_child_theme() && file_exists( $template_locale_functions ) )
-		require_once( $template_locale_functions );
+	if ( file_exists( $template_functions ) )
+		require_once( $template_functions );
 }
 
 /**

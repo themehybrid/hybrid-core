@@ -59,13 +59,10 @@ function hybrid_add_post_type_support() {
  *
  * @since  1.2.0
  * @access public
- * @global int    $content_width The width for the theme's content area.
- * @param  int    $width         Numeric value of the width to set.
+ * @param  int    $width
  */
 function hybrid_set_content_width( $width = '' ) {
-	global $content_width;
-
-	$content_width = absint( $width );
+	$GLOBALS['content_width'] = absint( $width );
 }
 
 /**
@@ -73,13 +70,10 @@ function hybrid_set_content_width( $width = '' ) {
  *
  * @since  1.2.0
  * @access public
- * @global int    $content_width The width for the theme's content area.
- * @return int    $content_width
+ * @return int
  */
 function hybrid_get_content_width() {
-	global $content_width;
-
-	return $content_width;
+	return $GLOBALS['content_width'];
 }
 
 /**

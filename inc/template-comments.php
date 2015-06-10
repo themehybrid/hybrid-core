@@ -1,8 +1,6 @@
 <?php
 /**
- * Functions for handling how comments are displayed and used on the site. This allows more precise
- * control over their display and makes more filter and action hooks available to developers to use in their
- * customizations.
+ * Functions for handling how comments are displayed and used on the site.
  *
  * @package    HybridCore
  * @subpackage Includes

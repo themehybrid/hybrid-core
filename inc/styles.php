@@ -1,8 +1,6 @@
 <?php
 /**
- * Functions for handling stylesheets in the framework.  Themes can add support for the
- * 'hybrid-core-styles' feature to allow the framework to handle loading the stylesheets into the
- * theme header at an appropriate point.
+ * Functions for handling styles in the framework.
  *
  * @package    HybridCore
  * @subpackage Includes
@@ -62,7 +60,7 @@ function hybrid_get_parent_stylesheet_uri() {
 	$stylesheet_uri = HYBRID_PARENT_URI . 'style.css';
 
 	// If a '.min' version of the parent theme stylesheet exists, use it.
-	if ( !empty( $suffix ) && file_exists( HYBRID_PARENT . "style{$suffix}.css" ) )
+	if ( $suffix && file_exists( HYBRID_PARENT . "style{$suffix}.css" ) )
 		$stylesheet_uri = HYBRID_PARENT_URI . "style{$suffix}.css";
 
 	return apply_filters( 'hybrid_get_parent_stylesheet_uri', $stylesheet_uri );
@@ -115,7 +113,7 @@ function hybrid_locale_stylesheet_uri( $stylesheet_uri ) {
 
 	$locale_style = hybrid_get_locale_style();
 
-	return !empty( $locale_style ) ? esc_url( $locale_style ) : $stylesheet_uri;
+	return $locale_style ? esc_url( $locale_style ) : $stylesheet_uri;
 }
 
 /**
