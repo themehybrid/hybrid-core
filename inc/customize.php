@@ -106,7 +106,7 @@ function hybrid_customize_register( $wp_customize ) {
  * @return void
  */
 function hybrid_customize_controls_register_scripts() {
-	wp_register_script( 'hybrid-customize-controls', HYBRID_JS . 'customize-controls' . hybrid_get_min_suffix() . '.js', array( 'jquery' ), '20150507', true );
+	wp_register_script( 'hybrid-customize-controls', HYBRID_JS . 'customize-controls' . hybrid_get_min_suffix() . '.js', array( 'customize-controls' ), null, true );
 }
 
 /**
