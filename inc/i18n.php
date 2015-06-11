@@ -41,16 +41,16 @@ function hybrid_load_locale_functions() {
 	$locale = strtolower( str_replace( '_', '-', get_locale() ) );
 
 	// Define locale functions files.
-	$stylesheet_functions = HYBRID_CHILD  . hybrid_get_child_domain_path()   . "/{$locale}.php";
-	$template_functions   = HYBRID_PARENT . hybrid_get_parent_domain_path()  . "/{$locale}.php";
+	$child_func = HYBRID_CHILD  . hybrid_get_child_domain_path()  . "/{$locale}.php";
+	$theme_func = HYBRID_PARENT . hybrid_get_parent_domain_path() . "/{$locale}.php";
 
 	// If file exists in child theme.
-	if ( is_child_theme() && file_exists( $stylesheet_functions ) )
-		require_once( $stylesheet_functions );
+	if ( is_child_theme() && file_exists( $child_func ) )
+		require_once( $child_func );
 
 	// If file exists in parent theme.
-	if ( file_exists( $template_functions ) )
-		require_once( $template_functions );
+	if ( file_exists( $theme_func ) )
+		require_once( $theme_func );
 }
 
 /**
@@ -100,7 +100,7 @@ function hybrid_override_load_textdomain( $override, $domain, $mofile ) {
 		$theme_textdomain = hybrid_get_parent_textdomain();
 
 		// If the theme's textdomain is loaded, use its translations instead.
-		if ( !empty( $theme_textdomain ) && isset( $l10n[ $theme_textdomain ] ) )
+		if ( $theme_textdomain && isset( $l10n[ $theme_textdomain ] ) )
 			$l10n[ $domain ] = $l10n[ $theme_textdomain ];
 
 		// Always override.  We only want the theme to handle translations.

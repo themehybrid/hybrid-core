@@ -17,11 +17,11 @@ add_action( 'customize_register', 'hybrid_load_customize_classes', 0 );
 add_action( 'customize_register', 'hybrid_customize_register' );
 
 # Register customize controls scripts/styles.
-add_action( 'customize_controls_enqueue_scripts', 'hybrid_customize_controls_register_scripts', 5 );
-add_action( 'customize_controls_enqueue_scripts', 'hybrid_customize_controls_register_styles',  5 );
+add_action( 'customize_controls_enqueue_scripts', 'hybrid_customize_controls_register_scripts', 0 );
+add_action( 'customize_controls_enqueue_scripts', 'hybrid_customize_controls_register_styles',  0 );
 
 # Register/Enqueue customize preview scripts/styles.
-add_action( 'customize_preview_init', 'hybrid_customize_preview_register_scripts', 5 );
+add_action( 'customize_preview_init', 'hybrid_customize_preview_register_scripts', 0 );
 add_action( 'customize_preview_init', 'hybrid_customize_preview_enqueue_scripts'     );
 
 /**
@@ -128,7 +128,7 @@ function hybrid_customize_controls_register_styles() {
  * @return void
  */
 function hybrid_customize_preview_register_scripts() {
-	wp_register_script( 'hybrid-customize-preview', HYBRID_JS . 'customize-preview' . hybrid_get_min_suffix() . '.js', array( 'jquery' ), '20150507', true );
+	wp_register_script( 'hybrid-customize-preview', HYBRID_JS . 'customize-preview' . hybrid_get_min_suffix() . '.js', array( 'jquery' ), null, true );
 }
 
 /**
