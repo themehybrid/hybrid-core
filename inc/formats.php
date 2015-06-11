@@ -88,7 +88,7 @@ function hybrid_image_content( $content ) {
 		preg_match( '/<img.*?>/', $content, $matches );
 
 		if ( empty( $matches ) && function_exists( 'get_the_image' ) )
-			$content = get_the_image( array( 'meta_key' => false, 'size' => 'large', 'link_to_post' => false, 'echo' => false ) ) . $content;
+			$content = get_the_image( array( 'meta_key' => false, 'size' => 'large', 'link' => false, 'echo' => false ) ) . $content;
 
 		elseif ( empty( $matches ) )
 			$content = get_the_post_thumbnail( get_the_ID(), 'large' ) . $content;
