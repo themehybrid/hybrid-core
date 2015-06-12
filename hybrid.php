@@ -138,35 +138,17 @@ if ( !class_exists( 'Hybrid' ) ) {
 		 */
 		public function core() {
 
-			// Load the context-based functions.
-			require_once( HYBRID_INC . 'context.php' );
-
-			// Load the core framework internationalization functions.
-			require_once( HYBRID_INC . 'i18n.php' );
-
-			// Load the framework customize functions.
-			require_once( HYBRID_INC . 'customize.php' );
-
-			// Load the framework filters.
-			require_once( HYBRID_INC . 'filters.php' );
-
-			// Load the <head> functions.
-			require_once( HYBRID_INC . 'head.php' );
-
-			// Load the metadata functions.
-			require_once( HYBRID_INC . 'meta.php' );
-
-			// Load the sidebar functions.
-			require_once( HYBRID_INC . 'sidebars.php' );
-
-			// Load the scripts functions.
-			require_once( HYBRID_INC . 'scripts.php' );
-
-			// Load the styles functions.
-			require_once( HYBRID_INC . 'styles.php' );
-
-			// Load the utility functions.
-			require_once( HYBRID_INC . 'utility.php' );
+			// Load the core framework files.
+			require_once( HYBRID_INC . 'functions-context.php'   );
+			require_once( HYBRID_INC . 'functions-i18n.php'      );
+			require_once( HYBRID_INC . 'functions-customize.php' );
+			require_once( HYBRID_INC . 'functions-filters.php'   );
+			require_once( HYBRID_INC . 'functions-head.php'      );
+			require_once( HYBRID_INC . 'functions-meta.php'      );
+			require_once( HYBRID_INC . 'functions-sidebars.php'  );
+			require_once( HYBRID_INC . 'functions-scripts.php'   );
+			require_once( HYBRID_INC . 'functions-styles.php'    );
+			require_once( HYBRID_INC . 'functions-utility.php'   );
 		}
 
 		/**
@@ -208,45 +190,35 @@ if ( !class_exists( 'Hybrid' ) ) {
 		 */
 		public function includes() {
 
-			// Load the HTML attributes functions.
-			require_once( HYBRID_INC . 'attr.php' );
-
-			// Load the template functions.
-			require_once( HYBRID_INC . 'template.php' );
-
-			// Load the comments functions.
-			require_once( HYBRID_INC . 'template-comments.php' );
-
-			// Load the general template functions.
-			require_once( HYBRID_INC . 'template-general.php' );
-
-			// Load the media template functions.
-			require_once( HYBRID_INC . 'template-media.php' );
-
-			// Load the post template functions.
-			require_once( HYBRID_INC . 'template-post.php' );
-
-			// Load the media meta class.
+			// Load the class files.
 			require_once( HYBRID_INC . 'class-media-meta.php'         );
 			require_once( HYBRID_INC . 'class-media-meta-factory.php' );
+			require_once( HYBRID_INC . 'class-media-grabber.php'      );
 
-			// Load the media grabber class.
-			require_once( HYBRID_INC . 'class-media-grabber.php' );
+			// Load the functions files.
+			require_once( HYBRID_INC . 'functions-attr.php' );
+
+			// Load the template files.
+			require_once( HYBRID_INC . 'template.php' );
+			require_once( HYBRID_INC . 'template-comments.php' );
+			require_once( HYBRID_INC . 'template-general.php' );
+			require_once( HYBRID_INC . 'template-media.php' );
+			require_once( HYBRID_INC . 'template-post.php' );
 
 			// Load the template hierarchy if supported.
 			require_if_theme_supports( 'hybrid-core-template-hierarchy', HYBRID_INC . 'template-hierarchy.php' );
 
 			// Load the post format functionality if post formats are supported.
-			require_if_theme_supports( 'post-formats', HYBRID_INC . 'formats.php'    );
+			require_if_theme_supports( 'post-formats', HYBRID_INC . 'functions-formats.php'    );
 			require_if_theme_supports( 'post-formats', HYBRID_INC . 'class-chat.php' );
-
-			// Load the deprecated functions if supported.
-			require_if_theme_supports( 'hybrid-core-deprecated', HYBRID_INC . 'deprecated.php' );
 
 			// Load the Theme Layouts extension if supported.
 			require_if_theme_supports( 'theme-layouts', HYBRID_INC . 'class-layout.php'         );
 			require_if_theme_supports( 'theme-layouts', HYBRID_INC . 'class-layout-factory.php' );
-			require_if_theme_supports( 'theme-layouts', HYBRID_INC . 'layouts.php'              );
+			require_if_theme_supports( 'theme-layouts', HYBRID_INC . 'functions-layouts.php'    );
+
+			// Load the deprecated functions if supported.
+			require_if_theme_supports( 'hybrid-core-deprecated', HYBRID_INC . 'functions-deprecated.php' );
 		}
 
 		/**
@@ -280,7 +252,6 @@ if ( !class_exists( 'Hybrid' ) ) {
 		 */
 		public function admin() {
 
-			// Load the main admin file if in admin.
 			if ( is_admin() )
 				require_once( HYBRID_ADMIN . 'admin.php' );
 		}
