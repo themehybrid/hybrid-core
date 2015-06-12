@@ -72,7 +72,7 @@ function hybrid_post_format_link() {
 function hybrid_get_post_format_link() {
 
 	$format = get_post_format();
-	$url    = $format ? get_permalink() : get_post_format_link( $format );
+	$url    = $format ? get_post_format_link( $format ) : get_permalink();
 
 	return sprintf( '<a href="%s" class="post-format-link">%s</a>', esc_url( $url ), get_post_format_string( $format ) );
 }
@@ -119,7 +119,7 @@ function hybrid_get_post_author( $args = array() ) {
 	$link = ob_get_clean();
 	// A small piece of my soul just died.  Kittens no longer purr.  Dolphins lost the ability to swim with grace.
 
-	if ( !empty( $link ) ) {
+	if ( $link ) {
 		$html .= $args['before'];
 		$html .= sprintf( $args['wrap'], hybrid_get_attr( 'entry-author' ), sprintf( $args['text'], $link ) );
 		$html .= $args['after'];
@@ -164,7 +164,7 @@ function hybrid_get_post_terms( $args = array() ) {
 		'text'       => '%s',
 		'before'     => '',
 		'after'      => '',
-		'items_wrap' => '<span %s>%s</span>',
+		'wrap'       => '<span %s>%s</span>',
 		// Translators: Separates tags, categories, etc. when displaying a post.
 		'sep'        => _x( ', ', 'taxonomy terms separator', 'hybrid-core' )
 	);
@@ -173,9 +173,9 @@ function hybrid_get_post_terms( $args = array() ) {
 
 	$terms = get_the_term_list( $args['post_id'], $args['taxonomy'], '', $args['sep'], '' );
 
-	if ( !empty( $terms ) ) {
+	if ( $terms ) {
 		$html .= $args['before'];
-		$html .= sprintf( $args['items_wrap'], hybrid_get_attr( 'entry-terms', $args['taxonomy'] ), sprintf( $args['text'], $terms ) );
+		$html .= sprintf( $args['wrap'], hybrid_get_attr( 'entry-terms', $args['taxonomy'] ), sprintf( $args['text'], $terms ) );
 		$html .= $args['after'];
 	}
 
@@ -225,11 +225,7 @@ function hybrid_get_gallery_item_count() {
 	);
 
 	// Return the attachment count if items were found.
-	if ( !empty( $attachments ) )
-		return count( $attachments );
-
-	// Return 0 for everything else.
-	return 0;
+	return !empty( $attachments ) ? count( $attachments ) : 0;
 }
 
 /**
@@ -298,7 +294,7 @@ function hybrid_get_content_url( $content ) {
  */
 function hybrid_get_the_post_format_url( $url = '', $post = null ) {
 
-	if ( empty( $url ) ) {
+	if ( ! $url ) {
 
 		$post = is_null( $post ) ? get_post() : $post;
 

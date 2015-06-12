@@ -29,7 +29,7 @@ add_filter( 'hybrid_attr_branding',         'hybrid_attr_branding',         5 );
 add_filter( 'hybrid_attr_site-title',       'hybrid_attr_site_title',       5 );
 add_filter( 'hybrid_attr_site-description', 'hybrid_attr_site_description', 5 );
 
-# Loop attributes.
+# Archive page header attributes.
 add_filter( 'hybrid_attr_archive-header',      'hybrid_attr_archive_header',      5 );
 add_filter( 'hybrid_attr_archive-title',       'hybrid_attr_archive_title',       5 );
 add_filter( 'hybrid_attr_archive-description', 'hybrid_attr_archive_description', 5 );

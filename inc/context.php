@@ -1,9 +1,6 @@
 <?php
 /**
- * Functions for making various theme elements context-aware.  Controls things such as the smart
- * and logical body, post, and comment CSS classes as well as context-based action and filter hooks.
- * The functions also integrate with WordPress' implementations of body_class, post_class, and
- * comment_class, so your theme won't have any trouble with plugin integration.
+ * Contextual functions and filters, particularly dealing with the body, post, and comment classes.
  *
  * @package    HybridCore
  * @subpackage Includes
@@ -34,40 +31,34 @@ add_filter( 'comment_class', 'hybrid_comment_class_filter', 0, 3 );
  *
  * @since  0.7.0
  * @access public
- * @global object $hybrid  The global Hybrid object.
  * @return array
  */
 function hybrid_get_context() {
-	global $hybrid;
-
-	// If $hybrid->context has been set, don't run through the conditionals again. Just return the variable.
-	if ( isset( $hybrid->context ) )
-		return apply_filters( 'hybrid_context', $hybrid->context );
 
 	// Set some variables for use within the function.
-	$hybrid->context = array();
-	$object = get_queried_object();
+	$context   = array();
+	$object    = get_queried_object();
 	$object_id = get_queried_object_id();
 
 	// Front page of the site.
 	if ( is_front_page() )
-		$hybrid->context[] = 'home';
+		$context[] = 'home';
 
 	// Blog page.
 	if ( is_home() ) {
-		$hybrid->context[] = 'blog';
+		$context[] = 'blog';
 	}
 
 	// Singular views.
 	elseif ( is_singular() ) {
-		$hybrid->context[] = 'singular';
-		$hybrid->context[] = "singular-{$object->post_type}";
-		$hybrid->context[] = "singular-{$object->post_type}-{$object_id}";
+		$context[] = 'singular';
+		$context[] = "singular-{$object->post_type}";
+		$context[] = "singular-{$object->post_type}-{$object_id}";
 	}
 
 	// Archive views.
 	elseif ( is_archive() ) {
-		$hybrid->context[] = 'archive';
+		$context[] = 'archive';
 
 		// Post type archives.
 		if ( is_post_type_archive() ) {
@@ -76,65 +67,66 @@ function hybrid_get_context() {
 			if ( is_array( $post_type ) )
 				reset( $post_type );
 
-			$hybrid->context[] = "archive-{$post_type}";
+			$context[] = "archive-{$post_type}";
 		}
 
 		// Taxonomy archives.
 		if ( is_tax() || is_category() || is_tag() ) {
-			$hybrid->context[] = 'taxonomy';
-			$hybrid->context[] = "taxonomy-{$object->taxonomy}";
+			$context[] = 'taxonomy';
+			$context[] = "taxonomy-{$object->taxonomy}";
 
-			$slug = ( ( 'post_format' == $object->taxonomy ) ? str_replace( 'post-format-', '', $object->slug ) : $object->slug );
-			$hybrid->context[] = "taxonomy-{$object->taxonomy}-" . sanitize_html_class( $slug, $object->term_id );
+			$slug = 'post_format' == $object->taxonomy ? str_replace( 'post-format-', '', $object->slug ) : $object->slug;
+
+			$context[] = "taxonomy-{$object->taxonomy}-" . sanitize_html_class( $slug, $object->term_id );
 		}
 
 		// User/author archives.
 		if ( is_author() ) {
 			$user_id = get_query_var( 'author' );
-			$hybrid->context[] = 'user';
-			$hybrid->context[] = 'user-' . sanitize_html_class( get_the_author_meta( 'user_nicename', $user_id ), $user_id );
+			$context[] = 'user';
+			$context[] = 'user-' . sanitize_html_class( get_the_author_meta( 'user_nicename', $user_id ), $user_id );
 		}
 
 		// Date archives.
 		if ( is_date() ) {
-			$hybrid->context[] = 'date';
+			$context[] = 'date';
 
 			if ( is_year() )
-				$hybrid->context[] = 'year';
+				$context[] = 'year';
 
 			if ( is_month() )
-				$hybrid->context[] = 'month';
+				$context[] = 'month';
 
 			if ( get_query_var( 'w' ) )
-				$hybrid->context[] = 'week';
+				$context[] = 'week';
 
 			if ( is_day() )
-				$hybrid->context[] = 'day';
+				$context[] = 'day';
 		}
 
 		// Time archives.
 		if ( is_time() ) {
-			$hybrid->context[] = 'time';
+			$context[] = 'time';
 
 			if ( get_query_var( 'hour' ) )
-				$hybrid->context[] = 'hour';
+				$context[] = 'hour';
 
 			if ( get_query_var( 'minute' ) )
-				$hybrid->context[] = 'minute';
+				$context[] = 'minute';
 		}
 	}
 
 	// Search results.
 	elseif ( is_search() ) {
-		$hybrid->context[] = 'search';
+		$context[] = 'search';
 	}
 
 	// Error 404 pages.
 	elseif ( is_404() ) {
-		$hybrid->context[] = 'error-404';
+		$context[] = 'error-404';
 	}
 
-	return array_map( 'esc_attr', apply_filters( 'hybrid_context', array_unique( $hybrid->context ) ) );
+	return array_map( 'esc_attr', apply_filters( 'hybrid_context', array_unique( $context ) ) );
 }
 
 /**
@@ -212,13 +204,13 @@ function hybrid_body_class_filter( $classes, $class ) {
 
 		// Checks for custom template.
 		$template = str_replace( array ( "{$post->post_type}-template-", "{$post->post_type}-" ), '', basename( get_post_meta( get_queried_object_id(), "_wp_{$post->post_type}_template", true ), '.php' ) );
-		if ( !empty( $template ) )
+		if ( $template )
 			$classes[] = "{$post->post_type}-template-{$template}";
 
 		// Post format.
 		if ( current_theme_supports( 'post-formats' ) && post_type_supports( $post->post_type, 'post-formats' ) ) {
 			$post_format = get_post_format( get_queried_object_id() );
-			$classes[] = ( empty( $post_format ) || is_wp_error( $post_format ) ) ? "{$post->post_type}-format-standard" : "{$post->post_type}-format-{$post_format}";
+			$classes[] = $post_format || is_wp_error( $post_format ) ? "{$post->post_type}-format-standard" : "{$post->post_type}-format-{$post_format}";
 		}
 
 		// Attachment mime types.

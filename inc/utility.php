@@ -60,6 +60,7 @@ function hybrid_add_post_type_support() {
  * @since  1.2.0
  * @access public
  * @param  int    $width
+ * @return void
  */
 function hybrid_set_content_width( $width = '' ) {
 	$GLOBALS['content_width'] = absint( $width );
@@ -73,7 +74,7 @@ function hybrid_set_content_width( $width = '' ) {
  * @return int
  */
 function hybrid_get_content_width() {
-	return $GLOBALS['content_width'];
+	return absint( $GLOBALS['content_width'] );
 }
 
 /**
@@ -88,11 +89,9 @@ function hybrid_get_content_width() {
  */
 function hybrid_untitled_post( $title ) {
 
-	if ( empty( $title ) && !is_singular() && in_the_loop() && !is_admin() ) {
-
-		// Translators: Used as a placeholder for untitled posts on non-singular views.
+	// Translators: Used as a placeholder for untitled posts on non-singular views.
+	if ( ! $title && !is_singular() && in_the_loop() && !is_admin() )
 		$title = esc_html__( '(Untitled)', 'hybrid-core' );
-	}
 
 	return $title;
 }
