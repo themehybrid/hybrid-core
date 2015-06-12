@@ -57,28 +57,17 @@ if ( !class_exists( 'Hybrid' ) ) {
 		 * @return void
 		 */
 		public function __construct() {
-			global $hybrid;
 
-			// Set up an empty class for the global $hybrid object.
-			$hybrid = new stdClass;
+			// Set up an empty object to work with.
+			$GLOBALS['hybrid'] = new stdClass;
 
-			// Define framework, parent theme, and child theme constants.
-			add_action( 'after_setup_theme', array( $this, 'constants' ), -95 );
-
-			// Load the core functions/classes required by the rest of the framework.
-			add_action( 'after_setup_theme', array( $this, 'core' ), -95 );
-
-			// Handle theme supported features.
-			add_action( 'after_setup_theme', array( $this, 'theme_support' ), 12 );
-
-			// Load framework includes.
-			add_action( 'after_setup_theme', array( $this, 'includes' ), 13 );
-
-			// Load the framework extensions.
-			add_action( 'after_setup_theme', array( $this, 'extensions' ), 14 );
-
-			// Load admin files.
-			add_action( 'wp_loaded', array( $this, 'admin' ) );
+			// Set up the load order.
+			add_action( 'after_setup_theme', array( $this, 'constants'     ), -95 );
+			add_action( 'after_setup_theme', array( $this, 'core'          ), -95 );
+			add_action( 'after_setup_theme', array( $this, 'theme_support' ),  12 );
+			add_action( 'after_setup_theme', array( $this, 'includes'      ),  13 );
+			add_action( 'after_setup_theme', array( $this, 'extensions'    ),  14 );
+			add_action( 'after_setup_theme', array( $this, 'admin'         ),  95 );
 		}
 
 		/**
@@ -133,7 +122,13 @@ if ( !class_exists( 'Hybrid' ) ) {
 		 */
 		public function core() {
 
-			// Load the core framework files.
+			// Load the class files.
+			require_once( HYBRID_INC . 'class-media-meta.php'         );
+			require_once( HYBRID_INC . 'class-media-meta-factory.php' );
+			require_once( HYBRID_INC . 'class-media-grabber.php'      );
+
+			// Load the functions files.
+			require_once( HYBRID_INC . 'functions-attr.php'      );
 			require_once( HYBRID_INC . 'functions-context.php'   );
 			require_once( HYBRID_INC . 'functions-i18n.php'      );
 			require_once( HYBRID_INC . 'functions-customize.php' );
@@ -144,6 +139,13 @@ if ( !class_exists( 'Hybrid' ) ) {
 			require_once( HYBRID_INC . 'functions-scripts.php'   );
 			require_once( HYBRID_INC . 'functions-styles.php'    );
 			require_once( HYBRID_INC . 'functions-utility.php'   );
+
+			// Load the template files.
+			require_once( HYBRID_INC . 'template.php'          );
+			require_once( HYBRID_INC . 'template-comments.php' );
+			require_once( HYBRID_INC . 'template-general.php'  );
+			require_once( HYBRID_INC . 'template-media.php'    );
+			require_once( HYBRID_INC . 'template-post.php'     );
 		}
 
 		/**
@@ -176,8 +178,8 @@ if ( !class_exists( 'Hybrid' ) ) {
 		}
 
 		/**
-		 * Loads the framework files supported by themes and template-related functions/classes.
-		 * Functionality in these files should not be expected within the theme setup function.
+		 * Loads the framework files supported by themes.  Functionality in these files should
+		 * not be expected within the theme setup function.
 		 *
 		 * @since  2.0.0
 		 * @access public
@@ -185,27 +187,12 @@ if ( !class_exists( 'Hybrid' ) ) {
 		 */
 		public function includes() {
 
-			// Load the class files.
-			require_once( HYBRID_INC . 'class-media-meta.php'         );
-			require_once( HYBRID_INC . 'class-media-meta-factory.php' );
-			require_once( HYBRID_INC . 'class-media-grabber.php'      );
-
-			// Load the functions files.
-			require_once( HYBRID_INC . 'functions-attr.php' );
-
-			// Load the template files.
-			require_once( HYBRID_INC . 'template.php' );
-			require_once( HYBRID_INC . 'template-comments.php' );
-			require_once( HYBRID_INC . 'template-general.php' );
-			require_once( HYBRID_INC . 'template-media.php' );
-			require_once( HYBRID_INC . 'template-post.php' );
-
 			// Load the template hierarchy if supported.
 			require_if_theme_supports( 'hybrid-core-template-hierarchy', HYBRID_INC . 'template-hierarchy.php' );
 
 			// Load the post format functionality if post formats are supported.
-			require_if_theme_supports( 'post-formats', HYBRID_INC . 'functions-formats.php'    );
-			require_if_theme_supports( 'post-formats', HYBRID_INC . 'class-chat.php' );
+			require_if_theme_supports( 'post-formats', HYBRID_INC . 'functions-formats.php' );
+			require_if_theme_supports( 'post-formats', HYBRID_INC . 'class-chat.php'        );
 
 			// Load the Theme Layouts extension if supported.
 			require_if_theme_supports( 'theme-layouts', HYBRID_INC . 'class-layout.php'         );
@@ -229,14 +216,9 @@ if ( !class_exists( 'Hybrid' ) ) {
 		 */
 		public function extensions() {
 
-			// Load the Breadcrumb Trail extension if supported.
 			hybrid_require_if_theme_supports( 'breadcrumb-trail', HYBRID_EXT . 'breadcrumb-trail.php' );
-
-			// Load the Cleaner Gallery extension if supported.
-			hybrid_require_if_theme_supports( 'cleaner-gallery', HYBRID_EXT . 'cleaner-gallery.php' );
-
-			// Load the Get the Image extension if supported.
-			hybrid_require_if_theme_supports( 'get-the-image', HYBRID_EXT . 'get-the-image.php' );
+			hybrid_require_if_theme_supports( 'cleaner-gallery',  HYBRID_EXT . 'cleaner-gallery.php'  );
+			hybrid_require_if_theme_supports( 'get-the-image',    HYBRID_EXT . 'get-the-image.php'    );
 		}
 
 		/**
