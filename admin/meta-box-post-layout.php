@@ -64,7 +64,7 @@ function hybrid_post_layout_meta_box( $post, $box ) {
 	// Get the current post's layout.
 	$post_layout = hybrid_get_post_layout( $post->ID );
 
-	$post_layout = !empty( $post_layout ) ? $post_layout : 'default';
+	$post_layout = $post_layout ? $post_layout : 'default';
 
 	wp_nonce_field( basename( __FILE__ ), 'hybrid-post-layout-nonce' ); ?>
 

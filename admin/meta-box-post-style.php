@@ -46,17 +46,20 @@ function hybrid_add_post_style_meta_box( $post_type, $post ) {
  */
 function hybrid_post_style_meta_box( $post, $box ) {
 
-	$styles = hybrid_get_post_styles( $post->post_type );
+	$styles     = hybrid_get_post_styles( $post->post_type );
+	$post_style = hybrid_get_post_style( $post->ID );
 
 	wp_nonce_field( basename( __FILE__ ), 'hybrid-post-style-nonce' ); ?>
 
 	<p>
 		<select name="hybrid-post-style" class="widefat">
+
 			<option value=""></option>
 
 			<?php foreach ( $styles as $label => $file ) : ?>
-				<option value="<?php echo esc_attr( $file ); ?>" <?php selected( hybrid_get_post_style( $post->ID ), esc_attr( $file ) ); ?>><?php echo esc_html( $label ); ?></option>
+				<option value="<?php echo esc_attr( $file ); ?>" <?php selected( $post_style, $file ); ?>><?php echo esc_html( $label ); ?></option>
 			<?php endforeach; ?>
+
 		</select>
 	</p>
 <?php }

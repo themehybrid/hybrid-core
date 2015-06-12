@@ -52,8 +52,8 @@ function hybrid_meta_box_post_add_template( $post_type, $post ) {
  */
 function hybrid_meta_box_post_display_template( $post, $box ) {
 
-	// Get a list of available custom templates for the post type.
-	$templates = hybrid_get_post_templates( $post->post_type );
+	$templates     = hybrid_get_post_templates( $post->post_type );
+	$post_template = get_post_meta( $post->ID, "_wp_{$post->post_type}_template", true );
 
 	wp_nonce_field( basename( __FILE__ ), 'hybrid-post-template-nonce' ); ?>
 
@@ -63,7 +63,7 @@ function hybrid_meta_box_post_display_template( $post, $box ) {
 			<option value=""></option>
 
 			<?php foreach ( $templates as $label => $template ) : ?>
-				<option value="<?php echo esc_attr( $template ); ?>" <?php selected( esc_attr( get_post_meta( $post->ID, "_wp_{$post->post_type}_template", true ) ), esc_attr( $template ) ); ?>><?php echo esc_html( $label ); ?></option>
+				<option value="<?php echo esc_attr( $template ); ?>" <?php selected( $post_template, $template ); ?>><?php echo esc_html( $label ); ?></option>
 			<?php endforeach; ?>
 
 		</select>
