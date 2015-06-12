@@ -173,7 +173,7 @@ function hybrid_singular_template( $template ) {
 	$post = get_queried_object();
 
 	// Check for a custom post template by custom field key '_wp_post_template'.
-	$custom = get_post_meta( get_queried_object_id(), "_wp_{$post->post_type}_template", true );
+	$custom = hybrid_get_post_template( get_queried_object_id() );
 	if ( $custom )
 		$templates[] = $custom;
 
