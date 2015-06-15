@@ -337,23 +337,29 @@ img.emoji {
 	margin-bottom: 1.5rem;
 }
 
-.alignleft,
-.left {
-	float:        left;
-	margin-right: 1.5rem;
-}
-
-.alignright,
-.right {
-	float:       right;
-	margin-left: 1.5rem;
-}
-
 .aligncenter,
-.center {
+.alignright,
+.alignleft {
 	display: block;
 	margin:  0 auto 1.5rem;
 }
+
+	p .aligncenter,
+	p .alignright,
+	p .alignleft { margin-bottom: 0; }
+
+	@media only screen and ( min-width: 480px ) {
+
+		.alignleft {
+			float:        left;
+			margin-right: 1.5rem;
+		}
+
+		.alignright {
+			float:       right;
+			margin-left: 1.5rem;
+		}
+	}
 
 .alignnone {
 	float: none;
