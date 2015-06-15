@@ -15,9 +15,9 @@
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * @package   CleanerGallery
- * @version   1.1.0
+ * @version   1.2.0-dev
  * @author    Justin Tadlock <justin@justintadlock.com>
- * @copyright Copyright (c) 2008 - 2014, Justin Tadlock
+ * @copyright Copyright (c) 2008 - 2015, Justin Tadlock
  * @link      http://justintadlock.com/archives/2008/04/13/cleaner-wordpress-gallery-plugin
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
@@ -185,7 +185,7 @@ final class Cleaner_Gallery {
 
 		/* Gallery attributes. */
 		$gallery_attr  = sprintf( "id='%s'", esc_attr( $this->args['id'] ) . '-' . esc_attr( $this->gallery_instance ) );
-		$gallery_attr .= sprintf( " class='gallery gallery-%s gallery-columns-%s gallery-size-%s'", esc_attr( $this->args['id'] ), esc_attr( $this->args['columns'] ), sanitize_html_class( $this->args['size'] ) );
+		$gallery_attr .= sprintf( " class='gallery gallery-%s gallery-columns-%s gallery-size-%s%s'", esc_attr( $this->args['id'] ), esc_attr( $this->args['columns'] ), sanitize_html_class( $this->args['size'] ), !empty( $this->args['type'] ) ? ' gallery-type-' . sanitize_html_class( $this->args['type'] ) : '' );
 		$gallery_attr .= sprintf( " itemscope itemtype='%s'", esc_attr( $this->get_gallery_itemtype() ) );
 
 		/* Return out very nice, valid HTML gallery. */
@@ -224,7 +224,8 @@ final class Cleaner_Gallery {
 			'include'     => '',
 			'exclude'     => '',
 			'numberposts' => -1,
-			'offset'      => ''
+			'offset'      => '',
+			'type'        => '', // In case someone used Jetpack's "gallery types".
 		);
 
 		/* Apply filters to the default arguments. */
