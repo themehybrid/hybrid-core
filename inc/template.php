@@ -17,8 +17,8 @@
  * and locate_template().
  *
  * Note that using this function assumes that you're creating a content template to handle attachments.
- * This filter must be removed since we're bypassing the WP template hierarchy and focusing on templates
- * specific to the content.
+ * The `prepend_attachment()` filter must be removed since we're bypassing the WP template hierarchy
+ * and focusing on templates specific to the content.
  *
  * @since  1.6.0
  * @access public
@@ -63,11 +63,12 @@ function hybrid_get_content_template() {
 	$templates[] = 'content.php';
 	$templates[] = 'content/content.php';
 
-	// Allow devs to filter the content template hierarchy.
-	$templates = apply_filters( 'hybrid_content_template_hierarchy', $templates );
+	// Apply filters and find the template.
+	$template = locate_template( apply_filters( 'hybrid_content_template_hierarchy', $templates ) );
 
-	// Apply filters and return the found content template.
-	include( apply_filters( 'hybrid_content_template', locate_template( $templates, false, false ) ) );
+	// If template is found, include it.
+	if ( apply_filters( 'hybrid_content_template', $template ) )
+		include( $template );
 }
 
 /**
@@ -92,7 +93,7 @@ function hybrid_get_menu( $name = '' ) {
 	$templates[] = 'menu.php';
 	$templates[] = 'menu/menu.php';
 
-	locate_template( $templates, true );
+	locate_template( $templates, true, false );
 }
 
 /**
@@ -116,7 +117,7 @@ function hybrid_get_menu( $name = '' ) {
  * @param  string  $name
  * @return void
  */
-function hybrid_get_header( $name = null ) {
+function hybrid_get_header( $name = '' ) {
 
 	do_action( 'get_header', $name ); // Core WordPress hook
 
@@ -130,7 +131,7 @@ function hybrid_get_header( $name = null ) {
 	$templates[] = 'header.php';
 	$templates[] = 'header/header.php';
 
-	locate_template( $templates, true );
+	locate_template( $templates, true, false );
 }
 
 /**
@@ -154,7 +155,7 @@ function hybrid_get_header( $name = null ) {
  * @param  string  $name
  * @return void
  */
-function hybrid_get_footer( $name = null ) {
+function hybrid_get_footer( $name = '' ) {
 
 	do_action( 'get_footer', $name ); // Core WordPress hook
 
@@ -168,7 +169,7 @@ function hybrid_get_footer( $name = null ) {
 	$templates[] = 'footer.php';
 	$templates[] = 'footer/footer.php';
 
-	locate_template( $templates, true );
+	locate_template( $templates, true, false );
 }
 
 /**
@@ -192,7 +193,7 @@ function hybrid_get_footer( $name = null ) {
  * @param  string  $name
  * @return void
  */
-function hybrid_get_sidebar( $name = null ) {
+function hybrid_get_sidebar( $name = '' ) {
 
 	do_action( 'get_sidebar', $name ); // Core WordPress hook
 
@@ -206,5 +207,5 @@ function hybrid_get_sidebar( $name = null ) {
 	$templates[] = 'sidebar.php';
 	$templates[] = 'sidebar/sidebar.php';
 
-	locate_template( $templates, true );
+	locate_template( $templates, true, false );
 }

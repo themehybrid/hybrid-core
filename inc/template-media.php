@@ -124,7 +124,7 @@ function hybrid_get_attachment_subtype( $post_id = 0 ) {
  * @return bool
  */
 function hybrid_attachment_is_audio( $post_id = 0 ) {
-	return 'audio' === hybrid_get_attachment_type( $post_id ) ? true : false;
+	return 'audio' === hybrid_get_attachment_type( $post_id );
 }
 
 /**
@@ -136,7 +136,7 @@ function hybrid_attachment_is_audio( $post_id = 0 ) {
  * @return bool
  */
 function hybrid_attachment_is_video( $post_id = 0 ) {
-	return 'video' === hybrid_get_attachment_type( $post_id ) ? true : false;
+	return 'video' === hybrid_get_attachment_type( $post_id );
 }
 
 /**

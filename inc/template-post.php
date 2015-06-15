@@ -12,28 +12,78 @@
  */
 
 /**
+ * Gets a post template.
+ *
+ * @since  3.0.0
+ * @access public
+ * @param  int     $post_id
+ * @return bool
+ */
+function hybrid_get_post_template( $post_id ) {
+	return get_post_meta( $post_id, hybrid_get_post_template_meta_key( $post_id ), true );
+}
+
+/**
+ * Sets a post template.
+ *
+ * @since  3.0.0
+ * @access public
+ * @param  int     $post_id
+ * @param  string  $template
+ * @return bool
+ */
+function hybrid_set_post_template( $post_id, $template ) {
+	return update_post_meta( $post_id, hybrid_get_post_template_meta_key( $post_id ), $template );
+}
+
+/**
+ * Deletes a post template.
+ *
+ * @since  3.0.0
+ * @access public
+ * @param  int     $post_id
+ * @return bool
+ */
+function hybrid_delete_post_template( $post_id ) {
+	return delete_post_meta( $post_id, hybrid_get_post_template_meta_key( $post_id ) );
+}
+
+/**
  * Checks if a post of any post type has a custom template.  This is the equivalent of WordPress'
  * `is_page_template()` function with the exception that it works for all post types.
  *
  * @since  1.2.0
  * @access public
  * @param  string  $template  The name of the template to check for.
+ * @param  int     $post_id
  * @return bool
  */
-function hybrid_has_post_template( $template = '' ) {
+function hybrid_has_post_template( $template = '', $post_id = '' ) {
+
+	if ( ! $post_id )
+		$post_id = get_the_ID();
 
 	// Get the post template, which is saved as metadata.
-	$post_template = get_post_meta( get_the_ID(), '_wp_' . get_post_type() . '_template', true );
+	$post_template = hybrid_get_post_template( $post_id );
 
 	// If a specific template was input, check that the post template matches.
 	if ( $template && $template === $post_template )
 		return true;
 
-	// If no specific template was input, check if the post has a template.
-	elseif ( ! $template && $post_template )
-		return true;
+	// Return whether we have a post template.
+	return !empty( $post_template );
+}
 
-	return false;
+/**
+ * Returns the post template meta key.
+ *
+ * @since  3.0.0
+ * @access public
+ * @param  int     $post_id
+ * @return string
+ */
+function hybrid_get_post_template_meta_key( $post_id ) {
+	return sprintf( '_wp_%s_template', get_post_type( $post_id ) );
 }
 
 /**
@@ -72,7 +122,7 @@ function hybrid_post_format_link() {
 function hybrid_get_post_format_link() {
 
 	$format = get_post_format();
-	$url    = $format ? get_permalink() : get_post_format_link( $format );
+	$url    = $format ? get_post_format_link( $format ) : get_permalink();
 
 	return sprintf( '<a href="%s" class="post-format-link">%s</a>', esc_url( $url ), get_post_format_string( $format ) );
 }
@@ -119,7 +169,7 @@ function hybrid_get_post_author( $args = array() ) {
 	$link = ob_get_clean();
 	// A small piece of my soul just died.  Kittens no longer purr.  Dolphins lost the ability to swim with grace.
 
-	if ( !empty( $link ) ) {
+	if ( $link ) {
 		$html .= $args['before'];
 		$html .= sprintf( $args['wrap'], hybrid_get_attr( 'entry-author' ), sprintf( $args['text'], $link ) );
 		$html .= $args['after'];
@@ -164,7 +214,7 @@ function hybrid_get_post_terms( $args = array() ) {
 		'text'       => '%s',
 		'before'     => '',
 		'after'      => '',
-		'items_wrap' => '<span %s>%s</span>',
+		'wrap'       => '<span %s>%s</span>',
 		// Translators: Separates tags, categories, etc. when displaying a post.
 		'sep'        => _x( ', ', 'taxonomy terms separator', 'hybrid-core' )
 	);
@@ -173,9 +223,9 @@ function hybrid_get_post_terms( $args = array() ) {
 
 	$terms = get_the_term_list( $args['post_id'], $args['taxonomy'], '', $args['sep'], '' );
 
-	if ( !empty( $terms ) ) {
+	if ( $terms ) {
 		$html .= $args['before'];
-		$html .= sprintf( $args['items_wrap'], hybrid_get_attr( 'entry-terms', $args['taxonomy'] ), sprintf( $args['text'], $terms ) );
+		$html .= sprintf( $args['wrap'], hybrid_get_attr( 'entry-terms', $args['taxonomy'] ), sprintf( $args['text'], $terms ) );
 		$html .= $args['after'];
 	}
 
@@ -225,11 +275,7 @@ function hybrid_get_gallery_item_count() {
 	);
 
 	// Return the attachment count if items were found.
-	if ( !empty( $attachments ) )
-		return count( $attachments );
-
-	// Return 0 for everything else.
-	return 0;
+	return !empty( $attachments ) ? count( $attachments ) : 0;
 }
 
 /**
@@ -298,7 +344,7 @@ function hybrid_get_content_url( $content ) {
  */
 function hybrid_get_the_post_format_url( $url = '', $post = null ) {
 
-	if ( empty( $url ) ) {
+	if ( ! $url ) {
 
 		$post = is_null( $post ) ? get_post() : $post;
 

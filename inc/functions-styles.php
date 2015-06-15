@@ -83,7 +83,7 @@ function hybrid_min_stylesheet_uri( $stylesheet_uri, $stylesheet_dir_uri ) {
 	$suffix = hybrid_get_min_suffix();
 
 	// Use the .min stylesheet if available.
-	if ( !empty( $suffix ) ) {
+	if ( $suffix ) {
 
 		// Remove the stylesheet directory URI from the file name.
 		$stylesheet = str_replace( trailingslashit( $stylesheet_dir_uri ), '', $stylesheet_uri );

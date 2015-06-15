@@ -237,7 +237,7 @@ function hybrid_single_author_title() {
  * @return void
  */
 function hybrid_get_single_author_title() {
-	return get_the_author_meta( 'display_name', get_query_var( 'author' ) );
+	return get_the_author_meta( 'display_name', absint( get_query_var( 'author' ) ) );
 }
 
 /**

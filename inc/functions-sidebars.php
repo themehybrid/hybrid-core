@@ -53,14 +53,12 @@ add_action( 'widgets_init', '__return_false', 95 );
  *
  * @since  2.0.0
  * @access public
+ * @global array   $wp_registered_sidebars
  * @param  string  $sidebar_id
  * @return string
  */
 function hybrid_get_sidebar_name( $sidebar_id ) {
 	global $wp_registered_sidebars;
 
-	if ( isset( $wp_registered_sidebars[ $sidebar_id ] ) )
-		return $wp_registered_sidebars[ $sidebar_id ]['name'];
-
-	return '';
+	return isset( $wp_registered_sidebars[ $sidebar_id ] ) ? $wp_registered_sidebars[ $sidebar_id ]['name'] : '';
 }
