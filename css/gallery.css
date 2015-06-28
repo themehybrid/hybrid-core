@@ -18,12 +18,6 @@
 		visibility: hidden;
 	}
 
-	.gallery-row {
-		display: block;
-		clear:   both;
-		margin:  0;
-	}
-
 		.gallery-item {
 			width:      100%;
 			padding:    0;
@@ -67,9 +61,6 @@
 			margin-right: 0;
 		}
 
-		     .gallery-row .gallery-item:last-child  { margin-right: 0; }
-		.rtl .gallery-row .gallery-item:last-child  { margin-left:  0; }
-
 	/* Everything should be 2 columns. */
 	.gallery-col-2 .gallery-item,
 	.gallery-col-3 .gallery-item,
@@ -79,11 +70,126 @@
 	.gallery-col-7 .gallery-item,
 	.gallery-col-8 .gallery-item,
 	.gallery-col-9 .gallery-item,
-	.gallery-col-10 .gallery-item { width: 45%;    }
+	.gallery-col-10 .gallery-item { width: 45%; }
+}
+
+/* When the screen width is between 480px and 539px. */
+@media only screen and ( min-width: 480px ) and ( max-width: 539px ) {
+
+	.gallery-item:nth-of-type( 2n + 1 ) { clear: both; }
+
+	     .gallery-item:nth-child( 2n )  { margin-right: 0; float: right; }
+	.rtl .gallery-item:nth-child( 2n )  { margin-left:  0; float: left;  }
+}
+
+/* When the screen width is between 540px and 639px. */
+@media only screen and ( min-width: 540px ) and ( max-width: 639px ) {
+
+	.gallery-col-3  .gallery-item:nth-child( 3n + 1 ),
+	.gallery-col-4  .gallery-item:nth-child( 3n + 1 ),
+	.gallery-col-5  .gallery-item:nth-child( 3n + 1 ),
+	.gallery-col-6  .gallery-item:nth-child( 3n + 1 ),
+	.gallery-col-7  .gallery-item:nth-child( 3n + 1 ),
+	.gallery-col-8  .gallery-item:nth-child( 3n + 1 ),
+	.gallery-col-9  .gallery-item:nth-child( 3n + 1 ),
+	.gallery-col-10 .gallery-item:nth-child( 3n + 1 ) { clear: both; }
+
+	.gallery-col-3  .gallery-item:nth-child( 3n ),
+	.gallery-col-4  .gallery-item:nth-child( 3n ),
+	.gallery-col-5  .gallery-item:nth-child( 3n ),
+	.gallery-col-6  .gallery-item:nth-child( 3n ),
+	.gallery-col-7  .gallery-item:nth-child( 3n ),
+	.gallery-col-8  .gallery-item:nth-child( 3n ),
+	.gallery-col-9  .gallery-item:nth-child( 3n ),
+	.gallery-col-10 .gallery-item:nth-child( 3n ) { float: right; margin-left: 0; margin-right: 0; }
+
+	.rtl .gallery-col-3  .gallery-item:nth-child( 3n ),
+	.rtl .gallery-col-4  .gallery-item:nth-child( 3n ),
+	.rtl .gallery-col-5  .gallery-item:nth-child( 3n ),
+	.rtl .gallery-col-6  .gallery-item:nth-child( 3n ),
+	.rtl .gallery-col-7  .gallery-item:nth-child( 3n ),
+	.rtl .gallery-col-8  .gallery-item:nth-child( 3n ),
+	.rtl .gallery-col-9  .gallery-item:nth-child( 3n ),
+	.rtl .gallery-col-10 .gallery-item:nth-child( 3n ) { float: left; }
+
+	/* Handle the columns. */
+	.gallery-col-3 .gallery-item,
+	.gallery-col-4  .gallery-item,
+	.gallery-col-5  .gallery-item,
+	.gallery-col-6  .gallery-item,
+	.gallery-col-7  .gallery-item,
+	.gallery-col-8  .gallery-item,
+	.gallery-col-9  .gallery-item,
+	.gallery-col-10 .gallery-item { width: 30%;   }
+}
+
+/* When the screen width is between 640px and 767px. */
+@media only screen and ( min-width: 640px ) and ( max-width: 767px ) {
+
+	.gallery-col-2  .gallery-item:nth-child( 2n + 1 ),
+	.gallery-col-3  .gallery-item:nth-child( 3n + 1 ),
+	.gallery-col-4  .gallery-item:nth-child( 4n + 1 ),
+	.gallery-col-5  .gallery-item:nth-child( 4n + 1 ),
+	.gallery-col-6  .gallery-item:nth-child( 4n + 1 ),
+	.gallery-col-7  .gallery-item:nth-child( 4n + 1 ),
+	.gallery-col-8  .gallery-item:nth-child( 4n + 1 ),
+	.gallery-col-9  .gallery-item:nth-child( 4n + 1 ),
+	.gallery-col-10 .gallery-item:nth-child( 4n + 1 ) { clear: both; }
+
+	.gallery-col-2  .gallery-item:nth-child( 2n ),
+	.gallery-col-3  .gallery-item:nth-child( 3n ),
+	.gallery-col-4  .gallery-item:nth-child( 4n ),
+	.gallery-col-5  .gallery-item:nth-child( 4n ),
+	.gallery-col-6  .gallery-item:nth-child( 4n ),
+	.gallery-col-7  .gallery-item:nth-child( 4n ),
+	.gallery-col-8  .gallery-item:nth-child( 4n ),
+	.gallery-col-9  .gallery-item:nth-child( 4n ),
+	.gallery-col-10 .gallery-item:nth-child( 4n ) { float: right; margin-left: 0; margin-right: 0; }
+
+	.rtl .gallery-col-2  .gallery-item:nth-child( 2n ),
+	.rtl .gallery-col-3  .gallery-item:nth-child( 3n ),
+	.rtl .gallery-col-4  .gallery-item:nth-child( 4n ),
+	.rtl .gallery-col-5  .gallery-item:nth-child( 4n ),
+	.rtl .gallery-col-6  .gallery-item:nth-child( 4n ),
+	.rtl .gallery-col-7  .gallery-item:nth-child( 4n ),
+	.rtl .gallery-col-8  .gallery-item:nth-child( 4n ),
+	.rtl .gallery-col-9  .gallery-item:nth-child( 4n ),
+	.rtl .gallery-col-10 .gallery-item:nth-child( 4n ) { float: left; }
+
+	/* Handle the columns. */
+	.gallery-col-2 .gallery-item  { width: 45%; }
+	.gallery-col-3 .gallery-item  { width: 30%; }
+	.gallery-col-4  .gallery-item,
+	.gallery-col-5  .gallery-item,
+	.gallery-col-6  .gallery-item,
+	.gallery-col-7  .gallery-item,
+	.gallery-col-8  .gallery-item,
+	.gallery-col-9  .gallery-item,
+	.gallery-col-10 .gallery-item { width: 21.25%;   }
 }
 
 /* When the screen width is at least 768px. */
 @media only screen and ( min-width: 768px ) {
+
+	.gallery-col-2  .gallery-item:nth-child( 2n  + 1 ),
+	.gallery-col-3  .gallery-item:nth-child( 3n  + 1 ),
+	.gallery-col-4  .gallery-item:nth-child( 4n  + 1 ),
+	.gallery-col-5  .gallery-item:nth-child( 5n  + 1 ),
+	.gallery-col-6  .gallery-item:nth-child( 6n  + 1 ),
+	.gallery-col-7  .gallery-item:nth-child( 7n  + 1 ),
+	.gallery-col-8  .gallery-item:nth-child( 8n  + 1 ),
+	.gallery-col-9  .gallery-item:nth-child( 9n  + 1 ),
+	.gallery-col-10 .gallery-item:nth-child( 10n + 1 ) { clear: both; }
+
+	.gallery-col-2  .gallery-item:nth-child( 2n  ),
+	.gallery-col-3  .gallery-item:nth-child( 3n  ),
+	.gallery-col-4  .gallery-item:nth-child( 4n  ),
+	.gallery-col-5  .gallery-item:nth-child( 5n  ),
+	.gallery-col-6  .gallery-item:nth-child( 6n  ),
+	.gallery-col-7  .gallery-item:nth-child( 7n  ),
+	.gallery-col-8  .gallery-item:nth-child( 8n  ),
+	.gallery-col-9  .gallery-item:nth-child( 9n  ),
+	.gallery-col-10 .gallery-item:nth-child( 10n ) { margin-left: 0; margin-right: 0; }
 
 	/* Handle the columns. */
 	.gallery-col-2 .gallery-item  { width: 45%;    }
@@ -93,6 +199,6 @@
 	.gallery-col-6 .gallery-item  { width: 12.5%;  }
 	.gallery-col-7 .gallery-item  { width: 10%;    }
 	.gallery-col-8 .gallery-item  { width: 8.125%; }
-	.gallery-col-9 .gallery-item  { width: 6.67%;  }
+	.gallery-col-9 .gallery-item  { width: 6.66%;  }
 	.gallery-col-10 .gallery-item { width: 5.5%;   }
 }
