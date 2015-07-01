@@ -77,7 +77,7 @@ class Hybrid_Media_Meta {
 
 		$this->post_id  = $post_id;
 		$this->meta     = wp_get_attachment_metadata( $this->post_id );
-		$this->type     = hybrid_get_attachment_type();
+		$this->type     = hybrid_get_attachment_type( $this->post_id );
 
 		// If we have a type that's in the whitelist, run filters.
 		if ( $this->type && in_array( $this->type, $this->allowed_types ) ) {
