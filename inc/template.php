@@ -63,11 +63,14 @@ function hybrid_get_content_template() {
 	$templates[] = 'content.php';
 	$templates[] = 'content/content.php';
 
-	// Apply filters and find the template.
-	$template = locate_template( apply_filters( 'hybrid_content_template_hierarchy', $templates ) );
+	// Apply filters to the templates array.
+	$templates = apply_filters( 'hybrid_content_template_hierarchy', $templates );
+
+	// Locate the template.
+	$template = locate_template( $templates );
 
 	// If template is found, include it.
-	if ( apply_filters( 'hybrid_content_template', $template ) )
+	if ( apply_filters( 'hybrid_content_template', $template, $templates ) )
 		include( $template );
 }
 
