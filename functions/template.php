@@ -69,7 +69,7 @@ function hybrid_get_content_template() {
 	$templates = apply_filters( 'hybrid_content_template_hierarchy', $templates );
 
 	/* Apply filters and return the found content template. */
-	include( apply_filters( 'hybrid_content_template', locate_template( $templates, false, false ) ) );
+	include( apply_filters( 'hybrid_content_template', locate_template( $templates, false, false ), $templates ) );
 }
 
 /**
