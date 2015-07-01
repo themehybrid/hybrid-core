@@ -41,7 +41,7 @@ class Hybrid_Layout {
 	 */
 	public function __get( $property ) {
 
-		return isset( $this->args[ $property ] ) ? $this->args[ $property ] : null;
+		return isset( $this->$property ) ? $this->args[ $property ] : null;
 	}
 
 	/**
@@ -55,7 +55,7 @@ class Hybrid_Layout {
 	 */
 	public function __set( $property, $value ) {
 
-		if ( isset( $this->args[ $property ] ) )
+		if ( isset( $this->$property ) )
 			$this->args[ $property ] = $value;
 	}
 
