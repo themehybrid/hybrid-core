@@ -140,6 +140,6 @@ function hybrid_customize_preview_register_scripts() {
  */
 function hybrid_customize_preview_enqueue_scripts() {
 
-	if ( current_theme_supports( 'theme-layouts' ) )
+	if ( current_theme_supports( 'theme-layouts', 'customize' ) )
 		wp_enqueue_script( 'hybrid-customize-preview' );
 }
