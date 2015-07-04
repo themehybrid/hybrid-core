@@ -37,6 +37,7 @@ class Hybrid_Media_Meta_Factory {
 	 * Creates a new `Hybrid_Media_Meta` object and stores it in the `$media` array by
 	 * post ID.
 	 *
+	 * @see    Hybrid_Media_Meta::__construct()
 	 * @since  3.0.0
 	 * @access protected
 	 * @param  int       $post_id

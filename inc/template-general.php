@@ -128,7 +128,7 @@ function hybrid_get_blog_url() {
 	elseif ( 0 < ( $page_for_posts = get_option( 'page_for_posts' ) ) )
 		$blog_url = get_permalink( $page_for_posts );
 
-	return !empty( $blog_url ) ? esc_url( $blog_url ) : '';
+	return $blog_url ? esc_url( $blog_url ) : '';
 }
 
 /**

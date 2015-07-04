@@ -78,7 +78,7 @@ class Hybrid_Chat {
 
 		// Filters for the chat message.
 		add_filter( 'hybrid_chat_text', array( $this, 'format_chat_text' ), 5 );
-		add_filter( 'hybrid_chat_text',                'wpautop',           5 );
+		add_filter( 'hybrid_chat_text',               'wpautop',            5 );
 
 		// Set the stanzas.
 		$this->set_stanzas();
