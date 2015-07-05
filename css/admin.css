@@ -4,10 +4,6 @@
 
 /* === Radio Image Control (Post Layout) === */
 
-#hybrid-post-layout label { display: block; margin: 10px 5px 5px; }
-
-#hybrid-post-layout .has-img { display: inline-block; margin: 0; }
-
 #hybrid-post-layout .has-img input[type="radio"] {
 	clip:     rect(1px, 1px, 1px, 1px);
 	height:   1px;
