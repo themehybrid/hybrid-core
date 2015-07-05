@@ -44,7 +44,8 @@ function breadcrumb_trail( $args = array() ) {
 /**
  * Creates a breadcrumbs menu for the site based on the current page that's being viewed by the user.
  *
- * @since 0.6.0
+ * @since  0.6.0
+ * @access public
  */
 class Breadcrumb_Trail {
 
@@ -67,46 +68,87 @@ class Breadcrumb_Trail {
 	public $args = array();
 
 	/**
-	 * Sets up the breadcrumb trail.
+	 * Array of text labels.
+	 *
+	 * @since  1.0.0
+	 * @access public
+	 * @var    array
+	 */
+	public $labels = array();
+
+	/**
+	 * Array of post types (key) and taxonomies (value) to use for single post views.
+	 *
+	 * @since  1.0.0
+	 * @access public
+	 * @var    array
+	 */
+	public $post_taxonomy = array();
+
+	/* ====== Magic Methods ====== */
+
+	/**
+	 * Magic method to use in case someone tries to output the layout object as a string.
+	 * We'll just return the trail HTML.
+	 *
+	 * @since  1.0.0
+	 * @access public
+	 * @return string
+	 */
+	public function __toString() {
+		return $this->trail();
+	}
+
+	/**
+	 * Sets up the breadcrumb trail properties.  Calls the `Breadcrumb_Trail::add_items()` method
+	 * to creat the array of breadcrumb items.
 	 *
 	 * @since  0.6.0
 	 * @access public
-	 * @param  array  $args The arguments for how to build the breadcrumb trail.
+	 * @param  array   $args  {
+	 *     @type string    $container      Container HTML element. nav|div
+	 *     @type string    $before         String to output before breadcrumb menu.
+	 *     @type string    $after          String to output after breadcrumb menu.
+	 *     @type bool      $show_on_front  Whether to show when `is_front_page()`.
+	 *     @type bool      $network        Whether to link to the network main site (multisite only).
+	 *     @type bool      $show_title     Whether to show the title (last item) in the trail.
+	 *     @type bool      $show_browse    Whether to show the breadcrumb menu header.
+	 *     @type array     $labels         Text labels. @see Breadcrumb_Trail::set_labels()
+	 *     @type array     $post_taxonomy  Taxonomies to use for post types. @see Breadcrumb_Trail::set_post_taxonomy()
+	 *     @type bool      $echo           Whether to print or return the breadcrumbs.
+	 * }
 	 * @return void
 	 */
 	public function __construct( $args = array() ) {
 
 		$defaults = array(
-			'container'       => 'div',
+			'container'       => 'nav',
 			'before'          => '',
 			'after'           => '',
 			'show_on_front'   => true,
 			'network'         => false,
-			//'show_edit_link'  => false,
 			'show_title'      => true,
 			'show_browse'     => true,
-			'echo'            => true,
-
-			/* Post taxonomy (examples follow). */
-			'post_taxonomy' => array(
-				// 'post'  => 'post_tag',
-				// 'book'  => 'genre',
-			),
-
-			/* Labels for text used (see Breadcrumb_Trail::default_labels). */
-			'labels' => array()
+			'labels'          => array(),
+			'post_taxonomy'   => array(),
+			'echo'            => true
 		);
 
+		// Parse the arguments with the deaults.
 		$this->args = apply_filters( 'breadcrumb_trail_args', wp_parse_args( $args, $defaults ) );
 
-		/* Merge the user-added labels with the defaults. */
-		$this->args['labels'] = wp_parse_args( $this->args['labels'], $this->default_labels() );
+		// Set the labels and post taxonomy properties.
+		$this->set_labels();
+		$this->set_post_taxonomy();
 
-		$this->do_trail_items();
+		// Let's find some items to add to the trail!
+		$this->add_items();
 	}
 
+	/* ====== Public Methods ====== */
+
 	/**
-	 * Formats and outputs the breadcrumb trail.
+	 * Formats the HTML output for the breadcrumb trail.
 	 *
 	 * @since  0.6.0
 	 * @access public
@@ -114,102 +156,106 @@ class Breadcrumb_Trail {
 	 */
 	public function trail() {
 
-		$breadcrumb = '';
+		// Set up variables that we'll need.
+		$breadcrumb    = '';
+		$item_count    = count( $this->items );
+		$item_position = 0;
 
-		/* Connect the breadcrumb trail if there are items in the trail. */
-		if ( !empty( $this->items ) && is_array( $this->items ) ) {
+		// Connect the breadcrumb trail if there are items in the trail.
+		if ( 0 < $item_count ) {
 
-			/* Make sure we have a unique array of items. */
-			$this->items = array_unique( $this->items );
-
-			/* Open the breadcrumb trail containers. */
-			$breadcrumb = "\n\t\t" . '<' . tag_escape( $this->args['container'] ) . ' role="navigation" aria-label="' . esc_attr_x( 'Breadcrumbs', 'Breadcrumbs aria label', 'hybrid-core' ) . '" class="breadcrumb-trail breadcrumbs" itemprop="breadcrumb">';
-
-			/* If $before was set, wrap it in a container. */
-			$breadcrumb .= ( !empty( $this->args['before'] ) ? "\n\t\t\t" . '<span class="trail-before">' . $this->args['before'] . '</span> ' . "\n\t\t\t" : '' );
-
-			/* Add 'browse' label if it should be shown. */
+			// Add 'browse' label if it should be shown.
 			if ( true === $this->args['show_browse'] )
-				$breadcrumb .= "\n\t\t\t" . '<h2 class="trail-browse">' . $this->args['labels']['browse'] . '</h2> ';
+				$breadcrumb .= sprintf( '<h2 class="trail-browse">%s</h2>', $this->labels['browse'] );
 
-			/* Open the unordered list. */
+			// Open the unordered list.
 			$breadcrumb .= '<ul class="trail-items" itemscope itemtype="http://schema.org/BreadcrumbList">';
 
-			/* Set up variables needed in the loop. */
-			$item_count    = count( $this->items );
-			$item_position = 0;
+			// Add the number of items and item list order schema.
+			$breadcrumb .= sprintf( '<meta name="numberOfItems" content="%d" />', absint( $item_count ) );
+			$breadcrumb .= '<meta name="itemListOrder" content="Ascending" />';
 
-			/* Loop through the items and add them to the list. */
+			// Loop through the items and add them to the list.
 			foreach ( $this->items as $item ) {
 
-				/* Iterate the item position. */
+				// Iterate the item position.
 				++$item_position;
 
-				/* Check if the item is linked. */
+				// Check if the item is linked.
 				preg_match( '/(<a.*?>)(.*?)(<\/a>)/i', $item, $matches );
 
-				/* Wrap the item text with appropriate itemprop. */
+				// Wrap the item text with appropriate itemprop.
 				$item = !empty( $matches ) ? sprintf( '%s<span itemprop="name">%s</span>%s', $matches[1], $matches[2], $matches[3] ) : sprintf( '<span itemprop="name">%s</span>', $item );
 
-				/* Create list item attributes. */
-				$attributes = 'itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"';
+				// Add list item classes.
+				$item_class = 'trail-item';
 
 				if ( 1 === $item_position && 1 < $item_count )
-					$attributes .= ' class="trail-begin"';
+					$item_class .= ' trail-begin';
 
 				elseif ( $item_count === $item_position )
-					$attributes .= ' class="trail-end"';
+					$item_class .= ' trail-end';
 
-				/* Build the meta position HTML. */
+				// Create list item attributes.
+				$attributes = 'itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem" class="' . $item_class . '"';
+
+				// Build the meta position HTML.
 				$meta = sprintf( '<meta itemprop="position" content="%s" />', absint( $item_position ) );
 
-				/* Build the list item. */
+				// Build the list item.
 				$breadcrumb .= sprintf( '<li %s>%s%s</li>', $attributes, $item, $meta );
 			}
 
-			/* Close the unordered list. */
+			// Close the unordered list.
 			$breadcrumb .= '</ul>';
 
-			/* If $after was set, wrap it in a container. */
-			$breadcrumb .= ( !empty( $this->args['after'] ) ? "\n\t\t\t" . ' <span class="trail-after">' . $this->args['after'] . '</span>' : '' );
-
-			/* Close the breadcrumb trail containers. */
-			$breadcrumb .= "\n\t\t" . '</' . tag_escape( $this->args['container'] ) . '>';
+			// Wrap the breadcrumb trail.
+			$breadcrumb = sprintf(
+				'<%1$s role="navigation" aria-label="%2$s" class="breadcrumb-trail breadcrumbs" itemprop="breadcrumb">%3$s%4$s%5$s</%1$s>',
+				tag_escape( $this->args['container'] ),
+				esc_attr( $this->labels['aria_label'] ),
+				$this->args['before'],
+				$breadcrumb,
+				$this->args['after']
+			);
 		}
 
-		/* Allow developers to filter the breadcrumb trail HTML. */
+		// Allow developers to filter the breadcrumb trail HTML.
 		$breadcrumb = apply_filters( 'breadcrumb_trail', $breadcrumb, $this->args );
 
-		if ( true === $this->args['echo'] )
-			echo $breadcrumb;
-		else
+		if ( false === $this->args['echo'] )
 			return $breadcrumb;
+
+		echo $breadcrumb;
 	}
 
+	/* ====== Protected Methods ====== */
+
 	/**
-	 * Returns an array of the default labels.
+	 * Sets the labels property.  Parses the inputted labels array with the defaults.
 	 *
-	 * @since  0.6.0
-	 * @access public
-	 * @return array
+	 * @since  1.0.0
+	 * @access protected
+	 * @return void
 	 */
-	public function default_labels() {
+	protected function set_labels() {
 
-		$labels = array(
-			'browse'              => esc_html__( 'Browse:',                             'hybrid-core' ),
-			'home'                => esc_html__( 'Home',                                'hybrid-core' ),
-			'error_404'           => esc_html__( '404 Not Found',                       'hybrid-core' ),
-			'archives'            => esc_html__( 'Archives',                            'hybrid-core' ),
-			/* Translators: %s is the search query. The HTML entities are opening and closing curly quotes. */
-			'search'              => esc_html__( 'Search results for &#8220;%s&#8221;', 'hybrid-core' ),
-			/* Translators: %s is the page number. */
-			'paged'               => esc_html__( 'Page %s',                             'hybrid-core' ),
-			/* Translators: Minute archive title. %s is the minute time format. */
-			'archive_minute'      => esc_html__( 'Minute %s',                           'hybrid-core' ),
-			/* Translators: Weekly archive title. %s is the week date format. */
-			'archive_week'        => esc_html__( 'Week %s',                             'hybrid-core' ),
+		$defaults = array(
+			'browse'              => esc_html__( 'Browse:',                               'hybrid-core' ),
+			'aria_label'          => esc_attr_x( 'Breadcrumbs', 'breadcrumbs aria label', 'hybrid-core' ),
+			'home'                => esc_html__( 'Home',                                  'hybrid-core' ),
+			'error_404'           => esc_html__( '404 Not Found',                         'hybrid-core' ),
+			'archives'            => esc_html__( 'Archives',                              'hybrid-core' ),
+			// Translators: %s is the search query. The HTML entities are opening and closing curly quotes.
+			'search'              => esc_html__( 'Search results for &#8220;%s&#8221;',   'hybrid-core' ),
+			// Translators: %s is the page number.
+			'paged'               => esc_html__( 'Page %s',                               'hybrid-core' ),
+			// Translators: Minute archive title. %s is the minute time format.
+			'archive_minute'      => esc_html__( 'Minute %s',                             'hybrid-core' ),
+			// Translators: Weekly archive title. %s is the week date format.
+			'archive_week'        => esc_html__( 'Week %s',                               'hybrid-core' ),
 
-			/* "%s" is replaced with the translated date/time format. */
+			// "%s" is replaced with the translated date/time format.
 			'archive_minute_hour' => '%s',
 			'archive_hour'        => '%s',
 			'archive_day'         => '%s',
@@ -217,204 +263,224 @@ class Breadcrumb_Trail {
 			'archive_year'        => '%s',
 		);
 
-		return $labels;
+		$this->labels = apply_filters( 'breadcrumb_trail_labels', wp_parse_args( $this->args['labels'], $defaults ) );
+	}
+
+	/**
+	 * Sets the `$post_taxonomy` property.  This is an array of post types (key) and taxonomies (value).
+	 * The taxonomy's terms are shown on the singular post view if set.
+	 *
+	 * @since  1.0.0
+	 * @access protected
+	 * @return void
+	 */
+	protected function set_post_taxonomy() {
+
+		$defaults = array();
+
+		// If post permalink is set to `%postname%`, use the `category` taxonomy.
+		if ( '%postname%' === trim( get_option( 'permalink_structure' ), '/' ) )
+			$defaults['post'] = 'category';
+
+		$this->post_taxonomy = apply_filters( 'breadcrumb_trail_post_taxonomy', wp_parse_args( $this->args['post_taxonomy'], $defaults ) );
 	}
 
 	/**
 	 * Runs through the various WordPress conditional tags to check the current page being viewed.  Once
-	 * a condition is met, a specific method is launched to add items to the $items array.
+	 * a condition is met, a specific method is launched to add items to the `$items` array.
 	 *
-	 * @since  0.6.0
-	 * @access public
+	 * @since  1.0.0
+	 * @access protected
 	 * @return void
 	 */
-	public function do_trail_items() {
+	protected function add_items() {
 
-		/* If viewing the front page. */
+		// If viewing the front page.
 		if ( is_front_page() ) {
-			$this->do_front_page_items();
+			$this->add_front_page_items();
 		}
 
-		/* If not viewing the front page. */
+		// If not viewing the front page.
 		else {
 
-			/* Add the network and site home links. */
-			$this->do_network_home_link();
-			$this->do_site_home_link();
+			// Add the network and site home links.
+			$this->add_network_home_link();
+			$this->add_site_home_link();
 
-			/* If viewing the home/blog page. */
+			// If viewing the home/blog page.
 			if ( is_home() ) {
-				$this->do_posts_page_items();
+				$this->add_posts_page_items();
 			}
 
-			/* If viewing a single post. */
+			// If viewing a single post.
 			elseif ( is_singular() ) {
-				$this->do_singular_items();
+				$this->add_singular_items();
 			}
 
-			/* If viewing an archive page. */
+			// If viewing an archive page.
 			elseif ( is_archive() ) {
 
 				if ( is_post_type_archive() )
-					$this->do_post_type_archive_items();
+					$this->add_post_type_archive_items();
 
 				elseif ( is_category() || is_tag() || is_tax() )
-					$this->do_term_archive_items();
+					$this->add_term_archive_items();
 
 				elseif ( is_author() )
-					$this->do_user_archive_items();
+					$this->add_user_archive_items();
 
 				elseif ( get_query_var( 'minute' ) && get_query_var( 'hour' ) )
-					$this->do_minute_hour_archive_items();
+					$this->add_minute_hour_archive_items();
 
 				elseif ( get_query_var( 'minute' ) )
-					$this->do_minute_archive_items();
+					$this->add_minute_archive_items();
 
 				elseif ( get_query_var( 'hour' ) )
-					$this->do_hour_archive_items();
+					$this->add_hour_archive_items();
 
 				elseif ( is_day() )
-					$this->do_day_archive_items();
+					$this->add_day_archive_items();
 
 				elseif ( get_query_var( 'w' ) )
-					$this->do_week_archive_items();
+					$this->add_week_archive_items();
 
 				elseif ( is_month() )
-					$this->do_month_archive_items();
+					$this->add_month_archive_items();
 
 				elseif ( is_year() )
-					$this->do_year_archive_items();
+					$this->add_year_archive_items();
 
 				else
-					$this->do_default_archive_items();
+					$this->add_default_archive_items();
 			}
 
-			/* If viewing a search results page. */
+			// If viewing a search results page.
 			elseif ( is_search() ) {
-				$this->do_search_items();
+				$this->add_search_items();
 			}
 
-			/* If viewing the 404 page. */
+			// If viewing the 404 page.
 			elseif ( is_404() ) {
-				$this->do_404_items();
+				$this->add_404_items();
 			}
 		}
 
-		/* Add paged items if they exist. */
-		$this->do_paged_items();
+		// Add paged items if they exist.
+		$this->add_paged_items();
 
-		/* Allow developers to overwrite the items for the breadcrumb trail. */
-		$this->items = apply_filters( 'breadcrumb_trail_items', $this->items, $this->args );
+		// Allow developers to overwrite the items for the breadcrumb trail.
+		$this->items = array_unique( apply_filters( 'breadcrumb_trail_items', $this->items, $this->args ) );
 	}
 
 	/**
 	 * Gets front items based on $wp_rewrite->front.
 	 *
-	 * @since  0.6.0
-	 * @access public
+	 * @since  1.0.0
+	 * @access protected
 	 * @return void
 	 */
-	public function do_rewrite_front_items() {
+	protected function add_rewrite_front_items() {
 		global $wp_rewrite;
 
 		if ( $wp_rewrite->front )
-			$this->do_path_parents( $wp_rewrite->front );
+			$this->add_path_parents( $wp_rewrite->front );
 	}
 
 	/**
 	 * Adds the page/paged number to the items array.
 	 *
-	 * @since  0.6.0
-	 * @access public
+	 * @since  1.0.0
+	 * @access protected
 	 * @return void
 	 */
-	public function do_paged_items() {
+	protected function add_paged_items() {
 
-		/* If viewing a paged singular post. */
+		// If viewing a paged singular post.
 		if ( is_singular() && 1 < get_query_var( 'page' ) && true === $this->args['show_title'] )
-			$this->items[] = sprintf( $this->args['labels']['paged'], number_format_i18n( absint( get_query_var( 'page' ) ) ) );
+			$this->items[] = sprintf( $this->labels['paged'], number_format_i18n( absint( get_query_var( 'page' ) ) ) );
 
-		/* If viewing a paged archive-type page. */
+		// If viewing a paged archive-type page.
 		elseif ( is_paged() && true === $this->args['show_title'] )
-			$this->items[] = sprintf( $this->args['labels']['paged'], number_format_i18n( absint( get_query_var( 'paged' ) ) ) );
+			$this->items[] = sprintf( $this->labels['paged'], number_format_i18n( absint( get_query_var( 'paged' ) ) ) );
 	}
 
 	/**
 	 * Adds the network (all sites) home page link to the items array.
 	 *
-	 * @since  0.6.0
-	 * @access public
+	 * @since  1.0.0
+	 * @access protected
 	 * @return void
 	 */
-	public function do_network_home_link() {
+	protected function add_network_home_link() {
+
 		if ( is_multisite() && !is_main_site() && true === $this->args['network'] )
-			$this->items[] = '<a href="' . esc_url( network_home_url() ) . '" rel="home">' . $this->args['labels']['home'] . '</a>';
+			$this->items[] = sprintf( '<a href="%s" rel="home">%s</a>', esc_url( network_home_url() ), $this->labels['home'] );
 	}
 
 	/**
 	 * Adds the current site's home page link to the items array.
 	 *
-	 * @since  0.6.0
-	 * @access public
+	 * @since  1.0.0
+	 * @access protected
 	 * @return void
 	 */
-	public function do_site_home_link() {
-		$label = ( is_multisite() && !is_main_site() && true === $this->args['network'] ) ? get_bloginfo( 'name' ) : $this->args['labels']['home'];
-		$rel   = ( is_multisite() && !is_main_site() && true === $this->args['network'] ) ? '' : ' rel="home"';
-		$this->items[] = '<a href="' . esc_url( home_url() ) . '"' . $rel .'>' . $label . '</a>';
+	protected function add_site_home_link() {
+
+		$network = is_multisite() && !is_main_site() && true === $this->args['network'];
+		$label   = $network ? get_bloginfo( 'name' ) : $this->labels['home'];
+		$rel     = $network ? '' : ' rel="home"';
+
+		$this->items[] = sprintf( '<a href="%s"%s>%s</a>', esc_url( home_url() ), $rel, $label );
 	}
 
 	/**
 	 * Adds items for the front page to the items array.
 	 *
-	 * @since  0.6.0
-	 * @access public
+	 * @since  1.0.0
+	 * @access protected
 	 * @return void
 	 */
-	public function do_front_page_items() {
+	protected function add_front_page_items() {
 
-		/* Only show front items if the 'show_on_front' argument is set to 'true'. */
+		// Only show front items if the 'show_on_front' argument is set to 'true'.
 		if ( true === $this->args['show_on_front'] || is_paged() || ( is_singular() && 1 < get_query_var( 'page' ) ) ) {
 
-			/* If on a paged view, add the home link items. */
-			if ( is_paged() ) {
-				$this->do_network_home_link();
-				$this->do_site_home_link();
-			}
+			// Add network home link.
+			$this->add_network_home_link();
 
-			/* If on the main front page, add the network home link item and the home item. */
-			else {
-				$this->do_network_home_link();
+			// If on a paged view, add the site home link.
+			if ( is_paged() )
+				$this->add_site_home_link();
 
-				if ( true === $this->args['show_title'] )
-					$this->items[] = ( is_multisite() && true === $this->args['network'] ) ? get_bloginfo( 'name' ) : $this->args['labels']['home'];
-			}
+			// If on the main front page, add the network home title.
+			elseif ( true === $this->args['show_title'] )
+				$this->items[] = is_multisite() && true === $this->args['network'] ? get_bloginfo( 'name' ) : $this->labels['home'];
 		}
 	}
 
 	/**
 	 * Adds items for the posts page (i.e., is_home()) to the items array.
 	 *
-	 * @since  0.6.0
-	 * @access public
+	 * @since  1.0.0
+	 * @access protected
 	 * @return void
 	 */
-	public function do_posts_page_items() {
+	protected function add_posts_page_items() {
 
-		/* Get the post ID and post. */
+		// Get the post ID and post.
 		$post_id = get_queried_object_id();
 		$post    = get_post( $post_id );
 
-		/* If the post has parents, add them to the trail. */
+		// If the post has parents, add them to the trail.
 		if ( 0 < $post->post_parent )
-			$this->do_post_parents( $post->post_parent );
+			$this->add_post_parents( $post->post_parent );
 
-		/* Get the page title. */
+		// Get the page title.
 		$title = get_the_title( $post_id );
 
-		/* Add the posts page item. */
+		// Add the posts page item.
 		if ( is_paged() )
-			$this->items[]  = '<a href="' . esc_url( get_permalink( $post_id ) ) . '">' . $title . '</a>';
+			$this->items[] = sprintf( '<a href="%s">%s</a>', esc_url( get_permalink( $post_id ) ), $title );
 
 		elseif ( $title && true === $this->args['show_title'] )
 			$this->items[] = $title;
@@ -423,32 +489,33 @@ class Breadcrumb_Trail {
 	/**
 	 * Adds singular post items to the items array.
 	 *
-	 * @since  0.6.0
-	 * @access public
+	 * @since  1.0.0
+	 * @access protected
 	 * @return void
 	 */
-	public function do_singular_items() {
+	protected function add_singular_items() {
 
-		/* Get the queried post. */
+		// Get the queried post.
 		$post    = get_queried_object();
 		$post_id = get_queried_object_id();
 
-		/* If the post has a parent, follow the parent trail. */
+		// If the post has a parent, follow the parent trail.
 		if ( 0 < $post->post_parent )
-			$this->do_post_parents( $post->post_parent );
+			$this->add_post_parents( $post->post_parent );
 
-		/* If the post doesn't have a parent, get its hierarchy based off the post type. */
+		// If the post doesn't have a parent, get its hierarchy based off the post type.
 		else
-			$this->do_post_hierarchy( $post_id );
+			$this->add_post_hierarchy( $post_id );
 
-		/* Display terms for specific post type taxonomy if requested. */
-		$this->do_post_terms( $post_id );
+		// Display terms for specific post type taxonomy if requested.
+		if ( !empty( $this->post_taxonomy[ $post->post_type ] ) )
+			$this->add_post_terms( $post_id, $this->post_taxonomy[ $post->post_type ] );
 
-		/* End with the post title. */
+		// End with the post title.
 		if ( $post_title = single_post_title( '', false ) ) {
 
 			if ( 1 < get_query_var( 'page' ) || is_paged() )
-				$this->items[] = '<a href="' . esc_url( get_permalink( $post_id ) ) . '">' . $post_title . '</a>';
+				$this->items[] = sprintf( '<a href="%s">%s</a>', esc_url( get_permalink( $post_id ) ), $post_title );
 
 			elseif ( true === $this->args['show_title'] )
 				$this->items[] = $post_title;
@@ -456,110 +523,467 @@ class Breadcrumb_Trail {
 	}
 
 	/**
-	 * Adds a specific post's parents to the items array.
+	 * Adds the items to the trail items array for taxonomy term archives.
 	 *
-	 * @since  0.6.0
-	 * @access public
-	 * @param  int    $post_id The ID of the post to get the parents of.
+	 * @since  1.0.0
+	 * @access protected
+	 * @global object $wp_rewrite
 	 * @return void
 	 */
-	public function do_post_parents( $post_id ) {
+	protected function add_term_archive_items() {
+		global $wp_rewrite;
+
+		// Get some taxonomy and term variables.
+		$term           = get_queried_object();
+		$taxonomy       = get_taxonomy( $term->taxonomy );
+		$done_post_type = false;
+
+		// If there are rewrite rules for the taxonomy.
+		if ( false !== $taxonomy->rewrite ) {
+
+			// If 'with_front' is true, dd $wp_rewrite->front to the trail.
+			if ( $taxonomy->rewrite['with_front'] && $wp_rewrite->front )
+				$this->add_rewrite_front_items();
+
+			// Get parent pages by path if they exist.
+			$this->add_path_parents( $taxonomy->rewrite['slug'] );
+
+			// Add post type archive if its 'has_archive' matches the taxonomy rewrite 'slug'.
+			if ( $taxonomy->rewrite['slug'] ) {
+
+				$slug = trim( $taxonomy->rewrite['slug'], '/' );
+
+				// Deals with the situation if the slug has a '/' between multiple
+				// strings. For example, "movies/genres" where "movies" is the post
+				// type archive.
+				$matches = explode( '/', $slug );
+
+				// If matches are found for the path.
+				if ( isset( $matches ) ) {
+
+					// Reverse the array of matches to search for posts in the proper order.
+					$matches = array_reverse( $matches );
+
+					// Loop through each of the path matches.
+					foreach ( $matches as $match ) {
+
+						// If a match is found.
+						$slug = $match;
+
+						// Get public post types that match the rewrite slug.
+						$post_types = $this->get_post_types_by_slug( $match );
+
+						if ( !empty( $post_types ) ) {
+
+							$post_type_object = $post_types[0];
+
+							// Add support for a non-standard label of 'archive_title' (special use case).
+							$label = !empty( $post_type_object->labels->archive_title ) ? $post_type_object->labels->archive_title : $post_type_object->labels->name;
+
+							// Core filter hook.
+							$label = apply_filters( 'post_type_archive_title', $label, $post_type_object->name );
+
+							// Add the post type archive link to the trail.
+							$this->items[] = sprintf( '<a href="%s">%s</a>', esc_url( get_post_type_archive_link( $post_type_object->name ) ), $label );
+
+							$done_post_type = true;
+
+							// Break out of the loop.
+							break;
+						}
+					}
+				}
+			}
+		}
+
+		// If there's a single post type for the taxonomy, use it.
+		if ( false === $done_post_type && 1 === count( $taxonomy->object_type ) && post_type_exists( $taxonomy->object_type[0] ) ) {
+
+			// If the post type is 'post'.
+			if ( 'post' === $taxonomy->object_type[0] ) {
+				$post_id = get_option( 'page_for_posts' );
+
+				if ( 'posts' !== get_option( 'show_on_front' ) && 0 < $post_id )
+					$this->items[] = sprintf( '<a href="%s">%s</a>', esc_url( get_permalink( $post_id ) ), get_the_title( $post_id ) );
+
+			// If the post type is not 'post'.
+			} else {
+				$post_type_object = get_post_type_object( $taxonomy->object_type[0] );
+
+				$label = !empty( $post_type_object->labels->archive_title ) ? $post_type_object->labels->archive_title : $post_type_object->labels->name;
+
+				// Core filter hook.
+				$label = apply_filters( 'post_type_archive_title', $label, $post_type_object->name );
+
+				$this->items[] = sprintf( '<a href="%s">%s</a>', esc_url( get_post_type_archive_link( $post_type_object->name ) ), $label );
+			}
+		}
+
+		// If the taxonomy is hierarchical, list its parent terms.
+		if ( is_taxonomy_hierarchical( $term->taxonomy ) && $term->parent )
+			$this->add_term_parents( $term->parent, $term->taxonomy );
+
+		// Add the term name to the trail end.
+		if ( is_paged() )
+			$this->items[] = sprintf( '<a href="%s">%s</a>', esc_url( get_term_link( $term, $term->taxonomy ) ), single_term_title( '', false ) );
+
+		elseif ( true === $this->args['show_title'] )
+			$this->items[] = single_term_title( '', false );
+	}
+
+	/**
+	 * Adds the items to the trail items array for post type archives.
+	 *
+	 * @since  1.0.0
+	 * @access protected
+	 * @return void
+	 */
+	protected function add_post_type_archive_items() {
+
+		// Get the post type object.
+		$post_type_object = get_post_type_object( get_query_var( 'post_type' ) );
+
+		if ( false !== $post_type_object->rewrite ) {
+
+			// If 'with_front' is true, add $wp_rewrite->front to the trail.
+			if ( $post_type_object->rewrite['with_front'] )
+				$this->add_rewrite_front_items();
+
+			// If there's a rewrite slug, check for parents.
+			if ( !empty( $post_type_object->rewrite['slug'] ) )
+				$this->add_path_parents( $post_type_object->rewrite['slug'] );
+		}
+
+		// Add the post type [plural] name to the trail end.
+		if ( is_paged() )
+			$this->items[] = sprintf( '<a href="%s">%s</a>', esc_url( get_post_type_archive_link( $post_type_object->name ) ), post_type_archive_title( '', false ) );
+
+		elseif ( true === $this->args['show_title'] )
+			$this->items[] = post_type_archive_title( '', false );
+	}
+
+	/**
+	 * Adds the items to the trail items array for user (author) archives.
+	 *
+	 * @since  1.0.0
+	 * @access protected
+	 * @global object $wp_rewrite
+	 * @return void
+	 */
+	protected function add_user_archive_items() {
+		global $wp_rewrite;
+
+		// Add $wp_rewrite->front to the trail.
+		$this->add_rewrite_front_items();
+
+		// Get the user ID.
+		$user_id = get_query_var( 'author' );
+
+		// If $author_base exists, check for parent pages.
+		if ( !empty( $wp_rewrite->author_base ) )
+			$this->add_path_parents( $wp_rewrite->author_base );
+
+		// Add the author's display name to the trail end.
+		if ( is_paged() )
+			$this->items[] = sprintf( '<a href="%s">%s</a>', esc_url( get_author_posts_url( $user_id ) ), get_the_author_meta( 'display_name', $user_id ) );
+
+		elseif ( true === $this->args['show_title'] )
+			$this->items[] = get_the_author_meta( 'display_name', $user_id );
+	}
+
+	/**
+	 * Adds the items to the trail items array for minute + hour archives.
+	 *
+	 * @since  1.0.0
+	 * @access protected
+	 * @return void
+	 */
+	protected function add_minute_hour_archive_items() {
+
+		// Add $wp_rewrite->front to the trail.
+		$this->add_rewrite_front_items();
+
+		// Add the minute + hour item.
+		if ( true === $this->args['show_title'] )
+			$this->items[] = sprintf( $this->labels['archive_minute_hour'], get_the_time( esc_html_x( 'g:i a', 'minute and hour archives time format', 'hybrid-core' ) ) );
+	}
+
+	/**
+	 * Adds the items to the trail items array for minute archives.
+	 *
+	 * @since  1.0.0
+	 * @access protected
+	 * @return void
+	 */
+	protected function add_minute_archive_items() {
+
+		// Add $wp_rewrite->front to the trail.
+		$this->add_rewrite_front_items();
+
+		// Add the minute item.
+		if ( true === $this->args['show_title'] )
+			$this->items[] = sprintf( $this->labels['archive_minute'], get_the_time( esc_html_x( 'i', 'minute archives time format', 'hybrid-core' ) ) );
+	}
+
+	/**
+	 * Adds the items to the trail items array for hour archives.
+	 *
+	 * @since  1.0.0
+	 * @access protected
+	 * @return void
+	 */
+	protected function add_hour_archive_items() {
+
+		// Add $wp_rewrite->front to the trail.
+		$this->add_rewrite_front_items();
+
+		// Add the hour item.
+		if ( true === $this->args['show_title'] )
+			$this->items[] = sprintf( $this->labels['archive_hour'], get_the_time( esc_html_x( 'g a', 'hour archives time format', 'hybrid-core' ) ) );
+	}
+
+	/**
+	 * Adds the items to the trail items array for day archives.
+	 *
+	 * @since  1.0.0
+	 * @access protected
+	 * @return void
+	 */
+	protected function add_day_archive_items() {
+
+		// Add $wp_rewrite->front to the trail.
+		$this->add_rewrite_front_items();
+
+		// Get year, month, and day.
+		$year  = sprintf( $this->labels['archive_year'],  get_the_time( esc_html_x( 'Y', 'yearly archives date format',  'hybrid-core' ) ) );
+		$month = sprintf( $this->labels['archive_month'], get_the_time( esc_html_x( 'F', 'monthly archives date format', 'hybrid-core' ) ) );
+		$day   = sprintf( $this->labels['archive_day'],   get_the_time( esc_html_x( 'j', 'daily archives date format',   'hybrid-core' ) ) );
+
+		// Add the year and month items.
+		$this->items[] = sprintf( '<a href="%s">%s</a>', esc_url( get_year_link( get_the_time( 'Y' ) ) ), $year );
+		$this->items[] = sprintf( '<a href="%s">%s</a>', esc_url( get_month_link( get_the_time( 'Y' ), get_the_time( 'm' ) ) ), $month );
+
+		// Add the day item.
+		if ( is_paged() )
+			$this->items[] = sprintf( '<a href="%s">%s</a>', esc_url( get_day_link( get_the_time( 'Y' ) ), get_the_time( 'm' ), get_the_time( 'd' ) ), $day );
+
+		elseif ( true === $this->args['show_title'] )
+			$this->items[] = $day;
+	}
+
+	/**
+	 * Adds the items to the trail items array for week archives.
+	 *
+	 * @since  1.0.0
+	 * @access protected
+	 * @return void
+	 */
+	protected function add_week_archive_items() {
+
+		// Add $wp_rewrite->front to the trail.
+		$this->add_rewrite_front_items();
+
+		// Get the year and week.
+		$year = sprintf( $this->labels['archive_year'],  get_the_time( esc_html_x( 'Y', 'yearly archives date format', 'hybrid-core' ) ) );
+		$week = sprintf( $this->labels['archive_week'],  get_the_time( esc_html_x( 'W', 'weekly archives date format', 'hybrid-core' ) ) );
+
+		// Add the year item.
+		$this->items[] = sprintf( '<a href="%s">%s</a>', esc_url( get_year_link( get_the_time( 'Y' ) ) ), $year );
+
+		// Add the week item.
+		if ( is_paged() )
+			$this->items[] = esc_url( get_archives_link( add_query_arg( array( 'm' => get_the_time( 'Y' ), 'w' => get_the_time( 'W' ) ), home_url() ), $week, false ) );
+
+		elseif ( true === $this->args['show_title'] )
+			$this->items[] = $week;
+	}
+
+	/**
+	 * Adds the items to the trail items array for month archives.
+	 *
+	 * @since  1.0.0
+	 * @access protected
+	 * @return void
+	 */
+	protected function add_month_archive_items() {
+
+		// Add $wp_rewrite->front to the trail.
+		$this->add_rewrite_front_items();
+
+		// Get the year and month.
+		$year  = sprintf( $this->labels['archive_year'],  get_the_time( esc_html_x( 'Y', 'yearly archives date format',  'hybrid-core' ) ) );
+		$month = sprintf( $this->labels['archive_month'], get_the_time( esc_html_x( 'F', 'monthly archives date format', 'hybrid-core' ) ) );
+
+		// Add the year item.
+		$this->items[] = sprintf( '<a href="%s">%s</a>', esc_url( get_year_link( get_the_time( 'Y' ) ) ), $year );
+
+		// Add the month item.
+		if ( is_paged() )
+			$this->items[] = sprintf( '<a href="%s">%s</a>', esc_url( get_month_link( get_the_time( 'Y' ), get_the_time( 'm' ) ) ), $month );
+
+		elseif ( true === $this->args['show_title'] )
+			$this->items[] = $month;
+	}
+
+	/**
+	 * Adds the items to the trail items array for year archives.
+	 *
+	 * @since  1.0.0
+	 * @access protected
+	 * @return void
+	 */
+	protected function add_year_archive_items() {
+
+		// Add $wp_rewrite->front to the trail.
+		$this->add_rewrite_front_items();
+
+		// Get the year.
+		$year  = sprintf( $this->labels['archive_year'],  get_the_time( esc_html_x( 'Y', 'yearly archives date format',  'hybrid-core' ) ) );
+
+		// Add the year item.
+		if ( is_paged() )
+			$this->items[] = sprintf( '<a href="%s">%s</a>', esc_url( get_year_link( get_the_time( 'Y' ) ) ), $year );
+
+		elseif ( true === $this->args['show_title'] )
+			$this->items[] = $year;
+	}
+
+	/**
+	 * Adds the items to the trail items array for archives that don't have a more specific method
+	 * defined in this class.
+	 *
+	 * @since  1.0.0
+	 * @access protected
+	 * @return void
+	 */
+	protected function add_default_archive_items() {
+
+		// If this is a date-/time-based archive, add $wp_rewrite->front to the trail.
+		if ( is_date() || is_time() )
+			$this->add_rewrite_front_items();
+
+		if ( true === $this->args['show_title'] )
+			$this->items[] = $this->labels['archives'];
+	}
+
+	/**
+	 * Adds the items to the trail items array for search results.
+	 *
+	 * @since  1.0.0
+	 * @access protected
+	 * @return void
+	 */
+	protected function add_search_items() {
+
+		if ( is_paged() )
+			$this->items[] = sprintf( '<a href="%s">%s</a>', esc_url( get_search_link() ), sprintf( $this->labels['search'], get_search_query() ) );
+
+		elseif ( true === $this->args['show_title'] )
+			$this->items[] = sprintf( $this->labels['search'], get_search_query() );
+	}
+
+	/**
+	 * Adds the items to the trail items array for 404 pages.
+	 *
+	 * @since  1.0.0
+	 * @access protected
+	 * @return void
+	 */
+	protected function add_404_items() {
+
+		if ( true === $this->args['show_title'] )
+			$this->items[] = $this->labels['error_404'];
+	}
+
+	/**
+	 * Adds a specific post's parents to the items array.
+	 *
+	 * @since  1.0.0
+	 * @access protected
+	 * @param  int    $post_id
+	 * @return void
+	 */
+	protected function add_post_parents( $post_id ) {
 		$parents = array();
 
 		while ( $post_id ) {
 
-			/* Get the post by ID. */
+			// Get the post by ID.
 			$post = get_post( $post_id );
 
-			/* If we hit a page that's set as the front page, bail. */
+			// If we hit a page that's set as the front page, bail.
 			if ( 'page' == $post->post_type && 'page' == get_option( 'show_on_front' ) && $post_id == get_option( 'page_on_front' ) )
 				break;
 
-			/* Add the formatted post link to the array of parents. */
-			$parents[] = '<a href="' . esc_url( get_permalink( $post_id ) ) . '">' . get_the_title( $post_id ) . '</a>';
+			// Add the formatted post link to the array of parents.
+			$parents[] = sprintf( '<a href="%s">%s</a>', esc_url( get_permalink( $post_id ) ), get_the_title( $post_id ) );
 
-			/* If there's no longer a post parent, break out of the loop. */
+			// If there's no longer a post parent, break out of the loop.
 			if ( 0 >= $post->post_parent )
 				break;
 
-			/* Change the post ID to the parent post to continue looping. */
+			// Change the post ID to the parent post to continue looping.
 			$post_id = $post->post_parent;
 		}
 
-		/* Get the post hierarchy based off the final parent post. */
-		$this->do_post_hierarchy( $post_id );
+		// Get the post hierarchy based off the final parent post.
+		$this->add_post_hierarchy( $post_id );
 
-		/* Merge the parent items into the items array. */
+		// Display terms for specific post type taxonomy if requested.
+		if ( !empty( $this->post_taxonomy[ $post->post_type ] ) )
+			$this->add_post_terms( $post_id, $this->post_taxonomy[ $post->post_type ] );
+
+		// Merge the parent items into the items array.
 		$this->items = array_merge( $this->items, array_reverse( $parents ) );
-	}
-
-	/**
-	 * Adds a post's terms from a specific taxonomy to the items array.
-	 *
-	 * @since  0.6.0
-	 * @access public
-	 * @param  int    $post_id The ID of the post to get the terms for.
-	 * @return void
-	 */
-	public function do_post_terms( $post_id ) {
-
-		/* Get the post type. */
-		$post_type = get_post_type( $post_id );
-
-		/* Add the terms of the taxonomy for this post. */
-		if ( !empty( $this->args['post_taxonomy'][ $post_type ] ) ) {
-
-			$terms = get_the_term_list( $post_id, $this->args['post_taxonomy'][ $post_type ], '', ', ', '' );
-
-			if ( $terms && !is_wp_error( $terms ) )
-				$this->items[] = $terms;
-		}
 	}
 
 	/**
 	 * Adds a specific post's hierarchy to the items array.  The hierarchy is determined by post type's
 	 * rewrite arguments and whether it has an archive page.
 	 *
-	 * @since  0.6.0
-	 * @access public
-	 * @param  int    $post_id The ID of the post to get the hierarchy for.
+	 * @since  1.0.0
+	 * @access protected
+	 * @param  int    $post_id
 	 * @return void
 	 */
-	public function do_post_hierarchy( $post_id ) {
+	protected function add_post_hierarchy( $post_id ) {
 
-		/* Get the post type. */
+		// Get the post type.
 		$post_type        = get_post_type( $post_id );
 		$post_type_object = get_post_type_object( $post_type );
 
-		/* If this is the 'post' post type, get the rewrite front items and map the rewrite tags. */
+		// If this is the 'post' post type, get the rewrite front items and map the rewrite tags.
 		if ( 'post' === $post_type ) {
 
-			/* Add $wp_rewrite->front to the trail. */
-			$this->do_rewrite_front_items();
+			// Add $wp_rewrite->front to the trail.
+			$this->add_rewrite_front_items();
 
-			/* Map the rewrite tags. */
+			// Map the rewrite tags.
 			$this->map_rewrite_tags( $post_id, get_option( 'permalink_structure' ) );
 		}
 
-		/* If the post type has rewrite rules. */
+		// If the post type has rewrite rules.
 		elseif ( false !== $post_type_object->rewrite ) {
 
-			/* If 'with_front' is true, add $wp_rewrite->front to the trail. */
+			// If 'with_front' is true, add $wp_rewrite->front to the trail.
 			if ( $post_type_object->rewrite['with_front'] )
-				$this->do_rewrite_front_items();
+				$this->add_rewrite_front_items();
 
-			/* If there's a path, check for parents. */
+			// If there's a path, check for parents.
 			if ( !empty( $post_type_object->rewrite['slug'] ) )
-				$this->do_path_parents( $post_type_object->rewrite['slug'] );
+				$this->add_path_parents( $post_type_object->rewrite['slug'] );
 		}
 
-		/* If there's an archive page, add it to the trail. */
-		if ( !empty( $post_type_object->has_archive ) ) {
+		// If there's an archive page, add it to the trail.
+		if ( $post_type_object->has_archive ) {
 
-			/* Add support for a non-standard label of 'archive_title' (special use case). */
+			// Add support for a non-standard label of 'archive_title' (special use case).
 			$label = !empty( $post_type_object->labels->archive_title ) ? $post_type_object->labels->archive_title : $post_type_object->labels->name;
 
-			$this->items[] = '<a href="' . esc_url( get_post_type_archive_link( $post_type ) ) . '">' . $label . '</a>';
+			// Core filter hook.
+			$label = apply_filters( 'post_type_archive_title', $label, $post_type_object->name );
+
+			$this->items[] = sprintf( '<a href="%s">%s</a>', esc_url( get_post_type_archive_link( $post_type ) ), $label );
 		}
 	}
 
@@ -568,11 +992,11 @@ class Breadcrumb_Trail {
 	 * match the 'has_archive' argument when it's set as a string instead of a boolean.
 	 *
 	 * @since  0.6.0
-	 * @access public
+	 * @access protected
 	 * @param  int    $slug  The post type archive slug to search for.
 	 * @return void
 	 */
-	public function get_post_types_by_slug( $slug ) {
+	protected function get_post_types_by_slug( $slug ) {
 
 		$return = array();
 
@@ -588,348 +1012,36 @@ class Breadcrumb_Trail {
 	}
 
 	/**
-	 * Adds the items to the trail items array for taxonomy term archives.
+	 * Adds a post's terms from a specific taxonomy to the items array.
 	 *
-	 * @since  0.6.0
-	 * @access public
-	 * @global object $wp_rewrite
+	 * @since  1.0.0
+	 * @access protected
+	 * @param  int     $post_id  The ID of the post to get the terms for.
+	 * @param  string  $taxonomy The taxonomy to get the terms from.
 	 * @return void
 	 */
-	public function do_term_archive_items() {
-		global $wp_rewrite;
+	protected function add_post_terms( $post_id, $taxonomy ) {
 
-		/* Get some taxonomy and term variables. */
-		$term     = get_queried_object();
-		$taxonomy = get_taxonomy( $term->taxonomy );
+		// Get the post type.
+		$post_type = get_post_type( $post_id );
 
-		/* If there are rewrite rules for the taxonomy. */
-		if ( false !== $taxonomy->rewrite ) {
+		// Get the post categories.
+		$terms = get_the_terms( $post_id, $taxonomy );
 
-			/* If 'with_front' is true, dd $wp_rewrite->front to the trail. */
-			if ( $taxonomy->rewrite['with_front'] && $wp_rewrite->front )
-				$this->do_rewrite_front_items();
+		// Check that categories were returned.
+		if ( $terms ) {
 
-			/* Get parent pages by path if they exist. */
-			$this->do_path_parents( $taxonomy->rewrite['slug'] );
+			// Sort the terms by ID and get the first category.
+			usort( $terms, '_usort_terms_by_ID' );
+			$term = get_term( $terms[0], $taxonomy );
 
-			/* Add post type archive if its 'has_archive' matches the taxonomy rewrite 'slug'. */
-			if ( $taxonomy->rewrite['slug'] ) {
+			// If the category has a parent, add the hierarchy to the trail.
+			if ( 0 < $term->parent )
+				$this->add_term_parents( $term->parent, $taxonomy );
 
-				$slug = trim( $taxonomy->rewrite['slug'], '/' );
-
-				/**
-				 * Deals with the situation if the slug has a '/' between multiple strings. For
-				 * example, "movies/genres" where "movies" is the post type archive.
-				 */
-				$matches = explode( '/', $slug );
-
-				/* If matches are found for the path. */
-				if ( isset( $matches ) ) {
-
-					/* Reverse the array of matches to search for posts in the proper order. */
-					$matches = array_reverse( $matches );
-
-					/* Loop through each of the path matches. */
-					foreach ( $matches as $match ) {
-
-						/* If a match is found. */
-						$slug = $match;
-
-						/* Get public post types that match the rewrite slug. */
-						$post_types = $this->get_post_types_by_slug( $match );
-
-						if ( !empty( $post_types ) ) {
-
-							$post_type_object = $post_types[0];
-
-							/* Add support for a non-standard label of 'archive_title' (special use case). */
-							$label = !empty( $post_type_object->labels->archive_title ) ? $post_type_object->labels->archive_title : $post_type_object->labels->name;
-
-							/* Add the post type archive link to the trail. */
-							$this->items[] = '<a href="' . esc_url( get_post_type_archive_link( $post_type_object->name ) ) . '">' . $label . '</a>';
-
-							/* Break out of the loop. */
-							break;
-						}
-					}
-				}
-			}
+			// Add the category archive link to the trail.
+			$this->items[] = sprintf( '<a href="%s">%s</a>', esc_url( get_term_link( $term, $taxonomy ) ), $term->name );
 		}
-
-		/* If the taxonomy is hierarchical, list its parent terms. */
-		if ( is_taxonomy_hierarchical( $term->taxonomy ) && $term->parent )
-			$this->do_term_parents( $term->parent, $term->taxonomy );
-
-		/* Add the term name to the trail end. */
-		if ( is_paged() )
-			$this->items[] = '<a href="' . esc_url( get_term_link( $term, $term->taxonomy ) ) . '">' . single_term_title( '', false ) . '</a>';
-
-		elseif ( true === $this->args['show_title'] )
-			$this->items[] = single_term_title( '', false );
-	}
-
-	/**
-	 * Adds the items to the trail items array for post type archives.
-	 *
-	 * @since  0.6.0
-	 * @access public
-	 * @return void
-	 */
-	public function do_post_type_archive_items() {
-
-		/* Get the post type object. */
-		$post_type_object = get_post_type_object( get_query_var( 'post_type' ) );
-
-		if ( false !== $post_type_object->rewrite ) {
-
-			/* If 'with_front' is true, add $wp_rewrite->front to the trail. */
-			if ( $post_type_object->rewrite['with_front'] )
-				$this->do_rewrite_front_items();
-
-			/* If there's a rewrite slug, check for parents. */
-			if ( !empty( $post_type_object->rewrite['slug'] ) )
-				$this->do_path_parents( $post_type_object->rewrite['slug'] );
-		}
-
-		/* Add the post type [plural] name to the trail end. */
-		if ( is_paged() )
-			$this->items[] = '<a href="' . esc_url( get_post_type_archive_link( $post_type_object->name ) ) . '">' . post_type_archive_title( '', false ) . '</a>';
-
-		elseif ( true === $this->args['show_title'] )
-			$this->items[] = post_type_archive_title( '', false );
-	}
-
-	/**
-	 * Adds the items to the trail items array for user (author) archives.
-	 *
-	 * @since  0.6.0
-	 * @access public
-	 * @global object $wp_rewrite
-	 * @return void
-	 */
-	public function do_user_archive_items() {
-		global $wp_rewrite;
-
-		/* Add $wp_rewrite->front to the trail. */
-		$this->do_rewrite_front_items();
-
-		/* Get the user ID. */
-		$user_id = get_query_var( 'author' );
-
-		/* If $author_base exists, check for parent pages. */
-		if ( !empty( $wp_rewrite->author_base ) )
-			$this->do_path_parents( $wp_rewrite->author_base );
-
-		/* Add the author's display name to the trail end. */
-		if ( is_paged() )
-			$this->items[] = '<a href="'. esc_url( get_author_posts_url( $user_id ) ) . '">' . get_the_author_meta( 'display_name', $user_id ) . '</a>';
-
-		elseif ( true === $this->args['show_title'] )
-			$this->items[] = get_the_author_meta( 'display_name', $user_id );
-	}
-
-	/**
-	 * Adds the items to the trail items array for minute + hour archives.
-	 *
-	 * @since  0.6.0
-	 * @access public
-	 * @return void
-	 */
-	public function do_minute_hour_archive_items() {
-
-		/* Add $wp_rewrite->front to the trail. */
-		$this->do_rewrite_front_items();
-
-		/* Add the minute + hour item. */
-		if ( true === $this->args['show_title'] )
-			$this->items[] = sprintf( $this->args['labels']['archive_minute_hour'], get_the_time( esc_html_x( 'g:i a', 'minute and hour archives time format', 'hybrid-core' ) ) );
-	}
-
-	/**
-	 * Adds the items to the trail items array for minute archives.
-	 *
-	 * @since  0.6.0
-	 * @access public
-	 * @return void
-	 */
-	public function do_minute_archive_items() {
-
-		/* Add $wp_rewrite->front to the trail. */
-		$this->do_rewrite_front_items();
-
-		/* Add the minute item. */
-		if ( true === $this->args['show_title'] )
-			$this->items[] = sprintf( $this->args['labels']['archive_minute'], get_the_time( esc_html_x( 'i', 'minute archives time format', 'hybrid-core' ) ) );
-	}
-
-	/**
-	 * Adds the items to the trail items array for hour archives.
-	 *
-	 * @since  0.6.0
-	 * @access public
-	 * @return void
-	 */
-	public function do_hour_archive_items() {
-
-		/* Add $wp_rewrite->front to the trail. */
-		$this->do_rewrite_front_items();
-
-		/* Add the hour item. */
-		if ( true === $this->args['show_title'] )
-			$this->items[] = sprintf( $this->args['labels']['archive_hour'], get_the_time( esc_html_x( 'g a', 'hour archives time format', 'hybrid-core' ) ) );
-	}
-
-	/**
-	 * Adds the items to the trail items array for day archives.
-	 *
-	 * @since  0.6.0
-	 * @access public
-	 * @return void
-	 */
-	public function do_day_archive_items() {
-
-		/* Add $wp_rewrite->front to the trail. */
-		$this->do_rewrite_front_items();
-
-		/* Get year, month, and day. */
-		$year  = sprintf( $this->args['labels']['archive_year'],  get_the_time( esc_html_x( 'Y', 'yearly archives date format',  'hybrid-core' ) ) );
-		$month = sprintf( $this->args['labels']['archive_month'], get_the_time( esc_html_x( 'F', 'monthly archives date format', 'hybrid-core' ) ) );
-		$day   = sprintf( $this->args['labels']['archive_day'],   get_the_time( esc_html_x( 'j', 'daily archives date format',   'hybrid-core' ) ) );
-
-		/* Add the year and month items. */
-		$this->items[] = '<a href="' . esc_url( get_year_link( get_the_time( 'Y' ) ) ) . '">' . $year . '</a>';
-		$this->items[] = '<a href="' . esc_url( get_month_link( get_the_time( 'Y' ), get_the_time( 'm' ) ) ) . '">' . $month . '</a>';
-
-		/* Add the day item. */
-		if ( is_paged() )
-			$this->items[] = '<a href="' . esc_url( get_day_link( get_the_time( 'Y' ) ), get_the_time( 'm' ), get_the_time( 'd' ) ) . '">' . $day . '</a>';
-
-		elseif ( true === $this->args['show_title'] )
-			$this->items[] = $day;
-	}
-
-	/**
-	 * Adds the items to the trail items array for week archives.
-	 *
-	 * @since  0.6.0
-	 * @access public
-	 * @return void
-	 */
-	public function do_week_archive_items() {
-
-		/* Add $wp_rewrite->front to the trail. */
-		$this->do_rewrite_front_items();
-
-		/* Get the year and week. */
-		$year = sprintf( $this->args['labels']['archive_year'],  get_the_time( esc_html_x( 'Y', 'yearly archives date format', 'hybrid-core' ) ) );
-		$week = sprintf( $this->args['labels']['archive_week'],  get_the_time( esc_html_x( 'W', 'weekly archives date format', 'hybrid-core' ) ) );
-
-		/* Add the year item. */
-		$this->items[] = '<a href="' . esc_url( get_year_link( get_the_time( 'Y' ) ) ) . '">' . $year . '</a>';
-
-		/* Add the week item. */
-		if ( is_paged() )
-			$this->items[] = esc_url( get_archives_link( add_query_arg( array( 'm' => get_the_time( 'Y' ), 'w' => get_the_time( 'W' ) ), home_url() ), $week, false ) );
-
-		elseif ( true === $this->args['show_title'] )
-			$this->items[] = $week;
-	}
-
-	/**
-	 * Adds the items to the trail items array for month archives.
-	 *
-	 * @since  0.6.0
-	 * @access public
-	 * @return void
-	 */
-	public function do_month_archive_items() {
-
-		/* Add $wp_rewrite->front to the trail. */
-		$this->do_rewrite_front_items();
-
-		/* Get the year and month. */
-		$year  = sprintf( $this->args['labels']['archive_year'],  get_the_time( esc_html_x( 'Y', 'yearly archives date format',  'hybrid-core' ) ) );
-		$month = sprintf( $this->args['labels']['archive_month'], get_the_time( esc_html_x( 'F', 'monthly archives date format', 'hybrid-core' ) ) );
-
-		/* Add the year item. */
-		$this->items[] = '<a href="' . esc_url( get_year_link( get_the_time( 'Y' ) ) ) . '">' . $year . '</a>';
-
-		/* Add the month item. */
-		if ( is_paged() )
-			$this->items[] = '<a href="' . esc_url( get_month_link( get_the_time( 'Y' ), get_the_time( 'm' ) ) ) . '">' . $month . '</a>';
-
-		elseif ( true === $this->args['show_title'] )
-			$this->items[] = $month;
-	}
-
-	/**
-	 * Adds the items to the trail items array for year archives.
-	 *
-	 * @since  0.6.0
-	 * @access public
-	 * @return void
-	 */
-	public function do_year_archive_items() {
-
-		/* Add $wp_rewrite->front to the trail. */
-		$this->do_rewrite_front_items();
-
-		/* Get the year. */
-		$year  = sprintf( $this->args['labels']['archive_year'],  get_the_time( esc_html_x( 'Y', 'yearly archives date format',  'hybrid-core' ) ) );
-
-		/* Add the year item. */
-		if ( is_paged() )
-			$this->items[] = '<a href="' . esc_url( get_year_link( get_the_time( 'Y' ) ) ) . '">' . $year . '</a>';
-
-		elseif ( true === $this->args['show_title'] )
-			$this->items[] = $year;
-	}
-
-	/**
-	 * Adds the items to the trail items array for archives that don't have a more specific method
-	 * defined in this class.
-	 *
-	 * @since  0.6.0
-	 * @access public
-	 * @return void
-	 */
-	public function do_default_archive_items() {
-
-		/* If this is a date-/time-based archive, add $wp_rewrite->front to the trail. */
-		if ( is_date() || is_time() )
-			$this->do_rewrite_front_items();
-
-		if ( true === $this->args['show_title'] )
-			$this->items[] = $this->args['labels']['archives'];
-	}
-
-	/**
-	 * Adds the items to the trail items array for search results.
-	 *
-	 * @since  0.6.0
-	 * @access public
-	 * @return void
-	 */
-	public function do_search_items() {
-
-		if ( is_paged() )
-			$this->items[] = '<a href="' . esc_url( get_search_link() ) . '">' . sprintf( $this->args['labels']['search'], get_search_query() ) . '</a>';
-
-		elseif ( true === $this->args['show_title'] )
-			$this->items[] = sprintf( $this->args['labels']['search'], get_search_query() );
-	}
-
-	/**
-	 * Adds the items to the trail items array for 404 pages.
-	 *
-	 * @since  0.6.0
-	 * @access public
-	 * @return void
-	 */
-	public function do_404_items() {
-
-		if ( true === $this->args['show_title'] )
-			$this->items[] = $this->args['labels']['error_404'];
 	}
 
 	/**
@@ -937,52 +1049,52 @@ class Breadcrumb_Trail {
 	 * post type.  The goal of this function is to create a clear path back to home given what would
 	 * normally be a "ghost" directory.  If any page matches the given path, it'll be added.
 	 *
-	 * @since  0.6.0
-	 * @access public
+	 * @since  1.0.0
+	 * @access protected
 	 * @param  string $path The path (slug) to search for posts by.
 	 * @return void
 	 */
-	function do_path_parents( $path ) {
+	function add_path_parents( $path ) {
 
-		/* Trim '/' off $path in case we just got a simple '/' instead of a real path. */
+		// Trim '/' off $path in case we just got a simple '/' instead of a real path.
 		$path = trim( $path, '/' );
 
-		/* If there's no path, return. */
+		// If there's no path, return.
 		if ( empty( $path ) )
 			return;
 
-		/* Get parent post by the path. */
+		// Get parent post by the path.
 		$post = get_page_by_path( $path );
 
 		if ( !empty( $post ) ) {
-			$this->do_post_parents( $post->ID );
+			$this->add_post_parents( $post->ID );
 		}
 
 		elseif ( is_null( $post ) ) {
 
-			/* Separate post names into separate paths by '/'. */
+			// Separate post names into separate paths by '/'.
 			$path = trim( $path, '/' );
 			preg_match_all( "/\/.*?\z/", $path, $matches );
 
-			/* If matches are found for the path. */
+			// If matches are found for the path.
 			if ( isset( $matches ) ) {
 
-				/* Reverse the array of matches to search for posts in the proper order. */
+				// Reverse the array of matches to search for posts in the proper order.
 				$matches = array_reverse( $matches );
 
-				/* Loop through each of the path matches. */
+				// Loop through each of the path matches.
 				foreach ( $matches as $match ) {
 
-					/* If a match is found. */
+					// If a match is found.
 					if ( isset( $match[0] ) ) {
 
-						/* Get the parent post by the given path. */
+						// Get the parent post by the given path.
 						$path = str_replace( $match[0], '', $path );
 						$post = get_page_by_path( trim( $path, '/' ) );
 
-						/* If a parent post is found, set the $post_id and break out of the loop. */
+						// If a parent post is found, set the $post_id and break out of the loop.
 						if ( !empty( $post ) && 0 < $post->ID ) {
-							$this->do_post_parents( $post->ID );
+							$this->add_post_parents( $post->ID );
 							break;
 						}
 					}
@@ -995,30 +1107,30 @@ class Breadcrumb_Trail {
 	 * Searches for term parents of hierarchical taxonomies.  This function is similar to the WordPress
 	 * function get_category_parents() but handles any type of taxonomy.
 	 *
-	 * @since  0.6.0
+	 * @since  1.0.0
 	 * @param  int    $term_id  ID of the term to get the parents of.
 	 * @param  string $taxonomy Name of the taxonomy for the given term.
 	 * @return void
 	 */
-	function do_term_parents( $term_id, $taxonomy ) {
+	function add_term_parents( $term_id, $taxonomy ) {
 
-		/* Set up some default arrays. */
+		// Set up some default arrays.
 		$parents = array();
 
-		/* While there is a parent ID, add the parent term link to the $parents array. */
+		// While there is a parent ID, add the parent term link to the $parents array.
 		while ( $term_id ) {
 
-			/* Get the parent term. */
+			// Get the parent term.
 			$term = get_term( $term_id, $taxonomy );
 
-			/* Add the formatted term link to the array of parent terms. */
-			$parents[] = '<a href="' . esc_url( get_term_link( $term, $taxonomy ) ) . '">' . $term->name . '</a>';
+			// Add the formatted term link to the array of parent terms.
+			$parents[] = sprintf( '<a href="%s">%s</a>', esc_url( get_term_link( $term, $taxonomy ) ), $term->name );
 
-			/* Set the parent term's parent as the parent ID. */
+			// Set the parent term's parent as the parent ID.
 			$term_id = $term->parent;
 		}
 
-		/* If we have parent terms, reverse the array to put them in the proper order for the trail. */
+		// If we have parent terms, reverse the array to put them in the proper order for the trail.
 		if ( !empty( $parents ) )
 			$this->items = array_merge( $this->items, $parents );
 	}
@@ -1030,75 +1142,59 @@ class Breadcrumb_Trail {
 	 * types.
 	 *
 	 * @since  0.6.0
-	 * @access public
+	 * @access protected
 	 * @param  int    $post_id ID of the post whose parents we want.
 	 * @param  string $path    Path of a potential parent page.
 	 * @param  array  $args    Mixed arguments for the menu.
 	 * @return array
 	 */
-	public function map_rewrite_tags( $post_id, $path ) {
+	protected function map_rewrite_tags( $post_id, $path ) {
 
-		/* Get the post based on the post ID. */
 		$post = get_post( $post_id );
 
-		/* If no post is returned, an error is returned, or the post does not have a 'post' post type, return. */
-		if ( empty( $post ) || is_wp_error( $post ) || 'post' !== $post->post_type )
-			return $trail;
+		// If the post doesn't have the `post` post type, bail.
+		if ( 'post' !== $post->post_type )
+			return;
 
-		/* Trim '/' from both sides of the $path. */
+		// Trim '/' from both sides of the $path.
 		$path = trim( $path, '/' );
 
-		/* Split the $path into an array of strings. */
+		// Split the $path into an array of strings.
 		$matches = explode( '/', $path );
 
-		/* If matches are found for the path. */
+		// If matches are found for the path.
 		if ( is_array( $matches ) ) {
 
-			/* Loop through each of the matches, adding each to the $trail array. */
+			// Loop through each of the matches, adding each to the $trail array.
 			foreach ( $matches as $match ) {
 
-				/* Trim any '/' from the $match. */
+				// Trim any '/' from the $match.
 				$tag = trim( $match, '/' );
 
-				/* If using the %year% tag, add a link to the yearly archive. */
+				// If using the %year% tag, add a link to the yearly archive.
 				if ( '%year%' == $tag )
-					$this->items[] = '<a href="' . esc_url( get_year_link( get_the_time( 'Y', $post_id ) ) ) . '">' . sprintf( $this->args['labels']['archive_year'], get_the_time( esc_html_x( 'Y', 'yearly archives date format',  'hybrid-core' ) ) ) . '</a>';
+					$this->items[] = sprintf( '<a href="%s">%s</a>', esc_url( get_year_link( get_the_time( 'Y', $post_id ) ) ), sprintf( $this->labels['archive_year'], get_the_time( esc_html_x( 'Y', 'yearly archives date format',  'hybrid-core' ) ) ) );
 
-				/* If using the %monthnum% tag, add a link to the monthly archive. */
+				// If using the %monthnum% tag, add a link to the monthly archive.
 				elseif ( '%monthnum%' == $tag )
-					$this->items[] = '<a href="' . esc_url( get_month_link( get_the_time( 'Y', $post_id ), get_the_time( 'm', $post_id ) ) ) . '">' . sprintf( $this->args['labels']['archive_month'], get_the_time( esc_html_x( 'F', 'monthly archives date format', 'hybrid-core' ) ) ) . '</a>';
+					$this->items[] = sprintf( '<a href="%s">%s</a>', esc_url( get_month_link( get_the_time( 'Y', $post_id ), get_the_time( 'm', $post_id ) ) ), sprintf( $this->labels['archive_month'], get_the_time( esc_html_x( 'F', 'monthly archives date format', 'hybrid-core' ) ) ) );
 
-				/* If using the %day% tag, add a link to the daily archive. */
+				// If using the %day% tag, add a link to the daily archive.
 				elseif ( '%day%' == $tag )
-					$this->items[] = '<a href="' . esc_url( get_day_link( get_the_time( 'Y', $post_id ), get_the_time( 'm', $post_id ), get_the_time( 'd', $post_id ) ) ) . '">' . sprintf( $this->args['labels']['archive_day'], get_the_time( esc_html_x( 'j', 'daily archives date format', 'hybrid-core' ) ) ) . '</a>';
+					$this->items[] = sprintf( '<a href="%s">%s</a>', esc_url( get_day_link( get_the_time( 'Y', $post_id ), get_the_time( 'm', $post_id ), get_the_time( 'd', $post_id ) ) ), sprintf( $this->labels['archive_day'], get_the_time( esc_html_x( 'j', 'daily archives date format', 'hybrid-core' ) ) ) );
 
-				/* If using the %author% tag, add a link to the post author archive. */
+				// If using the %author% tag, add a link to the post author archive.
 				elseif ( '%author%' == $tag )
-					$this->items[] = '<a href="' . esc_url( get_author_posts_url( $post->post_author ) ) . '">' . get_the_author_meta( 'display_name', $post->post_author ) . '</a>';
+					$this->items[] = sprintf( '<a href="%s">%s</a>', esc_url( get_author_posts_url( $post->post_author ) ), get_the_author_meta( 'display_name', $post->post_author ) );
 
-				/* If using the %category% tag, add a link to the first category archive to match permalinks. */
+				// If using the %category% tag, add a link to the first category archive to match permalinks.
 				elseif ( '%category%' == $tag ) {
 
-					/* Force override terms in this post type. */
-					$this->args['post_taxonomy'][ $post->post_type ] = false;
+					// Force override terms in this post type.
+					$this->post_taxonomy[ $post->post_type ] = false;
 
-					/* Get the post categories. */
-					$terms = get_the_category( $post_id );
-
-					/* Check that categories were returned. */
-					if ( $terms ) {
-
-						/* Sort the terms by ID and get the first category. */
-						usort( $terms, '_usort_terms_by_ID' );
-						$term = get_term( $terms[0], 'category' );
-
-						/* If the category has a parent, add the hierarchy to the trail. */
-						if ( 0 < $term->parent )
-							$this->do_term_parents( $term->parent, 'category' );
-
-						/* Add the category archive link to the trail. */
-						$this->items[] = '<a href="' . esc_url( get_term_link( $term, 'category' ) ) . '">' . $term->name . '</a>';
-					}
+					// Add the post categories.
+					$this->add_post_terms( $post_id, 'category' );
 				}
 			}
 		}
