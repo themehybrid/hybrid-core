@@ -87,24 +87,21 @@ function hybrid_post_layout_meta_box( $post, $box ) {
 	<script type="text/javascript">
 	jQuery( document ).ready( function( $ ) {
 
+		// Add the `.checked` class to whichever radio is checked.
 		$( '#hybrid-post-layout input:checked' ).addClass( 'checked' );
 
+		// When a radio is clicked.
 		$( "#hybrid-post-layout input" ).click( function() {
 
-			if ( 'default' === $( this ).val() ) {
-				$( "#hybrid-post-layout input" ).removeClass( 'checked' );
-				$( this ).addClass( 'checked' );
-			}
-
-			else if ( $( this ).hasClass( 'checked' ) ) {
+			// If the radio has the `.checked` class, remove it and uncheck the radio.
+			if ( $( this ).hasClass( 'checked' ) ) {
 
 				$( "#hybrid-post-layout input" ).removeClass( 'checked' );
 				$( this ).prop( 'checked', false );
 
-				$( '#hybrid-post-layout input[value="default"]' ).prop( 'checked', true ).addClass( 'checked' );
-			}
+			// If the radio is not checked, ad the `.checked` class and check it.
+			} else {
 
-			else {
 				$( "#hybrid-post-layout input" ).removeClass( 'checked' );
 				$( this ).addClass( 'checked' );
 			}
