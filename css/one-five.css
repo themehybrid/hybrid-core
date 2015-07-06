@@ -23,11 +23,6 @@ body {
 	font-size:   1rem;
 }
 
-	body.rtl {
-		direction:    rtl;
-		unicode-bidi: embed;
-	}
-
 h1, h2, h3, h4, h5, h6 {
 	font-style:  normal;
 	font-weight: normal;
@@ -58,11 +53,8 @@ ul {
 
 ol { margin: 0 0 1.5rem; }
 
-	.ltr ul,
-	.ltr ol { margin-left: 3rem; }
-
-	.rtl ul,
-	.rtl ol { margin-right: 3rem; }
+	ul,
+	ol { margin-left: 3rem; }
 
 	ol.disc,                 ul.disc                 { list-style: disc;                 }
 	ol.armenian,             ul.armenian             { list-style: armenian;             }
@@ -109,18 +101,12 @@ dl {
 		font-weight: bold;
 	}
 
-	.ltr dt {
+	dt {
 		margin-left: 0.75rem;
 	}
-	.rtl dt {
-		margin-right: 0.75rem;
-	}
 
-	.ltr dd {
+	dd {
 		margin-left: 1.5rem;
-	}
-	.rtl dd {
-		margin-right: 1.5rem;
 	}
 
 	dd + dd { margin-top: 0.75rem; }
@@ -131,11 +117,7 @@ dl {
 
 *[dir="ltr"] { direction: ltr; unicode-bidi: embed; }
 
-*[dir="rtl"] { direction: rtl; unicode-bidi: embed; }
-
 bdo[dir="ltr"] { direction: ltr; unicode-bidi: bidi-override; }
-
-bdo[dir="rtl"] { direction: rtl; unicode-bidi: bidi-override; }
 
 /* === <center> tag === */
 
@@ -406,12 +388,7 @@ video {
 .assistive-text {
 	position: absolute;
 	top:      -9999em;
+	left:     -9999em;
 }
-
-	.ltr .screen-reader-text,
-	.ltr .assistive-text { left:  -9999em; }
-
-	.rtl .screen-reader-text,
-	.rtl .assistive-text { right: -9999em; }
 
 .sticky, .bypostauthor {}

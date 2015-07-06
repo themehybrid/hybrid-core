@@ -30,9 +30,11 @@ remove_action( 'wp_print_styles', 'print_emoji_styles' );
  *
  * @since  1.5.0
  * @access public
+ * @global object  $wp_styles
  * @return void
  */
 function hybrid_register_styles() {
+	global $wp_styles;
 
 	$suffix = hybrid_get_min_suffix();
 
@@ -41,6 +43,13 @@ function hybrid_register_styles() {
 	wp_register_style( 'hybrid-gallery',  HYBRID_CSS . "gallery{$suffix}.css"  );
 	wp_register_style( 'hybrid-parent',   hybrid_get_parent_stylesheet_uri()   );
 	wp_register_style( 'hybrid-style',    get_stylesheet_uri()                 );
+
+	// Use the RTL style for the hybrid-one-five style.
+	$wp_styles->add_data( 'hybrid-one-five', 'rtl', 'replace' );
+
+	// Adds the suffix for the hybrid-one-five RTL style.
+	if ( $suffix )
+		$wp_styles->add_data( 'hybrid-one-five', 'suffix', $suffix );
 }
 
 /**
