@@ -20,8 +20,8 @@ add_action( 'init', 'hybrid_register_layouts', 95 );
 # Filters `current_theme_supports( 'theme-layouts', $arg )`.
 add_filter( 'current_theme_supports-theme-layouts', 'hybrid_theme_layouts_support', 10, 3 );
 
-# Filters the theme layout mod.
-add_filter( 'theme_mod_theme_layout', 'hybrid_filter_layout', 5 );
+# Filters the theme layout.
+add_filter( 'hybrid_get_theme_layout', 'hybrid_filter_layout', 5 );
 
 /**
  * Returns the instance of the `Hybrid_Layout_Factory` object. Use this function to access the object.
@@ -134,6 +134,17 @@ function hybrid_get_layout( $name ) {
  * @return string
  */
 function hybrid_get_theme_layout() {
+	return apply_filters( 'hybrid_get_theme_layout', hybrid_get_global_layout() );
+}
+
+/**
+ * Returns the theme mod used for the global layout setting.
+ *
+ * @since  3.0.0
+ * @access public
+ * @return string
+ */
+function hybrid_get_global_layout() {
 	return get_theme_mod( 'theme_layout', hybrid_get_default_layout() );
 }
 
