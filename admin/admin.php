@@ -108,7 +108,7 @@ function hybrid_get_post_styles( $post_type = 'post' ) {
 	global $hybrid;
 
 	// If stylesheets have already been loaded, return them.
-	if ( !empty( $hyrid->post_styles ) && isset( $hybrid->post_styles[ $post_type ] ) )
+	if ( !empty( $hybrid->post_styles ) && isset( $hybrid->post_styles[ $post_type ] ) )
 		return $hybrid->post_styles[ $post_type ];
 
 	// Set up an empty styles array.
