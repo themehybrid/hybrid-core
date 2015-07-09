@@ -228,7 +228,7 @@ textarea { box-sizing: content-box; }
 :focus { outline: none; }
 
 label,
-button
+button,
 input[type="submit"],
 input[type="reset"],
 input[type="button"] { cursor: pointer; }
