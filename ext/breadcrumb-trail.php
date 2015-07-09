@@ -1029,7 +1029,7 @@ class Breadcrumb_Trail {
 		$terms = get_the_terms( $post_id, $taxonomy );
 
 		// Check that categories were returned.
-		if ( $terms ) {
+		if ( $terms && ! is_wp_error( $terms ) ) {
 
 			// Sort the terms by ID and get the first category.
 			usort( $terms, '_usort_terms_by_ID' );
