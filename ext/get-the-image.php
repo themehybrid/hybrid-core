@@ -710,6 +710,19 @@ final class Get_The_Image {
 			// Set a class based on the orientation.
 			$classes[] = ( $this->image_args['height'] > $this->image_args['width'] ) ? 'portrait' : 'landscape';
 
+			// Set class based on the content width (defined by theme).
+			if ( 0 < $GLOBALS['content_width'] ) {
+
+				if ( $GLOBALS['content_width'] == $this->image_args['width'] )
+					$classes[] = 'cw-equal';
+
+				elseif ( $GLOBALS['content_width'] <= $this->image_args['width'] )
+					$classes[] = 'cw-lesser';
+
+				elseif ( $GLOBALS['content_width'] >= $this->image_args['width'] )
+					$classes[] = 'cw-greater';
+			}
+
 			// If an explicit width/height is not set, use the info from the image.
 			if ( empty( $this->args['width'] ) && empty( $this->args['height'] ) ) {
 				$this->args['width']  = $this->image_args['width'];
