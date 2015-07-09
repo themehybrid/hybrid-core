@@ -6,8 +6,10 @@
  * theme mod will be created called `example_image_data`.  The original will have the URL, but the new
  * mod will be an array of data for the image.
  *
+ * @package    Hybrid
+ * @subpackage Customize
  * @author     Justin Tadlock <justin@justintadlock.com>
- * @copyright  Copyright (c) 2015, Justin Tadlock
+ * @copyright  Copyright (c) 2008 - 2015, Justin Tadlock
  * @link       http://themehybrid.com/hybrid-core
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */

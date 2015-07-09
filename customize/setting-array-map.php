@@ -3,8 +3,10 @@
  * Customizer setting class for handling an array or comma-separated list of values.  This takes the
  * given `sanitize_callback` and runs it over each element in the array via the `array_map()` function.
  *
+ * @package    Hybrid
+ * @subpackage Customize
  * @author     Justin Tadlock <justin@justintadlock.com>
- * @copyright  Copyright (c) 2015, Justin Tadlock
+ * @copyright  Copyright (c) 2008 - 2015, Justin Tadlock
  * @link       http://themehybrid.com/hybrid-core
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */

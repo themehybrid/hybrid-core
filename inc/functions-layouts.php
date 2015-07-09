@@ -4,6 +4,7 @@
  *
  * Theme Layouts was created to allow theme developers to easily style themes with dynamic layout
  * structures. This file merely contains the API function calls at theme developers' disposal.
+ * See `inc/class-layout.php` and `inc/class-layout-factory.php` for the muscle behind the API.
  *
  * @package    HybridCore
  * @subpackage Includes

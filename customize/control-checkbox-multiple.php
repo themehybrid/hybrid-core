@@ -1,13 +1,10 @@
 <?php
 /**
  * The multiple checkbox customize control allows theme authors to add theme options that have
- * multiple choices.  Note that the value returned is a comma-delineated string rather than
- * an array of values.  In your `sanitize_callback` function for the specific customize setting,
- * you can turn that back into an array with `explode( ',', $value )` before it gets saved into
- * the DB.  The same goes or the JS as well.  You'll get a comma-delineated string.
+ * multiple choices.
  *
  * @package    Hybrid
- * @subpackage Classes
+ * @subpackage Customize
  * @author     Justin Tadlock <justin@justintadlock.com>
  * @copyright  Copyright (c) 2008 - 2015, Justin Tadlock
  * @link       http://themehybrid.com/hybrid-core

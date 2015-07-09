@@ -2,8 +2,14 @@
 /**
  * Customize control class to handle color palettes.
  *
+ * Note, the `$choices` array is slightly different than normal and should be in the form of
+ * `array(
+ *	$value => array( 'label' => $text_label, 'colors' => $array_of_hex_colors ),
+ *	$value => array( 'label' => $text_label, 'colors' => $array_of_hex_colors ),
+ * )`
+ *
  * @package    Hybrid
- * @subpackage Classes
+ * @subpackage Customize
  * @author     Justin Tadlock <justin@justintadlock.com>
  * @copyright  Copyright (c) 2008 - 2015, Justin Tadlock
  * @link       http://themehybrid.com/hybrid-core

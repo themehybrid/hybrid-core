@@ -111,10 +111,7 @@ if ( !class_exists( 'Hybrid' ) ) {
 		}
 
 		/**
-		 * Loads the core framework files.  These files are needed before loading anything
-		 * else in the framework because they have required functions for use.  Many of the
-		 * files run filters that theme authors may wish to remove in their theme setup
-		 * functions.
+		 * Loads the core framework files.
 		 *
 		 * @since  1.0.0
 		 * @access public
@@ -149,8 +146,9 @@ if ( !class_exists( 'Hybrid' ) ) {
 		}
 
 		/**
-		 * Removes theme supported features from themes in the case that a user has a plugin
-		 * installed that handles the functionality.
+		 * Adds theme support for features that themes should be supporting.  Also, removes 
+		 * theme supported features from themes in the case that a user has a plugin installed 
+		 * that handles the functionality.
 		 *
 		 * @since  1.3.0
 		 * @access public
