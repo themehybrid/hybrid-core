@@ -274,7 +274,8 @@ class Hybrid_Media_Grabber {
 	 */
 	public function do_audio_shortcode_media( $shortcode ) {
 
-		$this->original_media = array_shift( $shortcode );
+		if ( ! $this->original_media )
+			$this->original_media = array_shift( $shortcode );
 
 		$this->media = do_shortcode( $this->original_media );
 	}
@@ -289,7 +290,8 @@ class Hybrid_Media_Grabber {
 	 */
 	public function do_video_shortcode_media( $shortcode ) {
 
-		$this->original_media = array_shift( $shortcode );
+		if ( ! $this->original_media )
+			$this->original_media = array_shift( $shortcode );
 
 		// Need to filter dimensions here to overwrite WP's <div> surrounding the [video] shortcode.
 		$this->media = do_shortcode( $this->filter_dimensions( $this->original_media ) );
@@ -330,8 +332,18 @@ class Hybrid_Media_Grabber {
 				$embed = trim( apply_filters( 'hybrid_media_grabber_autoembed_media', $value[0] ) );
 
 				if ( !empty( $embed ) ) {
+
+					// If we're given a shortcode, roll with it.
+					if ( preg_match( "/\[{$this->type}\s/", $embed ) ) {
+
+						if ( 'video' === $this->type )
+							$embed = $this->filter_dimensions( $embed );
+
+						$embed = do_shortcode( $embed );
+					}
+
 					$this->original_media = $value[0];
-					$this->media = $embed;
+					$this->media          = $embed;
 					break;
 				}
 			}
