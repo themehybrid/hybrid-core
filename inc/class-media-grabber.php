@@ -274,8 +274,7 @@ class Hybrid_Media_Grabber {
 	 */
 	public function do_audio_shortcode_media( $shortcode ) {
 
-		if ( ! $this->original_media )
-			$this->original_media = array_shift( $shortcode );
+		$this->original_media = array_shift( $shortcode );
 
 		$this->media = do_shortcode( $this->original_media );
 	}
@@ -290,8 +289,7 @@ class Hybrid_Media_Grabber {
 	 */
 	public function do_video_shortcode_media( $shortcode ) {
 
-		if ( ! $this->original_media )
-			$this->original_media = array_shift( $shortcode );
+		$this->original_media = array_shift( $shortcode );
 
 		// Need to filter dimensions here to overwrite WP's <div> surrounding the [video] shortcode.
 		$this->media = do_shortcode( $this->filter_dimensions( $this->original_media ) );
