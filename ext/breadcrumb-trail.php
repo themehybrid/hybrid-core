@@ -15,7 +15,7 @@
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * @package   BreadcrumbTrail
- * @version   1.0.0
+ * @version   1.0.1
  * @author    Justin Tadlock <justin@justintadlock.com>
  * @copyright Copyright (c) 2008 - 2015, Justin Tadlock
  * @link      http://themehybrid.com/plugins/breadcrumb-trail
@@ -309,7 +309,7 @@ class Breadcrumb_Trail {
 
 			// If viewing the home/blog page.
 			if ( is_home() ) {
-				$this->add_posts_page_items();
+				$this->add_blog_items();
 			}
 
 			// If viewing a single post.
@@ -465,7 +465,7 @@ class Breadcrumb_Trail {
 	 * @access protected
 	 * @return void
 	 */
-	protected function add_posts_page_items() {
+	protected function add_blog_items() {
 
 		// Get the post ID and post.
 		$post_id = get_queried_object_id();
