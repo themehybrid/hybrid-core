@@ -575,7 +575,7 @@ function hybrid_attr_comment( $attr ) {
 function hybrid_attr_comment_author( $attr ) {
 
 	$attr['class']     = 'comment-author';
-	$attr['itemprop']  = 'creator';
+	$attr['itemprop']  = 'author';
 	$attr['itemscope'] = 'itemscope';
 	$attr['itemtype']  = 'http://schema.org/Person';
 
