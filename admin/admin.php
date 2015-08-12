@@ -18,6 +18,9 @@ add_action( 'load-post-new.php', 'hybrid_admin_load_post_meta_boxes' );
 # Register scripts and styles.
 add_action( 'admin_enqueue_scripts', 'hybrid_admin_register_styles',  0 );
 
+# Allow posts page to be edited.
+add_action( 'edit_form_after_title', 'hybrid_enable_posts_page_editor', 0 );
+
 /**
  * Loads the core post meta box files on the 'load-post.php' action hook.  Each meta box file is only loaded if
  * the theme declares support for the feature.
@@ -47,6 +50,24 @@ function hybrid_admin_load_post_meta_boxes() {
  */
 function hybrid_admin_register_styles() {
 	wp_register_style( 'hybrid-admin', HYBRID_CSS . 'admin.css' );
+}
+
+/**
+ * Fix for users who want to display content on the posts page above the posts list, which is a
+ * theme feature common to themes built from the framework.
+ *
+ * @since  3.0.0
+ * @access public
+ * @param  object  $post
+ * @return void
+ */
+function hybrid_enable_posts_page_editor( $post ) {
+
+	if ( get_option( 'page_for_posts' ) != $post->ID )
+		return;
+
+	remove_action( 'edit_form_after_title', '_wp_posts_page_notice' );
+	add_post_type_support( $post->post_type, 'editor' );
 }
 
 /**
