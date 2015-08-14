@@ -99,7 +99,7 @@ class Hybrid_Chat {
 		foreach ( $this->stanzas as $stanza ) {
 
 			// Get the chat author.
-			$author = !empty( $stanza['author'] ) ? $stanza['author'] : '';
+			$author = ! empty( $stanza['author'] ) ? $stanza['author'] : '';
 
 			// If we have an author, set the current author.
 			if ( $author )
@@ -109,7 +109,7 @@ class Hybrid_Chat {
 			$speaker_id = $this->get_author_id( $current_author );
 
 			// Format the time if there was one given.
-			$time = !empty( $stanza['time'] ) ? sprintf( '<time class="chat-timestamp">%s</time> ', esc_html( $stanza['time'] ) ) : '';
+			$time = ! empty( $stanza['time'] ) ? sprintf( '<time class="chat-timestamp">%s</time> ', esc_html( $stanza['time'] ) ) : '';
 
 			// Add the chat row author.
 			if ( $author )
@@ -181,7 +181,7 @@ class Hybrid_Chat {
 		$author = strtolower( strip_tags( $author ) );
 
 		// Add the chat author to the array.
-		if ( !in_array( $author, $this->authors ) )
+		if ( ! in_array( $author, $this->authors ) )
 			$this->authors[] = $author;
 
 		// Return the array key for the chat author and add "1" to avoid an ID of "0".

@@ -58,7 +58,7 @@ class Hybrid_Media_Meta_Factory {
 	public function get_media_meta( $post_id ) {
 
 		// If the media meta object doesn't exist, create it.
-		if ( !isset( $this->media[ $post_id ] ) )
+		if ( ! isset( $this->media[ $post_id ] ) )
 			$this->create_media_meta( $post_id );
 
 		return $this->media[ $post_id ];

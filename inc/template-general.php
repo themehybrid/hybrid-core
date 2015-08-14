@@ -101,7 +101,7 @@ function hybrid_child_theme_link() {
  */
 function hybrid_get_child_theme_link() {
 
-	if ( !is_child_theme() )
+	if ( ! is_child_theme() )
 		return '';
 
 	$theme   = wp_get_theme();
@@ -128,7 +128,7 @@ function hybrid_get_blog_url() {
 	elseif ( 0 < ( $page_for_posts = get_option( 'page_for_posts' ) ) )
 		$blog_url = get_permalink( $page_for_posts );
 
-	return $blog_url ? esc_url( $blog_url ) : '';
+	return ! empty( $blog_url ) ? esc_url( $blog_url ) : '';
 }
 
 /**

@@ -31,7 +31,7 @@ function hybrid_add_post_style_meta_box( $post_type, $post ) {
 
 	$styles = hybrid_get_post_styles( $post_type );
 
-	if ( !empty( $styles ) && current_user_can( 'edit_theme_options' ) )
+	if ( ! empty( $styles ) && current_user_can( 'edit_theme_options' ) )
 		add_meta_box( 'hybrid-post-style', esc_html__( 'Style', 'hybrid-core' ), 'hybrid_post_style_meta_box', $post_type, 'side', 'default' );
 }
 
@@ -76,11 +76,11 @@ function hybrid_post_style_meta_box( $post, $box ) {
 function hybrid_save_post_style( $post_id, $post = '' ) {
 
 	// Fix for attachment save issue in WordPress 3.5. @link http://core.trac.wordpress.org/ticket/21963
-	if ( !is_object( $post ) )
+	if ( ! is_object( $post ) )
 		$post = get_post();
 
 	// Verify the nonce before proceeding.
-	if ( !isset( $_POST['hybrid-post-style-nonce'] ) || !wp_verify_nonce( $_POST['hybrid-post-style-nonce'], basename( __FILE__ ) ) )
+	if ( ! isset( $_POST['hybrid-post-style-nonce'] ) || ! wp_verify_nonce( $_POST['hybrid-post-style-nonce'], basename( __FILE__ ) ) )
 		return;
 
 	// Get the previous post style.

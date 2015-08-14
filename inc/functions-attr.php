@@ -85,7 +85,7 @@ function hybrid_get_attr( $slug, $context = '' ) {
 		$attr['class'] = $slug;
 
 	foreach ( $attr as $name => $value )
-		$out .= !empty( $value ) ? sprintf( ' %s="%s"', esc_html( $name ), esc_attr( $value ) ) : esc_html( " {$name}" );
+		$out .= $value ? sprintf( ' %s="%s"', esc_html( $name ), esc_attr( $value ) ) : esc_html( " {$name}" );
 
 	return trim( $out );
 }
@@ -168,7 +168,7 @@ function hybrid_attr_content( $attr ) {
 	$attr['class']    = 'content';
 	$attr['role']     = 'main';
 
-	if ( !is_singular( 'post' ) && !is_home() && !is_archive() )
+	if ( ! is_singular( 'post' ) && ! is_home() && ! is_archive() )
 		$attr['itemprop'] = 'mainContentOfPage';
 
 	return $attr;
@@ -188,14 +188,14 @@ function hybrid_attr_sidebar( $attr, $context ) {
 	$attr['class'] = 'sidebar';
 	$attr['role']  = 'complementary';
 
-	if ( !empty( $context ) ) {
+	if ( $context ) {
 
 		$attr['class'] .= " sidebar-{$context}";
 		$attr['id']     = "sidebar-{$context}";
 
 		$sidebar_name = hybrid_get_sidebar_name( $context );
 
-		if ( !empty( $sidebar_name ) ) {
+		if ( $sidebar_name ) {
 			// Translators: The %s is the sidebar name. This is used for the 'aria-label' attribute.
 			$attr['aria-label'] = esc_attr( sprintf( _x( '%s Sidebar', 'sidebar aria label', 'hybrid-core' ), $sidebar_name ) );
 		}
@@ -221,14 +221,14 @@ function hybrid_attr_menu( $attr, $context ) {
 	$attr['class'] = 'menu';
 	$attr['role']  = 'navigation';
 
-	if ( !empty( $context ) ) {
+	if ( $context ) {
 
 		$attr['class'] .= " menu-{$context}";
 		$attr['id']     = "menu-{$context}";
 
 		$menu_name = hybrid_get_menu_location_name( $context );
 
-		if ( !empty( $menu_name ) ) {
+		if ( $menu_name ) {
 			// Translators: The %s is the menu name. This is used for the 'aria-label' attribute.
 			$attr['aria-label'] = esc_attr( sprintf( _x( '%s Menu', 'nav menu aria label', 'hybrid-core' ), $menu_name ) );
 		}
@@ -379,7 +379,7 @@ function hybrid_attr_post( $attr ) {
 	$post = get_post();
 
 	// Make sure we have a real post first.
-	if ( !empty( $post ) ) {
+	if ( ! empty( $post ) ) {
 
 		$attr['id']        = 'post-' . get_the_ID();
 		$attr['class']     = join( ' ', get_post_class() );
@@ -390,7 +390,7 @@ function hybrid_attr_post( $attr ) {
 			$attr['itemtype']  = 'http://schema.org/BlogPosting';
 
 			/* Add itemprop if within the main query. */
-			if ( is_main_query() && !is_search() )
+			if ( is_main_query() && ! is_search() )
 				$attr['itemprop'] = 'blogPost';
 		}
 

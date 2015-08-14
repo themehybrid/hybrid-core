@@ -40,9 +40,9 @@ class Hybrid_Customize_Setting_Array_Map extends WP_Customize_Setting {
 	 */
 	public function sanitize( $values ) {
 
-		$multi_values = !is_array( $values ) ? explode( ',', $values ) : $values;
+		$multi_values = ! is_array( $values ) ? explode( ',', $values ) : $values;
 
-		return !empty( $multi_values ) ? array_map( array( $this, 'map' ), $multi_values ) : array();
+		return ! empty( $multi_values ) ? array_map( array( $this, 'map' ), $multi_values ) : array();
 	}
 
 	/**

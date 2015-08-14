@@ -238,7 +238,7 @@ class Hybrid_Media_Meta {
 	public function dimensions( $dimensions ) {
 
 		// If there's a width and height.
-		if ( !empty( $this->meta['width'] ) && !empty( $this->meta['height'] ) ) {
+		if ( ! empty( $this->meta['width'] ) && ! empty( $this->meta['height'] ) ) {
 
 			$dimensions = sprintf(
 				// Translators: Media dimensions - 1 is width and 2 is height.
@@ -261,7 +261,7 @@ class Hybrid_Media_Meta {
 	 */
 	public function created_timestamp( $timestamp ) {
 
-		if ( !empty( $this->meta['image_meta']['created_timestamp'] ) ) {
+		if ( ! empty( $this->meta['image_meta']['created_timestamp'] ) ) {
 
 			$timestamp = date_i18n(
 				get_option( 'date_format' ),
@@ -299,7 +299,7 @@ class Hybrid_Media_Meta {
 	public function shutter_speed( $shutter ) {
 
 		// If a shutter speed is given, format the float into a fraction.
-		if ( !empty( $this->meta['image_meta']['shutter_speed'] ) ) {
+		if ( ! empty( $this->meta['image_meta']['shutter_speed'] ) ) {
 
 			$shutter = $speed = floatval( strip_tags( $this->meta['image_meta']['shutter_speed'] ) );
 
@@ -394,7 +394,7 @@ class Hybrid_Media_Meta {
 
 		$mime_type = get_post_mime_type( $this->post_id );
 
-		if ( empty( $mime_type ) && !empty( $this->meta['mime_type'] ) )
+		if ( empty( $mime_type ) && ! empty( $this->meta['mime_type'] ) )
 			$mime_type = $this->meta['mime_type'];
 
 		return esc_html( $mime_type );

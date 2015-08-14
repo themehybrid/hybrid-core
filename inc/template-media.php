@@ -149,7 +149,7 @@ function hybrid_attachment_is_video( $post_id = 0 ) {
 function hybrid_get_image_size_links() {
 
 	// If not viewing an image attachment page, return.
-	if ( !wp_attachment_is_image( get_the_ID() ) )
+	if ( ! wp_attachment_is_image( get_the_ID() ) )
 		return;
 
 	// Set up an empty array for the links.
@@ -166,7 +166,7 @@ function hybrid_get_image_size_links() {
 		$image = wp_get_attachment_image_src( get_the_ID(), $size );
 
 		// Add the link to the array if there's an image and if $is_intermediate (4th array value) is true or full size.
-		if ( !empty( $image ) && ( true === $image[3] || 'full' == $size ) ) {
+		if ( ! empty( $image ) && ( true === $image[3] || 'full' == $size ) ) {
 
 			// Translators: Media dimensions - 1 is width and 2 is height.
 			$label = sprintf( esc_html__( '%1$s &#215; %2$s', 'hybrid-core' ), number_format_i18n( absint( $image[1] ) ), number_format_i18n( absint( $image[2] ) ) );

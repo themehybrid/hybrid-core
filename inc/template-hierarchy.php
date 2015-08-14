@@ -174,11 +174,13 @@ function hybrid_singular_template( $template ) {
 
 	// Check for a custom post template by custom field key '_wp_post_template'.
 	$custom = hybrid_get_post_template( get_queried_object_id() );
+
 	if ( $custom )
 		$templates[] = $custom;
 
 	// If viewing an attachment page, handle the files by mime type.
 	if ( is_attachment() ) {
+
 		// Split the mime_type into two distinct parts.
 		$type    = hybrid_get_attachment_type();
 		$subtype = hybrid_get_attachment_subtype();

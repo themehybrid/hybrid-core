@@ -65,7 +65,7 @@ function hybrid_clean_post_format_slug( $slug ) {
  */
 function hybrid_aside_infinity( $content ) {
 
-	if ( has_post_format( 'aside' ) && !is_singular() && !post_password_required() )
+	if ( has_post_format( 'aside' ) && ! is_singular() && ! post_password_required() )
 		$content .= apply_filters( 'hybrid_aside_infinity', sprintf( ' <a class="permalink" href="%s">&#8734;</a>', esc_url( get_permalink() ) ) );
 
 	return $content;
@@ -84,7 +84,7 @@ function hybrid_aside_infinity( $content ) {
  */
 function hybrid_image_content( $content ) {
 
-	if ( has_post_format( 'image' ) && !post_password_required() ) {
+	if ( has_post_format( 'image' ) && ! post_password_required() ) {
 		preg_match( '/<img.*?>/', $content, $matches );
 
 		if ( empty( $matches ) && function_exists( 'get_the_image' ) )
@@ -110,7 +110,7 @@ function hybrid_image_content( $content ) {
  */
 function hybrid_link_content( $content ) {
 
-	if ( has_post_format( 'link' ) && !post_password_required() && !preg_match( '/<a\s[^>]*?href=[\'"](.+?)[\'"]/is', $content ) )
+	if ( has_post_format( 'link' ) && ! post_password_required() && ! preg_match( '/<a\s[^>]*?href=[\'"](.+?)[\'"]/is', $content ) )
 		$content = make_clickable( $content );
 
 	return $content;
@@ -129,7 +129,7 @@ function hybrid_link_content( $content ) {
  */
 function hybrid_quote_content( $content ) {
 
-	if ( has_post_format( 'quote' ) && !post_password_required() ) {
+	if ( has_post_format( 'quote' ) && ! post_password_required() ) {
 		preg_match( '/<blockquote.*?>/', $content, $matches );
 
 		if ( empty( $matches ) )
@@ -150,7 +150,7 @@ function hybrid_quote_content( $content ) {
  * @return string
  */
 function hybrid_chat_content( $content ) {
-	return has_post_format( 'chat' ) && !post_password_required() ? hybrid_get_chat_transcript( $content ) : $content;
+	return has_post_format( 'chat' ) && ! post_password_required() ? hybrid_get_chat_transcript( $content ) : $content;
 }
 
 /**

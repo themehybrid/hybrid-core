@@ -70,7 +70,7 @@ function hybrid_post_layout_meta_box( $post, $box ) {
 
 	<?php foreach ( hybrid_get_layouts() as $layout ) : ?>
 
-		<?php if ( true === $layout->is_post_layout && $layout->image && ! ( !empty( $layout->post_types ) && !in_array( $post->post_type, $layout->post_types ) ) ) : ?>
+		<?php if ( true === $layout->is_post_layout && $layout->image && ! ( ! empty( $layout->post_types ) && ! in_array( $post->post_type, $layout->post_types ) ) ) : ?>
 
 			<label class="has-img">
 				<input type="radio" value="<?php echo esc_attr( $layout->name ); ?>" name="hybrid-post-layout" <?php checked( $post_layout, $layout->name ); ?> />
@@ -99,7 +99,7 @@ function hybrid_post_layout_meta_box( $post, $box ) {
 				$( "#hybrid-post-layout input" ).removeClass( 'checked' );
 				$( this ).prop( 'checked', false );
 
-			// If the radio is not checked, ad the `.checked` class and check it.
+			// If the radio is not checked, add the `.checked` class and check it.
 			} else {
 
 				$( "#hybrid-post-layout input" ).removeClass( 'checked' );
@@ -123,11 +123,11 @@ function hybrid_post_layout_meta_box( $post, $box ) {
 function hybrid_save_post_layout( $post_id, $post = '' ) {
 
 	// Fix for attachment save issue in WordPress 3.5. @link http://core.trac.wordpress.org/ticket/21963
-	if ( !is_object( $post ) )
+	if ( ! is_object( $post ) )
 		$post = get_post();
 
 	// Verify the nonce for the post formats meta box.
-	if ( !isset( $_POST['hybrid-post-layout-nonce'] ) || !wp_verify_nonce( $_POST['hybrid-post-layout-nonce'], basename( __FILE__ ) ) )
+	if ( ! isset( $_POST['hybrid-post-layout-nonce'] ) || ! wp_verify_nonce( $_POST['hybrid-post-layout-nonce'], basename( __FILE__ ) ) )
 		return $post_id;
 
 	// Get the previous post layout.

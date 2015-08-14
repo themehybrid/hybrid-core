@@ -204,6 +204,7 @@ function hybrid_body_class_filter( $classes, $class ) {
 
 		// Checks for custom template.
 		$template = str_replace( array ( "{$post->post_type}-template-", "{$post->post_type}-" ), '', basename( hybrid_get_post_template( $post->ID ), '.php' ) );
+
 		if ( $template )
 			$classes[] = "{$post->post_type}-template-{$template}";
 
@@ -237,7 +238,7 @@ function hybrid_body_class_filter( $classes, $class ) {
 		$classes[] = sanitize_html_class( 'layout-' . hybrid_get_theme_layout() );
 
 	// Input class.
-	if ( !empty( $class ) ) {
+	if ( $class ) {
 		$class   = is_array( $class ) ? $class : preg_split( '#\s+#', $class );
 		$classes = array_merge( $classes, $class );
 	}
@@ -293,7 +294,7 @@ function hybrid_post_class_filter( $classes, $class, $post_id ) {
 		$_classes[] = 'has-excerpt';
 
 	// Has <!--more--> link.
-	if ( !is_singular() && false !== strpos( $post->post_content, '<!--more' ) )
+	if ( ! is_singular() && false !== strpos( $post->post_content, '<!--more' ) )
 		$_classes[] = 'has-more-link';
 
 	// Has <!--nextpage--> links.

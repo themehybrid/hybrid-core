@@ -97,7 +97,7 @@ function hybrid_get_post_template_meta_key( $post_id ) {
  */
 function hybrid_post_has_content( $post_id = 0 ) {
 	$post = get_post( $post_id );
-	return !empty( $post->post_content );
+	return ! empty( $post->post_content );
 }
 
 /**
@@ -252,7 +252,7 @@ function hybrid_get_gallery_item_count() {
 	$galleries = get_post_galleries( get_the_ID(), true );
 
 	// If galleries were found in the content, get the gallery item count.
-	if ( !empty( $galleries ) ) {
+	if ( ! empty( $galleries ) ) {
 		$items = '';
 
 		foreach ( $galleries as $gallery => $gallery_items )
@@ -260,7 +260,7 @@ function hybrid_get_gallery_item_count() {
 
 		preg_match_all( '#src=([\'"])(.+?)\1#is', $items, $sources, PREG_SET_ORDER );
 
-		if ( !empty( $sources ) )
+		if ( ! empty( $sources ) )
 			return count( $sources );
 	}
 
@@ -275,7 +275,7 @@ function hybrid_get_gallery_item_count() {
 	);
 
 	// Return the attachment count if items were found.
-	return !empty( $attachments ) ? count( $attachments ) : 0;
+	return ! empty( $attachments ) ? count( $attachments ) : 0;
 }
 
 /**
@@ -329,7 +329,7 @@ function hybrid_get_content_url( $content ) {
 	// Catch links that are not wrapped in an '<a>' tag.
 	preg_match( '/<a\s[^>]*?href=[\'"](.+?)[\'"]/is', make_clickable( $content ), $matches );
 
-	return !empty( $matches[1] ) ? esc_url_raw( $matches[1] ) : '';
+	return ! empty( $matches[1] ) ? esc_url_raw( $matches[1] ) : '';
 }
 
 /**

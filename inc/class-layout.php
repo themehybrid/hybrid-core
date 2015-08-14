@@ -145,11 +145,11 @@ class Hybrid_Layout {
 	 */
 	protected function add_post_type_support() {
 
-		if ( !empty( $this->post_types ) ) {
+		if ( ! empty( $this->post_types ) ) {
 
 			foreach ( $this->post_types as $post_type ) {
 
-				if ( !post_type_supports( $post_type, 'theme-layouts' ) )
+				if ( ! post_type_supports( $post_type, 'theme-layouts' ) )
 					add_post_type_support( $post_type, 'theme-layouts' );
 			}
 		}

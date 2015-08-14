@@ -59,11 +59,11 @@ class Hybrid_Customize_Control_Dropdown_Terms extends WP_Customize_Control {
 
 		<label>
 
-			<?php if ( !empty( $this->label ) ) : ?>
+			<?php if ( ! empty( $this->label ) ) : ?>
 				<span class="customize-control-title"><?php echo esc_html( $this->label ); ?></span>
 			<?php endif; ?>
 
-			<?php if ( !empty( $this->description ) ) : ?>
+			<?php if ( ! empty( $this->description ) ) : ?>
 				<span class="description customize-control-description"><?php echo $this->description; ?></span>
 			<?php endif; ?>
 

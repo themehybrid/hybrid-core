@@ -100,7 +100,7 @@ class Hybrid_Media_Grabber {
 
 		// Use WP's embed functionality to handle the [embed] shortcode and autoembeds.
 		add_filter( 'hybrid_media_grabber_embed_shortcode_media', array( $wp_embed, 'run_shortcode' ) );
-		add_filter( 'hybrid_media_grabber_autoembed_media',       array( $wp_embed, 'autoembed' ) );
+		add_filter( 'hybrid_media_grabber_autoembed_media',       array( $wp_embed, 'autoembed'     ) );
 
 		// Don't return a link if embeds don't work. Need media or nothing at all.
 		add_filter( 'embed_maybe_make_link', '__return_false' );

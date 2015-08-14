@@ -90,7 +90,7 @@ function hybrid_get_content_width() {
 function hybrid_untitled_post( $title ) {
 
 	// Translators: Used as a placeholder for untitled posts on non-singular views.
-	if ( ! $title && !is_singular() && in_the_loop() && !is_admin() )
+	if ( ! $title && ! is_singular() && in_the_loop() && ! is_admin() )
 		$title = esc_html__( '(Untitled)', 'hybrid-core' );
 
 	return $title;
@@ -225,7 +225,7 @@ function hybrid_require_if_theme_supports( $feature, $file ) {
  */
 function hybrid_archive_title_filter( $title ) {
 
-	if ( is_home() && !is_front_page() )
+	if ( is_home() && ! is_front_page() )
 		$title = get_post_field( 'post_title', get_queried_object_id() );
 
 	elseif ( is_category() )
@@ -283,7 +283,7 @@ function hybrid_archive_title_filter( $title ) {
  */
 function hybrid_archive_description_filter( $desc ) {
 
-	if ( is_home() && !is_front_page() )
+	if ( is_home() && ! is_front_page() )
 		$desc = get_post_field( 'post_content', get_queried_object_id(), 'raw' );
 
 	elseif ( is_category() )

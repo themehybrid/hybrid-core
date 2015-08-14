@@ -37,7 +37,7 @@ function hybrid_meta_box_post_add_template( $post_type, $post ) {
 	$templates = hybrid_get_post_templates( $post_type );
 
 	// If there's templates, add the meta box.
-	if ( !empty( $templates ) && 'page' !== $post_type )
+	if ( ! empty( $templates ) && 'page' !== $post_type )
 		add_meta_box( 'hybrid-post-template', esc_html__( 'Template', 'hybrid-core' ), 'hybrid_meta_box_post_display_template', $post_type, 'side', 'default' );
 }
 
@@ -83,15 +83,15 @@ function hybrid_meta_box_post_display_template( $post, $box ) {
 function hybrid_meta_box_post_save_template( $post_id, $post = '' ) {
 
 	// Fix for attachment save issue in WordPress 3.5. @link http://core.trac.wordpress.org/ticket/21963
-	if ( !is_object( $post ) )
+	if ( ! is_object( $post ) )
 		$post = get_post();
 
 	// Verify the nonce before proceeding.
-	if ( !isset( $_POST['hybrid-post-template-nonce'] ) || !wp_verify_nonce( $_POST['hybrid-post-template-nonce'], basename( __FILE__ ) ) )
+	if ( ! isset( $_POST['hybrid-post-template-nonce'] ) || ! wp_verify_nonce( $_POST['hybrid-post-template-nonce'], basename( __FILE__ ) ) )
 		return $post_id;
 
 	// Return here if the template is not set. There's a chance it won't be if the post type doesn't have any templates.
-	if ( !isset( $_POST['hybrid-post-template'] ) || !current_user_can( 'edit_post', $post_id ) )
+	if ( ! isset( $_POST['hybrid-post-template'] ) || ! current_user_can( 'edit_post', $post_id ) )
 		return $post_id;
 
 	// Get the posted meta value.

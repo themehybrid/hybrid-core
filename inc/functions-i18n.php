@@ -168,7 +168,7 @@ function hybrid_get_child_textdomain() {
 	global $hybrid;
 
 	// If a child theme isn't active, return an empty string.
-	if ( !is_child_theme() )
+	if ( ! is_child_theme() )
 		return '';
 
 	// If the global textdomain isn't set, define it. Plugin/theme authors may also define a custom textdomain.
@@ -207,7 +207,7 @@ function hybrid_get_parent_domain_path() {
  */
 function hybrid_get_child_domain_path() {
 
-	if ( !is_child_theme() )
+	if ( ! is_child_theme() )
 		return '';
 
 	$theme = wp_get_theme();
@@ -259,7 +259,7 @@ function hybrid_load_textdomain_mofile( $mofile, $domain ) {
  */
 function hybrid_get_language( $locale = '' ) {
 
-	if ( empty( $locale ) )
+	if ( ! $locale )
 		$locale = get_locale();
 
 	return sanitize_key( preg_replace( '/(.*?)_.*?$/i', '$1', $locale ) );
@@ -276,7 +276,7 @@ function hybrid_get_language( $locale = '' ) {
  */
 function hybrid_get_region( $locale = '' ) {
 
-	if ( empty( $locale ) )
+	if ( ! $locale )
 		$locale = get_locale();
 
 	return sanitize_key( preg_replace( '/.*?_(.*?)$/i', '$1', $locale ) );

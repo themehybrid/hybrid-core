@@ -208,7 +208,7 @@ function hybrid_delete_post_layout( $post_id ) {
  */
 function hybrid_has_post_layout( $layout, $post_id = '' ) {
 
-	if ( !$post_id )
+	if ( ! $post_id )
 		$post_id = get_the_ID();
 
 	return $layout == hybrid_get_post_layout( $post_id ) ? true : false;
@@ -262,7 +262,7 @@ function hybrid_delete_user_layout( $user_id ) {
  */
 function hybrid_has_user_layout( $layout, $user_id = '' ) {
 
-	if ( !$user_id )
+	if ( ! $user_id )
 		$user_id = absint( get_query_var( 'author' ) );
 
 	return $layout == hybrid_get_user_layout( $user_id ) ? true : false;

@@ -26,7 +26,7 @@
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
-if ( !class_exists( 'Hybrid' ) ) {
+if ( ! class_exists( 'Hybrid' ) ) {
 
 	/**
 	 * The Hybrid class launches the framework.  It's the organizational structure behind the
@@ -92,11 +92,11 @@ if ( !class_exists( 'Hybrid' ) ) {
 			define( 'HYBRID_CHILD_URI',  trailingslashit( get_stylesheet_directory_uri() ) );
 
 			// Sets the path to the core framework directory.
-			if ( !defined( 'HYBRID_DIR' ) )
+			if ( ! defined( 'HYBRID_DIR' ) )
 				define( 'HYBRID_DIR', trailingslashit( HYBRID_PARENT . basename( dirname( __FILE__ ) ) ) );
 
 			// Sets the path to the core framework directory URI.
-			if ( !defined( 'HYBRID_URI' ) )
+			if ( ! defined( 'HYBRID_URI' ) )
 				define( 'HYBRID_URI', trailingslashit( HYBRID_PARENT_URI . basename( dirname( __FILE__ ) ) ) );
 
 			// Core framework directory paths.
@@ -146,8 +146,8 @@ if ( !class_exists( 'Hybrid' ) ) {
 		}
 
 		/**
-		 * Adds theme support for features that themes should be supporting.  Also, removes 
-		 * theme supported features from themes in the case that a user has a plugin installed 
+		 * Adds theme support for features that themes should be supporting.  Also, removes
+		 * theme supported features from themes in the case that a user has a plugin installed
 		 * that handles the functionality.
 		 *
 		 * @since  1.3.0

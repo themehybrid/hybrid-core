@@ -85,7 +85,7 @@ function hybrid_get_post_templates( $post_type = 'post' ) {
 	global $hybrid;
 
 	// If templates have already been called, just return them.
-	if ( !empty( $hybrid->post_templates ) && isset( $hybrid->post_templates[ $post_type ] ) )
+	if ( ! empty( $hybrid->post_templates ) && isset( $hybrid->post_templates[ $post_type ] ) )
 		return $hybrid->post_templates[ $post_type ];
 
 	// Set up an empty array to house the templates.
@@ -105,7 +105,7 @@ function hybrid_get_post_templates( $post_type = 'post' ) {
 		$headers = get_file_data( $path, array( "{$post_type} Template" => "{$post_type} Template" ) );
 
 		// Add the PHP filename and template name to the array.
-		if ( !empty( $headers["{$post_type} Template"] ) )
+		if ( ! empty( $headers["{$post_type} Template"] ) )
 			$post_templates[ $file ] = $headers["{$post_type} Template"];
 	}
 
@@ -129,7 +129,7 @@ function hybrid_get_post_styles( $post_type = 'post' ) {
 	global $hybrid;
 
 	// If stylesheets have already been loaded, return them.
-	if ( !empty( $hybrid->post_styles ) && isset( $hybrid->post_styles[ $post_type ] ) )
+	if ( ! empty( $hybrid->post_styles ) && isset( $hybrid->post_styles[ $post_type ] ) )
 		return $hybrid->post_styles[ $post_type ];
 
 	// Set up an empty styles array.
@@ -155,10 +155,10 @@ function hybrid_get_post_styles( $post_type = 'post' ) {
 		);
 
 		// Add the CSS filename and template name to the array.
-		if ( !empty( $headers['Style Name'] ) )
+		if ( ! empty( $headers['Style Name'] ) )
 			$hybrid->post_styles[ $post_type ][ $file ] = $headers['Style Name'];
 
-		elseif ( !empty( $headers["{$post_type} Style"] ) )
+		elseif ( ! empty( $headers["{$post_type} Style"] ) )
 			$hybrid->post_styles[ $post_type ][ $file ] = $headers["{$post_type} Style"];
 	}
 

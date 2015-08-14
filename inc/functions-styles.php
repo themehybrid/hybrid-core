@@ -227,7 +227,7 @@ function hybrid_delete_post_style( $post_id ) {
  */
 function hybrid_has_post_style( $style, $post_id = '' ) {
 
-	if ( empty( $post_id ) )
+	if ( ! $post_id )
 		$post_id = get_the_ID();
 
 	return $style === hybrid_get_post_style( $post_id ) ? true : false;

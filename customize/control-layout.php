@@ -42,7 +42,7 @@ class Hybrid_Customize_Control_Layout extends Hybrid_Customize_Control_Radio_Ima
 	public function __construct( $manager, $id, $args = array() ) {
 
 		// Array of allowed layouts. Pass via `$args['layouts']`.
-		$allowed = !empty( $args['layouts'] ) ? $args['layouts'] : array_keys( hybrid_get_layouts() );
+		$allowed = ! empty( $args['layouts'] ) ? $args['layouts'] : array_keys( hybrid_get_layouts() );
 
 		// Loop through each of the layouts and add it to the choices array with proper key/value pairs.
 		foreach ( hybrid_get_layouts() as $layout ) {
