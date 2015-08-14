@@ -223,7 +223,7 @@ button,
 select { font-family: inherit; }
 
 input,
-textarea { box-sizing: content-box; }
+textarea { box-sizing: border-box; }
 
 :focus { outline: none; }
 
