@@ -88,7 +88,7 @@ function hybrid_get_menu( $name = '' ) {
 
 	$templates = array();
 
-	if ( '' !== $name ) {
+	if ( $name ) {
 		$templates[] = "menu-{$name}.php";
 		$templates[] = "menu/{$name}.php";
 	}
@@ -126,7 +126,7 @@ function hybrid_get_header( $name = '' ) {
 
 	$templates = array();
 
-	if ( '' !== $name ) {
+	if ( $name ) {
 		$templates[] = "header-{$name}.php";
 		$templates[] = "header/{$name}.php";
 	}
@@ -164,7 +164,7 @@ function hybrid_get_footer( $name = '' ) {
 
 	$templates = array();
 
-	if ( '' !== $name ) {
+	if ( $name ) {
 		$templates[] = "footer-{$name}.php";
 		$templates[] = "footer/{$name}.php";
 	}
@@ -202,7 +202,7 @@ function hybrid_get_sidebar( $name = '' ) {
 
 	$templates = array();
 
-	if ( '' !== $name ) {
+	if ( $name ) {
 		$templates[] = "sidebar-{$name}.php";
 		$templates[] = "sidebar/{$name}.php";
 	}

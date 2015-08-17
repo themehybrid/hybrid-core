@@ -363,7 +363,7 @@ class Hybrid_Media_Meta {
 	 */
 	public function file_size( $file_size ) {
 
-		return !empty( $this->meta['filesize'] ) ? size_format( strip_tags( $this->meta['filesize'] ), 2 ) : $file_size;
+		return ! empty( $this->meta['filesize'] ) ? size_format( strip_tags( $this->meta['filesize'] ), 2 ) : $file_size;
 	}
 
 	/**
