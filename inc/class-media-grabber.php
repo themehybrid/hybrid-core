@@ -60,7 +60,7 @@ class Hybrid_Media_Grabber {
 	public $original_media = '';
 
 	/**
-	 * The type of media to get.  Current supported types are 'audio' and 'video'.
+	 * The type of media to get.  Current supported types are 'audio', 'video', and 'gallery'.
 	 *
 	 * @since  1.6.0
 	 * @access public
@@ -118,7 +118,7 @@ class Hybrid_Media_Grabber {
 		// Set the object properties.
 		$this->args    = apply_filters( 'hybrid_media_grabber_args', wp_parse_args( $args, $defaults ) );
 		$this->content = get_post_field( 'post_content', $this->args['post_id'], 'raw' );
-		$this->type    = isset( $this->args['type'] ) && in_array( $this->args['type'], array( 'audio', 'video' ) ) ? $this->args['type'] : 'video';
+		$this->type    = isset( $this->args['type'] ) && in_array( $this->args['type'], array( 'audio', 'video', 'gallery' ) ) ? $this->args['type'] : 'video';
 
 		// Find the media related to the post.
 		$this->set_media();
@@ -304,6 +304,21 @@ class Hybrid_Media_Grabber {
 	 * @return void
 	 */
 	public function do_jetpack_shortcode_media( $shortcode ) {
+
+		$this->original_media = array_shift( $shortcode );
+
+		$this->media = do_shortcode( $this->original_media );
+	}
+
+	/**
+	 * Handles the HTML when the [gallery] shortcode is used.
+	 *
+	 * @since  3.0.
+	 * @access public
+	 * @param  array  $shortcode
+	 * @return void
+	 */
+	public function do_gallery_shortcode_media( $shortcode ) {
 
 		$this->original_media = array_shift( $shortcode );
 
