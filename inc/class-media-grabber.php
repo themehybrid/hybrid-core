@@ -162,38 +162,30 @@ class Hybrid_Media_Grabber {
 			$this->do_attachment_media();
 
 		// Find media in the post content based on WordPress' media-related shortcodes.
-		if ( empty( $this->media ) )
+		if ( ! $this->media )
 			$this->do_shortcode_media();
 
 		// If no media is found and autoembeds are enabled, check for autoembeds.
-		if ( empty( $this->media ) && get_option( 'embed_autourls' ) )
+		if ( ! $this->media && get_option( 'embed_autourls' ) )
 			$this->do_autoembed_media();
 
 		// If no media is found, check for media HTML within the post content.
-		if ( empty( $this->media ) )
+		if ( ! $this->media )
 			$this->do_embedded_media();
 
 		// If no media is found, check for media attached to the post.
-		if ( empty( $this->media ) )
+		if ( ! $this->media )
 			$this->do_attached_media();
 
 		// If media is found, let's run a few things.
-		if ( !empty( $this->media ) ) {
-
-			// Add the before HTML.
-			if ( isset( $this->args['before'] ) )
-				$this->media = $this->args['before'] . $this->media;
-
-			// Add the after HTML.
-			if ( isset( $this->args['after'] ) )
-				$this->media .= $this->args['after'];
+		if ( $this->media ) {
 
 			// Split the media from the content.
 			if ( true === $this->args['split_media'] && !empty( $this->original_media ) )
 				add_filter( 'the_content', array( $this, 'split_media' ), 5 );
 
-			// Filter the media dimensions.
-			$this->media = $this->filter_dimensions( $this->media );
+			// Filter the media dimensions and add the before/after HTML.
+			$this->media = $this->args['before'] . $this->filter_dimensions( $this->media ) . $this->args['after'];
 		}
 	}
 
@@ -212,7 +204,7 @@ class Hybrid_Media_Grabber {
 		preg_match_all( '/' . get_shortcode_regex() . '/s', $this->content, $matches, PREG_SET_ORDER );
 
 		// If matches are found, loop through them and check if they match one of WP's media shortcodes.
-		if ( !empty( $matches ) ) {
+		if ( ! empty( $matches ) ) {
 
 			foreach ( $matches as $shortcode ) {
 
@@ -344,7 +336,7 @@ class Hybrid_Media_Grabber {
 				// Let WP work its magic with the 'autoembed' method.
 				$embed = trim( apply_filters( 'hybrid_media_grabber_autoembed_media', $value[0] ) );
 
-				if ( !empty( $embed ) ) {
+				if ( $embed ) {
 
 					// If we're given a shortcode, roll with it.
 					if ( preg_match( "/\[{$this->type}\s/", $embed ) ) {
@@ -375,7 +367,7 @@ class Hybrid_Media_Grabber {
 
 		$embedded_media = get_media_embedded_in_content( $this->content );
 
-		if ( !empty( $embedded_media ) )
+		if ( $embedded_media )
 			$this->media = $this->original_media = array_shift( $embedded_media );
 	}
 
@@ -393,7 +385,7 @@ class Hybrid_Media_Grabber {
 		$attached_media = get_attached_media( $this->type, $this->args['post_id'] );
 
 		// If media is found.
-		if ( !empty( $attached_media ) ) {
+		if ( $attached_media ) {
 
 			// Get the first attachment/post object found for the post.
 			$post = array_shift( $attached_media );
@@ -447,7 +439,8 @@ class Hybrid_Media_Grabber {
 	 */
 	public function filter_dimensions( $html ) {
 
-		$_html = strip_tags( $html, '<object><embed><iframe><video>' );
+		$media_atts = array();
+		$_html      = strip_tags( $html, '<object><embed><iframe><video>' );
 
 		// Find the attributes of the media.
 		$atts = wp_kses_hair( $_html, array( 'http', 'https' ) );
@@ -457,7 +450,7 @@ class Hybrid_Media_Grabber {
 			$media_atts[ $att['name'] ] = $att['value'];
 
 		// If no dimensions are found, just return the HTML.
-		if ( empty( $media_atts ) || !isset( $media_atts['width'] ) || !isset( $media_atts['height'] ) )
+		if ( empty( $media_atts ) || ! isset( $media_atts['width'] ) || ! isset( $media_atts['height'] ) )
 			return $html;
 
 		// Set the max width.
@@ -467,7 +460,7 @@ class Hybrid_Media_Grabber {
 		$max_height = round( $max_width / ( $media_atts['width'] / $media_atts['height'] ) );
 
 		// Fix for Spotify embeds.
-		if ( !empty( $media_atts['src'] ) && preg_match( '#https?://(embed)\.spotify\.com/.*#i', $media_atts['src'], $matches ) )
+		if ( ! empty( $media_atts['src'] ) && preg_match( '#https?://(embed)\.spotify\.com/.*#i', $media_atts['src'], $matches ) )
 			list( $max_width, $max_height ) = $this->spotify_dimensions( $media_atts );
 
 		// Calculate new media dimensions.
