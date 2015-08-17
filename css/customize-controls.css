@@ -1,0 +1,58 @@
+/**
+ * Customize Controls Stylesheet
+ * @version 20150507
+ */
+
+/* === Palette Control === */
+
+.customize-control-palette label {
+	display: block;
+	padding: 0 10px 10px;
+}
+
+.customize-control-palette label.selected {
+	padding-top: 5px;
+	background-color: #ddd;
+}
+
+	.customize-control-palette .palette-label {
+		line-height: 28px;
+	}
+
+	.customize-control-palette .palette-block {
+		display: table;
+		width:   100%;
+		height:  45px;
+	}
+
+		.customize-control-palette .palette-color {
+			display: table-cell;
+			height:  100%;
+		}
+
+/* === Radio Image Control === */
+
+.customize-control-radio-image input[type="radio"] {
+	clip:     rect(1px, 1px, 1px, 1px);
+	height:   1px;
+	overflow: hidden;
+	position: absolute !important;
+	width:    1px;
+}
+
+.customize-control-radio-image img {
+	box-sizing: border-box;
+	max-width:  100%;
+	height:     auto;
+	padding:    1px;
+	border:     4px solid transparent;
+}
+
+	.customize-control-radio-image img:hover,
+	.customize-control-radio-image img:focus {
+		border-color: #ccc;
+	}
+
+	.customize-control-radio-image input:checked + span + img {
+		border-color: #00a0d2;
+	}

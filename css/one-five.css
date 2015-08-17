@@ -9,24 +9,16 @@ html, body, div, span, object, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, ab
 	text-decoration: none;
 }
 
-article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section, main { 
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section, main {
 	display: block;
 }
 
-
-html {
-	font-size: 16px;
-}
+html { font-size: 16px; }
 
 body {
 	line-height: 1.5;
 	font-size:   1rem;
 }
-
-	body.rtl {
-		direction:    rtl;
-		unicode-bidi: embed;
-	}
 
 h1, h2, h3, h4, h5, h6 {
 	font-style:  normal;
@@ -41,12 +33,13 @@ h4 { font-size: 1.375rem; }
 h5 { font-size: 1.25rem;  }
 h6 { font-size: 1.125rem; }
 
-p, figure {
-	margin: 0 0 1.5rem;
-}
+p,
+figure { margin: 0 0 1.5rem; }
 
-ol, ul {
-	list-style: none;
+p:empty {
+	margin:      0;
+	padding:     0;
+	line-height: 0;
 }
 
 ul {
@@ -54,32 +47,38 @@ ul {
 	margin:     0 0 1.5rem;
 }
 
-ol {
-	list-style: decimal;
-	margin:     0 0 1.5rem;
-}
+ol { margin: 0 0 1.5rem; }
 
-	.ltr ul,
-	.ltr ol { margin-left: 3rem; }
+	ul,
+	ol { margin-left: 3rem; }
 
-	.rtl ul,
-	.rtl ol { margin-right: 3rem; }
+	ol.disc,                 ul.disc                 { list-style: disc;                 }
+	ol.armenian,             ul.armenian             { list-style: armenian;             }
+	ol.circle,               ul.circle               { list-style: circle;               }
+	ol.cjk-ideographic,      ul.cjk-ideographic      { list-style: cjk-ideographic;      }
+	ol.decimal,              ul.decimal              { list-style: decimal;              }
+	ol.decimal-leading-zero, ul.decimal-leading-zero { list-style: decimal-leading-zero; }
+	ol.georgian,             ul.georgian             { list-style: georgian;             }
+	ol.hebrew,               ul.hebrew               { list-style: hebrew;               }
+	ol.hiragana,             ul.hiragana             { list-style: hiragana;             }
+	ol.hiragana-iroha,       ul.hiragana-iroha       { list-style: hiragana-iroha;       }
+	ol.katakana,             ul.katakana             { list-style: katakana;             }
+	ol.kataka-iroha,         ul.katakana-iroha       { list-style: katakana-iroha;       }
+	ol.lower-alpa,           ul.lower-alpha          { list-style: lower-alpha;          }
+	ol.lower-greek,          ul.lower-greek          { list-style: lower-greek;          }
+	ol.lower-latin,          ul.lower-latin          { list-style: lower-latin;          }
+	ol.lower-roman,          ul.lower-roman          { list-style: lower-roman;          }
+	ol.none,                 ul.none                 { list-style: none;                 }
+	ol.square,               ul.square               { list-style: square;               }
+	ol.upper-alpha,          ul.upper-alpha          { list-style: upper-alpha;          }
+	ol.upper-latin,          ul.upper-latin          { list-style: upper-latin;          }
+	ol.upper-roman,          ul.upper-roman          { list-style: upper-roman;          }
+	ol.initial,              ul.initial              { list-style: initial;              }
 
-
-ol ol { list-style: upper-roman; }
-
-	ol ol ol { list-style: lower-roman; }
-
-		ol ol ol ol { list-style: upper-alpha; }
-
-			ol ol ol ol ol { list-style: lower-alpha; }
-
-ul ul, 
-ol ol, 
-ul ol, 
-ol ul {
-	margin-bottom: 0;
-}
+ul ul,
+ol ol,
+ul ol,
+ol ul { margin-bottom: 0; }
 
 	.comment-content ul,
 	.comment-content ol { margin-bottom: 1.5rem; }
@@ -87,28 +86,14 @@ ol ul {
 		.comment-content li ul,
 		.comment-content li ol { margin-bottom: 0; }
 
-
-dl {
-	margin: 0 0 1.5rem;
-}
+dl { margin: 0 0 1.5rem; }
 
 	dt {
+		margin-left: 0.75rem;
 		font-weight: bold;
 	}
 
-	.ltr dt {
-		margin-left: 0.75rem;
-	}
-	.rtl dt {
-		margin-right: 0.75rem;
-	}
-
-	.ltr dd {
-		margin-left: 1.5rem;
-	}
-	.rtl dd {
-		margin-right: 1.5rem;
-	}
+	dd { margin-left: 1.5rem; }
 
 	dd + dd { margin-top: 0.75rem; }
 
@@ -118,11 +103,7 @@ dl {
 
 *[dir="ltr"] { direction: ltr; unicode-bidi: embed; }
 
-*[dir="rtl"] { direction: rtl; unicode-bidi: embed; }
-
 bdo[dir="ltr"] { direction: ltr; unicode-bidi: bidi-override; }
-
-bdo[dir="rtl"] { direction: rtl; unicode-bidi: bidi-override; }
 
 /* === <center> tag === */
 
@@ -139,12 +120,12 @@ strong { font-weight: 700; }
 /* === Emphasis, italics, etc. === */
 
 i,
-em, 
+em,
 mark,
 cite { font-style: italic; }
 
 i i,
-em em, 
+em em,
 mark mark,
 cite cite { font-style: normal; }
 
@@ -152,32 +133,22 @@ cite cite { font-style: normal; }
 
 abbr[title],
 acronym[title],
-time[title] {
-	cursor: help;
-}
+time[title] { cursor: help; }
 
 abbr,
-acronym {
-	border-bottom: 1px dotted #999;
-}
+acronym { border-bottom: 1px dotted #999; }
 
-acronym {
-	text-transform: uppercase;
-}
+acronym { text-transform: uppercase; }
 
 /* === Big === */
 
-big {
-	font-size: 1.125em;
-}
+big { font-size: 1.125em; }
 
 /* === Small, sup, sub === */
 
-small, 
-sup, 
-sub {
-	font-size: .8125em;
-}
+small,
+sup,
+sub { font-size: .8125em; }
 
 sup {
 	vertical-align: baseline;
@@ -206,19 +177,14 @@ blockquote {
 }
 
 	blockqoute i,
-	blockquote em, 
-	blockquote cite {
-		font-style: normal;
-	}
+	blockquote em,
+	blockquote cite { font-style: normal; }
 
 	.en-us q { quotes: '\201C' '\201D' '\2018' '\2019'; }
 
-
 /* === Links === */
 
-a {
-	cursor: pointer;
-}
+a { cursor: pointer; }
 
 /* === Code === */
 
@@ -236,52 +202,36 @@ code {
 	font-family: monospace;
 }
 
-ins, 
+ins,
 dfn {
 	font-style:      italic;
 	text-decoration: none;
 	border-bottom:   1px solid #999;
 }
 
-del, 
-s, 
-strike {
-	text-decoration: line-through;
-}
+del,
+s,
+strike { text-decoration: line-through; }
 
-object {
-	margin-bottom: 1.5rem;
-}
+object { margin-bottom: 1.5rem; }
 
 /* === Forms === */
 
 input,
 textarea,
 button,
-select {
-	font-family: inherit;
-}
+select { font-family: inherit; }
 
-input, 
-textarea {
-	box-sizing: content-box;
-}
+input,
+textarea { box-sizing: border-box; }
 
-input[type="submit"] {
-	cursor: pointer;
-}
+:focus { outline: none; }
 
-:focus {
-	outline: none;
-}
-
-form label,
+label,
+button,
 input[type="submit"],
 input[type="reset"],
-input[type="button"],
-button {
-	cursor: pointer;
-}
+input[type="button"] { cursor: pointer; }
 
 table {
 	border-collapse: collapse;
@@ -289,10 +239,8 @@ table {
 	margin-bottom:   1.5rem;
 }
 
-	th, 
-	td {
-		text-align: left;
-	}
+	th,
+	td { text-align: left; }
 
 hr {
 	height:        1px;
@@ -306,13 +254,17 @@ img {
 	height:          auto;
 }
 
-img.wp-smiley {
-	max-height: 12px;
-	margin:     0;
+img.wp-smiley,
+img.emoji {
+	display:    inline;
+	box-shadow: none;
+	max-height: 1em;
+	width:      1em;
+	margin:     0 .07em;
 	padding:    0;
 	border:     none;
 	background: transparent;
-	}
+}
 
 .gallery {
 	display:       block;
@@ -320,41 +272,39 @@ img.wp-smiley {
 	margin-bottom: 1.5rem;
 }
 
-.alignleft, 
-.left {
-	float:        left;
-	margin-right: 1.5rem;
-}
-
-.alignright, 
-.right {
-	float:       right;
-	margin-left: 1.5rem;
-}
-
-.aligncenter, 
-.center {
+.aligncenter,
+.alignright,
+.alignleft {
 	display: block;
 	margin:  0 auto 1.5rem;
 }
 
-.alignnone {
-	float: none;
-}
+	p .aligncenter,
+	p .alignright,
+	p .alignleft { margin-bottom: 0; }
 
-.clear {
-	clear: both;
-}
+	@media only screen and ( min-width: 480px ) {
 
-img.alignleft, 
-img.alignright {
-	display: inline;
-}
+		.alignleft {
+			float:        left;
+			margin-right: 1.5rem;
+		}
 
-blockquote.alignleft, 
-blockquote.alignright {
-	width: 33%;
-}
+		.alignright {
+			float:       right;
+			margin-left: 1.5rem;
+		}
+	}
+
+.alignnone { float: none; }
+
+.clear { clear: both; }
+
+img.alignleft,
+img.alignright { display: inline; }
+
+blockquote.alignleft,
+blockquote.alignright { width: 33%; }
 
 .wp-audio-shortcode,
 .wp-video-shortcode,
@@ -375,20 +325,13 @@ video {
 	max-width: 100%;
 }
 
-.show-if-js {
-	display: none;
-}
+.show-if-js { display: none; }
 
 .screen-reader-text,
 .assistive-text {
 	position: absolute;
 	top:      -9999em;
+	left:     -9999em;
 }
-
-	.ltr .screen-reader-text,
-	.ltr .assistive-text { left:  -9999em; }
-
-	.rtl .screen-reader-text,
-	.rtl .assistive-text { right: -9999em; }
 
 .sticky, .bypostauthor {}
