@@ -266,21 +266,18 @@ function hybrid_post_class_filter( $classes, $class, $post_id ) {
 	$_classes    = array();
 	$post        = get_post( $post_id );
 	$post_type   = get_post_type();
-	$post_status = get_post_status();
 
-	$remove = array( 'hentry', "type-{$post_type}", "status-{$post_status}", 'post-password-required' );
+	// Set up array of classes that we want to remove.
+	$remove = array( 'hentry', 'post-password-required' );
 
-	foreach ( $classes as $key => $class ) {
+	if ( post_type_supports( $post_type, 'post-formats' ) )
+		$remove[] = 'post_format-post-format-' . get_post_format();
 
-		if ( in_array( $class, $remove ) )
-			unset( $classes[ $key ] );
-		else
-			$classes[ $key ] = str_replace( 'tag-', 'post_tag-', $class );
-	}
+	// Remove classes.
+	$classes = array_diff( $classes, $remove );
 
+	// Entry class.
 	$_classes[] = 'entry';
-	$_classes[] = $post_type;
-	$_classes[] = $post_status;
 
 	// Author class.
 	$_classes[] = 'author-' . sanitize_html_class( get_the_author_meta( 'user_nicename' ), get_the_author_meta( 'ID' ) );
@@ -290,7 +287,7 @@ function hybrid_post_class_filter( $classes, $class, $post_id ) {
 		$_classes[] = 'protected';
 
 	// Has excerpt.
-	if ( post_type_supports( $post->post_type, 'excerpt' ) && has_excerpt() )
+	if ( post_type_supports( $post_type, 'excerpt' ) && has_excerpt() )
 		$_classes[] = 'has-excerpt';
 
 	// Has <!--more--> link.
