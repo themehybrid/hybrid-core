@@ -58,10 +58,11 @@ add_filter( 'hybrid_attr_comment-content',   'hybrid_attr_comment_content',   5 
  * @access public
  * @param  string  $slug     The slug/ID of the element (e.g., 'sidebar').
  * @param  string  $context  A specific context (e.g., 'primary').
+ * @param  array   $attr     Array of attributes to pass in (overwrites filters).
  * @return void
  */
-function hybrid_attr( $slug, $context = '' ) {
-	echo hybrid_get_attr( $slug, $context );
+function hybrid_attr( $slug, $context = '', $attr = array()  ) {
+	echo hybrid_get_attr( $slug, $context, $attr );
 }
 
 /**
@@ -74,12 +75,13 @@ function hybrid_attr( $slug, $context = '' ) {
  * @access public
  * @param  string  $slug     The slug/ID of the element (e.g., 'sidebar').
  * @param  string  $context  A specific context (e.g., 'primary').
+ * @param  array   $attr     Array of attributes to pass in (overwrites filters).
  * @return string
  */
-function hybrid_get_attr( $slug, $context = '' ) {
+function hybrid_get_attr( $slug, $context = '', $attr = array() ) {
 
 	$out    = '';
-	$attr   = apply_filters( "hybrid_attr_{$slug}", array(), $context );
+	$attr   = wp_parse_args( $attr, apply_filters( "hybrid_attr_{$slug}", array(), $context ) );
 
 	if ( empty( $attr ) )
 		$attr['class'] = $slug;
