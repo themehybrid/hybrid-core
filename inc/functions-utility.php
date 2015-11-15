@@ -18,8 +18,9 @@ add_action( 'init', 'hybrid_add_post_type_support', 15 );
 add_filter( 'the_title', 'hybrid_untitled_post' );
 
 # Filters the archive title and description.
-add_filter( 'get_the_archive_title',       'hybrid_archive_title_filter',       5 );
-add_filter( 'get_the_archive_description', 'hybrid_archive_description_filter', 5 );
+add_filter( 'get_the_archive_title',       'hybrid_archive_title_filter',       5  );
+add_filter( 'get_the_archive_description', 'hybrid_archive_description_filter', 0  );
+add_filter( 'get_the_archive_description', 'hybrid_archive_description_format', 95 );
 
 /**
  * This function is for adding extra support for features not default to the core post types.
@@ -284,22 +285,35 @@ function hybrid_archive_title_filter( $title ) {
 function hybrid_archive_description_filter( $desc ) {
 
 	if ( is_home() && ! is_front_page() )
-		$desc = get_post_field( 'post_content', get_queried_object_id(), 'raw' );
+		$new_desc = get_post_field( 'post_content', get_queried_object_id(), 'raw' );
 
 	elseif ( is_category() )
-		$desc = get_term_field( 'description', get_queried_object_id(), 'category', 'raw' );
+		$new_desc = get_term_field( 'description', get_queried_object_id(), 'category', 'raw' );
 
 	elseif ( is_tag() )
-		$desc = get_term_field( 'description', get_queried_object_id(), 'post_tag', 'raw' );
+		$new_desc = get_term_field( 'description', get_queried_object_id(), 'post_tag', 'raw' );
 
 	elseif ( is_tax() )
-		$desc = get_term_field( 'description', get_queried_object_id(), get_query_var( 'taxonomy' ), 'raw' );
+		$new_desc = get_term_field( 'description', get_queried_object_id(), get_query_var( 'taxonomy' ), 'raw' );
 
 	elseif ( is_author() )
-		$desc = get_the_author_meta( 'description', get_query_var( 'author' ) );
+		$new_desc = get_the_author_meta( 'description', get_query_var( 'author' ) );
 
 	elseif ( is_post_type_archive() )
-		$desc = get_post_type_object( get_query_var( 'post_type' ) )->description;
+		$new_desc = get_post_type_object( get_query_var( 'post_type' ) )->description;
+
+	return $new_desc ? $new_desc : $desc;
+}
+
+/**
+ * Filters `get_the_archve_description` to add custom formatting.
+ *
+ * @since  3.1.0
+ * @access public
+ * @param  string  $desc
+ * @return string
+ */
+function hybrid_archive_description_format( $desc ) {
 
 	return apply_filters( 'hybrid_archive_description', $desc );
 }
