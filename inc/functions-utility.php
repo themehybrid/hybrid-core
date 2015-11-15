@@ -284,6 +284,8 @@ function hybrid_archive_title_filter( $title ) {
  */
 function hybrid_archive_description_filter( $desc ) {
 
+	$new_desc = '';
+
 	if ( is_home() && ! is_front_page() )
 		$new_desc = get_post_field( 'post_content', get_queried_object_id(), 'raw' );
 
