@@ -19,7 +19,7 @@
  * write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  *
  * @package   HybridCore
- * @version   3.0.0
+ * @version   3.1.0-dev
  * @author    Justin Tadlock <justin@justintadlock.com>
  * @copyright Copyright (c) 2008 - 2015, Justin Tadlock
  * @link      http://themehybrid.com/hybrid-core
@@ -81,7 +81,7 @@ if ( ! class_exists( 'Hybrid' ) ) {
 		public function constants() {
 
 			// Sets the framework version number.
-			define( 'HYBRID_VERSION', '3.0.0' );
+			define( 'HYBRID_VERSION', '3.1.0' );
 
 			// Theme directory paths.
 			define( 'HYBRID_PARENT', trailingslashit( get_template_directory()   ) );
