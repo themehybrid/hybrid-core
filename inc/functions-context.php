@@ -211,7 +211,7 @@ function hybrid_body_class_filter( $classes, $class ) {
 		// Post format.
 		if ( current_theme_supports( 'post-formats' ) && post_type_supports( $post->post_type, 'post-formats' ) ) {
 			$post_format = get_post_format( get_queried_object_id() );
-			$classes[] = $post_format || is_wp_error( $post_format ) ? "{$post->post_type}-format-standard" : "{$post->post_type}-format-{$post_format}";
+			$classes[] = $post_format && ! is_wp_error( $post_format ) ? "{$post->post_type}-format-{$post_format}" : "{$post->post_type}-format-standard";
 		}
 
 		// Attachment mime types.
