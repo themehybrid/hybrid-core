@@ -11,12 +11,10 @@
  */
 
 # Register Hybrid Core styles.
-add_action( 'wp_enqueue_scripts',                 'hybrid_register_styles', 0 );
-add_action( 'enqueue_embed_scripts',              'hybrid_register_styles', 0 );
-add_action( 'wp_playlist_scripts',                'hybrid_register_styles', 0 );
-add_action( 'customize_controls_enqueue_scripts', 'hybrid_register_styles', 0 );
-add_action( 'login_enqueue_scripts',              'hybrid_register_styles', 0 );
-add_action( 'admin_enqueue_scripts',              'hybrid_register_styles', 0 );
+add_action( 'wp_enqueue_scripts',    'hybrid_register_styles', 0 );
+add_action( 'enqueue_embed_scripts', 'hybrid_register_styles', 0 );
+add_action( 'login_enqueue_scripts', 'hybrid_register_styles', 0 );
+add_action( 'admin_enqueue_scripts', 'hybrid_register_styles', 0 );
 
 # Active theme style filters.
 add_filter( 'stylesheet_uri', 'hybrid_min_stylesheet_uri', 5, 2 );
