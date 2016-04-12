@@ -185,6 +185,10 @@ function hybrid_body_class_filter( $classes, $class ) {
 	if ( get_header_image() || ( display_header_text() && get_header_textcolor() ) )
 		$classes[] = 'custom-header';
 
+	// Add the `.custom-logo` class if user is using a custom logo.
+	if ( function_exists( 'has_custom_logo' ) && has_custom_logo() )
+		$classes[] = 'wp-custom-logo';
+
 	// Add the '.display-header-text' class if the user chose to display it.
 	if ( display_header_text() )
 		$classes[] = 'display-header-text';
