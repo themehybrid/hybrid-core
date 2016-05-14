@@ -113,6 +113,10 @@ class Hybrid_Media_Grabber {
 			'after'       => '',             // HTML after the output
 			'split_media' => false,          // Splits the media from the post content
 			'width'       => $content_width, // Custom width. Defaults to the theme's content width.
+			'shortcodes'  => true,           // True | False | Array of specific shortcode handles to look for.
+			'autoembeds'  => true,           // Whether to check for autoembeds.
+			'embedded'    => true,           // Whether to check for HTML-embedded media.
+			'attached'    => true,           // Whether to check for attached media.
 		);
 
 		// Set the object properties.
@@ -162,19 +166,19 @@ class Hybrid_Media_Grabber {
 			$this->do_attachment_media();
 
 		// Find media in the post content based on WordPress' media-related shortcodes.
-		if ( ! $this->media )
+		if ( ! $this->media && $this->arg['shortcodes'] )
 			$this->do_shortcode_media();
 
 		// If no media is found and autoembeds are enabled, check for autoembeds.
-		if ( ! $this->media && get_option( 'embed_autourls' ) )
+		if ( ! $this->media && get_option( 'embed_autourls' ) && $this->args['autoembeds'] )
 			$this->do_autoembed_media();
 
 		// If no media is found, check for media HTML within the post content.
-		if ( ! $this->media )
+		if ( ! $this->media && $this->args['embedded'] )
 			$this->do_embedded_media();
 
 		// If no media is found, check for media attached to the post.
-		if ( ! $this->media )
+		if ( ! $this->media && $this->args['attached'] )
 			$this->do_attached_media();
 
 		// If media is found, let's run a few things.
@@ -208,8 +212,22 @@ class Hybrid_Media_Grabber {
 
 			foreach ( $matches as $shortcode ) {
 
+				// Only check for specific shortcodes.
+				if ( is_array( $this->args['shortcodes'] ) ) {
+
+					// Call the method related to the specific shortcode found and break out of the loop.
+					if ( in_array( $shortcode[2], $this->args['shortcodes'] ) && in_array( $shortcode[2], array( 'playlist', 'embed', $this->type ) ) ) {
+						call_user_func( array( $this, "do_{$shortcode[2]}_shortcode_media" ), $shortcode );
+						break;
+
+					} else if ( in_array( $shortcode[2], $this->args['shortcodes'] ) ) {
+						call_user_func( array( $this, '_do_shortcode_media' ), $shortcode );
+						break;
+					}
+				}
+
 				// Call the method related to the specific shortcode found and break out of the loop.
-				if ( in_array( $shortcode[2], array( 'playlist', 'embed', $this->type ) ) ) {
+				else if ( in_array( $shortcode[2], array( 'playlist', 'embed', $this->type ) ) ) {
 					call_user_func( array( $this, "do_{$shortcode[2]}_shortcode_media" ), $shortcode );
 					break;
 				}
@@ -227,15 +245,28 @@ class Hybrid_Media_Grabber {
 	 * Handles the output of the WordPress playlist feature.  This searches for the [playlist] shortcode
 	 * if it's used in the content.
 	 *
+	 * @since  3.1.0
+	 * @access public
+	 * @return void
+	 */
+	public function _do_shortcode_media( $shortcode ) {
+
+		$this->original_media = array_shift( $shortcode );
+
+		$this->media = do_shortcode( $this->original_media );
+	}
+
+	/**
+	 * Handles the output of the WordPress playlist feature.  This searches for the [playlist] shortcode
+	 * if it's used in the content.
+	 *
 	 * @since  2.0.0
 	 * @access public
 	 * @return void
 	 */
 	public function do_playlist_shortcode_media( $shortcode ) {
 
-		$this->original_media = array_shift( $shortcode );
-
-		$this->media = do_shortcode( $this->original_media );
+		$this->_do_shortcode_media( $shortcode );
 	}
 
 	/**
@@ -266,9 +297,7 @@ class Hybrid_Media_Grabber {
 	 */
 	public function do_audio_shortcode_media( $shortcode ) {
 
-		$this->original_media = array_shift( $shortcode );
-
-		$this->media = do_shortcode( $this->original_media );
+		$this->_do_shortcode_media( $shortcode );
 	}
 
 	/**
@@ -297,9 +326,7 @@ class Hybrid_Media_Grabber {
 	 */
 	public function do_jetpack_shortcode_media( $shortcode ) {
 
-		$this->original_media = array_shift( $shortcode );
-
-		$this->media = do_shortcode( $this->original_media );
+		$this->_do_shortcode_media( $shortcode );
 	}
 
 	/**
@@ -312,9 +339,7 @@ class Hybrid_Media_Grabber {
 	 */
 	public function do_gallery_shortcode_media( $shortcode ) {
 
-		$this->original_media = array_shift( $shortcode );
-
-		$this->media = do_shortcode( $this->original_media );
+		$this->_do_shortcode_media( $shortcode );
 	}
 
 	/**
