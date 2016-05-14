@@ -166,7 +166,7 @@ class Hybrid_Media_Grabber {
 			$this->do_attachment_media();
 
 		// Find media in the post content based on WordPress' media-related shortcodes.
-		if ( ! $this->media && $this->arg['shortcodes'] )
+		if ( ! $this->media && $this->args['shortcodes'] )
 			$this->do_shortcode_media();
 
 		// If no media is found and autoembeds are enabled, check for autoembeds.
