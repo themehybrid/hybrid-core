@@ -175,6 +175,7 @@ function hybrid_get_image_size_links() {
 			$links[] = sprintf( '<a href="%1$s" class="image-size-link">%2$s</a>',
 			$imgurl,
 			$label
+			);
 		}
 	}
 
