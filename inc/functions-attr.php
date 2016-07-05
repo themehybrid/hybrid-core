@@ -87,7 +87,7 @@ function hybrid_get_attr( $slug, $context = '', $attr = array() ) {
 		$attr['class'] = $slug;
 
 	foreach ( $attr as $name => $value )
-		$out .= $value ? sprintf( ' %s="%s"', esc_html( $name ), esc_attr( $value ) ) : esc_html( " {$name}" );
+		$out .= false !== $value ? sprintf( ' %s="%s"', esc_html( $name ), esc_attr( $value ) ) : esc_html( " {$name}" );
 
 	return trim( $out );
 }
