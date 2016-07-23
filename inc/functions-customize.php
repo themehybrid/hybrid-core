@@ -14,7 +14,7 @@
 add_action( 'customize_register', 'hybrid_load_customize_classes', 0 );
 
 # Register customizer panels, sections, settings, and/or controls.
-add_action( 'customize_register', 'hybrid_customize_register' );
+add_action( 'customize_register', 'hybrid_customize_register', 5 );
 
 # Register customize controls scripts/styles.
 add_action( 'customize_controls_enqueue_scripts', 'hybrid_customize_controls_register_scripts', 0 );
