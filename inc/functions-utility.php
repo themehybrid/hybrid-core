@@ -184,7 +184,9 @@ function hybrid_get_menu_name( $location ) {
 
 	$locations = get_nav_menu_locations();
 
-	return isset( $locations[ $location ] ) ? wp_get_nav_menu_object( $locations[ $location ] )->name : '';
+	$menu = isset( $locations[ $location ] ) ? wp_get_nav_menu_object( $locations[ $location ] ) : '';
+
+	return $menu ? $menu->name : '';
 }
 
 /**
