@@ -411,7 +411,8 @@ final class Get_The_Image {
 		$this->_get_image_attachment( $post_thumbnail_id );
 
 		// Add the post thumbnail ID.
-		$this->image_args['post_thumbnail_id'] = $post_thumbnail_id;
+		if ( $this->image_args )
+			$this->image_args['post_thumbnail_id'] = $post_thumbnail_id;
 	}
 
 	/**
@@ -632,6 +633,10 @@ final class Get_The_Image {
 		// Get the attachment caption.
 		$caption = get_post_field( 'post_excerpt', $attachment_id );
 
+		// Only use the image if we have an image and it meets the size requirements.
+		if ( ! $image || ! $this->have_required_dimensions( $image[1], $image[2] ) )
+			return;
+
 		// Save the attachment as the 'featured image'.
 		if ( true === $this->args['thumbnail_id_save'] )
 			$this->thumbnail_id_save( $attachment_id );
@@ -690,13 +695,15 @@ final class Get_The_Image {
 		if ( empty( $this->image_args['src'] ) )
 			return;
 
-		// Check against min. width. If the image width is too small return.
-		if ( 0 < $this->args['min_width'] && isset( $this->image_args['width'] ) && $this->image_args['width'] < $this->args['min_width'] )
-			return;
+		// Check against min. width and height. If the image is too small return.
+		if ( isset( $this->image_args['width'] ) || isset( $this->image_args['height'] ) ) {
 
-		// Check against min. height. If the image height is too small return.
-		if ( 0 < $this->args['min_height'] && isset( $this->image_args['height'] ) && $this->image_args['height'] < $this->args['min_height'] )
-			return;
+			$_w = isset( $this->image_args['width'] )  ? $this->image_args['width']  : false;
+			$_h = isset( $this->image_args['height'] ) ? $this->image_args['height'] : false;
+
+			if ( ! $this->have_required_dimensions( $_w, $_h ) )
+				return;
+		}
 
 		// Empty classes array.
 		$classes = array();
@@ -868,6 +875,28 @@ final class Get_The_Image {
 		remove_filter( 'the_content', array( $this, 'split_content' ), 9 );
 
 		return str_replace( $this->original_image, '', $content );
+	}
+
+	/**
+	 * Checks if the image meets the minimum size requirements.
+	 *
+	 * @since  1.1.0
+	 * @access public
+	 * @param  int|bool  $width
+	 * @param  int|bool  $height
+	 * @return bool
+	 */
+	public function have_required_dimensions( $width = false, $height = false ) {
+
+		// Check against min. width. If the image width is too small return.
+		if ( 0 < $this->args['min_width'] && $width && $width < $this->args['min_width'] )
+			return false;
+
+		// Check against min. height. If the image height is too small return.
+		if ( 0 < $this->args['min_height'] && $height && $height < $this->args['min_height'] )
+			return false;
+
+		return true;
 	}
 }
 
