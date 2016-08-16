@@ -250,6 +250,8 @@ class Breadcrumb_Trail {
 			'search'              => esc_html__( 'Search results for &#8220;%s&#8221;',   'hybrid-core' ),
 			// Translators: %s is the page number.
 			'paged'               => esc_html__( 'Page %s',                               'hybrid-core' ),
+			// Translators: %s is the page number.
+			'paged_comments'      => esc_html__( 'Comment Page %s',                       'hybrid-core' ),
 			// Translators: Minute archive title. %s is the minute time format.
 			'archive_minute'      => esc_html__( 'Minute %s',                             'hybrid-core' ),
 			// Translators: Weekly archive title. %s is the week date format.
@@ -399,6 +401,10 @@ class Breadcrumb_Trail {
 		if ( is_singular() && 1 < get_query_var( 'page' ) && true === $this->args['show_title'] )
 			$this->items[] = sprintf( $this->labels['paged'], number_format_i18n( absint( get_query_var( 'page' ) ) ) );
 
+		// If viewing a singular post with paged comments.
+		elseif ( is_singular() && get_option( 'page_comments' ) && 1 < get_query_var( 'cpage' ) )
+			$this->items[] = sprintf( $this->labels['paged_comments'], number_format_i18n( absint( get_query_var( 'cpage' ) ) ) );
+
 		// If viewing a paged archive-type page.
 		elseif ( is_paged() && true === $this->args['show_title'] )
 			$this->items[] = sprintf( $this->labels['paged'], number_format_i18n( absint( get_query_var( 'paged' ) ) ) );
@@ -514,7 +520,7 @@ class Breadcrumb_Trail {
 		// End with the post title.
 		if ( $post_title = single_post_title( '', false ) ) {
 
-			if ( 1 < get_query_var( 'page' ) || is_paged() )
+			if ( ( 1 < get_query_var( 'page' ) || is_paged() ) || ( get_option( 'page_comments' ) && 1 < absint( get_query_var( 'cpage' ) ) ) )
 				$this->items[] = sprintf( '<a href="%s">%s</a>', esc_url( get_permalink( $post_id ) ), $post_title );
 
 			elseif ( true === $this->args['show_title'] )
@@ -655,11 +661,15 @@ class Breadcrumb_Trail {
 		}
 
 		// Add the post type [plural] name to the trail end.
-		if ( is_paged() )
+		if ( is_paged() || is_author() )
 			$this->items[] = sprintf( '<a href="%s">%s</a>', esc_url( get_post_type_archive_link( $post_type_object->name ) ), post_type_archive_title( '', false ) );
 
 		elseif ( true === $this->args['show_title'] )
 			$this->items[] = post_type_archive_title( '', false );
+
+		// If viewing a post type archive by author.
+		if ( is_author() )
+			$this->add_user_archive_items();
 	}
 
 	/**
@@ -680,7 +690,7 @@ class Breadcrumb_Trail {
 		$user_id = get_query_var( 'author' );
 
 		// If $author_base exists, check for parent pages.
-		if ( !empty( $wp_rewrite->author_base ) )
+		if ( !empty( $wp_rewrite->author_base ) && ! is_post_type_archive() )
 			$this->add_path_parents( $wp_rewrite->author_base );
 
 		// Add the author's display name to the trail end.
@@ -985,6 +995,10 @@ class Breadcrumb_Trail {
 
 			$this->items[] = sprintf( '<a href="%s">%s</a>', esc_url( get_post_type_archive_link( $post_type ) ), $label );
 		}
+
+		// Map the rewrite tags if there's a `%` in the slug.
+		if ( 'post' !== $post_type && ! empty( $post_type_object->rewrite['slug'] ) && false !== strpos( $post_type_object->rewrite['slug'], '%' ) )
+			$this->map_rewrite_tags( $post_id, $post_type_object->rewrite['slug'] );
 	}
 
 	/**
@@ -1152,10 +1166,6 @@ class Breadcrumb_Trail {
 
 		$post = get_post( $post_id );
 
-		// If the post doesn't have the `post` post type, bail.
-		if ( 'post' !== $post->post_type )
-			return;
-
 		// Trim '/' from both sides of the $path.
 		$path = trim( $path, '/' );
 
@@ -1188,13 +1198,13 @@ class Breadcrumb_Trail {
 					$this->items[] = sprintf( '<a href="%s">%s</a>', esc_url( get_author_posts_url( $post->post_author ) ), get_the_author_meta( 'display_name', $post->post_author ) );
 
 				// If using the %category% tag, add a link to the first category archive to match permalinks.
-				elseif ( '%category%' == $tag ) {
+				elseif ( taxonomy_exists( trim( $tag, '%' ) ) ) {
 
 					// Force override terms in this post type.
 					$this->post_taxonomy[ $post->post_type ] = false;
 
 					// Add the post categories.
-					$this->add_post_terms( $post_id, 'category' );
+					$this->add_post_terms( $post_id, trim( $tag, '%' ) );
 				}
 			}
 		}
