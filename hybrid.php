@@ -130,6 +130,7 @@ if ( ! class_exists( 'Hybrid' ) ) {
 			require_once( HYBRID_INC . 'functions-i18n.php'      );
 			require_once( HYBRID_INC . 'functions-customize.php' );
 			require_once( HYBRID_INC . 'functions-filters.php'   );
+			require_once( HYBRID_INC . 'functions-fonts.php'     );
 			require_once( HYBRID_INC . 'functions-head.php'      );
 			require_once( HYBRID_INC . 'functions-meta.php'      );
 			require_once( HYBRID_INC . 'functions-sidebars.php'  );
