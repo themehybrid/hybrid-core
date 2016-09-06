@@ -301,7 +301,7 @@ function hybrid_filter_layout( $theme_layout ) {
 	elseif ( is_author() )
 		$layout = hybrid_get_user_layout( get_queried_object_id() );
 
-	return !empty( $layout ) && 'default' !== $layout ? $layout : $theme_layout;
+	return !empty( $layout ) && hybrid_layout_exists( $layout ) && 'default' !== $layout ? $layout : $theme_layout;
 }
 
 /**
