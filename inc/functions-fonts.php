@@ -20,7 +20,7 @@
  * Registers a font.
  *
  * @uses   wp_register_style()
- * @since  1.0.0
+ * @since  3.1.0
  * @access public
  * @param  string  $handle
  * @param  array   $args
@@ -54,7 +54,7 @@ function hybrid_register_font( $handle, $args = array() ) {
  * Deregisters a registered font.
  *
  * @uses   wp_deregister_style()
- * @since  1.0.0
+ * @since  3.1.0
  * @access public
  * @param  string  $handle
  * @return void
@@ -69,7 +69,7 @@ function hybrid_deregister_font( $handle ) {
  * register it.  See `hybrid_register_font()`.
  *
  * @uses   wp_enqueue_style()
- * @since  1.0.0
+ * @since  3.1.0
  * @access public
  * @param  string  $handle
  * @param  array   $args
@@ -87,7 +87,7 @@ function hybrid_enqueue_font( $handle, $args = array() ) {
  * Dequeues a font.
  *
  * @uses   wp_dequeue_style()
- * @since  1.0.0
+ * @since  3.1.0
  * @access public
  * @param  string  $handle
  * @return void
@@ -101,7 +101,7 @@ function hybrid_dequeue_font( $handle ) {
  * Checks a font's status.
  *
  * @uses   wp_style_is()
- * @since  1.0.0
+ * @since  3.1.0
  * @access public
  * @param  string  $handle
  * @param  string  $list
@@ -115,7 +115,7 @@ function hybrid_font_is( $handle, $list = 'enqueued' ) {
 /**
  * Checks if a font is registered.
  *
- * @since  1.0.0
+ * @since  3.1.0
  * @access public
  * @param  string  $handle
  * @return bool
@@ -128,7 +128,7 @@ function hybrid_font_is_registered( $handle ) {
 /**
  * Checks if a font is enqueued.
  *
- * @since  1.0.0
+ * @since  3.1.0
  * @access public
  * @param  string  $handle
  * @return bool
@@ -142,7 +142,7 @@ function hybrid_font_is_enqueued( $handle ) {
  * Helper function for creating the Google Fonts URL.  Note that `add_query_arg()` will call
  * `urlencode_deep()`, so we're going to leaving the encoding to that function.
  *
- * @since  1.0.0
+ * @since  3.1.0
  * @access public
  * @param  string  $handle
  * @param  array   $args
