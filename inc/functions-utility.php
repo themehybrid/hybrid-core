@@ -214,7 +214,21 @@ function hybrid_get_menu_name( $location ) {
  * @return string
  */
 function hybrid_get_min_suffix() {
-	return defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+
+	return hybrid_is_script_debug() ? '' : '.min';
+}
+
+/**
+ * Conditional check to determine if we are in script debug mode.  This is generally used 
+ * to decide whether to load development versions of scripts/styles.
+ *
+ * @since  3.1.0
+ * @access public
+ * @return bool
+ */
+function hybrid_is_script_debug() {
+
+	return apply_filters( 'hybrid_is_script_debug', defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG );
 }
 
 /**
