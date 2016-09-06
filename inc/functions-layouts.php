@@ -162,6 +162,19 @@ function hybrid_get_default_layout() {
 }
 
 /**
+ * Checks if the current layout matches the layout to check against.
+ *
+ * @since  3.1.0
+ * @access public
+ * @param  string  $layout
+ * @return bool
+ */
+function hybrid_is_layout( $layout ) {
+
+	return $layout === hybrid_get_theme_layout();
+}
+
+/**
  * Gets a post layout.
  *
  * @since  3.0.0
