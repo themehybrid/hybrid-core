@@ -51,7 +51,7 @@ class Hybrid_Customize_Control_Layout extends Hybrid_Customize_Control_Radio_Ima
 
 				$args['choices'][ $layout->name ] = array(
 					'label' => $layout->label,
-					'url'   => sprintf( $layout->image, get_template_directory_uri(), get_stylesheet_directory_uri() )
+					'url'   => hybrid_sprintf_theme_uri( $layout->image )
 				);
 			}
 		}

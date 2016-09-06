@@ -77,7 +77,7 @@ function hybrid_post_layout_meta_box( $post, $box ) {
 
 				<span class="screen-reader-text"><?php echo esc_html( $layout->label ); ?></span>
 
-				<img src="<?php echo esc_url( sprintf( $layout->image, get_template_directory_uri(), get_stylesheet_directory_uri() ) ); ?>" alt="<?php echo esc_attr( $layout->label ); ?>" />
+				<img src="<?php echo esc_url( hybrid_sprintf_theme_uri( $layout->image ) ); ?>" alt="<?php echo esc_attr( $layout->label ); ?>" />
 			</label>
 
 		<?php endif; ?>

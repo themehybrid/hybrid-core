@@ -219,7 +219,7 @@ function hybrid_get_min_suffix() {
 }
 
 /**
- * Conditional check to determine if we are in script debug mode.  This is generally used 
+ * Conditional check to determine if we are in script debug mode.  This is generally used
  * to decide whether to load development versions of scripts/styles.
  *
  * @since  3.1.0
@@ -229,6 +229,32 @@ function hybrid_get_min_suffix() {
 function hybrid_is_script_debug() {
 
 	return apply_filters( 'hybrid_is_script_debug', defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG );
+}
+
+/**
+ * Replaces `%1$s` and `%2$s` with the template and stylesheet directory paths.
+ *
+ * @since  3.1.0
+ * @access public
+ * @param  string  $value
+ * @return string
+ */
+function hybrid_sprintf_theme_dir( $value ) {
+
+	return sprintf( $value, get_template_directory(), get_stylesheet_directory() );
+}
+
+/**
+ * Replaces `%1$s` and `%2$s` with the template and stylesheet directory URIs.
+ *
+ * @since  3.1.0
+ * @access public
+ * @param  string  $value
+ * @return string
+ */
+function hybrid_sprintf_theme_uri( $value ) {
+
+	return sprintf( $value, get_template_directory_uri(), get_stylesheet_directory_uri() );
 }
 
 /**
