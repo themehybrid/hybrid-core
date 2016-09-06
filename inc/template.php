@@ -176,6 +176,63 @@ function hybrid_get_footer( $name = '' ) {
 }
 
 /**
+ * Gets the embed template used for embedding posts from the site.
+ *
+ * @since  3.1.0
+ * @access public
+ * @return void
+ */
+function hybrid_get_embed_template() {
+
+	// Set up an empty array and get the post type.
+	$templates = array();
+	$post_type = get_post_type();
+
+	// Assume the theme developer is creating an attachment template.
+	if ( 'attachment' === $post_type ) {
+		remove_filter( 'the_content',       'prepend_attachment'          );
+		remove_filter( 'the_excerpt_embed', 'wp_embed_excerpt_attachment' );
+
+		$type = hybrid_get_attachment_type();
+
+		$templates[] = "embed-attachment-{$type}.php";
+		$templates[] = "embed/attachment-{$type}.php";
+	}
+
+	// If the post type supports 'post-formats', get the template based on the format.
+	if ( post_type_supports( $post_type, 'post-formats' ) ) {
+
+		// Get the post format.
+		$post_format = get_post_format() ? get_post_format() : 'standard';
+
+		// Template based off post type and post format.
+		$templates[] = "embed-{$post_type}-{$post_format}.php";
+		$templates[] = "embed/{$post_type}-{$post_format}.php";
+
+		// Template based off the post format.
+		$templates[] = "embed-{$post_format}.php";
+		$templates[] = "embed/{$post_format}.php";
+	}
+
+	// Template based off the post type.
+	$templates[] = "embed-{$post_type}.php";
+	$templates[] = "embed/{$post_type}.php";
+
+	// Fallback 'embed/content.php' template.
+	$templates[] = 'embed/content.php';
+
+	// Apply filters to the templates array.
+	$templates = apply_filters( 'hybrid_embed_template_hierarchy', $templates );
+
+	// Locate the template.
+	$template = locate_template( $templates );
+
+	// If template is found, include it.
+	if ( apply_filters( 'hybrid_embed_template', $template, $templates ) )
+		include( $template );
+}
+
+/**
  * This is a replacement function for the WordPress `get_sidebar()` function. The reason for this function
  * over the core function is because the core function does not provide the functionality needed to properly
  * implement what's needed, particularly the ability to add sidebar templates to a sub-directory.
