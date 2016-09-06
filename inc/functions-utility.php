@@ -55,6 +55,23 @@ function hybrid_add_post_type_support() {
 }
 
 /**
+ * This is a wrapper function for core WP's `get_theme_mod()` function.  Core doesn't
+ * provide a filter hook for the default value (useful for child themes).  The purpose
+ * of this function is to provide that additional filter hook.  To filter the final
+ * theme mod, use the core `theme_mod_{$name}` filter hook.
+ *
+ * @since  3.1.0
+ * @access public
+ * @param  string  $name
+ * @param  mixed   $default
+ * @return mixed
+ */
+function hybrid_get_theme_mod( $name, $default = false ) {
+
+	return get_theme_mod( $name, apply_filters( "hybrid_theme_mod_{$name}_default", $default ) );
+}
+
+/**
  * Function for setting the content width of a theme.  This does not check if a content width has been set; it
  * simply overwrites whatever the content width is.
  *
