@@ -23,6 +23,21 @@
 /* === Deprecated Functions === */
 
 /**
+ * Adds microdata to the comment reply link.
+ *
+ * @since      2.0.0
+ * @deprecated 3.1.0
+ * @access     public
+ * @param      string  $link
+ * @return     string
+ */
+function hybrid_comment_reply_link_filter( $link ) {
+	_deprecated_function( __FUNCTION__, '3.1.0', '' );
+
+	return preg_replace( '/(<a\s)/i', '$1itemprop="replyToUrl" ', $link );
+}
+
+/**
  * Loop pagination function for paginating loops with multiple posts.  This should be used on archive, blog, and
  * search pages.  It is not for singular views.
  *
