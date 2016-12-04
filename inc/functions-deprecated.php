@@ -26,6 +26,29 @@
 
 /* Functions removed in the 4.0 branch. */
 
+function hybrid_attr_header() {}
+function hybrid_attr_footer() {}
+function hybrid_attr_content() {}
+function hybrid_attr_sidebar() {}
+function hybrid_attr_menu() {}
+function hybrid_attr_head() {}
+function hybrid_attr_branding() {}
+function hybrid_attr_site_title() {}
+function hybrid_attr_site_description() {}
+function hybrid_attr_archive_header() {}
+function hybrid_attr_archive_title() {}
+function hybrid_attr_archive_description() {}
+function hybrid_attr_entry_title() {}
+function hybrid_attr_entry_author() {}
+function hybrid_attr_entry_published() {}
+function hybrid_attr_entry_content() {}
+function hybrid_attr_entry_summary() {}
+function hybrid_attr_entry_terms() {}
+function hybrid_attr_comment_author() {}
+function hybrid_attr_comment_published() {}
+function hybrid_attr_comment_permalink() {}
+function hybrid_attr_comment_content() {}
+
 function hybrid_comment_reply_link_filter() {}
 function hybrid_set_post_template() {}
 function hybrid_delete_post_template() {}
