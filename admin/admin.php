@@ -68,52 +68,6 @@ function hybrid_enable_posts_page_editor( $post ) {
 }
 
 /**
- * Function for getting an array of available custom templates with a specific header. Ideally, this function
- * would be used to grab custom singular post (any post type) templates.  It is a recreation of the WordPress
- * page templates function because it doesn't allow for other types of templates.
- *
- * @since  0.7.0
- * @access public
- * @global object $hybrid
- * @param  string $post_type      The name of the post type to get templates for.
- * @return array  $post_templates The array of templates.
- */
-function hybrid_get_post_templates( $post_type = 'post' ) {
-	global $hybrid;
-
-	// If templates have already been called, just return them.
-	if ( ! empty( $hybrid->post_templates ) && isset( $hybrid->post_templates[ $post_type ] ) )
-		return $hybrid->post_templates[ $post_type ];
-
-	// Set up an empty array to house the templates.
-	$post_templates = array();
-
-	// Get the theme PHP files one level deep.
-	$files = wp_get_theme( get_template() )->get_files( 'php', 1 );
-
-	// If a child theme is active, get its files and merge with the parent theme files.
-	if ( is_child_theme() )
-		$files = array_merge( $files, wp_get_theme()->get_files( 'php', 1 ) );
-
-	// Loop through each of the PHP files and check if they are post templates.
-	foreach ( $files as $file => $path ) {
-
-		// Get file data based on the post type singular name (e.g., "Post Template", "Book Template", etc.).
-		$headers = get_file_data( $path, array( "{$post_type} Template" => "{$post_type} Template" ) );
-
-		// Add the PHP filename and template name to the array.
-		if ( ! empty( $headers["{$post_type} Template"] ) )
-			$post_templates[ $file ] = $headers["{$post_type} Template"];
-	}
-
-	// Add the templates to the global $hybrid object.
-	$hybrid->post_templates[ $post_type ] = array_flip( $post_templates );
-
-	// Return array of post templates.
-	return $hybrid->post_templates[ $post_type ];
-}
-
-/**
  * Gets the stylesheet files within the parent or child theme and checks if they have the 'Style Name'
  * header. If any files are found, they are returned in an array.
  *
