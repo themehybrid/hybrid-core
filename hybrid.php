@@ -19,7 +19,7 @@
  * write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  *
  * @package   HybridCore
- * @version   3.1.0-dev
+ * @version   4.0.0-dev
  * @author    Justin Tadlock <justin@justintadlock.com>
  * @copyright Copyright (c) 2008 - 2015, Justin Tadlock
  * @link      http://themehybrid.com/hybrid-core
@@ -30,120 +30,265 @@ if ( ! class_exists( 'Hybrid' ) ) {
 
 	/**
 	 * The Hybrid class launches the framework.  It's the organizational structure behind the
-	 * entire framework.  This class should be loaded and initialized before anything else within
-	 * the theme is called to properly use the framework.
+	 * entire framework.  This file should be loaded before anything else to use the framework.
 	 *
-	 * After parent themes call the Hybrid class, they should perform a theme setup function on
+	 * After parent themes loads the Hybrid class, they should perform a theme setup function on
 	 * the `after_setup_theme` hook with a priority no later than 11.  This allows the class to
 	 * load theme-supported features at the appropriate time, which is on the `after_setup_theme`
 	 * hook with a priority of 12.
 	 *
-	 * Note that while it is possible to extend this class, it's not usually recommended unless
-	 * you absolutely know what you're doing and expect your sub-class to break on updates.  This
-	 * class often gets modifications between versions.
+	 * Theme authors should not access this class directly. Instead, use the `hybrid()` function.
 	 *
 	 * @since  0.7.0
 	 * @access public
 	 */
-	class Hybrid {
+	final class Hybrid {
 
 		/**
-		 * Constructor method for the Hybrid class.  This method adds other methods of the
-		 * class to specific hooks within WordPress.  It controls the load order of the
-		 * required files for running the framework.
+		 * Framework version number.
 		 *
-		 * @since  1.0.0
+		 * @since  4.0.0
 		 * @access public
-		 * @return void
+		 * @var    string
 		 */
-		public function __construct() {
+		public $version = '4.0.0';
 
-			// Set up an empty object to work with.
-			$GLOBALS['hybrid'] = new stdClass;
+		/**
+		 * Framework directory path with trailing slash.
+		 *
+		 * @since  4.0.0
+		 * @access public
+		 * @var    string
+		 */
+		public $dir_path = '';
 
-			// Set up the load order.
-			add_action( 'after_setup_theme', array( $this, 'constants'     ), -95 );
-			add_action( 'after_setup_theme', array( $this, 'core'          ), -95 );
-			add_action( 'after_setup_theme', array( $this, 'theme_support' ),  12 );
-			add_action( 'after_setup_theme', array( $this, 'includes'      ),  13 );
-			add_action( 'after_setup_theme', array( $this, 'extensions'    ),  14 );
-			add_action( 'after_setup_theme', array( $this, 'admin'         ),  95 );
+		/**
+		 * Framework directory URI with trailing slash.
+		 *
+		 * @since  4.0.0
+		 * @access public
+		 * @var    string
+		 */
+		public $dir_uri = '';
+
+		/**
+		 * Parent theme directory path with trailing slash.
+		 *
+		 * @since  4.0.0
+		 * @access public
+		 * @var    string
+		 */
+		public $parent_dir = '';
+
+		/**
+		 * Child theme directory path with trailing slash.
+		 *
+		 * @since  4.0.0
+		 * @access public
+		 * @var    string
+		 */
+		public $child_dir = '';
+
+		/**
+		 * Parent theme directory URI with trailing slash.
+		 *
+		 * @since  4.0.0
+		 * @access public
+		 * @var    string
+		 */
+		public $parent_uri = '';
+
+		/**
+		 * Child theme directory URI with trailing slash.
+		 *
+		 * @since  4.0.0
+		 * @access public
+		 * @var    string
+		 */
+		public $child_uri = '';
+
+		/**
+		 * Framework admin directory path with trailing slash.
+		 *
+		 * @since  4.0.0
+		 * @access public
+		 * @var    string
+		 */
+		public $admin_dir = '';
+
+		/**
+		 * Framework includes directory path with trailing slash.
+		 *
+		 * @since  4.0.0
+		 * @access public
+		 * @var    string
+		 */
+		public $inc_dir = '';
+
+		/**
+		 * Framework extensions directory path with trailing slash.
+		 *
+		 * @since  4.0.0
+		 * @access public
+		 * @var    string
+		 */
+		public $ext_dir = '';
+
+		/**
+		 * Framework customize directory path with trailing slash.
+		 *
+		 * @since  4.0.0
+		 * @access public
+		 * @var    string
+		 */
+		public $customize_dir = '';
+
+		/**
+		 * Framework CSS URI with trailing slash.
+		 *
+		 * @since  4.0.0
+		 * @access public
+		 * @var    string
+		 */
+		public $css_uri = '';
+
+		/**
+		 * Framework JS URI with trailing slash.
+		 *
+		 * @since  4.0.0
+		 * @access public
+		 * @var    string
+		 */
+		public $js_uri = '';
+
+		/**
+		 * Returns the instance.
+		 *
+		 * @since  4.0.0
+		 * @access public
+		 * @return object
+		 */
+		public static function get_instance() {
+
+			static $instance = null;
+
+			if ( is_null( $instance ) ) {
+
+				// Set up an empty object to work with.
+				// @todo Remove this in 4.0.0.
+				$GLOBALS['hybrid'] = new stdClass;
+
+				$instance = new self;
+				$instance->setup();
+				$instance->core();
+				$instance->setup_actions();
+			}
+
+			return $instance;
 		}
 
 		/**
-		 * Defines the constant paths for use within the core framework, parent theme, and
-		 * child theme.
+		 * Constructor method.
 		 *
-		 * @since  0.7.0
-		 * @access public
+		 * @since  1.0.0
+		 * @access private
 		 * @return void
 		 */
-		public function constants() {
+		private function __construct() {}
 
-			// Sets the framework version number.
-			define( 'HYBRID_VERSION', '3.1.0' );
+		/**
+		 * Sets up the framework.
+		 *
+		 * @since  4.0.0
+		 * @access private
+		 * @return void
+		 */
+		private function setup() {
 
 			// Theme directory paths.
-			define( 'HYBRID_PARENT', trailingslashit( get_template_directory()   ) );
-			define( 'HYBRID_CHILD',  trailingslashit( get_stylesheet_directory() ) );
+			$this->parent_dir = trailingslashit( get_template_directory()   );
+			$this->child_dir  = trailingslashit( get_stylesheet_directory() );
 
 			// Theme directory URIs.
-			define( 'HYBRID_PARENT_URI', trailingslashit( get_template_directory_uri()   ) );
-			define( 'HYBRID_CHILD_URI',  trailingslashit( get_stylesheet_directory_uri() ) );
+			$this->parent_uri = trailingslashit( get_template_directory_uri()   );
+			$this->child_uri  = trailingslashit( get_stylesheet_directory_uri() );
 
 			// Sets the path to the core framework directory.
 			if ( ! defined( 'HYBRID_DIR' ) )
-				define( 'HYBRID_DIR', trailingslashit( HYBRID_PARENT . basename( dirname( __FILE__ ) ) ) );
+				define( 'HYBRID_DIR', trailingslashit( $this->parent_dir . basename( dirname( __FILE__ ) ) ) );
 
 			// Sets the path to the core framework directory URI.
 			if ( ! defined( 'HYBRID_URI' ) )
-				define( 'HYBRID_URI', trailingslashit( HYBRID_PARENT_URI . basename( dirname( __FILE__ ) ) ) );
+				define( 'HYBRID_URI', trailingslashit( $this->parent_uri . basename( dirname( __FILE__ ) ) ) );
+
+			$this->dir_path = HYBRID_DIR;
+			$this->dir_uri  = HYBRID_URI;
 
 			// Core framework directory paths.
-			define( 'HYBRID_ADMIN',     trailingslashit( HYBRID_DIR . 'admin'     ) );
-			define( 'HYBRID_INC',       trailingslashit( HYBRID_DIR . 'inc'       ) );
-			define( 'HYBRID_EXT',       trailingslashit( HYBRID_DIR . 'ext'       ) );
-			define( 'HYBRID_CUSTOMIZE', trailingslashit( HYBRID_DIR . 'customize' ) );
+			$this->admin_dir     = trailingslashit( $this->dir_path . 'admin'     );
+			$this->inc_dir       = trailingslashit( $this->dir_path . 'inc'       );
+			$this->ext_dir       = trailingslashit( $this->dir_path . 'ext'       );
+			$this->customize_dir = trailingslashit( $this->dir_path . 'customize' );
 
 			// Core framework directory URIs.
-			define( 'HYBRID_CSS', trailingslashit( HYBRID_URI . 'css' ) );
-			define( 'HYBRID_JS',  trailingslashit( HYBRID_URI . 'js'  ) );
+			$this->css_uri = trailingslashit( $this->dir_uri . 'css' );
+			$this->js_uri  = trailingslashit( $this->dir_uri . 'js'  );
 		}
 
 		/**
 		 * Loads the core framework files.
 		 *
 		 * @since  1.0.0
-		 * @access public
+		 * @access private
 		 * @return void
 		 */
-		public function core() {
+		private function core() {
 
 			// Load the class files.
-			require_once( HYBRID_INC . 'class-media-meta.php'         );
-			require_once( HYBRID_INC . 'class-media-meta-factory.php' );
-			require_once( HYBRID_INC . 'class-media-grabber.php'      );
+			require_once( $this->inc_dir . 'class-media-meta.php'         );
+			require_once( $this->inc_dir . 'class-media-meta-factory.php' );
+			require_once( $this->inc_dir . 'class-media-grabber.php'      );
 
 			// Load the functions files.
-			require_once( HYBRID_INC . 'functions-attr.php'      );
-			require_once( HYBRID_INC . 'functions-context.php'   );
-			require_once( HYBRID_INC . 'functions-i18n.php'      );
-			require_once( HYBRID_INC . 'functions-customize.php' );
-			require_once( HYBRID_INC . 'functions-filters.php'   );
-			require_once( HYBRID_INC . 'functions-fonts.php'     );
-			require_once( HYBRID_INC . 'functions-head.php'      );
-			require_once( HYBRID_INC . 'functions-meta.php'      );
-			require_once( HYBRID_INC . 'functions-sidebars.php'  );
-			require_once( HYBRID_INC . 'functions-scripts.php'   );
-			require_once( HYBRID_INC . 'functions-styles.php'    );
-			require_once( HYBRID_INC . 'functions-utility.php'   );
+			require_once( $this->inc_dir . 'functions-attr.php'      );
+			require_once( $this->inc_dir . 'functions-context.php'   );
+			require_once( $this->inc_dir . 'functions-i18n.php'      );
+			require_once( $this->inc_dir . 'functions-customize.php' );
+			require_once( $this->inc_dir . 'functions-filters.php'   );
+			require_once( $this->inc_dir . 'functions-fonts.php'     );
+			require_once( $this->inc_dir . 'functions-head.php'      );
+			require_once( $this->inc_dir . 'functions-meta.php'      );
+			require_once( $this->inc_dir . 'functions-sidebars.php'  );
+			require_once( $this->inc_dir . 'functions-scripts.php'   );
+			require_once( $this->inc_dir . 'functions-styles.php'    );
+			require_once( $this->inc_dir . 'functions-utility.php'   );
 
 			// Load the template files.
-			require_once( HYBRID_INC . 'template.php'          );
-			require_once( HYBRID_INC . 'template-comments.php' );
-			require_once( HYBRID_INC . 'template-general.php'  );
-			require_once( HYBRID_INC . 'template-media.php'    );
-			require_once( HYBRID_INC . 'template-post.php'     );
+			require_once( $this->inc_dir . 'template.php'          );
+			require_once( $this->inc_dir . 'template-comments.php' );
+			require_once( $this->inc_dir . 'template-general.php'  );
+			require_once( $this->inc_dir . 'template-media.php'    );
+			require_once( $this->inc_dir . 'template-post.php'     );
+
+			// Load admin files.
+			if ( is_admin() )
+				require_once( $this->admin_dir . 'admin.php' );
+
+		}
+
+		/**
+		 * Adds the necessary setup actions for the theme.
+		 *
+		 * @since  4.0.0
+		 * @access private
+		 * @return void
+		 */
+		private function setup_actions() {
+
+			// Set up the load order.
+			add_action( 'after_setup_theme', array( $this, 'theme_support' ),  12 );
+			add_action( 'after_setup_theme', array( $this, 'includes'      ),  13 );
+			add_action( 'after_setup_theme', array( $this, 'extensions'    ),  14 );
 		}
 
 		/**
@@ -187,19 +332,23 @@ if ( ! class_exists( 'Hybrid' ) ) {
 		public function includes() {
 
 			// Load the template hierarchy if supported.
-			require_if_theme_supports( 'hybrid-core-template-hierarchy', HYBRID_INC . 'template-hierarchy.php' );
+			require_if_theme_supports( 'hybrid-core-template-hierarchy', $this->inc_dir . 'template-hierarchy.php' );
 
 			// Load the post format functionality if post formats are supported.
-			require_if_theme_supports( 'post-formats', HYBRID_INC . 'functions-formats.php' );
-			require_if_theme_supports( 'post-formats', HYBRID_INC . 'class-chat.php'        );
+			require_if_theme_supports( 'post-formats', $this->inc_dir . 'functions-formats.php' );
+			require_if_theme_supports( 'post-formats', $this->inc_dir . 'class-chat.php'        );
 
 			// Load the Theme Layouts extension if supported.
-			require_if_theme_supports( 'theme-layouts', HYBRID_INC . 'class-layout.php'         );
-			require_if_theme_supports( 'theme-layouts', HYBRID_INC . 'class-layout-factory.php' );
-			require_if_theme_supports( 'theme-layouts', HYBRID_INC . 'functions-layouts.php'    );
+			require_if_theme_supports( 'theme-layouts', $this->inc_dir . 'class-layout.php'         );
+			require_if_theme_supports( 'theme-layouts', $this->inc_dir . 'class-layout-factory.php' );
+			require_if_theme_supports( 'theme-layouts', $this->inc_dir . 'functions-layouts.php'    );
 
 			// Load the deprecated functions if supported.
-			require_if_theme_supports( 'hybrid-core-deprecated', HYBRID_INC . 'functions-deprecated.php' );
+			require_if_theme_supports( 'hybrid-core-deprecated', $this->inc_dir . 'functions-deprecated.php' );
+
+			// Load admin files.
+			if ( is_admin() )
+				require_if_theme_supports( 'theme-layouts', $this->admin_dir . 'class-term-layout.php' );
 		}
 
 		/**
@@ -215,25 +364,40 @@ if ( ! class_exists( 'Hybrid' ) ) {
 		 */
 		public function extensions() {
 
-			hybrid_require_if_theme_supports( 'breadcrumb-trail', HYBRID_EXT . 'breadcrumb-trail.php' );
-			hybrid_require_if_theme_supports( 'cleaner-gallery',  HYBRID_EXT . 'cleaner-gallery.php'  );
-			hybrid_require_if_theme_supports( 'get-the-image',    HYBRID_EXT . 'get-the-image.php'    );
+			hybrid_require_if_theme_supports( 'breadcrumb-trail', $this->ext_dir . 'breadcrumb-trail.php' );
+			hybrid_require_if_theme_supports( 'cleaner-gallery',  $this->ext_dir . 'cleaner-gallery.php'  );
+			hybrid_require_if_theme_supports( 'get-the-image',    $this->ext_dir . 'get-the-image.php'    );
 		}
 
 		/**
-		 * Load admin files for the framework.
-		 *
-		 * @since  0.7.0
-		 * @access public
-		 * @return void
+		 * @since      0.7.0
+		 * @deprecated 4.0.0
+		 * @access     public
+		 * @return     void
 		 */
-		public function admin() {
+		public function constants() {}
 
-			if ( is_admin() ) {
-				require_once( HYBRID_ADMIN . 'admin.php' );
-
-				require_if_theme_supports( 'theme-layouts', HYBRID_ADMIN . 'class-term-layout.php' );
-			}
-		}
+		/**
+		 * @since      0.7.0
+		 * @deprecated 4.0.0
+		 * @access     public
+		 * @return     void
+		 */
+		public function admin() {}
 	}
+
+	/**
+	 * Gets the instance of the `Hybrid` class.  This function is useful for quickly grabbing data
+	 * used throughout the framework.
+	 *
+	 * @since  4.0.0
+	 * @access public
+	 * @return object
+	 */
+	function hybrid() {
+		return Hybrid::get_instance();
+	}
+
+	// Let's do this thang!
+	hybrid();
 }

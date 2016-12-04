@@ -251,7 +251,7 @@ function hybrid_comments_template( $template ) {
 	$templates = array();
 
 	// Allow for custom templates entered into comments_template( $file ).
-	$template = str_replace( HYBRID_CHILD, '', $template );
+	$template = str_replace( hybrid()->child_dir, '', $template );
 
 	if ( 'comments.php' !== $template )
 		$templates[] = $template;

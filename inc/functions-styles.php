@@ -42,8 +42,8 @@ function hybrid_register_styles() {
 	$suffix = hybrid_get_min_suffix();
 
 	// Register styles for use by themes.
-	wp_register_style( 'hybrid-one-five', HYBRID_CSS . "one-five{$suffix}.css" );
-	wp_register_style( 'hybrid-gallery',  HYBRID_CSS . "gallery{$suffix}.css"  );
+	wp_register_style( 'hybrid-one-five', hybrid()->css_uri . "one-five{$suffix}.css" );
+	wp_register_style( 'hybrid-gallery',  hybrid()->css_uri . "gallery{$suffix}.css"  );
 	wp_register_style( 'hybrid-parent',   hybrid_get_parent_stylesheet_uri()   );
 	wp_register_style( 'hybrid-style',    get_stylesheet_uri()                 );
 
@@ -69,11 +69,11 @@ function hybrid_get_parent_stylesheet_uri() {
 	$suffix = hybrid_get_min_suffix();
 
 	// Get the parent theme stylesheet.
-	$stylesheet_uri = HYBRID_PARENT_URI . 'style.css';
+	$stylesheet_uri = hybrid()->parent_uri . 'style.css';
 
 	// If a '.min' version of the parent theme stylesheet exists, use it.
-	if ( $suffix && file_exists( HYBRID_PARENT . "style{$suffix}.css" ) )
-		$stylesheet_uri = HYBRID_PARENT_URI . "style{$suffix}.css";
+	if ( $suffix && file_exists( hybrid()->parent_dir . "style{$suffix}.css" ) )
+		$stylesheet_uri = hybrid()->parent_uri . "style{$suffix}.css";
 
 	return apply_filters( 'hybrid_get_parent_stylesheet_uri', $stylesheet_uri );
 }
@@ -104,7 +104,7 @@ function hybrid_min_stylesheet_uri( $stylesheet_uri, $stylesheet_dir_uri ) {
 		$stylesheet = str_replace( '.css', "{$suffix}.css", $stylesheet );
 
 		// If the stylesheet exists in the stylesheet directory, set the stylesheet URI to the dev stylesheet.
-		if ( file_exists( HYBRID_CHILD . $stylesheet ) )
+		if ( file_exists( hybrid()->child_dir . $stylesheet ) )
 			$stylesheet_uri = esc_url( trailingslashit( $stylesheet_dir_uri ) . $stylesheet );
 	}
 

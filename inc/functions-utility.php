@@ -133,14 +133,14 @@ function hybrid_locate_theme_file( $file_names ) {
 	foreach ( (array) $file_names as $file ) {
 
 		// If the file exists in the stylesheet (child theme) directory.
-		if ( is_child_theme() && file_exists( HYBRID_CHILD . $file ) ) {
-			$located = HYBRID_CHILD_URI . $file;
+		if ( is_child_theme() && file_exists( hybrid()->child_dir . $file ) ) {
+			$located = hybrid()->child_uri . $file;
 			break;
 		}
 
 		// If the file exists in the template (parent theme) directory.
-		elseif ( file_exists( HYBRID_PARENT . $file ) ) {
-			$located = HYBRID_PARENT_URI . $file;
+		elseif ( file_exists( hybrid()->parent_dir . $file ) ) {
+			$located = hybrid()->parent_uri . $file;
 			break;
 		}
 	}
