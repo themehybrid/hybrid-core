@@ -378,3 +378,21 @@ function hybrid_archive_description_format( $desc ) {
 
 	return apply_filters( 'hybrid_archive_description', $desc );
 }
+
+/**
+ * Compatibility function that stores the old post template using the core WP
+ * post template naming scheme added in WordPress 4.7.0.  Deletes the old
+ * meta.
+ *
+ * @since  3.1.0
+ * @access public
+ * @param  int     $post_id
+ * @param  string  $template
+ * @return void
+ */
+function hybrid_post_template_compat( $post_id, $template ) {
+
+	update_post_meta( $post_id, '_wp_page_template', $template );
+
+	delete_post_meta( $post_id, sprintf( '_wp_%s_template', get_post_type( $post_id ) ) );
+}

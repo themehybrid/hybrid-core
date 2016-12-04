@@ -38,6 +38,117 @@ function hybrid_comment_reply_link_filter( $link ) {
 }
 
 /**
+ * Sets a post template.
+ *
+ * @since      3.0.0
+ * @deprecated 3.1.0
+ * @access     public
+ * @param      int     $post_id
+ * @param      string  $template
+ * @return     bool
+ */
+function hybrid_set_post_template( $post_id, $template ) {
+
+	_deprecated_function( __FUNCTION__, '3.1.0', 'update_post_meta()' );
+
+	return update_post_meta( $post_id, hybrid_get_post_template_meta_key( $post_id ), $template );
+}
+
+/**
+ * Deletes a post template.
+ *
+ * @since  3.0.0
+ * @deprecated 3.1.0
+ * @access public
+ * @param  int     $post_id
+ * @return bool
+ */
+function hybrid_delete_post_template( $post_id ) {
+
+	_deprecated_function( __FUNCTION__, '3.1.0', 'delete_post_meta()' );
+
+	return delete_post_meta( $post_id, hybrid_get_post_template_meta_key( $post_id ) );
+}
+
+/**
+ * Returns the post template meta key.
+ *
+ * @since  3.0.0
+ * @deprecated 3.1.0
+ * @access public
+ * @param  int     $post_id
+ * @return string
+ */
+function hybrid_get_post_template_meta_key( $post_id ) {
+
+	_deprecated_function( __FUNCTION__, '3.1.0', '' );
+
+	return sprintf( '_wp_%s_template', get_post_type( $post_id ) );
+}
+
+/**
+ * Function for getting an array of available custom templates with a specific header. Ideally, this function
+ * would be used to grab custom singular post (any post type) templates.  It is a recreation of the WordPress
+ * page templates function because it doesn't allow for other types of templates.
+ *
+ * @since      0.7.0
+ * @deprecated 3.1.0
+ * @access     public
+ * @param      string $post_type
+ * @return     array
+ */
+function hybrid_get_post_templates( $post_type = 'post' ) {
+
+	_deprecated_function( __FUNCTION__, '3.1.0', 'get_page_templates()' );
+
+	return get_page_templates();
+}
+
+/**
+ * Adds the post template meta box for all public post types, excluding the 'page' post type since WordPress
+ * core already handles page templates.
+ *
+ * @since      1.2.0
+ * @deprecated 3.1.0
+ * @access     public
+ * @param      string  $post_type
+ * @param      object  $post
+ * @return     void
+ */
+function hybrid_meta_box_post_add_template( $post_type, $post ) {
+	_deprecated_function( __FUNCTION__, '3.1.0', '' );
+}
+
+/**
+ * Displays the post template meta box.
+ *
+ * @since      1.2.0
+ * @deprecated 3.1.0
+ * @access     public
+ * @param      object  $object
+ * @param      array   $box
+ * @return     void
+ */
+function hybrid_meta_box_post_display_template( $post, $box ) {
+	_deprecated_function( __FUNCTION__, '3.1.0', '' );
+}
+
+/**
+ * Saves the post template meta box settings as post metadata. Note that this meta is sanitized using the
+ * hybrid_sanitize_meta() callback function prior to being saved.
+ *
+ * @since      1.2.0
+ * @deprecated 3.1.0
+ * @access     public
+ * @param      int      $post_id The ID of the current post being saved.
+ * @param      object   $post    The post object currently being saved.
+ * @return     void|int
+ */
+function hybrid_meta_box_post_save_template( $post_id, $post = '' ) {
+	_deprecated_function( __FUNCTION__, '3.1.0', '' );
+}
+
+/**
  * Loop pagination function for paginating loops with multiple posts.  This should be used on archive, blog, and
  * search pages.  It is not for singular views.
  *

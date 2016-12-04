@@ -20,32 +20,23 @@
  * @return bool
  */
 function hybrid_get_post_template( $post_id ) {
-	return get_post_meta( $post_id, hybrid_get_post_template_meta_key( $post_id ), true );
-}
 
-/**
- * Sets a post template.
- *
- * @since  3.0.0
- * @access public
- * @param  int     $post_id
- * @param  string  $template
- * @return bool
- */
-function hybrid_set_post_template( $post_id, $template ) {
-	return update_post_meta( $post_id, hybrid_get_post_template_meta_key( $post_id ), $template );
-}
+	$type     = get_post_type( $post_id );
+	$template = get_page_template_slug( $post_id );
 
-/**
- * Deletes a post template.
- *
- * @since  3.0.0
- * @access public
- * @param  int     $post_id
- * @return bool
- */
-function hybrid_delete_post_template( $post_id ) {
-	return delete_post_meta( $post_id, hybrid_get_post_template_meta_key( $post_id ) );
+	// If there's a template or `page` is the post type, return.
+	if ( $template || 'page' === $type )
+		return $template;
+
+	// Get old Hybrid Core post template meta.
+	$template = get_post_meta( $post_id, "_wp_{$type}_template", true );
+
+	// If old template, run the compat function.
+	if ( $template )
+		hybrid_post_template_compat( $post_id, $template );
+
+	// Return the template.
+	return $template;
 }
 
 /**
@@ -71,19 +62,7 @@ function hybrid_has_post_template( $template = '', $post_id = '' ) {
 		return true;
 
 	// Return whether we have a post template.
-	return !empty( $post_template );
-}
-
-/**
- * Returns the post template meta key.
- *
- * @since  3.0.0
- * @access public
- * @param  int     $post_id
- * @return string
- */
-function hybrid_get_post_template_meta_key( $post_id ) {
-	return sprintf( '_wp_%s_template', get_post_type( $post_id ) );
+	return ! empty( $post_template );
 }
 
 /**
