@@ -229,8 +229,11 @@ if ( ! class_exists( 'Hybrid' ) ) {
 		 */
 		public function admin() {
 
-			if ( is_admin() )
+			if ( is_admin() ) {
 				require_once( HYBRID_ADMIN . 'admin.php' );
+
+				require_if_theme_supports( 'theme-layouts', HYBRID_ADMIN . 'class-term-layout.php' );
+			}
 		}
 	}
 }

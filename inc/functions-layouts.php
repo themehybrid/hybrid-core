@@ -228,6 +228,59 @@ function hybrid_has_post_layout( $layout, $post_id = '' ) {
 }
 
 /**
+ * Gets a term layout.
+ *
+ * @since  3.1.0
+ * @access public
+ * @param  int     $term_id
+ * @return bool
+ */
+function hybrid_get_term_layout( $term_id ) {
+	return get_term_meta( $term_id, hybrid_get_layout_meta_key(), true );
+}
+
+/**
+ * Sets a term layout.
+ *
+ * @since  3.1.0
+ * @access public
+ * @param  int     $term_id
+ * @param  string  $layout
+ * @return bool
+ */
+function hybrid_set_term_layout( $term_id, $layout ) {
+	return 'default' !== $layout ? update_term_meta( $term_id, hybrid_get_layout_meta_key(), $layout ) : hybrid_delete_term_layout( $term_id );
+}
+
+/**
+ * Deletes a term layout.
+ *
+ * @since  3.1.0
+ * @access public
+ * @param  int     $term_id
+ * @return bool
+ */
+function hybrid_delete_term_layout( $term_id ) {
+	return delete_term_meta( $term_id, hybrid_get_layout_meta_key() );
+}
+
+/**
+ * Checks a term if it has a specific layout.
+ *
+ * @since  3.1.0
+ * @access public
+ * @param  int     $term_id
+ * @return bool
+ */
+function hybrid_has_term_layout( $layout, $term_id = '' ) {
+
+	if ( ! $term_id )
+		$term_id = get_queried_object_id();
+
+	return $layout == hybrid_get_term_layout( $term_id ) ? true : false;
+}
+
+/**
  * Gets a user layout.
  *
  * @since  3.0.0
@@ -301,6 +354,10 @@ function hybrid_filter_layout( $theme_layout ) {
 	elseif ( is_author() )
 		$layout = hybrid_get_user_layout( get_queried_object_id() );
 
+	// If viewing a term archive, get the term layout.
+	elseif ( is_tax() || is_category() || is_tag() )
+		$layout = hybrid_get_term_layout( get_queried_object_id() );
+
 	return !empty( $layout ) && hybrid_layout_exists( $layout ) && 'default' !== $layout ? $layout : $theme_layout;
 }
 
@@ -316,7 +373,7 @@ function hybrid_filter_layout( $theme_layout ) {
  */
 function hybrid_theme_layouts_support( $supports, $args, $feature ) {
 
-	if ( isset( $args[0] ) && in_array( $args[0], array( 'customize', 'post_meta' ) ) ) {
+	if ( isset( $args[0] ) && in_array( $args[0], array( 'customize', 'post_meta', 'term_meta' ) ) ) {
 
 		if ( is_array( $feature[0] ) && isset( $feature[0][ $args[0] ] ) && false === $feature[0][ $args[0] ] )
 			$supports = false;

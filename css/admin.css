@@ -4,7 +4,16 @@
 
 /* === Radio Image Control (Post Layout) === */
 
-#hybrid-post-layout .has-img input[type="radio"] {
+.form-field .hybrid-term-layout-header {
+	font-style: normal;
+}
+
+.hybrid-term-layout-wrap .has-img {
+	display: inline-block;
+}
+
+#hybrid-post-layout .has-img input[type="radio"],
+.hybrid-term-layout-wrap .has-img input[type="radio"] {
 	clip:     rect(1px, 1px, 1px, 1px);
 	height:   1px;
 	overflow: hidden;
@@ -12,7 +21,8 @@
 	width:    1px;
 }
 
-#hybrid-post-layout img {
+#hybrid-post-layout img,
+.hybrid-term-layout-wrap img {
 	box-sizing: border-box;
 	max-width:  100%;
 	height:     auto;
@@ -21,10 +31,13 @@
 }
 
 	#hybrid-post-layout img:hover,
-	#hybrid-post-layout img:focus {
+	#hybrid-post-layout img:focus,
+	.hybrid-term-layout-wrap img:hover,
+	.hybrid-term-layout-wrap img:focus {
 		border-color: #ddd;
 	}
 
-	#hybrid-post-layout input:checked + span + img {
+	#hybrid-post-layout input:checked + span + img,
+	.hybrid-term-layout-wrap input:checked + span + img {
 		border-color: #00a0d2;
 	}
