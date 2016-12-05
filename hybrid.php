@@ -72,42 +72,6 @@ if ( ! class_exists( 'Hybrid' ) ) {
 		public $dir_uri = '';
 
 		/**
-		 * Parent theme directory path with trailing slash.
-		 *
-		 * @since  4.0.0
-		 * @access public
-		 * @var    string
-		 */
-		public $parent_dir = '';
-
-		/**
-		 * Child theme directory path with trailing slash.
-		 *
-		 * @since  4.0.0
-		 * @access public
-		 * @var    string
-		 */
-		public $child_dir = '';
-
-		/**
-		 * Parent theme directory URI with trailing slash.
-		 *
-		 * @since  4.0.0
-		 * @access public
-		 * @var    string
-		 */
-		public $parent_uri = '';
-
-		/**
-		 * Child theme directory URI with trailing slash.
-		 *
-		 * @since  4.0.0
-		 * @access public
-		 * @var    string
-		 */
-		public $child_uri = '';
-
-		/**
 		 * Framework admin directory path with trailing slash.
 		 *
 		 * @since  4.0.0
@@ -162,6 +126,82 @@ if ( ! class_exists( 'Hybrid' ) ) {
 		public $js_uri = '';
 
 		/**
+		 * Parent theme directory path with trailing slash.
+		 *
+		 * @since  4.0.0
+		 * @access public
+		 * @var    string
+		 */
+		public $parent_dir = '';
+
+		/**
+		 * Child theme directory path with trailing slash.
+		 *
+		 * @since  4.0.0
+		 * @access public
+		 * @var    string
+		 */
+		public $child_dir = '';
+
+		/**
+		 * Parent theme directory URI with trailing slash.
+		 *
+		 * @since  4.0.0
+		 * @access public
+		 * @var    string
+		 */
+		public $parent_uri = '';
+
+		/**
+		 * Child theme directory URI with trailing slash.
+		 *
+		 * @since  4.0.0
+		 * @access public
+		 * @var    string
+		 */
+		public $child_uri = '';
+
+		/**
+		 * Parent theme textdomain.
+		 *
+		 * @since  4.0.0
+		 * @access public
+		 * @var    string
+		 */
+		public $parent_textdomain = '';
+
+		/**
+		 * Child theme textdomain.
+		 *
+		 * @since  4.0.0
+		 * @access public
+		 * @var    string
+		 */
+		public $child_textdomain = '';
+
+		/**
+		 * Stores an array of comment templates based on comment type.  We store
+		 * these globally so that we're not running unnecessary checks for posts
+		 * with 100s or 1,000s of comments.
+		 *
+		 * @since  4.0.0
+		 * @access public
+		 * @var    array
+		 */
+		public $comment_templates = array();
+
+		/**
+		 * Stores an array of post styles for use with the post styles feature.
+		 * Theme authors should not access this property directly.  Instead,
+		 * use the available post style functions.
+		 *
+		 * @since  4.0.0
+		 * @access public
+		 * @var    array
+		 */
+		public $post_styles = array();
+
+		/**
 		 * Returns the instance.
 		 *
 		 * @since  4.0.0
@@ -173,11 +213,6 @@ if ( ! class_exists( 'Hybrid' ) ) {
 			static $instance = null;
 
 			if ( is_null( $instance ) ) {
-
-				// Set up an empty object to work with.
-				// @todo Remove this in 4.0.0.
-				$GLOBALS['hybrid'] = new stdClass;
-
 				$instance = new self;
 				$instance->setup();
 				$instance->core();

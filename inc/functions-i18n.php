@@ -132,24 +132,22 @@ function hybrid_load_framework_textdomain( $domain = 'hybrid-core' ) {
  *
  * @since  1.3.0
  * @access public
- * @global object $hybrid The global Hybrid object.
- * @return string         The textdomain of the theme.
+ * @return string
  */
 function hybrid_get_parent_textdomain() {
-	global $hybrid;
 
 	// If the global textdomain isn't set, define it. Plugin/theme authors may also define a custom textdomain.
-	if ( empty( $hybrid->parent_textdomain ) ) {
+	if ( ! hybrid()->parent_textdomain ) {
 
 		$theme = wp_get_theme( get_template() );
 
 		$textdomain = $theme->get( 'TextDomain' ) ? $theme->get( 'TextDomain' ) : get_template();
 
-		$hybrid->parent_textdomain = sanitize_key( apply_filters( 'hybrid_parent_textdomain', $textdomain ) );
+		hybrid()->parent_textdomain = sanitize_key( apply_filters( 'hybrid_parent_textdomain', $textdomain ) );
 	}
 
 	// Return the expected textdomain of the parent theme.
-	return $hybrid->parent_textdomain;
+	return hybrid()->parent_textdomain;
 }
 
 /**
@@ -161,28 +159,26 @@ function hybrid_get_parent_textdomain() {
  *
  * @since  1.2.0
  * @access public
- * @global object $hybrid The global Hybrid object.
- * @return string         The textdomain of the child theme.
+ * @return string
  */
 function hybrid_get_child_textdomain() {
-	global $hybrid;
 
 	// If a child theme isn't active, return an empty string.
 	if ( ! is_child_theme() )
 		return '';
 
 	// If the global textdomain isn't set, define it. Plugin/theme authors may also define a custom textdomain.
-	if ( empty( $hybrid->child_textdomain ) ) {
+	if ( ! hybrid()->child_textdomain ) {
 
 		$theme = wp_get_theme();
 
 		$textdomain = $theme->get( 'TextDomain' ) ? $theme->get( 'TextDomain' ) : get_stylesheet();
 
-		$hybrid->child_textdomain = sanitize_key( apply_filters( 'hybrid_child_textdomain', $textdomain ) );
+		hybrid()->child_textdomain = sanitize_key( apply_filters( 'hybrid_child_textdomain', $textdomain ) );
 	}
 
 	// Return the expected textdomain of the child theme. */
-	return $hybrid->child_textdomain;
+	return hybrid()->child_textdomain;
 }
 
 /**

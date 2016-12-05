@@ -73,18 +73,17 @@ function hybrid_enable_posts_page_editor( $post ) {
  *
  * @since  3.0.0
  * @access public
- * @global object  $hybrid
+ * @param  string  $post_type
  * @return array
  */
 function hybrid_get_post_styles( $post_type = 'post' ) {
-	global $hybrid;
 
 	// If stylesheets have already been loaded, return them.
-	if ( ! empty( $hybrid->post_styles ) && isset( $hybrid->post_styles[ $post_type ] ) )
-		return $hybrid->post_styles[ $post_type ];
+	if ( ! empty( hybrid()->post_styles ) && isset( hybrid()->post_styles[ $post_type ] ) )
+		return hybrid()->post_styles[ $post_type ];
 
 	// Set up an empty styles array.
-	$hybrid->post_styles[ $post_type ] = array();
+	hybrid()->post_styles[ $post_type ] = array();
 
 	// Get the theme CSS files two levels deep.
 	$files = wp_get_theme( get_template() )->get_files( 'css', 2 );
@@ -107,15 +106,15 @@ function hybrid_get_post_styles( $post_type = 'post' ) {
 
 		// Add the CSS filename and template name to the array.
 		if ( ! empty( $headers['Style Name'] ) )
-			$hybrid->post_styles[ $post_type ][ $file ] = $headers['Style Name'];
+			hybrid()->post_styles[ $post_type ][ $file ] = $headers['Style Name'];
 
 		elseif ( ! empty( $headers["{$post_type} Style"] ) )
-			$hybrid->post_styles[ $post_type ][ $file ] = $headers["{$post_type} Style"];
+			hybrid()->post_styles[ $post_type ][ $file ] = $headers["{$post_type} Style"];
 	}
 
 	// Flip the array of styles.
-	$hybrid->post_styles[ $post_type ] = array_flip( $hybrid->post_styles[ $post_type ] );
+	hybrid()->post_styles[ $post_type ] = array_flip( hybrid()->post_styles[ $post_type ] );
 
 	// Return array of styles.
-	return $hybrid->post_styles[ $post_type ];
+	return hybrid()->post_styles[ $post_type ];
 }

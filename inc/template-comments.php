@@ -24,7 +24,7 @@ function hybrid_comment_reply_link( $args = array() ) {
 
 /**
  * Outputs the comment reply link.  Note that WP's `comment_reply_link()` doesn't work outside of
- * `wp_list_comments()` without passing in the proper arguments (it isn't meant to).  This function 
+ * `wp_list_comments()` without passing in the proper arguments (it isn't meant to).  This function
  * is just a wrapper for `get_comment_reply_link()`, which adds in the arguments automatically.
  *
  * @since  2.0.0
@@ -54,27 +54,21 @@ function hybrid_get_comment_reply_link( $args = array() ) {
  * the `$comment_type`. The comment template hierarchy is `comment-$comment_type.php`,
  * `comment.php`.
  *
- * The templates are saved in `$hybrid->comment_template[$comment_type]`, so each comment template
+ * The templates are saved in `hybrid()->comment_templates[ $comment_type ]`, so each comment template
  * is only located once if it is needed. Following comments will use the saved template.
  *
  * @since  0.2.3
  * @access public
- * @global object  $hybrid
  * @param  object  $comment
  * @return void
  */
 function hybrid_comments_callback( $comment ) {
-	global $hybrid;
 
 	// Get the comment type of the current comment.
 	$comment_type = get_comment_type( $comment->comment_ID );
 
-	// Create an empty array if the comment template array is not set.
-	if ( ! isset( $hybrid->comment_template ) || ! is_array( $hybrid->comment_template ) )
-		$hybrid->comment_template = array();
-
 	// Check if a template has been provided for the specific comment type.  If not, get the template.
-	if ( ! isset( $hybrid->comment_template[ $comment_type ] ) ) {
+	if ( ! isset( hybrid()->comment_templates[ $comment_type ] ) ) {
 
 		// Create an array of template files to look for.
 		$templates = array( "comment-{$comment_type}.php", "comment/{$comment_type}.php" );
@@ -95,13 +89,13 @@ function hybrid_comments_callback( $comment ) {
 		// Locate the comment template.
 		$template = locate_template( $templates );
 
-		// Set the template in the comment template array.
-		$hybrid->comment_template[ $comment_type ] = $template;
+		// Set the template in the comment templates array.
+		hybrid()->comment_templates[ $comment_type ] = $template;
 	}
 
 	// If a template was found, load the template.
-	if ( ! empty( $hybrid->comment_template[ $comment_type ] ) )
-		require( $hybrid->comment_template[ $comment_type ] );
+	if ( ! empty( hybrid()->comment_templates[ $comment_type ] ) )
+		require( hybrid()->comment_templates[ $comment_type ] );
 }
 
 /**
