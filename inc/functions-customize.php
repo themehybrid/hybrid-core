@@ -35,18 +35,18 @@ add_action( 'customize_preview_init', 'hybrid_customize_preview_enqueue_scripts'
 function hybrid_load_customize_classes( $wp_customize ) {
 
 	// Load customize setting classes.
-	require_once( hybrid()->customize_dir . 'setting-array-map.php'  );
-	require_once( hybrid()->customize_dir . 'setting-image-data.php' );
+	require_once( hybrid()->dir . 'customize/setting-array-map.php'  );
+	require_once( hybrid()->dir . 'customize/setting-image-data.php' );
 
 	// Load customize control classes.
-	require_once( hybrid()->customize_dir . 'control-checkbox-multiple.php' );
-	require_once( hybrid()->customize_dir . 'control-dropdown-terms.php'    );
-	require_once( hybrid()->customize_dir . 'control-palette.php'           );
-	require_once( hybrid()->customize_dir . 'control-radio-image.php'       );
-	require_once( hybrid()->customize_dir . 'control-select-group.php'      );
-	require_once( hybrid()->customize_dir . 'control-select-multiple.php'   );
+	require_once( hybrid()->dir . 'customize/control-checkbox-multiple.php' );
+	require_once( hybrid()->dir . 'customize/control-dropdown-terms.php'    );
+	require_once( hybrid()->dir . 'customize/control-palette.php'           );
+	require_once( hybrid()->dir . 'customize/control-radio-image.php'       );
+	require_once( hybrid()->dir . 'customize/control-select-group.php'      );
+	require_once( hybrid()->dir . 'customize/control-select-multiple.php'   );
 
-	require_if_theme_supports( 'theme-layouts', hybrid()->customize_dir . 'control-layout.php' );
+	require_if_theme_supports( 'theme-layouts', hybrid()->dir . 'customize/control-layout.php' );
 
 	// Register JS control types.
 	$wp_customize->register_control_type( 'Hybrid_Customize_Control_Checkbox_Multiple' );
@@ -106,7 +106,7 @@ function hybrid_customize_register( $wp_customize ) {
  * @return void
  */
 function hybrid_customize_controls_register_scripts() {
-	wp_register_script( 'hybrid-customize-controls', hybrid()->js_uri . 'customize-controls' . hybrid_get_min_suffix() . '.js', array( 'customize-controls' ), null, true );
+	wp_register_script( 'hybrid-customize-controls', hybrid()->uri . 'js/customize-controls' . hybrid_get_min_suffix() . '.js', array( 'customize-controls' ), null, true );
 }
 
 /**
@@ -117,7 +117,7 @@ function hybrid_customize_controls_register_scripts() {
  * @return void
  */
 function hybrid_customize_controls_register_styles() {
-	wp_register_style( 'hybrid-customize-controls', hybrid()->css_uri . 'customize-controls' . hybrid_get_min_suffix() . '.css' );
+	wp_register_style( 'hybrid-customize-controls', hybrid()->uri . 'css/customize-controls' . hybrid_get_min_suffix() . '.css' );
 }
 
 /**
@@ -128,7 +128,7 @@ function hybrid_customize_controls_register_styles() {
  * @return void
  */
 function hybrid_customize_preview_register_scripts() {
-	wp_register_script( 'hybrid-customize-preview', hybrid()->js_uri . 'customize-preview' . hybrid_get_min_suffix() . '.js', array( 'jquery' ), null, true );
+	wp_register_script( 'hybrid-customize-preview', hybrid()->uri . 'js/customize-preview' . hybrid_get_min_suffix() . '.js', array( 'jquery' ), null, true );
 }
 
 /**

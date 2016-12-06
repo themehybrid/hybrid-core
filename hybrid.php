@@ -60,7 +60,7 @@ if ( ! class_exists( 'Hybrid' ) ) {
 		 * @access public
 		 * @var    string
 		 */
-		public $dir_path = '';
+		public $dir = '';
 
 		/**
 		 * Framework directory URI with trailing slash.
@@ -69,61 +69,7 @@ if ( ! class_exists( 'Hybrid' ) ) {
 		 * @access public
 		 * @var    string
 		 */
-		public $dir_uri = '';
-
-		/**
-		 * Framework admin directory path with trailing slash.
-		 *
-		 * @since  4.0.0
-		 * @access public
-		 * @var    string
-		 */
-		public $admin_dir = '';
-
-		/**
-		 * Framework includes directory path with trailing slash.
-		 *
-		 * @since  4.0.0
-		 * @access public
-		 * @var    string
-		 */
-		public $inc_dir = '';
-
-		/**
-		 * Framework extensions directory path with trailing slash.
-		 *
-		 * @since  4.0.0
-		 * @access public
-		 * @var    string
-		 */
-		public $ext_dir = '';
-
-		/**
-		 * Framework customize directory path with trailing slash.
-		 *
-		 * @since  4.0.0
-		 * @access public
-		 * @var    string
-		 */
-		public $customize_dir = '';
-
-		/**
-		 * Framework CSS URI with trailing slash.
-		 *
-		 * @since  4.0.0
-		 * @access public
-		 * @var    string
-		 */
-		public $css_uri = '';
-
-		/**
-		 * Framework JS URI with trailing slash.
-		 *
-		 * @since  4.0.0
-		 * @access public
-		 * @var    string
-		 */
-		public $js_uri = '';
+		public $uri = '';
 
 		/**
 		 * Parent theme directory path with trailing slash.
@@ -256,18 +202,9 @@ if ( ! class_exists( 'Hybrid' ) ) {
 			if ( ! defined( 'HYBRID_URI' ) )
 				define( 'HYBRID_URI', trailingslashit( $this->parent_uri . basename( dirname( __FILE__ ) ) ) );
 
-			$this->dir_path = HYBRID_DIR;
-			$this->dir_uri  = HYBRID_URI;
-
-			// Core framework directory paths.
-			$this->admin_dir     = trailingslashit( $this->dir_path . 'admin'     );
-			$this->inc_dir       = trailingslashit( $this->dir_path . 'inc'       );
-			$this->ext_dir       = trailingslashit( $this->dir_path . 'ext'       );
-			$this->customize_dir = trailingslashit( $this->dir_path . 'customize' );
-
-			// Core framework directory URIs.
-			$this->css_uri = trailingslashit( $this->dir_uri . 'css' );
-			$this->js_uri  = trailingslashit( $this->dir_uri . 'js'  );
+			// Set the directory properties.
+			$this->dir = HYBRID_DIR;
+			$this->uri = HYBRID_URI;
 		}
 
 		/**
@@ -280,34 +217,34 @@ if ( ! class_exists( 'Hybrid' ) ) {
 		private function core() {
 
 			// Load the class files.
-			require_once( $this->inc_dir . 'class-media-meta.php'         );
-			require_once( $this->inc_dir . 'class-media-meta-factory.php' );
-			require_once( $this->inc_dir . 'class-media-grabber.php'      );
+			require_once( $this->dir . 'inc/class-media-meta.php'         );
+			require_once( $this->dir . 'inc/class-media-meta-factory.php' );
+			require_once( $this->dir . 'inc/class-media-grabber.php'      );
 
 			// Load the functions files.
-			require_once( $this->inc_dir . 'functions-attr.php'      );
-			require_once( $this->inc_dir . 'functions-context.php'   );
-			require_once( $this->inc_dir . 'functions-i18n.php'      );
-			require_once( $this->inc_dir . 'functions-customize.php' );
-			require_once( $this->inc_dir . 'functions-filters.php'   );
-			require_once( $this->inc_dir . 'functions-fonts.php'     );
-			require_once( $this->inc_dir . 'functions-head.php'      );
-			require_once( $this->inc_dir . 'functions-meta.php'      );
-			require_once( $this->inc_dir . 'functions-sidebars.php'  );
-			require_once( $this->inc_dir . 'functions-scripts.php'   );
-			require_once( $this->inc_dir . 'functions-styles.php'    );
-			require_once( $this->inc_dir . 'functions-utility.php'   );
+			require_once( $this->dir . 'inc/functions-attr.php'      );
+			require_once( $this->dir . 'inc/functions-context.php'   );
+			require_once( $this->dir . 'inc/functions-i18n.php'      );
+			require_once( $this->dir . 'inc/functions-customize.php' );
+			require_once( $this->dir . 'inc/functions-filters.php'   );
+			require_once( $this->dir . 'inc/functions-fonts.php'     );
+			require_once( $this->dir . 'inc/functions-head.php'      );
+			require_once( $this->dir . 'inc/functions-meta.php'      );
+			require_once( $this->dir . 'inc/functions-sidebars.php'  );
+			require_once( $this->dir . 'inc/functions-scripts.php'   );
+			require_once( $this->dir . 'inc/functions-styles.php'    );
+			require_once( $this->dir . 'inc/functions-utility.php'   );
 
 			// Load the template files.
-			require_once( $this->inc_dir . 'template.php'          );
-			require_once( $this->inc_dir . 'template-comments.php' );
-			require_once( $this->inc_dir . 'template-general.php'  );
-			require_once( $this->inc_dir . 'template-media.php'    );
-			require_once( $this->inc_dir . 'template-post.php'     );
+			require_once( $this->dir . 'inc/template.php'          );
+			require_once( $this->dir . 'inc/template-comments.php' );
+			require_once( $this->dir . 'inc/template-general.php'  );
+			require_once( $this->dir . 'inc/template-media.php'    );
+			require_once( $this->dir . 'inc/template-post.php'     );
 
 			// Load admin files.
 			if ( is_admin() )
-				require_once( $this->admin_dir . 'admin.php' );
+				require_once( $this->dir . 'admin/admin.php' );
 
 		}
 
@@ -367,23 +304,23 @@ if ( ! class_exists( 'Hybrid' ) ) {
 		public function includes() {
 
 			// Load the template hierarchy if supported.
-			require_if_theme_supports( 'hybrid-core-template-hierarchy', $this->inc_dir . 'template-hierarchy.php' );
+			require_if_theme_supports( 'hybrid-core-template-hierarchy', $this->dir . 'inc/template-hierarchy.php' );
 
 			// Load the post format functionality if post formats are supported.
-			require_if_theme_supports( 'post-formats', $this->inc_dir . 'functions-formats.php' );
-			require_if_theme_supports( 'post-formats', $this->inc_dir . 'class-chat.php'        );
+			require_if_theme_supports( 'post-formats', $this->dir . 'inc/functions-formats.php' );
+			require_if_theme_supports( 'post-formats', $this->dir . 'inc/class-chat.php'        );
 
 			// Load the Theme Layouts extension if supported.
-			require_if_theme_supports( 'theme-layouts', $this->inc_dir . 'class-layout.php'         );
-			require_if_theme_supports( 'theme-layouts', $this->inc_dir . 'class-layout-factory.php' );
-			require_if_theme_supports( 'theme-layouts', $this->inc_dir . 'functions-layouts.php'    );
+			require_if_theme_supports( 'theme-layouts', $this->dir . 'inc/class-layout.php'         );
+			require_if_theme_supports( 'theme-layouts', $this->dir . 'inc/class-layout-factory.php' );
+			require_if_theme_supports( 'theme-layouts', $this->dir . 'inc/functions-layouts.php'    );
 
 			// Load the deprecated functions if supported.
-			require_if_theme_supports( 'hybrid-core-deprecated', $this->inc_dir . 'functions-deprecated.php' );
+			require_if_theme_supports( 'hybrid-core-deprecated', $this->dir . 'inc/functions-deprecated.php' );
 
 			// Load admin files.
 			if ( is_admin() )
-				require_if_theme_supports( 'theme-layouts', $this->admin_dir . 'class-term-layout.php' );
+				require_if_theme_supports( 'theme-layouts', $this->dir . 'admin/class-term-layout.php' );
 		}
 
 		/**
@@ -399,9 +336,9 @@ if ( ! class_exists( 'Hybrid' ) ) {
 		 */
 		public function extensions() {
 
-			hybrid_require_if_theme_supports( 'breadcrumb-trail', $this->ext_dir . 'breadcrumb-trail.php' );
-			hybrid_require_if_theme_supports( 'cleaner-gallery',  $this->ext_dir . 'cleaner-gallery.php'  );
-			hybrid_require_if_theme_supports( 'get-the-image',    $this->ext_dir . 'get-the-image.php'    );
+			hybrid_require_if_theme_supports( 'breadcrumb-trail', $this->dir . 'ext/breadcrumb-trail.php' );
+			hybrid_require_if_theme_supports( 'cleaner-gallery',  $this->dir . 'ext/cleaner-gallery.php'  );
+			hybrid_require_if_theme_supports( 'get-the-image',    $this->dir . 'ext/get-the-image.php'    );
 		}
 
 		/**

@@ -32,10 +32,10 @@ add_action( 'edit_form_after_title', 'hybrid_enable_posts_page_editor', 0 );
 function hybrid_admin_load_post_meta_boxes() {
 
 	// Load the layout meta box.
-	require_if_theme_supports( 'theme-layouts', hybrid()->admin_dir . 'meta-box-post-layout.php' );
+	require_if_theme_supports( 'theme-layouts', hybrid()->dir . 'admin/meta-box-post-layout.php' );
 
 	// Load the post style meta box.
-	require_once( hybrid()->admin_dir . 'meta-box-post-style.php' );
+	require_once( hybrid()->dir . 'admin/meta-box-post-style.php' );
 }
 
 /**
@@ -46,7 +46,7 @@ function hybrid_admin_load_post_meta_boxes() {
  * @return void
  */
 function hybrid_admin_register_styles() {
-	wp_register_style( 'hybrid-admin', hybrid()->dir_uri . 'admin.css' );
+	wp_register_style( 'hybrid-admin', hybrid()->uri . 'css/admin.css' );
 }
 
 /**
