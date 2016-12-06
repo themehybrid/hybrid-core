@@ -49,6 +49,58 @@ function hybrid_get_comment_reply_link( $args = array() ) {
 }
 
 /**
+ * Prints the comment parent link.
+ *
+ * @since  4.0.0
+ * @access public
+ * @param  array   $args
+ * @return void
+ */
+function hybrid_comment_parent_link( $args = array() ) {
+
+	echo hybrid_get_comment_parent_link( $args );
+}
+
+/**
+ * Gets the link to the comment's parent comment.
+ *
+ * @since  4.0.0
+ * @access public
+ * @param  array   $args
+ * @return string
+ */
+function hybrid_get_comment_parent_link( $args = array() ) {
+
+	$link = '';
+
+	$defaults = array(
+		'text'   => '%s', // Defaults to parent comment author.
+		'depth'  => 2,    // At what level should the link show.
+		'before' => '',
+		'after'  => ''
+	);
+
+	$args = wp_parse_args( $args, $defaults );
+
+	// Only display the link if the current comment is greater than or equal
+	// to the depth requested.
+	if ( $args['depth'] <= $GLOBALS['comment_depth'] ) {
+
+		$parent = get_comment()->comment_parent;
+
+		if ( 0 < $parent ) {
+
+			$url  = esc_url( get_comment_link( $parent ) );
+			$text = sprintf( $args['text'], esc_html( get_comment_author( $parent ) ) );
+
+			$link = sprintf( '%s<a class="comment-parent-link" href="%s">%s</a>%s', $args['before'], $url, $text, $args['after'] );
+		}
+	}
+
+	return apply_filters( 'hybrid_comment_parent_link', $link, $args );
+}
+
+/**
  * Uses the `$comment_type` to determine which comment template should be used. Once the
  * template is located, it is loaded for use. Child themes can create custom templates based off
  * the `$comment_type`. The comment template hierarchy is `comment-$comment_type.php`,
