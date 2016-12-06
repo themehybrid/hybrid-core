@@ -146,6 +146,9 @@ final class Hybrid_Admin_Term_Layout {
 	 */
 	public function display_field( $term = '' ) {
 
+		// Get only the term layouts.
+		$layouts = wp_list_filter( hybrid_get_layouts(), array( 'is_term_layout' => true ) );
+
 		$term_layout = 'default';
 		$taxonomy    = get_current_screen()->taxonomy;
 
@@ -159,9 +162,9 @@ final class Hybrid_Admin_Term_Layout {
 
 		wp_nonce_field( basename( __FILE__ ), 'hybrid_term_layout_nonce' );
 
-		foreach ( hybrid_get_layouts() as $layout ) : ?>
+		foreach ( $layouts as $layout ) : ?>
 
-			<?php if ( true === $layout->is_term_layout && $layout->image && ( ! $layout->taxonomies || in_array( $taxonomy, $layout->taxonomies ) ) ) : ?>
+			<?php if ( $layout->image && ( ! $layout->taxonomies || in_array( $taxonomy, $layout->taxonomies ) ) ) : ?>
 
 				<label class="has-img">
 					<input type="radio" value="<?php echo esc_attr( $layout->name ); ?>" name="hybrid-term-layout" <?php checked( $term_layout, $layout->name ); ?> />
