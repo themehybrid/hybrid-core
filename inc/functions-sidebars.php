@@ -62,3 +62,17 @@ function hybrid_get_sidebar_name( $sidebar_id ) {
 
 	return isset( $wp_registered_sidebars[ $sidebar_id ] ) ? $wp_registered_sidebars[ $sidebar_id ]['name'] : '';
 }
+
+/**
+ * Checks if a widget exists.  Pass in the widget class name.  This function is useful for
+ * checking if the widget exists before directly calling `the_widget()` within a template.
+ *
+ * @since  4.0.0
+ * @access public
+ * @param  string  $widget
+ * @return bool
+ */
+function hybrid_widget_exists( $widget ) {
+
+	return isset( $GLOBALS['wp_widget_factory']->widgets[ $widget ] );
+}
