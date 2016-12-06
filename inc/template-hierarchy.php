@@ -172,7 +172,7 @@ function hybrid_singular_template( $template ) {
 	// Get the queried post.
 	$post = get_queried_object();
 
-	// Check for a custom post template by custom field key '_wp_post_template'.
+	// Check for a custom post template by custom field key '_wp_page_template'.
 	$custom = hybrid_get_post_template( get_queried_object_id() );
 
 	if ( $custom )
@@ -225,6 +225,8 @@ function hybrid_singular_template( $template ) {
  * way, the "front-page.php" template will only ever be used if an actual page is supposed to be
  * shown on the front.
  *
+ * @since  4.0.0  Filter makes sure user-selected page template overrides everything.
+ *
  * @link   http://www.chipbennett.net/2013/09/14/home-page-and-front-page-and-templates-oh-my/
  * @since  2.0.0
  * @access public
@@ -232,6 +234,13 @@ function hybrid_singular_template( $template ) {
  * @return string
  */
 function hybrid_front_page_template( $template ) {
+
+	if ( ! is_home() ) {
+		$custom = hybrid_get_post_template( get_queried_object_id() );
+
+		if ( $custom && $has_template = locate_template( $custom ) )
+			return $has_template;
+	}
 
 	return is_home() ? '' : $template;
 }
