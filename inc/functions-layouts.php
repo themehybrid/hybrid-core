@@ -145,7 +145,7 @@ function hybrid_get_theme_layout() {
  * @return string
  */
 function hybrid_get_global_layout() {
-	return get_theme_mod( 'theme_layout', hybrid_get_default_layout() );
+	return hybrid_get_theme_mod( 'theme_layout', hybrid_get_default_layout() );
 }
 
 /**
