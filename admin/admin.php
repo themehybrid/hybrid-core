@@ -31,9 +31,6 @@ add_action( 'edit_form_after_title', 'hybrid_enable_posts_page_editor', 0 );
  */
 function hybrid_admin_load_post_meta_boxes() {
 
-	// Load the layout meta box.
-	require_if_theme_supports( 'theme-layouts', hybrid()->dir . 'admin/meta-box-post-layout.php' );
-
 	// Load the post style meta box.
 	require_once( hybrid()->dir . 'admin/meta-box-post-style.php' );
 }
@@ -66,6 +63,83 @@ function hybrid_enable_posts_page_editor( $post ) {
 	remove_action( 'edit_form_after_title', '_wp_posts_page_notice' );
 	add_post_type_support( $post->post_type, 'editor' );
 }
+
+/**
+ * Displays the layout form field.  Used for various admin screens.
+ *
+ * @since  4.0.0
+ * @access public
+ * @param  array  $args
+ * @return void
+ */
+function hybrid_form_field_layout( $args = array() ) {
+
+	$defaults = array(
+		'layouts'    => hybrid_get_layouts(),
+		'selected'   => 'default',
+		'field_name' => 'hybrid-layout'
+	);
+
+	$args = wp_parse_args( $args, $defaults ); ?>
+
+	<div class="hybrid-form-field-layout">
+
+	<?php foreach ( $args['layouts'] as $layout ) : ?>
+
+		<?php if ( $layout->image ) : ?>
+
+			<label class="has-img">
+				<input type="radio" value="<?php echo esc_attr( $layout->name ); ?>" name="<?php echo esc_attr( $args['field_name'] ); ?>" <?php checked( $args['selected'], $layout->name ); ?> />
+
+				<span class="screen-reader-text"><?php echo esc_html( $layout->label ); ?></span>
+
+				<img src="<?php echo esc_url( hybrid_sprintf_theme_uri( $layout->image ) ); ?>" alt="<?php echo esc_attr( $layout->label ); ?>" />
+			</label>
+
+		<?php endif; ?>
+
+	<?php endforeach; ?>
+
+	</div>
+<?php }
+
+/**
+ * Outputs the inline JS for use with the layout form field.
+ *
+ * @since  4.0.0
+ * @access public
+ * @return void
+ */
+function hybrid_layout_field_inline_script() { ?>
+
+	<script type="text/javascript">
+	jQuery( document ).ready( function() {
+
+		// Layout container.
+		var container = jQuery( '.hybrid-form-field-layout' );
+
+		// Add the `.checked` class to whichever radio is checked.
+		container.addClass( 'checked' );
+
+		// When a radio is clicked.
+		jQuery( 'input', container ).click( function() {
+
+			// If the radio has the `.checked` class, remove it and uncheck the radio.
+			if ( jQuery( this ).hasClass( 'checked' ) ) {
+
+				jQuery( 'input', container ).removeClass( 'checked' );
+				jQuery( this ).prop( 'checked', false );
+
+			// If the radio is not checked, add the `.checked` class and check it.
+			} else {
+
+				jQuery( 'input', container ).removeClass( 'checked' );
+				jQuery( this ).addClass( 'checked' );
+			}
+		} );
+	} );
+	</script>
+<?php }
 
 /**
  * Gets the stylesheet files within the parent or child theme and checks if they have the 'Style Name'

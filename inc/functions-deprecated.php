@@ -63,6 +63,10 @@ function hybrid_get_loop_title() {}
 function hybrid_loop_description() {}
 function hybrid_get_loop_description() {}
 function hybrid_admin_register_scripts() {}
+function hybrid_add_post_layout_meta_box() {}
+function hybrid_post_layout_enqueue() {}
+function hybrid_post_layout_meta_box() {}
+function hybrid_save_post_layout() {}
 
 /* Fuctions removed in the 3.0 branch. */
 

@@ -319,8 +319,10 @@ if ( ! class_exists( 'Hybrid' ) ) {
 			require_if_theme_supports( 'hybrid-core-deprecated', $this->dir . 'inc/functions-deprecated.php' );
 
 			// Load admin files.
-			if ( is_admin() )
-				require_if_theme_supports( 'theme-layouts', $this->dir . 'admin/class-term-layout.php' );
+			if ( is_admin() && current_theme_supports( 'theme-layouts' ) ) {
+				require_once( $this->dir . 'admin/class-post-layout.php' );
+				require_once( $this->dir . 'admin/class-term-layout.php' );
+			}
 		}
 
 		/**
