@@ -48,7 +48,6 @@ function hybrid_add_post_type_support() {
 
 	add_post_type_support( 'forum',             'theme-layouts' );
 	add_post_type_support( 'literature',        'theme-layouts' );
-	add_post_type_support( 'portfolio_item',    'theme-layouts' );
 	add_post_type_support( 'portfolio_project', 'theme-layouts' );
 	add_post_type_support( 'product',           'theme-layouts' );
 	add_post_type_support( 'restaurant_item',   'theme-layouts' );
