@@ -98,7 +98,7 @@ final class Hybrid_Admin_Post_Layout {
 
 		wp_enqueue_style( 'hybrid-admin' );
 
-		add_action( 'wp_footer', 'hybrid_layout_field_inline_script' );
+		add_action( 'admin_footer', 'hybrid_layout_field_inline_script' );
 	}
 
 	/**
