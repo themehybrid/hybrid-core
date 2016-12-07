@@ -132,9 +132,9 @@ final class Hybrid_Admin_Post_Layout {
 		// Output the layout field.
 		hybrid_form_field_layout(
 			array(
-				'layouts'  => $layouts,
-				'selected' => $post_layout ? $post_layout : 'default',
-				'name'     => 'hybrid-post-layout'
+				'layouts'    => $layouts,
+				'selected'   => $post_layout ? $post_layout : 'default',
+				'field_name' => 'hybrid-post-layout'
 			)
 		);
 	}

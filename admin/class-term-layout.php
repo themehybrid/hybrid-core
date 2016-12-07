@@ -175,9 +175,9 @@ final class Hybrid_Admin_Term_Layout {
 		// Output the layout field.
 		hybrid_form_field_layout(
 			array(
-				'layouts'  => $layouts,
-				'selected' => $term_layout ? $term_layout : 'default',
-				'name'     => 'hybrid-term-layout'
+				'layouts'    => $layouts,
+				'selected'   => $term_layout ? $term_layout : 'default',
+				'field_name' => 'hybrid-term-layout'
 			)
 		);
 	}
