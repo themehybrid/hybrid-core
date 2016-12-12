@@ -12,6 +12,41 @@
  */
 
 /**
+ * Template part getter function.  This is more robust than the existing core
+ * WordPress template function while being compatible with its hooks.
+ *
+ * @since  4.0.0
+ * @access public
+ * @param  string  $slug
+ * @param  string  $name
+ * @return void
+ */
+function hybrid_get_template_part( $slug, $name = '' ) {
+
+	do_action( "get_template_part_{$slug}", $slug, $name ); // Core WP hook.
+
+	$templates = array();
+
+	if ( $name ) {
+		$templates[] = "{$slug}-{$name}.php";
+		$templates[] = "{$slug}/{$name}.php";
+	}
+
+	$templates[] = "{$slug}.php";
+	$templates[] = "{$slug}/{$slug}.php";
+
+	// Allow devs to filter the hierarchy before attempting to locate.
+	$templates = apply_filters( "hybrid_{$slug}_template_hierarchy", $templates, $name );
+
+	// Locate template. Allow devs to filter the final template.
+	$template = apply_filters( "hybrid_{$slug}_template", locate_template( $templates ), $name );
+
+	// If a template is found, include it.
+	if ( $template )
+		include( $template );
+}
+
+/**
  * Loads a post content template based off the post type and/or the post format.  This functionality is
  * not feasible with the WordPress get_template_part() function, so we have to rely on some custom logic
  * and locate_template().
@@ -86,17 +121,7 @@ function hybrid_get_content_template() {
  */
 function hybrid_get_menu( $name = '' ) {
 
-	$templates = array();
-
-	if ( $name ) {
-		$templates[] = "menu-{$name}.php";
-		$templates[] = "menu/{$name}.php";
-	}
-
-	$templates[] = 'menu.php';
-	$templates[] = 'menu/menu.php';
-
-	locate_template( $templates, true, false );
+	hybrid_get_template_part( 'menu', $name );
 }
 
 /**
@@ -124,17 +149,7 @@ function hybrid_get_header( $name = '' ) {
 
 	do_action( 'get_header', $name ); // Core WordPress hook
 
-	$templates = array();
-
-	if ( $name ) {
-		$templates[] = "header-{$name}.php";
-		$templates[] = "header/{$name}.php";
-	}
-
-	$templates[] = 'header.php';
-	$templates[] = 'header/header.php';
-
-	locate_template( $templates, true, false );
+	hybrid_get_template_part( 'header', $name );
 }
 
 /**
@@ -162,17 +177,7 @@ function hybrid_get_footer( $name = '' ) {
 
 	do_action( 'get_footer', $name ); // Core WordPress hook
 
-	$templates = array();
-
-	if ( $name ) {
-		$templates[] = "footer-{$name}.php";
-		$templates[] = "footer/{$name}.php";
-	}
-
-	$templates[] = 'footer.php';
-	$templates[] = 'footer/footer.php';
-
-	locate_template( $templates, true, false );
+	hybrid_get_template_part( 'footer', $name );
 }
 
 /**
@@ -257,15 +262,5 @@ function hybrid_get_sidebar( $name = '' ) {
 
 	do_action( 'get_sidebar', $name ); // Core WordPress hook
 
-	$templates = array();
-
-	if ( $name ) {
-		$templates[] = "sidebar-{$name}.php";
-		$templates[] = "sidebar/{$name}.php";
-	}
-
-	$templates[] = 'sidebar.php';
-	$templates[] = 'sidebar/sidebar.php';
-
-	locate_template( $templates, true, false );
+	hybrid_get_template_part( 'sidebar', $name );
 }
