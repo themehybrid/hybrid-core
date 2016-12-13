@@ -47,69 +47,6 @@ function hybrid_get_template_part( $slug, $name = '' ) {
 }
 
 /**
- * Loads a post content template based off the post type and/or the post format.  This functionality is
- * not feasible with the WordPress get_template_part() function, so we have to rely on some custom logic
- * and locate_template().
- *
- * Note that using this function assumes that you're creating a content template to handle attachments.
- * The `prepend_attachment()` filter must be removed since we're bypassing the WP template hierarchy
- * and focusing on templates specific to the content.
- *
- * @since  1.6.0
- * @access public
- * @return string
- */
-function hybrid_get_content_template() {
-
-	// Set up an empty array and get the post type.
-	$templates = array();
-	$post_type = get_post_type();
-
-	// Assume the theme developer is creating an attachment template.
-	if ( 'attachment' === $post_type ) {
-		remove_filter( 'the_content', 'prepend_attachment' );
-
-		$type = hybrid_get_attachment_type();
-
-		$templates[] = "content-attachment-{$type}.php";
-		$templates[] = "content/attachment-{$type}.php";
-	}
-
-	// If the post type supports 'post-formats', get the template based on the format.
-	if ( post_type_supports( $post_type, 'post-formats' ) ) {
-
-		// Get the post format.
-		$post_format = get_post_format() ? get_post_format() : 'standard';
-
-		// Template based off post type and post format.
-		$templates[] = "content-{$post_type}-{$post_format}.php";
-		$templates[] = "content/{$post_type}-{$post_format}.php";
-
-		// Template based off the post format.
-		$templates[] = "content-{$post_format}.php";
-		$templates[] = "content/{$post_format}.php";
-	}
-
-	// Template based off the post type.
-	$templates[] = "content-{$post_type}.php";
-	$templates[] = "content/{$post_type}.php";
-
-	// Fallback 'content.php' template.
-	$templates[] = 'content.php';
-	$templates[] = 'content/content.php';
-
-	// Apply filters to the templates array.
-	$templates = apply_filters( 'hybrid_content_template_hierarchy', $templates );
-
-	// Locate the template.
-	$template = apply_filters( 'hybrid_content_template', locate_template( $templates ), $templates );
-
-	// If template is found, include it.
-	if ( $template )
-		include( $template );
-}
-
-/**
  * A function for loading a menu template.  This works similar to the WordPress `get_*()` template functions.
  * It's purpose is for loading a menu template part.  This function looks for menu templates within the
  * `menu` sub-folder or the root theme folder.
@@ -181,6 +118,97 @@ function hybrid_get_footer( $name = '' ) {
 }
 
 /**
+ * This is a replacement function for the WordPress `get_sidebar()` function. The reason for this function
+ * over the core function is because the core function does not provide the functionality needed to properly
+ * implement what's needed, particularly the ability to add sidebar templates to a sub-directory.
+ * Technically, there's a workaround for that using the `get_sidebar` hook, but it requires keeping a
+ * an empty `sidebar.php` template in the theme's root, which will get loaded every time a sidebar template
+ * gets loaded.  That's kind of nasty hack, which leaves us with this function.  This is the **only**
+ * clean solution currently possible.
+ *
+ * This function maintains compatibility with the core `get_sidebar()` function.  It does so in two ways:
+ * 1) The `get_sidebar` hook is properly fired and 2) The core naming convention of sidebar templates
+ * (`sidebar-$name.php` and `sidebar.php`) is preserved and given a higher priority than custom templates.
+ *
+ * @link http://core.trac.wordpress.org/ticket/15086
+ * @link http://core.trac.wordpress.org/ticket/18676
+ *
+ * @since  2.0.0
+ * @access public
+ * @param  string  $name
+ * @return void
+ */
+function hybrid_get_sidebar( $name = '' ) {
+
+	do_action( 'get_sidebar', $name ); // Core WordPress hook
+
+	hybrid_get_template_part( 'sidebar', $name );
+}
+
+/**
+ * Loads a post content template based off the post type and/or the post format.  This functionality is
+ * not feasible with the WordPress get_template_part() function, so we have to rely on some custom logic
+ * and locate_template().
+ *
+ * Note that using this function assumes that you're creating a content template to handle attachments.
+ * The `prepend_attachment()` filter must be removed since we're bypassing the WP template hierarchy
+ * and focusing on templates specific to the content.
+ *
+ * @since  1.6.0
+ * @access public
+ * @return string
+ */
+function hybrid_get_content_template() {
+
+	// Set up an empty array and get the post type.
+	$templates = array();
+	$post_type = get_post_type();
+
+	// Assume the theme developer is creating an attachment template.
+	if ( 'attachment' === $post_type ) {
+		remove_filter( 'the_content', 'prepend_attachment' );
+
+		$type = hybrid_get_attachment_type();
+
+		$templates[] = "content-attachment-{$type}.php";
+		$templates[] = "content/attachment-{$type}.php";
+	}
+
+	// If the post type supports 'post-formats', get the template based on the format.
+	if ( post_type_supports( $post_type, 'post-formats' ) ) {
+
+		// Get the post format.
+		$post_format = get_post_format() ? get_post_format() : 'standard';
+
+		// Template based off post type and post format.
+		$templates[] = "content-{$post_type}-{$post_format}.php";
+		$templates[] = "content/{$post_type}-{$post_format}.php";
+
+		// Template based off the post format.
+		$templates[] = "content-{$post_format}.php";
+		$templates[] = "content/{$post_format}.php";
+	}
+
+	// Template based off the post type.
+	$templates[] = "content-{$post_type}.php";
+	$templates[] = "content/{$post_type}.php";
+
+	// Fallback 'content.php' template.
+	$templates[] = 'content.php';
+	$templates[] = 'content/content.php';
+
+	// Apply filters to the templates array.
+	$templates = apply_filters( 'hybrid_content_template_hierarchy', $templates );
+
+	// Locate the template.
+	$template = apply_filters( 'hybrid_content_template', locate_template( $templates ), $templates );
+
+	// If template is found, include it.
+	if ( $template )
+		include( $template );
+}
+
+/**
  * Gets the embed template used for embedding posts from the site.
  *
  * @since  3.1.0
@@ -235,32 +263,4 @@ function hybrid_get_embed_template() {
 	// If template is found, include it.
 	if ( apply_filters( 'hybrid_embed_template', $template, $templates ) )
 		include( $template );
-}
-
-/**
- * This is a replacement function for the WordPress `get_sidebar()` function. The reason for this function
- * over the core function is because the core function does not provide the functionality needed to properly
- * implement what's needed, particularly the ability to add sidebar templates to a sub-directory.
- * Technically, there's a workaround for that using the `get_sidebar` hook, but it requires keeping a
- * an empty `sidebar.php` template in the theme's root, which will get loaded every time a sidebar template
- * gets loaded.  That's kind of nasty hack, which leaves us with this function.  This is the **only**
- * clean solution currently possible.
- *
- * This function maintains compatibility with the core `get_sidebar()` function.  It does so in two ways:
- * 1) The `get_sidebar` hook is properly fired and 2) The core naming convention of sidebar templates
- * (`sidebar-$name.php` and `sidebar.php`) is preserved and given a higher priority than custom templates.
- *
- * @link http://core.trac.wordpress.org/ticket/15086
- * @link http://core.trac.wordpress.org/ticket/18676
- *
- * @since  2.0.0
- * @access public
- * @param  string  $name
- * @return void
- */
-function hybrid_get_sidebar( $name = '' ) {
-
-	do_action( 'get_sidebar', $name ); // Core WordPress hook
-
-	hybrid_get_template_part( 'sidebar', $name );
 }
