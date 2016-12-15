@@ -155,8 +155,7 @@ final class Hybrid_Admin_Term_Layout {
 		$taxonomy    = get_current_screen()->taxonomy;
 
 		// Get only the term layouts.
-		// Note that we're using `false` and `NOT` here b/c simply setting to `true` doesn't work.
-		$layouts = wp_list_filter( hybrid_get_layouts(), array( 'is_term_layout' => false ), 'NOT' );
+		$layouts = wp_list_filter( hybrid_get_layouts(), array( 'is_term_layout' => true, 'image' => true ) );
 
 		// Remove unwanted layouts.
 		foreach ( $layouts as $layout ) {
@@ -192,7 +191,7 @@ final class Hybrid_Admin_Term_Layout {
 	 */
 	public function save( $term_id ) {
 
-		if ( ! isset( $_POST['hybrid_term_layout_nonce'] ) || ! wp_verify_nonce( $_POST['hybrid_term_layout_nonce'], basename( __FILE__ ) ) )
+		if ( ! hybrid_verify_nonce_post( basename( __FILE__ ), 'hybrid_term_layout_nonce' ) )
 			return;
 
 		$old_layout = hybrid_get_term_layout( $term_id );

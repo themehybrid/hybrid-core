@@ -220,6 +220,8 @@ if ( ! class_exists( 'Hybrid' ) ) {
 			require_once( $this->dir . 'inc/class-media-meta.php'         );
 			require_once( $this->dir . 'inc/class-media-meta-factory.php' );
 			require_once( $this->dir . 'inc/class-media-grabber.php'      );
+			require_once( $this->dir . 'inc/class-template.php'           );
+			require_once( $this->dir . 'inc/class-template-factory.php'   );
 
 			// Load the functions files.
 			require_once( $this->dir . 'inc/functions-attr.php'      );
@@ -233,6 +235,7 @@ if ( ! class_exists( 'Hybrid' ) ) {
 			require_once( $this->dir . 'inc/functions-sidebars.php'  );
 			require_once( $this->dir . 'inc/functions-scripts.php'   );
 			require_once( $this->dir . 'inc/functions-styles.php'    );
+			require_once( $this->dir . 'inc/functions-templates.php' );
 			require_once( $this->dir . 'inc/functions-utility.php'   );
 
 			// Load the template files.

@@ -8,11 +8,11 @@
 	font-style: normal;
 }
 
-.hybrid-term-layout-wrap .has-img {
+.hybrid-term-layout-wrap label {
 	display: inline-block;
 }
 
-.hybrid-form-field-layout .has-img input[type="radio"] {
+.hybrid-form-field-layout input[type="radio"] {
 	clip:     rect(1px, 1px, 1px, 1px);
 	height:   1px;
 	overflow: hidden;

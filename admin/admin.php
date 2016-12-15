@@ -16,6 +16,7 @@ add_action( 'load-post.php',     'hybrid_admin_load_post_meta_boxes' );
 add_action( 'load-post-new.php', 'hybrid_admin_load_post_meta_boxes' );
 
 # Register scripts and styles.
+add_action( 'admin_enqueue_scripts', 'hybrid_admin_register_scripts', 0 );
 add_action( 'admin_enqueue_scripts', 'hybrid_admin_register_styles',  0 );
 
 # Allow posts page to be edited.
@@ -36,6 +37,16 @@ function hybrid_admin_load_post_meta_boxes() {
 }
 
 /**
+ * Registers admin scripts.
+ *
+ * @note   Soft-deprecated. We'll probably reuse function at some point.
+ * @since  3.0.0
+ * @access public
+ * @return void
+ */
+function hybrid_admin_register_scripts() {}
+
+/**
  * Registers admin styles.
  *
  * @since  3.0.0
@@ -43,6 +54,7 @@ function hybrid_admin_load_post_meta_boxes() {
  * @return void
  */
 function hybrid_admin_register_styles() {
+
 	wp_register_style( 'hybrid-admin', hybrid()->uri . 'css/admin' . hybrid_get_min_suffix() . '.css' );
 }
 
@@ -62,6 +74,21 @@ function hybrid_enable_posts_page_editor( $post ) {
 
 	remove_action( 'edit_form_after_title', '_wp_posts_page_notice' );
 	add_post_type_support( $post->post_type, 'editor' );
+}
+
+/**
+ * Wrapper function for `wp_verify_nonce()` with a posted value.  This is just
+ * a utility function to tidy up code.
+ *
+ * @since  4.0.0
+ * @access public
+ * @param  string  $action
+ * @param  string  $arg
+ * @return bool
+ */
+function hybrid_verify_nonce_post( $action = '', $arg = '_wpnonce' ) {
+
+	return isset( $_POST[ $arg ] ) ? wp_verify_nonce( $_POST[ $arg ], $action ) : false;
 }
 
 /**
@@ -86,17 +113,13 @@ function hybrid_form_field_layout( $args = array() ) {
 
 	<?php foreach ( $args['layouts'] as $layout ) : ?>
 
-		<?php if ( $layout->image ) : ?>
+		<label class="has-img">
+			<input type="radio" value="<?php echo esc_attr( $layout->name ); ?>" name="<?php echo esc_attr( $args['field_name'] ); ?>" <?php checked( $args['selected'], $layout->name ); ?> />
 
-			<label class="has-img">
-				<input type="radio" value="<?php echo esc_attr( $layout->name ); ?>" name="<?php echo esc_attr( $args['field_name'] ); ?>" <?php checked( $args['selected'], $layout->name ); ?> />
+			<span class="screen-reader-text"><?php echo esc_html( $layout->label ); ?></span>
 
-				<span class="screen-reader-text"><?php echo esc_html( $layout->label ); ?></span>
-
-				<img src="<?php echo esc_url( hybrid_sprintf_theme_uri( $layout->image ) ); ?>" alt="<?php echo esc_attr( $layout->label ); ?>" />
-			</label>
-
-		<?php endif; ?>
+			<img src="<?php echo esc_url( hybrid_sprintf_theme_uri( $layout->image ) ); ?>" alt="<?php echo esc_attr( $layout->label ); ?>" />
+		</label>
 
 	<?php endforeach; ?>
 
@@ -119,7 +142,7 @@ function hybrid_layout_field_inline_script() { ?>
 		var container = jQuery( '.hybrid-form-field-layout' );
 
 		// Add the `.checked` class to whichever radio is checked.
-		container.addClass( 'checked' );
+		jQuery( 'input:checked', container ).addClass( 'checked' );
 
 		// When a radio is clicked.
 		jQuery( 'input', container ).click( function() {

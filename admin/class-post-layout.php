@@ -113,8 +113,7 @@ final class Hybrid_Admin_Post_Layout {
 	public function meta_box( $post, $box ) {
 
 		// Get only the post layouts.
-		// Note that we're using `false` and `NOT` here b/c simply setting to `true` doesn't work.
-		$layouts = wp_list_filter( hybrid_get_layouts(), array( 'is_post_layout' => false ), 'NOT' );
+		$layouts = wp_list_filter( hybrid_get_layouts(), array( 'is_post_layout' => true, 'image' => true ) );
 
 		// Remove unwanted layouts.
 		foreach ( $layouts as $layout ) {
@@ -127,7 +126,7 @@ final class Hybrid_Admin_Post_Layout {
 		$post_layout = hybrid_get_post_layout( $post->ID );
 
 		// Output the nonce field.
-		wp_nonce_field( basename( __FILE__ ), 'hybrid-post-layout-nonce' );
+		wp_nonce_field( basename( __FILE__ ), 'hybrid_post_layout_nonce' );
 
 		// Output the layout field.
 		hybrid_form_field_layout(
@@ -155,7 +154,7 @@ final class Hybrid_Admin_Post_Layout {
 			$post = get_post();
 
 		// Verify the nonce for the post formats meta box.
-		if ( ! isset( $_POST['hybrid-post-layout-nonce'] ) || ! wp_verify_nonce( $_POST['hybrid-post-layout-nonce'], basename( __FILE__ ) ) )
+		if ( ! hybrid_verify_nonce_post( basename( __FILE__ ), 'hybrid_post_layout_nonce' ) )
 			return;
 
 		// Get the previous post layout.
