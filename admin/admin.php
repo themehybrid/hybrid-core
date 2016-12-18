@@ -88,7 +88,7 @@ function hybrid_enable_posts_page_editor( $post ) {
  */
 function hybrid_verify_nonce_post( $action = '', $arg = '_wpnonce' ) {
 
-	return isset( $_POST[ $arg ] ) ? wp_verify_nonce( $_POST[ $arg ], $action ) : false;
+	return isset( $_POST[ $arg ] ) ? wp_verify_nonce( wp_unslash( $_POST[ $arg ] ), $action ) : false;
 }
 
 /**
