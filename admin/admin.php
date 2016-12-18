@@ -77,8 +77,7 @@ function hybrid_enable_posts_page_editor( $post ) {
 }
 
 /**
- * Wrapper function for `wp_verify_nonce()` with a posted value.  This is just
- * a utility function to tidy up code.
+ * Wrapper function for `wp_verify_nonce()` with a posted value.
  *
  * @since  4.0.0
  * @access public
@@ -89,6 +88,20 @@ function hybrid_enable_posts_page_editor( $post ) {
 function hybrid_verify_nonce_post( $action = '', $arg = '_wpnonce' ) {
 
 	return isset( $_POST[ $arg ] ) ? wp_verify_nonce( wp_unslash( $_POST[ $arg ] ), $action ) : false;
+}
+
+/**
+ * Wrapper function for `wp_verify_nonce()` with a request value.
+ *
+ * @since  4.0.0
+ * @access public
+ * @param  string  $action
+ * @param  string  $arg
+ * @return bool
+ */
+function hybrid_verify_nonce_request( $action = '', $args = '_wpnonce' ) {
+
+	return isset( $_REQUEST[ $arg ] ) ? wp_verify_nonce( wp_unslash( $_REQUEST[ $arg ] ), $action ) : false;
 }
 
 /**
