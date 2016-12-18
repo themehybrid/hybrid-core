@@ -127,14 +127,14 @@ function hybrid_save_post_layout( $post_id, $post = '' ) {
 		$post = get_post();
 
 	// Verify the nonce for the post formats meta box.
-	if ( ! isset( $_POST['hybrid-post-layout-nonce'] ) || ! wp_verify_nonce( $_POST['hybrid-post-layout-nonce'], basename( __FILE__ ) ) )
+	if ( ! isset( $_POST['hybrid-post-layout-nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['hybrid-post-layout-nonce'] ), basename( __FILE__ ) ) )
 		return $post_id;
 
 	// Get the previous post layout.
 	$meta_value = hybrid_get_post_layout( $post_id );
 
 	// Get the submitted post layout.
-	$new_meta_value = isset( $_POST['hybrid-post-layout'] ) ? sanitize_key( $_POST['hybrid-post-layout'] ) : '';
+	$new_meta_value = isset( $_POST['hybrid-post-layout'] ) ? sanitize_key( wp_unslash( $_POST['hybrid-post-layout'] ) ) : '';
 
 	// If there is no new meta value but an old value exists, delete it.
 	if ( '' == $new_meta_value && $meta_value )

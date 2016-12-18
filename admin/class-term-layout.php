@@ -211,11 +211,11 @@ final class Hybrid_Admin_Term_Layout {
 	 */
 	public function save( $term_id ) {
 
-		if ( ! isset( $_POST['hybrid_term_layout_nonce'] ) || ! wp_verify_nonce( $_POST['hybrid_term_layout_nonce'], basename( __FILE__ ) ) )
+		if ( ! isset( $_POST['hybrid_term_layout_nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['hybrid_term_layout_nonce'] ), basename( __FILE__ ) ) )
 			return;
 
 		$old_layout = hybrid_get_term_layout( $term_id );
-		$new_layout = isset( $_POST['hybrid-term-layout'] ) ? sanitize_key( $_POST['hybrid-term-layout'] ) : '';
+		$new_layout = isset( $_POST['hybrid-term-layout'] ) ? sanitize_key( wp_unslash( $_POST['hybrid-term-layout'] ) ) : '';
 
 		if ( $old_layout && '' === $new_layout )
 			hybrid_delete_term_layout( $term_id );

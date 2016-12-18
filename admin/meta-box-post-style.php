@@ -80,14 +80,14 @@ function hybrid_save_post_style( $post_id, $post = '' ) {
 		$post = get_post();
 
 	// Verify the nonce before proceeding.
-	if ( ! isset( $_POST['hybrid-post-style-nonce'] ) || ! wp_verify_nonce( $_POST['hybrid-post-style-nonce'], basename( __FILE__ ) ) )
+	if ( ! isset( $_POST['hybrid-post-style-nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['hybrid-post-style-nonce'] ), basename( __FILE__ ) ) )
 		return;
 
 	// Get the previous post style.
 	$meta_value = hybrid_get_post_style( $post_id );
 
 	// Get the submitted post style.
-	$new_meta_value = isset( $_POST['hybrid-post-style'] ) ? sanitize_text_field( $_POST['hybrid-post-style'] ) : '';
+	$new_meta_value = isset( $_POST['hybrid-post-style'] ) ? sanitize_text_field( wp_unslash( $_POST['hybrid-post-style'] ) ) : '';
 
 	// If there is no new meta value but an old value exists, delete it.
 	if ( '' == $new_meta_value && $meta_value )
