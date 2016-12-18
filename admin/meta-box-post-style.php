@@ -80,7 +80,7 @@ function hybrid_save_post_style( $post_id, $post = '' ) {
 		$post = get_post();
 
 	// Verify the nonce before proceeding.
-	if ( ! isset( $_POST['hybrid-post-style-nonce'] ) || ! wp_verify_nonce( $_POST['hybrid-post-style-nonce'], basename( __FILE__ ) ) )
+	if ( ! hybrid_verify_nonce_post( basename( __FILE__, 'hybrid-post-style-nonce' ) ) )
 		return;
 
 	// Get the previous post style.
