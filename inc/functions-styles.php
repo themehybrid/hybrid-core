@@ -42,8 +42,8 @@ function hybrid_register_styles() {
 	$suffix = hybrid_get_min_suffix();
 
 	// Register styles for use by themes.
-	wp_register_style( 'hybrid-one-five', hybrid()->uri . "css/one-five{$suffix}.css" );
-	wp_register_style( 'hybrid-gallery',  hybrid()->uri . "css/gallery{$suffix}.css"  );
+	wp_register_style( 'hybrid-one-five', hybrid()->uri . "css/one-five{$suffix}.css", array(), hybrid()->version );
+	wp_register_style( 'hybrid-gallery',  hybrid()->uri . "css/gallery{$suffix}.css",  array(), hybrid()->version );
 	wp_register_style( 'hybrid-parent',   hybrid_get_parent_stylesheet_uri()   );
 	wp_register_style( 'hybrid-style',    get_stylesheet_uri()                 );
 
