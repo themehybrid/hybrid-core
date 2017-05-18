@@ -68,6 +68,15 @@ class Hybrid_Customize_Control_Select_Group extends WP_Customize_Control {
 	}
 
 	/**
+	 * Don't render the content via PHP.  This control is handled with a JS template.
+	 *
+	 * @since  4.0.0
+	 * @access public
+	 * @return bool
+	 */
+	protected function render_content() {}
+
+	/**
 	 * Underscore JS template to handle the control's output.
 	 *
 	 * @since  3.0.0
