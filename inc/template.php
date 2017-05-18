@@ -162,36 +162,16 @@ function hybrid_get_content_template() {
 
 	// Set up an empty array and get the post type.
 	$templates = array();
-	$post_type = get_post_type();
 
 	// Assume the theme developer is creating an attachment template.
-	if ( 'attachment' === $post_type ) {
+	if ( 'attachment' === get_post_type() )
 		remove_filter( 'the_content', 'prepend_attachment' );
 
-		$type = hybrid_get_attachment_type();
-
-		$templates[] = "content-attachment-{$type}.php";
-		$templates[] = "content/attachment-{$type}.php";
+	// Loop through hierarchy and add templates.
+	foreach ( hybrid_get_content_hierarchy() as $hier ) {
+		$templates[] = "content-{$hier}.php";
+		$templates[] = "content/{$hier}.php";
 	}
-
-	// If the post type supports 'post-formats', get the template based on the format.
-	if ( post_type_supports( $post_type, 'post-formats' ) ) {
-
-		// Get the post format.
-		$post_format = get_post_format() ? get_post_format() : 'standard';
-
-		// Template based off post type and post format.
-		$templates[] = "content-{$post_type}-{$post_format}.php";
-		$templates[] = "content/{$post_type}-{$post_format}.php";
-
-		// Template based off the post format.
-		$templates[] = "content-{$post_format}.php";
-		$templates[] = "content/{$post_format}.php";
-	}
-
-	// Template based off the post type.
-	$templates[] = "content-{$post_type}.php";
-	$templates[] = "content/{$post_type}.php";
 
 	// Fallback 'content.php' template.
 	$templates[] = 'content.php';
@@ -201,10 +181,10 @@ function hybrid_get_content_template() {
 	$templates = apply_filters( 'hybrid_content_template_hierarchy', $templates );
 
 	// Locate the template.
-	$template = apply_filters( 'hybrid_content_template', locate_template( $templates ), $templates );
+	$template = locate_template( $templates );
 
 	// If template is found, include it.
-	if ( $template )
+	if ( apply_filters( 'hybrid_content_template', $template, $templates ) )
 		include( $template );
 }
 
@@ -219,37 +199,18 @@ function hybrid_get_embed_template() {
 
 	// Set up an empty array and get the post type.
 	$templates = array();
-	$post_type = get_post_type();
 
 	// Assume the theme developer is creating an attachment template.
-	if ( 'attachment' === $post_type ) {
+	if ( 'attachment' === get_post_type() ) {
 		remove_filter( 'the_content',       'prepend_attachment'          );
 		remove_filter( 'the_excerpt_embed', 'wp_embed_excerpt_attachment' );
-
-		$type = hybrid_get_attachment_type();
-
-		$templates[] = "embed-attachment-{$type}.php";
-		$templates[] = "embed/attachment-{$type}.php";
 	}
 
-	// If the post type supports 'post-formats', get the template based on the format.
-	if ( post_type_supports( $post_type, 'post-formats' ) ) {
-
-		// Get the post format.
-		$post_format = get_post_format() ? get_post_format() : 'standard';
-
-		// Template based off post type and post format.
-		$templates[] = "embed-{$post_type}-{$post_format}.php";
-		$templates[] = "embed/{$post_type}-{$post_format}.php";
-
-		// Template based off the post format.
-		$templates[] = "embed-{$post_format}.php";
-		$templates[] = "embed/{$post_format}.php";
+	// Loop through hierarchy and add templates.
+	foreach ( hybrid_get_content_hierarchy() as $hier ) {
+		$templates[] = "embed-{$hier}.php";
+		$templates[] = "embed/{$hier}.php";
 	}
-
-	// Template based off the post type.
-	$templates[] = "embed-{$post_type}.php";
-	$templates[] = "embed/{$post_type}.php";
 
 	// Fallback 'embed/content.php' template.
 	$templates[] = 'embed/content.php';
@@ -263,4 +224,40 @@ function hybrid_get_embed_template() {
 	// If template is found, include it.
 	if ( apply_filters( 'hybrid_embed_template', $template, $templates ) )
 		include( $template );
+}
+
+/**
+ * Creates a hierarchy based on the current post.  For use with content-specific templates.
+ *
+ * @since  4.0.0
+ * @access public
+ * @return array
+ */
+function hybrid_get_content_hierarchy() {
+
+	// Set up an empty array and get the post type.
+	$hierarchy = array();
+	$post_type = get_post_type();
+
+	// If attachment, add an attachment type template.
+	if ( 'attachment' === $post_type )
+		$hierarchy[] = sprintf( 'attachment-%s', hybrid_get_attachment_type() );
+
+	// If the post type supports 'post-formats', get the template based on the format.
+	if ( post_type_supports( $post_type, 'post-formats' ) ) {
+
+		// Get the post format.
+		$post_format = get_post_format() ? get_post_format() : 'standard';
+
+		// Template based off post type and post format.
+		$hierarchy[] = "{$post_type}-{$post_format}";
+
+		// Template based off the post format.
+		$hierarchy[] = $post_format;
+	}
+
+	// Template based off the post type.
+	$hierarchy[] = $post_type;
+
+	return $hierarchy;
 }
