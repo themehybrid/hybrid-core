@@ -29,7 +29,4 @@ function hybrid_register_meta() {
 		register_meta( 'term', hybrid_get_layout_meta_key(), 'sanitize_key', '__return_false' );
 		register_meta( 'user', hybrid_get_layout_meta_key(), 'sanitize_key', '__return_false' );
 	}
-
-	// Post styles meta.
-	register_meta( 'post', hybrid_get_style_meta_key(), 'sanitize_text_field', '__return_false' );
 }

@@ -67,6 +67,18 @@ function hybrid_post_layout_enqueue() {}
 function hybrid_post_layout_meta_box() {}
 function hybrid_save_post_layout() {}
 
+function hybrid_style_filter() {}
+function hybrid_get_post_style() {}
+function hybrid_set_post_style() {}
+function hybrid_delete_post_style() {}
+function hybrid_has_post_style() {}
+function hybrid_get_style_meta_key() {}
+function hybrid_add_post_style_meta_box() {}
+function hybrid_post_style_meta_box() {}
+function hybrid_save_post_style() {}
+function hybrid_get_post_styles() {}
+function hybrid_admin_load_post_meta_boxes() {}
+
 /* Fuctions removed in the 3.0 branch. */
 
 // class Hybrid_Customize_Control_Textarea extends WP_Customize_Control {}

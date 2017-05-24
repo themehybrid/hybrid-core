@@ -11,30 +11,12 @@
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
-# Load the post meta boxes on the new post and edit post screens.
-add_action( 'load-post.php',     'hybrid_admin_load_post_meta_boxes' );
-add_action( 'load-post-new.php', 'hybrid_admin_load_post_meta_boxes' );
-
 # Register scripts and styles.
 add_action( 'admin_enqueue_scripts', 'hybrid_admin_register_scripts', 0 );
 add_action( 'admin_enqueue_scripts', 'hybrid_admin_register_styles',  0 );
 
 # Allow posts page to be edited.
 add_action( 'edit_form_after_title', 'hybrid_enable_posts_page_editor', 0 );
-
-/**
- * Loads the core post meta box files on the 'load-post.php' action hook.  Each meta box file is only loaded if
- * the theme declares support for the feature.
- *
- * @since  1.2.0
- * @access public
- * @return void
- */
-function hybrid_admin_load_post_meta_boxes() {
-
-	// Load the post style meta box.
-	require_once( hybrid()->dir . 'admin/meta-box-post-style.php' );
-}
 
 /**
  * Registers admin scripts.
@@ -176,55 +158,3 @@ function hybrid_layout_field_inline_script() { ?>
 	} );
 	</script>
 <?php }
-
-/**
- * Gets the stylesheet files within the parent or child theme and checks if they have the 'Style Name'
- * header. If any files are found, they are returned in an array.
- *
- * @since  3.0.0
- * @access public
- * @param  string  $post_type
- * @return array
- */
-function hybrid_get_post_styles( $post_type = 'post' ) {
-
-	// If stylesheets have already been loaded, return them.
-	if ( ! empty( hybrid()->post_styles ) && isset( hybrid()->post_styles[ $post_type ] ) )
-		return hybrid()->post_styles[ $post_type ];
-
-	// Set up an empty styles array.
-	hybrid()->post_styles[ $post_type ] = array();
-
-	// Get the theme CSS files two levels deep.
-	$files = wp_get_theme( get_template() )->get_files( 'css', 2 );
-
-	// If a child theme is active, get its files and merge with the parent theme files.
-	if ( is_child_theme() )
-		$files = array_merge( $files, wp_get_theme()->get_files( 'css', 2 ) );
-
-	// Loop through each of the CSS files and check if they are styles.
-	foreach ( $files as $file => $path ) {
-
-		// Get file data based on the 'Style Name' header.
-		$headers = get_file_data(
-			$path,
-			array(
-				'Style Name'         => 'Style Name',
-				"{$post_type} Style" => "{$post_type} Style"
-			)
-		);
-
-		// Add the CSS filename and template name to the array.
-		if ( ! empty( $headers['Style Name'] ) )
-			hybrid()->post_styles[ $post_type ][ $file ] = $headers['Style Name'];
-
-		elseif ( ! empty( $headers["{$post_type} Style"] ) )
-			hybrid()->post_styles[ $post_type ][ $file ] = $headers["{$post_type} Style"];
-	}
-
-	// Flip the array of styles.
-	hybrid()->post_styles[ $post_type ] = array_flip( hybrid()->post_styles[ $post_type ] );
-
-	// Return array of styles.
-	return hybrid()->post_styles[ $post_type ];
-}
