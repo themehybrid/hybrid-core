@@ -40,6 +40,10 @@ add_filter( 'get_avatar',                     'hybrid_get_avatar',              
 add_filter( 'post_thumbnail_html',            'hybrid_post_thumbnail_html',            5 );
 add_filter( 'comments_popup_link_attributes', 'hybrid_comments_popup_link_attributes', 5 );
 
+# Adds custom CSS classes to nav menu items.
+add_filter( 'nav_menu_css_class', 'hybrid_nav_menu_css_class', 5, 2 );
+
+
 /**
  * Filters the excerpt more output with internationalized text and a link to the post.
  *
@@ -187,4 +191,23 @@ function hybrid_post_thumbnail_html( $html ) {
  */
 function hybrid_comments_popup_link_attributes( $attr ) {
 	return 'itemprop="discussionURL"';
+}
+
+/**
+ * Adds a custom class to nav menu items that correspond to a post type archive.  The
+ * `menu-item-parent-archive` class is shown when viewing a single post of that belongs
+ * to the given post type.
+ *
+ * @since  4.0.0
+ * @access public
+ * @param  array   $classes
+ * @param  object  $item
+ * @return array
+ */
+function hybrid_nav_menu_css_class( $classes, $item ) {
+
+	if ( 'post_type' === $item->type && is_singular( $item->object ) )
+		$classes[] = 'menu-item-parent-archive';
+
+	return $classes;
 }
