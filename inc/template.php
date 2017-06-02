@@ -239,9 +239,20 @@ function hybrid_get_content_hierarchy() {
 	$hierarchy = array();
 	$post_type = get_post_type();
 
-	// If attachment, add an attachment type template.
-	if ( 'attachment' === $post_type )
-		$hierarchy[] = sprintf( 'attachment-%s', hybrid_get_attachment_type() );
+	// If attachment, add attachment type templates.
+	if ( 'attachment' === $post_type ) {
+
+		$type    = hybrid_get_attachment_type();
+		$subtype = hybrid_get_attachment_subtype();
+
+		if ( $subtype ) {
+			$hierarchy[] = "attachment-{$type}-{$subtype}";
+			$hierarchy[] = "attachment-{$subtype}";
+		}
+
+		$hierarchy[] = "attachment-{$type}";
+	}
+		
 
 	// If the post type supports 'post-formats', get the template based on the format.
 	if ( post_type_supports( $post_type, 'post-formats' ) ) {
