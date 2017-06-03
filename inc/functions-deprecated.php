@@ -49,6 +49,7 @@ function hybrid_attr_comment_published() {}
 function hybrid_attr_comment_permalink() {}
 function hybrid_attr_comment_content() {}
 
+function hybrid_wp_title() {}
 function hybrid_comment_reply_link_filter() {}
 function hybrid_get_post_template_meta_key() {}
 function hybrid_get_post_templates() {}
