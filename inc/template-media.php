@@ -12,6 +12,34 @@
  */
 
 /**
+ * Prints the post media from the media grabber.
+ *
+ * @see    Hybrid_Media_Grabber
+ * @since  4.0.0
+ * @access public
+ * @param  array   $args
+ * @return void
+ */
+function hybrid_post_media( $args = array() ) {
+
+	echo hybrid_get_post_media( $args );
+}
+
+/**
+ * Getter function for grabbing the post media.
+ *
+ * @see    Hybrid_Media_Grabber
+ * @since  4.0.0
+ * @access public
+ * @param  array   $args
+ * @return string
+ */
+function hybrid_get_post_media( $args = array() ) {
+
+	return hybrid_media_grabber( $args );
+}
+
+/**
  * Prints media meta directly to the screen.  The `$property` parameter can be any of the public
  * properties in the `Hybrid_Media_Meta` object.
  *
