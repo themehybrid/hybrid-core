@@ -209,8 +209,7 @@ function hybrid_body_class_filter( $classes, $class ) {
 		// Checks for custom template.
 		$template = str_replace( array ( "{$post->post_type}-template-", "{$post->post_type}-" ), '', basename( hybrid_get_post_template( $post->ID ), '.php' ) );
 
-		if ( $template )
-			$classes[] = "{$post->post_type}-template-{$template}";
+		$classes[] = $template ? "{$post->post_type}-template-{$template}" : "{$post->post_type}-template-default";
 
 		// Post format.
 		if ( current_theme_supports( 'post-formats' ) && post_type_supports( $post->post_type, 'post-formats' ) ) {
