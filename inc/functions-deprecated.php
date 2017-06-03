@@ -50,8 +50,6 @@ function hybrid_attr_comment_permalink() {}
 function hybrid_attr_comment_content() {}
 
 function hybrid_comment_reply_link_filter() {}
-function hybrid_set_post_template() {}
-function hybrid_delete_post_template() {}
 function hybrid_get_post_template_meta_key() {}
 function hybrid_get_post_templates() {}
 function hybrid_meta_box_post_add_template() {}

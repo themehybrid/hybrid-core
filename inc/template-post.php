@@ -12,60 +12,6 @@
  */
 
 /**
- * Gets a post template.
- *
- * @since  3.0.0
- * @access public
- * @param  int     $post_id
- * @return bool
- */
-function hybrid_get_post_template( $post_id ) {
-
-	$type     = get_post_type( $post_id );
-	$template = get_page_template_slug( $post_id );
-
-	// If there's a template or `page` is the post type, return.
-	if ( $template || 'page' === $type )
-		return $template;
-
-	// Get old Hybrid Core post template meta.
-	$template = get_post_meta( $post_id, "_wp_{$type}_template", true );
-
-	// If old template, run the compat function.
-	if ( $template )
-		hybrid_post_template_compat( $post_id, $template );
-
-	// Return the template.
-	return $template;
-}
-
-/**
- * Checks if a post of any post type has a custom template.  This is the equivalent of WordPress'
- * `is_page_template()` function with the exception that it works for all post types.
- *
- * @since  1.2.0
- * @access public
- * @param  string  $template  The name of the template to check for.
- * @param  int     $post_id
- * @return bool
- */
-function hybrid_has_post_template( $template = '', $post_id = '' ) {
-
-	if ( ! $post_id )
-		$post_id = get_the_ID();
-
-	// Get the post template, which is saved as metadata.
-	$post_template = hybrid_get_post_template( $post_id );
-
-	// If a specific template was input, check that the post template matches.
-	if ( $template && $template === $post_template )
-		return true;
-
-	// Return whether we have a post template.
-	return ! empty( $post_template );
-}
-
-/**
  * Checks if a post has any content. Useful if you need to check if the user has written any content
  * before performing any actions.
  *
