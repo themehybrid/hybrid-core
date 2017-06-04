@@ -10,6 +10,9 @@
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
+# Filter the comments template.
+add_filter( 'comments_template', 'hybrid_comments_template', 5 );
+
 /**
  * Outputs the comment reply link.  Only use outside of `wp_list_comments()`.
  *
@@ -161,4 +164,34 @@ function hybrid_comments_callback( $comment ) {
  */
 function hybrid_comments_end_callback() {
 	echo '</li><!-- .comment -->';
+}
+
+/**
+ * Overrides the default comments template.  This filter allows for a "comments-{$post_type}.php"
+ * template based on the post type of the current single post view.  If this template is not found, it falls
+ * back to the default "comments.php" template.
+ *
+ * @since  1.5.0
+ * @access public
+ * @param  string $template The comments template file name.
+ * @return string $template The theme comments template after all templates have been checked for.
+ */
+function hybrid_comments_template( $template ) {
+
+	$templates = array();
+
+	// Allow for custom templates entered into comments_template( $file ).
+	$template = str_replace( hybrid()->child_dir, '', $template );
+
+	if ( 'comments.php' !== $template )
+		$templates[] = $template;
+
+	// Add a comments template based on the post type.
+	$templates[] = 'comments-' . get_post_type() . '.php';
+
+	// Add the default comments template.
+	$templates[] = 'comments.php';
+
+	// Return the found template.
+	return locate_template( $templates );
 }

@@ -307,7 +307,7 @@ if ( ! class_exists( 'Hybrid' ) ) {
 		public function includes() {
 
 			// Load the template hierarchy if supported.
-			require_if_theme_supports( 'hybrid-core-template-hierarchy', $this->dir . 'inc/template-hierarchy.php' );
+			require_if_theme_supports( 'hybrid-core-template-hierarchy', $this->dir . 'inc/class-template-hierarchy.php' );
 
 			// Load the post format functionality if post formats are supported.
 			require_if_theme_supports( 'post-formats', $this->dir . 'inc/functions-formats.php' );

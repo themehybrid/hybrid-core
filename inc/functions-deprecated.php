@@ -78,6 +78,12 @@ function hybrid_save_post_style() {}
 function hybrid_get_post_styles() {}
 function hybrid_admin_load_post_meta_boxes() {}
 
+function hybrid_date_template() {}
+function hybrid_user_template() {}
+function hybrid_taxonomy_template() {}
+function hybrid_singular_template() {}
+function hybrid_front_page_template() {}
+
 /* Fuctions removed in the 3.0 branch. */
 
 // class Hybrid_Customize_Control_Textarea extends WP_Customize_Control {}
