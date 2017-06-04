@@ -190,7 +190,7 @@ function hybrid_has_post_template( $template = '', $post_id = '' ) {
 /**
  * Gets a term template.
  *
- * @since  3.1.0
+ * @since  4.0.0
  * @access public
  * @param  int     $term_id
  * @return bool
@@ -203,7 +203,7 @@ function hybrid_get_term_template( $term_id ) {
 /**
  * Sets a term template.
  *
- * @since  3.1.0
+ * @since  4.0.0
  * @access public
  * @param  int     $term_id
  * @param  string  $template
@@ -217,7 +217,7 @@ function hybrid_set_term_template( $term_id, $template ) {
 /**
  * Deletes a term template.
  *
- * @since  3.1.0
+ * @since  4.0.0
  * @access public
  * @param  int     $term_id
  * @return bool
@@ -231,7 +231,7 @@ function hybrid_delete_term_template( $term_id ) {
  * Checks a term if it has a specific template.  If no template is passed in, it'll
  * check if the term has a template at all.
  *
- * @since  3.1.0
+ * @since  4.0.0
  * @access public
  * @param  int     $term_id
  * @return bool

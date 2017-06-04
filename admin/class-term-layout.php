@@ -13,7 +13,7 @@
 /**
  * Singleton class for handling the term layout feature.
  *
- * @since  3.1.0
+ * @since  4.0.0
  * @access public
  */
 final class Hybrid_Admin_Term_Layout {
@@ -21,7 +21,7 @@ final class Hybrid_Admin_Term_Layout {
 	/**
 	 * Returns the instance.
 	 *
-	 * @since  3.1.0
+	 * @since  4.0.0
 	 * @access public
 	 * @return object
 	 */
@@ -40,7 +40,7 @@ final class Hybrid_Admin_Term_Layout {
 	/**
 	 * Constructor method.
 	 *
-	 * @since  3.1.0
+	 * @since  4.0.0
 	 * @access private
 	 * @return void
 	 */
@@ -49,7 +49,7 @@ final class Hybrid_Admin_Term_Layout {
 	/**
 	 * Sets up initial actions.
 	 *
-	 * @since  3.1.0
+	 * @since  4.0.0
 	 * @access private
 	 * @return void
 	 */
@@ -70,7 +70,7 @@ final class Hybrid_Admin_Term_Layout {
 	/**
 	 * Runs on the load hook and sets up what we need.
 	 *
-	 * @since  3.1.0
+	 * @since  4.0.0
 	 * @access public
 	 * @return void
 	 */
@@ -92,7 +92,7 @@ final class Hybrid_Admin_Term_Layout {
 	/**
 	 * Enqueues scripts/styles.
 	 *
-	 * @since  3.1.0
+	 * @since  4.0.0
 	 * @access public
 	 * @return void
 	 */
@@ -106,7 +106,7 @@ final class Hybrid_Admin_Term_Layout {
 	/**
 	 * Displays the layout selector in the new term form.
 	 *
-	 * @since  3.1.0
+	 * @since  4.0.0
 	 * @access public
 	 * @return void
 	 */
@@ -124,7 +124,7 @@ final class Hybrid_Admin_Term_Layout {
 	/**
 	 * Displays the layout selector on the edit term screen.
 	 *
-	 * @since  3.1.0
+	 * @since  4.0.0
 	 * @access public
 	 * @return void
 	 */
@@ -144,7 +144,7 @@ final class Hybrid_Admin_Term_Layout {
 	 * Note that this will most likely be deprecated in the future in favor of
 	 * building an all-purpose field to be used in any form.
 	 *
-	 * @since  3.1.0
+	 * @since  4.0.0
 	 * @access public
 	 * @param  object  $term
 	 * @return void
@@ -184,7 +184,7 @@ final class Hybrid_Admin_Term_Layout {
 	/**
 	 * Saves the term meta.
 	 *
-	 * @since  3.1.0
+	 * @since  4.0.0
 	 * @access public
 	 * @param  int     $term_id
 	 * @return void

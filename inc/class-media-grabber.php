@@ -245,7 +245,7 @@ class Hybrid_Media_Grabber {
 	 * Handles the output of the WordPress playlist feature.  This searches for the [playlist] shortcode
 	 * if it's used in the content.
 	 *
-	 * @since  3.1.0
+	 * @since  4.0.0
 	 * @access public
 	 * @return void
 	 */

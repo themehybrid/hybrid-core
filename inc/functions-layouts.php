@@ -164,7 +164,7 @@ function hybrid_get_default_layout() {
 /**
  * Checks if the current layout matches the layout to check against.
  *
- * @since  3.1.0
+ * @since  4.0.0
  * @access public
  * @param  string  $layout
  * @return bool
@@ -230,7 +230,7 @@ function hybrid_has_post_layout( $layout, $post_id = '' ) {
 /**
  * Gets a term layout.
  *
- * @since  3.1.0
+ * @since  4.0.0
  * @access public
  * @param  int     $term_id
  * @return bool
@@ -242,7 +242,7 @@ function hybrid_get_term_layout( $term_id ) {
 /**
  * Sets a term layout.
  *
- * @since  3.1.0
+ * @since  4.0.0
  * @access public
  * @param  int     $term_id
  * @param  string  $layout
@@ -255,7 +255,7 @@ function hybrid_set_term_layout( $term_id, $layout ) {
 /**
  * Deletes a term layout.
  *
- * @since  3.1.0
+ * @since  4.0.0
  * @access public
  * @param  int     $term_id
  * @return bool
@@ -267,7 +267,7 @@ function hybrid_delete_term_layout( $term_id ) {
 /**
  * Checks a term if it has a specific layout.
  *
- * @since  3.1.0
+ * @since  4.0.0
  * @access public
  * @param  int     $term_id
  * @return bool

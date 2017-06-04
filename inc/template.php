@@ -191,7 +191,7 @@ function hybrid_get_content_template() {
 /**
  * Gets the embed template used for embedding posts from the site.
  *
- * @since  3.1.0
+ * @since  4.0.0
  * @access public
  * @return void
  */

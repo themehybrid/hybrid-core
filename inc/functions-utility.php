@@ -59,7 +59,7 @@ function hybrid_add_post_type_support() {
  * of this function is to provide that additional filter hook.  To filter the final
  * theme mod, use the core `theme_mod_{$name}` filter hook.
  *
- * @since  3.1.0
+ * @since  4.0.0
  * @access public
  * @param  string  $name
  * @param  mixed   $default
@@ -221,7 +221,7 @@ function hybrid_get_min_suffix() {
  * Conditional check to determine if we are in script debug mode.  This is generally used
  * to decide whether to load development versions of scripts/styles.
  *
- * @since  3.1.0
+ * @since  4.0.0
  * @access public
  * @return bool
  */
@@ -233,7 +233,7 @@ function hybrid_is_script_debug() {
 /**
  * Replaces `%1$s` and `%2$s` with the template and stylesheet directory paths.
  *
- * @since  3.1.0
+ * @since  4.0.0
  * @access public
  * @param  string  $value
  * @return string
@@ -246,7 +246,7 @@ function hybrid_sprintf_theme_dir( $value ) {
 /**
  * Replaces `%1$s` and `%2$s` with the template and stylesheet directory URIs.
  *
- * @since  3.1.0
+ * @since  4.0.0
  * @access public
  * @param  string  $value
  * @return string
@@ -368,7 +368,7 @@ function hybrid_archive_description_filter( $desc ) {
 /**
  * Filters `get_the_archve_description` to add custom formatting.
  *
- * @since  3.1.0
+ * @since  4.0.0
  * @access public
  * @param  string  $desc
  * @return string
@@ -383,7 +383,7 @@ function hybrid_archive_description_format( $desc ) {
  * post template naming scheme added in WordPress 4.7.0.  Deletes the old
  * meta.
  *
- * @since  3.1.0
+ * @since  4.0.0
  * @access public
  * @param  int     $post_id
  * @param  string  $template
