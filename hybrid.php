@@ -137,17 +137,6 @@ if ( ! class_exists( 'Hybrid' ) ) {
 		public $comment_templates = array();
 
 		/**
-		 * Stores an array of post styles for use with the post styles feature.
-		 * Theme authors should not access this property directly.  Instead,
-		 * use the available post style functions.
-		 *
-		 * @since  4.0.0
-		 * @access public
-		 * @var    array
-		 */
-		public $post_styles = array();
-
-		/**
 		 * Returns the instance.
 		 *
 		 * @since  4.0.0
