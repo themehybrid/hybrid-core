@@ -6,7 +6,7 @@
  * @package    Hybrid
  * @subpackage Customize
  * @author     Justin Tadlock <justin@justintadlock.com>
- * @copyright  Copyright (c) 2008 - 2015, Justin Tadlock
+ * @copyright  Copyright (c) 2008 - 2017, Justin Tadlock
  * @link       http://themehybrid.com/hybrid-core
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */

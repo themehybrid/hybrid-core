@@ -5,7 +5,7 @@
  * @package    HybridCore
  * @subpackage Admin
  * @author     Justin Tadlock <justin@justintadlock.com>
- * @copyright  Copyright (c) 2008 - 2016, Justin Tadlock
+ * @copyright  Copyright (c) 2008 - 2017, Justin Tadlock
  * @link       http://themehybrid.com/hybrid-core
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
