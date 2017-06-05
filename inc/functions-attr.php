@@ -4,8 +4,7 @@
  * to hook into the attributes for specific HTML elements and create new or modify existing attributes.
  * This is sort of like `body_class()`, `post_class()`, and `comment_class()` on steroids.  Plus, it
  * handles attributes for many more elements.  The biggest benefit of using this is to provide richer
- * microdata while being forward compatible with the ever-changing Web.  Currently, the default microdata
- * vocabulary supported is Schema.org.
+ * microdata while being forward compatible with the ever-changing Web.
  *
  * @package    HybridCore
  * @subpackage Includes

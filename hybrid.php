@@ -32,11 +32,6 @@ if ( ! class_exists( 'Hybrid' ) ) {
 	 * The Hybrid class launches the framework.  It's the organizational structure behind the
 	 * entire framework.  This file should be loaded before anything else to use the framework.
 	 *
-	 * After parent themes loads the Hybrid class, they should perform a theme setup function on
-	 * the `after_setup_theme` hook with a priority no later than 11.  This allows the class to
-	 * load theme-supported features at the appropriate time, which is on the `after_setup_theme`
-	 * hook with a priority of 12.
-	 *
 	 * Theme authors should not access this class directly. Instead, use the `hybrid()` function.
 	 *
 	 * @since  0.7.0
@@ -321,8 +316,7 @@ if ( ! class_exists( 'Hybrid' ) ) {
 		 * Load extensions (external projects).  Extensions are projects that are included
 		 * within the framework but are not a part of it.  They are external projects
 		 * developed outside of the framework.  Themes must use `add_theme_support( $extension )`
-		 * to use a specific extension within the theme.  This should be declared on
-		 * `after_setup_theme` no later than a priority of 11.
+		 * to use a specific extension within the theme.
 		 *
 		 * @since  0.7.0
 		 * @access public

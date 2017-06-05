@@ -1,7 +1,7 @@
 <?php
 /**
- * Functions for loading template parts.  These functions are helper functions or more flexible functions
- * than what core WordPress currently offers with template part loading.
+ * Functions for loading template parts.  These functions are helper functions or more flexible
+ * functions than what core WordPress currently offers with template part loading.
  *
  * @package    HybridCore
  * @subpackage Includes
@@ -252,7 +252,7 @@ function hybrid_get_content_hierarchy() {
 
 		$hierarchy[] = "attachment-{$type}";
 	}
-		
+
 
 	// If the post type supports 'post-formats', get the template based on the format.
 	if ( post_type_supports( $post_type, 'post-formats' ) ) {

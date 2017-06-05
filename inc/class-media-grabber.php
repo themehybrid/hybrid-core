@@ -22,7 +22,7 @@
  *
  * @since  1.6.0
  * @access public
- * @param  array
+ * @param  array   $args
  * @return string
  */
 function hybrid_media_grabber( $args = array() ) {
@@ -91,6 +91,18 @@ class Hybrid_Media_Grabber {
 	 *
 	 * @since  1.6.0
 	 * @access public
+	 * @param  array  $args  {
+	 *     @type int     $post_id      Post ID (assumes within The Loop by default)
+	 *     @type string  $type         audio | video | gallery
+	 *     @type string  $before       HTML before the output
+	 *     @type string  $after        HTML after the output
+	 *     @type bool    $split_media  Whether to split the media from the post content
+	 *     @type int     $width        Custom width. Defaults to the theme's content width.
+	 *     @type bool    $shortcodes   True | False | Array of specific shortcode handles to look for.
+	 *     @type bool    $autoembeds   Whether to check for autoembeds.
+	 *     @type bool    $embedded     Whether to check for HTML-embedded media.
+	 *     @type bool    $attached     Whether to check for attached media.
+	 * }
 	 * @global object $wp_embed
 	 * @global int    $content_width
 	 * @return void
@@ -107,16 +119,16 @@ class Hybrid_Media_Grabber {
 
 		// Set up the default arguments.
 		$defaults = array(
-			'post_id'     => get_the_ID(),   // post ID (assumes within The Loop by default)
-			'type'        => 'video',        // audio|video
-			'before'      => '',             // HTML before the output
-			'after'       => '',             // HTML after the output
-			'split_media' => false,          // Splits the media from the post content
-			'width'       => $content_width, // Custom width. Defaults to the theme's content width.
-			'shortcodes'  => true,           // True | False | Array of specific shortcode handles to look for.
-			'autoembeds'  => true,           // Whether to check for autoembeds.
-			'embedded'    => true,           // Whether to check for HTML-embedded media.
-			'attached'    => true,           // Whether to check for attached media.
+			'post_id'     => get_the_ID(),
+			'type'        => 'video',
+			'before'      => '',
+			'after'       => '',
+			'split_media' => false,
+			'width'       => $content_width,
+			'shortcodes'  => true,
+			'autoembeds'  => true,
+			'embedded'    => true,
+			'attached'    => true,
 		);
 
 		// Set the object properties.
