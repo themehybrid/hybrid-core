@@ -334,22 +334,6 @@ if ( ! class_exists( 'Hybrid' ) ) {
 			hybrid_require_if_theme_supports( 'cleaner-gallery',  $this->dir . 'ext/cleaner-gallery.php'  );
 			hybrid_require_if_theme_supports( 'get-the-image',    $this->dir . 'ext/get-the-image.php'    );
 		}
-
-		/**
-		 * @since      0.7.0
-		 * @deprecated 4.0.0
-		 * @access     public
-		 * @return     void
-		 */
-		public function constants() {}
-
-		/**
-		 * @since      0.7.0
-		 * @deprecated 4.0.0
-		 * @access     public
-		 * @return     void
-		 */
-		public function admin() {}
 	}
 
 	/**
