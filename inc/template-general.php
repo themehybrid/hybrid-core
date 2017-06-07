@@ -396,8 +396,8 @@ function hybrid_search_title() {
  */
 function hybrid_get_search_title() {
 
-	// Translators: %s is the search query. The HTML entities are opening and closing curly quotes.
-	return sprintf( esc_html__( 'Search results for &#8220;%s&#8221;', 'hybrid-core' ), get_search_query() );
+	// Translators: %s is the search query.
+	return sprintf( esc_html__( 'Search results for: %s', 'hybrid-core' ), get_search_query() );
 }
 
 /**
