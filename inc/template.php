@@ -181,10 +181,10 @@ function hybrid_get_content_template() {
 	$templates = apply_filters( 'hybrid_content_template_hierarchy', $templates );
 
 	// Locate the template.
-	$template = locate_template( $templates );
+	$template = apply_filters( 'hybrid_content_template', locate_template( $templates ), $templates );
 
 	// If template is found, include it.
-	if ( apply_filters( 'hybrid_content_template', $template, $templates ) )
+	if ( $template )
 		include( $template );
 }
 
@@ -219,10 +219,10 @@ function hybrid_get_embed_template() {
 	$templates = apply_filters( 'hybrid_embed_template_hierarchy', $templates );
 
 	// Locate the template.
-	$template = locate_template( $templates );
+	$template = apply_filters( 'hybrid_embed_template', locate_template( $templates ), $templates );
 
 	// If template is found, include it.
-	if ( apply_filters( 'hybrid_embed_template', $template, $templates ) )
+	if ( $template )
 		include( $template );
 }
 
