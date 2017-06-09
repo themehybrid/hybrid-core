@@ -161,7 +161,7 @@ final class Hybrid_Admin_Term_Layout {
 		foreach ( $layouts as $layout ) {
 
 			if ( $layout->taxonomies && ! in_array( $taxonomy, $layout->taxonomies ) )
-				unset( $layouts[ $layout ] );
+				unset( $layouts[ $layout->name ] );
 		}
 
 		// If we have a term, get its layout.

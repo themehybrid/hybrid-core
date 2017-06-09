@@ -119,7 +119,7 @@ final class Hybrid_Admin_Post_Layout {
 		foreach ( $layouts as $layout ) {
 
 			if ( $layout->post_types && ! in_array( $post->post_type, $layout->post_types ) )
-				unset( $layouts[ $layout ] );
+				unset( $layouts[ $layout->name ] );
 		}
 
 		// Get the current post's layout.
