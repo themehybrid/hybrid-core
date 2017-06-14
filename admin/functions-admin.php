@@ -82,7 +82,7 @@ function hybrid_verify_nonce_post( $action = '', $arg = '_wpnonce' ) {
  * @param  string  $arg
  * @return bool
  */
-function hybrid_verify_nonce_request( $action = '', $args = '_wpnonce' ) {
+function hybrid_verify_nonce_request( $action = '', $arg = '_wpnonce' ) {
 
 	return isset( $_REQUEST[ $arg ] ) ? wp_verify_nonce( sanitize_key( $_REQUEST[ $arg ] ), $action ) : false;
 }
