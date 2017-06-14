@@ -22,6 +22,7 @@ add_filter( 'comments_template', 'hybrid_comments_template', 5 );
  * @return void
  */
 function hybrid_comment_reply_link( $args = array() ) {
+
 	echo hybrid_get_comment_reply_link( $args );
 }
 
@@ -163,6 +164,7 @@ function hybrid_comments_callback( $comment ) {
  * @return void
  */
 function hybrid_comments_end_callback() {
+
 	echo '</li><!-- .comment -->';
 }
 

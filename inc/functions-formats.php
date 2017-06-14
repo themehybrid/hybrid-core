@@ -50,6 +50,7 @@ function hybrid_structured_post_formats() {
  * @return string
  */
 function hybrid_clean_post_format_slug( $slug ) {
+
 	return str_replace( 'post-format-', '', $slug );
 }
 
@@ -150,6 +151,7 @@ function hybrid_quote_content( $content ) {
  * @return string
  */
 function hybrid_chat_content( $content ) {
+
 	return has_post_format( 'chat' ) && ! post_password_required() ? hybrid_get_chat_transcript( $content ) : $content;
 }
 
@@ -162,6 +164,7 @@ function hybrid_chat_content( $content ) {
  * @return string
  */
 function hybrid_get_chat_transcript( $content ) {
+
 	$chat = new Hybrid_Chat( $content );
 
 	return $chat->get_transcript();

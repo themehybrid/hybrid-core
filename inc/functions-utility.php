@@ -80,6 +80,7 @@ function hybrid_get_theme_mod( $name, $default = false ) {
  * @return void
  */
 function hybrid_set_content_width( $width = '' ) {
+
 	$GLOBALS['content_width'] = absint( $width );
 }
 
@@ -91,6 +92,7 @@ function hybrid_set_content_width( $width = '' ) {
  * @return int
  */
 function hybrid_get_content_width() {
+
 	return absint( $GLOBALS['content_width'] );
 }
 

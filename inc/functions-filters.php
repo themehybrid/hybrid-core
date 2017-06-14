@@ -70,7 +70,9 @@ function hybrid_excerpt_more( $text ) {
  * @return array
  */
 function hybrid_link_pages_args( $args ) {
+
 	$args['before'] = str_replace( '<p>', '<p class="page-links">', $args['before'] );
+
 	return $args;
 }
 
@@ -84,6 +86,7 @@ function hybrid_link_pages_args( $args ) {
  * @return string
  */
 function hybrid_link_pages_link( $link ) {
+
 	return 0 !== strpos( $link, '<a' ) ? "<span class='page-numbers'>{$link}</span>" : $link;
 }
 
@@ -166,6 +169,7 @@ function hybrid_get_comment_author_url_link( $link ) {
  * @return string
  */
 function hybrid_get_avatar( $avatar ) {
+
 	return preg_replace( '/(<img.*?)(\/>)/i', '$1itemprop="image" $2', $avatar );
 }
 
@@ -178,6 +182,7 @@ function hybrid_get_avatar( $avatar ) {
  * @return string
  */
 function hybrid_post_thumbnail_html( $html ) {
+
 	return function_exists( 'get_the_image' ) ? $html : preg_replace( '/(<img.*?)(\/>)/i', '$1itemprop="image" $2', $html );
 }
 
@@ -190,6 +195,7 @@ function hybrid_post_thumbnail_html( $html ) {
  * @return string
  */
 function hybrid_comments_popup_link_attributes( $attr ) {
+
 	return 'itemprop="discussionURL"';
 }
 

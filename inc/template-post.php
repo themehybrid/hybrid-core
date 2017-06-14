@@ -22,6 +22,7 @@
  */
 function hybrid_post_has_content( $post_id = 0 ) {
 	$post = get_post( $post_id );
+
 	return ! empty( $post->post_content );
 }
 
@@ -33,6 +34,7 @@ function hybrid_post_has_content( $post_id = 0 ) {
  * @return void
  */
 function hybrid_post_format_link() {
+
 	echo hybrid_get_post_format_link();
 }
 
@@ -61,6 +63,7 @@ function hybrid_get_post_format_link() {
  * @return void
  */
 function hybrid_post_author( $args = array() ) {
+
 	echo hybrid_get_post_author( $args );
 }
 
@@ -112,6 +115,7 @@ function hybrid_get_post_author( $args = array() ) {
  * @return void
  */
 function hybrid_post_terms( $args = array() ) {
+
 	echo hybrid_get_post_terms( $args );
 }
 

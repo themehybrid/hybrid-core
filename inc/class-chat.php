@@ -197,6 +197,7 @@ class Hybrid_Chat {
 	 * @return string
 	 */
 	public function format_chat_text( $text ) {
+
 		return trim( str_replace( array( "\r", "\n", "\t" ), '', $text ) );
 	}
 }

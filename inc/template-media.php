@@ -51,6 +51,7 @@ function hybrid_get_post_media( $args = array() ) {
  * @return void
  */
 function hybrid_media_meta( $property, $args = array() ) {
+
 	echo hybrid_get_media_meta( $property, $args );
 }
 
@@ -95,6 +96,7 @@ function hybrid_get_media_meta( $property, $args = array() ) {
  * @return object
  */
 function hybrid_media_meta_factory() {
+
 	return Hybrid_Media_Meta_Factory::get_instance();
 }
 
@@ -127,6 +129,7 @@ function hybrid_get_attachment_types( $post_id = 0 ) {
  * @return string
  */
 function hybrid_get_attachment_type( $post_id = 0 ) {
+
 	return hybrid_get_attachment_types( $post_id )->type;
 }
 
@@ -140,6 +143,7 @@ function hybrid_get_attachment_type( $post_id = 0 ) {
  * @return string
  */
 function hybrid_get_attachment_subtype( $post_id = 0 ) {
+
 	return hybrid_get_attachment_types( $post_id )->subtype;
 }
 
@@ -152,6 +156,7 @@ function hybrid_get_attachment_subtype( $post_id = 0 ) {
  * @return bool
  */
 function hybrid_attachment_is_audio( $post_id = 0 ) {
+
 	return 'audio' === hybrid_get_attachment_type( $post_id );
 }
 
@@ -164,6 +169,7 @@ function hybrid_attachment_is_audio( $post_id = 0 ) {
  * @return bool
  */
 function hybrid_attachment_is_video( $post_id = 0 ) {
+
 	return 'video' === hybrid_get_attachment_type( $post_id );
 }
 
@@ -221,6 +227,7 @@ function hybrid_get_image_size_links() {
  * @return string
  */
 function hybrid_get_audio_transcript( $post_id = 0 ) {
+
 	return hybrid_get_media_meta( 'lyrics', array( 'wrap' => '', 'post_id' => $post_id ? $post_id : get_the_ID() ) );
 }
 
@@ -297,6 +304,7 @@ function hybrid_text_attachment( $mime = '', $file = '' ) {
  * @return string
  */
 function hybrid_audio_attachment() {
+
 	return hybrid_media_grabber( array( 'type' => 'audio' ) );
 }
 
@@ -308,5 +316,6 @@ function hybrid_audio_attachment() {
  * @return string
  */
 function hybrid_video_attachment() {
+
 	return hybrid_media_grabber( array( 'type' => 'video' ) );
 }

@@ -31,6 +31,7 @@ add_filter( 'hybrid_attr_comment', 'hybrid_attr_comment', 5 );
  * @return void
  */
 function hybrid_attr( $slug, $context = '', $attr = array()  ) {
+
 	echo hybrid_get_attr( $slug, $context, $attr );
 }
 

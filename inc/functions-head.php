@@ -27,6 +27,7 @@ add_filter( 'document_title_parts', 'hybrid_document_title_parts', 5 );
  * @return void
  */
 function hybrid_meta_charset() {
+
 	printf( '<meta charset="%s" />' . "\n", esc_attr( get_bloginfo( 'charset' ) ) );
 }
 
@@ -37,6 +38,7 @@ function hybrid_meta_charset() {
  * @access public
  */
 function hybrid_meta_viewport() {
+
 	echo '<meta name="viewport" content="width=device-width, initial-scale=1" />' . "\n";
 }
 
@@ -63,6 +65,7 @@ function hybrid_meta_generator() {
  * @return void
  */
 function hybrid_link_pingback() {
+
 	if ( 'open' === get_option( 'default_ping_status' ) )
 		printf( '<link rel="pingback" href="%s" />' . "\n", esc_url( get_bloginfo( 'pingback_url' ) ) );
 }

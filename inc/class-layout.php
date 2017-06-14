@@ -131,6 +131,7 @@ class Hybrid_Layout {
 	 * @return string
 	 */
 	public function __toString() {
+
 		return $this->name;
 	}
 

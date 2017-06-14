@@ -120,6 +120,7 @@ function hybrid_override_load_textdomain( $override, $domain, $mofile ) {
  * @return bool           Whether the MO file was loaded.
  */
 function hybrid_load_framework_textdomain( $domain = 'hybrid-core' ) {
+
 	return load_textdomain( $domain, '' );
 }
 
