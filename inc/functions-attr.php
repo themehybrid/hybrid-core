@@ -56,10 +56,10 @@ function hybrid_get_attr( $slug, $context = '', $attr = array() ) {
 	$defaults = array( 'class' => $context ? "{$slug} {$slug}-{$context}" : $slug );
 
 	// Filtered attributes.
-	$filtered = apply_filters( "hybrid_attr_{$slug}", array(), $context );
+	$filtered = apply_filters( "hybrid_attr_{$slug}", $defaults, $context );
 
 	// Merge the attributes with those input.
-	$attr = array_merge( $defaults, $filtered, $attr );
+	$attr = wp_parse_args( $attr, $filtered );
 
 	foreach ( $attr as $name => $value )
 		$out .= false !== $value ? sprintf( ' %s="%s"', esc_html( $name ), esc_attr( $value ) ) : esc_html( " {$name}" );
