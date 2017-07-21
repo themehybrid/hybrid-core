@@ -24,16 +24,15 @@ add_filter( 'current_theme_supports-theme-layouts', 'hybrid_theme_layouts_suppor
 add_filter( 'hybrid_get_theme_layout', 'hybrid_filter_layout', 5 );
 
 /**
- * Returns the instance of the `Hybrid_Layout_Factory` object. Use this function to access the object.
+ * Returns the layout registry. Use this function to access the object.
  *
- * @see    Hybrid_Layout_Factory
- * @since  3.0.0
+ * @since  4.0.0
  * @access public
  * @return object
  */
-function hybrid_layouts() {
+function hybrid_layout_registry() {
 
-	return Hybrid_Layout_Factory::get_instance();
+	return Hybrid_Registry::get_instance( 'layout' );
 }
 
 /**
@@ -63,7 +62,6 @@ function hybrid_register_layouts() {
 /**
  * Function for registering a layout.
  *
- * @see    Hybrid_Layout_Factory::register_layout()
  * @since  3.0.0
  * @access public
  * @param  string  $name
@@ -72,13 +70,12 @@ function hybrid_register_layouts() {
  */
 function hybrid_register_layout( $name, $args = array() ) {
 
-	hybrid_layouts()->register_layout( $name, $args );
+	hybrid_layout_registry()->register( $name, new Hybrid_Layout( $name, $args ) );
 }
 
 /**
  * Unregisters a layout.
  *
- * @see    Hybrid_Layout_Factory::unregister_layout()
  * @since  3.0.0
  * @access public
  * @param  string  $name
@@ -86,13 +83,12 @@ function hybrid_register_layout( $name, $args = array() ) {
  */
 function hybrid_unregister_layout( $name ) {
 
-	hybrid_layouts()->unregister_layout( $name );
+	hybrid_layout_registry()->unregister( $name );
 }
 
 /**
  * Checks if a layout exists.
  *
- * @see    Hybrid_Layout_Factory::layout_exists()
  * @since  3.0.0
  * @access public
  * @param  string  $name
@@ -100,26 +96,24 @@ function hybrid_unregister_layout( $name ) {
  */
 function hybrid_layout_exists( $name ) {
 
-	return hybrid_layouts()->layout_exists( $name );
+	return hybrid_layout_registry()->exists( $name );
 }
 
 /**
  * Returns an array of registered layout objects.
  *
- * @see    Hybrid_Layout_Factory::layout
  * @since  3.0.0
  * @access public
  * @return array
  */
 function hybrid_get_layouts() {
 
-	return hybrid_layouts()->layouts;
+	return hybrid_layout_registry()->get_collection();
 }
 
 /**
  * Returns a layout object if it exists.  Otherwise, `FALSE`.
  *
- * @see    Hybrid_Layout_Factory::get_layout()
  * @see    Hybrid_Layout
  * @since  3.0.0
  * @access public
@@ -128,7 +122,7 @@ function hybrid_get_layouts() {
  */
 function hybrid_get_layout( $name ) {
 
-	return hybrid_layouts()->get_layout( $name );
+	return hybrid_layout_registry()->get_layout( $name );
 }
 
 /**

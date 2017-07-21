@@ -18,16 +18,15 @@
 add_action( 'init', 'hybrid_register_templates', 95 );
 
 /**
- * Returns the instance of the `Hybrid_Template_Factory` object. Use this function to access the object.
+ * Returns the template registry. Use this function to access the object.
  *
- * @see    Hybrid_Template_Factory
  * @since  4.0.0
  * @access public
  * @return object
  */
-function hybrid_templates() {
+function hybrid_template_registry() {
 
-	return Hybrid_Template_Factory::get_instance();
+	return Hybrid_Registry::get_instance( 'template' );
 }
 
 /**
@@ -55,13 +54,12 @@ function hybrid_register_templates() {
  */
 function hybrid_register_template( $name, $args = array() ) {
 
-	hybrid_templates()->register_template( $name, $args );
+	hybrid_template_registry()->register( $name, new Hybrid_Template( $name, $args ) );
 }
 
 /**
  * Unregisters a template.
  *
- * @see    Hybrid_Template_Factory::unregister_template()
  * @since  4.0.0
  * @access public
  * @param  string  $name
@@ -69,13 +67,12 @@ function hybrid_register_template( $name, $args = array() ) {
  */
 function hybrid_unregister_template( $name ) {
 
-	hybrid_templates()->unregister_template( $name );
+	hybrid_template_registry()->unregister( $name );
 }
 
 /**
  * Checks if a template exists.
  *
- * @see    Hybrid_Template_Factory::template_exists()
  * @since  4.0.0
  * @access public
  * @param  string  $name
@@ -83,20 +80,19 @@ function hybrid_unregister_template( $name ) {
  */
 function hybrid_template_exists( $name ) {
 
-	return hybrid_templates()->template_exists( $name );
+	return hybrid_template_registry()->exists( $name );
 }
 
 /**
  * Returns an array of registered template objects.
  *
- * @see    Hybrid_Template_Factory::template
  * @since  4.0.0
  * @access public
  * @return array
  */
 function hybrid_get_templates() {
 
-	return hybrid_templates()->templates;
+	return hybrid_template_registry()->get_collection();
 }
 
 /**
@@ -111,7 +107,7 @@ function hybrid_get_templates() {
  */
 function hybrid_get_template( $name ) {
 
-	return hybrid_templates()->get_template( $name );
+	return hybrid_template_registry()->get( $name );
 }
 
 /**
@@ -314,13 +310,24 @@ function hybrid_has_user_template( $template = '', $user_id = '' ) {
  */
 function hybrid_check_template_match( $template, $filename ) {
 
-	// Check if the template matches the filename.
+	// Check if the template is the filename.
+	// This is the most likely scenario because templates should be stored by
+	// their filenames.
 	if ( $template && $template === $filename )
 		return true;
 
-	// Check if the template matches the filename template object name.
-	if ( $template && $fileame )
-		return hybrid_template_exists( $filename ) && $template === hybrid_get_template( $filename )->name;
+	// Check if the template matches a template object by filename.
+	if ( $template && $filename ) {
+
+		$templates = wp_list_filter( hybrid_get_templates(), array( 'filename' => $filename ) );
+
+		if ( $templates ) {
+
+			$template_object = array_shift( $templates );
+
+			return $template_object->name === $template;
+		}
+	}
 
 	// Return whether we have a template at all.
 	return ! empty( $filename );

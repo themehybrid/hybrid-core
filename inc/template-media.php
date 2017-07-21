@@ -79,25 +79,41 @@ function hybrid_get_media_meta( $property, $args = array() ) {
 	$args = wp_parse_args( $args, $defaults );
 
 	// Get the media metadata.
-	$meta = hybrid_media_meta_factory()->get_media_meta( $args['post_id'] )->get( $property );
+	$meta_object = hybrid_get_media_metadata( $args['post_id'] );
+
+	$meta = is_object( $meta_object ) ? $meta_object->get( $property ) : false;
 
 	// Return the formatted meta or an empty string.
 	return $meta ? $args['before'] . sprintf( $args['wrap'], 'class="data"', sprintf( $args['text'], $meta ) ) . $args['after'] : '';
 }
 
 /**
- * Returns an instance of the `Hybrid_Media_Meta_Factory` singleton.  While theme authors can access
- * this function directly, it's best to use the `hybrid_media_meta()` and `hybrid_get_media_meta()`
- * functions for printing/getting media meta object data.
+ * Returns the registry of media metadata items.
  *
- * @see    Hybrid_Media_Meta_Factory
- * @since  3.0.0
+ * @since  4.0.0
  * @access public
  * @return object
  */
-function hybrid_media_meta_factory() {
+function hybrid_media_metadata_registry() {
 
-	return Hybrid_Media_Meta_Factory::get_instance();
+	return Hybrid_Registry::get_instance( 'media_metadata' );
+}
+
+/**
+ * Gets media metadata.  This function also serves to register meta on the fly if nothing
+ * exists for the attachment ID yet.
+ *
+ * @since  4.0.0
+ * @access public
+ * @param  int     $post_id
+ * @return object
+ */
+function hybrid_get_media_metadata( $post_id ) {
+
+	if ( ! hybrid_media_metadata_registry()->exists( $post_id ) )
+		hybrid_media_metadata_registry()->register( $post_id, new Hybrid_Media_Meta( $post_id ) );
+
+	return hybrid_media_metadata_registry()->get( $post_id );
 }
 
 /**
