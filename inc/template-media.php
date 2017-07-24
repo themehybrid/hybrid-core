@@ -96,7 +96,7 @@ function hybrid_get_media_meta( $property, $args = array() ) {
  */
 function hybrid_media_metadata_registry() {
 
-	return Hybrid_Registry::get_instance( 'media_metadata' );
+	return hybrid_registry( 'media_metadata' );
 }
 
 /**

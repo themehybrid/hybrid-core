@@ -26,7 +26,9 @@ add_action( 'init', 'hybrid_register_templates', 95 );
  */
 function hybrid_template_registry() {
 
-	return Hybrid_Registry::get_instance( 'template' );
+	return hybrid_registry( 'template' );
+
+	//return Hybrid_Registry::get_instance( 'template' );
 }
 
 /**
