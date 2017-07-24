@@ -56,7 +56,7 @@ function hybrid_wp_link() {
  */
 function hybrid_get_wp_link() {
 
-	return sprintf( '<a class="wp-link" href="%s">%s</a>', esc_url( __( 'http://wordpress.org', 'hybrid-core' ) ), esc_html__( 'WordPress', 'hybrid-core' ) );
+	return sprintf( '<a class="wp-link" href="%s">%s</a>', esc_url( __( 'https://wordpress.org', 'hybrid-core' ) ), esc_html__( 'WordPress', 'hybrid-core' ) );
 }
 
 /**
