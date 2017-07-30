@@ -224,6 +224,18 @@ function hybrid_body_class_filter( $classes, $class ) {
 		}
 	}
 
+	// Term template class.
+	if ( is_tax() || is_category() || is_tag() ) {
+
+		// Get the queried post object.
+		$term = get_queried_object();
+
+		// Checks for custom template.
+		$template = str_replace( array ( "{$term->taxonomy}-template-", "{$term->taxonomy}-" ), '', basename( hybrid_get_term_template( $term->term_id ), '.php' ) );
+
+		$classes[] = $template ? "{$term->taxonomy}-template-{$template}" : "{$term->taxonomy}-template-default";
+	}
+
 	// Paged views.
 	if ( is_paged() ) {
 		$classes[] = 'paged';
