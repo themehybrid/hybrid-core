@@ -33,8 +33,6 @@ add_filter( 'hybrid_get_theme_layout', 'hybrid_filter_layout', 5 );
 function hybrid_layout_registry() {
 
 	return hybrid_registry( 'layout' );
-
-	//return Hybrid_Registry::get_instance( 'layout' );
 }
 
 /**
