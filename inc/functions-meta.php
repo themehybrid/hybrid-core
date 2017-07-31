@@ -50,8 +50,41 @@ function hybrid_register_meta() {
 
 	// Theme layouts meta.
 	if ( current_theme_supports( 'theme-layouts' ) ) {
-		register_meta( 'post', hybrid_get_layout_meta_key(), 'sanitize_key', '__return_false' );
-		register_meta( 'term', hybrid_get_layout_meta_key(), 'sanitize_key', '__return_false' );
-		register_meta( 'user', hybrid_get_layout_meta_key(), 'sanitize_key', '__return_false' );
+
+		register_meta(
+			'post',
+			hybrid_get_layout_meta_key(),
+			array(
+				'type'              => 'string',
+				'single'            => true,
+				'sanitize_callback' => 'sanitize_key',
+				'auth_callback'     => '__return_false',
+				'show_in_rest'      => true
+			)
+		);
+
+		register_meta(
+			'term',
+			hybrid_get_layout_meta_key(),
+			array(
+				'type'              => 'string',
+				'single'            => true,
+				'sanitize_callback' => 'sanitize_key',
+				'auth_callback'     => '__return_false',
+				'show_in_rest'      => true
+			)
+		);
+
+		register_meta(
+			'user',
+			hybrid_get_layout_meta_key(),
+			array(
+				'type'              => 'string',
+				'single'            => true,
+				'sanitize_callback' => 'sanitize_key',
+				'auth_callback'     => '__return_false',
+				'show_in_rest'      => true
+			)
+		);
 	}
 }
