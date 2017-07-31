@@ -19,7 +19,7 @@
  * write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  *
  * @package   HybridCore
- * @version   4.0.0-dev
+ * @version   4.0.0
  * @author    Justin Tadlock <justintadlock@gmail.com>
  * @copyright Copyright (c) 2008 - 2017, Justin Tadlock
  * @link      https://themehybrid.com/hybrid-core
