@@ -2,6 +2,75 @@
 
 You can see the changes made via the [commit log](https://github.com/justintadlock/hybrid-core/commits/master) for the latest release.
 
+## [4.0.0] - 2017-07-31
+
+### Added
+
+* `.wp-custom-logo` body class.
+* Allow the shortcode, autoembeds, embedded, and attached methods of the media grabber to be enabled/disabled.
+* New Fonts API.  This allows developers to register, enqueue, etc. fonts just like scripts and styles.  The API natively supports font stylesheets bundled with the theme or the Google Fonts API.
+* Introduces the `hybrid_get_theme_mod()` wrapper function, which provides a `hybrid_theme_mod_{$name}_default` filter hook for filtering the default theme mod.
+* Adds a the `hybrid_is_layout()` conditional tag for checking if the current page has a specific layout.
+* Adds a `hybrid_is_script_debug()` conditional function for checking if `WP_SCRIPT_DEBUG` is set.
+* Adds the `hybrid_sprintf_theme_dir()` and `hybrid_sprintf_theme_uri()` functions. These functions replace `%1$s` with the template and `%2$s` with the stylesheet directory path and URI, respectively.
+* Introduces `hybrid_get_embed_template()` and an embed template part system.  This allows theme authors to create embed templates based on the post type, format, etc.
+* Full admin support for taxonomy term layouts.
+* Added the `hybrid()` wrapper function for returning the instance of the `Hybrid` object.
+* Adds the `hybrid_widget_exists()` conditional function for checking if a widget (by class name) exists.
+* Introduces the `hybrid_comment_parent_link()` and `hybrid_get_comment_parent_link()` functions for displaying or getting the comment parent link of a child comment.
+* Creates a new `hybrid_get_template_part()` function, which is a more robust version of the core WP `get_template_part()` function.
+* Introduces `hybrid_verify_nonce_post()` and `hybrid_verify_nonce_request()` for easier nonce checking in the admin.
+* Adds the `hybrid_get_content_hierarchy()` helper function for content and embed templates.  It retrieves the hierarchy based on post type, format, etc.
+* New `.menu-item-parent-archive` nav menu item class when viewing a post and the post type archive item is in the menu.
+* New template registration system.  This is post templates on steroids while being completely compatible with core WP's post template system.  Term and user templates are supported but no UI is yet implemented.
+* New filter on `document_title_parts`.  This is actually a replacement for the old filter on `wp_title`.  This brings us up to date with new doc title hooks and uses less code.
+* Adds the `hybrid_post_media()` and `hybrid_get_post_media()` wrapper functions for displaying and getting post media.  These are wrappers for the media grabber.
+* New registry system for registering and storing collections of data on the page.  This replaces some of the old factory/registry methods from before and combines the functionality into a single class.
+* Added the `hybrid_attr` hook for a more global filter on attributes.
+* Added the `hybrid_attr_{$slug}_class` hook for theme authors to filter just the `class` attribute.
+
+### Changed
+
+* Split the archive description filter into two distinct functions:  one for filtering changing the text output and a later function for formatting.
+* Registers Hybrid's styles on the front end, embeds, login page, and admin for use.
+* Attribute system now allows for `0` or `'0'` as valid attribute values.  `false` is for explicit empty values.
+* Overhauled the attributes (`hybrid_attr()`) system.  The framework no longer defines Schema.org as a default.  It leaves this up to theme authors.  Additionally, it only sets defaults for the body, post, and comment attributes.  The framework is just providing the foundation for theme authors to build what they want without getting in their way.
+* The `Hybrid` class is now a singleton class.  Theme authors should no longer call `new Hybrid()`.  The framework will launch itself.
+* User-selected page templates now overrule the theme author's choice if the theme author included a `front-page.php`.
+* Adds the Hybrid Core version to its own stylesheets when registering.
+* The template hierarchy system now uses the `*_template_hierarchy` filter hooks as opposed to the `*_template` filter hooks. This means that our code runs before looking up templates, which speeds things up.
+* Updated the meta registration calls to be in line with the new WP method of registration.
+
+### Removed
+
+* All deprecated functions have been completely removed or added to the "removed" section.  Version 4.0.0 is a major release and not concerned with back-compat.
+* Remove old post template admin and functionality since core WP now supports this.  It only took WP 7 years to catch up to the awesomeness that Hybrid users have long been enjoying.
+* Mobile toggle script was removed in favor of just letting theme authors handle it.
+* The global `$hybrid` variable is now dead.  Good riddance.
+* Add the `render_content()` method for JS-based customizer controls to make sure we overwrite the `WP_Customize_Control` method.
+* The Post Styles feature is now gone.  It was rarely used and just added bloat.
+* Old filter on `wp_title`.
+* Media meta, template, and layout hybrid factory-registry classes.
+
+### Fixed
+
+* Logic bug with post layout check.
+* Post format body class error check.
+* Make sure filters on `hybrid_content_template` work correctly.
+* Remove 100% max width default for embeds, which caused the WP visual editor to infinitely grow in height when embedding an audio/video file.
+* Make sure we have a nav menu object before attempting to get its name in `hybrid_get_menu_name()`.
+* Missing `href` attribute for the `hybrid_get_image_size_links()` function.
+* Make sure a layout exists before attempting to use it as the layout.
+* Fixed incorrect call when unregistering a theme layout.
+* Load the minified admin CSS file.
+* Use `https` for the WordPress.org link.
+* Adds the missing `.page-template-default` body class when no custom template is in use.
+* Change the search results title to `Search results for: %s`. This avoids double quotation marks.
+
+### Security
+
+* Run `wp_kses_post()` over the content when splitting media from it in the media grabber.
+
 ## [3.0.0] - 2015-08-17
 
 ### Added
