@@ -18,21 +18,6 @@
  */
 
 /**
- * Wrapper function for the Hybrid_Media_Grabber class.  Returns the HTML output for the found media.
- *
- * @since  1.6.0
- * @access public
- * @param  array   $args
- * @return string
- */
-function hybrid_media_grabber( $args = array() ) {
-
-	$media = new Hybrid_Media_Grabber( $args );
-
-	return $media->get_media();
-}
-
-/**
  * Grabs media related to the post.
  *
  * @since  1.6.0

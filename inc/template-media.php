@@ -40,6 +40,21 @@ function hybrid_get_post_media( $args = array() ) {
 }
 
 /**
+ * Wrapper function for the Hybrid_Media_Grabber class.  Returns the HTML output for the found media.
+ *
+ * @since  1.6.0
+ * @access public
+ * @param  array   $args
+ * @return string
+ */
+function hybrid_media_grabber( $args = array() ) {
+
+	$media = new Hybrid_Media_Grabber( $args );
+
+	return $media->get_media();
+}
+
+/**
  * Prints media meta directly to the screen.  The `$property` parameter can be any of the public
  * properties in the `Hybrid_Media_Meta` object.
  *
