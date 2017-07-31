@@ -231,7 +231,6 @@ if ( ! class_exists( 'Hybrid' ) ) {
 			// Load admin files.
 			if ( is_admin() )
 				require_once( $this->dir . 'admin/functions-admin.php' );
-
 		}
 
 		/**

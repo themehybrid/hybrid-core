@@ -1,9 +1,7 @@
 <?php
 /**
- * Template class.  This class is for creating new template objects.  Template
- * registration is handled via the `Hybrid_Template_Factory` class in
- * `inc/class-template-factory.php`.  Theme authors should utilize the API functions
- * in `inc/functions-templates.php`.
+ * Template object.  This class defines the structure for template objects.  Theme
+ * authors should utilize the wrapper functions within `inc/functions-templates.php.
  *
  * @package    HybridCore
  * @subpackage Includes
@@ -153,10 +151,10 @@ class Hybrid_Template {
 	 * Adds filters for the theme post templates.
 	 *
 	 * @since  4.0.0
-	 * @access private
+	 * @access protected
 	 * @return void
 	 */
-	private function post_templates() {
+	protected function post_templates() {
 
 		$types = $this->post_types ? $this->post_types : get_post_types( array( 'publicly_queryable' => true ) );
 

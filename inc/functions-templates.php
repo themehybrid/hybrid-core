@@ -4,7 +4,6 @@
  *
  * Theme Templates was created to allow theme developers to register custom templates for objects
  * (posts, terms, users). This file merely contains the API function calls at theme developers' disposal.
- * See `inc/class-template.php` and `inc/class-template-factory.php` for the muscle behind the API.
  *
  * @package    HybridCore
  * @subpackage Includes
@@ -98,8 +97,6 @@ function hybrid_get_templates() {
 /**
  * Returns a template object if it exists.  Otherwise, `FALSE`.
  *
- * @see    Hybrid_Template_Factory::get_template()
- * @see    Hybrid_Template
  * @since  4.0.0
  * @access public
  * @param  string      $name
