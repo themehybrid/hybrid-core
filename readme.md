@@ -8,11 +8,11 @@ The framework was built to make it easy for developers to include (or not includ
 
 ### Why was this framework built?
 
-In 2008, I started work on Hybrid Core.  At the time, it was used in only one of my themes on my newly-launched site, [Theme Hybrid](http://themehybrid.com).  The idea was that I'd have a base of reusable scripts that I could use along with any theme I built in the future.  Eventually, others wanted to use it too, so I officially released it to the public.  Basically, I decided to share the framework that had gotten my own business started with the entire WordPress community.
+In 2008, I started work on Hybrid Core.  At the time, it was used in only one of my themes on my newly-launched site, [Theme Hybrid](https://themehybrid.com).  The idea was that I'd have a base of reusable scripts that I could use along with any theme I built in the future.  Eventually, others wanted to use it too, so I officially released it to the public.  Basically, I decided to share the framework that had gotten my own business started with the entire WordPress community.
 
 ### Who is Hybrid Core for?
 
-Primarily, Hybrid Core is for me, Justin Tadlock.  I use it to build all of my [WordPress themes](http://themehybrid.com/themes) at Theme Hybrid, which is my plugin and theme site.
+Primarily, Hybrid Core is for me, Justin Tadlock.  I use it to build all of my [WordPress themes](https://themehybrid.com/themes) at Theme Hybrid, which is my plugin and theme site.
 
 However, I also maintain it for other theme authors who need a solid framework behind their themes that doesn't force them into certain markup and gives them ultimate flexibility.
 
@@ -31,7 +31,7 @@ The documentation is handled via Hybrid Core's [wiki](https://github.com/justint
 
 ### Where can I ask support questions?
 
-I have a membership site at [Theme Hybrid](http://themehybrid.com) where I'll answer any support questions you have via the site's support forums.
+I have a membership site at [Theme Hybrid](https://themehybrid.com) where I'll answer any support questions you have via the site's support forums.
 
 ### Can I install Hybrid Core as a theme?
 
@@ -49,7 +49,7 @@ I was one of the original theme authors to help pioneer the parent/child theme m
 
 ## Donations
 
-I make little money directly from Hybrid Core.  Developers (those who use the framework) account for only a small percentage of my paying club members.  This means that development time/money comes straight out of my own pocket.  I'm happy to do it and enjoy it.  However, [donations to the project](http://themehybrid.com/donate) are certainly appreciated and help greatly.
+I make little money directly from Hybrid Core.  Developers (those who use the framework) account for only a small percentage of my paying club members.  This means that development time/money comes straight out of my own pocket.  I'm happy to do it and enjoy it.  However, [donations to the project](https://themehybrid.com/donate) are certainly appreciated and help greatly.
 
 ## Copyright and License
 

@@ -20,9 +20,9 @@
  *
  * @package   HybridCore
  * @version   4.0.0-dev
- * @author    Justin Tadlock <justin@justintadlock.com>
+ * @author    Justin Tadlock <justintadlock@gmail.com>
  * @copyright Copyright (c) 2008 - 2017, Justin Tadlock
- * @link      http://themehybrid.com/hybrid-core
+ * @link      https://themehybrid.com/hybrid-core
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
