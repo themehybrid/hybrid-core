@@ -23,6 +23,31 @@ add_action( 'init', 'hybrid_register_meta', 15 );
  */
 function hybrid_register_meta() {
 
+	// Template meta.
+	register_meta(
+		'term',
+		hybrid_get_template_meta_key(),
+		array(
+			'type'              => 'string',
+			'single'            => true,
+			'sanitize_callback' => 'sanitize_file_name',
+			'auth_callback'     => '__return_false',
+			'show_in_rest'      => true
+		)
+	);
+
+	register_meta(
+		'user',
+		hybrid_get_template_meta_key(),
+		array(
+			'type'              => 'string',
+			'single'            => true,
+			'sanitize_callback' => 'sanitize_file_name',
+			'auth_callback'     => '__return_false',
+			'show_in_rest'      => true
+		)
+	);
+
 	// Theme layouts meta.
 	if ( current_theme_supports( 'theme-layouts' ) ) {
 		register_meta( 'post', hybrid_get_layout_meta_key(), 'sanitize_key', '__return_false' );
