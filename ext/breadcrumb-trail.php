@@ -15,7 +15,7 @@
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * @package   BreadcrumbTrail
- * @version   1.0.1
+ * @version   1.1.0-dev
  * @author    Justin Tadlock <justin@justintadlock.com>
  * @copyright Copyright (c) 2008 - 2015, Justin Tadlock
  * @link      http://themehybrid.com/plugins/breadcrumb-trail
@@ -109,6 +109,7 @@ class Breadcrumb_Trail {
 	 *     @type string    $container      Container HTML element. nav|div
 	 *     @type string    $before         String to output before breadcrumb menu.
 	 *     @type string    $after          String to output after breadcrumb menu.
+	 *     @type string    $browse_tag     The HTML tag to use to wrap the "Browse" header text.
 	 *     @type bool      $show_on_front  Whether to show when `is_front_page()`.
 	 *     @type bool      $network        Whether to link to the network main site (multisite only).
 	 *     @type bool      $show_title     Whether to show the title (last item) in the trail.
@@ -125,6 +126,7 @@ class Breadcrumb_Trail {
 			'container'       => 'nav',
 			'before'          => '',
 			'after'           => '',
+			'browse_tag'      => 'h2',
 			'show_on_front'   => true,
 			'network'         => false,
 			'show_title'      => true,
@@ -165,8 +167,14 @@ class Breadcrumb_Trail {
 		if ( 0 < $item_count ) {
 
 			// Add 'browse' label if it should be shown.
-			if ( true === $this->args['show_browse'] )
-				$breadcrumb .= sprintf( '<h2 class="trail-browse">%s</h2>', $this->labels['browse'] );
+			if ( true === $this->args['show_browse'] ) {
+
+				$breadcrumb .= sprintf(
+					'<%1$s class="trail-browse">%2$s</%1$s>',
+					tag_escape( $this->args['browse_tag'] ),
+					$this->labels['browse']
+				);
+			}
 
 			// Open the unordered list.
 			$breadcrumb .= '<ul class="trail-items" itemscope itemtype="http://schema.org/BreadcrumbList">';
@@ -246,8 +254,8 @@ class Breadcrumb_Trail {
 			'home'                => esc_html__( 'Home',                                  'hybrid-core' ),
 			'error_404'           => esc_html__( '404 Not Found',                         'hybrid-core' ),
 			'archives'            => esc_html__( 'Archives',                              'hybrid-core' ),
-			// Translators: %s is the search query. The HTML entities are opening and closing curly quotes.
-			'search'              => esc_html__( 'Search results for &#8220;%s&#8221;',   'hybrid-core' ),
+			// Translators: %s is the search query.
+			'search'              => esc_html__( 'Search results for: %s',                'hybrid-core' ),
 			// Translators: %s is the page number.
 			'paged'               => esc_html__( 'Page %s',                               'hybrid-core' ),
 			// Translators: %s is the page number.
@@ -436,7 +444,7 @@ class Breadcrumb_Trail {
 		$label   = $network ? get_bloginfo( 'name' ) : $this->labels['home'];
 		$rel     = $network ? '' : ' rel="home"';
 
-		$this->items[] = sprintf( '<a href="%s"%s>%s</a>', esc_url( home_url() ), $rel, $label );
+		$this->items[] = sprintf( '<a href="%s"%s>%s</a>', esc_url( user_trailingslashit( home_url() ) ), $rel, $label );
 	}
 
 	/**
@@ -1046,7 +1054,12 @@ class Breadcrumb_Trail {
 		if ( $terms && ! is_wp_error( $terms ) ) {
 
 			// Sort the terms by ID and get the first category.
-			usort( $terms, '_usort_terms_by_ID' );
+			if ( function_exists( 'wp_list_sort' ) )
+				$terms = wp_list_sort( $terms, 'term_id' );
+
+			else
+				usort( $terms, '_usort_terms_by_ID' );
+
 			$term = get_term( $terms[0], $taxonomy );
 
 			// If the category has a parent, add the hierarchy to the trail.

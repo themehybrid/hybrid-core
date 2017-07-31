@@ -5,11 +5,54 @@
  *
  * @package    HybridCore
  * @subpackage Includes
- * @author     Justin Tadlock <justin@justintadlock.com>
- * @copyright  Copyright (c) 2008 - 2015, Justin Tadlock
- * @link       http://themehybrid.com/hybrid-core
+ * @author     Justin Tadlock <justintadlock@gmail.com>
+ * @copyright  Copyright (c) 2008 - 2017, Justin Tadlock
+ * @link       https://themehybrid.com/hybrid-core
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
+
+/**
+ * Prints the post media from the media grabber.
+ *
+ * @see    Hybrid_Media_Grabber
+ * @since  4.0.0
+ * @access public
+ * @param  array   $args
+ * @return void
+ */
+function hybrid_post_media( $args = array() ) {
+
+	echo hybrid_get_post_media( $args );
+}
+
+/**
+ * Getter function for grabbing the post media.
+ *
+ * @see    Hybrid_Media_Grabber
+ * @since  4.0.0
+ * @access public
+ * @param  array   $args
+ * @return string
+ */
+function hybrid_get_post_media( $args = array() ) {
+
+	return hybrid_media_grabber( $args );
+}
+
+/**
+ * Wrapper function for the Hybrid_Media_Grabber class.  Returns the HTML output for the found media.
+ *
+ * @since  1.6.0
+ * @access public
+ * @param  array   $args
+ * @return string
+ */
+function hybrid_media_grabber( $args = array() ) {
+
+	$media = new Hybrid_Media_Grabber( $args );
+
+	return $media->get_media();
+}
 
 /**
  * Prints media meta directly to the screen.  The `$property` parameter can be any of the public
@@ -23,6 +66,7 @@
  * @return void
  */
 function hybrid_media_meta( $property, $args = array() ) {
+
 	echo hybrid_get_media_meta( $property, $args );
 }
 
@@ -50,24 +94,41 @@ function hybrid_get_media_meta( $property, $args = array() ) {
 	$args = wp_parse_args( $args, $defaults );
 
 	// Get the media metadata.
-	$meta = hybrid_media_meta_factory()->get_media_meta( $args['post_id'] )->get( $property );
+	$meta_object = hybrid_get_media_metadata( $args['post_id'] );
+
+	$meta = is_object( $meta_object ) ? $meta_object->get( $property ) : false;
 
 	// Return the formatted meta or an empty string.
 	return $meta ? $args['before'] . sprintf( $args['wrap'], 'class="data"', sprintf( $args['text'], $meta ) ) . $args['after'] : '';
 }
 
 /**
- * Returns an instance of the `Hybrid_Media_Meta_Factory` singleton.  While theme authors can access
- * this function directly, it's best to use the `hybrid_media_meta()` and `hybrid_get_media_meta()`
- * functions for printing/getting media meta object data.
+ * Returns the registry of media metadata items.
  *
- * @see    Hybrid_Media_Meta_Factory
- * @since  3.0.0
+ * @since  4.0.0
  * @access public
  * @return object
  */
-function hybrid_media_meta_factory() {
-	return Hybrid_Media_Meta_Factory::get_instance();
+function hybrid_media_metadata_registry() {
+
+	return hybrid_registry( 'media_metadata' );
+}
+
+/**
+ * Gets media metadata.  This function also serves to register meta on the fly if nothing
+ * exists for the attachment ID yet.
+ *
+ * @since  4.0.0
+ * @access public
+ * @param  int     $post_id
+ * @return object
+ */
+function hybrid_get_media_metadata( $post_id ) {
+
+	if ( ! hybrid_media_metadata_registry()->exists( $post_id ) )
+		hybrid_media_metadata_registry()->register( $post_id, new Hybrid_Media_Meta( $post_id ) );
+
+	return hybrid_media_metadata_registry()->get( $post_id );
 }
 
 /**
@@ -99,6 +160,7 @@ function hybrid_get_attachment_types( $post_id = 0 ) {
  * @return string
  */
 function hybrid_get_attachment_type( $post_id = 0 ) {
+
 	return hybrid_get_attachment_types( $post_id )->type;
 }
 
@@ -112,6 +174,7 @@ function hybrid_get_attachment_type( $post_id = 0 ) {
  * @return string
  */
 function hybrid_get_attachment_subtype( $post_id = 0 ) {
+
 	return hybrid_get_attachment_types( $post_id )->subtype;
 }
 
@@ -124,6 +187,7 @@ function hybrid_get_attachment_subtype( $post_id = 0 ) {
  * @return bool
  */
 function hybrid_attachment_is_audio( $post_id = 0 ) {
+
 	return 'audio' === hybrid_get_attachment_type( $post_id );
 }
 
@@ -136,6 +200,7 @@ function hybrid_attachment_is_audio( $post_id = 0 ) {
  * @return bool
  */
 function hybrid_attachment_is_video( $post_id = 0 ) {
+
 	return 'video' === hybrid_get_attachment_type( $post_id );
 }
 
@@ -193,6 +258,7 @@ function hybrid_get_image_size_links() {
  * @return string
  */
 function hybrid_get_audio_transcript( $post_id = 0 ) {
+
 	return hybrid_get_media_meta( 'lyrics', array( 'wrap' => '', 'post_id' => $post_id ? $post_id : get_the_ID() ) );
 }
 
@@ -269,6 +335,7 @@ function hybrid_text_attachment( $mime = '', $file = '' ) {
  * @return string
  */
 function hybrid_audio_attachment() {
+
 	return hybrid_media_grabber( array( 'type' => 'audio' ) );
 }
 
@@ -280,5 +347,6 @@ function hybrid_audio_attachment() {
  * @return string
  */
 function hybrid_video_attachment() {
+
 	return hybrid_media_grabber( array( 'type' => 'video' ) );
 }

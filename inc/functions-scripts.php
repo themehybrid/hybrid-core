@@ -6,14 +6,14 @@
  *
  * @package    HybridCore
  * @subpackage Includes
- * @author     Justin Tadlock <justin@justintadlock.com>
- * @copyright  Copyright (c) 2008 - 2015, Justin Tadlock
- * @link       http://themehybrid.com/hybrid-core
+ * @author     Justin Tadlock <justintadlock@gmail.com>
+ * @copyright  Copyright (c) 2008 - 2017, Justin Tadlock
+ * @link       https://themehybrid.com/hybrid-core
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 # Register Hybrid Core scripts.
-add_action( 'wp_enqueue_scripts', 'hybrid_register_scripts', 0 );
+//add_action( 'wp_enqueue_scripts', 'hybrid_register_scripts', 0 );
 
 # Load Hybrid Core scripts.
 add_action( 'wp_enqueue_scripts', 'hybrid_enqueue_scripts', 5 );
@@ -27,11 +27,7 @@ add_action( 'wp_enqueue_scripts', 'hybrid_enqueue_scripts', 5 );
  * @access public
  * @return void
  */
-function hybrid_register_scripts() {
-
-	// Register the 'mobile-toggle' script'.
-	wp_register_script( 'hybrid-mobile-toggle', HYBRID_JS . 'mobile-toggle' . hybrid_get_min_suffix() . '.js', array( 'jquery' ), '20130528', true );
-}
+function hybrid_register_scripts() {}
 
 /**
  * Tells WordPress to load the scripts needed for the framework using the wp_enqueue_script() function.

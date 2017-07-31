@@ -4,9 +4,9 @@
  *
  * @package    HybridCore
  * @subpackage Includes
- * @author     Justin Tadlock <justin@justintadlock.com>
- * @copyright  Copyright (c) 2008 - 2015, Justin Tadlock
- * @link       http://themehybrid.com/hybrid-core
+ * @author     Justin Tadlock <justintadlock@gmail.com>
+ * @copyright  Copyright (c) 2008 - 2017, Justin Tadlock
+ * @link       https://themehybrid.com/hybrid-core
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
@@ -18,7 +18,6 @@ add_action( 'admin_enqueue_scripts', 'hybrid_register_styles', 0 );
 
 # Active theme style filters.
 add_filter( 'stylesheet_uri', 'hybrid_min_stylesheet_uri', 5, 2 );
-add_filter( 'stylesheet_uri', 'hybrid_style_filter',       15   );
 
 # Filters the WP locale stylesheet.
 add_filter( 'locale_stylesheet_uri', 'hybrid_locale_stylesheet_uri', 5 );
@@ -42,8 +41,8 @@ function hybrid_register_styles() {
 	$suffix = hybrid_get_min_suffix();
 
 	// Register styles for use by themes.
-	wp_register_style( 'hybrid-one-five', HYBRID_CSS . "one-five{$suffix}.css" );
-	wp_register_style( 'hybrid-gallery',  HYBRID_CSS . "gallery{$suffix}.css"  );
+	wp_register_style( 'hybrid-one-five', hybrid()->uri . "css/one-five{$suffix}.css", array(), hybrid()->version );
+	wp_register_style( 'hybrid-gallery',  hybrid()->uri . "css/gallery{$suffix}.css",  array(), hybrid()->version );
 	wp_register_style( 'hybrid-parent',   hybrid_get_parent_stylesheet_uri()   );
 	wp_register_style( 'hybrid-style',    get_stylesheet_uri()                 );
 
@@ -69,11 +68,11 @@ function hybrid_get_parent_stylesheet_uri() {
 	$suffix = hybrid_get_min_suffix();
 
 	// Get the parent theme stylesheet.
-	$stylesheet_uri = HYBRID_PARENT_URI . 'style.css';
+	$stylesheet_uri = hybrid()->parent_uri . 'style.css';
 
 	// If a '.min' version of the parent theme stylesheet exists, use it.
-	if ( $suffix && file_exists( HYBRID_PARENT . "style{$suffix}.css" ) )
-		$stylesheet_uri = HYBRID_PARENT_URI . "style{$suffix}.css";
+	if ( $suffix && file_exists( hybrid()->parent_dir . "style{$suffix}.css" ) )
+		$stylesheet_uri = hybrid()->parent_uri . "style{$suffix}.css";
 
 	return apply_filters( 'hybrid_get_parent_stylesheet_uri', $stylesheet_uri );
 }
@@ -104,7 +103,7 @@ function hybrid_min_stylesheet_uri( $stylesheet_uri, $stylesheet_dir_uri ) {
 		$stylesheet = str_replace( '.css', "{$suffix}.css", $stylesheet );
 
 		// If the stylesheet exists in the stylesheet directory, set the stylesheet URI to the dev stylesheet.
-		if ( file_exists( HYBRID_CHILD . $stylesheet ) )
+		if ( file_exists( hybrid()->child_dir . $stylesheet ) )
 			$stylesheet_uri = esc_url( trailingslashit( $stylesheet_dir_uri ) . $stylesheet );
 	}
 
@@ -159,90 +158,4 @@ function hybrid_get_locale_style() {
 	$styles[] = is_rtl() ? 'css/rtl.css' : 'css/ltr.css';
 
 	return hybrid_locate_theme_file( $styles );
-}
-
-/**
- * Filters the 'stylesheet_uri' and checks if a post has a style that should overwrite the theme's
- * primary `style.css`.
- *
- * @since  3.0.0
- * @access public
- * @param  string  $stylesheet_uri
- * @return string
- */
-function hybrid_style_filter( $stylesheet_uri ) {
-
-	if ( is_singular() ) {
-
-		$style = hybrid_get_post_style( get_queried_object_id() );
-
-		if ( $style && $style_uri = hybrid_locate_theme_file( array( $style ) ) )
-			$stylesheet_uri = $style_uri;
-	}
-
-	return $stylesheet_uri;
-}
-
-/**
- * Gets a post style.
- *
- * @since  3.0.0
- * @access public
- * @param  int     $post_id
- * @return bool
- */
-function hybrid_get_post_style( $post_id ) {
-	return get_post_meta( $post_id, hybrid_get_style_meta_key(), true );
-}
-
-/**
- * Sets a post style.
- *
- * @since  3.0.0
- * @access public
- * @param  int     $post_id
- * @param  string  $layout
- * @return bool
- */
-function hybrid_set_post_style( $post_id, $style ) {
-	return update_post_meta( $post_id, hybrid_get_style_meta_key(), $style );
-}
-
-/**
- * Deletes a post style.
- *
- * @since  3.0.0
- * @access public
- * @param  int     $post_id
- * @return bool
- */
-function hybrid_delete_post_style( $post_id ) {
-	return delete_post_meta( $post_id, hybrid_get_style_meta_key() );
-}
-
-/**
- * Checks a post if it has a specific style.
- *
- * @since  3.0.0
- * @access public
- * @param  int     $post_id
- * @return bool
- */
-function hybrid_has_post_style( $style, $post_id = '' ) {
-
-	if ( ! $post_id )
-		$post_id = get_the_ID();
-
-	return $style === hybrid_get_post_style( $post_id ) ? true : false;
-}
-
-/**
- * Wrapper function for returning the metadata key used for objects that can use styles.
- *
- * @since  3.0.0
- * @access public
- * @return string
- */
-function hybrid_get_style_meta_key() {
-	return apply_filters( 'hybrid_style_meta_key', 'Stylesheet' );
 }

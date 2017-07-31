@@ -11,26 +11,11 @@
  *
  * @package    Hybrid
  * @subpackage Includes
- * @author     Justin Tadlock <justin@justintadlock.com>
- * @copyright  Copyright (c) 2008 - 2015, Justin Tadlock
- * @link       http://themehybrid.com/hybrid-core
+ * @author     Justin Tadlock <justintadlock@gmail.com>
+ * @copyright  Copyright (c) 2008 - 2017, Justin Tadlock
+ * @link       https://themehybrid.com/hybrid-core
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
-
-/**
- * Wrapper function for the Hybrid_Media_Grabber class.  Returns the HTML output for the found media.
- *
- * @since  1.6.0
- * @access public
- * @param  array
- * @return string
- */
-function hybrid_media_grabber( $args = array() ) {
-
-	$media = new Hybrid_Media_Grabber( $args );
-
-	return $media->get_media();
-}
 
 /**
  * Grabs media related to the post.
@@ -91,6 +76,18 @@ class Hybrid_Media_Grabber {
 	 *
 	 * @since  1.6.0
 	 * @access public
+	 * @param  array  $args  {
+	 *     @type int     $post_id      Post ID (assumes within The Loop by default)
+	 *     @type string  $type         audio | video | gallery
+	 *     @type string  $before       HTML before the output
+	 *     @type string  $after        HTML after the output
+	 *     @type bool    $split_media  Whether to split the media from the post content
+	 *     @type int     $width        Custom width. Defaults to the theme's content width.
+	 *     @type bool    $shortcodes   True | False | Array of specific shortcode handles to look for.
+	 *     @type bool    $autoembeds   Whether to check for autoembeds.
+	 *     @type bool    $embedded     Whether to check for HTML-embedded media.
+	 *     @type bool    $attached     Whether to check for attached media.
+	 * }
 	 * @global object $wp_embed
 	 * @global int    $content_width
 	 * @return void
@@ -107,16 +104,16 @@ class Hybrid_Media_Grabber {
 
 		// Set up the default arguments.
 		$defaults = array(
-			'post_id'     => get_the_ID(),   // post ID (assumes within The Loop by default)
-			'type'        => 'video',        // audio|video
-			'before'      => '',             // HTML before the output
-			'after'       => '',             // HTML after the output
-			'split_media' => false,          // Splits the media from the post content
-			'width'       => $content_width, // Custom width. Defaults to the theme's content width.
-			'shortcodes'  => true,           // True | False | Array of specific shortcode handles to look for.
-			'autoembeds'  => true,           // Whether to check for autoembeds.
-			'embedded'    => true,           // Whether to check for HTML-embedded media.
-			'attached'    => true,           // Whether to check for attached media.
+			'post_id'     => get_the_ID(),
+			'type'        => 'video',
+			'before'      => '',
+			'after'       => '',
+			'split_media' => false,
+			'width'       => $content_width,
+			'shortcodes'  => true,
+			'autoembeds'  => true,
+			'embedded'    => true,
+			'attached'    => true,
 		);
 
 		// Set the object properties.
@@ -136,6 +133,7 @@ class Hybrid_Media_Grabber {
 	 * @return void
 	 */
 	public function __destruct() {
+
 		remove_filter( 'embed_maybe_make_link', '__return_false' );
 		remove_filter( 'the_content', array( $this, 'split_media' ), 5 );
 	}
@@ -149,6 +147,7 @@ class Hybrid_Media_Grabber {
 	 * @return string
 	 */
 	public function get_media() {
+
 		return apply_filters( 'hybrid_media_grabber_media', $this->media, $this );
 	}
 
@@ -242,11 +241,11 @@ class Hybrid_Media_Grabber {
 	}
 
 	/**
-	 * Handles the output of the WordPress playlist feature.  This searches for the [playlist] shortcode
-	 * if it's used in the content.
+	 * Method for handling shortcodes.
 	 *
-	 * @since  3.1.0
+	 * @since  4.0.0
 	 * @access public
+	 * @param  array  $shortcode
 	 * @return void
 	 */
 	public function _do_shortcode_media( $shortcode ) {
@@ -262,6 +261,7 @@ class Hybrid_Media_Grabber {
 	 *
 	 * @since  2.0.0
 	 * @access public
+	 * @param  array  $shortcode
 	 * @return void
 	 */
 	public function do_playlist_shortcode_media( $shortcode ) {

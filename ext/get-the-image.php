@@ -156,6 +156,7 @@ final class Get_The_Image {
 			'link'               => 'post', // string|bool - 'post' (true), 'file', 'attachment', false
 			'link_class'         => '',
 			'image_class'        => false,
+			'image_attr'         => array(),
 			'width'              => false,
 			'height'             => false,
 			'before'             => '',
@@ -705,69 +706,15 @@ final class Get_The_Image {
 				return;
 		}
 
-		// Empty classes array.
-		$classes = array();
+		// Set up a variable for the image attributes.
+		$img_attr = '';
 
-		// If there is alt text, set it.  Otherwise, default to the post title.
-		$image_alt = !empty( $this->image_args['alt'] ) ? $this->image_args['alt'] : get_post_field( 'post_title', $this->args['post_id'] );
-
-		// If there's a width/height for the image.
-		if ( isset( $this->image_args['width'] ) && isset( $this->image_args['height'] ) ) {
-
-			// Set a class based on the orientation.
-			$classes[] = ( $this->image_args['height'] > $this->image_args['width'] ) ? 'portrait' : 'landscape';
-
-			// Set class based on the content width (defined by theme).
-			if ( 0 < $GLOBALS['content_width'] ) {
-
-				if ( $GLOBALS['content_width'] == $this->image_args['width'] )
-					$classes[] = 'cw-equal';
-
-				elseif ( $GLOBALS['content_width'] <= $this->image_args['width'] )
-					$classes[] = 'cw-lesser';
-
-				elseif ( $GLOBALS['content_width'] >= $this->image_args['width'] )
-					$classes[] = 'cw-greater';
-			}
-
-			// If an explicit width/height is not set, use the info from the image.
-			if ( empty( $this->args['width'] ) && empty( $this->args['height'] ) ) {
-				$this->args['width']  = $this->image_args['width'];
-				$this->args['height'] = $this->image_args['height'];
-			}
-		}
-
-		// If there is a width or height, set them as HMTL-ready attributes.
-		$width  = $this->args['width']  ? ' width="' .  esc_attr( $this->args['width']  ) . '"' : '';
-		$height = $this->args['height'] ? ' height="' . esc_attr( $this->args['height'] ) . '"' : '';
-
-		// srcset attribute
-		$srcset = !empty( $this->srcsets ) ? sprintf( ' srcset="%s"', esc_attr( join( ', ', $this->srcsets ) ) ) : '';
-
-		// Add the meta key(s) to the classes array.
-		if ( !empty( $this->args['meta_key'] ) )
-			$classes = array_merge( $classes, (array)$this->args['meta_key'] );
-
-		// Add the $size to the class.
-		$classes[] = $this->args['size'];
-
-		// Get the custom image class.
-		if ( !empty( $this->args['image_class'] ) ) {
-
-			if ( !is_array( $this->args['image_class'] ) )
-				$this->args['image_class'] = preg_split( '#\s+#', $this->args['image_class'] );
-
-			$classes = array_merge( $classes, $this->args['image_class'] );
-		}
-
-		// Sanitize all the classes.
-		$classes = $this->sanitize_class( $classes );
-
-		// Join all the classes into a single string and make sure there are no duplicates.
-		$class = join( ' ', $classes );
+		// Loop through the image attributes and format them for display.
+		foreach ( $this->get_image_attr() as $name => $value )
+			$img_attr .= false !== $value ? sprintf( ' %s="%s"', esc_html( $name ), esc_attr( $value ) ) : esc_html( " {$name}" );
 
 		// Add the image attributes to the <img /> element.
-		$html = sprintf( '<img src="%s"%s alt="%s" class="%s"%s itemprop="image" />', esc_attr( $this->image_args['src'] ), $srcset, esc_attr( strip_tags( $image_alt ) ), $class, $width . $height );
+		$html = sprintf( '<img %s />', $img_attr );
 
 		// If $link is set to true, link the image to its post.
 		if ( false !== $this->args['link'] ) {
@@ -781,7 +728,7 @@ final class Get_The_Image {
 			elseif ( 'attachment' === $this->args['link'] && isset( $this->image_args['id'] ) )
 				$url = get_permalink( $this->image_args['id'] );
 
-			if ( !empty( $url ) ) {
+			if ( ! empty( $url ) ) {
 
 				$link_class = $this->args['link_class'] ? sprintf( ' class="%s"', esc_attr( $this->args['link_class'] ) ) : '';
 
@@ -790,14 +737,121 @@ final class Get_The_Image {
 		}
 
 		// If there is a $post_thumbnail_id, apply the WP filters normally associated with get_the_post_thumbnail().
-		if ( !empty( $this->image_args['post_thumbnail_id'] ) )
+		if ( ! empty( $this->image_args['post_thumbnail_id'] ) )
 			$html = apply_filters( 'post_thumbnail_html', $html, $this->args['post_id'], $this->image_args['post_thumbnail_id'], $this->args['size'], '' );
 
 		// If we're showing a caption.
-		if ( true === $this->args['caption'] && !empty( $this->image_args['caption'] ) )
+		if ( true === $this->args['caption'] && ! empty( $this->image_args['caption'] ) )
 			$html = img_caption_shortcode( array( 'caption' => $this->image_args['caption'], 'width' => $this->args['width'] ), $html );
 
 		$this->image = $html;
+	}
+
+	/**
+	 * Sets up and returns an array of attributes for the final `<img>` element.
+	 *
+	 * @since  1.1.0
+	 * @access public
+	 * @return array
+	 */
+	public function get_image_attr() {
+
+		$attr = array();
+
+		// Add the image class.
+		$attr['class'] = join( ' ', $this->get_image_class() );
+
+		// If there's a width/height for the image.
+		if ( isset( $this->image_args['width'] ) && isset( $this->image_args['height'] ) ) {
+
+			// If an explicit width/height is not set, use the info from the image.
+			if ( ! $this->args['width'] && ! $this->args['height'] ) {
+
+				$this->args['width']  = $this->image_args['width'];
+				$this->args['height'] = $this->image_args['height'];
+			}
+		}
+
+		// If there is a width or height, set them.
+		if ( $this->args['width'] )
+			$attr['width'] = $this->args['width'];
+
+		if ( $this->args['height'] )
+			$attr['height'] = $this->args['height'];
+
+		// If there is alt text, set it.  Otherwise, default to the post title.
+		$attr['alt'] = ! empty( $this->image_args['alt'] ) ? $this->image_args['alt'] : get_post_field( 'post_title', $this->args['post_id'] );
+
+		// Add the itemprop attribute.
+		$attr['itemprop'] = 'image';
+
+		// Parse the args with the user inputted args.
+		$attr = wp_parse_args( $this->args['image_attr'], $attr );
+
+		// Allow devs to filter the image attributes.
+		$attr = apply_filters( 'get_the_image_attr', $attr, $this );
+
+		// Add the image source after the filter so that it can't be overwritten.
+		$attr['src'] = $this->image_args['src'];
+
+		// Return attributes.
+		return $attr;
+	}
+
+	/**
+	 * Sets up and returns an array of classes for the `<img>` element.
+	 *
+	 * @since  1.1.0
+	 * @access public
+	 * @global int     $content_width
+	 * @return array
+	 */
+	public function get_image_class() {
+		global $content_width;
+
+		$classes = array();
+
+		// Get true image height and width.
+		$width  = isset( $this->image_args['width'] )  ? $this->image_args['width']  : false;
+		$height = isset( $this->image_args['height'] ) ? $this->image_args['height'] : false;
+
+		// If there's a width/height for the image.
+		if ( $width && $height ) {
+
+			// Set a class based on the orientation.
+			$classes[] = $height > $width ? 'portrait' : 'landscape';
+
+			// Set class based on the content width (defined by theme).
+			if ( 0 < $content_width ) {
+
+				if ( $content_width == $width )
+					$classes[] = 'cw-equal';
+
+				elseif ( $content_width <= $width )
+					$classes[] = 'cw-lesser';
+
+				elseif ( $content_width >= $width )
+					$classes[] = 'cw-greater';
+			}
+		}
+
+		// Add the meta key(s) to the classes array.
+		if ( ! empty( $this->args['meta_key'] ) )
+			$classes = array_merge( $classes, (array)$this->args['meta_key'] );
+
+		// Add the $size to the class.
+		$classes[] = $this->args['size'];
+
+		// Get the custom image class.
+		if ( ! empty( $this->args['image_class'] ) ) {
+
+			if ( ! is_array( $this->args['image_class'] ) )
+				$this->args['image_class'] = preg_split( '#\s+#', $this->args['image_class'] );
+
+			$classes = array_merge( $classes, $this->args['image_class'] );
+		}
+
+		return apply_filters( 'get_the_image_class', $this->sanitize_class( $classes ), $this );
 	}
 
 	/**

@@ -4,16 +4,16 @@
  *
  * @package    HybridCore
  * @subpackage Admin
- * @author     Justin Tadlock <justin@justintadlock.com>
- * @copyright  Copyright (c) 2008 - 2016, Justin Tadlock
- * @link       http://themehybrid.com/hybrid-core
+ * @author     Justin Tadlock <justintadlock@gmail.com>
+ * @copyright  Copyright (c) 2008 - 2017, Justin Tadlock
+ * @link       https://themehybrid.com/hybrid-core
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 /**
  * Singleton class for handling the term layout feature.
  *
- * @since  3.1.0
+ * @since  4.0.0
  * @access public
  */
 final class Hybrid_Admin_Term_Layout {
@@ -21,7 +21,7 @@ final class Hybrid_Admin_Term_Layout {
 	/**
 	 * Returns the instance.
 	 *
-	 * @since  3.1.0
+	 * @since  4.0.0
 	 * @access public
 	 * @return object
 	 */
@@ -40,7 +40,7 @@ final class Hybrid_Admin_Term_Layout {
 	/**
 	 * Constructor method.
 	 *
-	 * @since  3.1.0
+	 * @since  4.0.0
 	 * @access private
 	 * @return void
 	 */
@@ -49,7 +49,7 @@ final class Hybrid_Admin_Term_Layout {
 	/**
 	 * Sets up initial actions.
 	 *
-	 * @since  3.1.0
+	 * @since  4.0.0
 	 * @access private
 	 * @return void
 	 */
@@ -70,11 +70,14 @@ final class Hybrid_Admin_Term_Layout {
 	/**
 	 * Runs on the load hook and sets up what we need.
 	 *
-	 * @since  3.1.0
+	 * @since  4.0.0
 	 * @access public
 	 * @return void
 	 */
 	public function load() {
+
+		if ( ! current_user_can( 'edit_theme_options' ) )
+			return;
 
 		$screen = get_current_screen();
 
@@ -89,19 +92,21 @@ final class Hybrid_Admin_Term_Layout {
 	/**
 	 * Enqueues scripts/styles.
 	 *
-	 * @since  3.1.0
+	 * @since  4.0.0
 	 * @access public
 	 * @return void
 	 */
 	public function enqueue() {
 
 		wp_enqueue_style( 'hybrid-admin' );
+
+		add_action( 'admin_footer', 'hybrid_layout_field_inline_script' );
 	}
 
 	/**
 	 * Displays the layout selector in the new term form.
 	 *
-	 * @since  3.1.0
+	 * @since  4.0.0
 	 * @access public
 	 * @return void
 	 */
@@ -119,7 +124,7 @@ final class Hybrid_Admin_Term_Layout {
 	/**
 	 * Displays the layout selector on the edit term screen.
 	 *
-	 * @since  3.1.0
+	 * @since  4.0.0
 	 * @access public
 	 * @return void
 	 */
@@ -139,7 +144,7 @@ final class Hybrid_Admin_Term_Layout {
 	 * Note that this will most likely be deprecated in the future in favor of
 	 * building an all-purpose field to be used in any form.
 	 *
-	 * @since  3.1.0
+	 * @since  4.0.0
 	 * @access public
 	 * @param  object  $term
 	 * @return void
@@ -149,69 +154,44 @@ final class Hybrid_Admin_Term_Layout {
 		$term_layout = 'default';
 		$taxonomy    = get_current_screen()->taxonomy;
 
-		if ( $term ) {
-			$term_layout = hybrid_get_term_layout( $term->term_id );
+		// Get only the term layouts.
+		$layouts = wp_list_filter( hybrid_get_layouts(), array( 'is_term_layout' => true, 'image' => true ) );
 
-			$term_layout = $term_layout ? $term_layout : 'default';
+		// Remove unwanted layouts.
+		foreach ( $layouts as $layout ) {
 
-			$taxonomy = $term->taxonomy;
+			if ( $layout->taxonomies && ! in_array( $taxonomy, $layout->taxonomies ) )
+				unset( $layouts[ $layout->name ] );
 		}
 
+		// If we have a term, get its layout.
+		if ( $term )
+			$term_layout = hybrid_get_term_layout( $term->term_id );
+
+		// Output the nonce field.
 		wp_nonce_field( basename( __FILE__ ), 'hybrid_term_layout_nonce' );
 
-		foreach ( hybrid_get_layouts() as $layout ) : ?>
-
-			<?php if ( true === $layout->is_term_layout && $layout->image && ( ! $layout->taxonomies || in_array( $taxonomy, $layout->taxonomies ) ) ) : ?>
-
-				<label class="has-img">
-					<input type="radio" value="<?php echo esc_attr( $layout->name ); ?>" name="hybrid-term-layout" <?php checked( $term_layout, $layout->name ); ?> />
-
-					<span class="screen-reader-text"><?php echo esc_html( $layout->label ); ?></span>
-
-					<img src="<?php echo esc_url( hybrid_sprintf_theme_uri( $layout->image ) ); ?>" alt="<?php echo esc_attr( $layout->label ); ?>" />
-				</label>
-
-			<?php endif; ?>
-
-		<?php endforeach; ?>
-
-		<script type="text/javascript">
-		jQuery( document ).ready( function( $ ) {
-
-			// Add the `.checked` class to whichever radio is checked.
-			$( '.hybrid-term-layout-wrap input:checked' ).addClass( 'checked' );
-
-			// When a radio is clicked.
-			$( ".hybrid-term-layout-wrap input" ).click( function() {
-
-				// If the radio has the `.checked` class, remove it and uncheck the radio.
-				if ( $( this ).hasClass( 'checked' ) ) {
-
-					$( ".hybrid-term-layout-wrap input" ).removeClass( 'checked' );
-					$( this ).prop( 'checked', false );
-
-				// If the radio is not checked, add the `.checked` class and check it.
-				} else {
-
-					$( ".hybrid-term-layout-wrap input" ).removeClass( 'checked' );
-					$( this ).addClass( 'checked' );
-				}
-			} );
-		} );
-		</script>
-	<?php }
+		// Output the layout field.
+		hybrid_form_field_layout(
+			array(
+				'layouts'    => $layouts,
+				'selected'   => $term_layout ? $term_layout : 'default',
+				'field_name' => 'hybrid-term-layout'
+			)
+		);
+	}
 
 	/**
 	 * Saves the term meta.
 	 *
-	 * @since  3.1.0
+	 * @since  4.0.0
 	 * @access public
 	 * @param  int     $term_id
 	 * @return void
 	 */
 	public function save( $term_id ) {
 
-		if ( ! isset( $_POST['hybrid_term_layout_nonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['hybrid_term_layout_nonce'] ), basename( __FILE__ ) ) )
+		if ( ! hybrid_verify_nonce_post( basename( __FILE__ ), 'hybrid_term_layout_nonce' ) )
 			return;
 
 		$old_layout = hybrid_get_term_layout( $term_id );

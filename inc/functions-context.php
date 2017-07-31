@@ -4,9 +4,9 @@
  *
  * @package    HybridCore
  * @subpackage Includes
- * @author     Justin Tadlock <justin@justintadlock.com>
- * @copyright  Copyright (c) 2008 - 2015, Justin Tadlock
- * @link       http://themehybrid.com/hybrid-core
+ * @author     Justin Tadlock <justintadlock@gmail.com>
+ * @copyright  Copyright (c) 2008 - 2017, Justin Tadlock
+ * @link       https://themehybrid.com/hybrid-core
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
@@ -209,8 +209,7 @@ function hybrid_body_class_filter( $classes, $class ) {
 		// Checks for custom template.
 		$template = str_replace( array ( "{$post->post_type}-template-", "{$post->post_type}-" ), '', basename( hybrid_get_post_template( $post->ID ), '.php' ) );
 
-		if ( $template )
-			$classes[] = "{$post->post_type}-template-{$template}";
+		$classes[] = $template ? "{$post->post_type}-template-{$template}" : "{$post->post_type}-template-default";
 
 		// Post format.
 		if ( current_theme_supports( 'post-formats' ) && post_type_supports( $post->post_type, 'post-formats' ) ) {
@@ -223,6 +222,18 @@ function hybrid_body_class_filter( $classes, $class ) {
 			foreach ( explode( '/', get_post_mime_type() ) as $type )
 				$classes[] = "attachment-{$type}";
 		}
+	}
+
+	// Term template class.
+	if ( is_tax() || is_category() || is_tag() ) {
+
+		// Get the queried post object.
+		$term = get_queried_object();
+
+		// Checks for custom template.
+		$template = str_replace( array ( "{$term->taxonomy}-template-", "{$term->taxonomy}-" ), '', basename( hybrid_get_term_template( $term->term_id ), '.php' ) );
+
+		$classes[] = $template ? "{$term->taxonomy}-template-{$template}" : "{$term->taxonomy}-template-default";
 	}
 
 	// Paged views.
