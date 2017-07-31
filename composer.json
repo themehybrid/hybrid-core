@@ -2,7 +2,7 @@
 	"name"       : "justintadlock/hybrid-core",
 	"description": "Hybrid Core WordPress theme framework",
 	"keywords"   : ["wordpress"],
-	"homepage"   : "http://themehybrid.com/hybrid-core",
+	"homepage"   : "https://themehybrid.com/hybrid-core",
 	"license"    : "GPL-2.0+",
 	"authors"    : [
 		{
@@ -13,7 +13,7 @@
 	],
 	"support"    : {
 		"issues": "https://github.com/justintadlock/hybrid-core/issues",
-		"forum" : "http://themehybrid.com/support/forum/hybrid-core"
+		"forum" : "https://themehybrid.com/board/forums/hybrid-core"
 	},
 	"autoload"   : {
 		"classmap": ["hybrid.php"]
