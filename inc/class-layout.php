@@ -1,14 +1,13 @@
 <?php
 /**
- * Layout class.  This class is for creating new layout objects.  Layout registration is handled via
- * the `Hybrid_Layout_Factory` class in `inc/class-layout-factory.php`.  Theme authors should utilize
- * the API functions in `inc/layouts.php`.
+ * Layout class.  This class is for creating new layout objects.  Theme authors should utilize
+ * the API functions in `inc/functions-layouts.php`.
  *
  * @package    HybridCore
  * @subpackage Includes
- * @author     Justin Tadlock <justin@justintadlock.com>
- * @copyright  Copyright (c) 2008 - 2015, Justin Tadlock
- * @link       http://themehybrid.com/hybrid-core
+ * @author     Justin Tadlock <justintadlock@gmail.com>
+ * @copyright  Copyright (c) 2008 - 2017, Justin Tadlock
+ * @link       https://themehybrid.com/hybrid-core
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
@@ -21,56 +20,96 @@
 class Hybrid_Layout {
 
 	/**
-	 * Arguments for creating the layout object.
+	 * Whether to show as an option in the customizer.
 	 *
-	 * @since  3.0.0
-	 * @access protected
-	 * @var    array
+	 * @since  4.0.0
+	 * @access public
+	 * @var    bool
 	 */
-	protected $args = array();
+	public $is_global_layout = true;
+
+	/**
+	 * Whether to show as an option in the post meta box.
+	 *
+	 * @since  4.0.0
+	 * @access public
+	 * @var    bool
+	 */
+	public $is_post_layout = true;
+
+	/**
+	 * Whether to show as an option on taxonomy term pages.
+	 *
+	 * @since  4.0.0
+	 * @access public
+	 * @var    bool
+	 */
+	public $is_term_layout = true;
+
+	/**
+	 * Whether to show as an option in user profile (not implemented).
+	 *
+	 * @since  4.0.0
+	 * @access public
+	 * @var    bool
+	 */
+	public $is_user_layout = true;
+
+	/**
+	 * Internationalized text label.
+	 *
+	 * @since  4.0.0
+	 * @access public
+	 * @var    bool
+	 */
+	public $label = '';
+
+	/**
+	 * Image URL of the layout design.
+	 *
+	 * @since  4.0.0
+	 * @access public
+	 * @var    bool
+	 */
+	public $image = '';
+
+	/**
+	 * Array of post types layout works with.
+	 *
+	 * @since  4.0.0
+	 * @access public
+	 * @var    bool
+	 */
+	public $post_types = array();
+
+	/**
+	 * Array of taxonomies layout works with.
+	 *
+	 * @since  4.0.0
+	 * @access public
+	 * @var    bool
+	 */
+	public $taxonomies = array();
+
+	/**
+	 * Internal use only! Whether the layout is built in.
+	 *
+	 * @since  4.0.0
+	 * @access public
+	 * @var    bool
+	 */
+	public $_builtin = false;
+
+	/**
+	 * Internal use only! Whether the layout is internal (cannot be unregistered).
+	 *
+	 * @since  4.0.0
+	 * @access public
+	 * @var    bool
+	 */
+	public $_internal = false;
 
 	/* ====== Magic Methods ====== */
-
-	/**
-	 * Magic method for getting layout object properties.
-	 *
-	 * @since  3.0.0
-	 * @access public
-	 * @param  string  $property
-	 * @return mixed
-	 */
-	public function __get( $property ) {
-
-		return isset( $this->$property ) ? $this->args[ $property ] : null;
-	}
-
-	/**
-	 * Magic method for setting layout object properties.
-	 *
-	 * @since  3.0.0
-	 * @access public
-	 * @param  string  $property
-	 * @param  mixed   $value
-	 * @return void
-	 */
-	public function __set( $property, $value ) {
-
-		if ( isset( $this->$property ) )
-			$this->args[ $property ] = $value;
-	}
-
-	/**
-	 * Magic method for checking if a layout property is set.
-	 *
-	 * @since  3.0.0
-	 * @access public
-	 * @param  string  $property
-	 * @return bool
-	 */
-	public function __isset( $property ) {
-
-		return isset( $this->args[ $property ] );
-	}
 
 	/**
 	 * Don't allow properties to be unset.
@@ -91,6 +130,7 @@ class Hybrid_Layout {
 	 * @return string
 	 */
 	public function __toString() {
+
 		return $this->name;
 	}
 
@@ -113,22 +153,13 @@ class Hybrid_Layout {
 	 */
 	public function __construct( $name, $args = array() ) {
 
-		$name = sanitize_key( $name );
+		foreach ( array_keys( get_object_vars( $this ) ) as $key ) {
 
-		$defaults = array(
-			'is_global_layout' => true,    // Whether to show as an option in the customizer.
-			'is_post_layout'   => true,    // Whether to show as an option in the meta box.
-			'is_user_layout'   => true,    // Whether to show as an option in user profile (not implemented).
-			'label'            => $name,   // Internationalized text label.
-			'image'            => '',      // Image URL of the layout design.
-			'post_types'       => array(), // Array of post types layout works with.
-			'_builtin'         => false,   // Internal use only! Whether the layout is built in.
-			'_internal'        => false,   // Internal use only! Whether the layout is internal (cannot be unregistered).
-		);
+			if ( isset( $args[ $key ] ) )
+				$this->$key = $args[ $key ];
+		}
 
-		$this->args = wp_parse_args( $args, $defaults );
-
-		$this->args['name'] = $name;
+		$this->name = sanitize_key( $name );
 
 		$this->add_post_type_support();
 	}

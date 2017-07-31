@@ -6,9 +6,9 @@
  * @package    Hybrid
  * @subpackage Includes
  * @author     David Chandra <david.warna@gmail.com>
- * @author     Justin Tadlock <justin@justintadlock.com>
- * @copyright  Copyright (c) 2008 - 2015, Justin Tadlock
- * @link       http://themehybrid.com/hybrid-core
+ * @author     Justin Tadlock <justintadlock@gmail.com>
+ * @copyright  Copyright (c) 2008 - 2017, Justin Tadlock
+ * @link       https://themehybrid.com/hybrid-core
  * @link       http://justintadlock.com/archives/2012/08/21/post-formats-chat
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
@@ -197,6 +197,7 @@ class Hybrid_Chat {
 	 * @return string
 	 */
 	public function format_chat_text( $text ) {
+
 		return trim( str_replace( array( "\r", "\n", "\t" ), '', $text ) );
 	}
 }

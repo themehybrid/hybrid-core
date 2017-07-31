@@ -5,86 +5,11 @@
  *
  * @package    HybridCore
  * @subpackage Includes
- * @author     Justin Tadlock <justin@justintadlock.com>
- * @copyright  Copyright (c) 2008 - 2015, Justin Tadlock
- * @link       http://themehybrid.com/hybrid-core
+ * @author     Justin Tadlock <justintadlock@gmail.com>
+ * @copyright  Copyright (c) 2008 - 2017, Justin Tadlock
+ * @link       https://themehybrid.com/hybrid-core
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
-
-/**
- * Gets a post template.
- *
- * @since  3.0.0
- * @access public
- * @param  int     $post_id
- * @return bool
- */
-function hybrid_get_post_template( $post_id ) {
-	return get_post_meta( $post_id, hybrid_get_post_template_meta_key( $post_id ), true );
-}
-
-/**
- * Sets a post template.
- *
- * @since  3.0.0
- * @access public
- * @param  int     $post_id
- * @param  string  $template
- * @return bool
- */
-function hybrid_set_post_template( $post_id, $template ) {
-	return update_post_meta( $post_id, hybrid_get_post_template_meta_key( $post_id ), $template );
-}
-
-/**
- * Deletes a post template.
- *
- * @since  3.0.0
- * @access public
- * @param  int     $post_id
- * @return bool
- */
-function hybrid_delete_post_template( $post_id ) {
-	return delete_post_meta( $post_id, hybrid_get_post_template_meta_key( $post_id ) );
-}
-
-/**
- * Checks if a post of any post type has a custom template.  This is the equivalent of WordPress'
- * `is_page_template()` function with the exception that it works for all post types.
- *
- * @since  1.2.0
- * @access public
- * @param  string  $template  The name of the template to check for.
- * @param  int     $post_id
- * @return bool
- */
-function hybrid_has_post_template( $template = '', $post_id = '' ) {
-
-	if ( ! $post_id )
-		$post_id = get_the_ID();
-
-	// Get the post template, which is saved as metadata.
-	$post_template = hybrid_get_post_template( $post_id );
-
-	// If a specific template was input, check that the post template matches.
-	if ( $template && $template === $post_template )
-		return true;
-
-	// Return whether we have a post template.
-	return !empty( $post_template );
-}
-
-/**
- * Returns the post template meta key.
- *
- * @since  3.0.0
- * @access public
- * @param  int     $post_id
- * @return string
- */
-function hybrid_get_post_template_meta_key( $post_id ) {
-	return sprintf( '_wp_%s_template', get_post_type( $post_id ) );
-}
 
 /**
  * Checks if a post has any content. Useful if you need to check if the user has written any content
@@ -97,6 +22,7 @@ function hybrid_get_post_template_meta_key( $post_id ) {
  */
 function hybrid_post_has_content( $post_id = 0 ) {
 	$post = get_post( $post_id );
+
 	return ! empty( $post->post_content );
 }
 
@@ -108,6 +34,7 @@ function hybrid_post_has_content( $post_id = 0 ) {
  * @return void
  */
 function hybrid_post_format_link() {
+
 	echo hybrid_get_post_format_link();
 }
 
@@ -136,6 +63,7 @@ function hybrid_get_post_format_link() {
  * @return void
  */
 function hybrid_post_author( $args = array() ) {
+
 	echo hybrid_get_post_author( $args );
 }
 
@@ -187,6 +115,7 @@ function hybrid_get_post_author( $args = array() ) {
  * @return void
  */
 function hybrid_post_terms( $args = array() ) {
+
 	echo hybrid_get_post_terms( $args );
 }
 

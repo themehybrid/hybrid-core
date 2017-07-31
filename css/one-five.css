@@ -313,7 +313,6 @@ video,
 object,
 embed,
 iframe {
-	max-width:     100%;
 	margin-bottom: 1.5rem;
 }
 
@@ -322,7 +321,6 @@ iframe {
 audio,
 video {
 	display:   block;
-	max-width: 100%;
 }
 
 .show-if-js { display: none; }

@@ -11,26 +11,11 @@
  *
  * @package    Hybrid
  * @subpackage Includes
- * @author     Justin Tadlock <justin@justintadlock.com>
- * @copyright  Copyright (c) 2008 - 2015, Justin Tadlock
- * @link       http://themehybrid.com/hybrid-core
+ * @author     Justin Tadlock <justintadlock@gmail.com>
+ * @copyright  Copyright (c) 2008 - 2017, Justin Tadlock
+ * @link       https://themehybrid.com/hybrid-core
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
-
-/**
- * Wrapper function for the Hybrid_Media_Grabber class.  Returns the HTML output for the found media.
- *
- * @since  1.6.0
- * @access public
- * @param  array
- * @return string
- */
-function hybrid_media_grabber( $args = array() ) {
-
-	$media = new Hybrid_Media_Grabber( $args );
-
-	return $media->get_media();
-}
 
 /**
  * Grabs media related to the post.
@@ -91,6 +76,18 @@ class Hybrid_Media_Grabber {
 	 *
 	 * @since  1.6.0
 	 * @access public
+	 * @param  array  $args  {
+	 *     @type int     $post_id      Post ID (assumes within The Loop by default)
+	 *     @type string  $type         audio | video | gallery
+	 *     @type string  $before       HTML before the output
+	 *     @type string  $after        HTML after the output
+	 *     @type bool    $split_media  Whether to split the media from the post content
+	 *     @type int     $width        Custom width. Defaults to the theme's content width.
+	 *     @type bool    $shortcodes   True | False | Array of specific shortcode handles to look for.
+	 *     @type bool    $autoembeds   Whether to check for autoembeds.
+	 *     @type bool    $embedded     Whether to check for HTML-embedded media.
+	 *     @type bool    $attached     Whether to check for attached media.
+	 * }
 	 * @global object $wp_embed
 	 * @global int    $content_width
 	 * @return void
@@ -107,12 +104,16 @@ class Hybrid_Media_Grabber {
 
 		// Set up the default arguments.
 		$defaults = array(
-			'post_id'     => get_the_ID(),   // post ID (assumes within The Loop by default)
-			'type'        => 'video',        // audio|video
-			'before'      => '',             // HTML before the output
-			'after'       => '',             // HTML after the output
-			'split_media' => false,          // Splits the media from the post content
-			'width'       => $content_width, // Custom width. Defaults to the theme's content width.
+			'post_id'     => get_the_ID(),
+			'type'        => 'video',
+			'before'      => '',
+			'after'       => '',
+			'split_media' => false,
+			'width'       => $content_width,
+			'shortcodes'  => true,
+			'autoembeds'  => true,
+			'embedded'    => true,
+			'attached'    => true,
 		);
 
 		// Set the object properties.
@@ -132,6 +133,7 @@ class Hybrid_Media_Grabber {
 	 * @return void
 	 */
 	public function __destruct() {
+
 		remove_filter( 'embed_maybe_make_link', '__return_false' );
 		remove_filter( 'the_content', array( $this, 'split_media' ), 5 );
 	}
@@ -145,6 +147,7 @@ class Hybrid_Media_Grabber {
 	 * @return string
 	 */
 	public function get_media() {
+
 		return apply_filters( 'hybrid_media_grabber_media', $this->media, $this );
 	}
 
@@ -162,19 +165,19 @@ class Hybrid_Media_Grabber {
 			$this->do_attachment_media();
 
 		// Find media in the post content based on WordPress' media-related shortcodes.
-		if ( ! $this->media )
+		if ( ! $this->media && $this->args['shortcodes'] )
 			$this->do_shortcode_media();
 
 		// If no media is found and autoembeds are enabled, check for autoembeds.
-		if ( ! $this->media && get_option( 'embed_autourls' ) )
+		if ( ! $this->media && get_option( 'embed_autourls' ) && $this->args['autoembeds'] )
 			$this->do_autoembed_media();
 
 		// If no media is found, check for media HTML within the post content.
-		if ( ! $this->media )
+		if ( ! $this->media && $this->args['embedded'] )
 			$this->do_embedded_media();
 
 		// If no media is found, check for media attached to the post.
-		if ( ! $this->media )
+		if ( ! $this->media && $this->args['attached'] )
 			$this->do_attached_media();
 
 		// If media is found, let's run a few things.
@@ -208,8 +211,22 @@ class Hybrid_Media_Grabber {
 
 			foreach ( $matches as $shortcode ) {
 
+				// Only check for specific shortcodes.
+				if ( is_array( $this->args['shortcodes'] ) ) {
+
+					// Call the method related to the specific shortcode found and break out of the loop.
+					if ( in_array( $shortcode[2], $this->args['shortcodes'] ) && in_array( $shortcode[2], array( 'playlist', 'embed', $this->type ) ) ) {
+						call_user_func( array( $this, "do_{$shortcode[2]}_shortcode_media" ), $shortcode );
+						break;
+
+					} else if ( in_array( $shortcode[2], $this->args['shortcodes'] ) ) {
+						call_user_func( array( $this, '_do_shortcode_media' ), $shortcode );
+						break;
+					}
+				}
+
 				// Call the method related to the specific shortcode found and break out of the loop.
-				if ( in_array( $shortcode[2], array( 'playlist', 'embed', $this->type ) ) ) {
+				else if ( in_array( $shortcode[2], array( 'playlist', 'embed', $this->type ) ) ) {
 					call_user_func( array( $this, "do_{$shortcode[2]}_shortcode_media" ), $shortcode );
 					break;
 				}
@@ -224,18 +241,32 @@ class Hybrid_Media_Grabber {
 	}
 
 	/**
+	 * Method for handling shortcodes.
+	 *
+	 * @since  4.0.0
+	 * @access public
+	 * @param  array  $shortcode
+	 * @return void
+	 */
+	public function _do_shortcode_media( $shortcode ) {
+
+		$this->original_media = array_shift( $shortcode );
+
+		$this->media = do_shortcode( $this->original_media );
+	}
+
+	/**
 	 * Handles the output of the WordPress playlist feature.  This searches for the [playlist] shortcode
 	 * if it's used in the content.
 	 *
 	 * @since  2.0.0
 	 * @access public
+	 * @param  array  $shortcode
 	 * @return void
 	 */
 	public function do_playlist_shortcode_media( $shortcode ) {
 
-		$this->original_media = array_shift( $shortcode );
-
-		$this->media = do_shortcode( $this->original_media );
+		$this->_do_shortcode_media( $shortcode );
 	}
 
 	/**
@@ -266,9 +297,7 @@ class Hybrid_Media_Grabber {
 	 */
 	public function do_audio_shortcode_media( $shortcode ) {
 
-		$this->original_media = array_shift( $shortcode );
-
-		$this->media = do_shortcode( $this->original_media );
+		$this->_do_shortcode_media( $shortcode );
 	}
 
 	/**
@@ -297,9 +326,7 @@ class Hybrid_Media_Grabber {
 	 */
 	public function do_jetpack_shortcode_media( $shortcode ) {
 
-		$this->original_media = array_shift( $shortcode );
-
-		$this->media = do_shortcode( $this->original_media );
+		$this->_do_shortcode_media( $shortcode );
 	}
 
 	/**
@@ -312,9 +339,7 @@ class Hybrid_Media_Grabber {
 	 */
 	public function do_gallery_shortcode_media( $shortcode ) {
 
-		$this->original_media = array_shift( $shortcode );
-
-		$this->media = do_shortcode( $this->original_media );
+		$this->_do_shortcode_media( $shortcode );
 	}
 
 	/**
@@ -425,7 +450,13 @@ class Hybrid_Media_Grabber {
 	 */
 	public function split_media( $content ) {
 
-		return get_the_ID() === $this->args['post_id'] ? str_replace( $this->original_media, '', $content ) : $content;
+		if ( get_the_ID() === (int) $this->args['post_id'] ) {
+
+			$content = str_replace( $this->original_media, '', $content );
+			$content = wp_kses_post( $content );
+		}
+
+		return $content;
 	}
 
 	/**

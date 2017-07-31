@@ -6,9 +6,9 @@
  *
  * @package    Hybrid
  * @subpackage Customize
- * @author     Justin Tadlock <justin@justintadlock.com>
- * @copyright  Copyright (c) 2008 - 2015, Justin Tadlock
- * @link       http://themehybrid.com/hybrid-core
+ * @author     Justin Tadlock <justintadlock@gmail.com>
+ * @copyright  Copyright (c) 2008 - 2017, Justin Tadlock
+ * @link       https://themehybrid.com/hybrid-core
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
@@ -51,7 +51,7 @@ class Hybrid_Customize_Control_Layout extends Hybrid_Customize_Control_Radio_Ima
 
 				$args['choices'][ $layout->name ] = array(
 					'label' => $layout->label,
-					'url'   => sprintf( $layout->image, get_template_directory_uri(), get_stylesheet_directory_uri() )
+					'url'   => hybrid_sprintf_theme_uri( $layout->image )
 				);
 			}
 		}

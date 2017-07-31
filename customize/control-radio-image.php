@@ -11,9 +11,9 @@
  *
  * @package    Hybrid
  * @subpackage Customize
- * @author     Justin Tadlock <justin@justintadlock.com>
- * @copyright  Copyright (c) 2008 - 2015, Justin Tadlock
- * @link       http://themehybrid.com/hybrid-core
+ * @author     Justin Tadlock <justintadlock@gmail.com>
+ * @copyright  Copyright (c) 2008 - 2017, Justin Tadlock
+ * @link       https://themehybrid.com/hybrid-core
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
@@ -58,13 +58,22 @@ class Hybrid_Customize_Control_Radio_Image extends WP_Customize_Control {
 
 		// We need to make sure we have the correct image URL.
 		foreach ( $this->choices as $value => $args )
-			$this->choices[ $value ]['url'] = esc_url( sprintf( $args['url'], get_template_directory_uri(), get_stylesheet_directory_uri() ) );
+			$this->choices[ $value ]['url'] = esc_url( hybrid_sprintf_theme_uri( $args['url'] ) );
 
 		$this->json['choices'] = $this->choices;
 		$this->json['link']    = $this->get_link();
 		$this->json['value']   = $this->value();
 		$this->json['id']      = $this->id;
 	}
+
+	/**
+	 * Don't render the content via PHP.  This control is handled with a JS template.
+	 *
+	 * @since  4.0.0
+	 * @access public
+	 * @return bool
+	 */
+	protected function render_content() {}
 
 	/**
 	 * Underscore JS template to handle the control's output.
