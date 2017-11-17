@@ -70,7 +70,7 @@ function hybrid_get_attr( $slug, $context = '', $attr = array() ) {
 		// hooks. This should only be used for custom attributes.
 		if ( 'class' === $name && has_filter( "hybrid_attr_{$slug}_class" ) ) {
 
-			$value = join( ' ', apply_filters( "hybrid_attr_{$slug}_class", explode( ' ', $value ) ) );
+			$value = join( ' ', apply_filters( "hybrid_attr_{$slug}_class", explode( ' ', $value ), $context ) );
 		}
 
 		$out .= false !== $value ? sprintf( ' %s="%s"', esc_html( $name ), esc_attr( $value ) ) : esc_html( " {$name}" );
