@@ -190,7 +190,7 @@ class Breadcrumb_Trail {
 				++$item_position;
 
 				// Check if the item is linked.
-				preg_match( '/(<a.*?>)(.*?)(<\/a>)/i', $item, $matches );
+				preg_match( '/(<a.*?>)(.*)(<\/a>)/i', $item, $matches );
 
 				// Wrap the item text with appropriate itemprop.
 				$item = !empty( $matches ) ? sprintf( '%s<span itemprop="name">%s</span>%s', $matches[1], $matches[2], $matches[3] ) : sprintf( '<span itemprop="name">%s</span>', $item );
