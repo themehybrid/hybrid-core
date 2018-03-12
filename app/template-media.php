@@ -111,7 +111,8 @@ function hybrid_get_media_meta( $property, $args = array() ) {
  */
 function hybrid_media_metadata_registry() {
 
-	return hybrid_registry( 'media_metadata' );
+	return \Hybrid\app()->get( 'media_meta' );
+	//return hybrid_registry( 'media_metadata' );
 }
 
 /**
@@ -125,10 +126,17 @@ function hybrid_media_metadata_registry() {
  */
 function hybrid_get_media_metadata( $post_id ) {
 
-	if ( ! hybrid_media_metadata_registry()->exists( $post_id ) )
-		hybrid_media_metadata_registry()->register( $post_id, new Hybrid_Media_Meta( $post_id ) );
+	if ( ! hybrid_media_metadata_registry()->has( $post_id ) ) {
+
+		hybrid_media_metadata_registry()->add( $post_id, new Hybrid_Media_Meta( $post_id ) );
+	}
 
 	return hybrid_media_metadata_registry()->get( $post_id );
+
+	//if ( ! hybrid_media_metadata_registry()->exists( $post_id ) )
+		//hybrid_media_metadata_registry()->register( $post_id, new Hybrid_Media_Meta( $post_id ) );
+
+	//return hybrid_media_metadata_registry()->get( $post_id );
 }
 
 /**

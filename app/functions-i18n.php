@@ -41,8 +41,8 @@ function hybrid_load_locale_functions() {
 	$locale = strtolower( str_replace( '_', '-', get_locale() ) );
 
 	// Define locale functions files.
-	$child_func = hybrid()->child_dir  . hybrid_get_child_domain_path()  . "/{$locale}.php";
-	$theme_func = hybrid()->parent_dir . hybrid_get_parent_domain_path() . "/{$locale}.php";
+	$child_func = \Hybrid\app()->child_dir  . hybrid_get_child_domain_path()  . "/{$locale}.php";
+	$theme_func = \Hybrid\app()->parent_dir . hybrid_get_parent_domain_path() . "/{$locale}.php";
 
 	// If file exists in child theme.
 	if ( is_child_theme() && file_exists( $child_func ) )
@@ -66,11 +66,11 @@ function hybrid_load_locale_functions() {
 function hybrid_load_textdomains() {
 
 	// Load theme textdomain.
-	load_theme_textdomain( hybrid_get_parent_textdomain(), hybrid()->parent_dir . hybrid_get_parent_domain_path() );
+	load_theme_textdomain( hybrid_get_parent_textdomain(), \Hybrid\app()->parent_dir . hybrid_get_parent_domain_path() );
 
 	// Load child theme textdomain.
 	if ( is_child_theme() )
-		load_child_theme_textdomain( hybrid_get_child_textdomain(), hybrid()->child_dir . hybrid_get_child_domain_path() );
+		load_child_theme_textdomain( hybrid_get_child_textdomain(), \Hybrid\app()->child_dir . hybrid_get_child_domain_path() );
 
 	// Load the framework textdomain.
 	hybrid_load_framework_textdomain();
@@ -138,17 +138,17 @@ function hybrid_load_framework_textdomain( $domain = 'hybrid-core' ) {
 function hybrid_get_parent_textdomain() {
 
 	// If the global textdomain isn't set, define it. Plugin/theme authors may also define a custom textdomain.
-	if ( ! hybrid()->parent_textdomain ) {
+	if ( ! \Hybrid\app()->parent_textdomain ) {
 
 		$theme = wp_get_theme( get_template() );
 
 		$textdomain = $theme->get( 'TextDomain' ) ? $theme->get( 'TextDomain' ) : get_template();
 
-		hybrid()->parent_textdomain = sanitize_key( apply_filters( 'hybrid_parent_textdomain', $textdomain ) );
+		\Hybrid\app()->parent_textdomain = sanitize_key( apply_filters( 'hybrid_parent_textdomain', $textdomain ) );
 	}
 
 	// Return the expected textdomain of the parent theme.
-	return hybrid()->parent_textdomain;
+	return \Hybrid\app()->parent_textdomain;
 }
 
 /**
@@ -169,17 +169,17 @@ function hybrid_get_child_textdomain() {
 		return '';
 
 	// If the global textdomain isn't set, define it. Plugin/theme authors may also define a custom textdomain.
-	if ( ! hybrid()->child_textdomain ) {
+	if ( ! \Hybrid\app()->child_textdomain ) {
 
 		$theme = wp_get_theme();
 
 		$textdomain = $theme->get( 'TextDomain' ) ? $theme->get( 'TextDomain' ) : get_stylesheet();
 
-		hybrid()->child_textdomain = sanitize_key( apply_filters( 'hybrid_child_textdomain', $textdomain ) );
+		\Hybrid\app()->child_textdomain = sanitize_key( apply_filters( 'hybrid_child_textdomain', $textdomain ) );
 	}
 
 	// Return the expected textdomain of the child theme. */
-	return hybrid()->child_textdomain;
+	return \Hybrid\app()->child_textdomain;
 }
 
 /**
@@ -233,7 +233,7 @@ function hybrid_load_textdomain_mofile( $mofile, $domain ) {
 
 		// Get just the theme path and file name for the mofile.
 		$mofile_short = str_replace( "{$locale}.mo", "{$domain}-{$locale}.mo", $mofile );
-		$mofile_short = str_replace( array( hybrid()->parent_dir, hybrid()->child_dir ), '', $mofile_short );
+		$mofile_short = str_replace( array( \Hybrid\app()->parent_dir, \Hybrid\app()->child_dir ), '', $mofile_short );
 
 		// Attempt to find the correct mofile.
 		$locate_mofile = locate_template( array( $mofile_short ) );

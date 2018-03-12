@@ -110,7 +110,7 @@ function hybrid_get_comment_parent_link( $args = array() ) {
  * the `$comment_type`. The comment template hierarchy is `comment-$comment_type.php`,
  * `comment.php`.
  *
- * The templates are saved in `hybrid()->comment_templates[ $comment_type ]`, so each comment template
+ * The templates are saved in `\Hybrid\app()->comment_templates[ $comment_type ]`, so each comment template
  * is only located once if it is needed. Following comments will use the saved template.
  *
  * @since  0.2.3
@@ -124,7 +124,7 @@ function hybrid_comments_callback( $comment ) {
 	$comment_type = get_comment_type( $comment->comment_ID );
 
 	// Check if a template has been provided for the specific comment type.  If not, get the template.
-	if ( ! isset( hybrid()->comment_templates[ $comment_type ] ) ) {
+	if ( ! isset( \Hybrid\app()->comment_templates[ $comment_type ] ) ) {
 
 		// Create an array of template files to look for.
 		$templates = array( "comment-{$comment_type}.php", "comment/{$comment_type}.php" );
@@ -146,12 +146,12 @@ function hybrid_comments_callback( $comment ) {
 		$template = locate_template( $templates );
 
 		// Set the template in the comment templates array.
-		hybrid()->comment_templates[ $comment_type ] = $template;
+		\Hybrid\app()->comment_templates[ $comment_type ] = $template;
 	}
 
 	// If a template was found, load the template.
-	if ( ! empty( hybrid()->comment_templates[ $comment_type ] ) )
-		require( hybrid()->comment_templates[ $comment_type ] );
+	if ( ! empty( \Hybrid\app()->comment_templates[ $comment_type ] ) )
+		require( \Hybrid\app()->comment_templates[ $comment_type ] );
 }
 
 /**
@@ -183,7 +183,7 @@ function hybrid_comments_template( $template ) {
 	$templates = array();
 
 	// Allow for custom templates entered into comments_template( $file ).
-	$template = str_replace( hybrid()->child_dir, '', $template );
+	$template = str_replace( \Hybrid\app()->child_dir, '', $template );
 
 	if ( 'comments.php' !== $template )
 		$templates[] = $template;

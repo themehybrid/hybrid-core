@@ -31,7 +31,8 @@ add_filter( 'hybrid_get_theme_layout', 'hybrid_filter_layout', 5 );
  */
 function hybrid_layout_registry() {
 
-	return hybrid_registry( 'layout' );
+	return \Hybrid\app()->get( 'layouts' );
+	//return hybrid_registry( 'layout' );
 }
 
 /**
@@ -69,7 +70,8 @@ function hybrid_register_layouts() {
  */
 function hybrid_register_layout( $name, $args = array() ) {
 
-	hybrid_layout_registry()->register( $name, new Hybrid_Layout( $name, $args ) );
+	\Hybrid\app()->get( 'layouts' )->add( $name, new Hybrid_Layout( $name, $args ) );
+	//hybrid_layout_registry()->register( $name, new Hybrid_Layout( $name, $args ) );
 }
 
 /**
@@ -82,7 +84,8 @@ function hybrid_register_layout( $name, $args = array() ) {
  */
 function hybrid_unregister_layout( $name ) {
 
-	hybrid_layout_registry()->unregister( $name );
+	\Hybrid\app()->get( 'layouts' )->remove( $name );
+	//hybrid_layout_registry()->unregister( $name );
 }
 
 /**
@@ -95,7 +98,8 @@ function hybrid_unregister_layout( $name ) {
  */
 function hybrid_layout_exists( $name ) {
 
-	return hybrid_layout_registry()->exists( $name );
+	return \Hybrid\app()->get( 'layouts' )->has( $name );
+	//return hybrid_layout_registry()->exists( $name );
 }
 
 /**
@@ -107,7 +111,8 @@ function hybrid_layout_exists( $name ) {
  */
 function hybrid_get_layouts() {
 
-	return hybrid_layout_registry()->get_collection();
+	return \Hybrid\app()->get( 'layouts' )->get_items();
+	//return hybrid_layout_registry()->get_collection();
 }
 
 /**
@@ -121,7 +126,8 @@ function hybrid_get_layouts() {
  */
 function hybrid_get_layout( $name ) {
 
-	return hybrid_layout_registry()->get_layout( $name );
+	return \Hybrid\app()->get( 'layouts' )->get( $name );
+	//return hybrid_layout_registry()->get_layout( $name );
 }
 
 /**

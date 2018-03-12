@@ -25,7 +25,8 @@ add_action( 'init', 'hybrid_register_templates', 95 );
  */
 function hybrid_template_registry() {
 
-	return hybrid_registry( 'template' );
+	return \Hybrid\app()->get( 'templates' );
+	//return hybrid_registry( 'template' );
 }
 
 /**
@@ -53,7 +54,8 @@ function hybrid_register_templates() {
  */
 function hybrid_register_template( $name, $args = array() ) {
 
-	hybrid_template_registry()->register( $name, new Hybrid_Template( $name, $args ) );
+	hybrid_template_registry()->add( $name, new Hybrid_Template( $name, $args ) );
+	//hybrid_template_registry()->register( $name, new Hybrid_Template( $name, $args ) );
 }
 
 /**
@@ -66,7 +68,8 @@ function hybrid_register_template( $name, $args = array() ) {
  */
 function hybrid_unregister_template( $name ) {
 
-	hybrid_template_registry()->unregister( $name );
+	hybrid_template_registry()->remove( $name );
+	//hybrid_template_registry()->unregister( $name );
 }
 
 /**
@@ -79,7 +82,8 @@ function hybrid_unregister_template( $name ) {
  */
 function hybrid_template_exists( $name ) {
 
-	return hybrid_template_registry()->exists( $name );
+	return hybrid_template_registry()->has( $name );
+	//return hybrid_template_registry()->exists( $name );
 }
 
 /**
@@ -91,7 +95,8 @@ function hybrid_template_exists( $name ) {
  */
 function hybrid_get_templates() {
 
-	return hybrid_template_registry()->get_collection();
+	return hybrid_template_registry()->get_items();
+	//return hybrid_template_registry()->get_collection();
 }
 
 /**

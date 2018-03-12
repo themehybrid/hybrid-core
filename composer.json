@@ -16,6 +16,9 @@
 		"forum" : "https://themehybrid.com/board/forums/hybrid-core"
 	},
 	"autoload"   : {
-		"classmap": ["hybrid.php"]
+		"files": ["hybrid.php"]
+	},
+	"require": {
+		"psr/container": "^1.0"
 	}
 }

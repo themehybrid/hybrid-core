@@ -87,14 +87,14 @@ function hybrid_locate_theme_file( $file_names ) {
 	foreach ( (array) $file_names as $file ) {
 
 		// If the file exists in the stylesheet (child theme) directory.
-		if ( is_child_theme() && file_exists( hybrid()->child_dir . $file ) ) {
-			$located = hybrid()->child_uri . $file;
+		if ( is_child_theme() && file_exists( \Hybrid\app()->child_dir . $file ) ) {
+			$located = \Hybrid\app()->child_uri . $file;
 			break;
 		}
 
 		// If the file exists in the template (parent theme) directory.
-		elseif ( file_exists( hybrid()->parent_dir . $file ) ) {
-			$located = hybrid()->parent_uri . $file;
+		elseif ( file_exists( \Hybrid\app()->parent_dir . $file ) ) {
+			$located = \Hybrid\app()->parent_uri . $file;
 			break;
 		}
 	}
