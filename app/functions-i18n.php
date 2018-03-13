@@ -13,17 +13,19 @@
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
+namespace Hybrid;
+
 # Load the locale functions file(s).
-add_action( 'after_setup_theme', 'hybrid_load_locale_functions', 0 );
+add_action( 'after_setup_theme', __NAMESPACE__ . '\load_locale_functions', 0 );
 
 # Load translations for theme, child theme, and framework.
-add_action( 'after_setup_theme', 'hybrid_load_textdomains', 5 );
+add_action( 'after_setup_theme', __NAMESPACE__ . '\load_textdomains', 5 );
 
 # Overrides the load textdomain function for the 'hybrid-core' domain.
-add_filter( 'override_load_textdomain', 'hybrid_override_load_textdomain', 5, 3 );
+add_filter( 'override_load_textdomain', __NAMESPACE__ . '\override_load_textdomain', 5, 3 );
 
 # Filter the textdomain mofile to allow child themes to load the parent theme translation.
-add_filter( 'load_textdomain_mofile', 'hybrid_load_textdomain_mofile', 10, 2 );
+add_filter( 'load_textdomain_mofile', __NAMESPACE__ . '\load_textdomain_mofile', 10, 2 );
 
 /**
  * Loads a `/languages/{$locale}.php` file for specific locales.  `$locale` should be an all lowercase
@@ -35,14 +37,14 @@ add_filter( 'load_textdomain_mofile', 'hybrid_load_textdomain_mofile', 10, 2 );
  * @access public
  * @return void
  */
-function hybrid_load_locale_functions() {
+function load_locale_functions() {
 
 	// Get the site's locale.
 	$locale = strtolower( str_replace( '_', '-', get_locale() ) );
 
 	// Define locale functions files.
-	$child_func = \Hybrid\app()->child_dir  . hybrid_get_child_domain_path()  . "/{$locale}.php";
-	$theme_func = \Hybrid\app()->parent_dir . hybrid_get_parent_domain_path() . "/{$locale}.php";
+	$child_func = app()->child_dir  . get_child_domain_path()  . "/{$locale}.php";
+	$theme_func = app()->parent_dir . get_parent_domain_path() . "/{$locale}.php";
 
 	// If file exists in child theme.
 	if ( is_child_theme() && file_exists( $child_func ) )
@@ -63,17 +65,17 @@ function hybrid_load_locale_functions() {
  * @access public
  * @return void
  */
-function hybrid_load_textdomains() {
+function load_textdomains() {
 
 	// Load theme textdomain.
-	load_theme_textdomain( hybrid_get_parent_textdomain(), \Hybrid\app()->parent_dir . hybrid_get_parent_domain_path() );
+	load_theme_textdomain( get_parent_textdomain(), app()->parent_dir . get_parent_domain_path() );
 
 	// Load child theme textdomain.
 	if ( is_child_theme() )
-		load_child_theme_textdomain( hybrid_get_child_textdomain(), \Hybrid\app()->child_dir . hybrid_get_child_domain_path() );
+		load_child_theme_textdomain( get_child_textdomain(), app()->child_dir . get_child_domain_path() );
 
 	// Load the framework textdomain.
-	hybrid_load_framework_textdomain();
+	load_framework_textdomain();
 }
 
 /**
@@ -90,14 +92,14 @@ function hybrid_load_textdomains() {
  * @param  string  $mofile
  * @return bool
  */
-function hybrid_override_load_textdomain( $override, $domain, $mofile ) {
+function override_load_textdomain( $override, $domain, $mofile ) {
 
 	// Check if the domain is one of our framework domains.
 	if ( 'hybrid-core' === $domain ) {
 		global $l10n;
 
 		// Get the theme's textdomain.
-		$theme_textdomain = hybrid_get_parent_textdomain();
+		$theme_textdomain = get_parent_textdomain();
 
 		// If the theme's textdomain is loaded, use its translations instead.
 		if ( $theme_textdomain && isset( $l10n[ $theme_textdomain ] ) )
@@ -119,7 +121,7 @@ function hybrid_override_load_textdomain( $override, $domain, $mofile ) {
  * @param  string $domain The name of the framework's textdomain.
  * @return bool           Whether the MO file was loaded.
  */
-function hybrid_load_framework_textdomain( $domain = 'hybrid-core' ) {
+function load_framework_textdomain( $domain = 'hybrid-core' ) {
 
 	return load_textdomain( $domain, '' );
 }
@@ -135,20 +137,20 @@ function hybrid_load_framework_textdomain( $domain = 'hybrid-core' ) {
  * @access public
  * @return string
  */
-function hybrid_get_parent_textdomain() {
+function get_parent_textdomain() {
 
 	// If the global textdomain isn't set, define it. Plugin/theme authors may also define a custom textdomain.
-	if ( ! \Hybrid\app()->parent_textdomain ) {
+	if ( ! app()->parent_textdomain ) {
 
-		$theme = wp_get_theme( get_template() );
+		$theme = wp_get_theme( \get_template() );
 
-		$textdomain = $theme->get( 'TextDomain' ) ? $theme->get( 'TextDomain' ) : get_template();
+		$textdomain = $theme->get( 'TextDomain' ) ? $theme->get( 'TextDomain' ) : \get_template();
 
-		\Hybrid\app()->parent_textdomain = sanitize_key( apply_filters( 'hybrid_parent_textdomain', $textdomain ) );
+		app()->parent_textdomain = sanitize_key( apply_filters( 'hybrid_parent_textdomain', $textdomain ) );
 	}
 
 	// Return the expected textdomain of the parent theme.
-	return \Hybrid\app()->parent_textdomain;
+	return app()->parent_textdomain;
 }
 
 /**
@@ -162,24 +164,24 @@ function hybrid_get_parent_textdomain() {
  * @access public
  * @return string
  */
-function hybrid_get_child_textdomain() {
+function get_child_textdomain() {
 
 	// If a child theme isn't active, return an empty string.
 	if ( ! is_child_theme() )
 		return '';
 
 	// If the global textdomain isn't set, define it. Plugin/theme authors may also define a custom textdomain.
-	if ( ! \Hybrid\app()->child_textdomain ) {
+	if ( ! app()->child_textdomain ) {
 
 		$theme = wp_get_theme();
 
-		$textdomain = $theme->get( 'TextDomain' ) ? $theme->get( 'TextDomain' ) : get_stylesheet();
+		$textdomain = $theme->get( 'TextDomain' ) ? $theme->get( 'TextDomain' ) : \get_stylesheet();
 
-		\Hybrid\app()->child_textdomain = sanitize_key( apply_filters( 'hybrid_child_textdomain', $textdomain ) );
+		app()->child_textdomain = sanitize_key( apply_filters( 'hybrid_child_textdomain', $textdomain ) );
 	}
 
 	// Return the expected textdomain of the child theme. */
-	return \Hybrid\app()->child_textdomain;
+	return app()->child_textdomain;
 }
 
 /**
@@ -189,8 +191,8 @@ function hybrid_get_child_textdomain() {
  * @access public
  * @return string
  */
-function hybrid_get_parent_domain_path() {
-	$theme = wp_get_theme( get_template() );
+function get_parent_domain_path() {
+	$theme = wp_get_theme( \get_template() );
 
 	return $theme->get( 'DomainPath' ) ? trim( $theme->get( 'DomainPath' ), '/' ) : 'languages';
 }
@@ -202,7 +204,7 @@ function hybrid_get_parent_domain_path() {
  * @access public
  * @return string
  */
-function hybrid_get_child_domain_path() {
+function get_child_domain_path() {
 
 	if ( ! is_child_theme() )
 		return '';
@@ -223,17 +225,17 @@ function hybrid_get_child_domain_path() {
  * @param  string $domain The textdomain currently being filtered.
  * @return string
  */
-function hybrid_load_textdomain_mofile( $mofile, $domain ) {
+function load_textdomain_mofile( $mofile, $domain ) {
 
 	// If the $domain is for the parent or child theme, search for a $domain-$locale.mo file.
-	if ( $domain == hybrid_get_parent_textdomain() || $domain == hybrid_get_child_textdomain() ) {
+	if ( $domain == get_parent_textdomain() || $domain == get_child_textdomain() ) {
 
 		// Get the locale.
 		$locale = get_locale();
 
 		// Get just the theme path and file name for the mofile.
 		$mofile_short = str_replace( "{$locale}.mo", "{$domain}-{$locale}.mo", $mofile );
-		$mofile_short = str_replace( array( \Hybrid\app()->parent_dir, \Hybrid\app()->child_dir ), '', $mofile_short );
+		$mofile_short = str_replace( array( app()->parent_dir, app()->child_dir ), '', $mofile_short );
 
 		// Attempt to find the correct mofile.
 		$locate_mofile = locate_template( array( $mofile_short ) );
@@ -254,7 +256,7 @@ function hybrid_load_textdomain_mofile( $mofile, $domain ) {
  * @param  string  $locale
  * @return string
  */
-function hybrid_get_language( $locale = '' ) {
+function get_language( $locale = '' ) {
 
 	if ( ! $locale )
 		$locale = get_locale();
@@ -271,7 +273,7 @@ function hybrid_get_language( $locale = '' ) {
  * @param  string  $locale
  * @return string
  */
-function hybrid_get_region( $locale = '' ) {
+function get_region( $locale = '' ) {
 
 	if ( ! $locale )
 		$locale = get_locale();

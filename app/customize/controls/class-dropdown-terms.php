@@ -13,13 +13,15 @@
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
+namespace Hybrid\Customize\Controls;
+
 /**
  * Dropdown terms customize control class.
  *
  * @since  3.0.0
  * @access public
  */
-class Hybrid_Customize_Control_Dropdown_Terms extends WP_Customize_Control {
+class DropdownTerms extends \WP_Customize_Control {
 
 	/**
 	 * The type of customize control being rendered.

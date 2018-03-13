@@ -11,6 +11,8 @@
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
+namespace Hybrid;
+
 /**
  * This is a wrapper function for core WP's `get_theme_mod()` function.  Core doesn't
  * provide a filter hook for the default value (useful for child themes).  The purpose
@@ -23,7 +25,7 @@
  * @param  mixed   $default
  * @return mixed
  */
-function hybrid_get_theme_mod( $name, $default = false ) {
+function get_theme_mod( $name, $default = false ) {
 
 	return get_theme_mod( $name, apply_filters( "hybrid_theme_mod_{$name}_default", $default ) );
 }
@@ -37,9 +39,9 @@ function hybrid_get_theme_mod( $name, $default = false ) {
  * @param  string  $name
  * @return object
  */
-function hybrid_registry( $name ) {
+function registry( $name ) {
 
-	return Hybrid_Registry::get_instance( $name );
+	return \Hybrid_Registry::get_instance( $name );
 }
 
 /**
@@ -51,7 +53,7 @@ function hybrid_registry( $name ) {
  * @param  int    $width
  * @return void
  */
-function hybrid_set_content_width( $width = '' ) {
+function set_content_width( $width = '' ) {
 
 	$GLOBALS['content_width'] = absint( $width );
 }
@@ -63,7 +65,7 @@ function hybrid_set_content_width( $width = '' ) {
  * @access public
  * @return int
  */
-function hybrid_get_content_width() {
+function get_content_width() {
 
 	return absint( $GLOBALS['content_width'] );
 }
@@ -79,7 +81,7 @@ function hybrid_get_content_width() {
  * @param  array  $file_names The files to search for.
  * @return string
  */
-function hybrid_locate_theme_file( $file_names ) {
+function locate_theme_file( $file_names ) {
 
 	$located = '';
 
@@ -87,14 +89,14 @@ function hybrid_locate_theme_file( $file_names ) {
 	foreach ( (array) $file_names as $file ) {
 
 		// If the file exists in the stylesheet (child theme) directory.
-		if ( is_child_theme() && file_exists( \Hybrid\app()->child_dir . $file ) ) {
-			$located = \Hybrid\app()->child_uri . $file;
+		if ( is_child_theme() && file_exists( app()->child_dir . $file ) ) {
+			$located = app()->child_uri . $file;
 			break;
 		}
 
 		// If the file exists in the template (parent theme) directory.
-		elseif ( file_exists( \Hybrid\app()->parent_dir . $file ) ) {
-			$located = \Hybrid\app()->parent_uri . $file;
+		elseif ( file_exists( app()->parent_dir . $file ) ) {
+			$located = app()->parent_uri . $file;
 			break;
 		}
 	}
@@ -110,7 +112,7 @@ function hybrid_locate_theme_file( $file_names ) {
  * @param  string  $hex
  * @return array
  */
-function hybrid_hex_to_rgb( $hex ) {
+function hex_to_rgb( $hex ) {
 
 	// Remove "#" if it was added.
 	$color = trim( $hex, '#' );
@@ -136,7 +138,7 @@ function hybrid_hex_to_rgb( $hex ) {
  * @param  string  $location
  * @return string
  */
-function hybrid_get_menu_location_name( $location ) {
+function get_menu_location_name( $location ) {
 
 	$locations = get_registered_nav_menus();
 
@@ -151,7 +153,7 @@ function hybrid_get_menu_location_name( $location ) {
  * @param  string  $location
  * @return string
  */
-function hybrid_get_menu_name( $location ) {
+function get_menu_name( $location ) {
 
 	$locations = get_nav_menu_locations();
 
@@ -167,9 +169,9 @@ function hybrid_get_menu_name( $location ) {
  * @access public
  * @return string
  */
-function hybrid_get_min_suffix() {
+function get_min_suffix() {
 
-	return hybrid_is_script_debug() ? '' : '.min';
+	return is_script_debug() ? '' : '.min';
 }
 
 /**
@@ -180,7 +182,7 @@ function hybrid_get_min_suffix() {
  * @access public
  * @return bool
  */
-function hybrid_is_script_debug() {
+function is_script_debug() {
 
 	return apply_filters( 'hybrid_is_script_debug', defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG );
 }
@@ -193,7 +195,7 @@ function hybrid_is_script_debug() {
  * @param  string  $value
  * @return string
  */
-function hybrid_sprintf_theme_dir( $value ) {
+function sprintf_theme_dir( $value ) {
 
 	return sprintf( $value, get_template_directory(), get_stylesheet_directory() );
 }
@@ -206,7 +208,7 @@ function hybrid_sprintf_theme_dir( $value ) {
  * @param  string  $value
  * @return string
  */
-function hybrid_sprintf_theme_uri( $value ) {
+function sprintf_theme_uri( $value ) {
 
 	return sprintf( $value, get_template_directory_uri(), get_stylesheet_directory_uri() );
 }
@@ -223,7 +225,7 @@ function hybrid_sprintf_theme_uri( $value ) {
  * @param  string  $file
  * @return void
  */
-function hybrid_require_if_theme_supports( $feature, $file ) {
+function require_if_theme_supports( $feature, $file ) {
 
 	if ( current_theme_supports( $feature ) && file_exists( $file ) )
 		require_once( $file );
@@ -240,7 +242,7 @@ function hybrid_require_if_theme_supports( $feature, $file ) {
  * @param  string  $template
  * @return void
  */
-function hybrid_post_template_compat( $post_id, $template ) {
+function post_template_compat( $post_id, $template ) {
 
 	update_post_meta( $post_id, '_wp_page_template', $template );
 

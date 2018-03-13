@@ -1,11 +1,12 @@
 <?php
 /**
- * Customize control class to handle color palettes.
+ * The radio image customize control extends the WP_Customize_Control class.  This class allows
+ * developers to create a list of image radio inputs.
  *
  * Note, the `$choices` array is slightly different than normal and should be in the form of
  * `array(
- *	$value => array( 'label' => $text_label, 'colors' => $array_of_hex_colors ),
- *	$value => array( 'label' => $text_label, 'colors' => $array_of_hex_colors ),
+ *	$value => array( 'url' => $image_url, 'label' => $text_label ),
+ *	$value => array( 'url' => $image_url, 'label' => $text_label ),
  * )`
  *
  * @package    Hybrid
@@ -16,13 +17,15 @@
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
+namespace Hybrid\Customize\Controls;
+
 /**
- * Theme Layout customize control class.
+ * Radio image customize control.
  *
  * @since  3.0.0
  * @access public
  */
-class Hybrid_Customize_Control_Palette extends WP_Customize_Control {
+class RadioImage extends \WP_Customize_Control {
 
 	/**
 	 * The type of customize control being rendered.
@@ -31,19 +34,10 @@ class Hybrid_Customize_Control_Palette extends WP_Customize_Control {
 	 * @access public
 	 * @var    string
 	 */
-	public $type = 'palette';
+	public $type = 'radio-image';
 
 	/**
-	 * The default customizer section this control is attached to.
-	 *
-	 * @since  3.0.0
-	 * @access public
-	 * @var    string
-	 */
-	public $section = 'colors';
-
-	/**
-	 * Enqueue scripts/styles.
+	 * Loads the framework scripts/styles.
 	 *
 	 * @since  3.0.0
 	 * @access public
@@ -64,9 +58,9 @@ class Hybrid_Customize_Control_Palette extends WP_Customize_Control {
 	public function to_json() {
 		parent::to_json();
 
-		// Make sure the colors have a hash.
-		foreach ( $this->choices as $choice => $value )
-			$this->choices[ $choice ]['colors'] = array_map( 'maybe_hash_hex_color', $value['colors'] );
+		// We need to make sure we have the correct image URL.
+		foreach ( $this->choices as $value => $args )
+			$this->choices[ $value ]['url'] = esc_url( hybrid_sprintf_theme_uri( $args['url'] ) );
 
 		$this->json['choices'] = $this->choices;
 		$this->json['link']    = $this->get_link();
@@ -104,19 +98,13 @@ class Hybrid_Customize_Control_Palette extends WP_Customize_Control {
 			<span class="description customize-control-description">{{{ data.description }}}</span>
 		<# } #>
 
-		<# _.each( data.choices, function( palette, choice ) { #>
+		<# _.each( data.choices, function( args, choice ) { #>
 			<label>
 				<input type="radio" value="{{ choice }}" name="_customize-{{ data.type }}-{{ data.id }}" {{{ data.link }}} <# if ( choice === data.value ) { #> checked="checked" <# } #> />
 
-				<span class="palette-label">{{ palette.label }}</span>
+				<span class="screen-reader-text">{{ args.label }}</span>
 
-				<div class="palette-block">
-
-					<# _.each( palette.colors, function( color ) { #>
-						<span class="palette-color" style="background-color: {{ color }}">&nbsp;</span>
-					<# } ) #>
-
-				</div>
+				<img src="{{ args.url }}" alt="{{ args.label }}" />
 			</label>
 		<# } ) #>
 	<?php }

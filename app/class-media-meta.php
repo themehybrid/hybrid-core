@@ -15,6 +15,8 @@
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
+namespace Hybrid;
+
 /**
  * Gets attachment media file metadata.  Each piece of meta will be escaped and formatted when
  * returned so that theme authors can properly utilize it within their themes.
@@ -25,7 +27,7 @@
  * @since  3.0.0
  * @access public
  */
-class Hybrid_Media_Meta {
+class MediaMeta {
 
 	/**
 	 * Arguments passed in.
@@ -77,7 +79,7 @@ class Hybrid_Media_Meta {
 
 		$this->post_id  = $post_id;
 		$this->meta     = wp_get_attachment_metadata( $this->post_id );
-		$this->type     = hybrid_get_attachment_type( $this->post_id );
+		$this->type     = get_attachment_type( $this->post_id );
 
 		// If we have a type that's in the whitelist, run filters.
 		if ( $this->type && in_array( $this->type, $this->allowed_types ) ) {

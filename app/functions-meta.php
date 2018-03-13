@@ -11,8 +11,10 @@
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
+namespace Hybrid;
+
 # Register meta on the 'init' hook.
-add_action( 'init', 'hybrid_register_meta', 15 );
+add_action( 'init', __NAMESPACE__ . '\register_meta', 15 );
 
 /**
  * Registers the framework's custom metadata keys and sets up the sanitize callback function.
@@ -21,12 +23,12 @@ add_action( 'init', 'hybrid_register_meta', 15 );
  * @access public
  * @return void
  */
-function hybrid_register_meta() {
+function register_meta() {
 
 	// Template meta.
-	register_meta(
+	\register_meta(
 		'term',
-		hybrid_get_template_meta_key(),
+		get_template_meta_key(),
 		array(
 			'type'              => 'string',
 			'single'            => true,
@@ -36,9 +38,9 @@ function hybrid_register_meta() {
 		)
 	);
 
-	register_meta(
+	\register_meta(
 		'user',
-		hybrid_get_template_meta_key(),
+		get_template_meta_key(),
 		array(
 			'type'              => 'string',
 			'single'            => true,
@@ -51,9 +53,9 @@ function hybrid_register_meta() {
 	// Theme layouts meta.
 	if ( current_theme_supports( 'theme-layouts' ) ) {
 
-		register_meta(
+		\register_meta(
 			'post',
-			hybrid_get_layout_meta_key(),
+			get_layout_meta_key(),
 			array(
 				'type'              => 'string',
 				'single'            => true,
@@ -63,9 +65,9 @@ function hybrid_register_meta() {
 			)
 		);
 
-		register_meta(
+		\register_meta(
 			'term',
-			hybrid_get_layout_meta_key(),
+			get_layout_meta_key(),
 			array(
 				'type'              => 'string',
 				'single'            => true,
@@ -75,9 +77,9 @@ function hybrid_register_meta() {
 			)
 		);
 
-		register_meta(
+		\register_meta(
 			'user',
-			hybrid_get_layout_meta_key(),
+			get_layout_meta_key(),
 			array(
 				'type'              => 'string',
 				'single'            => true,

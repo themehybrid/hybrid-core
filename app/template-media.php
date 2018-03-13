@@ -11,6 +11,8 @@
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
+namespace Hybrid;
+
 /**
  * Prints the post media from the media grabber.
  *
@@ -20,59 +22,59 @@
  * @param  array   $args
  * @return void
  */
-function hybrid_post_media( $args = array() ) {
+function post_media( $args = array() ) {
 
-	echo hybrid_get_post_media( $args );
+	echo get_post_media( $args );
 }
 
 /**
  * Getter function for grabbing the post media.
  *
- * @see    Hybrid_Media_Grabber
+ * @see    Hybrid\MediaGrabber
  * @since  4.0.0
  * @access public
  * @param  array   $args
  * @return string
  */
-function hybrid_get_post_media( $args = array() ) {
+function get_post_media( $args = array() ) {
 
-	return hybrid_media_grabber( $args );
+	return media_grabber( $args );
 }
 
 /**
- * Wrapper function for the Hybrid_Media_Grabber class.  Returns the HTML output for the found media.
+ * Wrapper function for the `Hybrid\MediaGrabber` class.  Returns the HTML output for the found media.
  *
  * @since  1.6.0
  * @access public
  * @param  array   $args
  * @return string
  */
-function hybrid_media_grabber( $args = array() ) {
+function media_grabber( $args = array() ) {
 
-	$media = new Hybrid_Media_Grabber( $args );
+	$media = new MediaGrabber( $args );
 
 	return $media->get_media();
 }
 
 /**
  * Prints media meta directly to the screen.  The `$property` parameter can be any of the public
- * properties in the `Hybrid_Media_Meta` object.
+ * properties in the `Hybrid\MediaMeta` object.
  *
- * @see    Hybrid_Media_Meta
+ * @see    Hybrid\MediaMeta
  * @since  3.0.0
  * @access public
  * @param  string  $property
  * @param  array   $args
  * @return void
  */
-function hybrid_media_meta( $property, $args = array() ) {
+function media_meta( $property, $args = array() ) {
 
-	echo hybrid_get_media_meta( $property, $args );
+	echo get_media_meta( $property, $args );
 }
 
 /**
  * Returns media meta from a media meta object.  The `$property` parameter can be any of the public
- * properties in the `Hybrid_Media_Meta` object.
+ * properties in the `Hybrid\MediaMeta` object.
  *
  * @see    Hybrid_Media_Meta
  * @since  3.0.0
@@ -81,7 +83,7 @@ function hybrid_media_meta( $property, $args = array() ) {
  * @param  array   $args
  * @return string
  */
-function hybrid_get_media_meta( $property, $args = array() ) {
+function get_media_meta( $property, $args = array() ) {
 
 	$defaults = array(
 		'post_id' => get_the_ID(),
@@ -94,7 +96,7 @@ function hybrid_get_media_meta( $property, $args = array() ) {
 	$args = wp_parse_args( $args, $defaults );
 
 	// Get the media metadata.
-	$meta_object = hybrid_get_media_metadata( $args['post_id'] );
+	$meta_object = get_media_metadata( $args['post_id'] );
 
 	$meta = is_object( $meta_object ) ? $meta_object->get( $property ) : false;
 
@@ -109,10 +111,9 @@ function hybrid_get_media_meta( $property, $args = array() ) {
  * @access public
  * @return object
  */
-function hybrid_media_metadata_registry() {
+function media_metadata_registry() {
 
-	return \Hybrid\app()->get( 'media_meta' );
-	//return hybrid_registry( 'media_metadata' );
+	return app()->get( 'media_meta' );
 }
 
 /**
@@ -124,19 +125,14 @@ function hybrid_media_metadata_registry() {
  * @param  int     $post_id
  * @return object
  */
-function hybrid_get_media_metadata( $post_id ) {
+function get_media_metadata( $post_id ) {
 
-	if ( ! hybrid_media_metadata_registry()->has( $post_id ) ) {
+	if ( ! media_metadata_registry()->has( $post_id ) ) {
 
-		hybrid_media_metadata_registry()->add( $post_id, new Hybrid_Media_Meta( $post_id ) );
+		media_metadata_registry()->add( $post_id, new MediaMeta( $post_id ) );
 	}
 
-	return hybrid_media_metadata_registry()->get( $post_id );
-
-	//if ( ! hybrid_media_metadata_registry()->exists( $post_id ) )
-		//hybrid_media_metadata_registry()->register( $post_id, new Hybrid_Media_Meta( $post_id ) );
-
-	//return hybrid_media_metadata_registry()->get( $post_id );
+	return media_metadata_registry()->get( $post_id );
 }
 
 /**
@@ -148,7 +144,7 @@ function hybrid_get_media_metadata( $post_id ) {
  * @param  int    $post_id
  * @return array
  */
-function hybrid_get_attachment_types( $post_id = 0 ) {
+function get_attachment_types( $post_id = 0 ) {
 
 	$post_id   = empty( $post_id ) ? get_the_ID() : $post_id;
 	$mime_type = get_post_mime_type( $post_id );
@@ -167,9 +163,9 @@ function hybrid_get_attachment_types( $post_id = 0 ) {
  * @param  int    $post_id
  * @return string
  */
-function hybrid_get_attachment_type( $post_id = 0 ) {
+function get_attachment_type( $post_id = 0 ) {
 
-	return hybrid_get_attachment_types( $post_id )->type;
+	return get_attachment_types( $post_id )->type;
 }
 
 /**
@@ -181,9 +177,9 @@ function hybrid_get_attachment_type( $post_id = 0 ) {
  * @param  int    $post_id
  * @return string
  */
-function hybrid_get_attachment_subtype( $post_id = 0 ) {
+function get_attachment_subtype( $post_id = 0 ) {
 
-	return hybrid_get_attachment_types( $post_id )->subtype;
+	return get_attachment_types( $post_id )->subtype;
 }
 
 /**
@@ -194,9 +190,9 @@ function hybrid_get_attachment_subtype( $post_id = 0 ) {
  * @param  int    $post_id
  * @return bool
  */
-function hybrid_attachment_is_audio( $post_id = 0 ) {
+function attachment_is_audio( $post_id = 0 ) {
 
-	return 'audio' === hybrid_get_attachment_type( $post_id );
+	return 'audio' === get_attachment_type( $post_id );
 }
 
 /**
@@ -207,9 +203,9 @@ function hybrid_attachment_is_audio( $post_id = 0 ) {
  * @param  int    $post_id
  * @return bool
  */
-function hybrid_attachment_is_video( $post_id = 0 ) {
+function attachment_is_video( $post_id = 0 ) {
 
-	return 'video' === hybrid_get_attachment_type( $post_id );
+	return 'video' === get_attachment_type( $post_id );
 }
 
 /**
@@ -219,7 +215,7 @@ function hybrid_attachment_is_video( $post_id = 0 ) {
  * @access public
  * @return string
  */
-function hybrid_get_image_size_links() {
+function get_image_size_links() {
 
 	// If not viewing an image attachment page, return.
 	if ( ! wp_attachment_is_image( get_the_ID() ) )
@@ -265,9 +261,9 @@ function hybrid_get_image_size_links() {
  * @param  int     $post_id
  * @return string
  */
-function hybrid_get_audio_transcript( $post_id = 0 ) {
+function get_audio_transcript( $post_id = 0 ) {
 
-	return hybrid_get_media_meta( 'lyrics', array( 'wrap' => '', 'post_id' => $post_id ? $post_id : get_the_ID() ) );
+	return get_media_meta( 'lyrics', array( 'wrap' => '', 'post_id' => $post_id ? $post_id : get_the_ID() ) );
 }
 
 /**
@@ -282,11 +278,11 @@ function hybrid_get_audio_transcript( $post_id = 0 ) {
  * @access public
  * @return void
  */
-function hybrid_attachment() {
+function attachment() {
 
-	$type = hybrid_get_attachment_type();
+	$type = get_attachment_type();
 
-	$attachment = function_exists( "hybrid_{$type}_attachment" ) ? call_user_func( "hybrid_{$type}_attachment", get_post_mime_type(), wp_get_attachment_url() ) : '';
+	$attachment = function_exists( "hybrid_{$type}_attachment" ) ? call_user_func( __NAMESPACE__ . "\{$type}_attachment", get_post_mime_type(), wp_get_attachment_url() ) : '';
 
 	echo apply_filters( 'hybrid_attachment', apply_filters( "hybrid_{$type}_attachment", $attachment ) );
 }
@@ -301,7 +297,7 @@ function hybrid_attachment() {
  * @param  string $file attachment file URL
  * @return string
  */
-function hybrid_application_attachment( $mime = '', $file = '' ) {
+function application_attachment( $mime = '', $file = '' ) {
 	$embed_defaults = wp_embed_defaults();
 
 	return sprintf(
@@ -323,7 +319,7 @@ function hybrid_application_attachment( $mime = '', $file = '' ) {
  * @param  string $file attachment file URL
  * @return string
  */
-function hybrid_text_attachment( $mime = '', $file = '' ) {
+function text_attachment( $mime = '', $file = '' ) {
 	$embed_defaults = wp_embed_defaults();
 
 	return sprintf(
@@ -342,9 +338,9 @@ function hybrid_text_attachment( $mime = '', $file = '' ) {
  * @access public
  * @return string
  */
-function hybrid_audio_attachment() {
+function audio_attachment() {
 
-	return hybrid_media_grabber( array( 'type' => 'audio' ) );
+	return media_grabber( array( 'type' => 'audio' ) );
 }
 
 /**
@@ -354,7 +350,7 @@ function hybrid_audio_attachment() {
  * @access public
  * @return string
  */
-function hybrid_video_attachment() {
+function video_attachment() {
 
-	return hybrid_media_grabber( array( 'type' => 'video' ) );
+	return media_grabber( array( 'type' => 'video' ) );
 }

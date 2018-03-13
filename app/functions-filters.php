@@ -12,13 +12,15 @@
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
+namespace Hybrid;
+
 # Add extra support for post types.
-add_action( 'init', 'hybrid_add_post_type_support', 15 );
+add_action( 'init', __NAMESPACE__ . '\add_post_type_support', 15 );
 
 # Filters the archive title and description.
-add_filter( 'get_the_archive_title',       'hybrid_archive_title_filter',       5  );
-add_filter( 'get_the_archive_description', 'hybrid_archive_description_filter', 0  );
-add_filter( 'get_the_archive_description', 'hybrid_archive_description_format', 95 );
+add_filter( 'get_the_archive_title',       __NAMESPACE__ . '\archive_title_filter',       5  );
+add_filter( 'get_the_archive_description', __NAMESPACE__ . '\archive_description_filter', 0  );
+add_filter( 'get_the_archive_description', __NAMESPACE__ . '\archive_description_format', 95 );
 
 # Use same default filters as 'the_content' with a little more flexibility.
 add_filter( 'hybrid_archive_description', array( $GLOBALS['wp_embed'], 'run_shortcode' ),   5  );
@@ -34,25 +36,25 @@ add_filter( 'hybrid_archive_description',                              'shortcod
 remove_filter( 'single_post_title', 'strip_tags' );
 
 # Filters the title for untitled posts.
-add_filter( 'the_title', 'hybrid_untitled_post' );
+add_filter( 'the_title', __NAMESPACE__ . '\untitled_post' );
 
 # Default excerpt more.
-add_filter( 'excerpt_more', 'hybrid_excerpt_more', 5 );
+add_filter( 'excerpt_more', __NAMESPACE__ . '\excerpt_more', 5 );
 
 # Modifies the arguments and output of wp_link_pages().
-add_filter( 'wp_link_pages_args', 'hybrid_link_pages_args', 5 );
-add_filter( 'wp_link_pages_link', 'hybrid_link_pages_link', 5 );
+add_filter( 'wp_link_pages_args', __NAMESPACE__ . '\link_pages_args', 5 );
+add_filter( 'wp_link_pages_link', __NAMESPACE__ . '\link_pages_link', 5 );
 
 # Filters to add microdata support to common template tags.
-add_filter( 'the_author_posts_link',          'hybrid_the_author_posts_link',          5 );
-add_filter( 'get_comment_author_link',        'hybrid_get_comment_author_link',        5 );
-add_filter( 'get_comment_author_url_link',    'hybrid_get_comment_author_url_link',    5 );
-add_filter( 'get_avatar',                     'hybrid_get_avatar',                     5 );
-add_filter( 'post_thumbnail_html',            'hybrid_post_thumbnail_html',            5 );
-add_filter( 'comments_popup_link_attributes', 'hybrid_comments_popup_link_attributes', 5 );
+add_filter( 'the_author_posts_link',          __NAMESPACE__ . '\the_author_posts_link',          5 );
+add_filter( 'get_comment_author_link',        __NAMESPACE__ . '\get_comment_author_link',        5 );
+add_filter( 'get_comment_author_url_link',    __NAMESPACE__ . '\get_comment_author_url_link',    5 );
+add_filter( 'get_avatar',                     __NAMESPACE__ . '\get_avatar',                     5 );
+add_filter( 'post_thumbnail_html',            __NAMESPACE__ . '\post_thumbnail_html',            5 );
+add_filter( 'comments_popup_link_attributes', __NAMESPACE__ . '\comments_popup_link_attributes', 5 );
 
 # Adds custom CSS classes to nav menu items.
-add_filter( 'nav_menu_css_class', 'hybrid_nav_menu_css_class', 5, 2 );
+add_filter( 'nav_menu_css_class', __NAMESPACE__ . '\nav_menu_css_class', 5, 2 );
 
 /**
  * This function is for adding extra support for features not default to the core post types.
@@ -64,25 +66,25 @@ add_filter( 'nav_menu_css_class', 'hybrid_nav_menu_css_class', 5, 2 );
  * @access public
  * @return void
  */
-function hybrid_add_post_type_support() {
+function add_post_type_support() {
 
 	// Add support for excerpts to the 'page' post type.
-	add_post_type_support( 'page', array( 'excerpt' ) );
+	\add_post_type_support( 'page', array( 'excerpt' ) );
 
 	// Add thumbnail support for audio and video attachments.
-	add_post_type_support( 'attachment:audio', 'thumbnail' );
-	add_post_type_support( 'attachment:video', 'thumbnail' );
+	\add_post_type_support( 'attachment:audio', 'thumbnail' );
+	\add_post_type_support( 'attachment:video', 'thumbnail' );
 
 	// Add theme layouts support to core and custom post types.
-	add_post_type_support( 'post',              'theme-layouts' );
-	add_post_type_support( 'page',              'theme-layouts' );
-	add_post_type_support( 'attachment',        'theme-layouts' );
+	\add_post_type_support( 'post',              'theme-layouts' );
+	\add_post_type_support( 'page',              'theme-layouts' );
+	\add_post_type_support( 'attachment',        'theme-layouts' );
 
-	add_post_type_support( 'forum',             'theme-layouts' );
-	add_post_type_support( 'literature',        'theme-layouts' );
-	add_post_type_support( 'portfolio_project', 'theme-layouts' );
-	add_post_type_support( 'product',           'theme-layouts' );
-	add_post_type_support( 'restaurant_item',   'theme-layouts' );
+	\add_post_type_support( 'forum',             'theme-layouts' );
+	\add_post_type_support( 'literature',        'theme-layouts' );
+	\add_post_type_support( 'portfolio_project', 'theme-layouts' );
+	\add_post_type_support( 'product',           'theme-layouts' );
+	\add_post_type_support( 'restaurant_item',   'theme-layouts' );
 }
 
 /**
@@ -93,7 +95,7 @@ function hybrid_add_post_type_support() {
  * @param  string  $title
  * @return string
  */
-function hybrid_archive_title_filter( $title ) {
+function archive_title_filter( $title ) {
 
 	if ( is_home() && ! is_front_page() )
 		$title = get_post_field( 'post_title', get_queried_object_id() );
@@ -108,37 +110,37 @@ function hybrid_archive_title_filter( $title ) {
 		$title = single_term_title( '', false );
 
 	elseif ( is_author() )
-		$title = hybrid_get_single_author_title();
+		$title = get_single_author_title();
 
 	elseif ( is_search() )
-		$title = hybrid_get_search_title();
+		$title = get_search_title();
 
 	elseif ( is_post_type_archive() )
 		$title = post_type_archive_title( '', false );
 
 	elseif ( get_query_var( 'minute' ) && get_query_var( 'hour' ) )
-		$title = hybrid_get_single_minute_hour_title();
+		$title = get_single_minute_hour_title();
 
 	elseif ( get_query_var( 'minute' ) )
-		$title = hybrid_get_single_minute_title();
+		$title = get_single_minute_title();
 
 	elseif ( get_query_var( 'hour' ) )
-		$title = hybrid_get_single_hour_title();
+		$title = get_single_hour_title();
 
 	elseif ( is_day() )
-		$title = hybrid_get_single_day_title();
+		$title = get_single_day_title();
 
 	elseif ( get_query_var( 'w' ) )
-		$title = hybrid_get_single_week_title();
+		$title = get_single_week_title();
 
 	elseif ( is_month() )
 		$title = single_month_title( ' ', false );
 
 	elseif ( is_year() )
-		$title = hybrid_get_single_year_title();
+		$title = get_single_year_title();
 
 	elseif ( is_archive() )
-		$title = hybrid_get_single_archive_title();
+		$title = get_single_archive_title();
 
 	return apply_filters( 'hybrid_archive_title', $title );
 }
@@ -151,7 +153,7 @@ function hybrid_archive_title_filter( $title ) {
  * @param  string  $desc
  * @return string
  */
-function hybrid_archive_description_filter( $desc ) {
+function archive_description_filter( $desc ) {
 
 	$new_desc = '';
 
@@ -184,7 +186,7 @@ function hybrid_archive_description_filter( $desc ) {
  * @param  string  $desc
  * @return string
  */
-function hybrid_archive_description_format( $desc ) {
+function archive_description_format( $desc ) {
 
 	return apply_filters( 'hybrid_archive_description', $desc );
 }
@@ -199,7 +201,7 @@ function hybrid_archive_description_format( $desc ) {
  * @param  string  $title
  * @return string
  */
-function hybrid_untitled_post( $title ) {
+function untitled_post( $title ) {
 
 	// Translators: Used as a placeholder for untitled posts on non-singular views.
 	if ( ! $title && ! is_singular() && in_the_loop() && ! is_admin() )
@@ -216,7 +218,7 @@ function hybrid_untitled_post( $title ) {
  * @param  string  $text
  * @return string
  */
-function hybrid_excerpt_more( $text ) {
+function excerpt_more( $text ) {
 
 	if ( 0 !== strpos( $text, '<a' ) )
 		$text = sprintf( ' <a href="%s" class="more-link">%s</a>', esc_url( get_permalink() ), trim( $text ) );
@@ -233,7 +235,7 @@ function hybrid_excerpt_more( $text ) {
  * @param  array  $args
  * @return array
  */
-function hybrid_link_pages_args( $args ) {
+function link_pages_args( $args ) {
 
 	$args['before'] = str_replace( '<p>', '<p class="page-links">', $args['before'] );
 
@@ -249,7 +251,7 @@ function hybrid_link_pages_args( $args ) {
  * @param  string  $link
  * @return string
  */
-function hybrid_link_pages_link( $link ) {
+function link_pages_link( $link ) {
 
 	return 0 !== strpos( $link, '<a' ) ? "<span class='page-numbers'>{$link}</span>" : $link;
 }
@@ -262,7 +264,7 @@ function hybrid_link_pages_link( $link ) {
  * @param  string  $link
  * @return string
  */
-function hybrid_the_author_posts_link( $link ) {
+function the_author_posts_link( $link ) {
 
 	$pattern = array(
 		"/(<a.*?)(>)/i",
@@ -285,7 +287,7 @@ function hybrid_the_author_posts_link( $link ) {
  * @param  string  $link
  * @return string
  */
-function hybrid_get_comment_author_link( $link ) {
+function get_comment_author_link( $link ) {
 
 	$pattern = array(
 		'/(class=[\'"])(.+?)([\'"])/i',
@@ -310,7 +312,7 @@ function hybrid_get_comment_author_link( $link ) {
  * @param  string  $link
  * @return string
  */
-function hybrid_get_comment_author_url_link( $link ) {
+function get_comment_author_url_link( $link ) {
 
 	$pattern = array(
 		'/(class=[\'"])(.+?)([\'"])/i',
@@ -332,7 +334,7 @@ function hybrid_get_comment_author_url_link( $link ) {
  * @param  string  $avatar
  * @return string
  */
-function hybrid_get_avatar( $avatar ) {
+function get_avatar( $avatar ) {
 
 	return preg_replace( '/(<img.*?)(\/>)/i', '$1itemprop="image" $2', $avatar );
 }
@@ -345,7 +347,7 @@ function hybrid_get_avatar( $avatar ) {
  * @param  string  $html
  * @return string
  */
-function hybrid_post_thumbnail_html( $html ) {
+function post_thumbnail_html( $html ) {
 
 	return function_exists( 'get_the_image' ) ? $html : preg_replace( '/(<img.*?)(\/>)/i', '$1itemprop="image" $2', $html );
 }
@@ -358,7 +360,7 @@ function hybrid_post_thumbnail_html( $html ) {
  * @param  string  $attr
  * @return string
  */
-function hybrid_comments_popup_link_attributes( $attr ) {
+function comments_popup_link_attributes( $attr ) {
 
 	return 'itemprop="discussionURL"';
 }
@@ -374,7 +376,7 @@ function hybrid_comments_popup_link_attributes( $attr ) {
  * @param  object  $item
  * @return array
  */
-function hybrid_nav_menu_css_class( $classes, $item ) {
+function nav_menu_css_class( $classes, $item ) {
 
 	if ( 'post_type' === $item->type && is_singular( $item->object ) )
 		$classes[] = 'menu-item-parent-archive';

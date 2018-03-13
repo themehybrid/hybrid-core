@@ -1,7 +1,12 @@
 <?php
 /**
- * The multiple checkbox customize control allows theme authors to add theme options that have
- * multiple choices.
+ * Customize control class to handle color palettes.
+ *
+ * Note, the `$choices` array is slightly different than normal and should be in the form of
+ * `array(
+ *	$value => array( 'label' => $text_label, 'colors' => $array_of_hex_colors ),
+ *	$value => array( 'label' => $text_label, 'colors' => $array_of_hex_colors ),
+ * )`
  *
  * @package    Hybrid
  * @subpackage Customize
@@ -11,13 +16,15 @@
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
+namespace Hybrid\Customize\Controls;
+
 /**
- * Multiple checkbox customize control class.
+ * Theme Layout customize control class.
  *
  * @since  3.0.0
  * @access public
  */
-class Hybrid_Customize_Control_Checkbox_Multiple extends WP_Customize_Control {
+class Palette extends \WP_Customize_Control {
 
 	/**
 	 * The type of customize control being rendered.
@@ -26,7 +33,16 @@ class Hybrid_Customize_Control_Checkbox_Multiple extends WP_Customize_Control {
 	 * @access public
 	 * @var    string
 	 */
-	public $type = 'checkbox-multiple';
+	public $type = 'palette';
+
+	/**
+	 * The default customizer section this control is attached to.
+	 *
+	 * @since  3.0.0
+	 * @access public
+	 * @var    string
+	 */
+	public $section = 'colors';
 
 	/**
 	 * Enqueue scripts/styles.
@@ -37,6 +53,7 @@ class Hybrid_Customize_Control_Checkbox_Multiple extends WP_Customize_Control {
 	 */
 	public function enqueue() {
 		wp_enqueue_script( 'hybrid-customize-controls' );
+		wp_enqueue_style(  'hybrid-customize-controls' );
 	}
 
 	/**
@@ -49,9 +66,13 @@ class Hybrid_Customize_Control_Checkbox_Multiple extends WP_Customize_Control {
 	public function to_json() {
 		parent::to_json();
 
-		$this->json['value']   = ! is_array( $this->value() ) ? explode( ',', $this->value() ) : $this->value();
+		// Make sure the colors have a hash.
+		foreach ( $this->choices as $choice => $value )
+			$this->choices[ $choice ]['colors'] = array_map( 'maybe_hash_hex_color', $value['colors'] );
+
 		$this->json['choices'] = $this->choices;
 		$this->json['link']    = $this->get_link();
+		$this->json['value']   = $this->value();
 		$this->json['id']      = $this->id;
 	}
 
@@ -85,15 +106,20 @@ class Hybrid_Customize_Control_Checkbox_Multiple extends WP_Customize_Control {
 			<span class="description customize-control-description">{{{ data.description }}}</span>
 		<# } #>
 
-		<ul>
-			<# _.each( data.choices, function( label, choice ) { #>
-				<li>
-					<label>
-						<input type="checkbox" value="{{ choice }}" <# if ( -1 !== data.value.indexOf( choice ) ) { #> checked="checked" <# } #> />
-						{{ label }}
-					</label>
-				</li>
-			<# } ) #>
-		</ul>
+		<# _.each( data.choices, function( palette, choice ) { #>
+			<label>
+				<input type="radio" value="{{ choice }}" name="_customize-{{ data.type }}-{{ data.id }}" {{{ data.link }}} <# if ( choice === data.value ) { #> checked="checked" <# } #> />
+
+				<span class="palette-label">{{ palette.label }}</span>
+
+				<div class="palette-block">
+
+					<# _.each( palette.colors, function( color ) { #>
+						<span class="palette-color" style="background-color: {{ color }}">&nbsp;</span>
+					<# } ) #>
+
+				</div>
+			</label>
+		<# } ) #>
 	<?php }
 }

@@ -12,13 +12,15 @@
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
+namespace Hybrid\Customize\Controls;
+
 /**
  * Theme Layout customize control class.
  *
  * @since  3.0.0
  * @access public
  */
-class Hybrid_Customize_Control_Layout extends Hybrid_Customize_Control_Radio_Image {
+class Layout extends Radio_Image {
 
 	/**
 	 * The default customizer section this control is attached to.
@@ -42,10 +44,10 @@ class Hybrid_Customize_Control_Layout extends Hybrid_Customize_Control_Radio_Ima
 	public function __construct( $manager, $id, $args = array() ) {
 
 		// Array of allowed layouts. Pass via `$args['layouts']`.
-		$allowed = ! empty( $args['layouts'] ) ? $args['layouts'] : array_keys( hybrid_get_layouts() );
+		$allowed = ! empty( $args['layouts'] ) ? $args['layouts'] : array_keys( \Hybrid\get_layouts() );
 
 		// Loop through each of the layouts and add it to the choices array with proper key/value pairs.
-		foreach ( hybrid_get_layouts() as $layout ) {
+		foreach ( \Hybrid\get_layouts() as $layout ) {
 
 			if ( in_array( $layout->name, $allowed ) && ! ( 'theme_layout' === $id && false === $layout->is_global_layout ) && $layout->image ) {
 

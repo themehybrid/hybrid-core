@@ -13,6 +13,8 @@
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
+namespace Hybrid;
+
 /**
  * Class for handling chat transcripts.
  *
@@ -20,7 +22,7 @@
  * @access public
  * @return void
  */
-class Hybrid_Chat {
+class Chat {
 
 	/**
 	 * Holds the array of authors in the chat.

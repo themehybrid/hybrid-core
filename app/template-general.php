@@ -11,6 +11,8 @@
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
+namespace Hybrid;
+
 /**
  * Outputs the link back to the site.
  *
@@ -18,9 +20,9 @@
  * @access public
  * @return void
  */
-function hybrid_site_link() {
+function site_link() {
 
-	echo hybrid_get_site_link();
+	echo get_site_link();
 }
 
 /**
@@ -30,7 +32,7 @@ function hybrid_site_link() {
  * @access public
  * @return string
  */
-function hybrid_get_site_link() {
+function get_site_link() {
 
 	return sprintf( '<a class="site-link" href="%s" rel="home">%s</a>', esc_url( home_url() ), get_bloginfo( 'name' ) );
 }
@@ -42,9 +44,9 @@ function hybrid_get_site_link() {
  * @access public
  * @return void
  */
-function hybrid_wp_link() {
+function wp_link() {
 
-	echo hybrid_get_wp_link();
+	echo get_wp_link();
 }
 
 /**
@@ -54,7 +56,7 @@ function hybrid_wp_link() {
  * @access public
  * @return string
  */
-function hybrid_get_wp_link() {
+function get_wp_link() {
 
 	return sprintf( '<a class="wp-link" href="%s">%s</a>', esc_url( __( 'https://wordpress.org', 'hybrid-core' ) ), esc_html__( 'WordPress', 'hybrid-core' ) );
 }
@@ -66,9 +68,9 @@ function hybrid_get_wp_link() {
  * @access public
  * @return void
  */
-function hybrid_theme_link() {
+function theme_link() {
 
-	echo hybrid_get_theme_link();
+	echo get_theme_link();
 }
 
 /**
@@ -78,7 +80,7 @@ function hybrid_theme_link() {
  * @access public
  * @return string
  */
-function hybrid_get_theme_link() {
+function get_theme_link() {
 	$theme   = wp_get_theme( get_template() );
 	$allowed = array( 'abbr' => array( 'title' => true ), 'acronym' => array( 'title' => true ), 'code' => true, 'em' => true, 'strong' => true );
 
@@ -93,9 +95,9 @@ function hybrid_get_theme_link() {
  * @access public
  * @return void
  */
-function hybrid_child_theme_link() {
+function child_theme_link() {
 
-	echo hybrid_get_child_theme_link();
+	echo get_child_theme_link();
 }
 
 /**
@@ -105,7 +107,7 @@ function hybrid_child_theme_link() {
  * @access public
  * @return string
  */
-function hybrid_get_child_theme_link() {
+function get_child_theme_link() {
 
 	if ( ! is_child_theme() )
 		return '';
@@ -126,7 +128,7 @@ function hybrid_get_child_theme_link() {
  * @access public
  * @return string
  */
-function hybrid_get_blog_url() {
+function get_blog_url() {
 
 	if ( 'posts' === get_option( 'show_on_front' ) )
 		$blog_url = home_url();
@@ -144,9 +146,9 @@ function hybrid_get_blog_url() {
  * @access public
  * @return void
  */
-function hybrid_site_title() {
+function site_title() {
 
-	echo hybrid_get_site_title();
+	echo get_site_title();
 }
 
 /**
@@ -156,10 +158,10 @@ function hybrid_site_title() {
  * @access public
  * @return string
  */
-function hybrid_get_site_title() {
+function get_site_title() {
 
 	if ( $title = get_bloginfo( 'name' ) )
-		$title = sprintf( '<h1 %s><a href="%s" rel="home">%s</a></h1>', hybrid_get_attr( 'site-title' ), esc_url( home_url() ), $title );
+		$title = sprintf( '<h1 %s><a href="%s" rel="home">%s</a></h1>', get_attr( 'site-title' ), esc_url( home_url() ), $title );
 
 	return apply_filters( 'hybrid_site_title', $title );
 }
@@ -171,9 +173,9 @@ function hybrid_get_site_title() {
  * @access public
  * @return void
  */
-function hybrid_site_description() {
+function site_description() {
 
-	echo hybrid_get_site_description();
+	echo get_site_description();
 }
 
 /**
@@ -183,10 +185,10 @@ function hybrid_site_description() {
  * @access public
  * @return string
  */
-function hybrid_get_site_description() {
+function get_site_description() {
 
 	if ( $desc = get_bloginfo( 'description' ) )
-		$desc = sprintf( '<h2 %s>%s</h2>', hybrid_get_attr( 'site-description' ), $desc );
+		$desc = sprintf( '<h2 %s>%s</h2>', get_attr( 'site-description' ), $desc );
 
 	return apply_filters( 'hybrid_site_description', $desc );
 }
@@ -200,7 +202,7 @@ function hybrid_get_site_description() {
  * @access public
  * @return bool
  */
-function hybrid_is_plural() {
+function is_plural() {
 
 	return apply_filters( 'hybrid_is_plural', is_home() || is_archive() || is_search() );
 }
@@ -212,9 +214,9 @@ function hybrid_is_plural() {
  * @access public
  * @return void
  */
-function hybrid_single_archive_title() {
+function single_archive_title() {
 
-	echo hybrid_get_single_archive_title();
+	echo get_single_archive_title();
 }
 
 /**
@@ -224,7 +226,7 @@ function hybrid_single_archive_title() {
  * @access public
  * @return string
  */
-function hybrid_get_single_archive_title() {
+function get_single_archive_title() {
 
 	return esc_html__( 'Archives', 'hybrid-core' );
 }
@@ -236,9 +238,9 @@ function hybrid_get_single_archive_title() {
  * @access public
  * @return void
  */
-function hybrid_single_author_title() {
+function single_author_title() {
 
-	echo hybrid_get_single_author_title();
+	echo get_single_author_title();
 }
 
 /**
@@ -248,7 +250,7 @@ function hybrid_single_author_title() {
  * @access public
  * @return void
  */
-function hybrid_get_single_author_title() {
+function get_single_author_title() {
 
 	return get_the_author_meta( 'display_name', absint( get_query_var( 'author' ) ) );
 }
@@ -260,9 +262,9 @@ function hybrid_get_single_author_title() {
  * @access public
  * @return void
  */
-function hybrid_single_year_title() {
+function single_year_title() {
 
-	echo hybrid_get_single_year_title();
+	echo get_single_year_title();
 }
 
 /**
@@ -272,7 +274,7 @@ function hybrid_single_year_title() {
  * @access public
  * @return string
  */
-function hybrid_get_single_year_title() {
+function get_single_year_title() {
 
 	return get_the_date( esc_html_x( 'Y', 'yearly archives date format', 'hybrid-core' ) );
 }
@@ -284,9 +286,9 @@ function hybrid_get_single_year_title() {
  * @access public
  * @return void
  */
-function hybrid_single_week_title() {
+function single_week_title() {
 
-	echo hybrid_get_single_week_title();
+	echo get_single_week_title();
 }
 
 /**
@@ -296,7 +298,7 @@ function hybrid_single_week_title() {
  * @access public
  * @return string
  */
-function hybrid_get_single_week_title() {
+function get_single_week_title() {
 
 	// Translators: 1 is the week number and 2 is the year.
 	return sprintf( esc_html__( 'Week %1$s of %2$s', 'hybrid-core' ), get_the_time( esc_html_x( 'W', 'weekly archives date format', 'hybrid-core' ) ), get_the_time( esc_html_x( 'Y', 'yearly archives date format', 'hybrid-core' ) ) );
@@ -309,9 +311,9 @@ function hybrid_get_single_week_title() {
  * @access public
  * @return void
  */
-function hybrid_single_day_title() {
+function single_day_title() {
 
-	echo hybrid_get_single_day_title();
+	echo get_single_day_title();
 }
 
 /**
@@ -321,7 +323,7 @@ function hybrid_single_day_title() {
  * @access public
  * @return string
  */
-function hybrid_get_single_day_title() {
+function get_single_day_title() {
 
 	return get_the_date( esc_html_x( 'F j, Y', 'daily archives date format', 'hybrid-core' ) );
 }
@@ -333,9 +335,9 @@ function hybrid_get_single_day_title() {
  * @access public
  * @return void
  */
-function hybrid_single_hour_title() {
+function single_hour_title() {
 
-	echo hybrid_get_single_hour_title();
+	echo get_single_hour_title();
 }
 
 /**
@@ -345,7 +347,7 @@ function hybrid_single_hour_title() {
  * @access public
  * @return string
  */
-function hybrid_get_single_hour_title() {
+function get_single_hour_title() {
 
 	return get_the_time( esc_html_x( 'g a', 'hour archives time format', 'hybrid-core' ) );
 }
@@ -357,9 +359,9 @@ function hybrid_get_single_hour_title() {
  * @access public
  * @return void
  */
-function hybrid_single_minute_title() {
+function single_minute_title() {
 
-	echo hybrid_get_single_minute_title();
+	echo get_single_minute_title();
 }
 
 /**
@@ -369,7 +371,7 @@ function hybrid_single_minute_title() {
  * @access public
  * @return string
  */
-function hybrid_get_single_minute_title() {
+function get_single_minute_title() {
 
 	// Translators: Minute archive title. %s is the minute time format.
 	return sprintf( esc_html__( 'Minute %s', 'hybrid-core' ), get_the_time( esc_html_x( 'i', 'minute archives time format', 'hybrid-core' ) ) );
@@ -382,9 +384,9 @@ function hybrid_get_single_minute_title() {
  * @access public
  * @return void
  */
-function hybrid_single_minute_hour_title() {
+function single_minute_hour_title() {
 
-	echo hybrid_get_single_minute_hour_title();
+	echo get_single_minute_hour_title();
 }
 
 /**
@@ -394,7 +396,7 @@ function hybrid_single_minute_hour_title() {
  * @access public
  * @return string
  */
-function hybrid_get_single_minute_hour_title() {
+function get_single_minute_hour_title() {
 
 	return get_the_time( esc_html_x( 'g:i a', 'minute and hour archives time format', 'hybrid-core' ) );
 }
@@ -406,9 +408,9 @@ function hybrid_get_single_minute_hour_title() {
  * @access public
  * @return void
  */
-function hybrid_search_title() {
+function search_title() {
 
-	echo hybrid_get_search_title();
+	echo get_search_title();
 }
 
 /**
@@ -418,7 +420,7 @@ function hybrid_search_title() {
  * @access public
  * @return string
  */
-function hybrid_get_search_title() {
+function get_search_title() {
 
 	// Translators: %s is the search query.
 	return sprintf( esc_html__( 'Search results for: %s', 'hybrid-core' ), get_search_query() );
@@ -431,9 +433,9 @@ function hybrid_get_search_title() {
  * @access public
  * @return void
  */
-function hybrid_404_title() {
+function error_title() {
 
-	echo hybrid_get_404_title();
+	echo get_error_title();
 }
 
 /**
@@ -443,7 +445,7 @@ function hybrid_404_title() {
  * @access public
  * @return string
  */
-function hybrid_get_404_title() {
+function get_error_title() {
 
 	return esc_html__( '404 Not Found', 'hybrid-core' );
 }

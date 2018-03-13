@@ -14,13 +14,15 @@
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
+namespace Hybrid\Customize\Settings;
+
 /**
  * Saves image data in addition to the URL.
  *
  * @since  3.0.0
  * @access public
  */
-class Hybrid_Customize_Setting_Image_Data extends WP_Customize_Setting {
+class ImageData extends \WP_Customize_Setting {
 
 	/**
 	 * Overwrites the `update()` method so we can save some extra data.

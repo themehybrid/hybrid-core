@@ -12,11 +12,13 @@
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
+namespace Hybrid;
+
 # Register Hybrid Core scripts.
-//add_action( 'wp_enqueue_scripts', 'hybrid_register_scripts', 0 );
+//add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\register_scripts', 0 );
 
 # Load Hybrid Core scripts.
-add_action( 'wp_enqueue_scripts', 'hybrid_enqueue_scripts', 5 );
+add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\enqueue_scripts', 5 );
 
 /**
  * Registers JavaScript files for the framework.  This function merely registers scripts with WordPress using
@@ -27,7 +29,7 @@ add_action( 'wp_enqueue_scripts', 'hybrid_enqueue_scripts', 5 );
  * @access public
  * @return void
  */
-function hybrid_register_scripts() {}
+function register_scripts() {}
 
 /**
  * Tells WordPress to load the scripts needed for the framework using the wp_enqueue_script() function.
@@ -36,7 +38,7 @@ function hybrid_register_scripts() {}
  * @access public
  * @return void
  */
-function hybrid_enqueue_scripts() {
+function enqueue_scripts() {
 
 	// Load the comment reply script on singular posts with open comments if threaded comments are supported.
 	if ( is_singular() && get_option( 'thread_comments' ) && comments_open() )

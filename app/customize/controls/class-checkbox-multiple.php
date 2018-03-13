@@ -1,13 +1,7 @@
 <?php
 /**
- * The radio image customize control extends the WP_Customize_Control class.  This class allows
- * developers to create a list of image radio inputs.
- *
- * Note, the `$choices` array is slightly different than normal and should be in the form of
- * `array(
- *	$value => array( 'url' => $image_url, 'label' => $text_label ),
- *	$value => array( 'url' => $image_url, 'label' => $text_label ),
- * )`
+ * The multiple checkbox customize control allows theme authors to add theme options that have
+ * multiple choices.
  *
  * @package    Hybrid
  * @subpackage Customize
@@ -17,13 +11,15 @@
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
+namespace Hybrid\Customize\Controls;
+
 /**
- * Radio image customize control.
+ * Multiple checkbox customize control class.
  *
  * @since  3.0.0
  * @access public
  */
-class Hybrid_Customize_Control_Radio_Image extends WP_Customize_Control {
+class CheckboxMultiple extends \WP_Customize_Control {
 
 	/**
 	 * The type of customize control being rendered.
@@ -32,10 +28,10 @@ class Hybrid_Customize_Control_Radio_Image extends WP_Customize_Control {
 	 * @access public
 	 * @var    string
 	 */
-	public $type = 'radio-image';
+	public $type = 'checkbox-multiple';
 
 	/**
-	 * Loads the framework scripts/styles.
+	 * Enqueue scripts/styles.
 	 *
 	 * @since  3.0.0
 	 * @access public
@@ -43,7 +39,6 @@ class Hybrid_Customize_Control_Radio_Image extends WP_Customize_Control {
 	 */
 	public function enqueue() {
 		wp_enqueue_script( 'hybrid-customize-controls' );
-		wp_enqueue_style(  'hybrid-customize-controls' );
 	}
 
 	/**
@@ -56,13 +51,9 @@ class Hybrid_Customize_Control_Radio_Image extends WP_Customize_Control {
 	public function to_json() {
 		parent::to_json();
 
-		// We need to make sure we have the correct image URL.
-		foreach ( $this->choices as $value => $args )
-			$this->choices[ $value ]['url'] = esc_url( hybrid_sprintf_theme_uri( $args['url'] ) );
-
+		$this->json['value']   = ! is_array( $this->value() ) ? explode( ',', $this->value() ) : $this->value();
 		$this->json['choices'] = $this->choices;
 		$this->json['link']    = $this->get_link();
-		$this->json['value']   = $this->value();
 		$this->json['id']      = $this->id;
 	}
 
@@ -96,14 +87,15 @@ class Hybrid_Customize_Control_Radio_Image extends WP_Customize_Control {
 			<span class="description customize-control-description">{{{ data.description }}}</span>
 		<# } #>
 
-		<# _.each( data.choices, function( args, choice ) { #>
-			<label>
-				<input type="radio" value="{{ choice }}" name="_customize-{{ data.type }}-{{ data.id }}" {{{ data.link }}} <# if ( choice === data.value ) { #> checked="checked" <# } #> />
-
-				<span class="screen-reader-text">{{ args.label }}</span>
-
-				<img src="{{ args.url }}" alt="{{ args.label }}" />
-			</label>
-		<# } ) #>
+		<ul>
+			<# _.each( data.choices, function( label, choice ) { #>
+				<li>
+					<label>
+						<input type="checkbox" value="{{ choice }}" <# if ( -1 !== data.value.indexOf( choice ) ) { #> checked="checked" <# } #> />
+						{{ label }}
+					</label>
+				</li>
+			<# } ) #>
+		</ul>
 	<?php }
 }

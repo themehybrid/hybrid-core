@@ -13,14 +13,16 @@
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
+namespace Hybrid;
+
 # Registers default layouts.
-add_action( 'init', 'hybrid_register_layouts', 95 );
+add_action( 'init', __NAMESPACE__ . '\register_layouts', 95 );
 
 # Filters `current_theme_supports( 'theme-layouts', $arg )`.
-add_filter( 'current_theme_supports-theme-layouts', 'hybrid_theme_layouts_support', 10, 3 );
+add_filter( 'current_theme_supports-theme-layouts', __NAMESPACE__ . '\theme_layouts_support', 10, 3 );
 
 # Filters the theme layout.
-add_filter( 'hybrid_get_theme_layout', 'hybrid_filter_layout', 5 );
+add_filter( 'hybrid_get_theme_layout', __NAMESPACE__ . '\filter_layout', 5 );
 
 /**
  * Returns the layout registry. Use this function to access the object.
@@ -29,10 +31,9 @@ add_filter( 'hybrid_get_theme_layout', 'hybrid_filter_layout', 5 );
  * @access public
  * @return object
  */
-function hybrid_layout_registry() {
+function layout_registry() {
 
-	return \Hybrid\app()->get( 'layouts' );
-	//return hybrid_registry( 'layout' );
+	return app()->get( 'layouts' );
 }
 
 /**
@@ -42,9 +43,9 @@ function hybrid_layout_registry() {
  * @access public
  * @return void
  */
-function hybrid_register_layouts() {
+function register_layouts() {
 
-	hybrid_register_layout(
+	register_layout(
 		'default',
 		array(
 			// Translators: Default theme layout option.
@@ -68,10 +69,9 @@ function hybrid_register_layouts() {
  * @param  array   $args
  * @return void
  */
-function hybrid_register_layout( $name, $args = array() ) {
+function register_layout( $name, $args = array() ) {
 
-	\Hybrid\app()->get( 'layouts' )->add( $name, new Hybrid_Layout( $name, $args ) );
-	//hybrid_layout_registry()->register( $name, new Hybrid_Layout( $name, $args ) );
+	layout_registry()->add( $name, new Layout( $name, $args ) );
 }
 
 /**
@@ -82,10 +82,9 @@ function hybrid_register_layout( $name, $args = array() ) {
  * @param  string  $name
  * @return void
  */
-function hybrid_unregister_layout( $name ) {
+function unregister_layout( $name ) {
 
-	\Hybrid\app()->get( 'layouts' )->remove( $name );
-	//hybrid_layout_registry()->unregister( $name );
+	layout_registry()->remove( $name );
 }
 
 /**
@@ -96,10 +95,9 @@ function hybrid_unregister_layout( $name ) {
  * @param  string  $name
  * @return bool
  */
-function hybrid_layout_exists( $name ) {
+function layout_exists( $name ) {
 
-	return \Hybrid\app()->get( 'layouts' )->has( $name );
-	//return hybrid_layout_registry()->exists( $name );
+	return layout_registry()->has( $name );
 }
 
 /**
@@ -109,10 +107,9 @@ function hybrid_layout_exists( $name ) {
  * @access public
  * @return array
  */
-function hybrid_get_layouts() {
+function get_layouts() {
 
-	return \Hybrid\app()->get( 'layouts' )->get_items();
-	//return hybrid_layout_registry()->get_collection();
+	return layout_registry()->get_items();
 }
 
 /**
@@ -124,10 +121,9 @@ function hybrid_get_layouts() {
  * @param  string      $name
  * @return object|bool
  */
-function hybrid_get_layout( $name ) {
+function get_layout( $name ) {
 
-	return \Hybrid\app()->get( 'layouts' )->get( $name );
-	//return hybrid_layout_registry()->get_layout( $name );
+	return layout_registry()->get( $name );
 }
 
 /**
@@ -138,9 +134,9 @@ function hybrid_get_layout( $name ) {
  * @access public
  * @return string
  */
-function hybrid_get_theme_layout() {
+function get_theme_layout() {
 
-	return apply_filters( 'hybrid_get_theme_layout', hybrid_get_global_layout() );
+	return apply_filters( 'hybrid_get_theme_layout', get_global_layout() );
 }
 
 /**
@@ -150,9 +146,9 @@ function hybrid_get_theme_layout() {
  * @access public
  * @return string
  */
-function hybrid_get_global_layout() {
+function get_global_layout() {
 
-	return hybrid_get_theme_mod( 'theme_layout', hybrid_get_default_layout() );
+	return hybrid_get_theme_mod( 'theme_layout', get_default_layout() );
 }
 
 /**
@@ -162,7 +158,7 @@ function hybrid_get_global_layout() {
  * @access public
  * @return string
  */
-function hybrid_get_default_layout() {
+function get_default_layout() {
 	$support = get_theme_support( 'theme-layouts' );
 
 	return isset( $support[0] ) && isset( $support[0]['default'] ) ? $support[0]['default'] : 'default';
@@ -176,9 +172,9 @@ function hybrid_get_default_layout() {
  * @param  string  $layout
  * @return bool
  */
-function hybrid_is_layout( $layout ) {
+function is_layout( $layout ) {
 
-	return $layout === hybrid_get_theme_layout();
+	return $layout === get_theme_layout();
 }
 
 /**
@@ -189,9 +185,9 @@ function hybrid_is_layout( $layout ) {
  * @param  int     $post_id
  * @return bool
  */
-function hybrid_get_post_layout( $post_id ) {
+function get_post_layout( $post_id ) {
 
-	return get_post_meta( $post_id, hybrid_get_layout_meta_key(), true );
+	return get_post_meta( $post_id, get_layout_meta_key(), true );
 }
 
 /**
@@ -203,9 +199,9 @@ function hybrid_get_post_layout( $post_id ) {
  * @param  string  $layout
  * @return bool
  */
-function hybrid_set_post_layout( $post_id, $layout ) {
+function set_post_layout( $post_id, $layout ) {
 
-	return 'default' !== $layout ? update_post_meta( $post_id, hybrid_get_layout_meta_key(), $layout ) : hybrid_delete_post_layout( $post_id );
+	return 'default' !== $layout ? update_post_meta( $post_id, get_layout_meta_key(), $layout ) : delete_post_layout( $post_id );
 }
 
 /**
@@ -216,9 +212,9 @@ function hybrid_set_post_layout( $post_id, $layout ) {
  * @param  int     $post_id
  * @return bool
  */
-function hybrid_delete_post_layout( $post_id ) {
+function delete_post_layout( $post_id ) {
 
-	return delete_post_meta( $post_id, hybrid_get_layout_meta_key() );
+	return delete_post_meta( $post_id, get_layout_meta_key() );
 }
 
 /**
@@ -229,12 +225,12 @@ function hybrid_delete_post_layout( $post_id ) {
  * @param  int     $post_id
  * @return bool
  */
-function hybrid_has_post_layout( $layout, $post_id = '' ) {
+function has_post_layout( $layout, $post_id = '' ) {
 
 	if ( ! $post_id )
 		$post_id = get_the_ID();
 
-	return $layout == hybrid_get_post_layout( $post_id ) ? true : false;
+	return $layout == get_post_layout( $post_id ) ? true : false;
 }
 
 /**
@@ -245,9 +241,9 @@ function hybrid_has_post_layout( $layout, $post_id = '' ) {
  * @param  int     $term_id
  * @return bool
  */
-function hybrid_get_term_layout( $term_id ) {
+function get_term_layout( $term_id ) {
 
-	return get_term_meta( $term_id, hybrid_get_layout_meta_key(), true );
+	return get_term_meta( $term_id, get_layout_meta_key(), true );
 }
 
 /**
@@ -259,9 +255,9 @@ function hybrid_get_term_layout( $term_id ) {
  * @param  string  $layout
  * @return bool
  */
-function hybrid_set_term_layout( $term_id, $layout ) {
+function set_term_layout( $term_id, $layout ) {
 
-	return 'default' !== $layout ? update_term_meta( $term_id, hybrid_get_layout_meta_key(), $layout ) : hybrid_delete_term_layout( $term_id );
+	return 'default' !== $layout ? update_term_meta( $term_id, get_layout_meta_key(), $layout ) : delete_term_layout( $term_id );
 }
 
 /**
@@ -272,9 +268,9 @@ function hybrid_set_term_layout( $term_id, $layout ) {
  * @param  int     $term_id
  * @return bool
  */
-function hybrid_delete_term_layout( $term_id ) {
+function delete_term_layout( $term_id ) {
 
-	return delete_term_meta( $term_id, hybrid_get_layout_meta_key() );
+	return delete_term_meta( $term_id, get_layout_meta_key() );
 }
 
 /**
@@ -285,12 +281,12 @@ function hybrid_delete_term_layout( $term_id ) {
  * @param  int     $term_id
  * @return bool
  */
-function hybrid_has_term_layout( $layout, $term_id = '' ) {
+function has_term_layout( $layout, $term_id = '' ) {
 
 	if ( ! $term_id )
 		$term_id = get_queried_object_id();
 
-	return $layout == hybrid_get_term_layout( $term_id ) ? true : false;
+	return $layout == get_term_layout( $term_id ) ? true : false;
 }
 
 /**
@@ -301,9 +297,9 @@ function hybrid_has_term_layout( $layout, $term_id = '' ) {
  * @param  int     $user_id
  * @return bool
  */
-function hybrid_get_user_layout( $user_id ) {
+function get_user_layout( $user_id ) {
 
-	return get_user_meta( $user_id, hybrid_get_layout_meta_key(), true );
+	return get_user_meta( $user_id, get_layout_meta_key(), true );
 }
 
 /**
@@ -315,9 +311,9 @@ function hybrid_get_user_layout( $user_id ) {
  * @param  string  $layout
  * @return bool
  */
-function hybrid_set_user_layout( $user_id, $layout ) {
+function set_user_layout( $user_id, $layout ) {
 
-	return 'default' !== $layout ? update_user_meta( $user_id, hybrid_get_layout_meta_key(), $layout ) : hybrid_delete_user_layout( $user_id );
+	return 'default' !== $layout ? update_user_meta( $user_id, get_layout_meta_key(), $layout ) : delete_user_layout( $user_id );
 }
 
 /**
@@ -328,9 +324,9 @@ function hybrid_set_user_layout( $user_id, $layout ) {
  * @param  int     $user_id
  * @return bool
  */
-function hybrid_delete_user_layout( $user_id ) {
+function delete_user_layout( $user_id ) {
 
-	return delete_user_meta( $user_id, hybrid_get_layout_meta_key() );
+	return delete_user_meta( $user_id, get_layout_meta_key() );
 }
 
 /**
@@ -342,12 +338,12 @@ function hybrid_delete_user_layout( $user_id ) {
  * @param  int     $user_id
  * @return bool
  */
-function hybrid_has_user_layout( $layout, $user_id = '' ) {
+function has_user_layout( $layout, $user_id = '' ) {
 
 	if ( ! $user_id )
 		$user_id = absint( get_query_var( 'author' ) );
 
-	return $layout == hybrid_get_user_layout( $user_id ) ? true : false;
+	return $layout == get_user_layout( $user_id ) ? true : false;
 }
 
 /**
@@ -360,21 +356,21 @@ function hybrid_has_user_layout( $layout, $user_id = '' ) {
  * @param  string  $theme_layout
  * @return string
  */
-function hybrid_filter_layout( $theme_layout ) {
+function filter_layout( $theme_layout ) {
 
 	// If viewing a singular post, get the post layout.
 	if ( is_singular() )
-		$layout = hybrid_get_post_layout( get_queried_object_id() );
+		$layout = get_post_layout( get_queried_object_id() );
 
 	// If viewing an author archive, get the user layout.
 	elseif ( is_author() )
-		$layout = hybrid_get_user_layout( get_queried_object_id() );
+		$layout = get_user_layout( get_queried_object_id() );
 
 	// If viewing a term archive, get the term layout.
 	elseif ( is_tax() || is_category() || is_tag() )
-		$layout = hybrid_get_term_layout( get_queried_object_id() );
+		$layout = get_term_layout( get_queried_object_id() );
 
-	return ! empty( $layout ) && hybrid_layout_exists( $layout ) && 'default' !== $layout ? $layout : $theme_layout;
+	return ! empty( $layout ) && layout_exists( $layout ) && 'default' !== $layout ? $layout : $theme_layout;
 }
 
 /**
@@ -387,7 +383,7 @@ function hybrid_filter_layout( $theme_layout ) {
  * @param  array  $feature
  * @return bool
  */
-function hybrid_theme_layouts_support( $supports, $args, $feature ) {
+function theme_layouts_support( $supports, $args, $feature ) {
 
 	if ( isset( $args[0] ) && in_array( $args[0], array( 'customize', 'post_meta', 'term_meta' ) ) ) {
 
@@ -405,7 +401,7 @@ function hybrid_theme_layouts_support( $supports, $args, $feature ) {
  * @access public
  * @return string
  */
-function hybrid_get_layout_meta_key() {
+function get_layout_meta_key() {
 
 	return apply_filters( 'hybrid_layout_meta_key', 'Layout' );
 }

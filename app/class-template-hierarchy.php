@@ -13,50 +13,24 @@
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
+namespace Hybrid;
+
 /**
  * Overwrites the core WP template hierarchy.
  *
  * @since  4.0.0
  * @access public
  */
-final class Hybrid_Template_Hiearchy {
-
-	/**
-	 * Returns the instance.
-	 *
-	 * @since  4.0.0
-	 * @access public
-	 * @return object
-	 */
-	public static function get_instance() {
-
-		static $instance = null;
-
-		if ( is_null( $instance ) ) {
-			$instance = new self;
-			$instance->setup();
-		}
-
-		return $instance;
-	}
-
-	/**
-	 * Constructor method.
-	 *
-	 * @since  4.0.0
-	 * @access private
-	 * @return void
-	 */
-	private function __construct() {}
+final class TemplateHierarchy {
 
 	/**
 	 * Sets up template hierarchy filters.
 	 *
 	 * @since  4.0.0
-	 * @access private
+	 * @access public
 	 * @return void
 	 */
-	private function setup() {
+	public function __construct() {
 
 		// Filter the front page template.
 		add_filter( 'frontpage_template_hierarchy',  array( $this, 'front_page' ), 5 );
@@ -133,7 +107,7 @@ final class Hybrid_Template_Hiearchy {
 		$name = urldecode( $post->post_name );
 
 		// Check for a custom post template.
-		$custom = hybrid_get_post_template( $post->ID );
+		$custom = get_post_template( $post->ID );
 
 		if ( $custom )
 			$templates[] = $custom;
@@ -142,8 +116,8 @@ final class Hybrid_Template_Hiearchy {
 		if ( is_attachment() ) {
 
 			// Split the mime type into two distinct parts.
-			$type    = hybrid_get_attachment_type();
-			$subtype = hybrid_get_attachment_subtype();
+			$type    = get_attachment_type();
+			$subtype = get_attachment_subtype();
 
 			if ( $subtype ) {
 				$templates[] = "attachment-{$type}-{$subtype}.php";
@@ -314,5 +288,3 @@ final class Hybrid_Template_Hiearchy {
 		return $templates;
 	}
 }
-
-Hybrid_Template_Hiearchy::get_instance();

@@ -10,14 +10,16 @@
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
+namespace Hybrid;
+
 # Filters the WordPress 'body_class' early.
-add_filter( 'body_class', 'hybrid_body_class_filter', 0, 2 );
+add_filter( 'body_class', __NAMESPACE__ . '\body_class_filter', 0, 2 );
 
 # Filters the WordPress 'post_class' early.
-add_filter( 'post_class', 'hybrid_post_class_filter', 0, 3 );
+add_filter( 'post_class', __NAMESPACE__ . '\post_class_filter', 0, 3 );
 
 # Filters the WordPress 'comment_class' early.
-add_filter( 'comment_class', 'hybrid_comment_class_filter', 0, 3 );
+add_filter( 'comment_class', __NAMESPACE__ . '\comment_class_filter', 0, 3 );
 
 /**
  * Hybrid's main contextual function.  This allows code to be used more than once without running
@@ -33,7 +35,7 @@ add_filter( 'comment_class', 'hybrid_comment_class_filter', 0, 3 );
  * @access public
  * @return array
  */
-function hybrid_get_context() {
+function get_context() {
 
 	// Set some variables for use within the function.
 	$context   = array();
@@ -140,7 +142,7 @@ function hybrid_get_context() {
  * @param  string|array $class
  * @return array
  */
-function hybrid_body_class_filter( $classes, $class ) {
+function body_class_filter( $classes, $class ) {
 
 	// WordPress class for uses when WordPress isn't always the only system on the site.
 	$classes = array( 'wordpress' );
@@ -150,7 +152,7 @@ function hybrid_body_class_filter( $classes, $class ) {
 
 	// Locale and language.
 	$locale = get_locale();
-	$lang   = hybrid_get_language( $locale );
+	$lang   = get_language( $locale );
 
 	if ( $locale !== $lang )
 		$classes[] = $lang;
@@ -194,11 +196,11 @@ function hybrid_body_class_filter( $classes, $class ) {
 		$classes[] = 'display-header-text';
 
 	// Plural/multiple-post view (opposite of singular).
-	if ( hybrid_is_plural() )
+	if ( is_plural() )
 		$classes[] = 'plural';
 
 	// Merge base contextual classes with $classes.
-	$classes = array_merge( $classes, hybrid_get_context() );
+	$classes = array_merge( $classes, get_context() );
 
 	// Singular post (post_type) classes.
 	if ( is_singular() ) {
@@ -207,7 +209,7 @@ function hybrid_body_class_filter( $classes, $class ) {
 		$post = get_queried_object();
 
 		// Checks for custom template.
-		$template = str_replace( array ( "{$post->post_type}-template-", "{$post->post_type}-" ), '', basename( hybrid_get_post_template( $post->ID ), '.php' ) );
+		$template = str_replace( array ( "{$post->post_type}-template-", "{$post->post_type}-" ), '', basename( get_post_template( $post->ID ), '.php' ) );
 
 		$classes[] = $template ? "{$post->post_type}-template-{$template}" : "{$post->post_type}-template-default";
 
@@ -231,7 +233,7 @@ function hybrid_body_class_filter( $classes, $class ) {
 		$term = get_queried_object();
 
 		// Checks for custom template.
-		$template = str_replace( array ( "{$term->taxonomy}-template-", "{$term->taxonomy}-" ), '', basename( hybrid_get_term_template( $term->term_id ), '.php' ) );
+		$template = str_replace( array ( "{$term->taxonomy}-template-", "{$term->taxonomy}-" ), '', basename( get_term_template( $term->term_id ), '.php' ) );
 
 		$classes[] = $template ? "{$term->taxonomy}-template-{$template}" : "{$term->taxonomy}-template-default";
 	}
@@ -250,7 +252,7 @@ function hybrid_body_class_filter( $classes, $class ) {
 
 	// Theme layouts.
 	if ( current_theme_supports( 'theme-layouts' ) )
-		$classes[] = sanitize_html_class( 'layout-' . hybrid_get_theme_layout() );
+		$classes[] = sanitize_html_class( 'layout-' . get_theme_layout() );
 
 	// Input class.
 	if ( $class ) {
@@ -273,7 +275,7 @@ function hybrid_body_class_filter( $classes, $class ) {
  * @param  int          $post_id
  * @return array
  */
-function hybrid_post_class_filter( $classes, $class, $post_id ) {
+function post_class_filter( $classes, $class, $post_id ) {
 
 	if ( is_admin() )
 		return $classes;
@@ -326,7 +328,7 @@ function hybrid_post_class_filter( $classes, $class, $post_id ) {
  * @param  int          $comment_id
  * @return array
  */
-function hybrid_comment_class_filter( $classes, $class, $comment_id ) {
+function comment_class_filter( $classes, $class, $comment_id ) {
 
 	$comment = get_comment( $comment_id );
 

@@ -11,6 +11,8 @@
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
+namespace Hybrid;
+
 /**
  * Checks if a post has any content. Useful if you need to check if the user has written any content
  * before performing any actions.
@@ -20,7 +22,7 @@
  * @param  int    $post_id
  * @return bool
  */
-function hybrid_post_has_content( $post_id = 0 ) {
+function post_has_content( $post_id = 0 ) {
 	$post = get_post( $post_id );
 
 	return ! empty( $post->post_content );
@@ -33,9 +35,9 @@ function hybrid_post_has_content( $post_id = 0 ) {
  * @access public
  * @return void
  */
-function hybrid_post_format_link() {
+function post_format_link() {
 
-	echo hybrid_get_post_format_link();
+	echo get_post_format_link();
 }
 
 /**
@@ -46,7 +48,7 @@ function hybrid_post_format_link() {
  * @access public
  * @return string
  */
-function hybrid_get_post_format_link() {
+function get_post_format_link() {
 
 	$format = get_post_format();
 	$url    = $format ? get_post_format_link( $format ) : get_permalink();
@@ -62,9 +64,9 @@ function hybrid_get_post_format_link() {
  * @param  array   $args
  * @return void
  */
-function hybrid_post_author( $args = array() ) {
+function post_author( $args = array() ) {
 
-	echo hybrid_get_post_author( $args );
+	echo get_post_author( $args );
 }
 
 /**
@@ -78,7 +80,7 @@ function hybrid_post_author( $args = array() ) {
  * @param  array   $args
  * @return string
  */
-function hybrid_get_post_author( $args = array() ) {
+function get_post_author( $args = array() ) {
 
 	$html = '';
 
@@ -99,7 +101,7 @@ function hybrid_get_post_author( $args = array() ) {
 
 	if ( $link ) {
 		$html .= $args['before'];
-		$html .= sprintf( $args['wrap'], hybrid_get_attr( 'entry-author' ), sprintf( $args['text'], $link ) );
+		$html .= sprintf( $args['wrap'], get_attr( 'entry-author' ), sprintf( $args['text'], $link ) );
 		$html .= $args['after'];
 	}
 
@@ -114,9 +116,9 @@ function hybrid_get_post_author( $args = array() ) {
  * @param  array   $args
  * @return void
  */
-function hybrid_post_terms( $args = array() ) {
+function post_terms( $args = array() ) {
 
-	echo hybrid_get_post_terms( $args );
+	echo get_post_terms( $args );
 }
 
 /**
@@ -133,7 +135,7 @@ function hybrid_post_terms( $args = array() ) {
  * @param  array   $args
  * @return string
  */
-function hybrid_get_post_terms( $args = array() ) {
+function get_post_terms( $args = array() ) {
 
 	$html = '';
 
@@ -154,7 +156,7 @@ function hybrid_get_post_terms( $args = array() ) {
 
 	if ( $terms ) {
 		$html .= $args['before'];
-		$html .= sprintf( $args['wrap'], hybrid_get_attr( 'entry-terms', $args['taxonomy'] ), sprintf( $args['text'], $terms ) );
+		$html .= sprintf( $args['wrap'], get_attr( 'entry-terms', $args['taxonomy'] ), sprintf( $args['text'], $terms ) );
 		$html .= $args['after'];
 	}
 
@@ -175,7 +177,7 @@ function hybrid_get_post_terms( $args = array() ) {
  * @access public
  * @return int
  */
-function hybrid_get_gallery_item_count() {
+function get_gallery_item_count() {
 
 	// Check the post content for galleries.
 	$galleries = get_post_galleries( get_the_ID(), true );
@@ -214,7 +216,7 @@ function hybrid_get_gallery_item_count() {
  * @access public
  * @return int
  */
-function hybrid_get_gallery_image_count() {
+function get_gallery_image_count() {
 
 	// Set up an empty array for images.
 	$images = array();
@@ -253,7 +255,7 @@ function hybrid_get_gallery_image_count() {
  * @param  string  $content
  * @return string
  */
-function hybrid_get_content_url( $content ) {
+function get_content_url( $content ) {
 
 	// Catch links that are not wrapped in an '<a>' tag.
 	preg_match( '/<a\s[^>]*?href=[\'"](.+?)[\'"]/is', make_clickable( $content ), $matches );
@@ -271,13 +273,13 @@ function hybrid_get_content_url( $content ) {
  * @param  object  $post
  * @return string
  */
-function hybrid_get_the_post_format_url( $url = '', $post = null ) {
+function get_the_post_format_url( $url = '', $post = null ) {
 
 	if ( ! $url ) {
 
 		$post = is_null( $post ) ? get_post() : $post;
 
-		$content_url = hybrid_get_content_url( $post->post_content );
+		$content_url = get_content_url( $post->post_content );
 
 		$url = $content_url ? esc_url( $content_url ) : esc_url( get_permalink( $post->ID ) );
 	}

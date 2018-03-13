@@ -11,13 +11,15 @@
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
+namespace Hybrid;
+
 /**
  * Creates new template objects.
  *
  * @since  4.0.0
  * @access public
  */
-class Hybrid_Template {
+class Template {
 
 	/**
 	 * Name/ID of the template.
@@ -160,8 +162,8 @@ class Hybrid_Template {
 
 		foreach ( $types as $type ) {
 
-			if ( ! has_filter( "theme_{$type}_templates", 'hybrid_post_templates_filter' ) )
-				add_filter( "theme_{$type}_templates", 'hybrid_post_templates_filter', 5, 4 );
+			if ( ! has_filter( "theme_{$type}_templates", __NAMESPACE__ . '\post_templates_filter' ) )
+				add_filter( "theme_{$type}_templates", __NAMESPACE__ . '\post_templates_filter', 5, 4 );
 		}
 	}
 }

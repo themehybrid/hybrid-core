@@ -11,13 +11,15 @@
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
+namespace Hybrid\Customize\Settings;
+
 /**
  * Handles an array of values by running the `sanitize_callback` through `array_map()`.
  *
  * @since  3.0.0
  * @access public
  */
-class Hybrid_Customize_Setting_Array_Map extends WP_Customize_Setting {
+class ArrayMap extends \WP_Customize_Setting {
 
 	/**
 	 * The sanitize callback function to run over each element of the array.

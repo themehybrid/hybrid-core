@@ -10,19 +10,21 @@
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
+namespace Hybrid;
+
 # Load custom control classes.
-add_action( 'customize_register', 'hybrid_load_customize_classes', 0 );
+add_action( 'customize_register', __NAMESPACE__ . '\load_customize_classes', 0 );
 
 # Register customizer panels, sections, settings, and/or controls.
-add_action( 'customize_register', 'hybrid_customize_register', 5 );
+add_action( 'customize_register', __NAMESPACE__ . '\customize_register', 5 );
 
 # Register customize controls scripts/styles.
-add_action( 'customize_controls_enqueue_scripts', 'hybrid_customize_controls_register_scripts', 0 );
-add_action( 'customize_controls_enqueue_scripts', 'hybrid_customize_controls_register_styles',  0 );
+add_action( 'customize_controls_enqueue_scripts', __NAMESPACE__ . '\customize_controls_register_scripts', 0 );
+add_action( 'customize_controls_enqueue_scripts', __NAMESPACE__ . '\customize_controls_register_styles',  0 );
 
 # Register/Enqueue customize preview scripts/styles.
-add_action( 'customize_preview_init', 'hybrid_customize_preview_register_scripts', 0 );
-add_action( 'customize_preview_init', 'hybrid_customize_preview_enqueue_scripts'     );
+add_action( 'customize_preview_init', __NAMESPACE__ . '\customize_preview_register_scripts', 0 );
+add_action( 'customize_preview_init', __NAMESPACE__ . '\customize_preview_enqueue_scripts'     );
 
 /**
  * Loads framework-specific customize classes.  These are classes that extend the core `WP_Customize_*`
@@ -33,28 +35,14 @@ add_action( 'customize_preview_init', 'hybrid_customize_preview_enqueue_scripts'
  * @param  object  $wp_customize
  * @return void
  */
-function hybrid_load_customize_classes( $wp_customize ) {
-
-	// Load customize setting classes.
-	require_once( \Hybrid\app()->dir . 'customize/setting-array-map.php'  );
-	require_once( \Hybrid\app()->dir . 'customize/setting-image-data.php' );
-
-	// Load customize control classes.
-	require_once( \Hybrid\app()->dir . 'customize/control-checkbox-multiple.php' );
-	require_once( \Hybrid\app()->dir . 'customize/control-dropdown-terms.php'    );
-	require_once( \Hybrid\app()->dir . 'customize/control-palette.php'           );
-	require_once( \Hybrid\app()->dir . 'customize/control-radio-image.php'       );
-	require_once( \Hybrid\app()->dir . 'customize/control-select-group.php'      );
-	require_once( \Hybrid\app()->dir . 'customize/control-select-multiple.php'   );
-
-	require_if_theme_supports( 'theme-layouts', \Hybrid\app()->dir . 'customize/control-layout.php' );
+function load_customize_classes( $wp_customize ) {
 
 	// Register JS control types.
-	$wp_customize->register_control_type( 'Hybrid_Customize_Control_Checkbox_Multiple' );
-	$wp_customize->register_control_type( 'Hybrid_Customize_Control_Palette'           );
-	$wp_customize->register_control_type( 'Hybrid_Customize_Control_Radio_Image'       );
-	$wp_customize->register_control_type( 'Hybrid_Customize_Control_Select_Group'      );
-	$wp_customize->register_control_type( 'Hybrid_Customize_Control_Select_Multiple'   );
+	$wp_customize->register_control_type( 'Hybrid\Customize\Controls\CheckboxMultiple' );
+	$wp_customize->register_control_type( 'Hybrid\Customize\Controls\Palette'          );
+	$wp_customize->register_control_type( 'Hybrid\Customize\Controls\RadioImage'       );
+	$wp_customize->register_control_type( 'Hybrid\Customize\Controls\SelectGroup'      );
+	$wp_customize->register_control_type( 'Hybrid\Customize\Controls\SelectMultiple'   );
 }
 
 /**
@@ -65,7 +53,7 @@ function hybrid_load_customize_classes( $wp_customize ) {
  * @param  object  $wp_customize
  * @return void
  */
-function hybrid_customize_register( $wp_customize ) {
+function customize_register( $wp_customize ) {
 
 	// Always add the layout section so that theme devs can utilize it.
 	$wp_customize->add_section(
@@ -83,7 +71,7 @@ function hybrid_customize_register( $wp_customize ) {
 		$wp_customize->add_setting(
 			'theme_layout',
 			array(
-				'default'           => hybrid_get_default_layout(),
+				'default'           => get_default_layout(),
 				'sanitize_callback' => 'sanitize_key',
 				'transport'         => 'postMessage'
 			)
@@ -91,7 +79,7 @@ function hybrid_customize_register( $wp_customize ) {
 
 		// Add the layout control.
 		$wp_customize->add_control(
-			new Hybrid_Customize_Control_Layout(
+			new Customize\Controls\Layout(
 				$wp_customize,
 				'theme_layout',
 				array( 'label' => esc_html__( 'Global Layout', 'hybrid-core' ) )
@@ -107,9 +95,9 @@ function hybrid_customize_register( $wp_customize ) {
  * @access public
  * @return void
  */
-function hybrid_customize_controls_register_scripts() {
+function customize_controls_register_scripts() {
 
-	wp_register_script( 'hybrid-customize-controls', \Hybrid\app()->uri . 'resources/scripts/customize-controls' . hybrid_get_min_suffix() . '.js', array( 'customize-controls' ), null, true );
+	wp_register_script( 'hybrid-customize-controls', app()->uri . 'resources/scripts/customize-controls' . hybrid_get_min_suffix() . '.js', array( 'customize-controls' ), null, true );
 }
 
 /**
@@ -119,9 +107,9 @@ function hybrid_customize_controls_register_scripts() {
  * @access public
  * @return void
  */
-function hybrid_customize_controls_register_styles() {
+function customize_controls_register_styles() {
 
-	wp_register_style( 'hybrid-customize-controls', \Hybrid\app()->uri . 'resources/styles/customize-controls' . hybrid_get_min_suffix() . '.css' );
+	wp_register_style( 'hybrid-customize-controls', app()->uri . 'resources/styles/customize-controls' . hybrid_get_min_suffix() . '.css' );
 }
 
 /**
@@ -131,9 +119,9 @@ function hybrid_customize_controls_register_styles() {
  * @access public
  * @return void
  */
-function hybrid_customize_preview_register_scripts() {
+function customize_preview_register_scripts() {
 
-	wp_register_script( 'hybrid-customize-preview', \Hybrid\app()->uri . 'resources/scripts/customize-preview' . hybrid_get_min_suffix() . '.js', array( 'jquery' ), null, true );
+	wp_register_script( 'hybrid-customize-preview', app()->uri . 'resources/scripts/customize-preview' . hybrid_get_min_suffix() . '.js', array( 'jquery' ), null, true );
 }
 
 /**
@@ -143,7 +131,7 @@ function hybrid_customize_preview_register_scripts() {
  * @access public
  * @return void
  */
-function hybrid_customize_preview_enqueue_scripts() {
+function customize_preview_enqueue_scripts() {
 
 	if ( current_theme_supports( 'theme-layouts', 'customize' ) )
 		wp_enqueue_script( 'hybrid-customize-preview' );

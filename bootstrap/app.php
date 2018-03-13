@@ -77,6 +77,14 @@ app()->add( 'media_meta', function( $container ) {
 	return new Collection();
 } );
 
+app()->add( 'template_hierarchy', function() {
+
+	return new TemplateHierarchy();
+} );
+
+// Resolve.
+app()->get( 'template_hierarchy' );
+
 // Load functions files.
 array_map(
 	function( $file ) {
@@ -85,13 +93,7 @@ array_map(
 	// Add file names of files to auto-load from the `/app` folder.
 	// Classes are auto-loaded, so we only need this for functions-files.
 	[
-		'class-chat',
-		'class-layout',
-		'class-media-grabber',
-		'class-media-meta',
 		'class-registry',
-		'class-template-hierarchy',
-		'class-template',
 		'functions-attr',
 		'functions-context',
 		'functions-customize',

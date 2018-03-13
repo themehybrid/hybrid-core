@@ -13,8 +13,10 @@
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
+namespace Hybrid;
+
 # Run hook for registering templates.
-add_action( 'init', 'hybrid_register_templates', 95 );
+add_action( 'init', __NAMESPACE__ . '\register_templates', 95 );
 
 /**
  * Returns the template registry. Use this function to access the object.
@@ -23,10 +25,9 @@ add_action( 'init', 'hybrid_register_templates', 95 );
  * @access public
  * @return object
  */
-function hybrid_template_registry() {
+function template_registry() {
 
-	return \Hybrid\app()->get( 'templates' );
-	//return hybrid_registry( 'template' );
+	return app()->get( 'templates' );
 }
 
 /**
@@ -37,7 +38,7 @@ function hybrid_template_registry() {
  * @access public
  * @return void
  */
-function hybrid_register_templates() {
+function register_templates() {
 
 	do_action( 'hybrid_register_templates' );
 }
@@ -45,17 +46,15 @@ function hybrid_register_templates() {
 /**
  * Function for registering a template.
  *
- * @see    Hybrid_Template_Factory::register_template()
  * @since  4.0.0
  * @access public
  * @param  string  $name
  * @param  array   $args
  * @return void
  */
-function hybrid_register_template( $name, $args = array() ) {
+function register_template( $name, $args = array() ) {
 
-	hybrid_template_registry()->add( $name, new Hybrid_Template( $name, $args ) );
-	//hybrid_template_registry()->register( $name, new Hybrid_Template( $name, $args ) );
+	template_registry()->add( $name, new Template( $name, $args ) );
 }
 
 /**
@@ -66,10 +65,9 @@ function hybrid_register_template( $name, $args = array() ) {
  * @param  string  $name
  * @return void
  */
-function hybrid_unregister_template( $name ) {
+function unregister_template( $name ) {
 
-	hybrid_template_registry()->remove( $name );
-	//hybrid_template_registry()->unregister( $name );
+	template_registry()->remove( $name );
 }
 
 /**
@@ -80,10 +78,9 @@ function hybrid_unregister_template( $name ) {
  * @param  string  $name
  * @return bool
  */
-function hybrid_template_exists( $name ) {
+function template_exists( $name ) {
 
-	return hybrid_template_registry()->has( $name );
-	//return hybrid_template_registry()->exists( $name );
+	return template_registry()->has( $name );
 }
 
 /**
@@ -93,10 +90,9 @@ function hybrid_template_exists( $name ) {
  * @access public
  * @return array
  */
-function hybrid_get_templates() {
+function get_templates() {
 
-	return hybrid_template_registry()->get_items();
-	//return hybrid_template_registry()->get_collection();
+	return template_registry()->get_items();
 }
 
 /**
@@ -107,9 +103,9 @@ function hybrid_get_templates() {
  * @param  string      $name
  * @return object|bool
  */
-function hybrid_get_template( $name ) {
+function get_template( $name ) {
 
-	return hybrid_template_registry()->get( $name );
+	return template_registry()->get( $name );
 }
 
 /**
@@ -120,7 +116,7 @@ function hybrid_get_template( $name ) {
  * @param  int     $post_id
  * @return bool
  */
-function hybrid_get_post_template( $post_id ) {
+function get_post_template( $post_id ) {
 
 	$type     = get_post_type( $post_id );
 	$template = get_page_template_slug( $post_id );
@@ -134,7 +130,7 @@ function hybrid_get_post_template( $post_id ) {
 
 	// If old template, run the compat function.
 	if ( $template )
-		hybrid_post_template_compat( $post_id, $template );
+		post_template_compat( $post_id, $template );
 
 	// Return the template.
 	return $template;
@@ -149,9 +145,9 @@ function hybrid_get_post_template( $post_id ) {
  * @param  string  $template
  * @return bool
  */
-function hybrid_set_post_template( $post_id, $template ) {
+function set_post_template( $post_id, $template ) {
 
-	return 'default' !== $template ? update_post_meta( $post_id, '_wp_page_template', $template ) : hybrid_delete_post_template( $post_id );
+	return 'default' !== $template ? update_post_meta( $post_id, '_wp_page_template', $template ) : delete_post_template( $post_id );
 }
 
 /**
@@ -162,7 +158,7 @@ function hybrid_set_post_template( $post_id, $template ) {
  * @param  int     $post_id
  * @return bool
  */
-function hybrid_delete_post_template( $post_id ) {
+function delete_post_template( $post_id ) {
 
 	return delete_post_meta( $post_id, '_wp_page_template' );
 }
@@ -177,12 +173,12 @@ function hybrid_delete_post_template( $post_id ) {
  * @param  int     $post_id
  * @return bool
  */
-function hybrid_has_post_template( $template = '', $post_id = '' ) {
+function has_post_template( $template = '', $post_id = '' ) {
 
 	if ( ! $post_id )
 		$post_id = get_the_ID();
 
-	return hybrid_check_template_match( $template, hybrid_get_post_template( $post_id ) );
+	return check_template_match( $template, get_post_template( $post_id ) );
 }
 
 /**
@@ -193,9 +189,9 @@ function hybrid_has_post_template( $template = '', $post_id = '' ) {
  * @param  int     $term_id
  * @return bool
  */
-function hybrid_get_term_template( $term_id ) {
+function get_term_template( $term_id ) {
 
-	return get_term_meta( $term_id, hybrid_get_template_meta_key(), true );
+	return get_term_meta( $term_id, get_template_meta_key(), true );
 }
 
 /**
@@ -207,9 +203,9 @@ function hybrid_get_term_template( $term_id ) {
  * @param  string  $template
  * @return bool
  */
-function hybrid_set_term_template( $term_id, $template ) {
+function set_term_template( $term_id, $template ) {
 
-	return 'default' !== $template ? update_term_meta( $term_id, hybrid_get_template_meta_key(), $template ) : hybrid_delete_term_template( $term_id );
+	return 'default' !== $template ? update_term_meta( $term_id, get_template_meta_key(), $template ) : delete_term_template( $term_id );
 }
 
 /**
@@ -220,9 +216,9 @@ function hybrid_set_term_template( $term_id, $template ) {
  * @param  int     $term_id
  * @return bool
  */
-function hybrid_delete_term_template( $term_id ) {
+function delete_term_template( $term_id ) {
 
-	return delete_term_meta( $term_id, hybrid_get_template_meta_key() );
+	return delete_term_meta( $term_id, get_template_meta_key() );
 }
 
 /**
@@ -234,12 +230,12 @@ function hybrid_delete_term_template( $term_id ) {
  * @param  int     $term_id
  * @return bool
  */
-function hybrid_has_term_template( $template = '', $term_id = '' ) {
+function has_term_template( $template = '', $term_id = '' ) {
 
 	if ( ! $term_id )
 		$term_id = get_queried_object_id();
 
-	return hybrid_check_template_match( $template, hybrid_get_term_template( $term_id ) );
+	return check_template_match( $template, get_term_template( $term_id ) );
 }
 
 /**
@@ -250,9 +246,9 @@ function hybrid_has_term_template( $template = '', $term_id = '' ) {
  * @param  int     $user_id
  * @return bool
  */
-function hybrid_get_user_template( $user_id ) {
+function get_user_template( $user_id ) {
 
-	return get_user_meta( $user_id, hybrid_get_template_meta_key(), true );
+	return get_user_meta( $user_id, get_template_meta_key(), true );
 }
 
 /**
@@ -264,9 +260,9 @@ function hybrid_get_user_template( $user_id ) {
  * @param  string  $template
  * @return bool
  */
-function hybrid_set_user_template( $user_id, $template ) {
+function set_user_template( $user_id, $template ) {
 
-	return 'default' !== $template ? update_user_meta( $user_id, hybrid_get_template_meta_key(), $template ) : hybrid_delete_user_template( $user_id );
+	return 'default' !== $template ? update_user_meta( $user_id, get_template_meta_key(), $template ) : delete_user_template( $user_id );
 }
 
 /**
@@ -277,9 +273,9 @@ function hybrid_set_user_template( $user_id, $template ) {
  * @param  int     $user_id
  * @return bool
  */
-function hybrid_delete_user_template( $user_id ) {
+function delete_user_template( $user_id ) {
 
-	return delete_user_meta( $user_id, hybrid_get_template_meta_key() );
+	return delete_user_meta( $user_id, get_template_meta_key() );
 }
 
 /**
@@ -292,12 +288,12 @@ function hybrid_delete_user_template( $user_id ) {
  * @param  int     $user_id
  * @return bool
  */
-function hybrid_has_user_template( $template = '', $user_id = '' ) {
+function has_user_template( $template = '', $user_id = '' ) {
 
 	if ( ! $user_id )
 		$user_id = absint( get_query_var( 'author' ) );
 
-	return hybrid_check_template_match( $template, hybrid_get_user_template( $user_id ) );
+	return check_template_match( $template, get_user_template( $user_id ) );
 }
 
 /**
@@ -310,7 +306,7 @@ function hybrid_has_user_template( $template = '', $user_id = '' ) {
  * @param  string  $filename
  * @return bool
  */
-function hybrid_check_template_match( $template, $filename ) {
+function check_template_match( $template, $filename ) {
 
 	// Check if the template is the filename.
 	// This is the most likely scenario because templates should be stored by
@@ -321,7 +317,7 @@ function hybrid_check_template_match( $template, $filename ) {
 	// Check if the template matches a template object by filename.
 	if ( $template && $filename ) {
 
-		$templates = wp_list_filter( hybrid_get_templates(), array( 'filename' => $filename ) );
+		$templates = wp_list_filter( get_templates(), array( 'filename' => $filename ) );
 
 		if ( $templates ) {
 
@@ -342,7 +338,7 @@ function hybrid_check_template_match( $template, $filename ) {
  * @access public
  * @return string
  */
-function hybrid_get_template_meta_key() {
+function get_template_meta_key() {
 
 	return apply_filters( 'hybrid_template_meta_key', 'template' );
 }
@@ -359,11 +355,11 @@ function hybrid_get_template_meta_key() {
  * @param  string  $post_type
  * @return array
  */
-function hybrid_post_templates_filter( $post_templates, $theme, $post, $post_type ) {
+function post_templates_filter( $post_templates, $theme, $post, $post_type ) {
 
 	$args = array( 'is_post_template' => false, 'filename' => '' );
 
-	$templates = wp_list_filter( hybrid_get_templates(), $args, 'NOT' );
+	$templates = wp_list_filter( get_templates(), $args, 'NOT' );
 
 	foreach ( $templates as $template ) {
 

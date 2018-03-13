@@ -14,11 +14,13 @@
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
+namespace Hybrid;
+
 # Attributes for a few default elements.
-add_filter( 'hybrid_attr_body',    'hybrid_attr_body',    5 );
-add_filter( 'hybrid_attr_post',    'hybrid_attr_post',    5 );
-add_filter( 'hybrid_attr_entry',   'hybrid_attr_post',    5 ); // Alternate for "post".
-add_filter( 'hybrid_attr_comment', 'hybrid_attr_comment', 5 );
+add_filter( 'hybrid_attr_body',    __NAMESPACE__ . '\attr_body',    5 );
+add_filter( 'hybrid_attr_post',    __NAMESPACE__ . '\attr_post',    5 );
+add_filter( 'hybrid_attr_entry',   __NAMESPACE__ . '\attr_post',    5 ); // Alternate for "post".
+add_filter( 'hybrid_attr_comment', __NAMESPACE__ . '\attr_comment', 5 );
 
 /**
  * Outputs an HTML element's attributes.
@@ -30,9 +32,9 @@ add_filter( 'hybrid_attr_comment', 'hybrid_attr_comment', 5 );
  * @param  array   $attr     Array of attributes to pass in (overwrites filters).
  * @return void
  */
-function hybrid_attr( $slug, $context = '', $attr = array()  ) {
+function attr( $slug, $context = '', $attr = array()  ) {
 
-	echo hybrid_get_attr( $slug, $context, $attr );
+	echo get_attr( $slug, $context, $attr );
 }
 
 /**
@@ -48,7 +50,7 @@ function hybrid_attr( $slug, $context = '', $attr = array()  ) {
  * @param  array   $attr     Array of attributes to pass in (overwrites filters).
  * @return string
  */
-function hybrid_get_attr( $slug, $context = '', $attr = array() ) {
+function get_attr( $slug, $context = '', $attr = array() ) {
 
 	$out = '';
 
@@ -87,7 +89,7 @@ function hybrid_get_attr( $slug, $context = '', $attr = array() ) {
  * @param  array   $attr
  * @return array
  */
-function hybrid_attr_body( $attr ) {
+function attr_body( $attr ) {
 
 	$attr['class'] = join( ' ', get_body_class() );
 	$attr['dir']   = is_rtl() ? 'rtl' : 'ltr';
@@ -103,7 +105,7 @@ function hybrid_attr_body( $attr ) {
  * @param  array   $attr
  * @return array
  */
-function hybrid_attr_post( $attr ) {
+function attr_post( $attr ) {
 
 	$post = get_post();
 
@@ -122,7 +124,7 @@ function hybrid_attr_post( $attr ) {
  * @param  array   $attr
  * @return array
  */
-function hybrid_attr_comment( $attr ) {
+function attr_comment( $attr ) {
 
 	$attr['id']    = 'comment-' . get_comment_ID();
 	$attr['class'] = join( ' ', get_comment_class() );

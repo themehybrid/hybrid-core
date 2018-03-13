@@ -11,6 +11,8 @@
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
+namespace Hybrid;
+
 /**
  * Wrapper function for WordPress' register_sidebar() function.  This function exists so that theme authors
  * can more quickly register sidebars with an HTML5 structure instead of having to write the same code
@@ -22,7 +24,7 @@
  * @param  array   $args
  * @return string  Sidebar ID.
  */
-function hybrid_register_sidebar( $args ) {
+function register_sidebar( $args ) {
 
 	// Set up some default sidebar arguments.
 	$defaults = array(
@@ -42,7 +44,7 @@ function hybrid_register_sidebar( $args ) {
 	remove_action( 'widgets_init', '__return_false', 95 );
 
 	// Register the sidebar.
-	return register_sidebar( apply_filters( 'hybrid_sidebar_args', $args ) );
+	return \register_sidebar( apply_filters( 'hybrid_sidebar_args', $args ) );
 }
 
 # Compatibility for when a theme doesn't register any sidebars.
@@ -57,7 +59,7 @@ add_action( 'widgets_init', '__return_false', 95 );
  * @param  string  $sidebar_id
  * @return string
  */
-function hybrid_get_sidebar_name( $sidebar_id ) {
+function get_sidebar_name( $sidebar_id ) {
 	global $wp_registered_sidebars;
 
 	return isset( $wp_registered_sidebars[ $sidebar_id ] ) ? $wp_registered_sidebars[ $sidebar_id ]['name'] : '';
@@ -72,7 +74,7 @@ function hybrid_get_sidebar_name( $sidebar_id ) {
  * @param  string  $widget
  * @return bool
  */
-function hybrid_widget_exists( $widget ) {
+function widget_exists( $widget ) {
 
 	return isset( $GLOBALS['wp_widget_factory']->widgets[ $widget ] );
 }

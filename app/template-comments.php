@@ -10,8 +10,10 @@
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
+namespace Hybrid;
+
 # Filter the comments template.
-add_filter( 'comments_template', 'hybrid_comments_template', 5 );
+add_filter( 'comments_template', __NAMESPACE__ . '\comments_template', 5 );
 
 /**
  * Outputs the comment reply link.  Only use outside of `wp_list_comments()`.
@@ -21,9 +23,9 @@ add_filter( 'comments_template', 'hybrid_comments_template', 5 );
  * @param  array   $args
  * @return void
  */
-function hybrid_comment_reply_link( $args = array() ) {
+function comment_reply_link( $args = array() ) {
 
-	echo hybrid_get_comment_reply_link( $args );
+	echo get_comment_reply_link( $args );
 }
 
 /**
@@ -36,7 +38,7 @@ function hybrid_comment_reply_link( $args = array() ) {
  * @param  array  $args
  * @return string
  */
-function hybrid_get_comment_reply_link( $args = array() ) {
+function get_comment_reply_link( $args = array() ) {
 
 	if ( ! get_option( 'thread_comments' ) || in_array( get_comment_type(), array( 'pingback', 'trackback' ) ) )
 		return '';
@@ -49,7 +51,7 @@ function hybrid_get_comment_reply_link( $args = array() ) {
 		)
 	);
 
-	return get_comment_reply_link( $args );
+	return \get_comment_reply_link( $args );
 }
 
 /**
@@ -60,9 +62,9 @@ function hybrid_get_comment_reply_link( $args = array() ) {
  * @param  array   $args
  * @return void
  */
-function hybrid_comment_parent_link( $args = array() ) {
+function comment_parent_link( $args = array() ) {
 
-	echo hybrid_get_comment_parent_link( $args );
+	echo get_comment_parent_link( $args );
 }
 
 /**
@@ -73,7 +75,7 @@ function hybrid_comment_parent_link( $args = array() ) {
  * @param  array   $args
  * @return string
  */
-function hybrid_get_comment_parent_link( $args = array() ) {
+function get_comment_parent_link( $args = array() ) {
 
 	$link = '';
 
@@ -118,13 +120,13 @@ function hybrid_get_comment_parent_link( $args = array() ) {
  * @param  object  $comment
  * @return void
  */
-function hybrid_comments_callback( $comment ) {
+function comments_callback( $comment ) {
 
 	// Get the comment type of the current comment.
 	$comment_type = get_comment_type( $comment->comment_ID );
 
 	// Check if a template has been provided for the specific comment type.  If not, get the template.
-	if ( ! isset( \Hybrid\app()->comment_templates[ $comment_type ] ) ) {
+	if ( ! isset( app()->comment_templates[ $comment_type ] ) ) {
 
 		// Create an array of template files to look for.
 		$templates = array( "comment-{$comment_type}.php", "comment/{$comment_type}.php" );
@@ -146,12 +148,12 @@ function hybrid_comments_callback( $comment ) {
 		$template = locate_template( $templates );
 
 		// Set the template in the comment templates array.
-		\Hybrid\app()->comment_templates[ $comment_type ] = $template;
+		app()->comment_templates[ $comment_type ] = $template;
 	}
 
 	// If a template was found, load the template.
-	if ( ! empty( \Hybrid\app()->comment_templates[ $comment_type ] ) )
-		require( \Hybrid\app()->comment_templates[ $comment_type ] );
+	if ( ! empty( app()->comment_templates[ $comment_type ] ) )
+		require( app()->comment_templates[ $comment_type ] );
 }
 
 /**
@@ -163,7 +165,7 @@ function hybrid_comments_callback( $comment ) {
  * @access public
  * @return void
  */
-function hybrid_comments_end_callback() {
+function comments_end_callback() {
 
 	echo '</li><!-- .comment -->';
 }
@@ -178,12 +180,12 @@ function hybrid_comments_end_callback() {
  * @param  string $template The comments template file name.
  * @return string $template The theme comments template after all templates have been checked for.
  */
-function hybrid_comments_template( $template ) {
+function comments_template( $template ) {
 
 	$templates = array();
 
 	// Allow for custom templates entered into comments_template( $file ).
-	$template = str_replace( \Hybrid\app()->child_dir, '', $template );
+	$template = str_replace( app()->child_dir, '', $template );
 
 	if ( 'comments.php' !== $template )
 		$templates[] = $template;

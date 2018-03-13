@@ -11,13 +11,15 @@
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
+namespace Hybrid;
+
 /**
  * Creates new layout objects.
  *
  * @since  3.0.0
  * @access public
  */
-class Hybrid_Layout {
+class Layout {
 
 	/**
 	 * Whether to show as an option in the customizer.

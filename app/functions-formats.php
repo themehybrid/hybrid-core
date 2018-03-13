@@ -165,7 +165,7 @@ function hybrid_chat_content( $content ) {
  */
 function hybrid_get_chat_transcript( $content ) {
 
-	$chat = new Hybrid_Chat( $content );
+	$chat = new Hybrid\Chat( $content );
 
 	return $chat->get_transcript();
 }
