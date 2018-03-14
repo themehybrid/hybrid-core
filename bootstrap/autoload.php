@@ -63,7 +63,7 @@ spl_autoload_register( function( $class ) {
 	$file = join( DIRECTORY_SEPARATOR, $new_pieces );
 
 	// Get the file from the `/app` folder.
-	$file = require_once( trailingslashit( realpath( trailingslashit( __DIR__ ) . '../' ) ) . "app/{$file}" );
+	$file = require_once( HYBRID_DIR . "app/{$file}" );
 
 	// Include the file only if it exists.
 	if ( file_exists( $file ) ) {
