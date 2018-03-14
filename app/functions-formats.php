@@ -11,8 +11,10 @@
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
+namespace Hybrid;
+
 # Add support for structured post formats.
-add_action( 'wp_loaded', 'hybrid_structured_post_formats', 0 );
+add_action( 'wp_loaded', __NAMESPACE__ . '\structured_post_formats', 0 );
 
 /**
  * Theme compatibility for post formats.  This function adds appropriate filters to 'the_content' for
@@ -22,23 +24,23 @@ add_action( 'wp_loaded', 'hybrid_structured_post_formats', 0 );
  * @access public
  * @return void
  */
-function hybrid_structured_post_formats() {
+function structured_post_formats() {
 
 	// Add infinity symbol to aside posts.
 	if ( current_theme_supports( 'post-formats', 'aside' ) )
-		add_filter( 'the_content', 'hybrid_aside_infinity', 9 ); // run before wpautop
+		add_filter( 'the_content', __NAMESPACE__ . '\aside_infinity', 9 ); // run before wpautop
 
 	// Adds the link to the content if it's not in the post.
 	if ( current_theme_supports( 'post-formats', 'link' ) )
-		add_filter( 'the_content', 'hybrid_link_content', 9 ); // run before wpautop
+		add_filter( 'the_content', __NAMESPACE__ . '\link_content', 9 ); // run before wpautop
 
 	// Wraps `<blockquote>` around quote posts.
 	if ( current_theme_supports( 'post-formats', 'quote' ) )
-		add_filter( 'the_content', 'hybrid_quote_content' );
+		add_filter( 'the_content', __NAMESPACE__ . '\quote_content' );
 
 	// Filter the content of chat posts.
 	if ( current_theme_supports( 'post-formats', 'chat' ) )
-		add_filter( 'the_content', 'hybrid_chat_content', 9 ); // run before wpautop
+		add_filter( 'the_content', __NAMESPACE__ . '\chat_content', 9 ); // run before wpautop
 }
 
 /**
@@ -49,7 +51,7 @@ function hybrid_structured_post_formats() {
  * @param  string  $slug
  * @return string
  */
-function hybrid_clean_post_format_slug( $slug ) {
+function clean_post_format_slug( $slug ) {
 
 	return str_replace( 'post-format-', '', $slug );
 }
@@ -64,7 +66,7 @@ function hybrid_clean_post_format_slug( $slug ) {
  * @param  string $content
  * @return string
  */
-function hybrid_aside_infinity( $content ) {
+function aside_infinity( $content ) {
 
 	if ( has_post_format( 'aside' ) && ! is_singular() && ! post_password_required() )
 		$content .= apply_filters( 'hybrid_aside_infinity', sprintf( ' <a class="permalink" href="%s">&#8734;</a>', esc_url( get_permalink() ) ) );
@@ -83,7 +85,7 @@ function hybrid_aside_infinity( $content ) {
  * @param  string  $content
  * @return string
  */
-function hybrid_image_content( $content ) {
+function image_content( $content ) {
 
 	if ( has_post_format( 'image' ) && ! post_password_required() ) {
 		preg_match( '/<img.*?>/', $content, $matches );
@@ -109,7 +111,7 @@ function hybrid_image_content( $content ) {
  * @param  string $content
  * @return string
  */
-function hybrid_link_content( $content ) {
+function link_content( $content ) {
 
 	if ( has_post_format( 'link' ) && ! post_password_required() && ! preg_match( '/<a\s[^>]*?href=[\'"](.+?)[\'"]/is', $content ) )
 		$content = make_clickable( $content );
@@ -128,7 +130,7 @@ function hybrid_link_content( $content ) {
  * @param  string $content
  * @return string
  */
-function hybrid_quote_content( $content ) {
+function quote_content( $content ) {
 
 	if ( has_post_format( 'quote' ) && ! post_password_required() ) {
 		preg_match( '/<blockquote.*?>/', $content, $matches );
@@ -150,9 +152,9 @@ function hybrid_quote_content( $content ) {
  * @param  string  $content
  * @return string
  */
-function hybrid_chat_content( $content ) {
+function chat_content( $content ) {
 
-	return has_post_format( 'chat' ) && ! post_password_required() ? hybrid_get_chat_transcript( $content ) : $content;
+	return has_post_format( 'chat' ) && ! post_password_required() ? get_chat_transcript( $content ) : $content;
 }
 
 /**
@@ -163,9 +165,9 @@ function hybrid_chat_content( $content ) {
  * @param  string  $content
  * @return string
  */
-function hybrid_get_chat_transcript( $content ) {
+function get_chat_transcript( $content ) {
 
-	$chat = new Hybrid\Chat( $content );
+	$chat = new Chat( $content );
 
 	return $chat->get_transcript();
 }

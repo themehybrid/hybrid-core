@@ -95,7 +95,7 @@ function get_post_author( $args = array() ) {
 
 	// Output buffering to get the author posts link.
 	ob_start();
-	the_author_posts_link();
+	\the_author_posts_link();
 	$link = ob_get_clean();
 	// A small piece of my soul just died.  Kittens no longer purr.  Dolphins lost the ability to swim with grace.
 

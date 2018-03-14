@@ -16,6 +16,8 @@
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
+namespace Hybrid;
+
 /**
  * Registers a font.
  *
@@ -26,7 +28,7 @@
  * @param  array   $args
  * @return bool
  */
-function hybrid_register_font( $handle, $args = array() ) {
+function register_font( $handle, $args = array() ) {
 
 	$args = wp_parse_args(
 		$args,
@@ -45,7 +47,7 @@ function hybrid_register_font( $handle, $args = array() ) {
 		)
 	);
 
-	$url = hybrid_get_font_url( $handle, $args );
+	$url = get_font_url( $handle, $args );
 
 	return wp_register_style( "{$handle}-font", $url, $args['depends'], $args['version'], $args['media'] );
 }
@@ -59,7 +61,7 @@ function hybrid_register_font( $handle, $args = array() ) {
  * @param  string  $handle
  * @return void
  */
-function hybrid_deregister_font( $handle ) {
+function deregister_font( $handle ) {
 
 	wp_deregister_style( "{$handle}-font" );
 }
@@ -75,10 +77,10 @@ function hybrid_deregister_font( $handle ) {
  * @param  array   $args
  * @return void
  */
-function hybrid_enqueue_font( $handle, $args = array() ) {
+function enqueue_font( $handle, $args = array() ) {
 
-	if ( ! hybrid_font_is_registered( $handle ) )
-		hybrid_register_font( $handle, $args );
+	if ( ! font_is_registered( $handle ) )
+		register_font( $handle, $args );
 
 	wp_enqueue_style( "{$handle}-font" );
 }
@@ -92,7 +94,7 @@ function hybrid_enqueue_font( $handle, $args = array() ) {
  * @param  string  $handle
  * @return void
  */
-function hybrid_dequeue_font( $handle ) {
+function dequeue_font( $handle ) {
 
 	wp_dequeue_style( "{$handle}-font" );
 }
@@ -107,7 +109,7 @@ function hybrid_dequeue_font( $handle ) {
  * @param  string  $list
  * @return bool
  */
-function hybrid_font_is( $handle, $list = 'enqueued' ) {
+function font_is( $handle, $list = 'enqueued' ) {
 
 	return wp_style_is( "{$handle}-font", $list );
 }
@@ -120,9 +122,9 @@ function hybrid_font_is( $handle, $list = 'enqueued' ) {
  * @param  string  $handle
  * @return bool
  */
-function hybrid_font_is_registered( $handle ) {
+function font_is_registered( $handle ) {
 
-	return hybrid_font_is( $handle, 'registered' );
+	return font_is( $handle, 'registered' );
 }
 
 /**
@@ -133,9 +135,9 @@ function hybrid_font_is_registered( $handle ) {
  * @param  string  $handle
  * @return bool
  */
-function hybrid_font_is_enqueued( $handle ) {
+function font_is_enqueued( $handle ) {
 
-	return hybrid_font_is( $handle, 'enqueued' );
+	return font_is( $handle, 'enqueued' );
 }
 
 /**
@@ -148,7 +150,7 @@ function hybrid_font_is_enqueued( $handle ) {
  * @param  array   $args
  * @return void
  */
-function hybrid_get_font_url( $handle, $args ) {
+function get_font_url( $handle, $args ) {
 
 	$font_url   = $args['src'] ? $args['src'] : '';
 	$query_args = array();

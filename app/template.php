@@ -11,6 +11,8 @@
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
+namespace Hybrid;
+
 /**
  * Template part getter function.  This is more robust than the existing core
  * WordPress template function while being compatible with its hooks.
@@ -21,7 +23,7 @@
  * @param  string  $name
  * @return void
  */
-function hybrid_get_template_part( $slug, $name = '' ) {
+function get_template_part( $slug, $name = '' ) {
 
 	do_action( "get_template_part_{$slug}", $slug, $name ); // Core WP hook.
 
@@ -56,9 +58,9 @@ function hybrid_get_template_part( $slug, $name = '' ) {
  * @param  string  $name
  * @return void
  */
-function hybrid_get_menu( $name = '' ) {
+function get_menu( $name = '' ) {
 
-	hybrid_get_template_part( 'menu', $name );
+	get_template_part( 'menu', $name );
 }
 
 /**
@@ -82,11 +84,11 @@ function hybrid_get_menu( $name = '' ) {
  * @param  string  $name
  * @return void
  */
-function hybrid_get_header( $name = '' ) {
+function get_header( $name = '' ) {
 
 	do_action( 'get_header', $name ); // Core WordPress hook
 
-	hybrid_get_template_part( 'header', $name );
+	get_template_part( 'header', $name );
 }
 
 /**
@@ -110,11 +112,11 @@ function hybrid_get_header( $name = '' ) {
  * @param  string  $name
  * @return void
  */
-function hybrid_get_footer( $name = '' ) {
+function get_footer( $name = '' ) {
 
 	do_action( 'get_footer', $name ); // Core WordPress hook
 
-	hybrid_get_template_part( 'footer', $name );
+	get_template_part( 'footer', $name );
 }
 
 /**
@@ -138,11 +140,11 @@ function hybrid_get_footer( $name = '' ) {
  * @param  string  $name
  * @return void
  */
-function hybrid_get_sidebar( $name = '' ) {
+function get_sidebar( $name = '' ) {
 
 	do_action( 'get_sidebar', $name ); // Core WordPress hook
 
-	hybrid_get_template_part( 'sidebar', $name );
+	get_template_part( 'sidebar', $name );
 }
 
 /**
@@ -158,7 +160,7 @@ function hybrid_get_sidebar( $name = '' ) {
  * @access public
  * @return string
  */
-function hybrid_get_content_template() {
+function get_content_template() {
 
 	// Set up an empty array and get the post type.
 	$templates = array();
@@ -195,7 +197,7 @@ function hybrid_get_content_template() {
  * @access public
  * @return void
  */
-function hybrid_get_embed_template() {
+function get_embed_template() {
 
 	// Set up an empty array and get the post type.
 	$templates = array();
@@ -233,7 +235,7 @@ function hybrid_get_embed_template() {
  * @access public
  * @return array
  */
-function hybrid_get_content_hierarchy() {
+function get_content_hierarchy() {
 
 	// Set up an empty array and get the post type.
 	$hierarchy = array();

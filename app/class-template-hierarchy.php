@@ -15,6 +15,8 @@
 
 namespace Hybrid;
 
+use WP_User;
+
 /**
  * Overwrites the core WP template hierarchy.
  *

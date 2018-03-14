@@ -12,6 +12,8 @@
 
 namespace Hybrid;
 
+use WP_User;
+
 # Filters the WordPress 'body_class' early.
 add_filter( 'body_class', __NAMESPACE__ . '\body_class_filter', 0, 2 );
 
