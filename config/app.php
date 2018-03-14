@@ -31,7 +31,7 @@ return [
 	 |
 	 */
 
-	'dir' => defined( 'HYBRID_DIR' ) ? HYBRID_DIR : trailingslashit( realpath( trailingslashit( __DIR__ ) . '../' ) ),
+	'dir' => HYBRID_DIR,
 
 	/*
 	 |-------------------------------------------------------------------------
@@ -42,12 +42,6 @@ return [
 	 |
 	 */
 
-	'uri' => defined( 'HYBRID_URI' )
-	         ? HYBRID_DIR
-		 : esc_url( trailingslashit( str_replace(
-	                 wp_normalize_path( untrailingslashit( ABSPATH ) ),
-	                 site_url(),
-	                 wp_normalize_path( realpath( trailingslashit( __DIR__ ) . '../' ) )
-	         ) ) ),
+	'uri' => HYBRID_URI,
 
 ];

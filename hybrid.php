@@ -26,6 +26,26 @@
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
+/*
+ * Define the directory path to the framework. This shouldn't
+ * need changing unless doing something really out there or
+ * just for clarity.
+ */
+if ( ! defined( 'HYBRID_DIR' ) ) {
+
+	define( 'HYBRID_DIR', trailingslashit( __DIR__ ) );
+}
+
+/*
+ * Define the directory URI to the framework. The assumption is
+ * that the framework is loaded from the parent theme folder.
+ * If not, this definitely needs to be defined for scripts/styles.
+ */
+if ( ! defined( 'HYBRID_URI' ) ) {
+
+	define( 'HYBRID_URI', trailingslashit( str_replace( get_template_directory(), get_template_directory_uri(), wp_normalize_path( __DIR__ ) ) ) );
+}
+
 
 if ( ! function_exists( '\\Hybrid\\app' ) ) {
 
