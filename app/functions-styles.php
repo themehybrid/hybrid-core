@@ -12,12 +12,6 @@
 
 namespace Hybrid;
 
-# Register Hybrid Core styles.
-add_action( 'wp_enqueue_scripts',    __NAMESPACE__ . '\register_styles', 0 );
-add_action( 'enqueue_embed_scripts', __NAMESPACE__ . '\register_styles', 0 );
-add_action( 'login_enqueue_scripts', __NAMESPACE__ . '\register_styles', 0 );
-add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\register_styles', 0 );
-
 # Active theme style filters.
 add_filter( 'stylesheet_uri', __NAMESPACE__ . '\min_stylesheet_uri', 5, 2 );
 
@@ -26,35 +20,6 @@ add_filter( 'locale_stylesheet_uri', __NAMESPACE__ . '\locale_stylesheet_uri', 5
 
 # Remove the default emoji styles. We'll handle this in the stylesheet.
 remove_action( 'wp_print_styles', 'print_emoji_styles' );
-
-/**
- * Registers stylesheets for the framework.  This function merely registers styles with WordPress using
- * the wp_register_style() function.  It does not load any stylesheets on the site.  If a theme wants to
- * register its own custom styles, it should do so on the 'wp_enqueue_scripts' hook.
- *
- * @since  1.5.0
- * @access public
- * @global object  $wp_styles
- * @return void
- */
-function register_styles() {
-	global $wp_styles;
-
-	$suffix = get_min_suffix();
-
-	// Register styles for use by themes.
-	wp_register_style( 'hybrid-one-five', app()->uri . "resources/styles/one-five{$suffix}.css", array(), app()->version );
-	wp_register_style( 'hybrid-gallery',  app()->uri . "resources/styles/gallery{$suffix}.css",  array(), app()->version );
-	wp_register_style( 'hybrid-parent',   get_parent_stylesheet_uri() );
-	wp_register_style( 'hybrid-style',    get_stylesheet_uri()        );
-
-	// Use the RTL style for the hybrid-one-five style.
-	$wp_styles->add_data( 'hybrid-one-five', 'rtl', 'replace' );
-
-	// Adds the suffix for the hybrid-one-five RTL style.
-	if ( $suffix )
-		$wp_styles->add_data( 'hybrid-one-five', 'suffix', $suffix );
-}
 
 /**
  * Returns the parent theme stylesheet URI.  Will return the active theme's stylesheet URI if no child

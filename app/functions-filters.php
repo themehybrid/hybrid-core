@@ -49,8 +49,6 @@ add_filter( 'wp_link_pages_link', __NAMESPACE__ . '\link_pages_link', 5 );
 add_filter( 'the_author_posts_link',          __NAMESPACE__ . '\the_author_posts_link',          5 );
 add_filter( 'get_comment_author_link',        __NAMESPACE__ . '\get_comment_author_link',        5 );
 add_filter( 'get_comment_author_url_link',    __NAMESPACE__ . '\get_comment_author_url_link',    5 );
-add_filter( 'get_avatar',                     __NAMESPACE__ . '\get_avatar',                     5 );
-add_filter( 'post_thumbnail_html',            __NAMESPACE__ . '\post_thumbnail_html',            5 );
 add_filter( 'comments_popup_link_attributes', __NAMESPACE__ . '\comments_popup_link_attributes', 5 );
 
 # Adds custom CSS classes to nav menu items.
@@ -324,32 +322,6 @@ function get_comment_author_url_link( $link ) {
 	);
 
 	return preg_replace( $pattern, $replace, $link );
-}
-
-/**
- * Adds microdata to avatars.
- *
- * @since  2.0.0
- * @access public
- * @param  string  $avatar
- * @return string
- */
-function get_avatar( $avatar ) {
-
-	return preg_replace( '/(<img.*?)(\/>)/i', '$1itemprop="image" $2', $avatar );
-}
-
-/**
- * Adds microdata to the post thumbnail HTML.
- *
- * @since  2.0.0
- * @access public
- * @param  string  $html
- * @return string
- */
-function post_thumbnail_html( $html ) {
-
-	return function_exists( 'get_the_image' ) ? $html : preg_replace( '/(<img.*?)(\/>)/i', '$1itemprop="image" $2', $html );
 }
 
 /**

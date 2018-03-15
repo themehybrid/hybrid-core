@@ -31,20 +31,6 @@ function get_theme_mod( $name, $default = false ) {
 }
 
 /**
- * Wrapper function for `Hybrid_Registry::get_instance()`.  Developers should use this function
- * instead of directly accessing the class.
- *
- * @since  4.0.0
- * @access public
- * @param  string  $name
- * @return object
- */
-function registry( $name ) {
-
-	return \Hybrid_Registry::get_instance( $name );
-}
-
-/**
  * Function for setting the content width of a theme.  This does not check if a content width has been set; it
  * simply overwrites whatever the content width is.
  *

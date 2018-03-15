@@ -16,16 +16,16 @@
 namespace Hybrid;
 
 # Load the locale functions file(s).
-add_action( 'after_setup_theme', __NAMESPACE__ . '\load_locale_functions', 0 );
+//add_action( 'after_setup_theme', __NAMESPACE__ . '\load_locale_functions', 0 );
 
 # Load translations for theme, child theme, and framework.
-add_action( 'after_setup_theme', __NAMESPACE__ . '\load_textdomains', 5 );
+//add_action( 'after_setup_theme', __NAMESPACE__ . '\load_textdomains', 5 );
 
 # Overrides the load textdomain function for the 'hybrid-core' domain.
-add_filter( 'override_load_textdomain', __NAMESPACE__ . '\override_load_textdomain', 5, 3 );
+//add_filter( 'override_load_textdomain', __NAMESPACE__ . '\override_load_textdomain', 5, 3 );
 
 # Filter the textdomain mofile to allow child themes to load the parent theme translation.
-add_filter( 'load_textdomain_mofile', __NAMESPACE__ . '\load_textdomain_mofile', 10, 2 );
+//add_filter( 'load_textdomain_mofile', __NAMESPACE__ . '\load_textdomain_mofile', 10, 2 );
 
 /**
  * Loads a `/languages/{$locale}.php` file for specific locales.  `$locale` should be an all lowercase

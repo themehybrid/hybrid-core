@@ -89,7 +89,7 @@ class View {
 	/**
 	 * When attempting to use the object as a string, return the template output.
 	 *
-	 * @since  1.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @return string
 	 */
@@ -101,8 +101,8 @@ class View {
 	/**
 	 * Locates the template using the core WordPress `locate_template()` function.
 	 *
-	 * @since  1.0.0
-	 * @access public
+	 * @since  5.0.0
+	 * @access protected
 	 * @return void
 	 */
 	protected function locate() {
@@ -114,8 +114,8 @@ class View {
 	 * Uses the array of template slugs to build a hierarchy of potential
 	 * templates that can be used.
 	 *
-	 * @since  1.0.0
-	 * @access public
+	 * @since  5.0.0
+	 * @access protected
 	 * @return array
 	 */
 	protected function get_hierarchy() {
@@ -146,7 +146,7 @@ class View {
 	/**
 	 * Sets up data to be passed to the template and renders it.
 	 *
-	 * @since  1.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @return void
 	 */
@@ -159,6 +159,9 @@ class View {
 		$this->locate();
 
 		if ( $this->template ) {
+
+			// Maybe remove core WP's `prepend_attachment`.
+			$this->maybe_shift_attachment();
 
 			// Make `$data` available to the template.
 			${ config( 'view' )->name } = $this->data;
@@ -177,7 +180,7 @@ class View {
 	/**
 	 * Returns the template output as a string.
 	 *
-	 * @since  1.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @return string
 	 */
@@ -194,8 +197,8 @@ class View {
 	 * Note that WP refers to `$name` and `$slug` differently than we do.
 	 * They're the opposite of what we use in our function.
 	 *
-	 * @since  1.0.0
-	 * @access public
+	 * @since  5.0.0
+	 * @access protected
 	 * @return void
 	 */
 	protected function template_part_compat() {
@@ -213,6 +216,33 @@ class View {
 		} else {
 
 			do_action( "get_template_part_{$this->name}", $this->name, $slug );
+		}
+	}
+
+	/**
+	 * Removes core WP's `prepend_attachment` filter whenever a
+	 * theme is building custom attachment templates. We'll assume
+	 * that the theme author will handle the appropriate output in
+	 * the template itself.
+	 *
+	 * @since  5.0.0
+	 * @access protected
+	 * @return void
+	 */
+	protected function maybe_shift_attachment() {
+
+		if ( ! in_the_loop() || 'attachment' !== get_post_type() ) {
+			return;
+		}
+
+		if ( in_array( $this->name, [ 'entry', 'post'] ) ) {
+
+			remove_filter( 'the_content', 'prepend_attachment' );
+
+		} elseif ( 'embed' === $this->name ) {
+
+			remove_filter( 'the_content',       'prepend_attachment'          );
+			remove_filter( 'the_excerpt_embed', 'wp_embed_excerpt_attachment' );
 		}
 	}
 }

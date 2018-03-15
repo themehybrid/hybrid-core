@@ -82,8 +82,14 @@ app()->add( 'template_hierarchy', function() {
 	return new TemplateHierarchy();
 } );
 
+app()->add( 'language', function() {
+
+	return new Language();
+} );
+
 // Resolve.
 app()->get( 'template_hierarchy' );
+app()->get( 'language' );
 
 // Load functions files.
 array_map(
