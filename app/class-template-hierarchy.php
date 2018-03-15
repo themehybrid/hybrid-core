@@ -77,7 +77,7 @@ final class TemplateHierarchy {
 
 		if ( ! is_home() ) {
 
-			$custom = hybrid_get_post_template( get_queried_object_id() );
+			$custom = get_post_template( get_queried_object_id() );
 
 			if ( $custom )
 				$templates[] = $custom;
