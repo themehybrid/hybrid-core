@@ -17,68 +17,54 @@
 namespace Hybrid;
 
 # Attributes for a few default elements.
-add_filter( 'hybrid_attr_body',    __NAMESPACE__ . '\attr_body',    5 );
-add_filter( 'hybrid_attr_post',    __NAMESPACE__ . '\attr_post',    5 );
-add_filter( 'hybrid_attr_entry',   __NAMESPACE__ . '\attr_post',    5 ); // Alternate for "post".
-add_filter( 'hybrid_attr_comment', __NAMESPACE__ . '\attr_comment', 5 );
+add_filter( app()->namespace . '/attr_body',    __NAMESPACE__ . '\attr_body',    5 );
+add_filter( app()->namespace . '/attr_post',    __NAMESPACE__ . '\attr_post',    5 );
+add_filter( app()->namespace . '/attr_entry',   __NAMESPACE__ . '\attr_post',    5 ); // Alternate for "post".
+add_filter( app()->namespace . '/attr_comment', __NAMESPACE__ . '\attr_comment', 5 );
+
+/**
+ * Wrapper for creating a new `Attributes` object.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  string  $name
+ * @param  string  $context
+ * @param  array   $attr
+ * @return object
+ */
+function attributes( $name, $context = '', $attr = array() ) {
+
+	return new Attributes( $name, $context, $attr );
+}
 
 /**
  * Outputs an HTML element's attributes.
  *
- * @since  2.0.0
+ * @since  5.0.0
  * @access public
- * @param  string  $slug     The slug/ID of the element (e.g., 'sidebar').
- * @param  string  $context  A specific context (e.g., 'primary').
- * @param  array   $attr     Array of attributes to pass in (overwrites filters).
+ * @param  string  $slug
+ * @param  string  $context
+ * @param  array   $attr
  * @return void
  */
-function attr( $slug, $context = '', $attr = array()  ) {
+function attr( $slug, $context = '', $attr = array() ) {
 
-	echo get_attr( $slug, $context, $attr );
+	attributes( $slug, $context, $attr )->render();
 }
 
 /**
- * Gets an HTML element's attributes.  This function is actually meant to be filtered by theme authors, plugins,
- * or advanced child theme users.  The purpose is to allow folks to modify, remove, or add any attributes they
- * want without having to edit every template file in the theme.  So, one could support microformats instead
- * of microdata, if desired.
+ * Returns an HTML element's attributes.
  *
- * @since  2.0.0
+ * @since  5.0.0
  * @access public
- * @param  string  $slug     The slug/ID of the element (e.g., 'sidebar').
- * @param  string  $context  A specific context (e.g., 'primary').
- * @param  array   $attr     Array of attributes to pass in (overwrites filters).
+ * @param  string  $slug
+ * @param  string  $context
+ * @param  array   $attr
  * @return string
  */
 function get_attr( $slug, $context = '', $attr = array() ) {
 
-	$out = '';
-
-	// Default attributes.
-	$defaults = array( 'class' => $context ? "{$slug} {$slug}-{$context}" : $slug );
-
-	// Filtered attributes.
-	$filtered = apply_filters( 'hybrid_attr', $defaults, $slug, $context  );
-	$filtered = apply_filters( "hybrid_attr_{$slug}", $filtered, $context );
-
-	// Merge the attributes with those input.
-	$attr = wp_parse_args( $attr, $filtered );
-
-	foreach ( $attr as $name => $value ) {
-
-		// Provide a filter hook for the class attribute directly. The classes are
-		// split up into an array for easier filtering. Note that theme authors
-		// should still utilize the core WP body, post, and comment class filter
-		// hooks. This should only be used for custom attributes.
-		if ( 'class' === $name && has_filter( "hybrid_attr_{$slug}_class" ) ) {
-
-			$value = join( ' ', apply_filters( "hybrid_attr_{$slug}_class", explode( ' ', $value ) ) );
-		}
-
-		$out .= false !== $value ? sprintf( ' %s="%s"', esc_html( $name ), esc_attr( $value ) ) : esc_html( " {$name}" );
-	}
-
-	return trim( $out );
+	return attributes( $slug, $context, $attr )->fetch();
 }
 
 /**
