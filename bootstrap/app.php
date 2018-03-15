@@ -99,7 +99,6 @@ array_map(
 	// Add file names of files to auto-load from the `/app` folder.
 	// Classes are auto-loaded, so we only need this for functions-files.
 	[
-		'class-registry',
 		'functions-attr',
 		'functions-context',
 		'functions-customize',
