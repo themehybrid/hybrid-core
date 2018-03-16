@@ -84,26 +84,120 @@ function get_post_author( $args = array() ) {
 
 	$html = '';
 
-	$defaults = array(
+	$args = wp_parse_args( $args, [
 		'text'   => '%s',
 		'before' => '',
-		'after'  => '',
-		'wrap'   => '<span %s>%s</span>',
-	);
+		'after'  => ''
+	] );
 
-	$args = wp_parse_args( $args, $defaults );
+	$author_id   = get_the_author_meta( 'ID' );
+	$author      = get_the_author();
+	$author_url  = get_author_posts_url( $author_id );
 
-	// Output buffering to get the author posts link.
-	ob_start();
-	\the_author_posts_link();
-	$link = ob_get_clean();
-	// A small piece of my soul just died.  Kittens no longer purr.  Dolphins lost the ability to swim with grace.
+	if ( $author && $author_url ) {
 
-	if ( $link ) {
+		$el = element( 'a', sprintf( $args['text'], $author ), attributes( 'entry-author', '', [ 'href' => esc_url( $author_url ) ] ) );
+
 		$html .= $args['before'];
-		$html .= sprintf( $args['wrap'], get_attr( 'entry-author' ), sprintf( $args['text'], $link ) );
+		$html .= $el->fetch();
 		$html .= $args['after'];
 	}
+
+	return $html;
+}
+
+/**
+ * Outputs the post date.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  array  $args
+ * @return void
+ */
+ function post_date( $args = [] ) {
+
+	 echo get_post_date( $args );
+ }
+
+/**
+ * Wrapper function for getting a post date.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  array   $args
+ * @return string
+ */
+function get_post_date( $args = [] ) {
+
+	$html = '';
+
+	$args = wp_parse_args( $args, [
+		'text'   => '%s',
+		'format' => '',
+		'before' => '',
+		'after'  => ''
+	] );
+
+	$date = get_the_date( $args['format'] );
+
+	if ( $date ) {
+
+		$el = element( 'time', sprintf( $args['text'], $date ), attributes( 'entry-published' ) );
+
+		$html .= $args['before'];
+		$html .= $el->fetch();
+		$html .= $args['after'];
+	}
+
+	return $html;
+}
+
+/**
+ * Outputs the current post's comments link.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  array   $args
+ * @return string
+ */
+function post_comments( $args = [] ) {
+
+	echo get_post_comments( $args );
+}
+
+/**
+ * Wrapper function for getting the current post's comments link.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  array   $args
+ * @return string
+ */
+function get_post_comments( $args = [] ) {
+
+	$html = '';
+
+	$args = wp_parse_args( $args, [
+		'zero'   => false,
+		'one'    => false,
+		'more'   => false,
+		'before' => '',
+		'after'  => ''
+	] );
+
+	$number = get_comments_number();
+
+	if ( 0 == $number && ! comments_open() && ! pings_open() ) {
+		return '';
+	}
+
+	$url  = get_comments_link();
+	$text = get_comments_number_text( $args['zero'], $args['one'], $args['more'] );
+	$el   = element( 'a', $text, attributes( 'entry-comments', '', [ 'href' => esc_url( $url ) ] ) );
+
+	$html .= $args['before'];
+	$html .= $el->fetch();
+	$html .= $args['after'];
 
 	return $html;
 }
