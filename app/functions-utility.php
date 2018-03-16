@@ -14,6 +14,20 @@
 namespace Hybrid;
 
 /**
+ * Returns an `Element` object.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  string  $tag
+ * @param  string  $content
+ * @param  object  $attr
+ */
+function element( $tag, $content = '', Attributes $attr = null ) {
+
+	return new Element( $tag, $content, $attr );
+}
+
+/**
  * This is a wrapper function for core WP's `get_theme_mod()` function.  Core doesn't
  * provide a filter hook for the default value (useful for child themes).  The purpose
  * of this function is to provide that additional filter hook.  To filter the final

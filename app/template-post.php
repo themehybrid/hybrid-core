@@ -145,7 +145,7 @@ function get_post_terms( $args = array() ) {
 		'text'       => '%s',
 		'before'     => '',
 		'after'      => '',
-		'wrap'       => '<span %s>%s</span>',
+	//	'wrap'       => '<span %s>%s</span>',
 		// Translators: Separates tags, categories, etc. when displaying a post.
 		'sep'        => _x( ', ', 'taxonomy terms separator', 'hybrid-core' )
 	);
@@ -155,8 +155,11 @@ function get_post_terms( $args = array() ) {
 	$terms = get_the_term_list( $args['post_id'], $args['taxonomy'], '', $args['sep'], '' );
 
 	if ( $terms ) {
+
+		$el = element( 'span', sprintf( $args['text'], $terms ), attributes( 'entry-terms', $args['taxonomy'] ) );
+
 		$html .= $args['before'];
-		$html .= sprintf( $args['wrap'], get_attr( 'entry-terms', $args['taxonomy'] ), sprintf( $args['text'], $terms ) );
+		$html .= $el->fetch();
 		$html .= $args['after'];
 	}
 
