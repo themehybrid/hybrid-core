@@ -43,6 +43,26 @@ class Language {
 	protected $child_textdomain = null;
 
 	/**
+	 * The parent theme's domain path. Gets set to the value
+	 * of the `Domain Path` header in `style.css`.
+	 *
+	 * @since  5.0.0
+	 * @access protected
+	 * @var    string|null
+	 */
+	protected $parent_path = null;
+
+	/**
+	 * The child theme's domain path. Gets set to the value
+	 * of the `Domain Path` header in `style.css`.
+	 *
+	 * @since  5.0.0
+	 * @access protected
+	 * @var    string|null
+	 */
+	protected $child_path = null;
+
+	/**
 	 * Adds the class' actions and filters.
 	 *
 	 * @since  5.0.0
@@ -79,11 +99,11 @@ class Language {
 	public function load_locale_functions() {
 
 		// Get the site's locale.
-		$locale = strtolower( str_replace( '_', '-', get_locale() ) );
+		$locale = strtolower( str_replace( '_', '-', is_admin() ? get_user_locale() : get_locale() ) );
 
 		// Define locale functions files.
-		$child_func = app()->child_dir  . $this->get_child_domain_path()  . "/{$locale}.php";
-		$theme_func = app()->parent_dir . $this->get_parent_domain_path() . "/{$locale}.php";
+		$child_func = trailingslashit( $this->get_child_dir()  ) . "{$locale}.php";
+		$theme_func = trailingslashit( $this->get_parent_dir() ) . "{$locale}.php";
 
 		// If file exists in child theme.
 		if ( is_child_theme() && file_exists( $child_func ) ) {
@@ -110,18 +130,12 @@ class Language {
 	public function load_textdomain() {
 
 		// Load theme textdomain.
-		load_theme_textdomain(
-			$this->get_parent_textdomain(),
-			app()->parent_dir . $this->get_parent_domain_path()
-		);
+		load_theme_textdomain( $this->get_parent_textdomain(), $this->get_parent_dir() );
 
 		// Load child theme textdomain.
 		if ( is_child_theme() ) {
 
-			load_child_theme_textdomain(
-				$this->get_child_textdomain(),
-				app()->child_dir . $this->get_child_domain_path()
-			);
+			load_child_theme_textdomain( $this->get_child_textdomain(), $this->get_child_dir() );
 		}
 
 		// Load the framework textdomain.
@@ -180,15 +194,15 @@ class Language {
 	 */
 	 public function load_textdomain_mofile( $mofile, $domain ) {
 
-		// If the $domain is for the parent or child theme, search for a $domain-$locale.mo file.
+		// If the `$domain` is for the parent or child theme, search for a `$domain-$locale.mo` file.
 		if ( $domain == $this->get_parent_textdomain() || $domain == $this->get_child_textdomain() ) {
 
 			// Get the locale.
-			$locale = get_locale();
+			$locale = is_admin() ? get_user_locale() : get_locale();
 
 			// Define locale functions files.
-			$child_mofile = app()->child_dir  . $this->get_child_domain_path()  . "/{$domain}-{$locale}.mo";
-			$theme_mofile = app()->parent_dir . $this->get_parent_domain_path() . "/{$domain}-{$locale}.mo";
+			$child_mofile = trailingslashit( $this->get_child_dir() )  . "{$domain}-{$locale}.mo";
+			$theme_mofile = trailingslashit( $this->get_parent_dir() ) . "{$domain}-{$locale}.mo";
 
 			// Overwrite the mofile if it exists.
 			if ( is_child_theme() && file_exists( $child_mofile ) ) {
@@ -214,15 +228,11 @@ class Language {
 	 */
 	public function get_parent_textdomain() {
 
-		// If the global textdomain isn't set, define it.
 		if ( is_null( $this->parent_textdomain ) ) {
 
-			$this->parent_textdomain = sanitize_key(
-				wp_get_theme( \get_template() )->get( 'TextDomain' )
-			);
+			$this->parent_textdomain = wp_get_theme( \get_template() )->get( 'TextDomain' );
 		}
 
-		// Return the expected textdomain of the parent theme.
 		return $this->parent_textdomain;
 	}
 
@@ -236,19 +246,38 @@ class Language {
 	 */
 	public function get_child_textdomain() {
 
-		// If a child theme isn't active, return an empty string.
-		if ( ! is_child_theme() ) {
-			return '';
-		}
-
-		// If the global textdomain isn't set, define it.
 		if ( is_null( $this->child_textdomain ) ) {
 
-			$this->child_textdomain = sanitize_key( wp_get_theme()->get( 'TextDomain' ) );
+			$this->child_textdomain = wp_get_theme()->get( 'TextDomain' );
 		}
 
-		// Return the expected textdomain of the child theme. */
 		return $this->child_textdomain;
+	}
+
+	/**
+	 * Returns the full directory path for the parent theme's
+	 * domain path set in `style.css`. No trailing slash.
+	 *
+	 * @since  5.0.0
+	 * @access public
+	 * @return string
+	 */
+	public function get_parent_dir() {
+
+		return app()->parent_dir . $this->get_parent_path();
+	}
+
+	/**
+	 * Returns the full directory path for the child theme's
+	 * domain path set in `style.css`. No trailing slash.
+	 *
+	 * @since  5.0.0
+	 * @access public
+	 * @return string
+	 */
+	public function get_child_dir() {
+
+		return app()->child_dir . $this->get_child_path();
 	}
 
 	/**
@@ -258,11 +287,14 @@ class Language {
 	 * @access public
 	 * @return string
 	 */
-	public function get_parent_domain_path() {
+	public function get_parent_path() {
 
-		$path = wp_get_theme( \get_template() )->get( 'DomainPath' );
+		if ( is_null( $this->parent_path ) ) {
 
-		return $path ? trim( $path, '/' ) : 'languages';
+			$this->parent_path = trim( wp_get_theme( \get_template() )->get( 'DomainPath' ), '/' );
+		}
+
+		return $this->parent_path;
 	}
 
 	/**
@@ -272,14 +304,13 @@ class Language {
 	 * @access public
 	 * @return string
 	 */
-	public function get_child_domain_path() {
+	public function get_child_path() {
 
-		if ( ! is_child_theme() ) {
-			return '';
+		if ( is_null( $this->child_path ) ) {
+
+			$this->child_path = trim( wp_get_theme()->get( 'DomainPath' ), '/' );
 		}
 
-		$path = wp_get_theme()->get( 'DomainPath' );
-
-		return $path ? trim( $path, '/' ) : 'languages';
+		return $this->child_path;
 	}
 }
