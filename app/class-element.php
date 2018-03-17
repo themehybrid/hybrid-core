@@ -52,6 +52,33 @@ class Element {
         public $attr = null;
 
         /**
+         * Array of self-closing tags (i.e., void elements) that have
+         * no content.
+         *
+         * @since  5.0.0
+         * @access protected
+         * @var    array
+         */
+        protected $self_closing = [
+                'base',
+                'br',
+                'col',
+                'command',
+                'embed',
+                'hr',
+                'img',
+                'input',
+                'keygen',
+                'link',
+                'menuitem',
+                'meta',
+                'param',
+                'source',
+                'track',
+                'wbr'
+        ];
+
+        /**
          * Set up the object.
          *
          * @since  5.0.0
@@ -78,6 +105,11 @@ class Element {
         public function fetch() {
 
                 $attr = $this->attr instanceof Attributes ? $this->attr->fetch() : '';
+
+                if ( in_array( $this->tag, $this->self_closing ) ) {
+
+                        return sprintf( '<%1$s %2$s />', tag_escape( $this->tag ), $attr );
+                }
 
                 return sprintf(
                         '<%1$s %2$s>%3$s</%1$s>',
