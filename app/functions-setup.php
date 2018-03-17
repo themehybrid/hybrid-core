@@ -12,7 +12,7 @@ namespace Hybrid;
  * @param  array         $data
  * @return object
  */
-function get_view( $name, $slugs = [], $data = [] ) {
+function view( $name, $slugs = [], $data = [] ) {
 
 	return new View( $name, $slugs, new Collection( $data ) );
 }
@@ -29,7 +29,7 @@ function get_view( $name, $slugs = [], $data = [] ) {
  */
 function render_view( $name, $slugs = [], $data = [] ) {
 
-	get_view( $name, $slugs, $data )->render();
+	view( $name, $slugs, $data )->render();
 }
 
 /**
@@ -44,7 +44,7 @@ function render_view( $name, $slugs = [], $data = [] ) {
  */
 function fetch_view( $name, $slugs = [], $data = [] ) {
 
-	return get_view( $name, $slugs, $data )->fetch();
+	return view( $name, $slugs, $data )->fetch();
 }
 
 /**
