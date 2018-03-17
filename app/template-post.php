@@ -29,31 +29,45 @@ function post_has_content( $post_id = 0 ) {
 }
 
 /**
- * Outputs a link to the post format archive.
+ * Outputs the post format link.
  *
- * @since  2.0.0
+ * @since  5.0.0
  * @access public
+ * @param  array  $args
  * @return void
  */
-function post_format_link() {
+function post_format( $args = [] ) {
 
-	echo get_post_format_link();
+	echo get_post_format( $args );
 }
 
 /**
- * Generates a link to the current post format's archive.  If the post doesn't have a post format, the link
- * will go to the post permalink.
+ * Returns the post format link. Note that this will return the
+ * permalink to the the post if the post has no format or is the
+ * `standard` format.
  *
- * @since  2.0.0
+ * @since  5.0.0
  * @access public
+ * @param  array  $args
  * @return string
  */
-function get_post_format_link() {
+function get_post_format( $args = [] ) {
 
-	$format = get_post_format();
+	$args = wp_parse_args( $args, [
+		'text'   => '%s',
+		'before' => '',
+		'after'  => ''
+	] );
+
+	$format = \get_post_format();
 	$url    = $format ? get_post_format_link( $format ) : get_permalink();
+	$string = get_post_format_string( $format );
 
-	return sprintf( '<a href="%s" class="post-format-link">%s</a>', esc_url( $url ), get_post_format_string( $format ) );
+	$el = element( 'a', sprintf( $args['text'], $string ), attributes( 'entry-format', '', [ 'href' => esc_url( $url ) ] ) );
+
+	$html = $args['before'] . $el->fetch() . $args['after'];
+
+	return $html;
 }
 
 /**
@@ -90,17 +104,14 @@ function get_post_author( $args = array() ) {
 		'after'  => ''
 	] );
 
-	$author_id   = get_the_author_meta( 'ID' );
-	$author      = get_the_author();
-	$author_url  = get_author_posts_url( $author_id );
+	$author     = get_the_author();
+	$author_url = get_author_posts_url( get_the_author_meta( 'ID' ) );
 
 	if ( $author && $author_url ) {
 
 		$el = element( 'a', sprintf( $args['text'], $author ), attributes( 'entry-author', '', [ 'href' => esc_url( $author_url ) ] ) );
 
-		$html .= $args['before'];
-		$html .= $el->fetch();
-		$html .= $args['after'];
+		$html = $args['before'] . $el->fetch() . $args['after'];
 	}
 
 	return $html;
@@ -114,10 +125,10 @@ function get_post_author( $args = array() ) {
  * @param  array  $args
  * @return void
  */
- function post_date( $args = [] ) {
+function post_date( $args = [] ) {
 
-	 echo get_post_date( $args );
- }
+	echo get_post_date( $args );
+}
 
 /**
  * Wrapper function for getting a post date.
@@ -144,9 +155,7 @@ function get_post_date( $args = [] ) {
 
 		$el = element( 'time', sprintf( $args['text'], $date ), attributes( 'entry-published' ) );
 
-		$html .= $args['before'];
-		$html .= $el->fetch();
-		$html .= $args['after'];
+		$html = $args['before'] . $el->fetch() . $args['after'];
 	}
 
 	return $html;
@@ -195,9 +204,7 @@ function get_post_comments( $args = [] ) {
 	$text = get_comments_number_text( $args['zero'], $args['one'], $args['more'] );
 	$el   = element( 'a', $text, attributes( 'entry-comments', '', [ 'href' => esc_url( $url ) ] ) );
 
-	$html .= $args['before'];
-	$html .= $el->fetch();
-	$html .= $args['after'];
+	$html = $args['before'] . $el->fetch() . $args['after'];
 
 	return $html;
 }
@@ -210,7 +217,7 @@ function get_post_comments( $args = [] ) {
  * @param  array   $args
  * @return void
  */
-function post_terms( $args = array() ) {
+function post_terms( $args = [] ) {
 
 	echo get_post_terms( $args );
 }
@@ -229,32 +236,26 @@ function post_terms( $args = array() ) {
  * @param  array   $args
  * @return string
  */
-function get_post_terms( $args = array() ) {
+function get_post_terms( $args = [] ) {
 
 	$html = '';
 
-	$defaults = array(
-		'post_id'    => get_the_ID(),
-		'taxonomy'   => 'category',
-		'text'       => '%s',
-		'before'     => '',
-		'after'      => '',
-	//	'wrap'       => '<span %s>%s</span>',
+	$args = wp_parse_args( $args, [
+		'taxonomy' => 'category',
+		'text'     => '%s',
+		'before'   => '',
+		'after'    => '',
 		// Translators: Separates tags, categories, etc. when displaying a post.
-		'sep'        => _x( ', ', 'taxonomy terms separator', 'hybrid-core' )
-	);
+		'sep'      => _x( ', ', 'taxonomy terms separator', 'hybrid-core' )
+	] );
 
-	$args = wp_parse_args( $args, $defaults );
-
-	$terms = get_the_term_list( $args['post_id'], $args['taxonomy'], '', $args['sep'], '' );
+	$terms = get_the_term_list( get_the_ID(), $args['taxonomy'], '', $args['sep'], '' );
 
 	if ( $terms ) {
 
 		$el = element( 'span', sprintf( $args['text'], $terms ), attributes( 'entry-terms', $args['taxonomy'] ) );
 
-		$html .= $args['before'];
-		$html .= $el->fetch();
-		$html .= $args['after'];
+		$html = $args['before'] . $el->fetch() . $args['after'];
 	}
 
 	return $html;
