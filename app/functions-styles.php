@@ -124,5 +124,5 @@ function get_locale_style() {
 
 	$styles[] = is_rtl() ? 'css/rtl.css' : 'css/ltr.css';
 
-	return locate_theme_file( $styles );
+	return locate_file_uri( $styles );
 }

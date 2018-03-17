@@ -71,18 +71,46 @@ function get_content_width() {
 }
 
 /**
- * Retrieves the file with the highest priority that exists.  The function searches both the stylesheet
- * and template directories.  This function is similar to the locate_template() function in WordPress
- * but returns the file name with the URI path instead of the directory path.
+ * Loops through an array of file names within both the child and parent theme
+ * directories.  Once a file is found, the full path to the file is returned.
  *
- * @since  1.5.0
+ * @since  5.0.0
  * @access public
- * @link   http://core.trac.wordpress.org/ticket/18302
- * @param  array  $file_names The files to search for.
+ * @param  array|string  $file_names
  * @return string
  */
-function locate_theme_file( $file_names ) {
+function locate_file_path( $file_names ) {
+	$located = '';
 
+	// Loops through each of the given file names.
+	foreach ( (array) $file_names as $file ) {
+
+		// If the file exists in the stylesheet (child theme) directory.
+		if ( is_child_theme() && file_exists( app()->child_dir . $file ) ) {
+			$located = app()->child_dir . $file;
+			break;
+		}
+
+		// If the file exists in the template (parent theme) directory.
+		elseif ( file_exists( app()->parent_dir . $file ) ) {
+			$located = app()->parent_dir . $file;
+			break;
+		}
+	}
+
+	return $located;
+}
+
+/**
+ * Loops through an array of file names within both the child and parent theme
+ * directories.  Once a file is found, the URI to the file is returned.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  array|string  $file_names
+ * @return string
+ */
+function locate_file_uri( $file_names ) {
 	$located = '';
 
 	// Loops through each of the given file names.
