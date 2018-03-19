@@ -32,7 +32,7 @@ class View {
 
 	/**
 	 * Name of the view. This is primarily used as the folder name. However,
-	 * it can also be the filename as the finall fallback if no folder exists.
+	 * it can also be the filename as the final fallback if no folder exists.
 	 *
 	 * @since  1.0.0
 	 * @access public
