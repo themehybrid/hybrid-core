@@ -38,7 +38,7 @@ function hybrid_admin_register_scripts() {}
  */
 function hybrid_admin_register_styles() {
 
-	wp_register_style( 'hybrid-admin', \Hybrid\app()->uri . 'resources/styles/admin' . hybrid_get_min_suffix() . '.css' );
+	wp_register_style( 'hybrid-admin', \Hybrid\app()->uri . 'resources/styles/admin' . Hybrid\get_min_suffix() . '.css' );
 }
 
 /**
