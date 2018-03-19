@@ -25,7 +25,7 @@ namespace Hybrid;
 /**
  * View class.
  *
- * @since  1.0.0
+ * @since  5.0.0
  * @access public
  */
 class View {
@@ -34,7 +34,7 @@ class View {
 	 * Name of the view. This is primarily used as the folder name. However,
 	 * it can also be the filename as the final fallback if no folder exists.
 	 *
-	 * @since  1.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @var    string
 	 */
@@ -45,7 +45,7 @@ class View {
 	 * `$name` property (e.g., `{$name}/{$slug}.php`). Slugs are used in
 	 * the order that they are set.
 	 *
-	 * @since  1.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @var    string
 	 */
@@ -54,7 +54,7 @@ class View {
 	/**
 	 * An array of data that is passed into the view template.
 	 *
-	 * @since  1.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @var    array
 	 */
@@ -63,7 +63,7 @@ class View {
 	/**
 	 * The template filename.
 	 *
-	 * @since  1.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @var    string
 	 */
@@ -72,7 +72,7 @@ class View {
 	/**
 	 * Sets up the view properties.
 	 *
-	 * @since  1.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @param  string  $name
 	 * @param  array   $slugs
@@ -225,10 +225,9 @@ class View {
 	}
 
 	/**
-	 * Removes core WP's `prepend_attachment` filter whenever a
-	 * theme is building custom attachment templates. We'll assume
-	 * that the theme author will handle the appropriate output in
-	 * the template itself.
+	 * Removes core WP's `prepend_attachment` filter whenever a theme is
+	 * building custom attachment templates. We'll assume that the theme
+	 * author will handle the appropriate output in the template itself.
 	 *
 	 * @since  5.0.0
 	 * @access protected
