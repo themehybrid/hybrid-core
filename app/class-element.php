@@ -2,9 +2,9 @@
 /**
  * Element class.
  *
- * This class is used for building out HTML elements based on input
- * from developers. This gives us a consistent base, primarily for
- * building elements within the framework.
+ * This class is used for building out HTML elements based on input from
+ * developers. This gives us a consistent base, primarily for building elements
+ * within the framework.
  *
  * @package   HybridCore
  * @author    Justin Tadlock <justintadlock@gmail.com>
@@ -43,6 +43,16 @@ class Element {
         protected $content = '';
 
         /**
+         * Array of child element content.  The children can either be a fetched
+         * instance of `Element` or a plain HTML string.
+         *
+         * @since  5.0.0
+         * @access protected
+         * @var    array
+         */
+        protected $children = [];
+
+        /**
          * Instance of `Attributes` for handling the element attributes.
          *
          * @since  5.0.0
@@ -52,8 +62,7 @@ class Element {
         public $attr = null;
 
         /**
-         * Array of self-closing tags (i.e., void elements) that have
-         * no content.
+         * Array of self-closing tags (i.e., void elements) that have no content.
          *
          * @since  5.0.0
          * @access protected
@@ -83,9 +92,9 @@ class Element {
          *
          * @since  5.0.0
          * @access public
-         * @param  string  $tag
-         * @param  string  $content
-         * @param  object  $attr
+         * @param  string       $tag
+         * @param  string|array $content
+         * @param  object       $attr
          * @return void
          */
         public function __construct( $tag, $content = '', Attributes $attr = null ) {
@@ -93,6 +102,14 @@ class Element {
                 $this->tag     = $tag;
                 $this->content = $content;
                 $this->attr    = $attr;
+
+                if ( is_array( $this->content ) ) {
+
+                        foreach ( $this->content as $el ) {
+
+                                $this->children[] = $el instanceof Element ? $el->fetch() : $el;
+                        }
+                }
         }
 
         /**
@@ -115,7 +132,7 @@ class Element {
                         '<%1$s %2$s>%3$s</%1$s>',
                         tag_escape( $this->tag ),
                         $attr,
-                        $this->content
+                        $this->children ? join( '', $this->children ) : $this->content
                 );
         }
 
