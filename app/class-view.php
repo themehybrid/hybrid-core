@@ -82,8 +82,13 @@ class View {
 	public function __construct( $name, $slugs = [], Collection $data = null ) {
 
 		$this->name  = $name;
-		$this->slugs = (array) apply_filters( app()->namespace . "/view_slugs_{$this->name}", $slugs );
-		$this->data  = apply_filters( app()->namespace . "/view_data_{$this->name}",  $data  );
+		$this->slugs = (array) $slugs;
+		$this->data  = $data;
+
+		// Apply filters after all the properties have been assigned.
+		// This way, the full object is available to filters.
+		$this->slugs = apply_filters( app()->namespace . "/view_slugs_{$this->name}", $this->slugs, $this );
+		$this->data  = apply_filters( app()->namespace . "/view_data_{$this->name}",  $this->data,  $this );
 	}
 
 	/**
