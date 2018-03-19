@@ -60,7 +60,7 @@ class RadioImage extends \WP_Customize_Control {
 
 		// We need to make sure we have the correct image URL.
 		foreach ( $this->choices as $value => $args )
-			$this->choices[ $value ]['url'] = esc_url( hybrid_sprintf_theme_uri( $args['url'] ) );
+			$this->choices[ $value ]['url'] = esc_url( \Hybrid\sprintf_theme_uri( $args['url'] ) );
 
 		$this->json['choices'] = $this->choices;
 		$this->json['link']    = $this->get_link();

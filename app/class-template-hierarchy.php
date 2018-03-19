@@ -169,10 +169,10 @@ final class TemplateHierarchy {
 		$term = get_queried_object();
 
 		// Remove 'post-format' from the slug.
-		$slug = 'post_format' === $term->taxonomy ? hybrid_clean_post_format_slug( $term->slug ) : urldecode( $term->slug );
+		$slug = 'post_format' === $term->taxonomy ? clean_post_format_slug( $term->slug ) : urldecode( $term->slug );
 
 		// Check for a custom term template.
-		$custom = hybrid_get_term_template( get_queried_object_id() );
+		$custom = get_term_template( get_queried_object_id() );
 
 		if ( $custom )
 			$templates[] = $custom;
@@ -211,7 +211,7 @@ final class TemplateHierarchy {
 		$user = new WP_User( absint( get_query_var( 'author' ) ) );
 
 		// Check for a custom user template.
-		$custom = hybrid_get_user_template( $user->ID );
+		$custom = get_user_template( $user->ID );
 
 		if ( $custom )
 			$templates[] = $custom;

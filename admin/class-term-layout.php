@@ -155,7 +155,7 @@ final class Hybrid_Admin_Term_Layout {
 		$taxonomy    = get_current_screen()->taxonomy;
 
 		// Get only the term layouts.
-		$layouts = wp_list_filter( hybrid_get_layouts(), array( 'is_term_layout' => true, 'image' => true ) );
+		$layouts = wp_list_filter( Hybrid\get_layouts(), array( 'is_term_layout' => true, 'image' => true ) );
 
 		// Remove unwanted layouts.
 		foreach ( $layouts as $layout ) {
@@ -166,7 +166,7 @@ final class Hybrid_Admin_Term_Layout {
 
 		// If we have a term, get its layout.
 		if ( $term )
-			$term_layout = hybrid_get_term_layout( $term->term_id );
+			$term_layout = Hybrid\get_term_layout( $term->term_id );
 
 		// Output the nonce field.
 		wp_nonce_field( basename( __FILE__ ), 'hybrid_term_layout_nonce' );
@@ -194,14 +194,14 @@ final class Hybrid_Admin_Term_Layout {
 		if ( ! hybrid_verify_nonce_post( basename( __FILE__ ), 'hybrid_term_layout_nonce' ) )
 			return;
 
-		$old_layout = hybrid_get_term_layout( $term_id );
+		$old_layout = Hybrid\get_term_layout( $term_id );
 		$new_layout = isset( $_POST['hybrid-term-layout'] ) ? sanitize_key( $_POST['hybrid-term-layout'] ) : '';
 
 		if ( $old_layout && '' === $new_layout )
-			hybrid_delete_term_layout( $term_id );
+			Hybrid\delete_term_layout( $term_id );
 
 		else if ( $old_layout !== $new_layout )
-			hybrid_set_term_layout( $term_id, $new_layout );
+			Hybrid\set_term_layout( $term_id, $new_layout );
 	}
 }
 

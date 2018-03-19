@@ -113,7 +113,7 @@ final class Hybrid_Admin_Post_Layout {
 	public function meta_box( $post, $box ) {
 
 		// Get only the post layouts.
-		$layouts = wp_list_filter( hybrid_get_layouts(), array( 'is_post_layout' => true, 'image' => true ) );
+		$layouts = wp_list_filter( Hybrid\get_layouts(), array( 'is_post_layout' => true, 'image' => true ) );
 
 		// Remove unwanted layouts.
 		foreach ( $layouts as $layout ) {
@@ -123,7 +123,7 @@ final class Hybrid_Admin_Post_Layout {
 		}
 
 		// Get the current post's layout.
-		$post_layout = hybrid_get_post_layout( $post->ID );
+		$post_layout = Hybrid\get_post_layout( $post->ID );
 
 		// Output the nonce field.
 		wp_nonce_field( basename( __FILE__ ), 'hybrid_post_layout_nonce' );
@@ -165,11 +165,11 @@ final class Hybrid_Admin_Post_Layout {
 
 		// If there is no new meta value but an old value exists, delete it.
 		if ( '' == $new_meta_value && $meta_value )
-			hybrid_delete_post_layout( $post_id );
+			Hybrid\delete_post_layout( $post_id );
 
 		// If a new meta value was added and there was no previous value, add it.
 		elseif ( $meta_value !== $new_meta_value )
-			hybrid_set_post_layout( $post_id, $new_meta_value );
+			Hybrid\set_post_layout( $post_id, $new_meta_value );
 	}
 }
 

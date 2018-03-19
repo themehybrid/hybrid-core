@@ -98,7 +98,7 @@ function hybrid_verify_nonce_request( $action = '', $arg = '_wpnonce' ) {
 function hybrid_form_field_layout( $args = array() ) {
 
 	$defaults = array(
-		'layouts'    => hybrid_get_layouts(),
+		'layouts'    => Hybrid\get_layouts(),
 		'selected'   => 'default',
 		'field_name' => 'hybrid-layout'
 	);
@@ -114,7 +114,7 @@ function hybrid_form_field_layout( $args = array() ) {
 
 			<span class="screen-reader-text"><?php echo esc_html( $layout->label ); ?></span>
 
-			<img src="<?php echo esc_url( hybrid_sprintf_theme_uri( $layout->image ) ); ?>" alt="<?php echo esc_attr( $layout->label ); ?>" />
+			<img src="<?php echo esc_url( Hybrid\sprintf_theme_uri( $layout->image ) ); ?>" alt="<?php echo esc_attr( $layout->label ); ?>" />
 		</label>
 
 	<?php endforeach; ?>

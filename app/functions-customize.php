@@ -97,7 +97,7 @@ function customize_register( $wp_customize ) {
  */
 function customize_controls_register_scripts() {
 
-	wp_register_script( 'hybrid-customize-controls', app()->uri . 'resources/scripts/customize-controls' . hybrid_get_min_suffix() . '.js', array( 'customize-controls' ), null, true );
+	wp_register_script( 'hybrid-customize-controls', app()->uri . 'resources/scripts/customize-controls' . get_min_suffix() . '.js', array( 'customize-controls' ), null, true );
 }
 
 /**
@@ -109,7 +109,7 @@ function customize_controls_register_scripts() {
  */
 function customize_controls_register_styles() {
 
-	wp_register_style( 'hybrid-customize-controls', app()->uri . 'resources/styles/customize-controls' . hybrid_get_min_suffix() . '.css' );
+	wp_register_style( 'hybrid-customize-controls', app()->uri . 'resources/styles/customize-controls' . get_min_suffix() . '.css' );
 }
 
 /**
@@ -121,7 +121,7 @@ function customize_controls_register_styles() {
  */
 function customize_preview_register_scripts() {
 
-	wp_register_script( 'hybrid-customize-preview', app()->uri . 'resources/scripts/customize-preview' . hybrid_get_min_suffix() . '.js', array( 'jquery' ), null, true );
+	wp_register_script( 'hybrid-customize-preview', app()->uri . 'resources/scripts/customize-preview' . get_min_suffix() . '.js', array( 'jquery' ), null, true );
 }
 
 /**

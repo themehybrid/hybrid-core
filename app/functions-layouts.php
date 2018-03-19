@@ -148,7 +148,7 @@ function get_theme_layout() {
  */
 function get_global_layout() {
 
-	return hybrid_get_theme_mod( 'theme_layout', get_default_layout() );
+	return get_theme_mod( 'theme_layout', get_default_layout() );
 }
 
 /**

@@ -53,7 +53,7 @@ class Layout extends Radio_Image {
 
 				$args['choices'][ $layout->name ] = array(
 					'label' => $layout->label,
-					'url'   => hybrid_sprintf_theme_uri( $layout->image )
+					'url'   => \Hybrid\sprintf_theme_uri( $layout->image )
 				);
 			}
 		}
