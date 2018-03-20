@@ -37,10 +37,6 @@ function structured_post_formats() {
 	// Wraps `<blockquote>` around quote posts.
 	if ( current_theme_supports( 'post-formats', 'quote' ) )
 		add_filter( 'the_content', __NAMESPACE__ . '\quote_content' );
-
-	// Filter the content of chat posts.
-	if ( current_theme_supports( 'post-formats', 'chat' ) )
-		add_filter( 'the_content', __NAMESPACE__ . '\chat_content', 9 ); // run before wpautop
 }
 
 /**
@@ -140,34 +136,4 @@ function quote_content( $content ) {
 	}
 
 	return $content;
-}
-
-/* === Chats === */
-
-/**
- * This function filters the post content when viewing a post with the "chat" post format.
- *
- * @since  1.6.0
- * @access public
- * @param  string  $content
- * @return string
- */
-function chat_content( $content ) {
-
-	return has_post_format( 'chat' ) && ! post_password_required() ? get_chat_transcript( $content ) : $content;
-}
-
-/**
- * Gets a chat transcript.
- *
- * @since  3.0.0
- * @access public
- * @param  string  $content
- * @return string
- */
-function get_chat_transcript( $content ) {
-
-	$chat = new Chat( $content );
-
-	return $chat->get_transcript();
 }
