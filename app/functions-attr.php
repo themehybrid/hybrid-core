@@ -20,11 +20,11 @@
 namespace Hybrid;
 
 # Attributes for a few default elements.
-add_filter( app()->namespace . '/attr_html',    __NAMESPACE__ . '\attr_html',    ~PHP_INT_MAX );
-add_filter( app()->namespace . '/attr_body',    __NAMESPACE__ . '\attr_body',    ~PHP_INT_MAX );
-add_filter( app()->namespace . '/attr_post',    __NAMESPACE__ . '\attr_post',    ~PHP_INT_MAX );
-add_filter( app()->namespace . '/attr_entry',   __NAMESPACE__ . '\attr_post',    ~PHP_INT_MAX ); // Alternate for "post".
-add_filter( app()->namespace . '/attr_comment', __NAMESPACE__ . '\attr_comment', ~PHP_INT_MAX );
+add_filter( app()->namespace . '/attr/html/defaults',    __NAMESPACE__ . '\attr_html',    ~PHP_INT_MAX );
+add_filter( app()->namespace . '/attr/body/defaults',    __NAMESPACE__ . '\attr_body',    ~PHP_INT_MAX );
+add_filter( app()->namespace . '/attr/post/defaults',    __NAMESPACE__ . '\attr_post',    ~PHP_INT_MAX );
+add_filter( app()->namespace . '/attr/entry/defaults',   __NAMESPACE__ . '\attr_post',    ~PHP_INT_MAX ); // Alternate for "post".
+add_filter( app()->namespace . '/attr/comment/defaults', __NAMESPACE__ . '\attr_comment', ~PHP_INT_MAX );
 
 /**
  * Wrapper for creating a new `Attributes` object.
@@ -106,7 +106,9 @@ function attr_html( $attr ) {
  */
 function attr_body( $attr ) {
 
-	$attr['class'] = join( ' ', get_body_class() );
+	$class = isset( $attr['class'] ) ? $attr['class'] : '';
+
+	$attr['class'] = join( ' ', get_body_class( $class ) );
 	$attr['dir']   = is_rtl() ? 'rtl' : 'ltr';
 
 	return $attr;
@@ -122,10 +124,11 @@ function attr_body( $attr ) {
  */
 function attr_post( $attr ) {
 
-	$post = get_post();
+	$post  = get_post();
+	$class = isset( $attr['class'] ) ? $attr['class'] : '';
 
 	$attr['id']    = ! empty( $post ) ? sprintf( 'post-%d', get_the_ID() ) : 'post-0';
-	$attr['class'] = join( ' ', get_post_class() );
+	$attr['class'] = join( ' ', get_post_class( $class ) );
 
 	return $attr;
 }
@@ -140,8 +143,10 @@ function attr_post( $attr ) {
  */
 function attr_comment( $attr ) {
 
+	$class = isset( $attr['class'] ) ? $attr['class'] : '';
+
 	$attr['id']    = 'comment-' . get_comment_ID();
-	$attr['class'] = join( ' ', get_comment_class() );
+	$attr['class'] = join( ' ', get_comment_class( $class ) );
 
 	return $attr;
 }

@@ -2,14 +2,14 @@
 /**
  * Attributes class.
  *
- * This is an HTML attributes class system. The purpose is to provide
- * devs a system for adding filterable attributes.  This is sort of
- * like `body_class()`, `post_class()`, and `comment_class()` on
- * steroids. However, it can handle attributes for any elements.
+ * This is an HTML attributes class system. The purpose is to provide devs a
+ * system for adding filterable attributes.  This is sort of like `body_class()`,
+ * `post_class()`, and `comment_class()` on steroids. However, it can handle
+ * attributes for any elements.
  *
  * @package   HybridCore
  * @author    Justin Tadlock <justintadlock@gmail.com>
- * @copyright Copyright (c) 2008 - 2017, Justin Tadlock
+ * @copyright Copyright (c) 2008 - 2018, Justin Tadlock
  * @link      https://themehybrid.com/hybrid-core
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
@@ -19,7 +19,7 @@ namespace Hybrid;
 /**
  * Attributes class.
  *
- * @since  1.0.0
+ * @since  5.0.0
  * @access public
  */
 class Attributes {
@@ -27,7 +27,7 @@ class Attributes {
 	/**
 	 * The name/ID of the element (e.g., `sidebar`).
 	 *
-	 * @since  1.0.0
+	 * @since  5.0.0
 	 * @access protected
 	 * @var    string
 	 */
@@ -36,7 +36,7 @@ class Attributes {
 	/**
 	 * A specific context for the element (e.g., `primary`).
 	 *
-	 * @since  1.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @var    string
 	 */
@@ -45,11 +45,13 @@ class Attributes {
 	/**
 	 * Stored array of attributes.
 	 *
-	 * @since  1.0.0
+	 * @since  5.0.0
 	 * @access protected
 	 * @var    array
 	 */
-	protected $attr = [];
+	public $attr = [];
+
+	public $defaults = [];
 
 	/**
 	 * Outputs an HTML element's attributes.
@@ -102,7 +104,7 @@ class Attributes {
 	}
 
 	/**
-	 * Filtes the array of attributes.
+	 * Filters the array of attributes.
 	 *
 	 * @since  5.0.0
 	 * @access protected
@@ -110,29 +112,46 @@ class Attributes {
 	 */
 	protected function filter() {
 
-		$defaults = [
-			'class' => $this->context ? "{$this->name} {$this->name}-{$this->context}" : $this->name
-		];
+		$defaults = [];
 
-		$filtered = apply_filters( app()->namespace . '/attr', $defaults, $this->name, $this->context );
-		$filtered = apply_filters( app()->namespace . "/attr_{$this->name}", $filtered, $this->context );
+		// If the a class was input, we want to go ahead and set that as
+		// the default class.  That way, filters can know early on that
+		// a class has already been declared. Any filters on the defaults
+		// should, ideally, respect any classes that already exist.
+		if ( isset( $this->attr['class'] ) ) {
+			$defaults['class'] = $this->attr['class'];
 
-		$this->attr = wp_parse_args( $this->attr, $filtered );
+			// This is kind of a hacky way to keep the class input
+			// from overwriting everything later.
+			unset( $this->attr['class'] );
 
-		foreach ( $this->attr as $name => $value ) {
+		// If no class was input, let's build a custom default.
+		} else {
+			$defaults['class'] = $this->context ? "{$this->name} {$this->name}-{$this->context}" : $this->name;
+		}
 
-			$hook = app()->namespace . "/attr_{$this->name}_{$name}";
+		// Filter the default attributes.
+		$defaults = apply_filters( app()->namespace . "/attr/{$this->name}/defaults", $defaults, $this->context, $this );
 
-			$hook = app()->namespace . "/attr_{$this->name}_class";
+		// Merge the attributes with the defaults.
+		$this->attr = wp_parse_args( $this->attr, $defaults );
 
-			// Provide a filter hook for the class attribute directly. The classes are
-			// split up into an array for easier filtering. Note that theme authors
-			// should still utilize the core WP body, post, and comment class filter
-			// hooks. This should only be used for custom attributes.
-			if ( 'class' === $name && has_filter( $hook ) ) {
+		// Apply filters to the parsed attributes.
+		$this->attr = apply_filters( app()->namespace . '/attr', $this->attr, $this->name, $this->context );
+		$this->attr = apply_filters( app()->namespace . "/attr/{$this->name}", $this->attr, $this->context );
 
-				$this->attr[ $name ] = join( ' ', apply_filters( $hook, explode( ' ', $value ) ) );
-			}
+		// Provide a filter hook for the class attribute directly. The
+		// classes are split up into an array for easier filtering. Note
+		// that theme authors should still utilize the core WP body,
+		// post, and comment class filter hooks. This should only be
+		// used for custom attributes.
+		$hook = app()->namespace . "/attr/{$this->name}/class";
+
+		if ( isset( $this->attr['class'] ) && has_filter( $hook ) ) {
+
+			$this->attr[ $name ] = join( ' ', array_unique(
+				apply_filters( $hook, explode( ' ', $value ) )
+			) );
 		}
 	}
 }
