@@ -1,26 +1,30 @@
 <?php
 /**
- * HTML attribute functions and filters.  The purposes of this is to provide a way for theme/plugin devs
- * to hook into the attributes for specific HTML elements and create new or modify existing attributes.
- * This is sort of like `body_class()`, `post_class()`, and `comment_class()` on steroids.  Plus, it
- * handles attributes for many more elements.  The biggest benefit of using this is to provide richer
- * microdata while being forward compatible with the ever-changing Web.
+ * Attribute functions.
  *
- * @package    HybridCore
- * @subpackage Includes
- * @author     Justin Tadlock <justintadlock@gmail.com>
- * @copyright  Copyright (c) 2008 - 2017, Justin Tadlock
- * @link       https://themehybrid.com/hybrid-core
- * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * HTML attribute functions and filters.  The purposes of this is to provide a
+ * way for theme/plugin devs to hook into the attributes for specific HTML
+ * elements and create new or modify existing attributes. This is sort of like
+ * `body_class()`, `post_class()`, and `comment_class()` on steroids.  Plus, it
+ * handles attributes for many more elements.  The biggest benefit of using this
+ * is to provide richer microdata while being forward compatible with the
+ * ever-changing Web.
+ *
+ * @package   HybridCore
+ * @author    Justin Tadlock <justintadlock@gmail.com>
+ * @copyright Copyright (c) 2008 - 2018, Justin Tadlock
+ * @link      https://themehybrid.com/hybrid-core
+ * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 namespace Hybrid;
 
 # Attributes for a few default elements.
-add_filter( app()->namespace . '/attr_body',    __NAMESPACE__ . '\attr_body',    5 );
-add_filter( app()->namespace . '/attr_post',    __NAMESPACE__ . '\attr_post',    5 );
-add_filter( app()->namespace . '/attr_entry',   __NAMESPACE__ . '\attr_post',    5 ); // Alternate for "post".
-add_filter( app()->namespace . '/attr_comment', __NAMESPACE__ . '\attr_comment', 5 );
+add_filter( app()->namespace . '/attr_html',    __NAMESPACE__ . '\attr_html',    ~PHP_INT_MAX );
+add_filter( app()->namespace . '/attr_body',    __NAMESPACE__ . '\attr_body',    ~PHP_INT_MAX );
+add_filter( app()->namespace . '/attr_post',    __NAMESPACE__ . '\attr_post',    ~PHP_INT_MAX );
+add_filter( app()->namespace . '/attr_entry',   __NAMESPACE__ . '\attr_post',    ~PHP_INT_MAX ); // Alternate for "post".
+add_filter( app()->namespace . '/attr_comment', __NAMESPACE__ . '\attr_comment', ~PHP_INT_MAX );
 
 /**
  * Wrapper for creating a new `Attributes` object.
@@ -32,7 +36,7 @@ add_filter( app()->namespace . '/attr_comment', __NAMESPACE__ . '\attr_comment',
  * @param  array   $attr
  * @return object
  */
-function attributes( $name, $context = '', $attr = array() ) {
+function attributes( $name, $context = '', $attr = [] ) {
 
 	return new Attributes( $name, $context, $attr );
 }
@@ -47,7 +51,7 @@ function attributes( $name, $context = '', $attr = array() ) {
  * @param  array   $attr
  * @return void
  */
-function attr( $slug, $context = '', $attr = array() ) {
+function attr( $slug, $context = '', $attr = [] ) {
 
 	attributes( $slug, $context, $attr )->render();
 }
@@ -62,15 +66,40 @@ function attr( $slug, $context = '', $attr = array() ) {
  * @param  array   $attr
  * @return string
  */
-function get_attr( $slug, $context = '', $attr = array() ) {
+function get_attr( $slug, $context = '', $attr = [] ) {
 
 	return attributes( $slug, $context, $attr )->fetch();
 }
 
 /**
- * <body> element attributes.
+ * `<html>` element attributes.
  *
- * @since  2.0.0
+ * @since  5.0.0
+ * @access public
+ * @param  array   $attr
+ * @return array
+ */
+function attr_html( $attr ) {
+
+	$attr = [];
+
+	$parts = wp_kses_hair( get_language_attributes(), [ 'http', 'https' ] );
+
+	if ( $parts ) {
+
+		foreach ( $parts as $part ) {
+
+			$attr[ $part['name'] ] = $part['value'];
+		}
+	}
+
+	return $attr;
+}
+
+/**
+ * `<body>` element attributes.
+ *
+ * @since  5.0.0
  * @access public
  * @param  array   $attr
  * @return array
@@ -84,9 +113,9 @@ function attr_body( $attr ) {
 }
 
 /**
- * Post <article> element attributes.
+ * Post `<article>` element attributes.
  *
- * @since  2.0.0
+ * @since  5.0.0
  * @access public
  * @param  array   $attr
  * @return array
@@ -101,11 +130,10 @@ function attr_post( $attr ) {
 	return $attr;
 }
 
-
 /**
  * Comment wrapper attributes.
  *
- * @since  2.0.0
+ * @since  5.0.0
  * @access public
  * @param  array   $attr
  * @return array
