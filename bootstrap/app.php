@@ -47,7 +47,7 @@ app()->add( 'config.view', function( $container ) {
 } );
 
 // Use the theme namespace as the overall app namespace.
-app()->add( 'namespace', app()->get( 'config.theme' )->namespace );
+app()->add( 'namespace', app()->get( 'config.app' )->namespace );
 
 app()->add( 'dir', app()->get( 'config.app' )->dir );
 app()->add( 'uri', app()->get( 'config.app' )->uri );
@@ -87,9 +87,15 @@ app()->add( 'language', function() {
 	return new Language();
 } );
 
+app()->add( 'customize', function() {
+
+	return new Customize();
+} );
+
 // Resolve.
 app()->get( 'template_hierarchy' );
 app()->get( 'language' );
+app()->get( 'customize' );
 
 // Load functions files.
 array_map(
@@ -101,7 +107,6 @@ array_map(
 	[
 		'functions-attr',
 		'functions-context',
-		'functions-customize',
 		'functions-deprecated',
 		'functions-filters',
 		'functions-fonts',
