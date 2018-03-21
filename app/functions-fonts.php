@@ -1,19 +1,19 @@
 <?php
 /**
- * Functions for handling font enqueueing, registration, etc.  This works with the
- * Google Fonts API.
+ * Font functions.
  *
- * Extending an idea from Jose Castaneda. This is a small script for loading Google fonts
- * with an easy method for adding/removing/editing the fonts loaded via child theme.
+ * Functions for handling font enqueueing, registration, etc.  This works with
+ * the Google Fonts API. This extends an idea from Jose Castaneda. This is a
+ * small script for loading Google fontswith an easy method for
+ * adding/removing/editing the fonts loaded via child theme.
  *
  * @link http://blog.josemcastaneda.com/2016/02/29/adding-removing-fonts-from-a-theme/
  *
- * @package    HybridCore
- * @subpackage Includes
- * @author     Justin Tadlock <justintadlock@gmail.com>
- * @copyright  Copyright (c) 2008 - 2017, Justin Tadlock
- * @link       https://themehybrid.com/hybrid-core
- * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @package   HybridCore
+ * @author    Justin Tadlock <justintadlock@gmail.com>
+ * @copyright Copyright (c) 2008 - 2018, Justin Tadlock
+ * @link      https://themehybrid.com/hybrid-core
+ * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 namespace Hybrid;
@@ -22,25 +22,25 @@ namespace Hybrid;
  * Registers a font.
  *
  * @uses   wp_register_style()
- * @since  4.0.0
+ * @since  5.0.0
  * @access public
  * @param  string  $handle
  * @param  array   $args
  * @return bool
  */
-function register_font( $handle, $args = array() ) {
+function register_font( $handle, $args = [] ) {
 
 	$args = wp_parse_args(
 		$args,
 		array(
 			// Arguments for https://developers.google.com/fonts/docs/getting_started
-			'family'  => array(),
-			'subset'  => array(),
+			'family'  => [],
+			'subset'  => [],
 			'text'    => '',
-			'effect'  => array(),
+			'effect'  => [],
 
 			// Arguments for `wp_register_style()`.
-			'depends' => array(),
+			'depends' => [],
 			'version' => false,
 			'media'   => 'all',
 			'src'     => ''     // Will overwrite Google Fonts arguments.
@@ -56,7 +56,7 @@ function register_font( $handle, $args = array() ) {
  * Deregisters a registered font.
  *
  * @uses   wp_deregister_style()
- * @since  4.0.0
+ * @since  5.0.0
  * @access public
  * @param  string  $handle
  * @return void
@@ -68,19 +68,20 @@ function deregister_font( $handle ) {
 
 /**
  * Enqueue a registered font.  If the font is not registered, pass the `$args` to
- * register it.  See `hybrid_register_font()`.
+ * register it.  See `register_font()`.
  *
  * @uses   wp_enqueue_style()
- * @since  4.0.0
+ * @since  5.0.0
  * @access public
  * @param  string  $handle
  * @param  array   $args
  * @return void
  */
-function enqueue_font( $handle, $args = array() ) {
+function enqueue_font( $handle, $args = [] ) {
 
-	if ( ! font_is_registered( $handle ) )
+	if ( ! font_is_registered( $handle ) ) {
 		register_font( $handle, $args );
+	}
 
 	wp_enqueue_style( "{$handle}-font" );
 }
@@ -89,7 +90,7 @@ function enqueue_font( $handle, $args = array() ) {
  * Dequeues a font.
  *
  * @uses   wp_dequeue_style()
- * @since  4.0.0
+ * @since  5.0.0
  * @access public
  * @param  string  $handle
  * @return void
@@ -103,7 +104,7 @@ function dequeue_font( $handle ) {
  * Checks a font's status.
  *
  * @uses   wp_style_is()
- * @since  4.0.0
+ * @since  5.0.0
  * @access public
  * @param  string  $handle
  * @param  string  $list
@@ -117,7 +118,7 @@ function font_is( $handle, $list = 'enqueued' ) {
 /**
  * Checks if a font is registered.
  *
- * @since  4.0.0
+ * @since  5.0.0
  * @access public
  * @param  string  $handle
  * @return bool
@@ -130,7 +131,7 @@ function font_is_registered( $handle ) {
 /**
  * Checks if a font is enqueued.
  *
- * @since  4.0.0
+ * @since  5.0.0
  * @access public
  * @param  string  $handle
  * @return bool
@@ -141,10 +142,11 @@ function font_is_enqueued( $handle ) {
 }
 
 /**
- * Helper function for creating the Google Fonts URL.  Note that `add_query_arg()` will call
- * `urlencode_deep()`, so we're going to leaving the encoding to that function.
+ * Helper function for creating the Google Fonts URL.  Note that `add_query_arg()`
+ * will call `urlencode_deep()`, so we're going to leaving the encoding to
+ * that function.
  *
- * @since  4.0.0
+ * @since  5.0.0
  * @access public
  * @param  string  $handle
  * @param  array   $args
@@ -157,27 +159,30 @@ function get_font_url( $handle, $args ) {
 
 	if ( ! $font_url ) {
 
-		$family = apply_filters( "hybrid_{$handle}_font_family", $args['family'] );
-		$subset = apply_filters( "hybrid_{$handle}_font_subset", $args['subset'] );
-		$text   = apply_filters( "hybrid_{$handle}_font_text",   $args['text']   );
-		$effect = apply_filters( "hybrid_{$handle}_font_effect", $args['effect']   );
+		$family = apply_filters( app()->namespace . "/{$handle}_font_family", $args['family'] );
+		$subset = apply_filters( app()->namespace . "/{$handle}_font_subset", $args['subset'] );
+		$text   = apply_filters( app()->namespace . "/{$handle}_font_text",   $args['text']   );
+		$effect = apply_filters( app()->namespace . "/{$handle}_font_effect", $args['effect'] );
 
 		if ( $family ) {
 
 			$query_args['family'] = implode( '|', (array) $family );
 
-			if ( $subset )
+			if ( $subset ) {
 				$query_args['subset'] = implode( ',', (array) $subset );
+			}
 
-			if ( $text )
+			if ( $text ) {
 				$query_args['text'] = $text;
+			}
 
-			if ( $effect )
+			if ( $effect ) {
 				$query_args['effect'] = implode( '|', (array) $effect );
+			}
 
 			$font_url = add_query_arg( $query_args, 'https://fonts.googleapis.com/css' );
 		}
 	}
 
-	return esc_url( apply_filters( "hybrid_{$handle}_font_url", $font_url, $args, $query_args ) );
+	return esc_url( apply_filters( app()->namespace . "/{$handle}_font_url", $font_url, $args, $query_args ) );
 }
