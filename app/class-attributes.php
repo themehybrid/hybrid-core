@@ -51,8 +51,6 @@ class Attributes {
 	 */
 	public $attr = [];
 
-	public $defaults = [];
-
 	/**
 	 * Outputs an HTML element's attributes.
 	 *
