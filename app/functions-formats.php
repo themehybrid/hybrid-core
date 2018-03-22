@@ -5,12 +5,11 @@
  * Functions and filters for handling the output of post formats.  This file is
  * only loaded if themes declare support for `post-formats`.
  *
- * @package    HybridCore
- * @subpackage Includes
- * @author     Justin Tadlock <justintadlock@gmail.com>
- * @copyright  Copyright (c) 2008 - 2017, Justin Tadlock
- * @link       https://themehybrid.com/hybrid-core
- * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @package   HybridCore
+ * @author    Justin Tadlock <justintadlock@gmail.com>
+ * @copyright Copyright (c) 2008 - 2018, Justin Tadlock
+ * @link      https://themehybrid.com/hybrid-core
+ * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 namespace Hybrid;
@@ -19,10 +18,10 @@ namespace Hybrid;
 add_action( 'wp_loaded', __NAMESPACE__ . '\structured_post_formats', 0 );
 
 /**
- * Theme compatibility for post formats.  This function adds appropriate filters to 'the_content' for
- * the various post formats that a theme supports.
+ * Theme compatibility for post formats.  This function adds appropriate filters
+ * to `the_content` for the various post formats that a theme supports.
  *
- * @since  1.6.0
+ * @since  5.0.0
  * @access public
  * @return void
  */
@@ -48,9 +47,9 @@ function structured_post_formats() {
 }
 
 /**
- * Strips the 'post-format-' prefix from a post format (term) slug.
+ * Strips the `post-format-` prefix from a post format (term) slug.
  *
- * @since  1.6.0
+ * @since  5.0.0
  * @access public
  * @param  string  $slug
  * @return string
@@ -66,7 +65,7 @@ function clean_post_format_slug( $slug ) {
  * Adds an infinity character "&#8734;" to the end of the post content on
  * 'aside' posts.
  *
- * @since  1.6.0
+ * @since  5.0.0
  * @access public
  * @param  string $content
  * @return string
@@ -91,7 +90,7 @@ function aside_infinity( $content ) {
  * `make_clickable()` function so that users can enter just a URL into the post
  * content editor.
  *
- * @since  1.6.0
+ * @since  5.0.0
  * @access public
  * @param  string $content
  * @return string
@@ -112,7 +111,7 @@ function link_content( $content ) {
  * Checks if the quote post has a `<blockquote>` tag within the content.  If not,
  * wraps the entire post content with one.
  *
- * @since  1.6.0
+ * @since  5.0.0
  * @access public
  * @param  string $content
  * @return string
