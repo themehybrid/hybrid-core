@@ -1,14 +1,15 @@
 <?php
 /**
- * Media template functions. These functions are meant to handle various features needed in theme templates
- * for media and attachments.
+ * Media template tags.
  *
- * @package    HybridCore
- * @subpackage Includes
- * @author     Justin Tadlock <justintadlock@gmail.com>
- * @copyright  Copyright (c) 2008 - 2017, Justin Tadlock
- * @link       https://themehybrid.com/hybrid-core
- * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * Media template functions. These functions are meant to handle various features
+ * needed in theme templates for media and attachments.
+ *
+ * @package   HybridCore
+ * @author    Justin Tadlock <justintadlock@gmail.com>
+ * @copyright Copyright (c) 2008 - 2018, Justin Tadlock
+ * @link      https://themehybrid.com/hybrid-core
+ * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 namespace Hybrid;
@@ -16,13 +17,12 @@ namespace Hybrid;
 /**
  * Prints the post media from the media grabber.
  *
- * @see    Hybrid_Media_Grabber
- * @since  4.0.0
+ * @since  5.0.0
  * @access public
  * @param  array   $args
  * @return void
  */
-function post_media( $args = array() ) {
+function post_media( $args = [] ) {
 
 	echo get_post_media( $args );
 }
@@ -30,26 +30,26 @@ function post_media( $args = array() ) {
 /**
  * Getter function for grabbing the post media.
  *
- * @see    Hybrid\MediaGrabber
- * @since  4.0.0
+ * @since  5.0.0
  * @access public
  * @param  array   $args
  * @return string
  */
-function get_post_media( $args = array() ) {
+function get_post_media( $args = [] ) {
 
 	return media_grabber( $args );
 }
 
 /**
- * Wrapper function for the `Hybrid\MediaGrabber` class.  Returns the HTML output for the found media.
+ * Wrapper function for the `Hybrid\MediaGrabber` class.  Returns the HTML output
+ * for the found media.
  *
- * @since  1.6.0
+ * @since  5.0.0
  * @access public
  * @param  array   $args
  * @return string
  */
-function media_grabber( $args = array() ) {
+function media_grabber( $args = [] ) {
 
 	$media = new MediaGrabber( $args );
 
@@ -57,43 +57,41 @@ function media_grabber( $args = array() ) {
 }
 
 /**
- * Prints media meta directly to the screen.  The `$property` parameter can be any of the public
- * properties in the `Hybrid\MediaMeta` object.
+ * Prints media meta directly to the screen.  The `$property` parameter can be
+ * any of the public properties in the `Hybrid\MediaMeta` object.
  *
  * @see    Hybrid\MediaMeta
- * @since  3.0.0
+ * @since  5.0.0
  * @access public
  * @param  string  $property
  * @param  array   $args
  * @return void
  */
-function media_meta( $property, $args = array() ) {
+function media_meta( $property, $args = [] ) {
 
 	echo get_media_meta( $property, $args );
 }
 
 /**
- * Returns media meta from a media meta object.  The `$property` parameter can be any of the public
- * properties in the `Hybrid\MediaMeta` object.
+ * Returns media meta from a media meta object.  The `$property` parameter can
+ * be any of the public properties in the `Hybrid\MediaMeta` object.
  *
- * @see    Hybrid_Media_Meta
- * @since  3.0.0
+ * @see    Hybrid\MediaMeta
+ * @since  5.0.0
  * @access public
  * @param  string  $property
  * @param  array   $args
  * @return string
  */
-function get_media_meta( $property, $args = array() ) {
+function get_media_meta( $property, $args = [] ) {
 
-	$defaults = array(
+	$args = wp_parse_args( $args, [
 		'post_id' => get_the_ID(),
 		'text'    => '%s',
 		'before'  => '',
 		'after'   => '',
 		'wrap'    => '<span %s>%s</span>'
-	);
-
-	$args = wp_parse_args( $args, $defaults );
+	] );
 
 	// Get the media metadata.
 	$meta_object = get_media_metadata( $args['post_id'] );
@@ -107,39 +105,39 @@ function get_media_meta( $property, $args = array() ) {
 /**
  * Returns the registry of media metadata items.
  *
- * @since  4.0.0
+ * @since  5.0.0
  * @access public
  * @return object
  */
-function media_metadata_registry() {
+function media_metadata() {
 
 	return app()->get( 'media_meta' );
 }
 
 /**
- * Gets media metadata.  This function also serves to register meta on the fly if nothing
- * exists for the attachment ID yet.
+ * Gets media metadata.  This function also serves to register meta on the fly
+ * if nothing exists for the attachment ID yet.
  *
- * @since  4.0.0
+ * @since  5.0.0
  * @access public
  * @param  int     $post_id
  * @return object
  */
 function get_media_metadata( $post_id ) {
 
-	if ( ! media_metadata_registry()->has( $post_id ) ) {
+	if ( ! media_metadata()->has( $post_id ) ) {
 
-		media_metadata_registry()->add( $post_id, new MediaMeta( $post_id ) );
+		media_metadata()->add( $post_id, new MediaMeta( $post_id ) );
 	}
 
-	return media_metadata_registry()->get( $post_id );
+	return media_metadata()->get( $post_id );
 }
 
 /**
- * Splits the attachment mime type into two distinct parts: type / subtype (e.g., image / png).
- * Returns an array of the parts.
+ * Splits the attachment mime type into two distinct parts: type / subtype
+ * (e.g., image / png). Returns an array of the parts.
  *
- * @since  3.0.0
+ * @since  5.0.0
  * @access public
  * @param  int    $post_id
  * @return array
@@ -151,14 +149,14 @@ function get_attachment_types( $post_id = 0 ) {
 
 	list( $type, $subtype ) = false !== strpos( $mime_type, '/' ) ? explode( '/', $mime_type ) : array( $mime_type, '' );
 
-	return (object) array( 'type' => $type, 'subtype' => $subtype );
+	return (object) [ 'type' => $type, 'subtype' => $subtype ];
 }
 
 /**
- * Returns the main attachment mime type.  For example, `image` when the file has an `image / jpeg`
- * mime type.
+ * Returns the main attachment mime type.  For example, `image` when the file
+ * has an `image / jpeg` mime type.
  *
- * @since  3.0.0
+ * @since  5.0.0
  * @access public
  * @param  int    $post_id
  * @return string
@@ -169,10 +167,10 @@ function get_attachment_type( $post_id = 0 ) {
 }
 
 /**
- * Returns the attachment mime subtype.  For example, `jpeg` when the file has an `image / jpeg`
- * mime type.
+ * Returns the attachment mime subtype.  For example, `jpeg` when the file has
+ * an `image / jpeg` mime type.
  *
- * @since  3.0.0
+ * @since  5.0.0
  * @access public
  * @param  int    $post_id
  * @return string
@@ -185,7 +183,7 @@ function get_attachment_subtype( $post_id = 0 ) {
 /**
  * Checks if the current post has a mime type of 'audio'.
  *
- * @since  1.6.0
+ * @since  5.0.0
  * @access public
  * @param  int    $post_id
  * @return bool
@@ -198,7 +196,7 @@ function attachment_is_audio( $post_id = 0 ) {
 /**
  * Checks if the current post has a mime type of 'video'.
  *
- * @since  1.6.0
+ * @since  5.0.0
  * @access public
  * @param  int    $post_id
  * @return bool
@@ -211,15 +209,16 @@ function attachment_is_video( $post_id = 0 ) {
 /**
  * Returns a set of image attachment links based on size.
  *
- * @since  2.0.0
+ * @since  5.0.0
  * @access public
  * @return string
  */
 function get_image_size_links() {
 
 	// If not viewing an image attachment page, return.
-	if ( ! wp_attachment_is_image( get_the_ID() ) )
+	if ( ! wp_attachment_is_image( get_the_ID() ) ) {
 		return;
+	}
 
 	// Set up an empty array for the links.
 	$links = array();
@@ -237,8 +236,12 @@ function get_image_size_links() {
 		// Add the link to the array if there's an image and if $is_intermediate (4th array value) is true or full size.
 		if ( ! empty( $image ) && ( true === $image[3] || 'full' == $size ) ) {
 
-			// Translators: Media dimensions - 1 is width and 2 is height.
-			$label = sprintf( esc_html__( '%1$s &#215; %2$s', 'hybrid-core' ), number_format_i18n( absint( $image[1] ) ), number_format_i18n( absint( $image[2] ) ) );
+			$label = sprintf(
+				// Translators: Media dimensions - 1 is width and 2 is height.
+				esc_html__( '%1$s &#215; %2$s', 'hybrid-core' ),
+				number_format_i18n( absint( $image[1] ) ),
+				number_format_i18n( absint( $image[2] ) )
+			);
 
 			$links[] = sprintf(
 				'<a href="%s" class="image-size-link">%s</a>',
@@ -253,45 +256,55 @@ function get_image_size_links() {
 }
 
 /**
- * Gets the "transcript" for an audio attachment.  This is typically saved as "unsynchronised_lyric", which is
- * the ID3 tag sanitized by WordPress.
+ * Gets the "transcript" for an audio attachment.  This is typically saved as
+ * "unsynchronised_lyric", which is the ID3 tag sanitized by WordPress.
  *
- * @since  2.0.0
+ * @since  5.0.0
  * @access public
  * @param  int     $post_id
  * @return string
  */
 function get_audio_transcript( $post_id = 0 ) {
 
-	return get_media_meta( 'lyrics', array( 'wrap' => '', 'post_id' => $post_id ? $post_id : get_the_ID() ) );
+	return get_media_meta( 'lyrics', [
+		'wrap'    => '',
+		'post_id' => $post_id ? $post_id : get_the_ID()
+	] );
 }
 
 /**
- * Loads the correct function for handling attachments.  Checks the attachment mime type to call
- * correct function. Image attachments are not loaded with this function.  The functionality for them
- * should be handled by the theme's attachment or image attachment file.
+ * Loads the correct function for handling attachments.  Checks the attachment
+ * mime type to call correct function. Image attachments are not loaded with
+ * this function.  The functionality for them should be handled by the theme's
+ * attachment or image attachment file.
  *
- * Ideally, all attachments would be appropriately handled within their templates. However, this could
- * lead to messy template files.
+ * Ideally, all attachments would be appropriately handled within their
+ * templates. However, this could lead to messy template files.
  *
- * @since  0.5.0
+ * @since  5.0.0
  * @access public
  * @return void
  */
 function attachment() {
 
 	$type = get_attachment_type();
+	$mime = get_post_mime_type();
+	$url  = wp_get_attachment_url();
+	$func = __NAMESPACE__ . "\{$type}_attachment";
 
-	$attachment = function_exists( "hybrid_{$type}_attachment" ) ? call_user_func( __NAMESPACE__ . "\{$type}_attachment", get_post_mime_type(), wp_get_attachment_url() ) : '';
+	$attachment = function_exists( $func ) ? call_user_func( $func, $mime, $url ) : '';
 
-	echo apply_filters( 'hybrid_attachment', apply_filters( "hybrid_{$type}_attachment", $attachment ) );
+	echo apply_filters(
+		app()->namespace . '/attachment',
+		apply_filters( app()->namespace . "/{$type}_attachment" )
+	);
 }
 
 /**
- * Handles application attachments on their attachment pages.  Uses the `<object>` tag to embed media
- * on those pages.
+ * Handles application attachments on their attachment pages.  Uses the `<object>`
+ * tag to embed media on those pages.
  *
- * @since  0.3.0
+ * @since  5.0.0
  * @access public
  * @param  string $mime attachment mime type
  * @param  string $file attachment file URL
@@ -310,10 +323,10 @@ function application_attachment( $mime = '', $file = '' ) {
 }
 
 /**
- * Handles text attachments on their attachment pages.  Uses the `<object>` element to embed media
- * in the pages.
+ * Handles text attachments on their attachment pages.  Uses the `<object>`
+ * element to embed media in the pages.
  *
- * @since  0.3.0
+ * @since  5.0.0
  * @access public
  * @param  string $mime attachment mime type
  * @param  string $file attachment file URL
@@ -332,25 +345,27 @@ function text_attachment( $mime = '', $file = '' ) {
 }
 
 /**
- * Handles the output of the media for audio attachment posts. This should be used within The Loop.
+ * Handles the output of the media for audio attachment posts. This should be
+ * used within The Loop.
  *
- * @since  0.2.2
+ * @since  5.0.0
  * @access public
  * @return string
  */
 function audio_attachment() {
 
-	return media_grabber( array( 'type' => 'audio' ) );
+	return media_grabber( [ 'type' => 'audio' ] );
 }
 
 /**
- * Handles the output of the media for video attachment posts. This should be used within The Loop.
+ * Handles the output of the media for video attachment posts. This should be
+ * used within The Loop.
  *
- * @since  0.2.2
+ * @since  5.0.0
  * @access public
  * @return string
  */
 function video_attachment() {
 
-	return media_grabber( array( 'type' => 'video' ) );
+	return media_grabber( [ 'type' => 'video' ] );
 }
