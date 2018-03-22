@@ -15,6 +15,37 @@
 namespace Hybrid;
 
 /**
+ * Returns a hierarchy based on the locale, language, region, and text direction.
+ * This can be useful for loading functions, files, scripts, or styles based on
+ * the site's locale. Note that the locale is all lowercase and hyphenated (for
+ * example, `en_US` becomes `en-us`).
+ *
+ * @since  5.0.0
+ * @access public
+ * @return array
+ */
+function get_lang_hierarchy() {
+
+	$locale = strtolower( str_replace( '_', '-', is_admin() ? get_user_locale() : get_locale() ) );
+	$lang   = strtolower( get_language() );
+	$region = strtolower( get_region() );
+
+	$hier = [ $locale ];
+
+	if ( $region !== $locale ) {
+		$hier[] = $region;
+	}
+
+	if ( $lang !== $locale ) {
+		$hier[] = $lang;
+	}
+
+	$hier[] = is_rtl() ? 'rtl' : 'ltr';
+
+	return apply_filters( app()->namespace . '/lang_hierarchy', $hier );
+}
+
+/**
  * Gets the language for the currently-viewed page.  It strips the region from
  * the locale if needed and just returns the language code.
  *
