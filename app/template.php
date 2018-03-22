@@ -1,14 +1,16 @@
 <?php
 /**
- * Functions for loading template parts.  These functions are helper functions or more flexible
- * functions than what core WordPress currently offers with template part loading.
+ * Template functions.
  *
- * @package    HybridCore
- * @subpackage Includes
- * @author     Justin Tadlock <justintadlock@gmail.com>
- * @copyright  Copyright (c) 2008 - 2017, Justin Tadlock
- * @link       https://themehybrid.com/hybrid-core
- * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * Functions for loading template parts.  These functions are helper functions
+ * or more flexible functions than what core WordPress currently offers with
+ * template part loading.
+ *
+ * @package   HybridCore
+ * @author    Justin Tadlock <justintadlock@gmail.com>
+ * @copyright Copyright (c) 2008 - 2018, Justin Tadlock
+ * @link      https://themehybrid.com/hybrid-core
+ * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 namespace Hybrid;
@@ -16,7 +18,7 @@ namespace Hybrid;
 /**
  * Creates a hierarchy based on the current post.  For use with content-specific templates.
  *
- * @since  4.0.0
+ * @since  5.0.0
  * @access public
  * @return array
  */
