@@ -2,15 +2,15 @@
 /**
  * Layouts API - An API for themes to build layout options.
  *
- * Theme Layouts was created to allow theme developers to easily style themes with dynamic layout
- * structures. This file merely contains the API function calls at theme developers' disposal.
+ * Theme Layouts was created to allow theme developers to easily style themes
+ * with dynamic layout structures. This file merely contains the API function
+ * calls at theme developers' disposal.
  *
- * @package    HybridCore
- * @subpackage Includes
- * @author     Justin Tadlock <justintadlock@gmail.com>
- * @copyright  Copyright (c) 2008 - 2017, Justin Tadlock
- * @link       https://themehybrid.com/hybrid-core
- * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @package   HybridCore
+ * @author    Justin Tadlock <justintadlock@gmail.com>
+ * @copyright Copyright (c) 2008 - 2018, Justin Tadlock
+ * @link      https://themehybrid.com/hybrid-core
+ * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 namespace Hybrid;
@@ -22,16 +22,16 @@ add_action( 'init', __NAMESPACE__ . '\register_layouts', 95 );
 add_filter( 'current_theme_supports-theme-layouts', __NAMESPACE__ . '\theme_layouts_support', 10, 3 );
 
 # Filters the theme layout.
-add_filter( 'hybrid_get_theme_layout', __NAMESPACE__ . '\filter_layout', 5 );
+add_filter( app()->namespace . '/get_theme_layout', __NAMESPACE__ . '\filter_layout', ~PHP_INT_MAX );
 
 /**
  * Returns the layout registry. Use this function to access the object.
  *
- * @since  4.0.0
+ * @since  5.0.0
  * @access public
  * @return object
  */
-function layout_registry() {
+function layouts() {
 
 	return app()->get( 'layouts' );
 }
@@ -39,110 +39,110 @@ function layout_registry() {
 /**
  * Registers the default theme layouts.
  *
- * @since  3.0.0
+ * @since  5.0.0
  * @access public
  * @return void
  */
 function register_layouts() {
 
-	register_layout(
-		'default',
-		array(
-			// Translators: Default theme layout option.
-			'label'            => esc_html_x( 'Default', 'theme layout', 'hybrid-core' ),
-			'is_global_layout' => false,
-			'_builtin'         => true,
-			'_internal'        => true,
-		)
-	);
+	register_layout( 'default', [
+		// Translators: Default theme layout option.
+		'label'            => esc_html_x( 'Default', 'theme layout', 'hybrid-core' ),
+		'is_global_layout' => false,
+		'_builtin'         => true,
+		'_internal'        => true,
+	] );
 
 	// Hook for registering theme layouts. Theme should always register on this hook.
-	do_action( 'hybrid_register_layouts' );
+	do_action( app()->namespace . '/register_layouts' );
 }
 
 /**
  * Function for registering a layout.
  *
- * @since  3.0.0
+ * @since  5.0.0
  * @access public
  * @param  string  $name
  * @param  array   $args
  * @return void
  */
-function register_layout( $name, $args = array() ) {
+function register_layout( $name, array $args = [] ) {
 
-	layout_registry()->add( $name, new Layout( $name, $args ) );
+	layouts()->add( $name, new Layout( $name, $args ) );
 }
 
 /**
  * Unregisters a layout.
  *
- * @since  3.0.0
+ * @since  5.0.0
  * @access public
  * @param  string  $name
  * @return void
  */
 function unregister_layout( $name ) {
 
-	layout_registry()->remove( $name );
+	layouts()->remove( $name );
 }
 
 /**
  * Checks if a layout exists.
  *
- * @since  3.0.0
+ * @since  5.0.0
  * @access public
  * @param  string  $name
  * @return bool
  */
 function layout_exists( $name ) {
 
-	return layout_registry()->has( $name );
+	return layouts()->has( $name );
 }
 
 /**
  * Returns an array of registered layout objects.
  *
- * @since  3.0.0
+ * @since  5.0.0
  * @access public
  * @return array
  */
 function get_layouts() {
 
-	return layout_registry()->get_items();
+	return layouts()->get_items();
 }
 
 /**
  * Returns a layout object if it exists.  Otherwise, `FALSE`.
  *
  * @see    Hybrid_Layout
- * @since  3.0.0
+ * @since  5.0.0
  * @access public
  * @param  string      $name
  * @return object|bool
  */
 function get_layout( $name ) {
 
-	return layout_registry()->get( $name );
+	return layouts()->get( $name );
 }
 
 /**
- * Gets the theme layout.  This is the global theme layout defined. Other functions filter the
- * available `theme_mod_theme_layout` hook to overwrite this.
+ * Gets the theme layout.  This is the global theme layout defined. Other
+ * functions filter the available `theme_mod_theme_layout` hook to overwrite this.
  *
- * @since  3.0.0
+ * @since  5.0.0
  * @access public
  * @return string
  */
 function get_theme_layout() {
 
-	return apply_filters( 'hybrid_get_theme_layout', get_global_layout() );
+	return apply_filters(
+		app()->namespace . '/get_theme_layout',
+		get_global_layout()
+	);
 }
 
 /**
  * Returns the theme mod used for the global layout setting.
  *
- * @since  3.0.0
+ * @since  5.0.0
  * @access public
  * @return string
  */
@@ -154,7 +154,7 @@ function get_global_layout() {
 /**
  * Returns the default layout defined by the theme.
  *
- * @since  3.0.0
+ * @since  5.0.0
  * @access public
  * @return string
  */
@@ -167,7 +167,7 @@ function get_default_layout() {
 /**
  * Checks if the current layout matches the layout to check against.
  *
- * @since  4.0.0
+ * @since  5.0.0
  * @access public
  * @param  string  $layout
  * @return bool
@@ -180,7 +180,7 @@ function is_layout( $layout ) {
 /**
  * Gets a post layout.
  *
- * @since  3.0.0
+ * @since  5.0.0
  * @access public
  * @param  int     $post_id
  * @return bool
@@ -193,7 +193,7 @@ function get_post_layout( $post_id ) {
 /**
  * Sets a post layout.
  *
- * @since  3.0.0
+ * @since  5.0.0
  * @access public
  * @param  int     $post_id
  * @param  string  $layout
@@ -201,13 +201,15 @@ function get_post_layout( $post_id ) {
  */
 function set_post_layout( $post_id, $layout ) {
 
-	return 'default' !== $layout ? update_post_meta( $post_id, get_layout_meta_key(), $layout ) : delete_post_layout( $post_id );
+	return 'default' !== $layout
+	       ? update_post_meta( $post_id, get_layout_meta_key(), $layout )
+	       : delete_post_layout( $post_id );
 }
 
 /**
  * Deletes a post layout.
  *
- * @since  3.0.0
+ * @since  5.0.0
  * @access public
  * @param  int     $post_id
  * @return bool
@@ -220,23 +222,24 @@ function delete_post_layout( $post_id ) {
 /**
  * Checks a post if it has a specific layout.
  *
- * @since  3.0.0
+ * @since  5.0.0
  * @access public
  * @param  int     $post_id
  * @return bool
  */
 function has_post_layout( $layout, $post_id = '' ) {
 
-	if ( ! $post_id )
+	if ( ! $post_id ) {
 		$post_id = get_the_ID();
+	}
 
-	return $layout == get_post_layout( $post_id ) ? true : false;
+	return $layout == get_post_layout( $post_id );
 }
 
 /**
  * Gets a term layout.
  *
- * @since  4.0.0
+ * @since  5.0.0
  * @access public
  * @param  int     $term_id
  * @return bool
@@ -249,7 +252,7 @@ function get_term_layout( $term_id ) {
 /**
  * Sets a term layout.
  *
- * @since  4.0.0
+ * @since  5.0.0
  * @access public
  * @param  int     $term_id
  * @param  string  $layout
@@ -257,13 +260,15 @@ function get_term_layout( $term_id ) {
  */
 function set_term_layout( $term_id, $layout ) {
 
-	return 'default' !== $layout ? update_term_meta( $term_id, get_layout_meta_key(), $layout ) : delete_term_layout( $term_id );
+	return 'default' !== $layout
+	       ? update_term_meta( $term_id, get_layout_meta_key(), $layout )
+	       : delete_term_layout( $term_id );
 }
 
 /**
  * Deletes a term layout.
  *
- * @since  4.0.0
+ * @since  5.0.0
  * @access public
  * @param  int     $term_id
  * @return bool
@@ -276,23 +281,24 @@ function delete_term_layout( $term_id ) {
 /**
  * Checks a term if it has a specific layout.
  *
- * @since  4.0.0
+ * @since  5.0.0
  * @access public
  * @param  int     $term_id
  * @return bool
  */
 function has_term_layout( $layout, $term_id = '' ) {
 
-	if ( ! $term_id )
+	if ( ! $term_id ) {
 		$term_id = get_queried_object_id();
+	}
 
-	return $layout == get_term_layout( $term_id ) ? true : false;
+	return $layout == get_term_layout( $term_id );
 }
 
 /**
  * Gets a user layout.
  *
- * @since  3.0.0
+ * @since  5.0.0
  * @access public
  * @param  int     $user_id
  * @return bool
@@ -305,7 +311,7 @@ function get_user_layout( $user_id ) {
 /**
  * Sets a user layout.
  *
- * @since  3.0.0
+ * @since  5.0.0
  * @access public
  * @param  int     $user_id
  * @param  string  $layout
@@ -313,13 +319,15 @@ function get_user_layout( $user_id ) {
  */
 function set_user_layout( $user_id, $layout ) {
 
-	return 'default' !== $layout ? update_user_meta( $user_id, get_layout_meta_key(), $layout ) : delete_user_layout( $user_id );
+	return 'default' !== $layout
+	       ? update_user_meta( $user_id, get_layout_meta_key(), $layout )
+	       : delete_user_layout( $user_id );
 }
 
 /**
  * Deletes user layout.
  *
- * @since  3.0.0
+ * @since  5.0.0
  * @access public
  * @param  int     $user_id
  * @return bool
@@ -332,7 +340,7 @@ function delete_user_layout( $user_id ) {
 /**
  * Checks if a user/author has a specific layout.
  *
- * @since  3.0.0
+ * @since  5.0.0
  * @access public
  * @param  string  $layout
  * @param  int     $user_id
@@ -340,43 +348,48 @@ function delete_user_layout( $user_id ) {
  */
 function has_user_layout( $layout, $user_id = '' ) {
 
-	if ( ! $user_id )
+	if ( ! $user_id ) {
 		$user_id = absint( get_query_var( 'author' ) );
+	}
 
-	return $layout == get_user_layout( $user_id ) ? true : false;
+	return $layout == get_user_layout( $user_id );
 }
 
 /**
- * Default filter on the `theme_mod_theme_layout` hook.  By default, we'll check for per-post
- * or per-author layouts saved as metadata.  If set, we'll filter.  Else, just return the
- * global layout.
+ * Default filter on the `hybrid/get_theme_layout` hook.  By default, we'll
+ * check for per-post or per-author layouts saved as metadata.  If set, we'll
+ * filter.  Else, just return the global layout.
  *
- * @since  3.0.0
+ * @since  5.0.0
  * @access public
  * @param  string  $theme_layout
  * @return string
  */
 function filter_layout( $theme_layout ) {
 
+	$layout = '';
+
 	// If viewing a singular post, get the post layout.
-	if ( is_singular() )
+	if ( is_singular() ) {
 		$layout = get_post_layout( get_queried_object_id() );
 
 	// If viewing an author archive, get the user layout.
-	elseif ( is_author() )
+	} elseif ( is_author() ) {
 		$layout = get_user_layout( get_queried_object_id() );
 
 	// If viewing a term archive, get the term layout.
-	elseif ( is_tax() || is_category() || is_tag() )
+	} elseif ( is_tax() || is_category() || is_tag() ) {
 		$layout = get_term_layout( get_queried_object_id() );
+	}
 
-	return ! empty( $layout ) && layout_exists( $layout ) && 'default' !== $layout ? $layout : $theme_layout;
+	return $layout && layout_exists( $layout ) && 'default' !== $layout ? $layout : $theme_layout;
 }
 
 /**
- * Returns an array of the available theme layouts.
+ * Filter on `current_theme_supports-theme-layouts` for checking whether a theme
+ * supports a particular feature for theme layouts.
  *
- * @since  3.0.0
+ * @since  5.0.0
  * @access public
  * @param  bool   $supports
  * @param  array  $args
@@ -385,19 +398,21 @@ function filter_layout( $theme_layout ) {
  */
 function theme_layouts_support( $supports, $args, $feature ) {
 
-	if ( isset( $args[0] ) && in_array( $args[0], array( 'customize', 'post_meta', 'term_meta' ) ) ) {
+	if ( isset( $args[0] ) && in_array( $args[0], [ 'customize', 'post_meta', 'term_meta' ] ) ) {
 
-		if ( is_array( $feature[0] ) && isset( $feature[0][ $args[0] ] ) && false === $feature[0][ $args[0] ] )
+		if ( is_array( $feature[0] ) && isset( $feature[0][ $args[0] ] ) && false === $feature[0][ $args[0] ] ) {
 			$supports = false;
+		}
 	}
 
 	return $supports;
 }
 
 /**
- * Wrapper function for returning the metadata key used for objects that can use layouts.
+ * Wrapper function for returning the metadata key used for objects that can
+ * use layouts.
  *
- * @since  3.0.0
+ * @since  5.0.0
  * @access public
  * @return string
  */
