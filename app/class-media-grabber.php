@@ -2,19 +2,19 @@
 /**
  * Hybrid Media Grabber - A script for grabbing media related to a post.
  *
- * Hybrid Media Grabber is a script for pulling media either from the post content or attached to the
- * post.  It's an attempt to consolidate the various methods that users have used over the years to
- * embed media into their posts.  This script was written so that theme developers could grab that
- * media and use it in interesting ways within their themes.  For example, a theme could get a video
- * and display it on archive pages alongside the post excerpt or pull it out of the content to display
- * it above the post on single post views.
+ * Hybrid Media Grabber is a script for pulling media either from the post
+ * content or attached to the post.  It's an attempt to consolidate the various
+ * methods that users have used over the years to embed media into their posts.
+ * This script was written so that theme developers could grab that media and
+ * use it in interesting ways within their themes.  For example, a theme could
+ * get a video and display it on archive pages alongside the post excerpt or
+ * pull it out of the content to display it above the post on single post views.
  *
- * @package    Hybrid
- * @subpackage Includes
- * @author     Justin Tadlock <justintadlock@gmail.com>
- * @copyright  Copyright (c) 2008 - 2017, Justin Tadlock
- * @link       https://themehybrid.com/hybrid-core
- * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @package   Hybrid
+ * @author    Justin Tadlock <justintadlock@gmail.com>
+ * @copyright Copyright (c) 2008 - 2018, Justin Tadlock
+ * @link      https://themehybrid.com/hybrid-core
+ * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 namespace Hybrid;
@@ -22,7 +22,7 @@ namespace Hybrid;
 /**
  * Grabs media related to the post.
  *
- * @since  1.6.0
+ * @since  5.0.0
  * @access public
  * @return void
  */
@@ -31,7 +31,7 @@ class MediaGrabber {
 	/**
 	 * The HTML version of the media to return.
 	 *
-	 * @since  1.6.0
+	 * @since  5.0.0
 	 * @access public
 	 * @var    string
 	 */
@@ -40,16 +40,17 @@ class MediaGrabber {
 	/**
 	 * The original media taken from the post content.
 	 *
-	 * @since  1.6.0
+	 * @since  5.0.0
 	 * @access public
 	 * @var    string
 	 */
 	public $original_media = '';
 
 	/**
-	 * The type of media to get.  Current supported types are 'audio', 'video', and 'gallery'.
+	 * The type of media to get.  Current supported types are 'audio',
+	 * 'video', and 'gallery'.
 	 *
-	 * @since  1.6.0
+	 * @since  5.0.0
 	 * @access public
 	 * @var    string
 	 */
@@ -58,16 +59,16 @@ class MediaGrabber {
 	/**
 	 * Arguments passed into the class and parsed with the defaults.
 	 *
-	 * @since  1.6.0
+	 * @since  5.0.0
 	 * @access public
 	 * @var    array
 	 */
-	public $args = array();
+	public $args = [];
 
 	/**
 	 * The content to search for embedded media within.
 	 *
-	 * @since  1.6.0
+	 * @since  5.0.0
 	 * @access public
 	 * @var    string
 	 */
@@ -76,14 +77,14 @@ class MediaGrabber {
 	/**
 	 * Constructor method.  Sets up the media grabber.
 	 *
-	 * @since  1.6.0
+	 * @since  5.0.0
 	 * @access public
 	 * @param  array  $args  {
-	 *     @type int     $post_id      Post ID (assumes within The Loop by default)
+	 *     @type int     $post_id      Post ID (assumes within The Loop by default).
 	 *     @type string  $type         audio | video | gallery
-	 *     @type string  $before       HTML before the output
-	 *     @type string  $after        HTML after the output
-	 *     @type bool    $split_media  Whether to split the media from the post content
+	 *     @type string  $before       HTML before the output.
+	 *     @type string  $after        HTML after the output.
+	 *     @type bool    $split_media  Whether to split the media from the post content.
 	 *     @type int     $width        Custom width. Defaults to the theme's content width.
 	 *     @type bool    $shortcodes   True | False | Array of specific shortcode handles to look for.
 	 *     @type bool    $autoembeds   Whether to check for autoembeds.
@@ -94,18 +95,18 @@ class MediaGrabber {
 	 * @global int    $content_width
 	 * @return void
 	 */
-	public function __construct( $args = array() ) {
+	public function __construct( $args = [] ) {
 		global $wp_embed, $content_width;
 
 		// Use WP's embed functionality to handle the [embed] shortcode and autoembeds.
-		add_filter( 'hybrid_media_grabber_embed_shortcode_media', array( $wp_embed, 'run_shortcode' ) );
-		add_filter( 'hybrid_media_grabber_autoembed_media',       array( $wp_embed, 'autoembed'     ) );
+		add_filter( 'hybrid_media_grabber_embed_shortcode_media', [ $wp_embed, 'run_shortcode' ] );
+		add_filter( 'hybrid_media_grabber_autoembed_media',       [ $wp_embed, 'autoembed'     ] );
 
 		// Don't return a link if embeds don't work. Need media or nothing at all.
 		add_filter( 'embed_maybe_make_link', '__return_false' );
 
 		// Set up the default arguments.
-		$defaults = array(
+		$args = wp_parse_args( $args, [
 			'post_id'     => get_the_ID(),
 			'type'        => 'video',
 			'before'      => '',
@@ -116,12 +117,14 @@ class MediaGrabber {
 			'autoembeds'  => true,
 			'embedded'    => true,
 			'attached'    => true,
-		);
+		] );
+
+		$allowed_types = [ 'audio', 'video', 'gallery' ];
 
 		// Set the object properties.
-		$this->args    = apply_filters( 'hybrid_media_grabber_args', wp_parse_args( $args, $defaults ) );
+		$this->args    = apply_filters( 'hybrid/media_grabber_args', $args );
 		$this->content = get_post_field( 'post_content', $this->args['post_id'], 'raw' );
-		$this->type    = isset( $this->args['type'] ) && in_array( $this->args['type'], array( 'audio', 'video', 'gallery' ) ) ? $this->args['type'] : 'video';
+		$this->type    = isset( $this->args['type'] ) && in_array( $this->args['type'], $allowed_types ) ? $this->args['type'] : 'video';
 
 		// Find the media related to the post.
 		$this->set_media();
@@ -130,64 +133,71 @@ class MediaGrabber {
 	/**
 	 * Destructor method.  Removes filters we needed to add.
 	 *
-	 * @since  1.6.0
+	 * @since  5.0.0
 	 * @access public
 	 * @return void
 	 */
 	public function __destruct() {
 
 		remove_filter( 'embed_maybe_make_link', '__return_false' );
-		remove_filter( 'the_content', array( $this, 'split_media' ), 5 );
+		remove_filter( 'the_content', [ $this, 'split_media' ], 5 );
 	}
 
 
 	/**
 	 * Basic method for returning the media found.
 	 *
-	 * @since  1.6.0
+	 * @since  5.0.0
 	 * @access public
 	 * @return string
 	 */
 	public function get_media() {
 
-		return apply_filters( 'hybrid_media_grabber_media', $this->media, $this );
+		return apply_filters( 'hybrid/media_grabber_media', $this->media, $this );
 	}
 
 	/**
-	 * Tries several methods to find media related to the post.  Returns the found media.
+	 * Tries several methods to find media related to the post.  Returns the
+	 * found media.
 	 *
-	 * @since  1.6.0
+	 * @since  5.0.0
 	 * @access public
 	 * @return void
 	 */
 	public function set_media() {
 
 		// Get the media if the post type is an attachment.
-		if ( 'attachment' === get_post_type( $this->args['post_id'] ) )
+		if ( 'attachment' === get_post_type( $this->args['post_id'] ) ) {
 			$this->do_attachment_media();
+		}
 
 		// Find media in the post content based on WordPress' media-related shortcodes.
-		if ( ! $this->media && $this->args['shortcodes'] )
+		if ( ! $this->media && $this->args['shortcodes'] ) {
 			$this->do_shortcode_media();
+		}
 
 		// If no media is found and autoembeds are enabled, check for autoembeds.
-		if ( ! $this->media && get_option( 'embed_autourls' ) && $this->args['autoembeds'] )
+		if ( ! $this->media && get_option( 'embed_autourls' ) && $this->args['autoembeds'] ) {
 			$this->do_autoembed_media();
+		}
 
 		// If no media is found, check for media HTML within the post content.
-		if ( ! $this->media && $this->args['embedded'] )
+		if ( ! $this->media && $this->args['embedded'] ) {
 			$this->do_embedded_media();
+		}
 
 		// If no media is found, check for media attached to the post.
-		if ( ! $this->media && $this->args['attached'] )
+		if ( ! $this->media && $this->args['attached'] ) {
 			$this->do_attached_media();
+		}
 
 		// If media is found, let's run a few things.
 		if ( $this->media ) {
 
 			// Split the media from the content.
-			if ( true === $this->args['split_media'] && !empty( $this->original_media ) )
-				add_filter( 'the_content', array( $this, 'split_media' ), 5 );
+			if ( true === $this->args['split_media'] && !empty( $this->original_media ) ) {
+				add_filter( 'the_content', [ $this, 'split_media' ], 5 );
+			}
 
 			// Filter the media dimensions and add the before/after HTML.
 			$this->media = $this->args['before'] . $this->filter_dimensions( $this->media ) . $this->args['after'];
@@ -195,11 +205,12 @@ class MediaGrabber {
 	}
 
 	/**
-	 * WordPress has a few shortcodes for handling embedding media:  [audio], [video], and [embed].  This
-	 * method figures out the shortcode used in the content.  Once it's found, the appropriate method for
-	 * the shortcode is executed.
+	 * WordPress has a few shortcodes for handling embedding media:  [audio],
+	 * [video], and [embed].  This method figures out the shortcode used in
+	 * the content.  Once it's found, the appropriate method for the
+	 * shortcode is executed.
 	 *
-	 * @since  1.6.0
+	 * @since  5.0.0
 	 * @access public
 	 * @return void
 	 */
@@ -217,24 +228,24 @@ class MediaGrabber {
 				if ( is_array( $this->args['shortcodes'] ) ) {
 
 					// Call the method related to the specific shortcode found and break out of the loop.
-					if ( in_array( $shortcode[2], $this->args['shortcodes'] ) && in_array( $shortcode[2], array( 'playlist', 'embed', $this->type ) ) ) {
-						call_user_func( array( $this, "do_{$shortcode[2]}_shortcode_media" ), $shortcode );
+					if ( in_array( $shortcode[2], $this->args['shortcodes'] ) && in_array( $shortcode[2], [ 'playlist', 'embed', $this->type ] ) ) {
+						call_user_func( [ $this, "do_{$shortcode[2]}_shortcode_media" ], $shortcode );
 						break;
 
 					} else if ( in_array( $shortcode[2], $this->args['shortcodes'] ) ) {
-						call_user_func( array( $this, '_do_shortcode_media' ), $shortcode );
+						call_user_func( [ $this, '_do_shortcode_media' ], $shortcode );
 						break;
 					}
 				}
 
 				// Call the method related to the specific shortcode found and break out of the loop.
-				else if ( in_array( $shortcode[2], array( 'playlist', 'embed', $this->type ) ) ) {
-					call_user_func( array( $this, "do_{$shortcode[2]}_shortcode_media" ), $shortcode );
+				else if ( in_array( $shortcode[2], [ 'playlist', 'embed', $this->type ] ) ) {
+					call_user_func( [ $this, "do_{$shortcode[2]}_shortcode_media" ], $shortcode );
 					break;
 				}
 
 				// Check for Jetpack audio/video shortcodes.
-				elseif ( in_array( $shortcode[2], array( 'blip.tv', 'dailymotion', 'flickr', 'ted', 'vimeo', 'vine', 'youtube', 'wpvideo', 'soundcloud', 'bandcamp' ) ) ) {
+				elseif ( in_array( $shortcode[2], [ 'blip.tv', 'dailymotion', 'flickr', 'ted', 'vimeo', 'vine', 'youtube', 'wpvideo', 'soundcloud', 'bandcamp' ] ) ) {
 					$this->do_jetpack_shortcode_media( $shortcode );
 					break;
 				}
@@ -245,7 +256,7 @@ class MediaGrabber {
 	/**
 	 * Method for handling shortcodes.
 	 *
-	 * @since  4.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @param  array  $shortcode
 	 * @return void
@@ -258,10 +269,10 @@ class MediaGrabber {
 	}
 
 	/**
-	 * Handles the output of the WordPress playlist feature.  This searches for the [playlist] shortcode
-	 * if it's used in the content.
+	 * Handles the output of the WordPress playlist feature.  This searches
+	 * for the [playlist] shortcode if it's used in the content.
 	 *
-	 * @since  2.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @param  array  $shortcode
 	 * @return void
@@ -274,7 +285,7 @@ class MediaGrabber {
 	/**
 	 * Handles the HTML when the [embed] shortcode is used.
 	 *
-	 * @since  1.6.0
+	 * @since  5.0.0
 	 * @access public
 	 * @param  array  $shortcode
 	 * @return void
@@ -284,7 +295,7 @@ class MediaGrabber {
 		$this->original_media = array_shift( $shortcode );
 
 		$this->media = apply_filters(
-			'hybrid_media_grabber_embed_shortcode_media',
+			'hybrid/media_grabber_embed_shortcode_media',
 			$this->original_media
 		);
 	}
@@ -292,7 +303,7 @@ class MediaGrabber {
 	/**
 	 * Handles the HTML when the [audio] shortcode is used.
 	 *
-	 * @since  1.6.0
+	 * @since  5.0.0
 	 * @access public
 	 * @param  array  $shortcode
 	 * @return void
@@ -305,7 +316,7 @@ class MediaGrabber {
 	/**
 	 * Handles the HTML when the [video] shortcode is used.
 	 *
-	 * @since  1.6.0
+	 * @since  5.0.0
 	 * @access public
 	 * @param  array  $shortcode
 	 * @return void
@@ -319,10 +330,10 @@ class MediaGrabber {
 	}
 
 	/**
-	 * Handles the output of audio/video shortcodes included with the Jetpack plugin (or Jetpack
-	 * Slim) via the Shortcode Embeds feature.
+	 * Handles the output of audio/video shortcodes included with the
+	 * Jetpack plugin (or Jetpack Slim) via the Shortcode Embeds feature.
 	 *
-	 * @since  2.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @return void
 	 */
@@ -334,7 +345,7 @@ class MediaGrabber {
 	/**
 	 * Handles the HTML when the [gallery] shortcode is used.
 	 *
-	 * @since  3.0.
+	 * @since  5.0.0
 	 * @access public
 	 * @param  array  $shortcode
 	 * @return void
@@ -345,9 +356,10 @@ class MediaGrabber {
 	}
 
 	/**
-	 * Uses WordPress' autoembed feature to automatically to handle media that's just input as a URL.
+	 * Uses WordPress' autoembed feature to automatically to handle media
+	 * that's just input as a URL.
 	 *
-	 * @since  1.6.0
+	 * @since  5.0.0
 	 * @access public
 	 * @return void
 	 */
@@ -361,15 +373,16 @@ class MediaGrabber {
 			foreach ( $matches as $value ) {
 
 				// Let WP work its magic with the 'autoembed' method.
-				$embed = trim( apply_filters( 'hybrid_media_grabber_autoembed_media', $value[0] ) );
+				$embed = trim( apply_filters( 'hybrid/media_grabber_autoembed_media', $value[0] ) );
 
 				if ( $embed ) {
 
 					// If we're given a shortcode, roll with it.
 					if ( preg_match( "/\[{$this->type}\s/", $embed ) ) {
 
-						if ( 'video' === $this->type )
+						if ( 'video' === $this->type ) {
 							$embed = $this->filter_dimensions( $embed );
+						}
 
 						$embed = do_shortcode( $embed );
 					}
@@ -383,10 +396,10 @@ class MediaGrabber {
 	}
 
 	/**
-	 * Grabs media embbeded into the content within <iframe>, <object>, <embed>, and other HTML methods for
-	 * embedding media.
+	 * Grabs media embbeded into the content within <iframe>, <object>,
+	 * <embed>, and other HTML methods for embedding media.
 	 *
-	 * @since  1.6.0
+	 * @since  5.0.0
 	 * @access public
 	 * @return void
 	 */
@@ -394,15 +407,16 @@ class MediaGrabber {
 
 		$embedded_media = get_media_embedded_in_content( $this->content );
 
-		if ( $embedded_media )
+		if ( $embedded_media ) {
 			$this->media = $this->original_media = array_shift( $embedded_media );
+		}
 	}
 
 	/**
-	 * Gets media attached to the post.  Then, uses the WordPress [audio] or [video] shortcode to handle
-	 * the HTML output of the media.
+	 * Gets media attached to the post.  Then, uses the WordPress [audio] or
+	 * [video] shortcode to handle the HTML output of the media.
 	 *
-	 * @since  1.6.0
+	 * @since  5.0.0
 	 * @access public
 	 * @return void
 	 */
@@ -420,15 +434,17 @@ class MediaGrabber {
 			// Gets the URI for the attachment (the media file).
 			$url = esc_url( wp_get_attachment_url( $post->ID ) );
 
-			// Run the media as a shortcode using WordPress' built-in [audio] and [video] shortcodes.
+			// Run the media as a shortcode using WordPress' built-in
+			// [audio] and [video] shortcodes.
 			$this->media = do_shortcode( "[{$this->type} src='{$url}']" );
 		}
 	}
 
 	/**
-	 * If the post type itself is an attachment, run the shortcode for the media type.
+	 * If the post type itself is an attachment, run the shortcode for the
+	 * media type.
 	 *
-	 * @since  2.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @return void
 	 */
@@ -437,15 +453,17 @@ class MediaGrabber {
 		// Gets the URI for the attachment (the media file).
 		$url = esc_url( wp_get_attachment_url( $this->args['post_id'] ) );
 
-		// Run the media as a shortcode using WordPress' built-in [audio] and [video] shortcodes.
+		// Run the media as a shortcode using WordPress' built-in [audio]
+		// and [video] shortcodes.
 		$this->media = do_shortcode( "[{$this->type} src='{$url}']" );
 	}
 
 	/**
-	 * Removes the found media from the content.  The purpose of this is so that themes can retrieve the
-	 * media from the content and display it elsewhere on the page based on its design.
+	 * Removes the found media from the content.  The purpose of this is so
+	 * that themes can retrieve the media from the content and display it
+	 * elsewhere on the page based on its design.
 	 *
-	 * @since  1.6.0
+	 * @since  5.0.0
 	 * @access public
 	 * @param  string  $content
 	 * @return string
@@ -462,10 +480,10 @@ class MediaGrabber {
 	}
 
 	/**
-	 * Method for filtering the media's 'width' and 'height' attributes so that the theme can handle the
-	 * dimensions how it sees fit.
+	 * Method for filtering the media's 'width' and 'height' attributes so
+	 * that the theme can handle the dimensions how it sees fit.
 	 *
-	 * @since  1.6.0
+	 * @since  5.0.0
 	 * @access public
 	 * @param  string  $html
 	 * @return string
@@ -476,15 +494,17 @@ class MediaGrabber {
 		$_html      = strip_tags( $html, '<object><embed><iframe><video>' );
 
 		// Find the attributes of the media.
-		$atts = wp_kses_hair( $_html, array( 'http', 'https' ) );
+		$atts = wp_kses_hair( $_html, [ 'http', 'https' ] );
 
 		// Loop through the media attributes and add them in key/value pairs.
-		foreach ( $atts as $att )
+		foreach ( $atts as $att ) {
 			$media_atts[ $att['name'] ] = $att['value'];
+		}
 
 		// If no dimensions are found, just return the HTML.
-		if ( empty( $media_atts ) || ! isset( $media_atts['width'] ) || ! isset( $media_atts['height'] ) )
+		if ( empty( $media_atts ) || ! isset( $media_atts['width'] ) || ! isset( $media_atts['height'] ) ) {
 			return $html;
+		}
 
 		// Set the max width.
 		$max_width = $this->args['width'];
@@ -493,8 +513,10 @@ class MediaGrabber {
 		$max_height = round( $max_width / ( $media_atts['width'] / $media_atts['height'] ) );
 
 		// Fix for Spotify embeds.
-		if ( ! empty( $media_atts['src'] ) && preg_match( '#https?://(embed)\.spotify\.com/.*#i', $media_atts['src'], $matches ) )
+		if ( ! empty( $media_atts['src'] ) && preg_match( '#https?://(embed)\.spotify\.com/.*#i', $media_atts['src'], $matches ) ) {
+
 			list( $max_width, $max_height ) = $this->spotify_dimensions( $media_atts );
+		}
 
 		// Calculate new media dimensions.
 		$dimensions = wp_expand_dimensions(
@@ -506,38 +528,39 @@ class MediaGrabber {
 
 		// Allow devs to filter the final width and height of the media.
 		list( $width, $height ) = apply_filters(
-			'hybrid_media_grabber_dimensions',
+			'hybrid/media_grabber_dimensions',
 			$dimensions,                       // width/height array
 			$media_atts,                       // media HTML attributes
 			$this                              // media grabber object
 		);
 
 		// Set up the patterns for the 'width' and 'height' attributes.
-		$patterns = array(
+		$patterns = [
 			'/(width=[\'"]).+?([\'"])/i',
 			'/(height=[\'"]).+?([\'"])/i',
 			'/(<div.+?style=[\'"].*?width:.+?).+?(px;.+?[\'"].*?>)/i',
 			'/(<div.+?style=[\'"].*?height:.+?).+?(px;.+?[\'"].*?>)/i'
-		);
+		];
 
 		// Set up the replacements for the 'width' and 'height' attributes.
-		$replacements = array(
+		$replacements = [
 			'${1}' . $width . '${2}',
 			'${1}' . $height . '${2}',
 			'${1}' . $width . '${2}',
 			'${1}' . $height . '${2}',
-		);
+		];
 
 		// Filter the dimensions and return the media HTML.
 		return preg_replace( $patterns, $replacements, $html );
 	}
 
 	/**
-	 * Fix for Spotify embeds because they're the only embeddable service that doesn't work that well
-	 * with custom-sized embeds.  So, we need to adjust this the best we can.  Right now, the only
-	 * embed size that works for full-width embeds is the "compact" player (height of 80).
+	 * Fix for Spotify embeds because they're the only embeddable service
+	 * that doesn't work that well with custom-sized embeds.  So, we need to
+	 * adjust this the best we can.  Right now, the only embed size that
+	 * works for full-width embeds is the "compact" player (height of 80).
 	 *
-	 * @since  1.6.0
+	 * @since  5.0.0
 	 * @access public
 	 * @param  array   $media_atts
 	 * @return array
@@ -547,9 +570,10 @@ class MediaGrabber {
 		$max_width  = $media_atts['width'];
 		$max_height = $media_atts['height'];
 
-		if ( 80 == $media_atts['height'] )
+		if ( 80 == $media_atts['height'] ) {
 			$max_width  = $this->args['width'];
+		}
 
-		return array( $max_width, $max_height );
+		return [ $max_width, $max_height ];
 	}
 }
