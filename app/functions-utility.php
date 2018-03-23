@@ -269,6 +269,26 @@ function require_if_theme_supports( $feature, $file ) {
 }
 
 /**
+ * Helper function for replacing a class in an HTML string. This function only
+ * replaces the first class attribute it comes upon and stops.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  string  $class
+ * @param  string  $html
+ * @return string
+ */
+function replace_html_class( $class, $html ) {
+
+	return preg_replace(
+		"/class=(['\"]).+?(['\"])/i",
+		'class=$1' . esc_attr( $class ) . '$2',
+		$html,
+		1
+	);
+}
+
+/**
  * Compatibility function that stores the old post template using the core WP
  * post template naming scheme added in WordPress 4.7.0.  Deletes the old meta.
  *
