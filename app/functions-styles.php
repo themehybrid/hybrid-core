@@ -109,7 +109,7 @@ function locale_stylesheet_uri( $stylesheet_uri ) {
  */
 function get_locale_style( $slug = '' ) {
 
-	$styles = array_map( function( $hier ) {
+	$styles = array_map( function( $hier ) use ( $slug ) {
 
 		return $slug ? "{$slug}-{$hier}.css" : "{$hier}.css";
 
