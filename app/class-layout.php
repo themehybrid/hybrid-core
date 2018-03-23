@@ -1,14 +1,15 @@
 <?php
 /**
- * Layout class.  This class is for creating new layout objects.  Theme authors should utilize
- * the API functions in `inc/functions-layouts.php`.
+ * Layout class.
  *
- * @package    HybridCore
- * @subpackage Includes
- * @author     Justin Tadlock <justintadlock@gmail.com>
- * @copyright  Copyright (c) 2008 - 2017, Justin Tadlock
- * @link       https://themehybrid.com/hybrid-core
- * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * This class is for creating new layout objects.  Theme authors should utilize
+ * the API functions in `app/functions-layouts.php`.
+ *
+ * @package   HybridCore
+ * @author    Justin Tadlock <justintadlock@gmail.com>
+ * @copyright Copyright (c) 2008 - 2018, Justin Tadlock
+ * @link      https://themehybrid.com/hybrid-core
+ * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 namespace Hybrid;
@@ -16,7 +17,7 @@ namespace Hybrid;
 /**
  * Creates new layout objects.
  *
- * @since  3.0.0
+ * @since  5.0.0
  * @access public
  */
 class Layout {
@@ -24,7 +25,7 @@ class Layout {
 	/**
 	 * Whether to show as an option in the customizer.
 	 *
-	 * @since  4.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @var    bool
 	 */
@@ -33,7 +34,7 @@ class Layout {
 	/**
 	 * Whether to show as an option in the post meta box.
 	 *
-	 * @since  4.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @var    bool
 	 */
@@ -42,7 +43,7 @@ class Layout {
 	/**
 	 * Whether to show as an option on taxonomy term pages.
 	 *
-	 * @since  4.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @var    bool
 	 */
@@ -51,7 +52,7 @@ class Layout {
 	/**
 	 * Whether to show as an option in user profile (not implemented).
 	 *
-	 * @since  4.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @var    bool
 	 */
@@ -60,7 +61,7 @@ class Layout {
 	/**
 	 * Internationalized text label.
 	 *
-	 * @since  4.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @var    bool
 	 */
@@ -69,7 +70,7 @@ class Layout {
 	/**
 	 * Image URL of the layout design.
 	 *
-	 * @since  4.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @var    bool
 	 */
@@ -78,25 +79,25 @@ class Layout {
 	/**
 	 * Array of post types layout works with.
 	 *
-	 * @since  4.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @var    bool
 	 */
-	public $post_types = array();
+	public $post_types = [];
 
 	/**
 	 * Array of taxonomies layout works with.
 	 *
-	 * @since  4.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @var    bool
 	 */
-	public $taxonomies = array();
+	public $taxonomies = [];
 
 	/**
 	 * Internal use only! Whether the layout is built in.
 	 *
-	 * @since  4.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @var    bool
 	 */
@@ -105,7 +106,7 @@ class Layout {
 	/**
 	 * Internal use only! Whether the layout is internal (cannot be unregistered).
 	 *
-	 * @since  4.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @var    bool
 	 */
@@ -116,7 +117,7 @@ class Layout {
 	/**
 	 * Don't allow properties to be unset.
 	 *
-	 * @since  3.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @param  string  $property
 	 * @return void
@@ -124,10 +125,10 @@ class Layout {
 	public function __unset( $property ) {}
 
 	/**
-	 * Magic method to use in case someone tries to output the layout object as a string.
-	 * We'll just return the layout name.
+	 * Magic method to use in case someone tries to output the layout object
+	 * as a string. We'll just return the layout name.
 	 *
-	 * @since  3.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @return string
 	 */
@@ -139,7 +140,7 @@ class Layout {
 	/**
 	 * Register a new layout object
 	 *
-	 * @since  3.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @param  string  $name
 	 * @param  array   $args  {
@@ -153,12 +154,13 @@ class Layout {
 	 * }
 	 * @return void
 	 */
-	public function __construct( $name, $args = array() ) {
+	public function __construct( $name, array $args = [] ) {
 
 		foreach ( array_keys( get_object_vars( $this ) ) as $key ) {
 
-			if ( isset( $args[ $key ] ) )
+			if ( isset( $args[ $key ] ) ) {
 				$this->$key = $args[ $key ];
+			}
 		}
 
 		$this->name = sanitize_key( $name );
@@ -169,21 +171,23 @@ class Layout {
 	/* ====== Protected Methods ====== */
 
 	/**
-	 * Adds post type support for `theme-layouts` in the event that the layout has been
-	 * explicitly set for one or more post types.
+	 * Adds post type support for `theme-layouts` in the event that the
+	 * layout has been explicitly set for one or more post types.
 	 *
-	 * @since  3.0.0
+	 * @todo   Ideally, this should be moved out of the class.
+	 * @since  5.0.0
 	 * @access protected
 	 * @return void
 	 */
 	protected function add_post_type_support() {
 
-		if ( ! empty( $this->post_types ) ) {
+		if ( $this->post_types ) {
 
 			foreach ( $this->post_types as $post_type ) {
 
-				if ( ! post_type_supports( $post_type, 'theme-layouts' ) )
+				if ( ! post_type_supports( $post_type, 'theme-layouts' ) ) {
 					add_post_type_support( $post_type, 'theme-layouts' );
+				}
 			}
 		}
 	}
