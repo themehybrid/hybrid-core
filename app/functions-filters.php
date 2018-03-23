@@ -47,6 +47,10 @@ add_filter( 'excerpt_more', __NAMESPACE__ . '\excerpt_more', 5 );
 add_filter( 'nav_menu_css_class',       __NAMESPACE__ . '\nav_menu_css_class',       5, 2 );
 add_filter( 'nav_menu_link_attributes', __NAMESPACE__ . '\nav_menu_link_attributes', 5    );
 
+# Adds custom CSS classes to the comment form fields.
+add_filter( 'comment_form_default_fields', __NAMESPACE__ . '\comment_form_default_fields', ~PHP_INT_MAX );
+add_filter( 'comment_form_defaults',       __NAMESPACE__ . '\comment_form_defaults',       ~PHP_INT_MAX );
+
 /**
  * This function is for adding extra support for features not default to the core post types.
  * Excerpts are added to the 'page' post type.  Comments and trackbacks are added for the
@@ -274,4 +278,52 @@ function nav_menu_link_attributes( $attr ) {
 	$attr['class'] = 'menu__anchor';
 
 	return $attr;
+}
+
+/**
+ * Overwrites the HTML classes for the comment form default fields.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  array  $fields
+ * @return array
+ */
+function comment_form_default_fields( $fields ) {
+
+	array_walk( $fields, function( &$field, $key ) {
+
+	 	$field = replace_html_class(
+			"comment-respond__field comment-respond__field--{$key}",
+			$field
+		);
+	} );
+
+	return $fields;
+}
+
+/**
+ * Overwrites the HTML classes for various comment form elements.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  array  $defaults
+ * @return array
+ */
+function comment_form_defaults( $defaults ) {
+
+	// Classes we can set.
+	$defaults['class_form']   = 'comment-respond__form';
+	$defaults['class_submit'] = 'comment-respond__submit';
+
+	// Field wrappers.
+	$defaults['comment_field'] = replace_html_class( 'comment-respond__field comment-respond__field--comment', $defaults['comment_field'] );
+	$defaults['submit_field']  = replace_html_class( 'comment-respond__field comment-respond__field--submit',  $defaults['submit_field']  );
+
+	// Other elements.
+	$defaults['must_log_in']          = replace_html_class( 'comment-respond__must-log-in',  $defaults['must_log_in']          );
+	$defaults['logged_in_as']         = replace_html_class( 'comment-respond__logged-in-as', $defaults['logged_in_as']         );
+	$defaults['comment_notes_before'] = replace_html_class( 'comment-respond__notes',        $defaults['comment_notes_before'] );
+	$defaults['title_reply_before']   = replace_html_class( 'comment-respond__reply-title',  $defaults['title_reply_before']   );
+
+	return $defaults;
 }
