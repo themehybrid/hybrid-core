@@ -16,6 +16,18 @@
 namespace Hybrid;
 
 /**
+ * Returns the template hierarchy from the theme wrapper.
+ *
+ * @since  5.0.0
+ * @access public
+ * @return array
+ */
+function get_template_hierarchy() {
+
+	return app()->get( 'template_hierarchy' )->hierarchy;
+}
+
+/**
  * Creates a hierarchy based on the current post.  For use with content-specific templates.
  *
  * @since  5.0.0
