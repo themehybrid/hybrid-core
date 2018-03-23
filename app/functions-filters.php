@@ -44,7 +44,8 @@ add_filter( 'the_title', __NAMESPACE__ . '\untitled_post' );
 add_filter( 'excerpt_more', __NAMESPACE__ . '\excerpt_more', 5 );
 
 # Adds custom CSS classes to nav menu items.
-add_filter( 'nav_menu_css_class', __NAMESPACE__ . '\nav_menu_css_class', 5, 2 );
+add_filter( 'nav_menu_css_class',       __NAMESPACE__ . '\nav_menu_css_class',       5, 2 );
+add_filter( 'nav_menu_link_attributes', __NAMESPACE__ . '\nav_menu_link_attributes', 5    );
 
 /**
  * This function is for adding extra support for features not default to the core post types.
@@ -231,9 +232,7 @@ function excerpt_more( $text ) {
 }
 
 /**
- * Adds a custom class to nav menu items that correspond to a post type archive.
- * The `menu-item-parent-archive` class is shown when viewing a single post of
- * that belongs to the given post type.
+ * Simplifies the nav menu class system.
  *
  * @since  5.0.0
  * @access public
@@ -243,9 +242,36 @@ function excerpt_more( $text ) {
  */
 function nav_menu_css_class( $classes, $item ) {
 
-	if ( 'post_type' === $item->type && is_singular( $item->object ) ) {
-		$classes[] = 'menu-item-parent-archive';
+	$_classes = [ 'menu__item' ];
+
+	foreach ( [ 'item', 'parent', 'ancestor' ] as $type ) {
+
+		if ( in_array( "current-menu-{$type}", $classes ) ) {
+
+			$_classes[] = "menu__item--{$type}";
+		}
 	}
 
-	return $classes;
+	// If the menu item is a post type archive and we're viewing a single
+	// post of that post type, the menu item should be an ancestor.
+	if ( 'post_type' === $item->type && is_singular( $item->object ) && ! in_array( 'menu__item--ancestor', $_classes ) ) {
+		$_classes[] = 'menu__item--ancestor';
+	}
+
+	return $_classes;
+}
+
+/**
+ * Adds a custom class to the nav menu link.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  array   $attr;
+ * @return array
+ */
+function nav_menu_link_attributes( $attr ) {
+
+	$attr['class'] = 'menu__anchor';
+
+	return $attr;
 }
