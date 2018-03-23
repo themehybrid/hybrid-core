@@ -2,8 +2,8 @@
 /**
  * Language class.
  *
- * This file holds the `Lang` class, which deals with loading theme
- * textdomains and locale-specific functions files.
+ * This file holds the `Lang` class, which deals with loading theme textdomains
+ * and locale-specific functions files.
  *
  * @package   HybridCore
  * @author    Justin Tadlock <justintadlock@gmail.com>
@@ -23,8 +23,8 @@ namespace Hybrid;
 class Language {
 
 	/**
-	 * The parent theme's textdomain. Gets set to the value of
-	 * the `Text Domain` header in `style.css`.
+	 * The parent theme's textdomain. Gets set to the value of the `Text
+	 * Domain` header in `style.css`.
 	 *
 	 * @since  5.0.0
 	 * @access protected
@@ -33,8 +33,8 @@ class Language {
 	protected $parent_textdomain = null;
 
 	/**
-	 * The child theme's textdomain. Gets set to the value of
-	 * the `Text Domain` header in `style.css`.
+	 * The child theme's textdomain. Gets set to the value of the `Text
+	 * Domain` header in `style.css`.
 	 *
 	 * @since  5.0.0
 	 * @access protected
@@ -43,8 +43,8 @@ class Language {
 	protected $child_textdomain = null;
 
 	/**
-	 * The parent theme's domain path. Gets set to the value
-	 * of the `Domain Path` header in `style.css`.
+	 * The parent theme's domain path. Gets set to the value of the `Domain
+	 * Path` header in `style.css`.
 	 *
 	 * @since  5.0.0
 	 * @access protected
@@ -53,8 +53,8 @@ class Language {
 	protected $parent_path = null;
 
 	/**
-	 * The child theme's domain path. Gets set to the value
-	 * of the `Domain Path` header in `style.css`.
+	 * The child theme's domain path. Gets set to the value of the `Domain
+	 * Path` header in `style.css`.
 	 *
 	 * @since  5.0.0
 	 * @access protected
@@ -72,16 +72,16 @@ class Language {
 	public function __construct() {
 
 		// Load the locale functions file(s).
-		add_action( 'after_setup_theme', array( $this, 'load_locale_functions' ), 0 );
+		add_action( 'after_setup_theme', [ $this, 'load_locale_functions' ], 0 );
 
 		// Load translations for theme, child theme, and framework.
-		add_action( 'after_setup_theme', array( $this, 'load_textdomain' ), 5 );
+		add_action( 'after_setup_theme', [ $this, 'load_textdomain' ], 5 );
 
 		// Overrides the load textdomain function for the 'hybrid-core' domain.
-		add_filter( 'override_load_textdomain', array( $this, 'override_load_textdomain' ), 5, 3 );
+		add_filter( 'override_load_textdomain', [ $this, 'override_load_textdomain' ], 5, 3 );
 
 		// Filter the textdomain mofile to allow child themes to load the parent theme translation.
-		add_filter( 'load_textdomain_mofile', array( $this, 'load_textdomain_mofile' ), 10, 2 );
+		add_filter( 'load_textdomain_mofile', [ $this, 'load_textdomain_mofile' ], 10, 2 );
 	}
 
 	/**
