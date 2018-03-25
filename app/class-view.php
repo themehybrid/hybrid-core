@@ -112,7 +112,7 @@ class View {
 	 */
 	protected function locate() {
 
-		$this->template = locate_template( $this->get_hierarchy(), false, false );
+		$this->template = locate_template( $this->get_hierarchy() );
 	}
 
 	/**

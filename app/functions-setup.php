@@ -48,22 +48,6 @@ function fetch_view( $name, $slugs = [], $data = [] ) {
 }
 
 /**
- * Wrapper for the core WP `locate_template()` function. Runs the templates
- * through `filter_templates()` to change the file paths.
- *
- * @since  1.0.0
- * @access public
- * @param  array|string  $templates
- * @param  bool          $load
- * @param  bool          $require_once
- * @return string
- */
-function locate_template( $templates, $load = false, $require_once = true  ) {
-
-	return \locate_template( filter_templates( (array) $templates ), $load, $require_once );
-}
-
-/**
  * Filters an array of templates and prefixes them with the
  * `/resources/views/` file path.
  *

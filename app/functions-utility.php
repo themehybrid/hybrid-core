@@ -62,6 +62,59 @@ function get_content_width() {
 }
 
 /**
+ * Returns an array of locations to look for templates.
+ *
+ * Note that this won't work with the core WP template hierarchy due to an
+ * issue that hasn't been addressed since 2010.
+ *
+ * @link   https://core.trac.wordpress.org/ticket/13239
+ * @since  5.0.0
+ * @access public
+ * @return array
+ */
+function get_template_locations() {
+
+	$path = config( 'view' )->path ? '/' . config( 'view' )->path : '';
+
+	$locations = [ get_stylesheet_directory() . $path ];
+
+	if ( is_child_theme() ) {
+		$locations[] = get_template_directory() . $path;
+	}
+
+	return apply_filters( 'hybrid/template_locations', $locations );
+}
+
+/**
+ * A better `locate_template()` function than what core WP provides. Note that
+ * this function merely locates templates and does no loading. Use the core
+ * `load_template()` function for actually loading the template.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  array|string  $template_names
+ * @return string
+ */
+function locate_template( $template_names ) {
+	$located = '';
+
+	foreach ( (array) $template_names as $template ) {
+
+		foreach ( (array) get_template_locations() as $location ) {
+
+			$file = trailingslashit( $location ) . $template;
+
+			if ( file_exists( $file ) ) {
+				$located = $file;
+				break 2;
+			}
+		}
+	}
+
+	return $located;
+}
+
+/**
  * Loops through an array of file names within both the child and parent theme
  * directories.  Once a file is found, the full path to the file is returned.
  *
