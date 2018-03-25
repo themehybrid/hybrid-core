@@ -95,7 +95,18 @@ class Attributes {
 
 		foreach ( $this->attr as $name => $value ) {
 
-			$html .= false !== $value ? sprintf( ' %s="%s"', esc_html( $name ), esc_attr( $value ) ) : esc_html( " {$name}" );
+			$esc_value = '';
+
+			// If the value is a link `href`, use `esc_url()`.
+			if ( $value !== false && 'href' === $name ) {
+				$esc_value = esc_url( $value );
+
+			// Else, use `esc_attr()`.
+			} elseif ( $value !== false ) {
+				$esc_value = esc_attr( $value );
+			}
+
+			$html .= false !== $value ? sprintf( ' %s="%s"', esc_html( $name ), $esc_value ) : esc_html( " {$name}" );
 		}
 
 		return trim( $html );
