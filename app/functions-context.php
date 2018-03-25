@@ -386,14 +386,6 @@ function comment_class_filter( $classes, $class, $comment_id, $post_id ) {
 			sanitize_html_class( $user->user_nicename, $comment->user_id )
 		);
 
-		// Set a class with the user's role(s).
-		if ( is_array( $user->roles ) ) {
-
-			foreach ( $user->roles as $role ) {
-				$classes[] = sprintf( 'comment--role-%s', $role );
-			}
-		}
-
 		// Add a class if the comment author is also the post author.
 		$post = get_post( $post_id );
 
