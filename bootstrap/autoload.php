@@ -14,14 +14,14 @@
 namespace Hybrid;
 
 /**
- * Autoloader for the theme.  Looks in the `/app` folder for classes.
- * File names are prefixed with `class-` and are a lowercased version
- * of the class name.  Classes are broken up by uppercase letter.
+ * Autoloader for the theme.  Looks in the `/app` folder for classes. File names
+ * are prefixed with `class-` and are a lowercased version of the class name.
+ * Classes are broken up by uppercase letter.
  *
  * `ABC\MyClass`       = `/app/class-my-class.php`
  * `ABC\Admin\MyClass` = `/app/admin/class-my-class.php`
  *
- * @since  1.0.0
+ * @since  5.0.0
  * @access public
  * @param  string  $class
  * @return void
@@ -63,11 +63,10 @@ spl_autoload_register( function( $class ) {
 	$file = join( DIRECTORY_SEPARATOR, $new_pieces );
 
 	// Get the file from the `/app` folder.
-	$file = require_once( HYBRID_DIR . "app/{$file}" );
+	$file = require_once( trailingslashit( HYBRID_DIR ) . "app/{$file}" );
 
 	// Include the file only if it exists.
 	if ( file_exists( $file ) ) {
-
 		include( $file );
 	}
 } );
