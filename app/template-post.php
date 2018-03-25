@@ -64,11 +64,14 @@ function get_post_format( $args = [] ) {
 	$url    = $format ? get_post_format_link( $format ) : get_permalink();
 	$string = get_post_format_string( $format );
 
-	$el = element( 'a', sprintf( $args['text'], $string ), attributes( 'entry-format', '', [ 'href' => esc_url( $url ) ] ) );
+	$attr = attributes( 'entry-format', '', [
+		'href'  => $url,
+		'class' => 'entry__format'
+	] );
 
-	$html = $args['before'] . $el->fetch() . $args['after'];
+	$el = sprintf( '<a %s>%s</a>', $attr->fetch(), sprintf( $args['text'], $string ) );
 
-	return $html;
+	return $args['before'] . $el . $args['after'];
 }
 
 /**
@@ -98,8 +101,6 @@ function post_author( $args = array() ) {
  */
 function get_post_author( $args = array() ) {
 
-	$html = '';
-
 	$args = wp_parse_args( $args, [
 		'text'   => '%s',
 		'before' => '',
@@ -109,14 +110,14 @@ function get_post_author( $args = array() ) {
 	$author     = get_the_author();
 	$author_url = get_author_posts_url( get_the_author_meta( 'ID' ) );
 
-	if ( $author && $author_url ) {
+	$attr = attributes( 'entry-author', '', [
+		'href'  => $author_url,
+		'class' => 'entry__author'
+	] );
 
-		$el = element( 'a', sprintf( $args['text'], $author ), attributes( 'entry-author', '', [ 'href' => esc_url( $author_url ) ] ) );
+	$el = sprintf( '<a %s>%s</a>', $attr->fetch(), sprintf( $args['text'], $author ) );
 
-		$html = $args['before'] . $el->fetch() . $args['after'];
-	}
-
-	return $html;
+	return $args['before'] . $el . $args['after'];
 }
 
 /**
@@ -142,8 +143,6 @@ function post_date( $args = [] ) {
  */
 function get_post_date( $args = [] ) {
 
-	$html = '';
-
 	$args = wp_parse_args( $args, [
 		'text'   => '%s',
 		'format' => '',
@@ -153,14 +152,13 @@ function get_post_date( $args = [] ) {
 
 	$date = get_the_date( $args['format'] );
 
-	if ( $date ) {
+	$attr = attributes( 'entry-published', '', [
+		'class' => 'entry__published'
+	] );
 
-		$el = element( 'time', sprintf( $args['text'], $date ), attributes( 'entry-published' ) );
+	$el = sprintf( '<time %s>%s</time>', $attr->fetch(), sprintf( $args['text'], $date ) );
 
-		$html = $args['before'] . $el->fetch() . $args['after'];
-	}
-
-	return $html;
+	return $args['before'] . $el . $args['after'];
 }
 
 /**
@@ -186,7 +184,11 @@ function post_comments( $args = [] ) {
  */
 function get_post_comments( $args = [] ) {
 
-	$html = '';
+	$number = get_comments_number();
+
+	if ( 0 == $number && ! comments_open() && ! pings_open() ) {
+		return '';
+	}
 
 	$args = wp_parse_args( $args, [
 		'zero'   => false,
@@ -196,19 +198,16 @@ function get_post_comments( $args = [] ) {
 		'after'  => ''
 	] );
 
-	$number = get_comments_number();
+	$attr = attributes( 'entry-comments', '', [
+		'href'  => get_comments_link(),
+		'class' => 'entry__comments'
+	] );
 
-	if ( 0 == $number && ! comments_open() && ! pings_open() ) {
-		return '';
-	}
-
-	$url  = get_comments_link();
 	$text = get_comments_number_text( $args['zero'], $args['one'], $args['more'] );
-	$el   = element( 'a', $text, attributes( 'entry-comments', '', [ 'href' => esc_url( $url ) ] ) );
 
-	$html = $args['before'] . $el->fetch() . $args['after'];
+	$el = sprintf( '<a %s>%s</a>', $attr->fetch(), $text );
 
-	return $html;
+	return $args['before'] . $el . $args['after'];
 }
 
 /**
@@ -257,9 +256,13 @@ function get_post_terms( $args = [] ) {
 
 	if ( $terms ) {
 
-		$el = element( 'span', sprintf( $args['text'], $terms ), attributes( 'entry-terms', $args['taxonomy'] ) );
+		$attr = attributes( 'entry-terms', $args['taxonomy'], [
+			'class' => sprintf( 'entry__terms entry__terms--%s', $args['taxonomy'] )
+		] );
 
-		$html = $args['before'] . $el->fetch() . $args['after'];
+		$el = sprintf( '<span %s>%s</span>', $attr->fetch(), sprintf( $args['text'], $terms ) );
+
+		$html = $args['before'] . $el . $args['after'];
 	}
 
 	return $html;
