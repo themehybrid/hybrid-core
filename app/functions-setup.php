@@ -200,20 +200,6 @@ add_action( 'after_setup_theme', function() {
  */
 add_action( 'after_setup_theme', function() {
 
-	// Load the template hierarchy if supported.
-	\require_if_theme_supports( 'hybrid-core-template-hierarchy', path( 'app/class-template-hierarchy.php' ) );
-
-	// Load the post format functionality if post formats are supported.
-	\require_if_theme_supports( 'post-formats', path( 'app/functions-formats.php' ) );
-	\require_if_theme_supports( 'post-formats', path( 'app/class-chat.php'        ) );
-
-	// Load the Theme Layouts extension if supported.
-	\require_if_theme_supports( 'theme-layouts', path( 'app/class-layout.php'      ) );
-	\require_if_theme_supports( 'theme-layouts', path( 'app/functions-layouts.php' ) );
-
-	// Load the deprecated functions if supported.
-	\require_if_theme_supports( 'hybrid-core-deprecated', path( 'app/functions-deprecated.php' ) );
-
 	// Load admin files.
 	if ( is_admin() && current_theme_supports( 'theme-layouts' ) ) {
 		require_once( path( 'admin/class-post-layout.php' ) );
