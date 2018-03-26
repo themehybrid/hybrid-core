@@ -1,58 +1,62 @@
 <?php
 /**
- * A dropdown taxonomy terms `<select>` customizer control class.  This control is built on top of
- * the core `wp_dropdown_categories()` function (works for any taxonomy).  By passing in a custom
- * `$args` parameter, which is passed to `wp_dropdown_categories()`, you can alter the output of the
- * dropdown select.
+ * Term dropdown customize control.
  *
- * @package    Hybrid
- * @subpackage Customize
- * @author     Justin Tadlock <justintadlock@gmail.com>
- * @copyright  Copyright (c) 2008 - 2017, Justin Tadlock
- * @link       https://themehybrid.com/hybrid-core
- * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * A dropdown taxonomy terms `<select>` customizer control class.  This control
+ * is built on top of the core `wp_dropdown_categories()` function (works for
+ * any taxonomy).  By passing in a custom `$args` parameter, which is passed to
+ * `wp_dropdown_categories()`, you can alter the output of the dropdown select.
+ *
+ * @package   Hybrid
+ * @author    Justin Tadlock <justintadlock@gmail.com>
+ * @copyright Copyright (c) 2008 - 2018, Justin Tadlock
+ * @link      https://themehybrid.com/hybrid-core
+ * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 namespace Hybrid\Customize\Controls;
 
+use WP_Customize_Control as Control;
+
 /**
  * Dropdown terms customize control class.
  *
- * @since  3.0.0
+ * @since  5.0.0
  * @access public
  */
-class DropdownTerms extends \WP_Customize_Control {
+class DropdownTerms extends Control {
 
 	/**
 	 * The type of customize control being rendered.
 	 *
-	 * @since  3.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @var    string
 	 */
-	public $type = 'dropdown-terms';
+	public $type = 'hybrid/dropdown-terms';
 
 	/**
 	 * Custom arguments to pass into `wp_dropdown_categories()`.
 	 *
-	 * @since  3.0.0
+	 * @since  5.0.0
 	 * @access public
-	 * @var    string
+	 * @var    array
 	 */
-	public $args = array();
+	public $args = [];
 
 	/**
 	 * Displays the control content.
 	 *
-	 * @since 3.0.0
+	 * @since 5.0.0
 	 */
 	public function render_content() {
 
 		// Allow devs to pass in custom arguments.
-		$args = wp_parse_args(
-			$this->args,
-			array( 'hierarchical' => true, 'show_option_none'  => ' ', 'option_none_value' => '0' )
-		);
+		$args = wp_parse_args( $this->args, [
+			'hierarchical'      => true,
+			'show_option_none'  => ' ',
+			'option_none_value' => '0'
+		] );
 
 		// Overwrite specific arguments.
 		$args['name']     = '_customize-dropdown-terms-' . $this->id;

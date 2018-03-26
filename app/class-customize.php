@@ -55,7 +55,7 @@ class Customize {
          */
         public function register_sections( $wp_customize ) {
 
-                $wp_customize->add_section( 'layout', [
+                $wp_customize->add_section( 'hybrid-layout', [
                         'title'    => esc_html__( 'Layout', 'hybrid-core' ),
                         'priority' => 30
                 ] );
@@ -119,7 +119,7 @@ class Customize {
         public function controls_register_scripts() {
 
         	wp_register_script(
-                        app()->namespace . '-customize-controls',
+                        'hybrid-customize-controls',
                         uri( 'resources/scripts/customize-controls' . get_min_suffix() . '.js' ),
                         [ 'customize-controls' ],
                         null,
@@ -127,7 +127,7 @@ class Customize {
                 );
 
                 wp_register_style(
-                        app()->namespace . '-customize-controls',
+                        'hybrid-customize-controls',
                         uri( 'resources/styles/customize-controls' . get_min_suffix() . '.css' )
                 );
         }
@@ -144,7 +144,7 @@ class Customize {
         	if ( current_theme_supports( 'theme-layouts', 'customize' ) ) {
 
                         wp_enqueue_script(
-                                app()->namespace . '-customize-preview',
+                                'hybrid-customize-preview',
                                 uri( 'resources/scripts/customize-preview' . get_min_suffix() . '.js' ),
                                 [ 'jquery' ],
                                 null,

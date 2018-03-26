@@ -1,44 +1,41 @@
 <?php
 /**
- * Customize control class to handle color palettes.
+ * Color palette customize control.
  *
- * Note, the `$choices` array is slightly different than normal and should be in the form of
- * `array(
- *	$value => array( 'label' => $text_label, 'colors' => $array_of_hex_colors ),
- *	$value => array( 'label' => $text_label, 'colors' => $array_of_hex_colors ),
- * )`
+ * Allows developers to have a selectable color palette/scheme for their users.
  *
  * @package    Hybrid
- * @subpackage Customize
  * @author     Justin Tadlock <justintadlock@gmail.com>
- * @copyright  Copyright (c) 2008 - 2017, Justin Tadlock
+ * @copyright  Copyright (c) 2008 - 2018, Justin Tadlock
  * @link       https://themehybrid.com/hybrid-core
  * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 namespace Hybrid\Customize\Controls;
 
+use WP_Customize_Control as Control;
+
 /**
  * Theme Layout customize control class.
  *
- * @since  3.0.0
+ * @since  5.0.0
  * @access public
  */
-class Palette extends \WP_Customize_Control {
+class Palette extends Control {
 
 	/**
 	 * The type of customize control being rendered.
 	 *
-	 * @since  3.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @var    string
 	 */
-	public $type = 'palette';
+	public $type = 'hybrid-palette';
 
 	/**
 	 * The default customizer section this control is attached to.
 	 *
-	 * @since  3.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @var    string
 	 */
@@ -47,7 +44,7 @@ class Palette extends \WP_Customize_Control {
 	/**
 	 * Enqueue scripts/styles.
 	 *
-	 * @since  3.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @return void
 	 */
@@ -59,7 +56,7 @@ class Palette extends \WP_Customize_Control {
 	/**
 	 * Add custom parameters to pass to the JS via JSON.
 	 *
-	 * @since  3.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @return void
 	 */
@@ -67,8 +64,10 @@ class Palette extends \WP_Customize_Control {
 		parent::to_json();
 
 		// Make sure the colors have a hash.
-		foreach ( $this->choices as $choice => $value )
-			$this->choices[ $choice ]['colors'] = array_map( 'maybe_hash_hex_color', $value['colors'] );
+		array_walk( $this->choices, function( &$value, $choice ) {
+
+			$value['colors'] = array_map( 'maybe_hash_hex_color', $value['colors'] );
+		} );
 
 		$this->json['choices'] = $this->choices;
 		$this->json['link']    = $this->get_link();
@@ -79,7 +78,7 @@ class Palette extends \WP_Customize_Control {
 	/**
 	 * Don't render the content via PHP.  This control is handled with a JS template.
 	 *
-	 * @since  4.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @return bool
 	 */
@@ -88,7 +87,7 @@ class Palette extends \WP_Customize_Control {
 	/**
 	 * Underscore JS template to handle the control's output.
 	 *
-	 * @since  3.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @return void
 	 */

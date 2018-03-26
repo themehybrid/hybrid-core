@@ -1,45 +1,42 @@
 <?php
 /**
- * The radio image customize control extends the WP_Customize_Control class.  This class allows
- * developers to create a list of image radio inputs.
+ * Radio image customize control.
  *
- * Note, the `$choices` array is slightly different than normal and should be in the form of
- * `array(
- *	$value => array( 'url' => $image_url, 'label' => $text_label ),
- *	$value => array( 'url' => $image_url, 'label' => $text_label ),
- * )`
+ * The radio image customize control allows developers to create a list of image
+ * radio inputs.
  *
- * @package    Hybrid
- * @subpackage Customize
- * @author     Justin Tadlock <justintadlock@gmail.com>
- * @copyright  Copyright (c) 2008 - 2017, Justin Tadlock
- * @link       https://themehybrid.com/hybrid-core
- * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @package   Hybrid
+ * @author    Justin Tadlock <justintadlock@gmail.com>
+ * @copyright Copyright (c) 2008 - 2018, Justin Tadlock
+ * @link      https://themehybrid.com/hybrid-core
+ * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 namespace Hybrid\Customize\Controls;
 
+use WP_Customize_Control as Control;
+
 /**
  * Radio image customize control.
  *
- * @since  3.0.0
+ * @since  5.0.0
  * @access public
  */
-class RadioImage extends \WP_Customize_Control {
+class RadioImage extends Control {
 
 	/**
 	 * The type of customize control being rendered.
 	 *
-	 * @since  3.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @var    string
 	 */
-	public $type = 'radio-image';
+	public $type = 'hybrid-radio-image';
 
 	/**
 	 * Loads the framework scripts/styles.
 	 *
-	 * @since  3.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @return void
 	 */
@@ -51,7 +48,7 @@ class RadioImage extends \WP_Customize_Control {
 	/**
 	 * Add custom parameters to pass to the JS via JSON.
 	 *
-	 * @since  3.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @return void
 	 */
@@ -59,8 +56,10 @@ class RadioImage extends \WP_Customize_Control {
 		parent::to_json();
 
 		// We need to make sure we have the correct image URL.
-		foreach ( $this->choices as $value => $args )
-			$this->choices[ $value ]['url'] = esc_url( \Hybrid\sprintf_theme_uri( $args['url'] ) );
+		array_walk( $this->choices, function( &$args, $key ) {
+
+			$args['url'] = esc_url( \Hybrid\sprintf_theme_uri( $args['url'] ) );
+		} );
 
 		$this->json['choices'] = $this->choices;
 		$this->json['link']    = $this->get_link();
@@ -71,7 +70,7 @@ class RadioImage extends \WP_Customize_Control {
 	/**
 	 * Don't render the content via PHP.  This control is handled with a JS template.
 	 *
-	 * @since  4.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @return bool
 	 */
@@ -80,7 +79,7 @@ class RadioImage extends \WP_Customize_Control {
 	/**
 	 * Underscore JS template to handle the control's output.
 	 *
-	 * @since  3.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @return void
 	 */

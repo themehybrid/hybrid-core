@@ -1,15 +1,15 @@
 <?php
 /**
- * Customize control class to handle theme layouts.  This class extends the framework's
- * `Hybrid_Customize_Control_Radio_Image` class.  Only layouts that have an image will
- * be shown.
+ * Layout customize control.
  *
- * @package    Hybrid
- * @subpackage Customize
- * @author     Justin Tadlock <justintadlock@gmail.com>
- * @copyright  Copyright (c) 2008 - 2017, Justin Tadlock
- * @link       https://themehybrid.com/hybrid-core
- * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * Customize control class to handle theme layouts. Only layouts that have an
+ * image will be shown.
+ *
+ * @package   Hybrid
+ * @author    Justin Tadlock <justintadlock@gmail.com>
+ * @copyright Copyright (c) 2008 - 2018, Justin Tadlock
+ * @link      https://themehybrid.com/hybrid-core
+ * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 namespace Hybrid\Customize\Controls;
@@ -17,31 +17,31 @@ namespace Hybrid\Customize\Controls;
 /**
  * Theme Layout customize control class.
  *
- * @since  3.0.0
+ * @since  5.0.0
  * @access public
  */
-class Layout extends Radio_Image {
+class Layout extends RadioImage {
 
 	/**
 	 * The default customizer section this control is attached to.
 	 *
-	 * @since  3.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @var    string
 	 */
-	public $section = 'layout';
+	public $section = 'hybrid-layout';
 
 	/**
 	 * Set up our control.
 	 *
-	 * @since  3.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @param  object  $manager
 	 * @param  string  $id
 	 * @param  array   $args
 	 * @return void
 	 */
-	public function __construct( $manager, $id, $args = array() ) {
+	public function __construct( $manager, $id, $args = [] ) {
 
 		// Array of allowed layouts. Pass via `$args['layouts']`.
 		$allowed = ! empty( $args['layouts'] ) ? $args['layouts'] : array_keys( \Hybrid\get_layouts() );
@@ -51,10 +51,10 @@ class Layout extends Radio_Image {
 
 			if ( in_array( $layout->name, $allowed ) && ! ( 'theme_layout' === $id && false === $layout->is_global_layout ) && $layout->image ) {
 
-				$args['choices'][ $layout->name ] = array(
+				$args['choices'][ $layout->name ] = [
 					'label' => $layout->label,
 					'url'   => \Hybrid\sprintf_theme_uri( $layout->image )
-				);
+				];
 			}
 		}
 

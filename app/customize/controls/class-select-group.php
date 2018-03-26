@@ -1,40 +1,42 @@
 <?php
 /**
- * The group select customize control extends the WP_Customize_Control class.  This class allows
- * developers to create a `<select>` form field with the `<optgroup>` elements mixed in.  They
- * can also utilize regular `<option>` choices.
+ * Select group customize control.
  *
- * @package    Hybrid
- * @subpackage Customize
- * @author     Justin Tadlock <justintadlock@gmail.com>
- * @copyright  Copyright (c) 2008 - 2017, Justin Tadlock
- * @link       https://themehybrid.com/hybrid-core
- * @license    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * This class allows developers to create a `<select>` control with `<optgroup>`
+ * elements mixed in. They can also utilize regular `<option>` choices.
+ *
+ * @package   Hybrid
+ * @author    Justin Tadlock <justintadlock@gmail.com>
+ * @copyright Copyright (c) 2008 - 2018, Justin Tadlock
+ * @link      https://themehybrid.com/hybrid-core
+ * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 namespace Hybrid\Customize\Controls;
 
+use WP_Customize_Control as Control;
+
 /**
  * Multiple select customize control class.
  *
- * @since  3.0.0
+ * @since  5.0.0
  * @access public
  */
-class SelectGroup extends \WP_Customize_Control {
+class SelectGroup extends Control {
 
 	/**
 	 * The type of customize control being rendered.
 	 *
-	 * @since  3.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @var    string
 	 */
-	public $type = 'select-group';
+	public $type = 'hybrid-select-group';
 
 	/**
 	 * Enqueue scripts/styles.
 	 *
-	 * @since  3.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @return void
 	 */
@@ -45,21 +47,22 @@ class SelectGroup extends \WP_Customize_Control {
 	/**
 	 * Add custom parameters to pass to the JS via JSON.
 	 *
-	 * @since  3.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @return void
 	 */
 	public function to_json() {
 		parent::to_json();
 
-		$choices = $group = array();
+		$choices = $group = [];
 
 		foreach ( $this->choices as $choice => $maybe_group ) {
 
-			if ( is_array( $maybe_group ) )
+			if ( is_array( $maybe_group ) ) {
 				$group[ $choice ] = $maybe_group;
-			else
+			} else {
 				$choices[ $choice ] = $maybe_group;
+			}
 		}
 
 		$this->json['choices'] = $choices;
@@ -72,7 +75,7 @@ class SelectGroup extends \WP_Customize_Control {
 	/**
 	 * Don't render the content via PHP.  This control is handled with a JS template.
 	 *
-	 * @since  4.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @return bool
 	 */
@@ -81,7 +84,7 @@ class SelectGroup extends \WP_Customize_Control {
 	/**
 	 * Underscore JS template to handle the control's output.
 	 *
-	 * @since  3.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @return void
 	 */
