@@ -38,25 +38,25 @@ function app() {
 // Add configuration.
 app()->add( 'config.app', function( $container ) {
 
-	return new Collection( require_once( trailingslashit( realpath( trailingslashit( __DIR__ ) . '../' ) ) . 'config/app.php' ) );
+	return new Collection( require_once( "{$container->dir}/config/app.php" ) );
 } );
 
 app()->add( 'config.view', function( $container ) {
 
-	return new Collection( require_once( $container->dir . 'config/view.php' ) );
+	return new Collection( require_once( "{$container->dir}/config/view.php" ) );
 } );
 
 // Use the theme namespace as the overall app namespace.
-app()->add( 'namespace', app()->get( 'config.app' )->namespace );
+app()->add( 'namespace', 'hybrid' );
 
-app()->add( 'dir', app()->get( 'config.app' )->dir );
-app()->add( 'uri', app()->get( 'config.app' )->uri );
+app()->add( 'dir', untrailingslashit( HYBRID_DIR ) );
+app()->add( 'uri', untrailingslashit( HYBRID_URI ) );
 
-app()->add( 'parent_dir', trailingslashit( get_template_directory() ) );
-app()->add( 'child_dir', trailingslashit( get_stylesheet_directory() ) );
+app()->add( 'parent_dir', untrailingslashit( get_template_directory() ) );
+app()->add( 'child_dir',  untrailingslashit( get_stylesheet_directory() ) );
 
-app()->add( 'parent_uri', trailingslashit( get_template_directory_uri() ) );
-app()->add( 'child_uri', trailingslashit( get_stylesheet_directory_uri() ) );
+app()->add( 'parent_uri', untrailingslashit( get_template_directory_uri() ) );
+app()->add( 'child_uri',  untrailingslashit( get_stylesheet_directory_uri() ) );
 
 app()->add( 'parent_textdomain', '' );
 app()->add( 'child_textdomain', '' );
@@ -100,7 +100,7 @@ app()->get( 'customize' );
 // Load functions files.
 array_map(
 	function( $file ) {
-		require_once( app()->dir . "app/{$file}.php" );
+		require_once( app()->dir . "/app/{$file}.php" );
 	},
 	// Add file names of files to auto-load from the `/app` folder.
 	// Classes are auto-loaded, so we only need this for functions-files.
@@ -131,8 +131,8 @@ array_map(
 
 // Load admin files.
 if ( is_admin() ) {
-	require_once( app()->dir . 'admin/functions-admin.php' );
+	require_once( app()->dir . '/admin/functions-admin.php' );
 }
 
 // Runs after the app has been bootstrapped.
-do_action( app()->namespace . '/app_bootstrapped', app() );
+do_action( 'hybrid/bootstrapped', app() );

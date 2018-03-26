@@ -148,7 +148,7 @@ function comments_template( $template ) {
 	$templates = [];
 
 	// Allow for custom templates entered into comments_template( $file ).
-	$template = str_replace( app()->child_dir, '', $template );
+	$template = str_replace( trailingslashit( app()->child_dir ), '', $template );
 
 	if ( 'comments.php' !== $template ) {
 		$templates[] = $template;

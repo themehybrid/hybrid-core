@@ -34,7 +34,7 @@
 # unless doing something really out there or just for clarity.
 if ( ! defined( 'HYBRID_DIR' ) ) {
 
-	define( 'HYBRID_DIR', trailingslashit( __DIR__ ) );
+	define( 'HYBRID_DIR', __DIR__ );
 }
 
 # Define the directory URI to the framework. The assumption is that the framework
@@ -42,12 +42,10 @@ if ( ! defined( 'HYBRID_DIR' ) ) {
 # defined for scripts/styles.
 if ( ! defined( 'HYBRID_URI' ) ) {
 
-	define( 'HYBRID_URI', trailingslashit(
-		str_replace(
-			get_template_directory(),
-			get_template_directory_uri(),
-			wp_normalize_path( __DIR__ )
-		)
+	define( 'HYBRID_URI', str_replace(
+		get_template_directory(),
+		get_template_directory_uri(),
+		wp_normalize_path( __DIR__ )
 	) );
 }
 

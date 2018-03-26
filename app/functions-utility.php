@@ -130,14 +130,14 @@ function locate_file_path( $file_names ) {
 	foreach ( (array) $file_names as $file ) {
 
 		// If the file exists in the stylesheet (child theme) directory.
-		if ( is_child_theme() && file_exists( app()->child_dir . $file ) ) {
-			$located = app()->child_dir . $file;
+		if ( is_child_theme() && file_exists( app()->child_dir . "/{$file}" ) ) {
+			$located = app()->child_dir . "/{$file}";
 			break;
 		}
 
 		// If the file exists in the template (parent theme) directory.
-		elseif ( file_exists( app()->parent_dir . $file ) ) {
-			$located = app()->parent_dir . $file;
+		elseif ( file_exists( app()->parent_dir . "/{$file}" ) ) {
+			$located = app()->parent_dir . "/{$file}";
 			break;
 		}
 	}
@@ -161,14 +161,14 @@ function locate_file_uri( $file_names ) {
 	foreach ( (array) $file_names as $file ) {
 
 		// If the file exists in the stylesheet (child theme) directory.
-		if ( is_child_theme() && file_exists( app()->child_dir . $file ) ) {
-			$located = app()->child_uri . $file;
+		if ( is_child_theme() && file_exists( app()->child_dir . "/{$file}" ) ) {
+			$located = app()->child_uri . "/{$file}";
 			break;
 		}
 
 		// If the file exists in the template (parent theme) directory.
-		elseif ( file_exists( app()->parent_dir . $file ) ) {
-			$located = app()->parent_uri . $file;
+		elseif ( file_exists( app()->parent_dir . "/{$file}" ) ) {
+			$located = app()->parent_uri . "/{$file}";
 			break;
 		}
 	}
@@ -342,4 +342,32 @@ function post_template_compat( $post_id, $template ) {
 	update_post_meta( $post_id, '_wp_page_template', $template );
 
 	delete_post_meta( $post_id, sprintf( '_wp_%s_template', get_post_type( $post_id ) ) );
+}
+
+/**
+ * Returns the directory path of the framework. If a file is passed in, it'll be
+ * appended to the end of the path.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  string  $file
+ * @return string
+ */
+function path( $file = '' ) {
+
+	$file ? trailingslashit( app()->dir ) . ltrim( $file, '/' ) : app()->dir;
+}
+
+/**
+ * Returns the directory URI of the framework. If a file is passed in, it'll be
+ * appended to the end of the URI.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  string  $file
+ * @return string
+ */
+function uri( $file = '' ) {
+
+	$file ? trailingslashit( app()->uri ) . ltrim( $file, '/' ) : app()->uri;
 }

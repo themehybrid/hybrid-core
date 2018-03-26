@@ -120,7 +120,7 @@ class Customize {
 
         	wp_register_script(
                         app()->namespace . '-customize-controls',
-                        app()->uri . 'resources/scripts/customize-controls' . get_min_suffix() . '.js',
+                        uri( 'resources/scripts/customize-controls' . get_min_suffix() . '.js' ),
                         [ 'customize-controls' ],
                         null,
                         true
@@ -128,7 +128,7 @@ class Customize {
 
                 wp_register_style(
                         app()->namespace . '-customize-controls',
-                        app()->uri . 'resources/styles/customize-controls' . get_min_suffix() . '.css'
+                        uri( 'resources/styles/customize-controls' . get_min_suffix() . '.css' )
                 );
         }
 
@@ -145,7 +145,7 @@ class Customize {
 
                         wp_enqueue_script(
                                 app()->namespace . '-customize-preview',
-                                app()->uri . 'resources/scripts/customize-preview' . get_min_suffix() . '.js',
+                                uri( 'resources/scripts/customize-preview' . get_min_suffix() . '.js' ),
                                 [ 'jquery' ],
                                 null,
                                 true

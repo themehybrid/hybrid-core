@@ -31,7 +31,7 @@ return [
 	 |
 	 */
 
-	'dir' => HYBRID_DIR,
+	'dir' => untrailingslashit( HYBRID_DIR ),
 
 	/*
 	 |-------------------------------------------------------------------------
@@ -42,6 +42,6 @@ return [
 	 |
 	 */
 
-	'uri' => HYBRID_URI,
+	'uri' => untrailingslashit( HYBRID_URI ),
 
 ];

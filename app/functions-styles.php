@@ -38,8 +38,8 @@ function get_parent_stylesheet_uri() {
 	$stylesheet_uri = app()->parent_uri . 'style.css';
 
 	// If a '.min' version of the parent theme stylesheet exists, use it.
-	if ( $suffix && file_exists( app()->parent_dir . "style{$suffix}.css" ) ) {
-		$stylesheet_uri = app()->parent_uri . "style{$suffix}.css";
+	if ( $suffix && file_exists( app()->parent_dir . "/style{$suffix}.css" ) ) {
+		$stylesheet_uri = app()->parent_uri . "/style{$suffix}.css";
 	}
 
 	return apply_filters(
@@ -74,7 +74,7 @@ function min_stylesheet_uri( $stylesheet_uri, $stylesheet_dir_uri ) {
 		$stylesheet = str_replace( '.css', "{$suffix}.css", $stylesheet );
 
 		// If the stylesheet exists in the stylesheet directory, set the stylesheet URI to the dev stylesheet.
-		if ( file_exists( app()->child_dir . $stylesheet ) ) {
+		if ( file_exists( app()->child_dir . "/{$stylesheet}" ) ) {
 			$stylesheet_uri = esc_url( trailingslashit( $stylesheet_dir_uri ) . $stylesheet );
 		}
 	}
