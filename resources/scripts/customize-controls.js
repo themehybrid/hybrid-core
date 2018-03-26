@@ -2,7 +2,7 @@
 
 	/* === Checkbox Multiple Control === */
 
-	api.controlConstructor['checkbox-multiple'] = api.Control.extend( {
+	api.controlConstructor['hybrid-checkbox-multiple'] = api.Control.extend( {
 		ready: function() {
 			var control = this;
 
@@ -29,7 +29,7 @@
 
 	/* === Palette Control === */
 
-	api.controlConstructor['palette'] = api.Control.extend( {
+	api.controlConstructor['hybrid-palette'] = api.Control.extend( {
 		ready: function() {
 			var control = this;
 
@@ -51,7 +51,7 @@
 
 	/* === Radio Image Control === */
 
-	api.controlConstructor['radio-image'] = api.Control.extend( {
+	api.controlConstructor['hybrid-radio-image'] = api.Control.extend( {
 		ready: function() {
 			var control = this;
 
@@ -65,7 +65,7 @@
 
 	/* === Select Group Control === */
 
-	api.controlConstructor['select-group'] = api.Control.extend( {
+	api.controlConstructor['hybrid-select-group'] = api.Control.extend( {
 		ready: function() {
 			var control = this;
 
@@ -79,7 +79,7 @@
 
 	/* === Select Multiple Control === */
 
-	api.controlConstructor['select-multiple'] = api.Control.extend( {
+	api.controlConstructor['hybrid-select-multiple'] = api.Control.extend( {
 		ready: function() {
 			var control = this;
 
