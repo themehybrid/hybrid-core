@@ -355,7 +355,7 @@ function post_template_compat( $post_id, $template ) {
  */
 function path( $file = '' ) {
 
-	$file ? trailingslashit( app()->dir ) . ltrim( $file, '/' ) : app()->dir;
+	return $file ? trailingslashit( app()->dir ) . ltrim( $file, '/' ) : app()->dir;
 }
 
 /**
@@ -369,5 +369,5 @@ function path( $file = '' ) {
  */
 function uri( $file = '' ) {
 
-	$file ? trailingslashit( app()->uri ) . ltrim( $file, '/' ) : app()->uri;
+	return $file ? trailingslashit( app()->uri ) . ltrim( $file, '/' ) : app()->uri;
 }
