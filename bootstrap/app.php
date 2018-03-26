@@ -131,7 +131,21 @@ array_map(
 
 // Load admin files.
 if ( is_admin() ) {
-	require_once( app()->dir . '/admin/functions-admin.php' );
+
+	app()->add( 'admin/post_layout', function() {
+
+		return new Admin\PostLayout();
+	} );
+
+	app()->add( 'admin/term_layout', function() {
+
+		return new Admin\TermLayout();
+	} );
+
+	app()->get( 'admin/post_layout' );
+	app()->get( 'admin/term_layout' );
+
+	require_once( app()->dir . '/app/admin/functions-admin.php' );
 }
 
 // Runs after the app has been bootstrapped.

@@ -191,24 +191,6 @@ add_action( 'after_setup_theme', function() {
 }, 15 );
 
 /**
- * Loads the framework files supported by themes.  Functionality in these files should
- * not be expected within the theme setup function.
- *
- * @since  5.0.0
- * @access public
- * @return void
- */
-add_action( 'after_setup_theme', function() {
-
-	// Load admin files.
-	if ( is_admin() && current_theme_supports( 'theme-layouts' ) ) {
-		require_once( path( 'admin/class-post-layout.php' ) );
-		require_once( path( 'admin/class-term-layout.php' ) );
-	}
-
-}, 20 );
-
-/**
  * Load extensions (external projects).  Extensions are projects that are included
  * within the framework but are not a part of it.  They are external projects
  * developed outside of the framework.  Themes must use `add_theme_support( $extension )`
