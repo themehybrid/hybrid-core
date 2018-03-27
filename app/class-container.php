@@ -2,9 +2,11 @@
 /**
  * Container class.
  *
- * This file maintains the `Container` class, which handles storing
- * objects for later use.  It's primarily designed for handling
- * single instances to avoid globals or singletons.
+ * This file maintains the `Container` class, which handles storing objects for
+ * later use. It's primarily designed for handling single instances to avoid
+ * globals or singletons. This is just a basic container for the purposes of
+ * WordPress theme dev and isn't as powerful as some of the more robust
+ * containers available in the larger PHP world.
  *
  * @package   HybridCore
  * @author    Justin Tadlock <justintadlock@gmail.com>
@@ -22,7 +24,7 @@ use Psr\Container\ContainerInterface;
 /**
  * A simple container for objects.
  *
- * @since  1.0.0
+ * @since  5.0.0
  * @access public
  */
 class Container implements ContainerInterface, ArrayAccess {
@@ -30,16 +32,16 @@ class Container implements ContainerInterface, ArrayAccess {
 	/**
 	 * Stored definitions of objects.
 	 *
-	 * @since  1.0.0
+	 * @since  5.0.0
 	 * @access protected
 	 * @var    array
 	 */
-	protected $definitions = [];
+	 protected $bindings = [];
 
 	/**
 	 * Array of single instance objects.
 	 *
-	 * @since  1.0.0
+	 * @since  5.0.0
 	 * @access protected
 	 * @var    array
 	 */
@@ -48,7 +50,7 @@ class Container implements ContainerInterface, ArrayAccess {
 	/**
 	 * Set to an instance of `SplObjectStorage`.
 	 *
-	 * @since  1.0.0
+	 * @since  5.0.0
 	 * @access protected
 	 * @var    object
 	 */
@@ -57,7 +59,7 @@ class Container implements ContainerInterface, ArrayAccess {
 	/**
 	 * Set up a new container.
 	 *
-	 * @since  1.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @param  array  $definitions
 	 * @return void
@@ -75,25 +77,26 @@ class Container implements ContainerInterface, ArrayAccess {
 	/**
 	 * Add an object.
 	 *
-	 * @since  1.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @param  string  $alias
-	 * @param  object  $concrete
+	 * @param  object  $value
+	 * @param  bool    $shared
 	 * @return void
 	 */
-	public function add( $alias, $value = null ) {
+	public function add( $alias, $value = null, $shared = false ) {
 
-		if ( isset( $this->instances[ $alias ] ) ) {
+		if ( isset( $this->bindings[ $alias ] ) ) {
 			return;
 		}
 
-		$this->definitions[ $alias ] = $value;
+		$this->bindings[ $alias ] = compact( 'value', 'shared' );
 	}
 
 	/**
 	 * Remove an object.
 	 *
-	 * @since  1.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @param  string  $alias
 	 * @return void
@@ -102,14 +105,14 @@ class Container implements ContainerInterface, ArrayAccess {
 
 		if ( $this->has( $alias ) ) {
 
-			unset( $this->definitions[ $alias ], $this->instances[ $alias ] );
+			unset( $this->bindings[ $alias ], $this->instances[ $alias ] );
 		}
 	}
 
 	/**
 	 * Return an object.
 	 *
-	 * @since  1.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @param  string  $alias
 	 * @return object
@@ -120,7 +123,7 @@ class Container implements ContainerInterface, ArrayAccess {
 			return false;
 		}
 
-		$definition = $this->definitions[ $alias ];
+		$definition = $this->bindings[ $alias ]['value'];
 
 		// If this is not a closure, return the definition.
 		if ( ! is_object( $definition ) || ! method_exists( $definition, '__invoke' ) ) {
@@ -128,8 +131,14 @@ class Container implements ContainerInterface, ArrayAccess {
 			return $definition;
 		}
 
-		// If we already have a single instance return it.
-		if ( isset( $this->instances[ $alias ] ) ) {
+		// Return a single instance.
+		if ( $this->bindings[ $alias ]['shared'] ) {
+
+			// If the instance isn't set yet, get it.
+			if ( ! isset( $this->instances[ $alias ] ) ) {
+
+				$this->instances[ $alias ] = $definition( $this );
+			}
 
 			return $this->instances[ $alias ];
 		}
@@ -140,30 +149,41 @@ class Container implements ContainerInterface, ArrayAccess {
 			return $definition( $this );
 		}
 
-		// Store the single instance of the object.
-		$this->instances[ $alias ] = $definition( $this );
-
-		// Return the single instance.
-		return $this->instances[ $alias ];
+		// Return the instance.
+		return $definition( $this );
 	}
 
 	/**
 	 * Check if an object exists.
 	 *
-	 * @since  1.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @param  string  $alias
 	 * @return bool
 	 */
 	public function has( $alias ) {
 
-		return isset( $this->definitions[ $alias ] );
+		return isset( $this->bindings[ $alias ] );
+	}
+
+	/**
+	 * Add a shared object.
+	 *
+	 * @since  5.0.0
+	 * @access public
+	 * @param  string  $alias
+	 * @param  object  $value
+	 * @return void
+	 */
+	public function singleton( $alias, $value = null ) {
+
+		$this->add( $alias, $value, true );
 	}
 
 	/**
 	 * Adds a factory and returns the callable object.
 	 *
-	 * @since  1.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @param  callable  $callable
 	 * @return callable
@@ -178,7 +198,7 @@ class Container implements ContainerInterface, ArrayAccess {
 	/**
 	 * Sets a property via `ArrayAccess`.
 	 *
-	 * @since  1.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @param  string  $name
 	 * @param  mixed   $value
@@ -192,7 +212,7 @@ class Container implements ContainerInterface, ArrayAccess {
 	/**
 	 * Unsets a property via `ArrayAccess`.
 	 *
-	 * @since  1.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @param  string  $name
 	 * @return void
@@ -205,7 +225,7 @@ class Container implements ContainerInterface, ArrayAccess {
 	/**
 	 * Checks if a property exists via `ArrayAccess`.
 	 *
-	 * @since  1.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @param  string  $name
 	 * @return bool
@@ -218,7 +238,7 @@ class Container implements ContainerInterface, ArrayAccess {
 	/**
 	 * Returns a property via `ArrayAccess`.
 	 *
-	 * @since  1.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @param  string  $name
 	 * @return mixed
@@ -232,7 +252,7 @@ class Container implements ContainerInterface, ArrayAccess {
 	/**
 	 * Magic method when trying to set a property.
 	 *
-	 * @since  1.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @param  string  $name
 	 * @param  mixed   $value
@@ -246,7 +266,7 @@ class Container implements ContainerInterface, ArrayAccess {
 	/**
 	 * Magic method when trying to unset a property.
 	 *
-	 * @since  1.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @param  string  $name
 	 * @return void
@@ -259,7 +279,7 @@ class Container implements ContainerInterface, ArrayAccess {
 	/**
 	 * Magic method when trying to check if a property exists.
 	 *
-	 * @since  1.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @param  string  $name
 	 * @return bool
@@ -272,7 +292,7 @@ class Container implements ContainerInterface, ArrayAccess {
 	/**
 	 * Magic method when trying to get a property.
 	 *
-	 * @since  1.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @param  string  $name
 	 * @return mixed

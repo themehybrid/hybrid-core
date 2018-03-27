@@ -36,12 +36,12 @@ function app() {
 }
 
 // Add configuration.
-app()->add( 'config.app', function( $container ) {
+app()->singleton( 'config.app', function( $container ) {
 
 	return new Collection( require_once( "{$container->dir}/config/app.php" ) );
 } );
 
-app()->add( 'config.view', function( $container ) {
+app()->singleton( 'config.view', function( $container ) {
 
 	return new Collection( require_once( "{$container->dir}/config/view.php" ) );
 } );
@@ -62,32 +62,32 @@ app()->add( 'parent_textdomain', '' );
 app()->add( 'child_textdomain', '' );
 app()->add( 'comment_templates', [] );
 
-app()->add( 'templates', function( $container ) {
+app()->singleton( 'templates', function( $container ) {
 
 	return new Collection();
 } );
 
-app()->add( 'layouts', function( $container ) {
+app()->singleton( 'layouts', function( $container ) {
 
 	return new Collection();
 } );
 
-app()->add( 'media_meta', function( $container ) {
+app()->singleton( 'media_meta', function( $container ) {
 
 	return new Collection();
 } );
 
-app()->add( 'template_hierarchy', function() {
+app()->singleton( 'template_hierarchy', function() {
 
 	return new TemplateHierarchy();
 } );
 
-app()->add( 'language', function() {
+app()->singleton( 'language', function() {
 
 	return new Language();
 } );
 
-app()->add( 'customize', function() {
+app()->singleton( 'customize', function() {
 
 	return new Customize();
 } );
@@ -132,12 +132,12 @@ array_map(
 // Load admin files.
 if ( is_admin() ) {
 
-	app()->add( 'admin/post_layout', function() {
+	app()->singleton( 'admin/post_layout', function() {
 
 		return new Admin\PostLayout();
 	} );
 
-	app()->add( 'admin/term_layout', function() {
+	app()->singleton( 'admin/term_layout', function() {
 
 		return new Admin\TermLayout();
 	} );
