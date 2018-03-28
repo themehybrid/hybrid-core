@@ -10,7 +10,7 @@ return [
 	 | The path, relative to the theme root, where view templates exist.
 	 |
 	 */
-	 'path' => 'resources/views',
+	 'path' => 'public/views',
 
 	/*
 	 |-------------------------------------------------------------------------
