@@ -16,6 +16,94 @@
 namespace Hybrid;
 
 /**
+ * Outputs the site title.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  array   $args
+ * @param  array   $attr
+ * @return void
+ */
+function site_title( $args = [], $attr = [] ) {
+
+	echo get_site_title( $args, $attr );
+}
+
+/**
+ * Returns the site title.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  array   $args
+ * @param  array   $attr
+ * @return string
+ */
+function get_site_title( $args = [], $attr = [] ) {
+
+	$html  = '';
+	$title = get_bloginfo( 'name', 'display' );
+
+	$args = wp_parse_args( $args, [ 'tag' => is_front_page() ? 'h1' : 'div' ] );
+	$attr = wp_parse_args( $attr, [ 'class' => 'site-title' ] );
+
+	if ( $title ) {
+		$link = sprintf( '<a href="%s">%s</a>', esc_url( home_url() ), $title );
+
+		$html = sprintf(
+			'<%1$s %2$s>%3$s</%1$s>',
+			tag_escape( $args['tag'] ),
+			attributes( 'site-title', '', $attr )->fetch(),
+			$link
+		);
+	}
+
+	return apply_filters( 'hybrid/site_title', $html );
+}
+
+/**
+ * Outputs the site description.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  array   $args
+ * @param  array   $attr
+ * @return void
+ */
+function site_description( $args = [], $attr = [] ) {
+
+	echo get_site_description( $args, $attr );
+}
+
+/**
+ * Returns the site title.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  array   $args
+ * @param  array   $attr
+ * @return string
+ */
+function get_site_description( $args = [], $attr = [] ) {
+
+	$html = '';
+	$desc = get_bloginfo( 'description', 'display' );
+
+	$args = wp_parse_args( $args, [ 'tag' => 'div' ] );
+	$attr = wp_parse_args( $attr, [ 'class' => 'site-description' ] );
+
+	if ( $desc ) {
+		$html = sprintf(
+			'<%1$s %2$s>%3$s</%1$s>',
+			tag_escape( $args['tag'] ),
+			attributes( 'site-description', '', $attr )->fetch(),
+			$desc
+		);
+	}
+
+	return apply_filters( 'hybrid/site_description', $html );
+}
+
+/**
  * Outputs the link back to the site.
  *
  * @since  5.0.0
