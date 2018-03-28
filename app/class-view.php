@@ -87,8 +87,8 @@ class View {
 
 		// Apply filters after all the properties have been assigned.
 		// This way, the full object is available to filters.
-		$this->slugs = apply_filters( app()->namespace . "/view_slugs_{$this->name}", $this->slugs, $this );
-		$this->data  = apply_filters( app()->namespace . "/view_data_{$this->name}",  $this->data,  $this );
+		$this->slugs = apply_filters( "hybrid/view/{$this->name}/slugs", $this->slugs, $this );
+		$this->data  = apply_filters( "hybrid/view/{$this->name}/data",  $this->data,  $this );
 	}
 
 	/**
@@ -141,11 +141,7 @@ class View {
 		$templates[] = "{$this->name}.php";
 
 		// Allow developers to overwrite the hierarchy.
-		return apply_filters(
-			app()->namespace . "/view_hierarchy_{$this->name}",
-			$templates,
-			$this
-		);
+		return apply_filters( "hybrid/view/{$this->name}/hierarchy", $templates, $this );
 	}
 
 	/**
