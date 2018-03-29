@@ -43,7 +43,11 @@ app()->singleton( 'config.app', function( $container ) {
 
 app()->singleton( 'config.view', function( $container ) {
 
-	return new Collection( require_once( "{$container->dir}/config/view.php" ) );
+	$locate = locate_file_path( 'config/view.php' );
+
+	$view   = require_once( $locate ?: "{$container->dir}/config/view.php" );
+
+	return new Collection( $view );
 } );
 
 // Use the theme namespace as the overall app namespace.
