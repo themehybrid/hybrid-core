@@ -9,9 +9,8 @@
  * templates for use.
  *
  * Every effort has been made to make this compliant with WordPress.org theme
- * directory guidelines by utilizing the core `locate_template()` function as
- * well as providing compatible action hooks with `get_template_part()` and
- * other `get_*()` functions for templates.
+ * directory guidelines by providing compatible action hooks with WordPress core
+ * `get_template_part()` and other `get_*()` functions for templates.
  *
  * @package   HybridCore
  * @author    Justin Tadlock <justintadlock@gmail.com>
@@ -112,7 +111,7 @@ class View {
 	 */
 	protected function locate() {
 
-		$this->template = locate_template( $this->get_hierarchy() );
+		$this->template = locate_template( $this->hierarchy() );
 	}
 
 	/**
@@ -123,7 +122,7 @@ class View {
 	 * @access protected
 	 * @return array
 	 */
-	protected function get_hierarchy() {
+	protected function hierarchy() {
 
 		// Uses the slugs to build a hierarchy.
 		foreach ( $this->slugs as $slug ) {
@@ -154,7 +153,7 @@ class View {
 	public function render() {
 
 		// Compatibility with core WP's template parts.
-		$this->template_part_compat();
+		$this->templatePartCompat();
 
 		// Locate the template.
 		$this->locate();
@@ -162,7 +161,7 @@ class View {
 		if ( $this->template ) {
 
 			// Maybe remove core WP's `prepend_attachment`.
-			$this->maybe_shift_attachment();
+			$this->maybeShiftAttachment();
 
 			// Make `$data` available to the template.
 			${ config( 'view' )->name } = $this->data;
@@ -202,7 +201,7 @@ class View {
 	 * @access protected
 	 * @return void
 	 */
-	protected function template_part_compat() {
+	protected function templatePartCompat() {
 
 		// The slug is a string in WP and we have an array. So, we're
 		// just going to use the first item of the array in this case.
@@ -229,13 +228,13 @@ class View {
 	 * @access protected
 	 * @return void
 	 */
-	protected function maybe_shift_attachment() {
+	protected function maybeShiftAttachment() {
 
 		if ( ! in_the_loop() || 'attachment' !== get_post_type() ) {
 			return;
 		}
 
-		if ( in_array( $this->name, [ 'entry', 'post'] ) ) {
+		if ( in_array( $this->name, [ 'entry', 'post', 'entry/archive', 'entry/single' ] ) ) {
 
 			remove_filter( 'the_content', 'prepend_attachment' );
 
