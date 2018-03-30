@@ -36,18 +36,14 @@ function app() {
 }
 
 // Add configuration.
-app()->singleton( 'config.app', function( $container ) {
+app()->singleton( 'config', function( $container ) {
 
-	return new Collection( require_once( "{$container->dir}/config/app.php" ) );
-} );
+	$view = locate_file_path( 'config/view.php' );
 
-app()->singleton( 'config.view', function( $container ) {
-
-	$locate = locate_file_path( 'config/view.php' );
-
-	$view   = require_once( $locate ?: "{$container->dir}/config/view.php" );
-
-	return new Collection( $view );
+	return new Collection( [
+		'app'  => new Collection( require_once "{$container->dir}/config/app.php" ),
+		'view' => new Collection( require_once $view ?: "{$container->dir}/config/view.php" )
+	] );
 } );
 
 // Use the theme namespace as the overall app namespace.

@@ -60,7 +60,6 @@ function filter_templates( $templates ) {
 
 	array_walk( $templates, function( &$template, $key ) {
 
-	//	$path = 'resources/views';
 		$path = config( 'view' )->path;
 
 		$template = ltrim( str_replace( $path, '', $template ), '/' );
@@ -79,9 +78,9 @@ function filter_templates( $templates ) {
  * @param  string  $name
  * @return object
  */
-function config( $name ) {
+function config( $name = '' ) {
 
-	return app()->get( "config.{$name}" );
+	return $name ? app()->config->$name : app()->config;
 }
 
 /**
