@@ -106,7 +106,7 @@ function layout_exists( $name ) {
  */
 function get_layouts() {
 
-	return layouts()->get_items();
+	return layouts()->all();
 }
 
 /**

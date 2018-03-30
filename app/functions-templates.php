@@ -92,7 +92,7 @@ function template_exists( $name ) {
  */
 function get_templates() {
 
-	return templates()->get_items();
+	return templates()->all();
 }
 
 /**

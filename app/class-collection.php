@@ -84,7 +84,7 @@ class Collection extends \ArrayObject {
 	 * @access public
 	 * @return array
 	 */
-	public function get_items() {
+	public function all() {
 
 		return $this->getArrayCopy();
 	}

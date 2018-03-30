@@ -170,7 +170,7 @@ class View {
 			// Extract the data into individual variables if set.
 			if ( config( 'view' )->extract && $this->data instanceof Collection ) {
 
-				extract( $this->data->get_items() );
+				extract( $this->data->all() );
 			}
 
 			// Load the template.
