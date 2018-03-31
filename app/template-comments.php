@@ -129,7 +129,7 @@ function get_comment_parent_link( $args = [] ) {
 		}
 	}
 
-	return apply_filters( app()->namespace . '/comment_parent_link', $link, $args );
+	return apply_filters( 'hybrid/comment_parent_link', $link, $args );
 }
 
 /**
@@ -148,7 +148,7 @@ function comments_template( $template ) {
 	$templates = [];
 
 	// Allow for custom templates entered into comments_template( $file ).
-	$template = str_replace( trailingslashit( app()->child_dir ), '', $template );
+	$template = str_replace( trailingslashit( get_stylesheet_directory() ), '', $template );
 
 	if ( 'comments.php' !== $template ) {
 		$templates[] = $template;

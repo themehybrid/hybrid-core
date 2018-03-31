@@ -42,7 +42,7 @@ function get_lang_hierarchy() {
 
 	$hier[] = is_rtl() ? 'rtl' : 'ltr';
 
-	return apply_filters( app()->namespace . '/lang_hierarchy', $hier );
+	return apply_filters( 'hybrid/lang_hierarchy', $hier );
 }
 
 /**

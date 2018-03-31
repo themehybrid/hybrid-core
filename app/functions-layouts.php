@@ -22,7 +22,7 @@ add_action( 'init', __NAMESPACE__ . '\register_layouts', 95 );
 add_filter( 'current_theme_supports-theme-layouts', __NAMESPACE__ . '\theme_layouts_support', 10, 3 );
 
 # Filters the theme layout.
-add_filter( app()->namespace . '/get_theme_layout', __NAMESPACE__ . '\filter_layout', ~PHP_INT_MAX );
+add_filter( 'hybrid/get_theme_layout', __NAMESPACE__ . '\filter_layout', ~PHP_INT_MAX );
 
 /**
  * Returns the layout registry. Use this function to access the object.
@@ -54,7 +54,7 @@ function register_layouts() {
 	] );
 
 	// Hook for registering theme layouts. Theme should always register on this hook.
-	do_action( app()->namespace . '/register_layouts' );
+	do_action( 'hybrid/register_layouts' );
 }
 
 /**
@@ -134,7 +134,7 @@ function get_layout( $name ) {
 function get_theme_layout() {
 
 	return apply_filters(
-		app()->namespace . '/get_theme_layout',
+		'hybrid/get_theme_layout',
 		get_global_layout()
 	);
 }

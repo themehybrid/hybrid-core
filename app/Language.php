@@ -264,7 +264,7 @@ class Language {
 	 */
 	public function get_parent_dir() {
 
-		return trailingslashit( app()->parent_dir ) . $this->get_parent_path();
+		return trailingslashit( get_template_directory() ) . $this->get_parent_path();
 	}
 
 	/**
@@ -277,7 +277,7 @@ class Language {
 	 */
 	public function get_child_dir() {
 
-		return trailingslashit( app()->child_dir ) . $this->get_child_path();
+		return trailingslashit( get_stylesheet_directory() ) . $this->get_child_path();
 	}
 
 	/**

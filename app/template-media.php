@@ -295,8 +295,8 @@ function attachment() {
 	$attachment = function_exists( $func ) ? call_user_func( $func, $mime, $url ) : '';
 
 	echo apply_filters(
-		app()->namespace . '/attachment',
-		apply_filters( app()->namespace . "/{$type}_attachment" )
+		'hybrid/attachment',
+		apply_filters( "hybrid/{$type}_attachment", $attachment )
 	);
 }
 

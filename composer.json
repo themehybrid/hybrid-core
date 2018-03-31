@@ -16,7 +16,34 @@
 		"forum" : "https://themehybrid.com/board/forums/hybrid-core"
 	},
 	"autoload"   : {
-		"files": ["hybrid.php"]
+		"psr-4": {
+			"Hybrid\\": "app/"
+		},
+		"files": [
+			"hybrid.php",
+			"app/functions-attr.php",
+			"app/functions-context.php",
+			"app/functions-deprecated.php",
+			"app/functions-filters.php",
+			"app/functions-fonts.php",
+			"app/functions-formats.php",
+			"app/functions-head.php",
+			"app/functions-i18n.php",
+			"app/functions-layouts.php",
+			"app/functions-meta.php",
+			"app/functions-scripts.php",
+			"app/functions-setup.php",
+			"app/functions-sidebars.php",
+			"app/functions-styles.php",
+			"app/functions-templates.php",
+			"app/functions-utility.php",
+			"app/template-comments.php",
+			"app/template-general.php",
+			"app/template-media.php",
+			"app/template-post.php",
+			"app/template.php",
+			"app/admin/functions-admin.php"
+		]
 	},
 	"require": {
 		"psr/container": "^1.0"

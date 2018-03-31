@@ -40,7 +40,7 @@ function templates() {
  */
 function register_templates() {
 
-	do_action( app()->namespace . '/register_templates' );
+	do_action( 'hybrid/register_templates' );
 }
 
 /**
@@ -353,7 +353,7 @@ function check_template_match( $template, $filename ) {
  */
 function get_template_meta_key() {
 
-	return apply_filters( app()->namespace . '/template_meta_key', 'template' );
+	return apply_filters( 'hybrid/template_meta_key', 'template' );
 }
 
 /**

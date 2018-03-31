@@ -12,7 +12,7 @@
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
-namespace Hybrid;
+namespace Hybrid\Customize;
 
 /**
  * Customize class.
@@ -75,7 +75,7 @@ class Customize {
                 if ( current_theme_supports( 'theme-layouts', 'customize' ) ) {
 
                         $wp_customize->add_setting( 'theme_layout', [
-                                'default'           => get_default_layout(),
+                                'default'           => \Hybrid\get_default_layout(),
                                 'sanitize_callback' => 'sanitize_key',
                                 'transport'         => 'postMessage'
                         ] );
@@ -101,7 +101,7 @@ class Customize {
 
                 if ( current_theme_supports( 'theme-layouts', 'customize' ) ) {
 
-                        $layout = new Customize\Controls\Layout( $wp_customize, 'theme_layout', [
+                        $layout = new Controls\Layout( $wp_customize, 'theme_layout', [
                                 'label' => esc_html__( 'Global Layout', 'hybrid-core' )
                         ] );
 
@@ -120,7 +120,7 @@ class Customize {
 
         	wp_register_script(
                         'hybrid-customize-controls',
-                        uri( 'resources/scripts/customize-controls' . get_min_suffix() . '.js' ),
+                        uri( 'resources/scripts/customize-controls' . \Hybrid\get_min_suffix() . '.js' ),
                         [ 'customize-controls' ],
                         null,
                         true
@@ -128,7 +128,7 @@ class Customize {
 
                 wp_register_style(
                         'hybrid-customize-controls',
-                        uri( 'resources/styles/customize-controls' . get_min_suffix() . '.css' )
+                        uri( 'resources/styles/customize-controls' . \Hybrid\get_min_suffix() . '.css' )
                 );
         }
 
@@ -145,7 +145,7 @@ class Customize {
 
                         wp_enqueue_script(
                                 'hybrid-customize-preview',
-                                uri( 'resources/scripts/customize-preview' . get_min_suffix() . '.js' ),
+                                \Hybrid\uri( 'resources/scripts/customize-preview' . \Hybrid\get_min_suffix() . '.js' ),
                                 [ 'jquery' ],
                                 null,
                                 true

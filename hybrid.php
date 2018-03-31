@@ -48,10 +48,3 @@ if ( ! defined( 'HYBRID_URI' ) ) {
 		wp_normalize_path( __DIR__ )
 	) );
 }
-
-# Bootstrap the framework if it's not already set up.
-if ( ! function_exists( '\\Hybrid\\app' ) ) {
-
-	require_once( 'bootstrap/autoload.php' );
-	require_once( 'bootstrap/app.php'      );
-}

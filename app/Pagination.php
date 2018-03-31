@@ -173,11 +173,7 @@ class Pagination {
 			);
 		}
 
-		return apply_filters(
-			app()->namespace . '/pagination',
-			$template,
-			$this->args
-		);
+		return apply_filters( 'hybrid/pagination', $template, $this->args );
 	}
 
 	/**

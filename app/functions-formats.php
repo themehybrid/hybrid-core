@@ -75,7 +75,7 @@ function aside_infinity( $content ) {
 	if ( has_post_format( 'aside' ) && ! is_singular() && ! post_password_required() ) {
 
 		$content .= apply_filters(
-			app()->namespace . '/aside_infinity',
+			'hybrid/aside_infinity',
 			sprintf( ' <a class="permalink" href="%s">&#8734;</a>', esc_url( get_permalink() ) )
 		);
 	}

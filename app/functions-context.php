@@ -291,7 +291,7 @@ function post_class_filter( $classes, $class, $post_id ) {
 
 	// Add taxonomy term classes.  By default, no taxonomies (except for
 	// post formats added above) are added.
-	$taxonomies = apply_filters( app()->namespace . '/post_class_taxonomy', [] );
+	$taxonomies = apply_filters( 'hybrid/post_class_taxonomy', [] );
 
 	foreach ( (array) $taxonomies as $taxonomy ) {
 

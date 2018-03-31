@@ -32,7 +32,7 @@ add_filter( 'document_title_parts', __NAMESPACE__ . '\document_title_parts', 5 )
 function meta_charset() {
 
 	echo apply_filters(
-		app()->namespace . '/meta_charset',
+		'hybrid/meta_charset',
 		sprintf( '<meta charset="%s" />' . "\n", esc_attr( get_bloginfo( 'charset' ) ) )
 	);
 }
@@ -47,7 +47,7 @@ function meta_charset() {
 function meta_viewport() {
 
 	echo apply_filters(
-		app()->namespace . '/meta_viewport',
+		'hybrid/meta_viewport',
 		'<meta name="viewport" content="width=device-width, initial-scale=1" />' . "\n"
 	);
 }
@@ -91,7 +91,7 @@ function link_pingback() {
 		);
 	}
 
-	echo apply_filters( app()->namespace . '/link_pingback', $link );
+	echo apply_filters( 'hybrid/link_pingback', $link );
 }
 
 /**

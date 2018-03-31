@@ -20,11 +20,11 @@
 namespace Hybrid;
 
 # Attributes for a few default elements.
-add_filter( app()->namespace . '/attr/html/defaults',    __NAMESPACE__ . '\attr_html',    ~PHP_INT_MAX );
-add_filter( app()->namespace . '/attr/body/defaults',    __NAMESPACE__ . '\attr_body',    ~PHP_INT_MAX );
-add_filter( app()->namespace . '/attr/post/defaults',    __NAMESPACE__ . '\attr_post',    ~PHP_INT_MAX );
-add_filter( app()->namespace . '/attr/entry/defaults',   __NAMESPACE__ . '\attr_post',    ~PHP_INT_MAX ); // Alternate for "post".
-add_filter( app()->namespace . '/attr/comment/defaults', __NAMESPACE__ . '\attr_comment', ~PHP_INT_MAX );
+add_filter( 'hybrid/attr/html/defaults',    __NAMESPACE__ . '\attr_html',    ~PHP_INT_MAX );
+add_filter( 'hybrid/attr/body/defaults',    __NAMESPACE__ . '\attr_body',    ~PHP_INT_MAX );
+add_filter( 'hybrid/attr/post/defaults',    __NAMESPACE__ . '\attr_post',    ~PHP_INT_MAX );
+add_filter( 'hybrid/attr/entry/defaults',   __NAMESPACE__ . '\attr_post',    ~PHP_INT_MAX ); // Alternate for "post".
+add_filter( 'hybrid/attr/comment/defaults', __NAMESPACE__ . '\attr_comment', ~PHP_INT_MAX );
 
 /**
  * Wrapper for creating a new `Attributes` object.

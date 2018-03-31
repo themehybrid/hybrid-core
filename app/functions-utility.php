@@ -16,6 +16,25 @@
 namespace Hybrid;
 
 /**
+ * The single instance of the app. Use this function for quickly working with
+ * data.  Returns an instance of the `Application` class.
+ *
+ * @since  5.0.0
+ * @access public
+ * @return object
+ */
+function app() {
+
+	static $app = null;
+
+	if ( is_null( $app ) ) {
+		$app = new Application();
+	}
+
+	return $app;
+}
+
+/**
  * This is a wrapper function for core WP's `get_theme_mod()` function.  Core
  * doesn't provide a filter hook for the default value (useful for child themes).
  * The purpose of this function is to provide that additional filter hook.  To
@@ -31,7 +50,7 @@ function get_theme_mod( $name, $default = false ) {
 
 	return \get_theme_mod(
 		$name,
-		apply_filters( app()->namespace . "/theme_mod_{$name}_default", $default )
+		apply_filters( "hybrid/theme_mod_{$name}_default", $default )
 	);
 }
 
@@ -59,6 +78,30 @@ function set_content_width( $width = '' ) {
 function get_content_width() {
 
 	return absint( $GLOBALS['content_width'] );
+}
+
+function get_parent_file_path( $file = '' ) {
+
+	return \get_parent_theme_file_path( $file );
+}
+
+function get_child_file_path( $file = '' ) {
+
+	return $file
+	       ? trailingslashit( get_stylesheet_directory() ) . $file
+	       : get_stylesheet_directory();
+}
+
+function get_parent_file_uri( $file = '' ) {
+
+	return \get_parent_theme_file_uri( $file );
+}
+
+function get_child_file_uri( $file = '' ) {
+
+	return $file
+	       ? trailingslashit( get_stylesheet_directory_uri() ) . $file
+	       : get_stylesheet_directory_uri();
 }
 
 /**
@@ -130,14 +173,15 @@ function locate_file_path( $file_names ) {
 	foreach ( (array) $file_names as $file ) {
 
 		// If the file exists in the stylesheet (child theme) directory.
-		if ( is_child_theme() && file_exists( app()->child_dir . "/{$file}" ) ) {
-			$located = app()->child_dir . "/{$file}";
+		if ( is_child_theme() && file_exists( get_child_file_path( $file ) ) ) {
+
+			$located = get_child_file_path( $file );
 			break;
-		}
 
 		// If the file exists in the template (parent theme) directory.
-		elseif ( file_exists( app()->parent_dir . "/{$file}" ) ) {
-			$located = app()->parent_dir . "/{$file}";
+		} elseif ( file_exists( get_parent_file_path( $file ) ) ) {
+
+			$located = get_parent_file_path( $file );
 			break;
 		}
 	}
@@ -160,15 +204,16 @@ function locate_file_uri( $file_names ) {
 	// Loops through each of the given file names.
 	foreach ( (array) $file_names as $file ) {
 
-		// If the file exists in the stylesheet (child theme) directory.
-		if ( is_child_theme() && file_exists( app()->child_dir . "/{$file}" ) ) {
-			$located = app()->child_uri . "/{$file}";
-			break;
-		}
+		// If the file exists in the child theme directory.
+		if ( is_child_theme() && file_exists( get_child_file_path( $file ) ) ) {
 
-		// If the file exists in the template (parent theme) directory.
-		elseif ( file_exists( app()->parent_dir . "/{$file}" ) ) {
-			$located = app()->parent_uri . "/{$file}";
+			$located = get_child_file_uri( $file );
+			break;
+
+		// If the file exists in the parent theme directory.
+		} elseif ( file_exists( get_parent_file_path( $file ) ) ) {
+
+			$located = get_parent_file_uri( $file );
 			break;
 		}
 	}
@@ -258,7 +303,7 @@ function get_min_suffix() {
 function is_script_debug() {
 
 	return apply_filters(
-		app()->namespace . '/is_script_debug',
+		'hybrid/is_script_debug',
 		defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG
 	);
 }
@@ -355,7 +400,7 @@ function post_template_compat( $post_id, $template ) {
  */
 function path( $file = '' ) {
 
-	return $file ? trailingslashit( app()->dir ) . ltrim( $file, '/' ) : app()->dir;
+	return $file ? trailingslashit( app()->path ) . ltrim( $file, '/' ) : app()->path;
 }
 
 /**

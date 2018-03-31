@@ -159,10 +159,10 @@ function get_font_url( $handle, $args ) {
 
 	if ( ! $font_url ) {
 
-		$family = apply_filters( app()->namespace . "/{$handle}_font_family", $args['family'] );
-		$subset = apply_filters( app()->namespace . "/{$handle}_font_subset", $args['subset'] );
-		$text   = apply_filters( app()->namespace . "/{$handle}_font_text",   $args['text']   );
-		$effect = apply_filters( app()->namespace . "/{$handle}_font_effect", $args['effect'] );
+		$family = apply_filters( "hybrid/{$handle}_font_family", $args['family'] );
+		$subset = apply_filters( "hybrid/{$handle}_font_subset", $args['subset'] );
+		$text   = apply_filters( "hybrid/{$handle}_font_text",   $args['text']   );
+		$effect = apply_filters( "hybrid/{$handle}_font_effect", $args['effect'] );
 
 		if ( $family ) {
 
@@ -184,5 +184,5 @@ function get_font_url( $handle, $args ) {
 		}
 	}
 
-	return esc_url( apply_filters( app()->namespace . "/{$handle}_font_url", $font_url, $args, $query_args ) );
+	return esc_url( apply_filters( "hybrid/{$handle}_font_url", $font_url, $args, $query_args ) );
 }
