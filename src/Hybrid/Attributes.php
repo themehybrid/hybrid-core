@@ -159,7 +159,7 @@ class Attributes {
 		if ( isset( $this->attr['class'] ) && has_filter( $hook ) ) {
 
 			$this->attr[ $name ] = join( ' ', array_unique(
-				apply_filters( $hook, explode( ' ', $value ) )
+				apply_filters( $hook, explode( ' ', $value ), $this->context )
 			) );
 		}
 	}
