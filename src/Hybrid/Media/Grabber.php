@@ -17,7 +17,7 @@
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
-namespace Hybrid;
+namespace Hybrid\Media;
 
 /**
  * Grabs media related to the post.
@@ -26,7 +26,7 @@ namespace Hybrid;
  * @access public
  * @return void
  */
-class MediaGrabber {
+class Grabber {
 
 	/**
 	 * The HTML version of the media to return.

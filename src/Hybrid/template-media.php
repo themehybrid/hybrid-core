@@ -14,6 +14,9 @@
 
 namespace Hybrid;
 
+use Hybrid\Media\Grabber as MediaGrabber;
+use Hybrid\Media\Meta as MediaMeta;
+
 /**
  * Prints the post media from the media grabber.
  *

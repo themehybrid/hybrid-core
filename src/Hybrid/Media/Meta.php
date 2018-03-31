@@ -13,7 +13,9 @@
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
-namespace Hybrid;
+namespace Hybrid\Media;
+
+use function Hybrid\get_attachment_type;
 
 /**
  * Gets attachment media file metadata.  Each piece of meta will be escaped and
@@ -23,7 +25,7 @@ namespace Hybrid;
  * @since  3.0.0
  * @access public
  */
-class MediaMeta {
+class Meta {
 
 	/**
 	 * Arguments passed in.
