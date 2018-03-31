@@ -1,6 +1,6 @@
 <?php
 
-namespace Hybrid;
+namespace Hybrid\Core;
 
 use Hybrid\Providers\ConfigServiceProvider;
 use Hybrid\Providers\CustomizeServiceProvider;

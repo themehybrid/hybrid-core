@@ -93,7 +93,7 @@ function config( $name = '' ) {
  */
 function collect( $items = [] ) {
 
-	return new Collection( $items );
+	return new \Hybrid\Core\Collection( $items );
 }
 
 /**

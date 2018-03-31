@@ -15,6 +15,8 @@
 
 namespace Hybrid;
 
+use Hybrid\Core\Application;
+
 /**
  * The single instance of the app. Use this function for quickly working with
  * data.  Returns an instance of the `Application` class.
