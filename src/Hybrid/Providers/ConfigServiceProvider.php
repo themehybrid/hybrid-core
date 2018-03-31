@@ -2,7 +2,7 @@
 
 namespace Hybrid\Providers;
 
-use Hybrid\Collection;
+use Hybrid\Core\Collection;
 use function Hybrid\locate_file_path;
 
 class ConfigServiceProvider extends ServiceProvider {

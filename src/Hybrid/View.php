@@ -21,6 +21,8 @@
 
 namespace Hybrid;
 
+use Hybrid\Core\Collection;
+
 /**
  * View class.
  *

@@ -2,7 +2,7 @@
 
 namespace Hybrid\Providers;
 
-use Hybrid\Collection;
+use Hybrid\Core\Collection;
 use Hybrid\Admin\PostLayout;
 use Hybrid\Admin\TermLayout;
 

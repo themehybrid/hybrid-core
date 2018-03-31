@@ -14,7 +14,7 @@ namespace Hybrid;
  */
 function view( $name, $slugs = [], $data = [] ) {
 
-	return new View( $name, $slugs, new Collection( $data ) );
+	return new View( $name, $slugs, new \Hybrid\Core\Collection( $data ) );
 }
 
 /**

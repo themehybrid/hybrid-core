@@ -2,7 +2,7 @@
 
 namespace Hybrid\Providers;
 
-use Hybrid\Collection;
+use Hybrid\Core\Collection;
 
 class TemplateServiceProvider extends ServiceProvider {
 
