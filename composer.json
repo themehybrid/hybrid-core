@@ -37,11 +37,11 @@
 			"src/Hybrid/functions-styles.php",
 			"src/Hybrid/functions-templates.php",
 			"src/Hybrid/functions-utility.php",
+			"src/Hybrid/functions-view.php",
 			"src/Hybrid/template-comments.php",
 			"src/Hybrid/template-general.php",
 			"src/Hybrid/template-media.php",
 			"src/Hybrid/template-post.php",
-			"src/Hybrid/template.php",
 			"src/Hybrid/Admin/functions-admin.php"
 		]
 	},

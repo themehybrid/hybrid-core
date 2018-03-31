@@ -2,7 +2,7 @@
 
 namespace Hybrid\Providers;
 
-use Hybrid\TemplateHierarchy;
+use Hybrid\Template\Hierarchy;
 
 class TemplateHierarchyServiceProvider extends ServiceProvider {
 
@@ -10,7 +10,7 @@ class TemplateHierarchyServiceProvider extends ServiceProvider {
 
                 $this->app->singleton( 'template_hierarchy', function( $container ) {
 
-                        return new TemplateHierarchy();
+                        return new Hierarchy();
                 } );
         }
 

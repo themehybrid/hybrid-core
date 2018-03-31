@@ -15,6 +15,8 @@
 
 namespace Hybrid;
 
+use Hybrid\Template\ObjectTemplate;
+
 # Run hook for registering templates.
 add_action( 'init', __NAMESPACE__ . '\register_templates', 95 );
 
@@ -54,7 +56,7 @@ function register_templates() {
  */
 function register_template( $name, array $args = [] ) {
 
-	templates()->add( $name, new Template( $name, $args ) );
+	templates()->add( $name, new ObjectTemplate( $name, $args ) );
 }
 
 /**

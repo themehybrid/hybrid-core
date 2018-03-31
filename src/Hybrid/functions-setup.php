@@ -3,51 +3,6 @@
 namespace Hybrid;
 
 /**
- * Returns a view object.
- *
- * @since  1.0.0
- * @access public
- * @param  string        $name
- * @param  array|string  $slugs
- * @param  array         $data
- * @return object
- */
-function view( $name, $slugs = [], $data = [] ) {
-
-	return new View( $name, $slugs, new \Hybrid\Core\Collection( $data ) );
-}
-
-/**
- * Outputs a view template.
- *
- * @since  1.0.0
- * @access public
- * @param  string        $name
- * @param  array|string  $slugs
- * @param  array         $data
- * @return void
- */
-function render_view( $name, $slugs = [], $data = [] ) {
-
-	view( $name, $slugs, $data )->render();
-}
-
-/**
- * Returns a view template as a string.
- *
- * @since  1.0.0
- * @access public
- * @param  string        $name
- * @param  array|string  $slugs
- * @param  array         $data
- * @return string
- */
-function fetch_view( $name, $slugs = [], $data = [] ) {
-
-	return view( $name, $slugs, $data )->fetch();
-}
-
-/**
  * Filters an array of templates and prefixes them with the
  * `/resources/views/` file path.
  *
@@ -94,68 +49,6 @@ function config( $name = '' ) {
 function collect( $items = [] ) {
 
 	return new \Hybrid\Core\Collection( $items );
-}
-
-/**
- * Returns a new `Pagination` object.
- *
- * @since  1.0.0
- * @access public
- * @param  array  $args
- * @return object
- */
-function pagination( $args = [] ) {
-
-	return new Pagination( $args );
-}
-
-/**
- * Outputs the posts pagination.
- *
- * @since  1.0.0
- * @access public
- * @return void
- */
-function posts_pagination( $args = [] ) {
-
-	echo pagination( $args )->fetch();
-}
-
-/**
- * Single post pagination. This is a replacement for `wp_link_pages()`
- * using our `Pagination` class.
- *
- * @since  1.0.0
- * @access public
- * @param  array  $args
- * @global int    $page
- * @global int    $numpages
- * @global bool   $multipage
- * @global bool   $more
- * @global object $wp_rewrite
- * @return void
- */
-function singular_pagination( $args = [] ) {
-	global $page, $numpages, $multipage, $more, $wp_rewrite;
-
-	if ( ! $multipage ) {
-		return;
-	}
-
-	$url_parts = explode( '?', html_entity_decode( get_permalink() ) );
-	$base      = trailingslashit( $url_parts[0] ) . '%_%';
-
-	$format  = $wp_rewrite->using_index_permalinks() && ! strpos( $base, 'index.php' ) ? 'index.php/' : '';
-	$format .= $wp_rewrite->using_permalinks() ? user_trailingslashit( '%#%' ) : '?page=%#%';
-
-	$args = (array) $args + [
-		'base'    => $base,
-		'format'  => $format,
-		'current' => ! $more && 1 === $page ? 0 : $page,
-		'total'   => $numpages
-	];
-
-	echo pagination( $args )->fetch();
 }
 
 /**

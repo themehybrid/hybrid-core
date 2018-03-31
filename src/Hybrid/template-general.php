@@ -15,6 +15,8 @@
 
 namespace Hybrid;
 
+use Hybrid\Template\Pagination;
+
 /**
  * Returns the template hierarchy from the theme wrapper.
  *
@@ -580,4 +582,66 @@ function error_title() {
 function get_error_title() {
 
 	return esc_html__( '404 Not Found', 'hybrid-core' );
+}
+
+/**
+ * Returns a new `Pagination` object.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  array  $args
+ * @return object
+ */
+function pagination( $args = [] ) {
+
+	return new Pagination( $args );
+}
+
+/**
+ * Outputs the posts pagination.
+ *
+ * @since  5.0.0
+ * @access public
+ * @return void
+ */
+function posts_pagination( $args = [] ) {
+
+	echo pagination( $args )->fetch();
+}
+
+/**
+ * Single post pagination. This is a replacement for `wp_link_pages()` using our
+ * `Pagination` class.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  array  $args
+ * @global int    $page
+ * @global int    $numpages
+ * @global bool   $multipage
+ * @global bool   $more
+ * @global object $wp_rewrite
+ * @return void
+ */
+function singular_pagination( $args = [] ) {
+	global $page, $numpages, $multipage, $more, $wp_rewrite;
+
+	if ( ! $multipage ) {
+		return;
+	}
+
+	$url_parts = explode( '?', html_entity_decode( get_permalink() ) );
+	$base      = trailingslashit( $url_parts[0] ) . '%_%';
+
+	$format  = $wp_rewrite->using_index_permalinks() && ! strpos( $base, 'index.php' ) ? 'index.php/' : '';
+	$format .= $wp_rewrite->using_permalinks() ? user_trailingslashit( '%#%' ) : '?page=%#%';
+
+	$args = (array) $args + [
+		'base'    => $base,
+		'format'  => $format,
+		'current' => ! $more && 1 === $page ? 0 : $page,
+		'total'   => $numpages
+	];
+
+	echo pagination( $args )->fetch();
 }

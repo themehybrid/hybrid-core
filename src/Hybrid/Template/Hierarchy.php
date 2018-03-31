@@ -15,9 +15,16 @@
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
-namespace Hybrid;
+namespace Hybrid\Template;
 
 use WP_User;
+use function Hybrid\clean_post_format_slug;
+use function Hybrid\filter_templates;
+use function Hybrid\get_attachment_type;
+use function Hybrid\get_attachment_subtype;
+use function Hybrid\get_post_template;
+use function Hybrid\get_term_template;
+use function Hybrid\get_user_template;
 
 /**
  * Overwrites the core WP template hierarchy.
@@ -25,7 +32,7 @@ use WP_User;
  * @since  5.0.0
  * @access public
  */
-class TemplateHierarchy {
+class Hierarchy {
 
 	/**
 	 * Array of template types in core WP.
