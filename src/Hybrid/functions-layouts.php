@@ -53,8 +53,8 @@ function register_layouts() {
 		'_internal'        => true,
 	] );
 
-	// Hook for registering theme layouts. Theme should always register on this hook.
-	do_action( 'hybrid/register_layouts' );
+	// Hook for registering layouts. Theme should always register on this hook.
+	do_action( 'hybrid/layouts/register', layouts() );
 }
 
 /**
@@ -112,7 +112,6 @@ function get_layouts() {
 /**
  * Returns a layout object if it exists.  Otherwise, `FALSE`.
  *
- * @see    Hybrid_Layout
  * @since  5.0.0
  * @access public
  * @param  string      $name
@@ -133,10 +132,7 @@ function get_layout( $name ) {
  */
 function get_theme_layout() {
 
-	return apply_filters(
-		'hybrid/get_theme_layout',
-		get_global_layout()
-	);
+	return apply_filters( 'hybrid/get_theme_layout', get_global_layout() );
 }
 
 /**
@@ -183,11 +179,11 @@ function is_layout( $layout ) {
  * @since  5.0.0
  * @access public
  * @param  int     $post_id
- * @return bool
+ * @return string
  */
 function get_post_layout( $post_id ) {
 
-	return get_post_meta( $post_id, get_layout_meta_key(), true );
+	return get_object_layout( 'post', $post_id );
 }
 
 /**
@@ -201,9 +197,7 @@ function get_post_layout( $post_id ) {
  */
 function set_post_layout( $post_id, $layout ) {
 
-	return 'default' !== $layout
-	       ? update_post_meta( $post_id, get_layout_meta_key(), $layout )
-	       : delete_post_layout( $post_id );
+	return set_object_layout( 'post', $post_id, $layout );
 }
 
 /**
@@ -216,7 +210,7 @@ function set_post_layout( $post_id, $layout ) {
  */
 function delete_post_layout( $post_id ) {
 
-	return delete_post_meta( $post_id, get_layout_meta_key() );
+	return delete_object_layout( 'post', $post_id );
 }
 
 /**
@@ -229,11 +223,7 @@ function delete_post_layout( $post_id ) {
  */
 function has_post_layout( $layout, $post_id = '' ) {
 
-	if ( ! $post_id ) {
-		$post_id = get_the_ID();
-	}
-
-	return $layout == get_post_layout( $post_id );
+	return $layout == get_post_layout( $post_id ?: get_the_ID() );
 }
 
 /**
@@ -242,11 +232,11 @@ function has_post_layout( $layout, $post_id = '' ) {
  * @since  5.0.0
  * @access public
  * @param  int     $term_id
- * @return bool
+ * @return string
  */
 function get_term_layout( $term_id ) {
 
-	return get_term_meta( $term_id, get_layout_meta_key(), true );
+	return get_object_layout( 'term', $term_id );
 }
 
 /**
@@ -260,9 +250,7 @@ function get_term_layout( $term_id ) {
  */
 function set_term_layout( $term_id, $layout ) {
 
-	return 'default' !== $layout
-	       ? update_term_meta( $term_id, get_layout_meta_key(), $layout )
-	       : delete_term_layout( $term_id );
+	return set_object_layout( 'term', $term_id, $layout );
 }
 
 /**
@@ -275,7 +263,7 @@ function set_term_layout( $term_id, $layout ) {
  */
 function delete_term_layout( $term_id ) {
 
-	return delete_term_meta( $term_id, get_layout_meta_key() );
+	return delete_object_layout( 'term', $term_id );
 }
 
 /**
@@ -288,11 +276,7 @@ function delete_term_layout( $term_id ) {
  */
 function has_term_layout( $layout, $term_id = '' ) {
 
-	if ( ! $term_id ) {
-		$term_id = get_queried_object_id();
-	}
-
-	return $layout == get_term_layout( $term_id );
+	return $layout == get_term_layout( $term_id ?: get_queried_object_id() );
 }
 
 /**
@@ -301,11 +285,11 @@ function has_term_layout( $layout, $term_id = '' ) {
  * @since  5.0.0
  * @access public
  * @param  int     $user_id
- * @return bool
+ * @return string
  */
 function get_user_layout( $user_id ) {
 
-	return get_user_meta( $user_id, get_layout_meta_key(), true );
+	return get_object_layout( 'user', $user_id );
 }
 
 /**
@@ -319,9 +303,7 @@ function get_user_layout( $user_id ) {
  */
 function set_user_layout( $user_id, $layout ) {
 
-	return 'default' !== $layout
-	       ? update_user_meta( $user_id, get_layout_meta_key(), $layout )
-	       : delete_user_layout( $user_id );
+	return set_object_layout( 'user', $user_id, $layout );
 }
 
 /**
@@ -334,7 +316,7 @@ function set_user_layout( $user_id, $layout ) {
  */
 function delete_user_layout( $user_id ) {
 
-	return delete_user_meta( $user_id, get_layout_meta_key() );
+	return delete_object_layout( 'user', $user_id );
 }
 
 /**
@@ -348,11 +330,7 @@ function delete_user_layout( $user_id ) {
  */
 function has_user_layout( $layout, $user_id = '' ) {
 
-	if ( ! $user_id ) {
-		$user_id = absint( get_query_var( 'author' ) );
-	}
-
-	return $layout == get_user_layout( $user_id );
+	return $layout == get_user_layout( $user_id ?: absint( get_query_var( 'author' ) ) );
 }
 
 /**
@@ -418,5 +396,50 @@ function theme_layouts_support( $supports, $args, $feature ) {
  */
 function get_layout_meta_key() {
 
-	return apply_filters( 'hybrid_layout_meta_key', 'Layout' );
+	return apply_filters( 'hybrid/layout_meta_key', 'Layout' );
+}
+
+/**
+ * Helper function for getting an object layout.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  string  $meta_type
+ * @param  int     $user_id
+ * @return string
+ */
+function get_object_layout( $meta_type, $object_id ) {
+
+	return get_metadata( $meta_type, $object_id, get_layout_meta_key(), true );
+}
+
+/**
+ * Helper function for setting an object layout.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  string  $meta_type
+ * @param  int     $object_id
+ * @param  string  $layout
+ * @return bool
+ */
+function set_object_layout( $meta_type, $object_id, $layout ) {
+
+	return 'default' !== $layout
+	       ? update_metadata( $meta_type, $object_id, get_layout_meta_key(), $layout )
+	       : delete_object_layout( $meta_type, $object_id );
+}
+
+/**
+ * Helper function for deleting an object layout.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  string  $meta_type
+ * @param  int     $post_id
+ * @return bool
+ */
+function delete_object_layout( $meta_type, $object_id ) {
+
+	return delete_metadata( $meta_type, $object_id, get_layout_meta_key() );
 }
