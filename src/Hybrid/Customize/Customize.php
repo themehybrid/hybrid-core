@@ -120,7 +120,7 @@ class Customize {
 
         	wp_register_script(
                         'hybrid-customize-controls',
-                        uri( 'resources/scripts/customize-controls' . \Hybrid\get_min_suffix() . '.js' ),
+                        \Hybrid\uri( 'resources/scripts/customize-controls' . \Hybrid\get_min_suffix() . '.js' ),
                         [ 'customize-controls' ],
                         null,
                         true
@@ -128,7 +128,7 @@ class Customize {
 
                 wp_register_style(
                         'hybrid-customize-controls',
-                        uri( 'resources/styles/customize-controls' . \Hybrid\get_min_suffix() . '.css' )
+                        \Hybrid\uri( 'resources/styles/customize-controls' . \Hybrid\get_min_suffix() . '.css' )
                 );
         }
 
