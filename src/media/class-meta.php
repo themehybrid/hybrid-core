@@ -78,13 +78,13 @@ class Meta {
 		$this->type     = get_attachment_type( $this->post_id );
 
 		// If we have a type that's in the whitelist, run filters.
-		if ( $this->type && in_[ $this->type, $this->allowed_types ) ) {
+		if ( $this->type && in_array( $this->type, $this->allowed_types ) ) {
 
 			// Run common media filters for any media type.
-			$this->media_filters();
+			$this->mediaFilters();
 
 			// Run type-specific filters.
-			call_user_func( [ $this, "{$this->type}_filters" ] );
+			call_user_func( [ $this, "{$this->type}Filters" ] );
 		}
 	}
 
@@ -114,9 +114,9 @@ class Meta {
 	 */
 	protected function escape( $value, $property ) {
 
-		if ( has_filter( "hybrid/media_meta_escape_{$property}" ) ) {
+		if ( has_filter( "hybrid/media/meta/escape/{$property}" ) ) {
 
-			return apply_filters( "hybrid/media_meta_escape_{$property}", $value, $this->type );
+			return apply_filters( "hybrid/media/meta/escape/{$property}", $value, $this->type );
 		}
 
 		return is_numeric( $value ) ? intval( $value ) : esc_html( $value );
@@ -133,11 +133,11 @@ class Meta {
 	 */
 	protected function media_filters() {
 
-		add_filter( 'hybrid/media_meta_escape_file_name', [ $this, 'file_name' ], 5 );
-		add_filter( 'hybrid/media_meta_escape_filesize',  [ $this, 'file_size' ], 5 );
-		add_filter( 'hybrid/media_meta_escape_file_size', [ $this, 'file_size' ], 5 ); // alias for filesize
-		add_filter( 'hybrid/media_meta_escape_file_type', [ $this, 'file_type' ], 5 );
-		add_filter( 'hybrid/media_meta_escape_mime_type', [ $this, 'mime_type' ], 5 );
+		add_filter( 'hybrid/media/meta/escape/file_name', [ $this, 'fileName' ], 5 );
+		add_filter( 'hybrid/media/meta/escape/filesize',  [ $this, 'fileSize' ], 5 );
+		add_filter( 'hybrid/media/meta/escape/file_size', [ $this, 'fileSize' ], 5 ); // alias for filesize
+		add_filter( 'hybrid/media/meta/escape/file_type', [ $this, 'fileType' ], 5 );
+		add_filter( 'hybrid/media/meta/escape/mime_type', [ $this, 'mimeType' ], 5 );
 	}
 
 	/**
@@ -151,14 +151,14 @@ class Meta {
 	 * @access protected
 	 * @return void
 	 */
-	protected function image_filters() {
+	protected function imageFilters() {
 
-		add_filter( 'hybrid/media_meta_escape_dimensions',        [ $this, 'dimensions'        ], 5 );
-		add_filter( 'hybrid/media_meta_escape_created_timestamp', [ $this, 'created_timestamp' ], 5 );
-		add_filter( 'hybrid/media_meta_escape_aperture',          [ $this, 'aperture'          ], 5 );
-		add_filter( 'hybrid/media_meta_escape_shutter_speed',     [ $this, 'shutter_speed'     ], 5 );
-		add_filter( 'hybrid/media_meta_escape_focal_length',      'absint',                       5 );
-		add_filter( 'hybrid/media_meta_escape_iso',               'absint',                       5 );
+		add_filter( 'hybrid/media/meta/escape/dimensions',        [ $this, 'dimensions'       ], 5 );
+		add_filter( 'hybrid/media/meta/escape/created_timestamp', [ $this, 'createdTimestamp' ], 5 );
+		add_filter( 'hybrid/media/meta/escape/aperture',          [ $this, 'aperture'         ], 5 );
+		add_filter( 'hybrid/media/meta/escape/shutter_speed',     [ $this, 'shutterSpeed'     ], 5 );
+		add_filter( 'hybrid/media/meta/escape/focal_length',      'absint',                      5 );
+		add_filter( 'hybrid/media/meta/escape/iso',               'absint',                      5 );
 	}
 
 	/**
@@ -171,16 +171,16 @@ class Meta {
 	 * @access protected
 	 * @return void
 	 */
-	protected function audio_filters() {
+	protected function audioFilters() {
 
-		add_filter( 'hybrid/media_meta_escape_track_number', 'absint', 5 );
-		add_filter( 'hybrid/media_meta_escape_year',         'absint', 5 );
+		add_filter( 'hybrid/media/meta/escape/track_number', 'absint', 5 );
+		add_filter( 'hybrid/media/meta/escape/year',         'absint', 5 );
 
 		// Filters for the audio transcript.
-		add_filter( 'hybrid/media_meta_escape_lyrics', [ $this, 'lyrics' ],  5 );
-		add_filter( 'hybrid/media_meta_escape_lyrics', 'wptexturize',       10 );
-		add_filter( 'hybrid/media_meta_escape_lyrics', 'convert_chars',     15 );
-		add_filter( 'hybrid/media_meta_escape_lyrics', 'wpautop',           20 );
+		add_filter( 'hybrid/media/meta/escape/lyrics', [ $this, 'lyrics' ],  5 );
+		add_filter( 'hybrid/media/meta/escape/lyrics', 'wptexturize',       10 );
+		add_filter( 'hybrid/media/meta/escape/lyrics', 'convert_chars',     15 );
+		add_filter( 'hybrid/media/meta/escape/lyrics', 'wpautop',           20 );
 	}
 
 	/**
@@ -192,9 +192,9 @@ class Meta {
 	 * @access protected
 	 * @return void
 	 */
-	protected function video_filters() {
+	protected function videoFilters() {
 
-		add_filter( 'hybrid/media_meta_escape_dimensions', [ $this, 'dimensions' ], 5 );
+		add_filter( 'hybrid/media/meta/escape/dimensions', [ $this, 'dimensions' ], 5 );
 	}
 
 	/**
@@ -261,7 +261,7 @@ class Meta {
 	 * @param  string  $timestamp
 	 * @return string
 	 */
-	public function created_timestamp( $timestamp ) {
+	public function createdTimestamp( $timestamp ) {
 
 		if ( ! empty( $this->meta['image_meta']['created_timestamp'] ) ) {
 
@@ -284,7 +284,7 @@ class Meta {
 	 */
 	public function aperture( $aperture ) {
 
-		if ( !empty( $this->meta['image_meta']['aperture'] ) ) {
+		if ( ! empty( $this->meta['image_meta']['aperture'] ) ) {
 
 			$aperture = sprintf(
 				'<sup>f</sup>&#8260;<sub>%s</sub>',
@@ -303,7 +303,7 @@ class Meta {
 	 * @param  string  $shutter
 	 * @return string
 	 */
-	public function shutter_speed( $shutter ) {
+	public function shutterSpeed( $shutter ) {
 
 		// If a shutter speed is given, format the float into a fraction.
 		if ( ! empty( $this->meta['image_meta']['shutter_speed'] ) ) {
@@ -361,7 +361,7 @@ class Meta {
 	 * @access public
 	 * @return string
 	 */
-	public function file_name() {
+	public function fileName() {
 
 		return sprintf(
 			'<a href="%s">%s</a>',
@@ -378,7 +378,7 @@ class Meta {
 	 * @param  int    $file_size
 	 * @return int
 	 */
-	public function file_size( $file_size ) {
+	public function fileSize( $file_size ) {
 
 		return ! empty( $this->meta['filesize'] )
 		       ? size_format( strip_tags( $this->meta['filesize'] ), 2 )
@@ -393,7 +393,7 @@ class Meta {
 	 * @param  string  $file_type
 	 * @return string
 	 */
-	public function file_type( $file_type ) {
+	public function fileType( $file_type ) {
 
 		if ( preg_match( '/^.*?\.(\w+)$/', get_attached_file( $this->post_id ), $matches ) ) {
 
@@ -411,7 +411,7 @@ class Meta {
 	 * @param  string  $mime_type
 	 * @return string
 	 */
-	public function mime_type( $mime_type ) {
+	public function mimeType( $mime_type ) {
 
 		$mime_type = get_post_mime_type( $this->post_id );
 
