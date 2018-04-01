@@ -16,33 +16,9 @@
 		"forum" : "https://themehybrid.com/board/forums/hybrid-core"
 	},
 	"autoload"   : {
-		"psr-4": {
-			"Hybrid\\": "src/Hybrid/"
-		},
 		"files": [
-			"src/Hybrid/hybrid.php",
-			"src/Hybrid/functions-attr.php",
-			"src/Hybrid/functions-context.php",
-			"src/Hybrid/functions-deprecated.php",
-			"src/Hybrid/functions-filters.php",
-			"src/Hybrid/functions-fonts.php",
-			"src/Hybrid/functions-formats.php",
-			"src/Hybrid/functions-head.php",
-			"src/Hybrid/functions-i18n.php",
-			"src/Hybrid/functions-layouts.php",
-			"src/Hybrid/functions-meta.php",
-			"src/Hybrid/functions-scripts.php",
-			"src/Hybrid/functions-setup.php",
-			"src/Hybrid/functions-sidebars.php",
-			"src/Hybrid/functions-styles.php",
-			"src/Hybrid/functions-templates.php",
-			"src/Hybrid/functions-utility.php",
-			"src/Hybrid/functions-view.php",
-			"src/Hybrid/template-comments.php",
-			"src/Hybrid/template-general.php",
-			"src/Hybrid/template-media.php",
-			"src/Hybrid/template-post.php",
-			"src/Hybrid/Admin/functions-admin.php"
+			"src/bootstrap-hybrid.php",
+			"src/bootstrap-autoload.php"
 		]
 	},
 	"require": {
