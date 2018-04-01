@@ -2,7 +2,8 @@
 /**
  * Class autoloader.
  *
- * This file holds the autoloader.
+ * This file holds the class autoloader for the framework so that we can load
+ * classes on an as-needed basis.
  *
  * @package   HybridCore
  * @author    Justin Tadlock <justintadlock@gmail.com>
@@ -14,9 +15,9 @@
 namespace Hybrid;
 
 /**
- * Autoloader for the theme.  Looks in the `/app` folder for classes. File names
- * are prefixed with `class-` and are a lowercased version of the class name.
- * Classes are broken up by uppercase letter.
+ * Autoloader for the framework. Looks in the framework folder for classes. File
+ * names are prefixed with `class-` and are a lowercased version of the class
+ * name. Classes are broken up by uppercase letter.
  *
  * `ABC\MyClass`       = `/app/class-my-class.php`
  * `ABC\Admin\MyClass` = `/app/admin/class-my-class.php`
@@ -62,41 +63,11 @@ spl_autoload_register( function( $class ) {
 	// Join all the pieces together by a forward slash. These are directories.
 	$file = join( DIRECTORY_SEPARATOR, $new_pieces );
 
-	// Get the file from the `/app` folder.
-	$file = require_once( trailingslashit( HYBRID_DIR ) . $file );
+	// Append the file name to the framework directory.
+	$file = trailingslashit( HYBRID_DIR ) . $file;
 
 	// Include the file only if it exists.
 	if ( file_exists( $file ) ) {
 		include( $file );
 	}
 } );
-
-# Autoloads our custom functions files that are not loaded via the class loader.
-array_map(
-	function( $file ) {
-		require_once( trailingslashit( HYBRID_DIR ) . "{$file}.php" );
-	},
-	[
-		'functions-attr',
-		'functions-context',
-		'functions-deprecated',
-		'functions-filters',
-		'functions-fonts',
-		'functions-formats',
-		'functions-head',
-		'functions-i18n',
-		'functions-layouts',
-		'functions-meta',
-		'functions-scripts',
-		'functions-setup',
-		'functions-sidebars',
-		'functions-styles',
-		'functions-templates',
-		'functions-utility',
-		'functions-view',
-		'template-comments',
-		'template-general',
-		'template-media',
-		'template-post'
-	]
-);

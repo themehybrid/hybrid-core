@@ -17,8 +17,7 @@
 	},
 	"autoload"   : {
 		"files": [
-			"src/bootstrap-hybrid.php",
-			"src/bootstrap-autoload.php"
+			"src/bootstrap-hybrid.php"
 		]
 	},
 	"require": {

@@ -48,3 +48,13 @@ if ( ! defined( 'HYBRID_URI' ) ) {
 		wp_normalize_path( __DIR__ )
 	) );
 }
+
+# Check if the framework has been bootstrapped. If not, load the bootstrap files
+# and get the framework set up.
+if ( ! defined( 'HYBRID_BOOTSTRAPPED' ) ) {
+
+	require_once( trailingslashit( HYBRID_DIR ) . 'bootstrap-autoload.php'  );
+	require_once( trailingslashit( HYBRID_DIR ) . 'bootstrap-functions.php' );
+
+	define( 'HYBRID_BOOTSTRAPPED', true );
+}
