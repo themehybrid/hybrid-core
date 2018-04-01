@@ -2,8 +2,9 @@
 /**
  * Customize class.
  *
- * Registers customizer panels, sections, settings, controls, scripts, and styles.
- * Basically, this class just sets up a lot of stuff for theme authors to use.
+ * Registers panels, sections, settings, controls, and anything else needed
+ * for the customizer. Basically, this class just sets up a lot of stuff
+ * for theme authors to use.
  *
  * @package   HybridCore
  * @author    Justin Tadlock <justintadlock@gmail.com>
@@ -13,6 +14,13 @@
  */
 
 namespace Hybrid\Customize;
+
+use Hybrid\Customize\Controls\CheckboxMultiple;
+use Hybrid\Customize\Controls\Palette;
+use Hybrid\Customize\Controls\RadioImage;
+use Hybrid\Customize\Controls\SelectGroup;
+use Hybrid\Customize\Controls\SelectMultiple;
+use function Hybrid\get_default_layout;
 
 /**
  * Customize class.
@@ -32,19 +40,16 @@ class Customize {
         public function __construct() {
 
                 // Add panels, sections, settings, and controls.
-                add_action( 'customize_register', [ $this, 'register_sections' ], 0 );
-                add_action( 'customize_register', [ $this, 'register_settings' ], 0 );
-                add_action( 'customize_register', [ $this, 'register_controls' ], 0 );
-
-                // Register customize controls scripts/styles.
-                add_action( 'customize_controls_enqueue_scripts', [ $this, 'controls_register_scripts' ], 0 );
+                add_action( 'customize_register', [ $this, 'registerSections' ], 0 );
+                add_action( 'customize_register', [ $this, 'registerSettings' ], 0 );
+                add_action( 'customize_register', [ $this, 'registerControls' ], 0 );
 
                 // Enqueue customize preview scripts/styles.
-                add_action( 'customize_preview_init', [ $this, 'preview_enqueue' ], 5 );
+                add_action( 'customize_preview_init', [ $this, 'previewEnqueue' ], 5 );
         }
 
         /**
-         * Registers the `layout` section. This is used by the theme layotus
+         * Registers the `layout` section. This is used by the theme layouts
          * feature by default but can actually be used for custom theme
          * layout features.
          *
@@ -53,7 +58,7 @@ class Customize {
          * @param  object  $wp_customize
          * @return void
          */
-        public function register_sections( $wp_customize ) {
+        public function registerSections( $wp_customize ) {
 
                 $wp_customize->add_section( 'hybrid-layout', [
                         'title'    => esc_html__( 'Layout', 'hybrid-core' ),
@@ -62,20 +67,20 @@ class Customize {
         }
 
         /**
-         * Registers the global theme layout setting if the theme supports the
-         * theme layouts feature.
+         * Registers the global theme layout setting if the theme supports
+         * the theme layouts feature.
          *
          * @since  5.0.0
          * @access public
          * @param  object  $wp_customize
          * @return void
          */
-        public function register_settings( $wp_customize ) {
+        public function registerSettings( $wp_customize ) {
 
                 if ( current_theme_supports( 'theme-layouts', 'customize' ) ) {
 
                         $wp_customize->add_setting( 'theme_layout', [
-                                'default'           => \Hybrid\get_default_layout(),
+                                'default'           => get_default_layout(),
                                 'sanitize_callback' => 'sanitize_key',
                                 'transport'         => 'postMessage'
                         ] );
@@ -91,13 +96,13 @@ class Customize {
          * @param  object  $wp_customize
          * @return void
          */
-        public function register_controls( $wp_customize ) {
+        public function registerControls( $wp_customize ) {
 
-                $wp_customize->register_control_type( __NAMESPACE__ . '\Customize\Controls\CheckboxMultiple' );
-                $wp_customize->register_control_type( __NAMESPACE__ . '\Customize\Controls\Palette'          );
-                $wp_customize->register_control_type( __NAMESPACE__ . '\Customize\Controls\RadioImage'       );
-                $wp_customize->register_control_type( __NAMESPACE__ . '\Customize\Controls\SelectGroup'      );
-                $wp_customize->register_control_type( __NAMESPACE__ . '\Customize\Controls\SelectMultiple'   );
+                $wp_customize->register_control_type( CheckboxMultiple::class );
+                $wp_customize->register_control_type( Palette::class          );
+                $wp_customize->register_control_type( RadioImage::class       );
+                $wp_customize->register_control_type( SelectGroup::class      );
+                $wp_customize->register_control_type( SelectMultiple::class   );
 
                 if ( current_theme_supports( 'theme-layouts', 'customize' ) ) {
 
@@ -110,46 +115,16 @@ class Customize {
         }
 
         /**
-         * Register customizer controls scripts/styles.
-         *
-         * @since  5.0.0
-         * @access public
-         * @return void
-         */
-        public function controls_register_scripts() {
-
-        	wp_register_script(
-                        'hybrid-customize-controls',
-                        \Hybrid\uri( 'resources/scripts/customize-controls' . \Hybrid\get_min_suffix() . '.js' ),
-                        [ 'customize-controls' ],
-                        null,
-                        true
-                );
-
-                wp_register_style(
-                        'hybrid-customize-controls',
-                        \Hybrid\uri( 'resources/styles/customize-controls' . \Hybrid\get_min_suffix() . '.css' )
-                );
-        }
-
-        /**
          * Enqueue customizer preview scripts/styles.
          *
          * @since  5.0.0
          * @access public
          * @return void
          */
-        public function preview_enqueue() {
+        public function previewEnqueue() {
 
         	if ( current_theme_supports( 'theme-layouts', 'customize' ) ) {
-
-                        wp_enqueue_script(
-                                'hybrid-customize-preview',
-                                \Hybrid\uri( 'resources/scripts/customize-preview' . \Hybrid\get_min_suffix() . '.js' ),
-                                [ 'jquery' ],
-                                null,
-                                true
-                        );
+                        wp_enqueue_script( 'hybrid-customize-preview' );
                 }
         }
 }
