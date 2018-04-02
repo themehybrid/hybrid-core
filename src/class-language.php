@@ -43,8 +43,8 @@ class Language {
 	protected $child_textdomain = null;
 
 	/**
-	 * The parent theme's domain path. Gets set to the value of the `Domain
-	 * Path` header in `style.css`.
+	 * Absolute path to the parent theme's language folder. Theme authors
+	 * should set the relative path via the `Domain Path` header in `style.css`.
 	 *
 	 * @since  5.0.0
 	 * @access protected
@@ -53,8 +53,8 @@ class Language {
 	protected $parent_path = null;
 
 	/**
-	 * The child theme's domain path. Gets set to the value of the `Domain
-	 * Path` header in `style.css`.
+	 * Absolute path to the child theme's language folder. Theme authors
+	 * should set the relative path via the `Domain Path` header in `style.css`.
 	 *
 	 * @since  5.0.0
 	 * @access protected
@@ -102,8 +102,8 @@ class Language {
 		$locale = strtolower( str_replace( '_', '-', is_admin() ? get_user_locale() : get_locale() ) );
 
 		// Define locale functions files.
-		$child_func = trailingslashit( $this->get_child_dir()  ) . "{$locale}.php";
-		$theme_func = trailingslashit( $this->get_parent_dir() ) . "{$locale}.php";
+		$child_func = $this->child_path(  "{$locale}.php" );
+		$theme_func = $this->parent_path( "{$locale}.php" );
 
 		// If file exists in child theme.
 		if ( is_child_theme() && file_exists( $child_func ) ) {
@@ -130,12 +130,12 @@ class Language {
 	public function load_textdomain() {
 
 		// Load theme textdomain.
-		load_theme_textdomain( $this->get_parent_textdomain(), $this->get_parent_dir() );
+		load_theme_textdomain( $this->get_parent_textdomain(), $this->parent_path() );
 
 		// Load child theme textdomain.
 		if ( is_child_theme() ) {
 
-			load_child_theme_textdomain( $this->get_child_textdomain(), $this->get_child_dir() );
+			load_child_theme_textdomain( $this->get_child_textdomain(), $this->child_path() );
 		}
 
 		// Load the framework textdomain.
@@ -201,8 +201,8 @@ class Language {
 			$locale = is_admin() ? get_user_locale() : get_locale();
 
 			// Define locale functions files.
-			$child_mofile = trailingslashit( $this->get_child_dir() )  . "{$domain}-{$locale}.mo";
-			$theme_mofile = trailingslashit( $this->get_parent_dir() ) . "{$domain}-{$locale}.mo";
+			$child_mofile = $this->child_path(  "{$domain}-{$locale}.mo" );
+			$theme_mofile = $this->parent_path( "{$domain}-{$locale}.mo" );
 
 			// Overwrite the mofile if it exists.
 			if ( is_child_theme() && file_exists( $child_mofile ) ) {
@@ -255,62 +255,44 @@ class Language {
 	}
 
 	/**
-	 * Returns the full directory path for the parent theme's
-	 * domain path set in `style.css`. No trailing slash.
+	 * Returns the full directory path for the parent theme's domain path set
+	 * in `style.css`. No trailing slash.
 	 *
 	 * @since  5.0.0
 	 * @access public
+	 * @param  string  $file
 	 * @return string
 	 */
-	public function get_parent_dir() {
-
-		return trailingslashit( get_template_directory() ) . $this->get_parent_path();
-	}
-
-	/**
-	 * Returns the full directory path for the child theme's
-	 * domain path set in `style.css`. No trailing slash.
-	 *
-	 * @since  5.0.0
-	 * @access public
-	 * @return string
-	 */
-	public function get_child_dir() {
-
-		return trailingslashit( get_stylesheet_directory() ) . $this->get_child_path();
-	}
-
-	/**
-	 * Returns the parent theme domain path.  No slash.
-	 *
-	 * @since  5.0.0
-	 * @access public
-	 * @return string
-	 */
-	public function get_parent_path() {
+	public function parent_path( $file = '' ) {
 
 		if ( is_null( $this->parent_path ) ) {
 
-			$this->parent_path = trim( wp_get_theme( \get_template() )->get( 'DomainPath' ), '/' );
+			$path = trim( wp_get_theme( \get_template() )->get( 'DomainPath' ), '/' );
+
+			$this->parent_path = get_template_directory() . "/{$path}";
 		}
 
-		return $this->parent_path;
+		return $file ? "{$this->parent_path}/{$file}" : $this->parent_path;
 	}
 
 	/**
-	 * Returns the child theme domain path.  No slash.
+	 * Returns the full directory path for the child theme's domain path set
+	 * in `style.css`. No trailing slash.
 	 *
 	 * @since  5.0.0
 	 * @access public
+	 * @param  string  $file
 	 * @return string
 	 */
-	public function get_child_path() {
+	public function child_path( $file = '' ) {
 
 		if ( is_null( $this->child_path ) ) {
 
-			$this->child_path = trim( wp_get_theme()->get( 'DomainPath' ), '/' );
+			$path = trim( wp_get_theme()->get( 'DomainPath' ), '/' );
+
+			$this->child_path = get_stylesheet_directory() . "/{$path}";
 		}
 
-		return $this->child_path;
+		return $file ? "{$this->child_path}/{$file}" : $this->child_path;
 	}
 }
