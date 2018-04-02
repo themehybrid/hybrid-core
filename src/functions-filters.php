@@ -51,6 +51,9 @@ add_filter( 'nav_menu_link_attributes', __NAMESPACE__ . '\nav_menu_link_attribut
 add_filter( 'comment_form_default_fields', __NAMESPACE__ . '\comment_form_default_fields', ~PHP_INT_MAX );
 add_filter( 'comment_form_defaults',       __NAMESPACE__ . '\comment_form_defaults',       ~PHP_INT_MAX );
 
+# Allow the posts page to be edited.
+add_action( 'edit_form_after_title', __NAMESPACE__ . '\enable_posts_page_editor', 0 );
+
 /**
  * This function is for adding extra support for features not default to the core post types.
  * Excerpts are added to the 'page' post type.  Comments and trackbacks are added for the
@@ -326,4 +329,23 @@ function comment_form_defaults( $defaults ) {
 	$defaults['title_reply_before']   = replace_html_class( 'comment-respond__reply-title',  $defaults['title_reply_before']   );
 
 	return $defaults;
+}
+
+/**
+ * Fix for users who want to display content on the posts page above the posts
+ * list, which is a theme feature common to themes built from the framework.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  object  $post
+ * @return void
+ */
+function enable_posts_page_editor( $post ) {
+
+	if ( get_option( 'page_for_posts' ) != $post->ID ) {
+		return;
+	}
+
+	remove_action( 'edit_form_after_title', '_wp_posts_page_notice' );
+	add_post_type_support( $post->post_type, 'editor' );
 }

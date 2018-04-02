@@ -418,3 +418,35 @@ function uri( $file = '' ) {
 
 	return $file ? trailingslashit( app()->uri ) . ltrim( $file, '/' ) : app()->uri;
 }
+
+/**
+ * Wrapper function for `wp_verify_nonce()` with a posted value.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  string  $action
+ * @param  string  $arg
+ * @return bool
+ */
+function verify_nonce_post( $action = '', $arg = '_wpnonce' ) {
+
+	return isset( $_POST[ $arg ] )
+	       ? wp_verify_nonce( sanitize_key( $_POST[ $arg ] ), $action )
+	       : false;
+}
+
+/**
+ * Wrapper function for `wp_verify_nonce()` with a request value.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  string  $action
+ * @param  string  $arg
+ * @return bool
+ */
+function verify_nonce_request( $action = '', $arg = '_wpnonce' ) {
+
+	return isset( $_REQUEST[ $arg ] )
+	       ? wp_verify_nonce( sanitize_key( $_REQUEST[ $arg ] ), $action )
+	       : false;
+}
