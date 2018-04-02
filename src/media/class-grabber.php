@@ -99,8 +99,8 @@ class Grabber {
 		global $wp_embed, $content_width;
 
 		// Use WP's embed functionality to handle the [embed] shortcode and autoembeds.
-		add_filter( 'hybrid/media_grabber_embed_shortcode_media', [ $wp_embed, 'run_shortcode' ] );
-		add_filter( 'hybrid/media_grabber_autoembed_media',       [ $wp_embed, 'autoembed'     ] );
+		add_filter( 'hybrid/media/grabber/embed_shortcode_media', [ $wp_embed, 'run_shortcode' ] );
+		add_filter( 'hybrid/media/grabber/autoembed_media',       [ $wp_embed, 'autoembed'     ] );
 
 		// Don't return a link if embeds don't work. Need media or nothing at all.
 		add_filter( 'embed_maybe_make_link', '__return_false' );
@@ -119,12 +119,12 @@ class Grabber {
 			'attached'    => true,
 		] );
 
-		$allowed_types = [ 'audio', 'video', 'gallery' ];
+		$types = [ 'audio', 'video', 'gallery' ];
 
 		// Set the object properties.
-		$this->args    = apply_filters( 'hybrid/media_grabber_args', $args );
+		$this->args    = apply_filters( 'hybrid/media/grabber/args', $args );
 		$this->content = get_post_field( 'post_content', $this->args['post_id'], 'raw' );
-		$this->type    = isset( $this->args['type'] ) && in_array( $this->args['type'], $allowed_types ) ? $this->args['type'] : 'video';
+		$this->type    = in_array( $this->args['type'], $types ) ? $this->args['type'] : 'video';
 
 		// Find the media related to the post.
 		$this->set_media();
@@ -151,9 +151,9 @@ class Grabber {
 	 * @access public
 	 * @return string
 	 */
-	public function get_media() {
+	public function fetch() {
 
-		return apply_filters( 'hybrid/media_grabber_media', $this->media, $this );
+		return apply_filters( 'hybrid/media/grabber/media', $this->media, $this );
 	}
 
 	/**
@@ -295,7 +295,7 @@ class Grabber {
 		$this->original_media = array_shift( $shortcode );
 
 		$this->media = apply_filters(
-			'hybrid/media_grabber_embed_shortcode_media',
+			'hybrid/media/grabber/embed_shortcode_media',
 			$this->original_media
 		);
 	}
@@ -373,7 +373,7 @@ class Grabber {
 			foreach ( $matches as $value ) {
 
 				// Let WP work its magic with the 'autoembed' method.
-				$embed = trim( apply_filters( 'hybrid/media_grabber_autoembed_media', $value[0] ) );
+				$embed = trim( apply_filters( 'hybrid/media/grabber/autoembed_media', $value[0] ) );
 
 				if ( $embed ) {
 
@@ -490,7 +490,7 @@ class Grabber {
 	 */
 	public function filter_dimensions( $html ) {
 
-		$media_atts = array();
+		$media_atts = [];
 		$_html      = strip_tags( $html, '<object><embed><iframe><video>' );
 
 		// Find the attributes of the media.
@@ -528,7 +528,7 @@ class Grabber {
 
 		// Allow devs to filter the final width and height of the media.
 		list( $width, $height ) = apply_filters(
-			'hybrid/media_grabber_dimensions',
+			'hybrid/media/grabber/dimensions',
 			$dimensions,                       // width/height array
 			$media_atts,                       // media HTML attributes
 			$this                              // media grabber object

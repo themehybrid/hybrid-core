@@ -56,7 +56,7 @@ function media_grabber( $args = [] ) {
 
 	$media = new MediaGrabber( $args );
 
-	return $media->get_media();
+	return $media->fetch();
 }
 
 /**
