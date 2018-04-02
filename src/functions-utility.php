@@ -16,6 +16,7 @@
 namespace Hybrid;
 
 use Hybrid\Core\Application;
+use Hybrid\Common\Collection;
 
 /**
  * The single instance of the app. Use this function for quickly working with
@@ -104,6 +105,28 @@ function get_child_file_uri( $file = '' ) {
 	return $file
 	       ? trailingslashit( get_stylesheet_directory_uri() ) . $file
 	       : get_stylesheet_directory_uri();
+}
+
+/**
+ * Filters an array of templates and prefixes them with the view path.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  array  $templates
+ * @return array
+ */
+function filter_templates( $templates ) {
+
+	array_walk( $templates, function( &$template, $key ) {
+
+		$path = config( 'view' )->path;
+
+		$template = ltrim( str_replace( $path, '', $template ), '/' );
+
+		$template = "{$path}/{$template}";
+	} );
+
+	return $templates;
 }
 
 /**
@@ -389,6 +412,32 @@ function post_template_compat( $post_id, $template ) {
 	update_post_meta( $post_id, '_wp_page_template', $template );
 
 	delete_post_meta( $post_id, sprintf( '_wp_%s_template', get_post_type( $post_id ) ) );
+}
+
+/**
+ * Returns a configuration object.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  string  $name
+ * @return object
+ */
+function config( $name = '' ) {
+
+	return $name ? app()->config->$name : app()->config;
+}
+
+/**
+ * Wrapper function for the `Collection` class.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  array   $items
+ * @return object
+ */
+function collect( $items = [] ) {
+
+	return new Collection( $items );
 }
 
 /**

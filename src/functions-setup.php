@@ -3,55 +3,6 @@
 namespace Hybrid;
 
 /**
- * Filters an array of templates and prefixes them with the
- * `/resources/views/` file path.
- *
- * @since  1.0.0
- * @access public
- * @param  array  $templates
- * @return array
- */
-function filter_templates( $templates ) {
-
-	array_walk( $templates, function( &$template, $key ) {
-
-		$path = config( 'view' )->path;
-
-		$template = ltrim( str_replace( $path, '', $template ), '/' );
-
-		$template = "{$path}/{$template}";
-	} );
-
-	return $templates;
-}
-
-/**
- * Returns a configuration object.
- *
- * @since  1.0.0
- * @access public
- * @param  string  $name
- * @return object
- */
-function config( $name = '' ) {
-
-	return $name ? app()->config->$name : app()->config;
-}
-
-/**
- * Wrapper function for the `Collection` class.
- *
- * @since  1.0.0
- * @access public
- * @param  array   $items
- * @return object
- */
-function collect( $items = [] ) {
-
-	return new \Hybrid\Common\Collection( $items );
-}
-
-/**
  * Adds theme support for features that themes should be supporting.  Also, removes
  * theme supported features from themes in the case that a user has a plugin installed
  * that handles the functionality.
