@@ -29,7 +29,6 @@ array_map(
 		'functions-lang',
 		'functions-meta',
 		'functions-scripts',
-		'functions-setup',
 		'functions-sidebars',
 		'functions-styles',
 		'functions-templates',
