@@ -5,7 +5,6 @@ namespace Hybrid\Core;
 use Hybrid\Providers\ConfigServiceProvider;
 use Hybrid\Providers\CustomizeServiceProvider;
 use Hybrid\Providers\LanguageServiceProvider;
-use Hybrid\Providers\LayoutServiceProvider;
 use Hybrid\Providers\MediaMetaServiceProvider;
 use Hybrid\Providers\ObjectTemplatesServiceProvider;
 use Hybrid\Providers\TemplateHierarchyServiceProvider;
@@ -35,7 +34,6 @@ class Application extends Container {
                         ConfigServiceProvider::class,
                         CustomizeServiceProvider::class,
                         LanguageServiceProvider::class,
-                        LayoutServiceProvider::class,
                         MediaMetaServiceProvider::class,
                         ObjectTemplatesServiceProvider::class,
                         TemplateHierarchyServiceProvider::class

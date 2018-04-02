@@ -110,8 +110,8 @@ class ObjectTemplate {
 	public function __unset( $property ) {}
 
 	/**
-	 * Magic method to use in case someone tries to output the layout object
-	 * as a string. We'll just return the layout name.
+	 * Magic method to use in case someone tries to output the object as a
+	 * string. We'll just return the name.
 	 *
 	 * @since  5.0.0
 	 * @access public

@@ -72,20 +72,6 @@ function post_type_support() {
 	// Add thumbnail support for audio and video attachments.
 	add_post_type_support( 'attachment:audio', 'thumbnail' );
 	add_post_type_support( 'attachment:video', 'thumbnail' );
-
-	// Add theme layouts support to core and custom post types.
-	array_map( function( $type ) {
-		add_post_type_support( $type, 'theme-layouts' );
-	}, [
-		'post',
-		'page',
-		'attachment',
-		'forum',
-		'literature',
-		'portfolio_project',
-		'product',
-		'restaurant_item'
-	] );
 }
 
 /**

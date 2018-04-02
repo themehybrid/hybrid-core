@@ -39,20 +39,4 @@ function register_meta() {
 		] );
 
 	}, [ 'term', 'user' ] );
-
-	// Theme layouts meta.
-	if ( current_theme_supports( 'theme-layouts' ) ) {
-
-		array_map( function( $type ) {
-
-			\register_meta( $type, get_layout_meta_key(), [
-				'type'              => 'string',
-				'single'            => true,
-				'sanitize_callback' => 'sanitize_key',
-				'auth_callback'     => '__return_false',
-				'show_in_rest'      => true
-			] );
-
-		}, [ 'post', 'term', 'user' ] );
-	}
 }

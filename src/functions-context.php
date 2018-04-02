@@ -236,11 +236,6 @@ function body_class_filter( $classes, $class ) {
 		$classes[] = 'display-header-text';
 	}
 
-	// Theme layouts.
-	if ( current_theme_supports( 'theme-layouts' ) ) {
-		$classes[] = sanitize_html_class( 'layout-' . get_theme_layout() );
-	}
-
 	return array_map( 'esc_attr', array_unique( array_merge( $classes, (array) $class ) ) );
 }
 
