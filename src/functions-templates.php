@@ -18,7 +18,7 @@ namespace Hybrid;
 use Hybrid\Template\ObjectTemplate;
 
 # Run hook for registering templates.
-add_action( 'init', __NAMESPACE__ . '\register_templates', 95 );
+add_action( 'init', __NAMESPACE__ . '\register_object_templates', 95 );
 
 /**
  * Returns the template registry. Use this function to access the object.
@@ -27,22 +27,29 @@ add_action( 'init', __NAMESPACE__ . '\register_templates', 95 );
  * @access public
  * @return object
  */
-function templates() {
+function object_templates() {
 
-	return app()->get( 'templates' );
+	return app()->get( 'object_templates' );
 }
 
 /**
- * Executes the action hook for themes to register their templates.  Themes should
- * always register on `hybrid/register_templates`.
+ * Executes the action hook for themes to register their templates. Themes should
+ * always register on this hook.
  *
  * @since  5.0.0
  * @access public
  * @return void
  */
-function register_templates() {
+function register_object_templates() {
 
-	do_action( 'hybrid/register_templates' );
+	do_action( 'hybrid/register_object_templates' );
+
+	// Add a filter to each post type so that we can determine if that post
+	// type has any custom templates registered for it.
+	foreach ( get_post_types( [ 'publicly_queryable' => true ] ) as $type ) {
+
+		add_filter( "theme_{$type}_templates", __NAMESPACE__ . '\post_templates_filter', 5, 4 );
+	}
 }
 
 /**
@@ -54,9 +61,9 @@ function register_templates() {
  * @param  array   $args
  * @return void
  */
-function register_template( $name, array $args = [] ) {
+function register_object_template( $name, array $args = [] ) {
 
-	templates()->add( $name, new ObjectTemplate( $name, $args ) );
+	object_templates()->add( $name, new ObjectTemplate( $name, $args ) );
 }
 
 /**
@@ -67,9 +74,9 @@ function register_template( $name, array $args = [] ) {
  * @param  string  $name
  * @return void
  */
-function unregister_template( $name ) {
+function unregister_object_template( $name ) {
 
-	templates()->remove( $name );
+	object_templates()->remove( $name );
 }
 
 /**
@@ -80,9 +87,9 @@ function unregister_template( $name ) {
  * @param  string  $name
  * @return bool
  */
-function template_exists( $name ) {
+function object_template_exists( $name ) {
 
-	return templates()->has( $name );
+	return object_templates()->has( $name );
 }
 
 /**
@@ -92,9 +99,9 @@ function template_exists( $name ) {
  * @access public
  * @return array
  */
-function get_templates() {
+function get_object_templates() {
 
-	return templates()->all();
+	return object_templates()->all();
 }
 
 /**
@@ -105,9 +112,9 @@ function get_templates() {
  * @param  string      $name
  * @return object|bool
  */
-function get_template( $name ) {
+function get_object_template( $name ) {
 
-	return templates()->get( $name );
+	return object_templates()->get( $name );
 }
 
 /**
@@ -331,7 +338,7 @@ function check_template_match( $template, $filename ) {
 	// Check if the template matches a template object by filename.
 	if ( $template && $filename ) {
 
-		$templates = wp_list_filter( get_templates(), [ 'filename' => $filename ] );
+		$templates = wp_list_filter( get_object_templates(), [ 'filename' => $filename ] );
 
 		if ( $templates ) {
 
@@ -374,7 +381,7 @@ function post_templates_filter( $post_templates, $theme, $post, $post_type ) {
 
 	$args = [ 'is_post_template' => false, 'filename' => '' ];
 
-	$templates = wp_list_filter( get_templates(), $args, 'NOT' );
+	$templates = wp_list_filter( get_object_templates(), $args, 'NOT' );
 
 	foreach ( $templates as $template ) {
 

@@ -1,7 +1,10 @@
 <?php
 /**
- * Template object.  This class defines the structure for template objects.  Theme
- * authors should utilize the wrapper functions within `inc/functions-templates.php.
+ * Object template class.
+ *
+ * This class allows for templates for any object type, which includes `post`,
+ * `term`, and `user`.  When viewing a particular single post, term archive, or
+ * user/author archive page, the template can be used.
  *
  * @package    HybridCore
  * @subpackage Includes
@@ -14,9 +17,9 @@
 namespace Hybrid\Template;
 
 /**
- * Creates new template objects.
+ * Creates a new object template.
  *
- * @since  4.0.0
+ * @since  5.0.0
  * @access public
  */
 class ObjectTemplate {
@@ -24,7 +27,7 @@ class ObjectTemplate {
 	/**
 	 * Name/ID of the template.
 	 *
-	 * @since  4.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @var    string
 	 */
@@ -33,16 +36,17 @@ class ObjectTemplate {
 	/**
 	 * Internationalized text label.
 	 *
-	 * @since  4.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @var    string
 	 */
 	public $label = '';
 
 	/**
-	 * The theme filename for the template.
+	 * The theme filename for the template. Use the relative path and not
+	 * the full absolute path if dealing with folders.
 	 *
-	 * @since  4.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @var    string
 	 */
@@ -51,7 +55,7 @@ class ObjectTemplate {
 	/**
 	 * Whether template can be used as a single post template.
 	 *
-	 * @since  4.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @var    bool
 	 */
@@ -60,7 +64,7 @@ class ObjectTemplate {
 	/**
 	 * Whether template can be used as a term archive template.
 	 *
-	 * @since  4.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @var    bool
 	 */
@@ -69,7 +73,7 @@ class ObjectTemplate {
 	/**
 	 * Whether template can be used as a user archive template.
 	 *
-	 * @since  4.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @var    bool
 	 */
@@ -78,27 +82,27 @@ class ObjectTemplate {
 	/**
 	 * Array of post types template works with.
 	 *
-	 * @since  4.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @var    array
 	 */
-	public $post_types = array();
+	public $post_types = [];
 
 	/**
 	 * Array of taxonomies the template works with.
 	 *
-	 * @since  4.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @var    array
 	 */
-	public $taxonomies = array();
+	public $taxonomies = [];
 
 	/* ====== Magic Methods ====== */
 
 	/**
 	 * Don't allow properties to be unset.
 	 *
-	 * @since  4.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @param  string  $property
 	 * @return void
@@ -106,10 +110,10 @@ class ObjectTemplate {
 	public function __unset( $property ) {}
 
 	/**
-	 * Magic method to use in case someone tries to output the layout object as a string.
-	 * We'll just return the layout name.
+	 * Magic method to use in case someone tries to output the layout object
+	 * as a string. We'll just return the layout name.
 	 *
-	 * @since  4.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @return string
 	 */
@@ -121,7 +125,7 @@ class ObjectTemplate {
 	/**
 	 * Register a new template object.
 	 *
-	 * @since  4.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @param  string  $name
 	 * @param  array   $args  {
@@ -135,35 +139,15 @@ class ObjectTemplate {
 	 * }
 	 * @return void
 	 */
-	public function __construct( $name, $args = array() ) {
+	public function __construct( $name, $args = [] ) {
 
 		foreach ( array_keys( get_object_vars( $this ) ) as $key ) {
 
-			if ( isset( $args[ $key ] ) )
+			if ( isset( $args[ $key ] ) ) {
 				$this->$key = $args[ $key ];
+			}
 		}
 
 		$this->name = sanitize_key( $name );
-
-		if ( $this->is_post_template )
-			$this->post_templates();
-	}
-
-	/**
-	 * Adds filters for the theme post templates.
-	 *
-	 * @since  4.0.0
-	 * @access protected
-	 * @return void
-	 */
-	protected function post_templates() {
-
-		$types = $this->post_types ? $this->post_types : get_post_types( array( 'publicly_queryable' => true ) );
-
-		foreach ( $types as $type ) {
-
-			if ( ! has_filter( "theme_{$type}_templates", 'Hybrid\post_templates_filter' ) )
-				add_filter( "theme_{$type}_templates", 'Hybrid\post_templates_filter', 5, 4 );
-		}
 	}
 }

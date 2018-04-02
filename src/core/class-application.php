@@ -7,8 +7,8 @@ use Hybrid\Providers\CustomizeServiceProvider;
 use Hybrid\Providers\LanguageServiceProvider;
 use Hybrid\Providers\LayoutServiceProvider;
 use Hybrid\Providers\MediaMetaServiceProvider;
+use Hybrid\Providers\ObjectTemplatesServiceProvider;
 use Hybrid\Providers\TemplateHierarchyServiceProvider;
-use Hybrid\Providers\TemplateServiceProvider;
 
 class Application extends Container {
 
@@ -37,8 +37,8 @@ class Application extends Container {
                         LanguageServiceProvider::class,
                         LayoutServiceProvider::class,
                         MediaMetaServiceProvider::class,
-                        TemplateHierarchyServiceProvider::class,
-                        TemplateServiceProvider::class
+                        ObjectTemplatesServiceProvider::class,
+                        TemplateHierarchyServiceProvider::class
                 ];
 
                 foreach ( $providers as $provider ) {
