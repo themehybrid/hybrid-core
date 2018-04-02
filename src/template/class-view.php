@@ -21,7 +21,7 @@
 
 namespace Hybrid\Template;
 
-use Hybrid\Core\Collection;
+use Hybrid\Common\Collection;
 use function Hybrid\config;
 use function Hybrid\locate_template;
 

@@ -48,7 +48,7 @@ function config( $name = '' ) {
  */
 function collect( $items = [] ) {
 
-	return new \Hybrid\Core\Collection( $items );
+	return new \Hybrid\Common\Collection( $items );
 }
 
 /**

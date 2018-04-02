@@ -14,20 +14,22 @@
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
-namespace Hybrid\Core;
+namespace Hybrid\Common;
+
+use ArrayObject;
 
 /**
  * Registry class.
  *
- * @since  1.0.0
+ * @since  5.0.0
  * @access public
  */
-class Collection extends \ArrayObject {
+class Collection extends ArrayObject {
 
 	/**
 	 * Add an item.
 	 *
-	 * @since  1.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @param  string  $name
 	 * @param  mixed   $value
@@ -41,7 +43,7 @@ class Collection extends \ArrayObject {
 	/**
 	 * Removes an item.
 	 *
-	 * @since  1.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @param  string  $name
 	 * @return void
@@ -54,7 +56,7 @@ class Collection extends \ArrayObject {
 	/**
 	 * Checks if an item exists.
 	 *
-	 * @since  1.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @param  string  $name
 	 * @return bool
@@ -67,7 +69,7 @@ class Collection extends \ArrayObject {
 	/**
 	 * Returns an item.
 	 *
-	 * @since  1.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @param  string  $name
 	 * @return mixed
@@ -80,7 +82,7 @@ class Collection extends \ArrayObject {
 	/**
 	 * Returns the collection of items.
 	 *
-	 * @since  1.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @return array
 	 */
@@ -90,10 +92,10 @@ class Collection extends \ArrayObject {
 	}
 
 	/**
-	 * Magic method when trying to set a property. Assume the property
-	 * is part of the collection and add it.
+	 * Magic method when trying to set a property. Assume the property is
+	 * part of the collection and add it.
 	 *
-	 * @since  1.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @param  string  $name
 	 * @param  mixed   $value
@@ -107,7 +109,7 @@ class Collection extends \ArrayObject {
 	/**
 	 * Magic method when trying to unset a property.
 	 *
-	 * @since  1.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @param  string  $name
 	 * @return void
@@ -120,7 +122,7 @@ class Collection extends \ArrayObject {
 	/**
 	 * Magic method when trying to check if a property has.
 	 *
-	 * @since  1.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @param  string  $name
 	 * @return bool
@@ -133,7 +135,7 @@ class Collection extends \ArrayObject {
 	/**
 	 * Magic method when trying to get a property.
 	 *
-	 * @since  1.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @param  string  $name
 	 * @return mixed
