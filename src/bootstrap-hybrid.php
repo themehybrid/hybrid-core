@@ -56,5 +56,8 @@ if ( ! defined( 'HYBRID_BOOTSTRAPPED' ) ) {
 	require_once( trailingslashit( HYBRID_DIR ) . 'bootstrap-autoload.php'  );
 	require_once( trailingslashit( HYBRID_DIR ) . 'bootstrap-functions.php' );
 
+	# Boom!
+	Hybrid\app();
+
 	define( 'HYBRID_BOOTSTRAPPED', true );
 }
