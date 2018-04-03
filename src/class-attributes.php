@@ -136,7 +136,7 @@ class Attributes {
 
 		// If no class was input, let's build a custom default.
 		} else {
-			$defaults['class'] = $this->context ? "{$this->name} {$this->name}-{$this->context}" : $this->name;
+			$defaults['class'] = $this->context ? "{$this->name} {$this->name}--{$this->context}" : $this->name;
 		}
 
 		// Filter the default attributes.
