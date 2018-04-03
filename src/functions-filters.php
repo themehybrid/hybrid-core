@@ -241,7 +241,7 @@ function nav_menu_css_class( $classes, $item ) {
 
 		if ( in_array( "current-menu-{$type}", $classes ) ) {
 
-			$_classes[] = "menu__item--{$type}";
+			$_classes[] = 'item' === $type ? 'menu__item--current' : "menu__item--{$type}";
 		}
 	}
 
