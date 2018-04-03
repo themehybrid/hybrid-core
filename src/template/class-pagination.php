@@ -96,7 +96,7 @@ class Pagination {
 			if ( ! empty( $matches ) && isset( $matches[1] ) && isset( $matches[2] ) ) {
 
 				// Get an array of the attributes.
-				$attr = wp_kses_hair( trim( $matches[1] ), array( 'http', 'https' ) );
+				$attr = wp_kses_hair( trim( $matches[1] ), [ 'http', 'https' ] );
 
 				if ( ! empty( $attr['class'] ) ) {
 

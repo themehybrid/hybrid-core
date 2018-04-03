@@ -82,7 +82,7 @@ function get_post_format( $args = [] ) {
  * @param  array   $args
  * @return void
  */
-function post_author( $args = array() ) {
+function post_author( $args = [] ) {
 
 	echo get_post_author( $args );
 }
@@ -99,7 +99,7 @@ function post_author( $args = array() ) {
  * @param  array   $args
  * @return string
  */
-function get_post_author( $args = array() ) {
+function get_post_author( $args = [] ) {
 
 	$args = wp_parse_args( $args, [
 		'text'   => '%s',

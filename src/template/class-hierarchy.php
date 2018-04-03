@@ -323,7 +323,7 @@ class Hierarchy {
 	 */
 	public function date( $templates ) {
 
-		$templates = array();
+		$templates = [];
 
 		// If viewing a time-based archive.
 		if ( is_time() ) {
