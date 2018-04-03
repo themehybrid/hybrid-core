@@ -239,7 +239,7 @@ function nav_menu_css_class( $classes, $item ) {
 
 	foreach ( [ 'item', 'parent', 'ancestor' ] as $type ) {
 
-		if ( in_array( "current-menu-{$type}", $classes ) ) {
+		if ( in_array( "current-menu-{$type}", $classes ) || in_array( "current_page_{$type}", $classes ) ) {
 
 			$_classes[] = 'item' === $type ? 'menu__item--current' : "menu__item--{$type}";
 		}
