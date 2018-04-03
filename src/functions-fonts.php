@@ -4,7 +4,7 @@
  *
  * Functions for handling font enqueueing, registration, etc.  This works with
  * the Google Fonts API. This extends an idea from Jose Castaneda. This is a
- * small script for loading Google fontswith an easy method for
+ * small script for loading Google fonts with an easy method for
  * adding/removing/editing the fonts loaded via child theme.
  *
  * @link http://blog.josemcastaneda.com/2016/02/29/adding-removing-fonts-from-a-theme/
@@ -30,9 +30,7 @@ namespace Hybrid;
  */
 function register_font( $handle, $args = [] ) {
 
-	$args = wp_parse_args(
-		$args,
-		array(
+	$args = wp_parse_args( $args, [
 			// Arguments for https://developers.google.com/fonts/docs/getting_started
 			'family'  => [],
 			'subset'  => [],
@@ -44,12 +42,17 @@ function register_font( $handle, $args = [] ) {
 			'version' => false,
 			'media'   => 'all',
 			'src'     => ''     // Will overwrite Google Fonts arguments.
-		)
-	);
+	] );
 
 	$url = get_font_url( $handle, $args );
 
-	return wp_register_style( "{$handle}-font", $url, $args['depends'], $args['version'], $args['media'] );
+	return wp_register_style(
+		"{$handle}-font",
+		$url,
+		$args['depends'],
+		$args['version'],
+		$args['media']
+	);
 }
 
 /**
@@ -154,15 +157,15 @@ function font_is_enqueued( $handle ) {
  */
 function get_font_url( $handle, $args ) {
 
-	$font_url   = $args['src'] ? $args['src'] : '';
-	$query_args = array();
+	$font_url   = $args['src'] ?: '';
+	$query_args = [];
 
 	if ( ! $font_url ) {
 
-		$family = apply_filters( "hybrid/{$handle}_font_family", $args['family'] );
-		$subset = apply_filters( "hybrid/{$handle}_font_subset", $args['subset'] );
-		$text   = apply_filters( "hybrid/{$handle}_font_text",   $args['text']   );
-		$effect = apply_filters( "hybrid/{$handle}_font_effect", $args['effect'] );
+		$family = apply_filters( "hybrid/font/{$handle}/family", $args['family'] );
+		$subset = apply_filters( "hybrid/font/{$handle}/subset", $args['subset'] );
+		$text   = apply_filters( "hybrid/font/{$handle}/text",   $args['text']   );
+		$effect = apply_filters( "hybrid/font/{$handle}/effect", $args['effect'] );
 
 		if ( $family ) {
 
@@ -184,5 +187,7 @@ function get_font_url( $handle, $args ) {
 		}
 	}
 
-	return esc_url( apply_filters( "hybrid/{$handle}_font_url", $font_url, $args, $query_args ) );
+	return esc_url(
+		apply_filters( "hybrid/font/{$handle}/url", $font_url, $args, $query_args )
+	);
 }
