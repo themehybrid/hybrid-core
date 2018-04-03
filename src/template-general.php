@@ -39,7 +39,7 @@ function get_template_hierarchy() {
 function get_post_hierarchy() {
 
 	// Set up an empty array and get the post type.
-	$hierarchy = array();
+	$hierarchy = [];
 	$post_type = get_post_type();
 
 	// If attachment, add attachment type templates.
@@ -60,7 +60,7 @@ function get_post_hierarchy() {
 	if ( post_type_supports( $post_type, 'post-formats' ) ) {
 
 		// Get the post format.
-		$post_format = get_post_format() ? get_post_format() : 'standard';
+		$post_format = get_post_format() ?: 'standard';
 
 		// Template based off post type and post format.
 		$hierarchy[] = "{$post_type}-{$post_format}";
@@ -104,7 +104,6 @@ function get_site_title( $args = [], $attr = [] ) {
 	$title = get_bloginfo( 'name', 'display' );
 
 	$args = wp_parse_args( $args, [ 'tag' => is_front_page() ? 'h1' : 'div' ] );
-	$attr = wp_parse_args( $attr, [ 'class' => 'site-title' ] );
 
 	if ( $title ) {
 		$link = sprintf( '<a href="%s">%s</a>', esc_url( home_url() ), $title );
@@ -149,7 +148,6 @@ function get_site_description( $args = [], $attr = [] ) {
 	$desc = get_bloginfo( 'description', 'display' );
 
 	$args = wp_parse_args( $args, [ 'tag' => 'div' ] );
-	$attr = wp_parse_args( $attr, [ 'class' => 'site-description' ] );
 
 	if ( $desc ) {
 		$html = sprintf(
@@ -184,7 +182,11 @@ function site_link() {
  */
 function get_site_link() {
 
-	return sprintf( '<a class="site-link" href="%s" rel="home">%s</a>', esc_url( home_url() ), get_bloginfo( 'name' ) );
+	return sprintf(
+		'<a class="site-link" href="%s" rel="home">%s</a>',
+		esc_url( home_url() ),
+		get_bloginfo( 'name' )
+	);
 }
 
 /**
@@ -208,7 +210,11 @@ function wp_link() {
  */
 function get_wp_link() {
 
-	return sprintf( '<a class="wp-link" href="%s">%s</a>', esc_url( __( 'https://wordpress.org', 'hybrid-core' ) ), esc_html__( 'WordPress', 'hybrid-core' ) );
+	return sprintf(
+		'<a class="wp-link" href="%s">%s</a>',
+		esc_url( __( 'https://wordpress.org', 'hybrid-core' ) ),
+		esc_html__( 'WordPress', 'hybrid-core' )
+	);
 }
 
 /**
@@ -242,10 +248,9 @@ function get_theme_link() {
 		'strong'  => true
 	];
 
-	// Note: URI is escaped via `WP_Theme::markup_header()`.
 	return sprintf(
 		'<a class="theme-link" href="%s">%s</a>',
-		$theme->display( 'ThemeURI' ),
+		esc_url( $theme->display( 'ThemeURI' ) ),
 		wp_kses( $theme->display( 'Name' ), $allowed )
 	);
 }
@@ -285,10 +290,9 @@ function get_child_theme_link() {
 		'strong'  => true
 	];
 
-	// Note: URI is escaped via `WP_Theme::markup_header()`.
 	return sprintf(
 		'<a class="child-link" href="%s">%s</a>',
-		$theme->display( 'ThemeURI' ),
+		esc_url( $theme->display( 'ThemeURI' ) ),
 		wp_kses( $theme->display( 'Name' ), $allowed )
 	);
 }
@@ -328,7 +332,7 @@ function get_blog_url() {
  */
 function is_plural() {
 
-	return apply_filters( 'hybrid_is_plural', is_home() || is_archive() || is_search() );
+	return apply_filters( 'hybrid/is_plural', is_home() || is_archive() || is_search() );
 }
 
 /**
