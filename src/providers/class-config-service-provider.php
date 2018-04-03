@@ -11,17 +11,17 @@ class ConfigServiceProvider extends ServiceProvider {
 
                 $this->app->singleton( 'config', function( $container ) {
 
-                        $view_config = locate_file_path( 'config/view.php' );
+                        // Create a new collection to house the view config.
+                        $view = new Collection(
+                                apply_filters( 'hybrid/config/view', [
+                                        'path'    => 'resources/views',
+                                        'name'    => 'data',
+                                        'extract' => true
+                                ] )
+                        );
 
-                        $view = wp_parse_args( $view_config ?: [], [
-                                'path'    => 'resources/views',
-                                'name'    => 'data',
-                                'extract' => true
-                        ] );
-
-                	return new Collection( [
-                		'view' => new Collection( apply_filters( 'hybrid/config/view', $view ) )
-                	] );
+                        // Create and return a new collection of config objects.
+                	return new Collection( [ 'view' => $view ] );
                 } );
         }
 }
