@@ -147,10 +147,10 @@ function get_media_metadata( $post_id ) {
  */
 function get_attachment_types( $post_id = 0 ) {
 
-	$post_id   = empty( $post_id ) ? get_the_ID() : $post_id;
-	$mime_type = get_post_mime_type( $post_id );
+	$post_id = empty( $post_id ) ? get_the_ID() : $post_id;
+	$mime    = get_post_mime_type( $post_id );
 
-	list( $type, $subtype ) = false !== strpos( $mime_type, '/' ) ? explode( '/', $mime_type ) : array( $mime_type, '' );
+	list( $type, $subtype ) = false !== strpos( $mime, '/' ) ? explode( '/', $mime ) : [ $mime, '' ];
 
 	return (object) [ 'type' => $type, 'subtype' => $subtype ];
 }
@@ -224,7 +224,7 @@ function get_image_size_links() {
 	}
 
 	// Set up an empty array for the links.
-	$links = array();
+	$links = [];
 
 	// Get the intermediate image sizes and add the full size to the array.
 	$sizes   = get_intermediate_image_sizes();
@@ -271,7 +271,7 @@ function get_audio_transcript( $post_id = 0 ) {
 
 	return get_media_meta( 'lyrics', [
 		'wrap'    => '',
-		'post_id' => $post_id ? $post_id : get_the_ID()
+		'post_id' => $post_id ?: get_the_ID()
 	] );
 }
 
