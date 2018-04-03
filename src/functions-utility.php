@@ -274,6 +274,19 @@ function hex_to_rgb( $hex ) {
 }
 
 /**
+ * Outputs the nav menu theme location name.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  string  $location
+ * @return void
+ */
+ function menu_location_name( $location ) {
+
+	 return esc_html( get_menu_location_name( $location ) );
+ }
+
+/**
  * Function for grabbing a WP nav menu theme location name.
  *
  * @since  5.0.0
@@ -287,6 +300,19 @@ function get_menu_location_name( $location ) {
 
 	return isset( $locations[ $location ] ) ? $locations[ $location ] : '';
 }
+
+/**
+ * Outputs the nav menu name by theme location.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  string  $location
+ * @return void
+ */
+ function menu_name( $location ) {
+
+	 echo esc_html( get_menu_name( $location ) );
+ }
 
 /**
  * Function for grabbing a WP nav menu name based on theme location.

@@ -14,6 +14,19 @@
 namespace Hybrid;
 
 /**
+ * Outputs a sidebar name.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  string  $sidebar_id
+ * @return void
+ */
+ function sidebar_name( $sidebar_id ) {
+
+	 echo esc_html( get_sidebar_name( $sidebar_id ) );
+ }
+
+/**
  * Function for grabbing a dynamic sidebar name.
  *
  * @since  5.0.0
