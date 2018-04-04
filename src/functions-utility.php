@@ -38,6 +38,69 @@ function app() {
 }
 
 /**
+ * Autoloader for the framework. Looks in the framework folder for classes. File
+ * names are prefixed with `class-` and are a lowercased version of the class
+ * name. Classes are broken up by uppercase letter.
+ *
+ * `ABC\MyClass`       = `/app/class-my-class.php`
+ * `ABC\Admin\MyClass` = `/app/admin/class-my-class.php`
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  string  $class
+ * @return void
+ */
+function autoload( $class, $args = [] ) {
+
+	$args = $args + [
+		'namespace' => __NAMESPACE__,
+		'path'      => HYBRID_DIR
+	];
+
+	$args['namespace'] = trim( $args['namespace'], '\\' ) . '\\';
+
+	// Bail if the class is not in our namespace.
+	if ( 0 !== strpos( $class, $args['namespace'] ) ) {
+		return;
+	}
+
+	$file       = '';
+	$new_pieces = [];
+
+	// Remove the namespace.
+	$class = str_replace( $args['namespace'], '', $class );
+
+	// Explode the full class name into an array of items by sub-namespace
+	// and class name.
+	$pieces = explode( '\\', $class );
+
+	foreach ( $pieces as $piece ) {
+
+		// Split pieces by uppercase letter.  Assume sub-namespaces and
+		// classes are in "PascalCase".
+		$pascal = preg_split( '/(?=[A-Z])/', $piece,  -1, PREG_SPLIT_NO_EMPTY );
+
+		// Lowercase and hyphenate the word pieces within a string.
+		$new_pieces[] = strtolower( join( '-', $pascal ) );
+	}
+
+	// Pop the last item off the array and re-add it with the `class-` prefix
+	// and the `.php` file extension.  This is our class file.
+	$new_pieces[] = sprintf( 'class-%s.php', array_pop( $new_pieces ) );
+
+	// Join all the pieces together by a forward slash. These are directories.
+	$file = join( DIRECTORY_SEPARATOR, $new_pieces );
+
+	// Append the file name to the framework directory.
+	$file = trailingslashit( $args['path'] ) . $file;
+
+	// Include the file only if it exists.
+	if ( file_exists( $file ) ) {
+		include( $file );
+	}
+}
+
+/**
  * This is a wrapper function for core WP's `get_theme_mod()` function.  Core
  * doesn't provide a filter hook for the default value (useful for child themes).
  * The purpose of this function is to provide that additional filter hook.  To
