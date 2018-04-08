@@ -146,30 +146,6 @@ function get_content_width() {
 	return absint( $GLOBALS['content_width'] );
 }
 
-function get_parent_file_path( $file = '' ) {
-
-	return \get_parent_theme_file_path( $file );
-}
-
-function get_child_file_path( $file = '' ) {
-
-	return $file
-	       ? trailingslashit( get_stylesheet_directory() ) . $file
-	       : get_stylesheet_directory();
-}
-
-function get_parent_file_uri( $file = '' ) {
-
-	return \get_parent_theme_file_uri( $file );
-}
-
-function get_child_file_uri( $file = '' ) {
-
-	return $file
-	       ? trailingslashit( get_stylesheet_directory_uri() ) . $file
-	       : get_stylesheet_directory_uri();
-}
-
 /**
  * Filters an array of templates and prefixes them with the view path.
  *
@@ -540,7 +516,9 @@ function collect( $items = [] ) {
  */
 function path( $file = '' ) {
 
-	return $file ? trailingslashit( app()->path ) . ltrim( $file, '/' ) : app()->path;
+	$file = ltrim( $file, '/' );
+
+	return $file ? trailingslashit( app()->path ) . $file : app()->path;
 }
 
 /**
@@ -554,7 +532,73 @@ function path( $file = '' ) {
  */
 function uri( $file = '' ) {
 
-	return $file ? trailingslashit( app()->uri ) . ltrim( $file, '/' ) : app()->uri;
+	$file = ltrim( $file, '/' );
+
+	return $file ? trailingslashit( app()->uri ) . $file : app()->uri;
+}
+
+/**
+ * Returns the directory path of the parent theme. If a file is passed in, it'll
+ * be appended to the end of the path.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  string  $file
+ * @return string
+ */
+function get_parent_file_path( $file = '' ) {
+
+	return \get_parent_theme_file_path( $file );
+}
+
+/**
+ * Returns the directory path of the child theme. If a file is passed in, it'll
+ * be appended to the end of the path.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  string  $file
+ * @return string
+ */
+function get_child_file_path( $file = '' ) {
+
+	$file = ltrim( $file, '/' );
+
+	return $file
+	       ? trailingslashit( get_stylesheet_directory() ) . $file
+	       : get_stylesheet_directory();
+}
+
+/**
+ * Returns the directory URI of the parent theme. If a file is passed in, it'll
+ * be appended to the end of the URI.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  string  $file
+ * @return string
+ */
+function get_parent_file_uri( $file = '' ) {
+
+	return \get_parent_theme_file_uri( $file );
+}
+
+/**
+ * Returns the directory URI of the child theme. If a file is passed in, it'll
+ * be appended to the end of the URI.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  string  $file
+ * @return string
+ */
+function get_child_file_uri( $file = '' ) {
+
+	$file = ltrim( $file, '/' );
+
+	return $file
+	       ? trailingslashit( get_stylesheet_directory_uri() ) . $file
+	       : get_stylesheet_directory_uri();
 }
 
 /**
