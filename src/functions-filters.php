@@ -54,6 +54,9 @@ add_filter( 'comment_form_defaults',       __NAMESPACE__ . '\comment_form_defaul
 # Allow the posts page to be edited.
 add_action( 'edit_form_after_title', __NAMESPACE__ . '\enable_posts_page_editor', 0 );
 
+# Filters widget classes.
+add_filter( 'dynamic_sidebar_params', __NAMESPACE__ . '\widget_class_filter', ~PHP_INT_MAX );
+
 /**
  * This function is for adding extra support for features not default to the core post types.
  * Excerpts are added to the 'page' post type.  Comments and trackbacks are added for the
@@ -334,4 +337,52 @@ function enable_posts_page_editor( $post ) {
 
 	remove_action( 'edit_form_after_title', '_wp_posts_page_notice' );
 	add_post_type_support( $post->post_type, 'editor' );
+}
+
+/**
+ * Attempts to fix widget class naming woes. If the theme author uses the
+ * `widget--%1$s` class, we'll strip the widget instance. If the theme author
+ * uses the `widget--%2$s` class, we'll fix any double `widget--widget` problems.
+ * And, if the author does use a widget ID in the class, we'll try to add that in.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  array   $params
+ * @return array
+ */
+function widget_class_filter( $params ) {
+
+	$widget_id = $params[0]['widget_id'];
+	$instance  = $params[1]['number'];
+	$context   = str_replace( "-{$instance}", '', $widget_id );
+
+	// If the theme author is emplying BEM-style classes with the widget ID,
+	// let's remove the widget instance from the class.
+	if ( false !== strpos( $params[0]['before_widget'], " widget--{$widget_id}" ) ) {
+
+		$pattern = " widget--{$widget_id}";
+		$replace = sprintf( " widget--%s", sanitize_html_class( $context ) );
+
+		$params[0]['before_widget'] = str_replace( $pattern, $replace, $params[0]['before_widget'] );
+
+	// If the theme author isn't employing BEM-style classes with the widget
+	// ID, let's add that in.
+	} elseif ( false === strpos( $params[0]['before_widget'], " widget--{$context}" ) ) {
+
+		$pattern = "widget ";
+		$replace = sprintf( 'widget widget--%s ', sanitize_html_class( $context ) );
+
+		$params[0]['before_widget'] = str_replace( $pattern, $replace, $params[0]['before_widget'] );
+	}
+
+	// If we get a double `widget--widget` class name, let's fix that.
+	if ( false !== strpos( $params[0]['before_widget'], ' widget--widget' ) ) {
+
+		$pattern = [ ' widget--widget_', ' widget--widget-' ];
+		$replace = ' widget--';
+
+		$params[0]['before_widget'] = str_replace( $pattern, $replace, $params[0]['before_widget'] );
+	}
+
+	return $params;
 }
