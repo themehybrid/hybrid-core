@@ -2,7 +2,7 @@
 
 namespace Hybrid;
 
-use Hybrid\Common\Collection;
+use Hybrid\Core\Collection;
 use Hybrid\Template\View;
 
 /**

@@ -15,7 +15,7 @@
 
 namespace Hybrid\Providers;
 
-use Hybrid\Common\Collection;
+use Hybrid\Core\Collection;
 
 /**
  * Configuration provider.

@@ -14,7 +14,7 @@
 
 namespace Hybrid\Providers;
 
-use Hybrid\Common\Collection;
+use Hybrid\Core\Collection;
 
 /**
  * Object templates provider class.
