@@ -167,6 +167,22 @@ class Container implements ContainerInterface, ArrayAccess {
 	}
 
 	/**
+	 * Alias for `get()`. Often, particularly with single-instances, we
+	 * don't need to "get" the instance. We just need to "resolve" it. So,
+	 * this function is just here as an easier-to-remember method name
+	 * for resolving.
+	 *
+	 * @since  5.0.0
+	 * @access public
+	 * @param  string  $alias
+	 * @return object
+	 */
+	 public function resolve( $alias ) {
+
+		 return $this->get( $alias );
+	 }
+
+	/**
 	 * Add a shared object.
 	 *
 	 * @since  5.0.0

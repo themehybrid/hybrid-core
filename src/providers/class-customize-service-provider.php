@@ -50,6 +50,6 @@ class CustomizeServiceProvider extends ServiceProvider {
          */
         public function boot() {
 
-                $this->app->get( 'customize' );
+                $this->app->resolve( 'customize' );
         }
 }

@@ -50,6 +50,6 @@ class LanguageServiceProvider extends ServiceProvider {
          */
         public function boot() {
 
-                $this->app->get( 'language' );
+                $this->app->resolve( 'language' );
         }
 }

@@ -50,6 +50,6 @@ class TemplateHierarchyServiceProvider extends ServiceProvider {
          */
         public function boot() {
 
-                $this->app->get( 'template_hierarchy' );
+                $this->app->resolve( 'template_hierarchy' );
         }
 }
