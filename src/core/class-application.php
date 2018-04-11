@@ -60,8 +60,12 @@ class Application extends Container {
         public function __construct() {
 
                 $this->registerPaths();
-                $this->registerProviders();
-                $this->bootProviders();
+
+                // Register and providers at the earliest hook available to
+                // themes. This is so that themes can register service providers
+                // if they choose to do so.
+                add_action( 'after_setup_theme', [ $this, 'registerProviders' ], ~PHP_INT_MAX );
+                add_action( 'after_setup_theme', [ $this, 'bootProviders'     ], ~PHP_INT_MAX );
         }
 
         /**
@@ -80,24 +84,22 @@ class Application extends Container {
         }
 
         /**
-         * Registers the framework's default service providers. At the moment,
-         * we're not providing a method to register third-party service providers
-         * until things are bit more fleshed out and stable.
+         * Calls the `register()` method of all the available service providers.
          *
          * @since  5.0.0
-         * @access protected
+         * @access public
          * @return void
          */
-        protected function registerProviders() {
+        public function registerProviders() {
 
-                $providers = [
+                $providers = apply_filters( 'hybrid/app/providers', [
                         ConfigServiceProvider::class,
                         CustomizeServiceProvider::class,
                         LanguageServiceProvider::class,
                         MediaMetaServiceProvider::class,
                         ObjectTemplatesServiceProvider::class,
                         TemplateHierarchyServiceProvider::class
-                ];
+                ] );
 
                 foreach ( $providers as $provider ) {
 
@@ -111,10 +113,10 @@ class Application extends Container {
          * Calls the `boot()` method of all the registered service providers.
          *
          * @since  5.0.0
-         * @access protected
+         * @access public
          * @return void
          */
-        protected function bootProviders() {
+        public function bootProviders() {
 
                 foreach ( $this->providers as $provider ) {
                         $provider->boot();
