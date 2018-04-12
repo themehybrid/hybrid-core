@@ -110,7 +110,60 @@ class Container implements ContainerInterface, ArrayAccess {
 	}
 
 	/**
-	 * Return an object.
+	 * Resolve and return the definition.
+	 *
+	 * @since  5.0.0
+	 * @access public
+	 * @param  string  $abstract
+	 * @param  array   $parameters
+	 * @return mixed
+	 */
+	public function resolve( $abstract, $parameters = [] ) {
+
+ 		if ( ! $this->has( $abstract ) ) {
+ 			return false;
+ 		}
+
+ 		// If this is being managed as an instance and we already have
+ 		// the instance, return it now.
+ 		if ( isset( $this->instances[ $abstract ] ) ) {
+
+ 			return $this->instances[ $abstract ];
+ 		}
+
+		// Get the definition.
+ 		$definition = $this->bindings[ $abstract ]['concrete'];
+
+ 		// If this is not a closure, return the definition.
+ 		if ( ! is_object( $definition ) || ! method_exists( $definition, '__invoke' ) ) {
+
+ 			return $definition;
+ 		}
+
+ 		// Return a single instance.
+ 		if ( $this->bindings[ $abstract ]['shared'] ) {
+
+ 			// If the instance isn't set yet, get it.
+ 			if ( ! isset( $this->instances[ $abstract ] ) ) {
+
+ 				$this->instances[ $abstract ] = $definition( $this, $parameters );
+ 			}
+
+ 			return $this->instances[ $abstract ];
+ 		}
+
+ 		// If this is a factory, call it.
+ 		if ( isset( $this->factories[ $definition ] ) ) {
+
+ 			return $definition( $this, $parameters );
+ 		}
+
+ 		// Return the instance.
+ 		return $definition( $this, $parameters );
+	}
+
+	/**
+	 * Alias for `resolve()`.
 	 *
 	 * @since  5.0.0
 	 * @access public
@@ -119,45 +172,7 @@ class Container implements ContainerInterface, ArrayAccess {
 	 */
 	public function get( $abstract ) {
 
-		if ( ! $this->has( $abstract ) ) {
-			return false;
-		}
-
-		// If this is being managed as an instance and we already have
-		// the instance, return it now.
-		if ( isset( $this->instances[ $abstract ] ) ) {
-
-			return $this->instances[ $abstract ];
-		}
-
-		$definition = $this->bindings[ $abstract ]['concrete'];
-
-		// If this is not a closure, return the definition.
-		if ( ! is_object( $definition ) || ! method_exists( $definition, '__invoke' ) ) {
-
-			return $definition;
-		}
-
-		// Return a single instance.
-		if ( $this->bindings[ $abstract ]['shared'] ) {
-
-			// If the instance isn't set yet, get it.
-			if ( ! isset( $this->instances[ $abstract ] ) ) {
-
-				$this->instances[ $abstract ] = $definition( $this );
-			}
-
-			return $this->instances[ $abstract ];
-		}
-
-		// If this is a factory, call it.
-		if ( isset( $this->factories[ $definition ] ) ) {
-
-			return $definition( $this );
-		}
-
-		// Return the instance.
-		return $definition( $this );
+		return $this->resolve( $abstract );
 	}
 
 	/**
@@ -172,22 +187,6 @@ class Container implements ContainerInterface, ArrayAccess {
 
 		return isset( $this->bindings[ $abstract ] ) || isset( $this->instances[ $abstract ] );
 	}
-
-	/**
-	 * Alias for `get()`. Often, particularly with single-instances, we
-	 * don't need to "get" the instance. We just need to "resolve" it. So,
-	 * this function is just here as an easier-to-remember method name
-	 * for resolving.
-	 *
-	 * @since  5.0.0
-	 * @access public
-	 * @param  string  $abstract
-	 * @return object
-	 */
-	 public function resolve( $abstract ) {
-
-		 return $this->get( $abstract );
-	 }
 
 	/**
 	 * Add a shared object.

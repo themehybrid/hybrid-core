@@ -20,20 +20,31 @@ use Hybrid\Core\Collection;
 
 /**
  * The single instance of the app. Use this function for quickly working with
- * data.  Returns an instance of the `Application` class.
+ * data.  Returns an instance of the `Application` class. If the `$abstract`
+ * parameter is passed in, it'll resolve and return the value from the container.
  *
  * @since  5.0.0
  * @access public
- * @return object
+ * @param  string  $abstract
+ * @param  array   $params
+ * @return mixed
  */
-function app() {
+function app( $abstract = '', $params = [] ) {
 
 	static $app = null;
 
+	// If this is the first time calling `app()`, let's set up a new
+	// application first. This essentially bootstraps the framework.
 	if ( is_null( $app ) ) {
 		$app = new Application();
 	}
 
+	// If an abstract name was passed in, let's resolve it and return.
+	if ( $abstract ) {
+		return $app->resolve( $abstract, $params );
+	}
+
+	// Return the application instance.
 	return $app;
 }
 
