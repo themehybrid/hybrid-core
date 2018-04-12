@@ -34,22 +34,6 @@ class TemplateHierarchyServiceProvider extends ServiceProvider {
          */
         public function register() {
 
-                $this->app->singleton( 'template_hierarchy', function( $container ) {
-
-                        return new Hierarchy();
-                } );
-        }
-
-        /**
-         * Boot callback that is used to resolve the template hierarchy instance
-         * once all the service providers have been loaded.
-         *
-         * @since  5.0.0
-         * @access public
-         * @return void
-         */
-        public function boot() {
-
-                $this->app->resolve( 'template_hierarchy' );
+                $this->app->instance( 'template_hierarchy', new Hierarchy() );
         }
 }

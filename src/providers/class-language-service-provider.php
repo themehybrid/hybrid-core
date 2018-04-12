@@ -34,22 +34,6 @@ class LanguageServiceProvider extends ServiceProvider {
          */
         public function register() {
 
-                $this->app->singleton( 'language', function( $container ) {
-
-                        return new Language();
-                } );
-        }
-
-        /**
-         * Boot callback that is used to resolve the language instance once all
-         * the service providers have been loaded.
-         *
-         * @since  5.0.0
-         * @access public
-         * @return void
-         */
-        public function boot() {
-
-                $this->app->resolve( 'language' );
+                $this->app->instance( 'language', new Language() );
         }
 }

@@ -34,22 +34,6 @@ class CustomizeServiceProvider extends ServiceProvider {
          */
         public function register() {
 
-                $this->app->singleton( 'customize', function( $container ) {
-
-                        return new Customize();
-                } );
-        }
-
-        /**
-         * Boot callback that is used to resolve the customize instance once all
-         * the service providers have been loaded.
-         *
-         * @since  5.0.0
-         * @access public
-         * @return void
-         */
-        public function boot() {
-
-                $this->app->resolve( 'customize' );
+                $this->app->instance( 'customize', new Customize() );
         }
 }

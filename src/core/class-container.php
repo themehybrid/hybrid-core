@@ -68,9 +68,9 @@ class Container implements ContainerInterface, ArrayAccess {
 
 		$this->factories = new SplObjectStorage();
 
-		foreach ( $definitions as $alias => $value ) {
+		foreach ( $definitions as $abstract => $concrete ) {
 
-			$this->add( $alias, $value );
+			$this->add( $abstract, $concrete );
 		}
 	}
 
@@ -79,18 +79,18 @@ class Container implements ContainerInterface, ArrayAccess {
 	 *
 	 * @since  5.0.0
 	 * @access public
-	 * @param  string  $alias
-	 * @param  object  $value
+	 * @param  string  $abstract
+	 * @param  object  $concrete
 	 * @param  bool    $shared
 	 * @return void
 	 */
-	public function add( $alias, $value = null, $shared = false ) {
+	public function add( $abstract, $concrete = null, $shared = false ) {
 
-		if ( isset( $this->bindings[ $alias ] ) ) {
+		if ( isset( $this->bindings[ $abstract ] ) ) {
 			return;
 		}
 
-		$this->bindings[ $alias ] = compact( 'value', 'shared' );
+		$this->bindings[ $abstract ] = compact( 'concrete', 'shared' );
 	}
 
 	/**
@@ -98,14 +98,14 @@ class Container implements ContainerInterface, ArrayAccess {
 	 *
 	 * @since  5.0.0
 	 * @access public
-	 * @param  string  $alias
+	 * @param  string  $abstract
 	 * @return void
 	 */
-	public function remove( $alias ) {
+	public function remove( $abstract ) {
 
-		if ( $this->has( $alias ) ) {
+		if ( $this->has( $abstract ) ) {
 
-			unset( $this->bindings[ $alias ], $this->instances[ $alias ] );
+			unset( $this->bindings[ $abstract ], $this->instances[ $abstract ] );
 		}
 	}
 
@@ -114,16 +114,23 @@ class Container implements ContainerInterface, ArrayAccess {
 	 *
 	 * @since  5.0.0
 	 * @access public
-	 * @param  string  $alias
+	 * @param  string  $abstract
 	 * @return object
 	 */
-	public function get( $alias ) {
+	public function get( $abstract ) {
 
-		if ( ! $this->has( $alias ) ) {
+		if ( ! $this->has( $abstract ) ) {
 			return false;
 		}
 
-		$definition = $this->bindings[ $alias ]['value'];
+		// If this is being managed as an instance and we already have
+		// the instance, return it now.
+		if ( isset( $this->instances[ $abstract ] ) ) {
+
+			return $this->instances[ $abstract ];
+		}
+
+		$definition = $this->bindings[ $abstract ]['concrete'];
 
 		// If this is not a closure, return the definition.
 		if ( ! is_object( $definition ) || ! method_exists( $definition, '__invoke' ) ) {
@@ -132,15 +139,15 @@ class Container implements ContainerInterface, ArrayAccess {
 		}
 
 		// Return a single instance.
-		if ( $this->bindings[ $alias ]['shared'] ) {
+		if ( $this->bindings[ $abstract ]['shared'] ) {
 
 			// If the instance isn't set yet, get it.
-			if ( ! isset( $this->instances[ $alias ] ) ) {
+			if ( ! isset( $this->instances[ $abstract ] ) ) {
 
-				$this->instances[ $alias ] = $definition( $this );
+				$this->instances[ $abstract ] = $definition( $this );
 			}
 
-			return $this->instances[ $alias ];
+			return $this->instances[ $abstract ];
 		}
 
 		// If this is a factory, call it.
@@ -158,12 +165,12 @@ class Container implements ContainerInterface, ArrayAccess {
 	 *
 	 * @since  5.0.0
 	 * @access public
-	 * @param  string  $alias
+	 * @param  string  $abstract
 	 * @return bool
 	 */
-	public function has( $alias ) {
+	public function has( $abstract ) {
 
-		return isset( $this->bindings[ $alias ] );
+		return isset( $this->bindings[ $abstract ] ) || isset( $this->instances[ $abstract ] );
 	}
 
 	/**
@@ -174,12 +181,12 @@ class Container implements ContainerInterface, ArrayAccess {
 	 *
 	 * @since  5.0.0
 	 * @access public
-	 * @param  string  $alias
+	 * @param  string  $abstract
 	 * @return object
 	 */
-	 public function resolve( $alias ) {
+	 public function resolve( $abstract ) {
 
-		 return $this->get( $alias );
+		 return $this->get( $abstract );
 	 }
 
 	/**
@@ -187,14 +194,30 @@ class Container implements ContainerInterface, ArrayAccess {
 	 *
 	 * @since  5.0.0
 	 * @access public
-	 * @param  string  $alias
-	 * @param  object  $value
+	 * @param  string  $abstract
+	 * @param  object  $concrete
 	 * @return void
 	 */
-	public function singleton( $alias, $value = null ) {
+	public function singleton( $abstract, $concrete = null ) {
 
-		$this->add( $alias, $value, true );
+		$this->add( $abstract, $concrete, true );
 	}
+
+	/**
+	 * Add an instance of an object.
+	 *
+	 * @since  5.0.0
+	 * @access public
+	 * @param  string  $abstract
+	 * @param  mixed   $instance
+	 * @return mixed
+	 */
+	 public function instance( $abstract, $instance ) {
+
+		 $this->instances[ $abstract ] = $instance;
+
+		 return $instance;
+	 }
 
 	/**
 	 * Adds a factory and returns the callable object.
