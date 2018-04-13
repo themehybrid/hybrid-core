@@ -15,7 +15,7 @@ You can see the changes made via the [commit log](https://github.com/justintadlo
 * Adds the `hybrid_sprintf_theme_dir()` and `hybrid_sprintf_theme_uri()` functions. These functions replace `%1$s` with the template and `%2$s` with the stylesheet directory path and URI, respectively.
 * Introduces `hybrid_get_embed_template()` and an embed template part system.  This allows theme authors to create embed templates based on the post type, format, etc.
 * Full admin support for taxonomy term layouts.
-* Added the `\Hybrid\app()` wrapper function for returning the instance of the `Hybrid` object.
+* Added the `hybrid()` wrapper function for returning the instance of the `Hybrid` object.
 * Adds the `hybrid_widget_exists()` conditional function for checking if a widget (by class name) exists.
 * Introduces the `hybrid_comment_parent_link()` and `hybrid_get_comment_parent_link()` functions for displaying or getting the comment parent link of a child comment.
 * Creates a new `hybrid_get_template_part()` function, which is a more robust version of the core WP `get_template_part()` function.
@@ -35,7 +35,7 @@ You can see the changes made via the [commit log](https://github.com/justintadlo
 * Registers Hybrid's styles on the front end, embeds, login page, and admin for use.
 * Attribute system now allows for `0` or `'0'` as valid attribute values.  `false` is for explicit empty values.
 * Overhauled the attributes (`hybrid_attr()`) system.  The framework no longer defines Schema.org as a default.  It leaves this up to theme authors.  Additionally, it only sets defaults for the body, post, and comment attributes.  The framework is just providing the foundation for theme authors to build what they want without getting in their way.
-* The `Hybrid` class is now a singleton class.  Theme authors should no longer call `new \Hybrid\app()`.  The framework will launch itself.
+* The `Hybrid` class is now a singleton class.  Theme authors should no longer call `new Hybrid()`.  The framework will launch itself.
 * User-selected page templates now overrule the theme author's choice if the theme author included a `front-page.php`.
 * Adds the Hybrid Core version to its own stylesheets when registering.
 * The template hierarchy system now uses the `*_template_hierarchy` filter hooks as opposed to the `*_template` filter hooks. This means that our code runs before looking up templates, which speeds things up.
