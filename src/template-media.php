@@ -114,7 +114,7 @@ function get_media_meta( $property, $args = [] ) {
  */
 function media_metadata() {
 
-	return app()->get( 'media_meta' );
+	return app( 'media_meta' );
 }
 
 /**

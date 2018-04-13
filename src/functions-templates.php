@@ -29,7 +29,7 @@ add_action( 'init', __NAMESPACE__ . '\register_object_templates', 95 );
  */
 function object_templates() {
 
-	return app()->get( 'object_templates' );
+	return app( 'object_templates' );
 }
 
 /**

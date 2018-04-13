@@ -26,7 +26,7 @@ use Hybrid\Template\Pagination;
  */
 function get_template_hierarchy() {
 
-	return app()->get( 'template_hierarchy' )->hierarchy;
+	return app( 'template_hierarchy' )->hierarchy;
 }
 
 /**

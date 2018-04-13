@@ -500,7 +500,7 @@ function post_template_compat( $post_id, $template ) {
  */
 function config( $name = '' ) {
 
-	return $name ? app()->config->$name : app()->config;
+	return $name ? app( 'config' )->$name : app( 'config' );
 }
 
 /**
@@ -529,7 +529,7 @@ function path( $file = '' ) {
 
 	$file = ltrim( $file, '/' );
 
-	return $file ? trailingslashit( app()->path ) . $file : app()->path;
+	return $file ? trailingslashit( app( 'path') ) . $file : app( 'path' );
 }
 
 /**
@@ -545,7 +545,7 @@ function uri( $file = '' ) {
 
 	$file = ltrim( $file, '/' );
 
-	return $file ? trailingslashit( app()->uri ) . $file : app()->uri;
+	return $file ? trailingslashit( app( 'uri' ) ) . $file : app( 'uri' );
 }
 
 /**
