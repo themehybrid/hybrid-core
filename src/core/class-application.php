@@ -59,7 +59,7 @@ class Application extends Container {
          */
         public function __construct() {
 
-                $this->registerPaths();
+                $this->registerDefaultBindings();
 
                 // Register and providers at the earliest hook available to
                 // themes. This is so that themes can register service providers
@@ -69,18 +69,22 @@ class Application extends Container {
         }
 
         /**
-         * Adds the directory path and URI to the framework. These should
-         * initially be defined via the `HYBRID_DIR` and `HYBRID_URI` constants
-         * to get the correct results.
+         * Registers the default bindings we need to run the framework.
          *
          * @since  5.0.0
          * @access protected
          * @return void
          */
-        protected function registerPaths() {
+        protected function registerDefaultBindings() {
 
+                // Adds the directory path and URI for the framework. These
+                // should initially be defined via the `HYBRID_DIR` and
+                // `HYBRID_URI` constants to get the correct results.
                 $this->add( 'path', untrailingslashit( HYBRID_DIR ) );
                 $this->add( 'uri',  untrailingslashit( HYBRID_URI ) );
+
+                // Add the version for the framework.
+                $this->add( 'version', static::VERSION );
         }
 
         /**
@@ -121,17 +125,5 @@ class Application extends Container {
                 foreach ( $this->providers as $provider ) {
                         $provider->boot();
                 }
-        }
-
-        /**
-         * Returns the framework version number.
-         *
-         * @since  5.0.0
-         * @access public
-         * @return string
-         */
-        public function version() {
-
-                return static::VERSION;
         }
 }

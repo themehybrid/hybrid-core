@@ -36,7 +36,7 @@ function customize_controls_register_scripts() {
 		'hybrid-customize-controls',
 		uri( "resources/scripts/customize-controls{$suffix}.js" ),
 		[ 'customize-controls', 'jquery' ],
-		app()->version(),
+		app( 'version' ),
 		true
 	);
 }
