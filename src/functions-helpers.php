@@ -104,3 +104,15 @@ function uri( $file = '' ) {
 
 	return $file ? trailingslashit( app( 'uri' ) ) . $file : app( 'uri' );
 }
+
+/**
+ * Returns the framework version.
+ *
+ * @since  5.0.0
+ * @access public
+ * @return string
+ */
+ function version() {
+
+	 return app( 'version' );
+ }

@@ -32,7 +32,7 @@ function customize_controls_register_styles() {
 		'hybrid-customize-controls',
 		uri( "resources/styles/customize-controls{$suffix}.css" ),
 		[],
-		app( 'version' )
+		version()
 	);
 }
 
