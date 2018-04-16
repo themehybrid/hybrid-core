@@ -26,6 +26,7 @@ array_map(
 		'functions-fonts',
 		'functions-formats',
 		'functions-head',
+		'functions-helpers',
 		'functions-lang',
 		'functions-meta',
 		'functions-scripts',

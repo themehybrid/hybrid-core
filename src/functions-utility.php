@@ -15,39 +15,6 @@
 
 namespace Hybrid;
 
-use Hybrid\Core\Application;
-use Hybrid\Core\Collection;
-
-/**
- * The single instance of the app. Use this function for quickly working with
- * data.  Returns an instance of the `Application` class. If the `$abstract`
- * parameter is passed in, it'll resolve and return the value from the container.
- *
- * @since  5.0.0
- * @access public
- * @param  string  $abstract
- * @param  array   $params
- * @return mixed
- */
-function app( $abstract = '', $params = [] ) {
-
-	static $app = null;
-
-	// If this is the first time calling `app()`, let's set up a new
-	// application first. This essentially bootstraps the framework.
-	if ( is_null( $app ) ) {
-		$app = new Application();
-	}
-
-	// If an abstract name was passed in, let's resolve it and return.
-	if ( $abstract ) {
-		return $app->resolve( $abstract, $params );
-	}
-
-	// Return the application instance.
-	return $app;
-}
-
 /**
  * Autoloader for the framework. Looks in the framework folder for classes. File
  * names are prefixed with `class-` and are a lowercased version of the class
@@ -488,64 +455,6 @@ function post_template_compat( $post_id, $template ) {
 	update_post_meta( $post_id, '_wp_page_template', $template );
 
 	delete_post_meta( $post_id, sprintf( '_wp_%s_template', get_post_type( $post_id ) ) );
-}
-
-/**
- * Returns a configuration object.
- *
- * @since  5.0.0
- * @access public
- * @param  string  $name
- * @return object
- */
-function config( $name = '' ) {
-
-	return $name ? app( 'config' )->$name : app( 'config' );
-}
-
-/**
- * Wrapper function for the `Collection` class.
- *
- * @since  5.0.0
- * @access public
- * @param  array   $items
- * @return object
- */
-function collect( $items = [] ) {
-
-	return new Collection( $items );
-}
-
-/**
- * Returns the directory path of the framework. If a file is passed in, it'll be
- * appended to the end of the path.
- *
- * @since  5.0.0
- * @access public
- * @param  string  $file
- * @return string
- */
-function path( $file = '' ) {
-
-	$file = ltrim( $file, '/' );
-
-	return $file ? trailingslashit( app( 'path') ) . $file : app( 'path' );
-}
-
-/**
- * Returns the directory URI of the framework. If a file is passed in, it'll be
- * appended to the end of the URI.
- *
- * @since  5.0.0
- * @access public
- * @param  string  $file
- * @return string
- */
-function uri( $file = '' ) {
-
-	$file = ltrim( $file, '/' );
-
-	return $file ? trailingslashit( app( 'uri' ) ) . $file : app( 'uri' );
 }
 
 /**
