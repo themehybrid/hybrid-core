@@ -1,8 +1,8 @@
 <?php
 /**
- * Sidebar functions.
+ * Sidebar template tags.
  *
- * Helper functions for working with the WordPress sidebar system.
+ * Template tags related to widgets and sidebars for use within theme templates.
  *
  * @package   HybridCore
  * @author    Justin Tadlock <justintadlock@gmail.com>

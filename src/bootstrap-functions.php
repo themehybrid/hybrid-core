@@ -30,7 +30,6 @@ array_map(
 		'functions-lang',
 		'functions-meta',
 		'functions-scripts',
-		'functions-sidebars',
 		'functions-styles',
 		'functions-templates',
 		'functions-utility',
@@ -38,6 +37,7 @@ array_map(
 		'template-comments',
 		'template-general',
 		'template-media',
-		'template-post'
+		'template-post',
+		'template-sidebars'
 	]
 );
