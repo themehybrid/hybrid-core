@@ -33,11 +33,11 @@ array_map(
 		'functions-styles',
 		'functions-templates',
 		'functions-utility',
-		'functions-view',
 		'template-comments',
 		'template-general',
 		'template-media',
 		'template-post',
-		'template-sidebars'
+		'template-sidebars',
+		'template-view'
 	]
 );
