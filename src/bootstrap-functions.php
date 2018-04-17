@@ -36,6 +36,7 @@ array_map(
 		'template-comments',
 		'template-general',
 		'template-media',
+		'template-menus',
 		'template-post',
 		'template-sidebars',
 		'template-view'
