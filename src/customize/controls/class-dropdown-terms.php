@@ -33,7 +33,7 @@ class DropdownTerms extends Control {
 	 * @access public
 	 * @var    string
 	 */
-	public $type = 'hybrid/dropdown-terms';
+	public $type = 'hybrid-dropdown-terms';
 
 	/**
 	 * Custom arguments to pass into `wp_dropdown_categories()`.
