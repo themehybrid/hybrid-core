@@ -18,7 +18,6 @@
 namespace Hybrid\Core;
 
 use ArrayAccess;
-use SplObjectStorage;
 use Psr\Container\ContainerInterface;
 
 /**
@@ -48,15 +47,6 @@ class Container implements ContainerInterface, ArrayAccess {
 	protected $instances = [];
 
 	/**
-	 * Set to an instance of `SplObjectStorage`.
-	 *
-	 * @since  5.0.0
-	 * @access protected
-	 * @var    object
-	 */
-	protected $factories;
-
-	/**
 	 * Set up a new container.
 	 *
 	 * @since  5.0.0
@@ -65,8 +55,6 @@ class Container implements ContainerInterface, ArrayAccess {
 	 * @return void
 	 */
 	public function __construct( array $definitions = [] ) {
-
-		$this->factories = new SplObjectStorage();
 
 		foreach ( $definitions as $abstract => $concrete ) {
 
@@ -152,12 +140,6 @@ class Container implements ContainerInterface, ArrayAccess {
  			return $this->instances[ $abstract ];
  		}
 
- 		// If this is a factory, call it.
- 		if ( isset( $this->factories[ $definition ] ) ) {
-
- 			return $definition( $this, $parameters );
- 		}
-
  		// Return the instance.
  		return $definition( $this, $parameters );
 	}
@@ -217,21 +199,6 @@ class Container implements ContainerInterface, ArrayAccess {
 
 		 return $instance;
 	 }
-
-	/**
-	 * Adds a factory and returns the callable object.
-	 *
-	 * @since  5.0.0
-	 * @access public
-	 * @param  callable  $callable
-	 * @return callable
-	 */
-	public function factory( $callable ) {
-
-		$this->factories->attach( $callabale );
-
-		return $callable;
-	}
 
 	/**
 	 * Sets a property via `ArrayAccess`.
