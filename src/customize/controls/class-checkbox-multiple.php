@@ -41,7 +41,7 @@ class CheckboxMultiple extends Control {
 	 * @return void
 	 */
 	public function enqueue() {
-		wp_enqueue_script( 'hybrid/customize-controls' );
+		wp_enqueue_script( 'hybrid-customize-controls' );
 	}
 
 	/**
