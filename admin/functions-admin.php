@@ -114,7 +114,7 @@ function hybrid_form_field_layout( $args = array() ) {
 
 			<span class="screen-reader-text"><?php echo esc_html( $layout->label ); ?></span>
 
-			<img src="<?php echo esc_url( hybrid_sprintf_theme_uri( $layout->image ) ); ?>" alt="<?php echo esc_attr( $layout->label ); ?>" />
+			<img src="<?php echo esc_url( hybrid_sprintf_theme_uri( $layout->image ) ); ?>" alt="<?php echo esc_attr( $layout->label ); ?>" title="<?php echo esc_attr( $layout->label ); ?>" />
 		</label>
 
 	<?php endforeach; ?>
