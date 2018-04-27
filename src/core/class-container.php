@@ -18,6 +18,7 @@
 namespace Hybrid\Core;
 
 use ArrayAccess;
+use Closure;
 use Psr\Container\ContainerInterface;
 
 /**
@@ -45,6 +46,15 @@ class Container implements ContainerInterface, ArrayAccess {
 	 * @var    array
 	 */
 	protected $instances = [];
+
+	/**
+	 * Array of object extensions.
+	 *
+	 * @since  5.0.0
+	 * @access protected
+	 * @var    array
+	 */
+	protected $extensions = [];
 
 	/**
 	 * Set up a new container.
@@ -79,6 +89,8 @@ class Container implements ContainerInterface, ArrayAccess {
 		}
 
 		$this->bindings[ $abstract ] = compact( 'concrete', 'shared' );
+
+		$this->extensions[ $abstract ] = [];
 	}
 
 	/**
@@ -128,20 +140,24 @@ class Container implements ContainerInterface, ArrayAccess {
  			return $definition;
  		}
 
- 		// Return a single instance.
- 		if ( $this->bindings[ $abstract ]['shared'] ) {
+		// Build the object.
+		$object = $definition( $this, $parameters );
 
- 			// If the instance isn't set yet, get it.
- 			if ( ! isset( $this->instances[ $abstract ] ) ) {
+ 		// If shared instance, make sure to store it in the instances
+		// array so that we're not creating new objects later.
+ 		if ( $this->bindings[ $abstract ]['shared'] && ! isset( $this->instances[ $abstract ] ) ) {
 
- 				$this->instances[ $abstract ] = $definition( $this, $parameters );
- 			}
-
- 			return $this->instances[ $abstract ];
+			$this->instances[ $abstract ] = $object;
  		}
 
- 		// Return the instance.
- 		return $definition( $this, $parameters );
+		// Run through each of the extensions for the object.
+		foreach ( $this->extensions[ $abstract ] as $extension ) {
+
+			$object = new $extension( $object, $this );
+		}
+
+ 		// Return the object.
+		return $object;
 	}
 
 	/**
@@ -198,6 +214,21 @@ class Container implements ContainerInterface, ArrayAccess {
 		 $this->instances[ $abstract ] = $instance;
 
 		 return $instance;
+	 }
+
+	 /**
+	  * Extend a binding with something like a decorator class. Cannot
+	  * extend resolved instances.
+	  *
+	  * @since  5.0.0
+	  * @access public
+	  * @param  string  $abstract
+	  * @param  Closure $closure
+	  * @return void
+	  */
+	 public function extend( $abstract, Closure $closure ) {
+
+		 $this->extensions[ $abstract ][] = $closure;
 	 }
 
 	/**
