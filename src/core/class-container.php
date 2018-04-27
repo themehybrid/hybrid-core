@@ -135,7 +135,7 @@ class Container implements ContainerInterface, ArrayAccess {
  		$definition = $this->bindings[ $abstract ]['concrete'];
 
  		// If this is not a closure, return the definition.
- 		if ( ! is_object( $definition ) || ! method_exists( $definition, '__invoke' ) ) {
+		if ( ! $definition instanceof Closure ) {
 
  			return $definition;
  		}
