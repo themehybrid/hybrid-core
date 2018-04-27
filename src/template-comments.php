@@ -155,9 +155,10 @@ function comments_template( $template ) {
 	}
 
 	// Add a comments template based on the post type.
-	$templates[] = 'comments-' . get_post_type() . '.php';
+	$templates[] = sprintf( 'comments/%s.php', get_post_type() );
 
 	// Add the default comments template.
+	$templates[] = 'comments/default.php';
 	$templates[] = 'comments.php';
 
 	// Return the found template.
