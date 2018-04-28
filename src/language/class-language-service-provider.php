@@ -12,9 +12,9 @@
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
-namespace Hybrid\Providers;
+namespace Hybrid\Language;
 
-use Hybrid\Language;
+use Hybrid\Core\ServiceProvider;
 
 /**
  * Language provider.

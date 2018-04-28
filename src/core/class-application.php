@@ -16,12 +16,12 @@
 
 namespace Hybrid\Core;
 
-use Hybrid\Providers\ConfigServiceProvider;
-use Hybrid\Providers\CustomizeServiceProvider;
-use Hybrid\Providers\LanguageServiceProvider;
-use Hybrid\Providers\MediaMetaServiceProvider;
-use Hybrid\Providers\ObjectTemplatesServiceProvider;
-use Hybrid\Providers\TemplateHierarchyServiceProvider;
+use Hybrid\Config\ConfigServiceProvider;
+use Hybrid\Customize\CustomizeServiceProvider;
+use Hybrid\Language\LanguageServiceProvider;
+use Hybrid\Media\MediaMetaServiceProvider;
+use Hybrid\Template\ObjectTemplatesServiceProvider;
+use Hybrid\Template\TemplateHierarchyServiceProvider;
 
 /**
  * Application class.

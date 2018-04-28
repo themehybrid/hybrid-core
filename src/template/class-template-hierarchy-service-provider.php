@@ -12,9 +12,9 @@
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
-namespace Hybrid\Providers;
+namespace Hybrid\Template;
 
-use Hybrid\Template\Hierarchy;
+use Hybrid\Core\ServiceProvider;
 
 /**
  * Template hierarchy provider class.

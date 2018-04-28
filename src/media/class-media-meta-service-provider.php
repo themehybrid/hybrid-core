@@ -1,9 +1,9 @@
 <?php
 /**
- * Object templates service provider.
+ * Media meta service provider.
  *
- * This is the service provider for the object templates system, which binds an
- * empty collection to the container that can later be used to register templates.
+ * This is the service provider for the media meta system, which binds an
+ * empty collection to the container that can later be used to store media meta.
  *
  * @package   HybridCore
  * @author    Justin Tadlock <justintadlock@gmail.com>
@@ -12,21 +12,22 @@
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
-namespace Hybrid\Providers;
+namespace Hybrid\Media;
 
 use Hybrid\Core\Collection;
+use Hybrid\Core\ServiceProvider;
 
 /**
- * Object templates provider class.
+ * Media meta provider class.
  *
  * @since  5.0.0
  * @access public
  */
-class ObjectTemplatesServiceProvider extends ServiceProvider {
+class MediaMetaServiceProvider extends ServiceProvider {
 
         /**
-         * Registration callback that adds a single instance of the object
-         * templates collection to the container.
+         * Registration callback that adds a single instance of the media meta
+         * collection to the container.
          *
          * @since  5.0.0
          * @access public
@@ -34,7 +35,7 @@ class ObjectTemplatesServiceProvider extends ServiceProvider {
          */
         public function register() {
 
-                $this->app->singleton( 'object_templates', function( $container ) {
+                $this->app->singleton( 'media_meta', function( $container ) {
 
                         return new Collection();
                 } );

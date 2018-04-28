@@ -12,9 +12,9 @@
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
-namespace Hybrid\Providers;
+namespace Hybrid\Customize;
 
-use Hybrid\Customize\Customize;
+use Hybrid\Core\ServiceProvider;
 
 /**
  * Customize provider.

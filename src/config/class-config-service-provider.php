@@ -13,9 +13,10 @@
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
-namespace Hybrid\Providers;
+namespace Hybrid\Config;
 
 use Hybrid\Core\Collection;
+use Hybrid\Core\ServiceProvider;
 
 /**
  * Configuration provider.
