@@ -38,7 +38,7 @@ add_filter( 'hybrid/attr/comment/defaults', __NAMESPACE__ . '\attr_comment', ~PH
  */
 function attributes( $name, $context = '', $attr = [] ) {
 
-	return new Attributes( $name, $context, $attr );
+	return app( 'attr', compact( 'name', 'context', 'attr' ) );
 }
 
 /**

@@ -16,6 +16,7 @@
 
 namespace Hybrid\Core;
 
+use Hybrid\Attributes\AttributesServiceProvider;
 use Hybrid\Config\ConfigServiceProvider;
 use Hybrid\Customize\CustomizeServiceProvider;
 use Hybrid\Language\LanguageServiceProvider;
@@ -97,6 +98,7 @@ class Application extends Container {
         public function registerProviders() {
 
                 $providers = apply_filters( 'hybrid/app/providers', [
+                        AttributesServiceProvider::class,
                         ConfigServiceProvider::class,
                         CustomizeServiceProvider::class,
                         LanguageServiceProvider::class,
