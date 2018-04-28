@@ -18,19 +18,21 @@ namespace Hybrid;
 use Hybrid\Template\Pagination;
 
 /**
- * Returns the template hierarchy from the theme wrapper.
+ * Returns the global hierarchy. This is a wrapper around the values stored via
+ * the template hierarchy object.
  *
  * @since  5.0.0
  * @access public
  * @return array
  */
-function get_template_hierarchy() {
+function get_global_hierarchy() {
 
-	return app( 'template_hierarchy' )->hierarchy;
+	return apply_filters( 'hybrid/hierarchy/global', app( 'template_hierarchy' )->hierarchy );
 }
 
 /**
- * Creates a hierarchy based on the current post.  For use with content-specific templates.
+ * Creates a hierarchy based on the current post. It's primary purpose is for
+ * use with post views/templates.
  *
  * @since  5.0.0
  * @access public
@@ -72,7 +74,7 @@ function get_post_hierarchy() {
 	// Template based off the post type.
 	$hierarchy[] = $post_type;
 
-	return $hierarchy;
+	return apply_filters( 'hybrid/hierarchy/post', $hierarchy );
 }
 
 /**

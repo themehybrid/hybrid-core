@@ -35,7 +35,7 @@ function get_comment_hierarchy() {
 		$hier[] = 'ping';
 	}
 
-	return apply_filters( 'hybrid/comment_hierarchy', $hier );
+	return apply_filters( 'hybrid/hierarchy/comment', $hier );
 }
 
 /**
