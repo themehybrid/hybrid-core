@@ -15,31 +15,8 @@
 
 namespace Hybrid;
 
-# Register scripts.
-add_action( 'customize_controls_enqueue_scripts', __NAMESPACE__ . '\customize_controls_register_scripts', 0 );
-
 # Enqueue scripts.
 add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\enqueue_scripts', 5 );
-
-/**
- * Registers scripts for use with customize controls.
- *
- * @since  5.0.0
- * @access public
- * @return void
- */
-function customize_controls_register_scripts() {
-
-	$suffix = get_min_suffix();
-
-	wp_register_script(
-		'hybrid-customize-controls',
-		uri( "resources/scripts/customize-controls{$suffix}.js" ),
-		[ 'customize-controls', 'jquery' ],
-		version(),
-		true
-	);
-}
 
 /**
  * Loads the `comment-reply` script when it's needed.

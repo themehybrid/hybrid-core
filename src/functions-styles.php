@@ -11,30 +11,8 @@
 
 namespace Hybrid;
 
-# Register scripts.
-add_action( 'customize_controls_enqueue_scripts', __NAMESPACE__ . '\customize_controls_register_styles', 0 );
-
 # Remove the default emoji styles. We'll handle this in the stylesheet.
 remove_action( 'wp_print_styles', 'print_emoji_styles' );
-
-/**
- * Registers styles for use with customize controls.
- *
- * @since  5.0.0
- * @access public
- * @return void
- */
-function customize_controls_register_styles() {
-
-	$suffix = get_min_suffix();
-
-	wp_register_style(
-		'hybrid-customize-controls',
-		uri( "resources/styles/customize-controls{$suffix}.css" ),
-		[],
-		version()
-	);
-}
 
 /**
  * Searches for a locale stylesheet.
