@@ -19,7 +19,7 @@
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
-namespace Hybrid\Template;
+namespace Hybrid\View;
 
 use Hybrid\Core\Collection;
 use function Hybrid\config;

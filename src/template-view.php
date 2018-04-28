@@ -13,9 +13,6 @@
 
 namespace Hybrid;
 
-use Hybrid\Core\Collection;
-use Hybrid\Template\View;
-
 /**
  * Returns a view object.
  *
@@ -28,7 +25,7 @@ use Hybrid\Template\View;
  */
 function view( $name, $slugs = [], $data = [] ) {
 
-	return new View( $name, $slugs, new Collection( $data ) );
+	return app( 'view', compact( 'name', 'slugs', 'data' ) );
 }
 
 /**

@@ -23,6 +23,7 @@ use Hybrid\Language\LanguageServiceProvider;
 use Hybrid\Media\MediaMetaServiceProvider;
 use Hybrid\Template\ObjectTemplatesServiceProvider;
 use Hybrid\Template\TemplateHierarchyServiceProvider;
+use Hybrid\View\ViewServiceProvider;
 
 /**
  * Application class.
@@ -104,7 +105,8 @@ class Application extends Container {
                         LanguageServiceProvider::class,
                         MediaMetaServiceProvider::class,
                         ObjectTemplatesServiceProvider::class,
-                        TemplateHierarchyServiceProvider::class
+                        TemplateHierarchyServiceProvider::class,
+                        ViewServiceProvider::class
                 ] );
 
                 foreach ( $providers as $provider ) {
