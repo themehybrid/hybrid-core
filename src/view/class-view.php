@@ -38,7 +38,7 @@ class View {
 	 * it can also be the filename as the final fallback if no folder exists.
 	 *
 	 * @since  5.0.0
-	 * @access public
+	 * @access protected
 	 * @var    string
 	 */
 	protected $name = '';
@@ -49,7 +49,7 @@ class View {
 	 * the order that they are set.
 	 *
 	 * @since  5.0.0
-	 * @access public
+	 * @access protected
 	 * @var    string
 	 */
 	protected $slugs = [];
@@ -58,7 +58,7 @@ class View {
 	 * An array of data that is passed into the view template.
 	 *
 	 * @since  5.0.0
-	 * @access public
+	 * @access protected
 	 * @var    array
 	 */
 	protected $data = [];
@@ -67,10 +67,10 @@ class View {
 	 * The template filename.
 	 *
 	 * @since  5.0.0
-	 * @access public
+	 * @access protected
 	 * @var    string
 	 */
-	protected $template = '';
+	protected $template = null;
 
 	/**
 	 * Sets up the view properties.
@@ -101,21 +101,9 @@ class View {
 	 * @access public
 	 * @return string
 	 */
-	 public function __toString() {
+	public function __toString() {
 
-		 return $this->fetch();
-	 }
-
-	/**
-	 * Locates the template using the core WordPress `locate_template()` function.
-	 *
-	 * @since  5.0.0
-	 * @access protected
-	 * @return void
-	 */
-	protected function locate() {
-
-		$this->template = locate_template( $this->hierarchy() );
+		return $this->fetch();
 	}
 
 	/**
@@ -148,6 +136,34 @@ class View {
 	}
 
 	/**
+	 * Locates the template.
+	 *
+	 * @since  5.0.0
+	 * @access protected
+	 * @return void
+	 */
+	protected function locate() {
+
+		return locate_template( $this->hierarchy() );
+	}
+
+	/**
+	 * Returns the located template.
+	 *
+	 * @since  5.0.0
+	 * @access public
+	 * @return string
+	 */
+	public function template() {
+
+		if ( is_null( $this->template ) ) {
+			$this->template = $this->locate();
+		}
+
+		return $this->template;
+	}
+
+	/**
 	 * Sets up data to be passed to the template and renders it.
 	 *
 	 * @since  5.0.0
@@ -159,10 +175,7 @@ class View {
 		// Compatibility with core WP's template parts.
 		$this->templatePartCompat();
 
-		// Locate the template.
-		$this->locate();
-
-		if ( $this->template ) {
+		if ( $this->template() ) {
 
 			// Maybe remove core WP's `prepend_attachment`.
 			$this->maybeShiftAttachment();
@@ -177,7 +190,7 @@ class View {
 			}
 
 			// Load the template.
-			include( $this->template );
+			include( $this->template() );
 		}
 	}
 
