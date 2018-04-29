@@ -19,7 +19,7 @@ namespace Hybrid\Core;
 
 use ArrayAccess;
 use Closure;
-use Psr\Container\ContainerInterface;
+use Hybrid\Contracts\Container as ContainerContract;
 
 /**
  * A simple container for objects.
@@ -27,7 +27,7 @@ use Psr\Container\ContainerInterface;
  * @since  5.0.0
  * @access public
  */
-class Container implements ContainerInterface, ArrayAccess {
+class Container implements ContainerContract, ArrayAccess {
 
 	/**
 	 * Stored definitions of objects.
@@ -82,7 +82,7 @@ class Container implements ContainerInterface, ArrayAccess {
 	 * @param  bool    $shared
 	 * @return void
 	 */
-	public function add( $abstract, $concrete = null, $shared = false ) {
+	public function bind( $abstract, $concrete = null, $shared = false ) {
 
 		if ( isset( $this->bindings[ $abstract ] ) ) {
 			return;
@@ -91,6 +91,21 @@ class Container implements ContainerInterface, ArrayAccess {
 		$this->bindings[ $abstract ] = compact( 'concrete', 'shared' );
 
 		$this->extensions[ $abstract ] = [];
+	}
+
+	/**
+	 * Alias for `bind()`.
+	 *
+	 * @since  5.0.0
+	 * @access public
+	 * @param  string  $abstract
+	 * @param  object  $concrete
+	 * @param  bool    $shared
+	 * @return void
+	 */
+	public function add( $abstract, $concrete = null, $shared = false ) {
+
+		$this->bind( $abstract, $concrete, $shared );
 	}
 
 	/**

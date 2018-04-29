@@ -62,9 +62,14 @@ function autoload( $class, $args = [] ) {
 		$new_pieces[] = strtolower( join( '-', $pascal ) );
 	}
 
+	// Gets the prefix. `class-` for classes and `interface-` for interfaces.
+	$prefix = !! array_intersect( [ 'contract', 'contracts', 'interface', 'interface' ], $new_pieces )
+	          ? 'interface'
+		  : 'class';
+
 	// Pop the last item off the array and re-add it with the `class-` prefix
 	// and the `.php` file extension.  This is our class file.
-	$new_pieces[] = sprintf( 'class-%s.php', array_pop( $new_pieces ) );
+	$new_pieces[] = sprintf( '%s-%s.php', $prefix, array_pop( $new_pieces ) );
 
 	// Join all the pieces together by a forward slash. These are directories.
 	$file = join( DIRECTORY_SEPARATOR, $new_pieces );

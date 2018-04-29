@@ -21,7 +21,9 @@
 
 namespace Hybrid\View;
 
+use Hybrid\Contracts\View as ViewContract;
 use Hybrid\Core\Collection;
+
 use function Hybrid\config;
 use function Hybrid\locate_template;
 
@@ -31,7 +33,7 @@ use function Hybrid\locate_template;
  * @since  5.0.0
  * @access public
  */
-class View {
+class View implements ViewContract {
 
 	/**
 	 * Name of the view. This is primarily used as the folder name. However,
