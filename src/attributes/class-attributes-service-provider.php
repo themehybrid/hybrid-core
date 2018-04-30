@@ -24,22 +24,22 @@ use Hybrid\Core\ServiceProvider;
  */
 class AttributesServiceProvider extends ServiceProvider {
 
-        /**
-         * Registration callback that binds the `Attributes` class to the container.
-         *
-         * @since  5.0.0
-         * @access public
-         * @return void
-         */
-        public function register() {
+	/**
+	 * Registration callback that binds the `Attributes` class to the container.
+	 *
+	 * @since  5.0.0
+	 * @access public
+	 * @return void
+	 */
+	public function register() {
 
-                $this->app->add( 'attr', function( $container, $params ) {
+		$this->app->add( 'attr', function( $container, $params ) {
 
-                        return new Attributes(
-                                $params['name'],
-                                $params['context'],
-                                $params['attr']
-                        );
-                } );
-        }
+			return new Attributes(
+				$params['name'],
+				$params['context'],
+				$params['attr']
+			);
+		} );
+	}
 }

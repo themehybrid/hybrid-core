@@ -24,16 +24,16 @@ use Hybrid\Core\ServiceProvider;
  */
 class LanguageServiceProvider extends ServiceProvider {
 
-        /**
-         * Registration callback that adds a single instance of the language
-         * system to the container.
-         *
-         * @since  5.0.0
-         * @access public
-         * @return void
-         */
-        public function register() {
+	/**
+	 * Registration callback that adds a single instance of the language
+	 * system to the container.
+	 *
+	 * @since  5.0.0
+	 * @access public
+	 * @return void
+	 */
+	public function register() {
 
-                $this->app->instance( 'language', new Language() );
-        }
+		$this->app->instance( 'language', new Language() );
+	}
 }

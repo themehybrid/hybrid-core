@@ -25,19 +25,19 @@ use Hybrid\Core\ServiceProvider;
  */
 class MediaMetaServiceProvider extends ServiceProvider {
 
-        /**
-         * Registration callback that adds a single instance of the media meta
-         * collection to the container.
-         *
-         * @since  5.0.0
-         * @access public
-         * @return void
-         */
-        public function register() {
+	/**
+	 * Registration callback that adds a single instance of the media meta
+	 * collection to the container.
+	 *
+	 * @since  5.0.0
+	 * @access public
+	 * @return void
+	 */
+	public function register() {
 
-                $this->app->singleton( 'media_meta', function( $container ) {
+		$this->app->singleton( 'media_meta', function( $container ) {
 
-                        return new Collection();
-                } );
-        }
+			return new Collection();
+		} );
+	}
 }

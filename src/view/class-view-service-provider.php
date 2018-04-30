@@ -25,22 +25,22 @@ use Hybrid\Core\ServiceProvider;
  */
 class ViewServiceProvider extends ServiceProvider {
 
-        /**
-         * Registration callback that binds the `View` class to the container.
-         *
-         * @since  5.0.0
-         * @access public
-         * @return void
-         */
-        public function register() {
+	/**
+	 * Registration callback that binds the `View` class to the container.
+	 *
+	 * @since  5.0.0
+	 * @access public
+	 * @return void
+	 */
+	public function register() {
 
-                $this->app->add( 'view', function( $container, $params ) {
+		$this->app->add( 'view', function( $container, $params ) {
 
-                        return new View(
-                                $params['name'],
-                                $params['slugs'],
-                                $params['data'] instanceof Collection ? $params['data'] : new Collection( $params['data'] )
-                        );
-                } );
-        }
+			return new View(
+				$params['name'],
+				$params['slugs'],
+				$params['data'] instanceof Collection ? $params['data'] : new Collection( $params['data'] )
+			);
+		} );
+	}
 }

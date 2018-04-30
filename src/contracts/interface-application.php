@@ -22,13 +22,13 @@ namespace Hybrid\Contracts;
 interface Application {
 
 	/**
-         * Calls the `register()` method of all the available service providers.
-         *
-         * @since  5.0.0
-         * @access public
-         * @return void
-         */
-        public function registerProviders();
+	 * Calls the `register()` method of all the available service providers.
+	 *
+	 * @since  5.0.0
+	 * @access public
+	 * @return void
+	 */
+	public function registerProviders();
 
 	/**
 	 * Calls the `boot()` method of all the registered service providers.

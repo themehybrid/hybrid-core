@@ -34,101 +34,101 @@ use Hybrid\Contracts\Application as ApplicationContract;
  */
 class Application extends Container implements ApplicationContract {
 
-        /**
-         * The current version of the framework.
-         *
-         * @since  5.0.0
-         * @access public
-         * @var    string
-         */
-        const VERSION = '5.0.0';
+	/**
+	 * The current version of the framework.
+	 *
+	 * @since  5.0.0
+	 * @access public
+	 * @var    string
+	 */
+	const VERSION = '5.0.0';
 
-        /**
-         * Array of service provider objects.
-         *
-         * @since  5.0.0
-         * @access protected
-         * @var    array
-         */
-        protected $providers = [];
+	/**
+	 * Array of service provider objects.
+	 *
+	 * @since  5.0.0
+	 * @access protected
+	 * @var    array
+	 */
+	protected $providers = [];
 
-        /**
-         * Calls the functions to register the framework directory paths,
-         * register service providers, and boot the service providers.
-         *
-         * @since  5.0.0
-         * @access public
-         * @return void
-         */
-        public function __construct() {
+	/**
+	 * Calls the functions to register the framework directory paths,
+	 * register service providers, and boot the service providers.
+	 *
+	 * @since  5.0.0
+	 * @access public
+	 * @return void
+	 */
+	public function __construct() {
 
-                $this->registerDefaultBindings();
+		$this->registerDefaultBindings();
 
-                // Register and providers at the earliest hook available to
-                // themes. This is so that themes can register service providers
-                // if they choose to do so.
-                add_action( 'after_setup_theme', [ $this, 'registerProviders' ], ~PHP_INT_MAX );
-                add_action( 'after_setup_theme', [ $this, 'bootProviders'     ], ~PHP_INT_MAX );
-        }
+		// Register and providers at the earliest hook available to
+		// themes. This is so that themes can register service providers
+		// if they choose to do so.
+		add_action( 'after_setup_theme', [ $this, 'registerProviders' ], ~PHP_INT_MAX );
+		add_action( 'after_setup_theme', [ $this, 'bootProviders'     ], ~PHP_INT_MAX );
+	}
 
-        /**
-         * Registers the default bindings we need to run the framework.
-         *
-         * @since  5.0.0
-         * @access protected
-         * @return void
-         */
-        protected function registerDefaultBindings() {
+	/**
+	 * Registers the default bindings we need to run the framework.
+	 *
+	 * @since  5.0.0
+	 * @access protected
+	 * @return void
+	 */
+	protected function registerDefaultBindings() {
 
-                // Adds the directory path and URI for the framework. These
-                // should initially be defined via the `HYBRID_DIR` and
-                // `HYBRID_URI` constants to get the correct results.
-                $this->add( 'path', untrailingslashit( HYBRID_DIR ) );
-                $this->add( 'uri',  untrailingslashit( HYBRID_URI ) );
+		// Adds the directory path and URI for the framework. These
+		// should initially be defined via the `HYBRID_DIR` and
+		// `HYBRID_URI` constants to get the correct results.
+		$this->add( 'path', untrailingslashit( HYBRID_DIR ) );
+		$this->add( 'uri',  untrailingslashit( HYBRID_URI ) );
 
-                // Add the version for the framework.
-                $this->add( 'version', static::VERSION );
-        }
+		// Add the version for the framework.
+		$this->add( 'version', static::VERSION );
+	}
 
-        /**
-         * Calls the `register()` method of all the available service providers.
-         *
-         * @since  5.0.0
-         * @access public
-         * @return void
-         */
-        public function registerProviders() {
+	/**
+	 * Calls the `register()` method of all the available service providers.
+	 *
+	 * @since  5.0.0
+	 * @access public
+	 * @return void
+	 */
+	public function registerProviders() {
 
-                $providers = apply_filters( 'hybrid/app/providers', [
-                        AttributesServiceProvider::class,
-                        ConfigServiceProvider::class,
-                        CustomizeServiceProvider::class,
-                        LanguageServiceProvider::class,
-                        MediaMetaServiceProvider::class,
-                        ObjectTemplatesServiceProvider::class,
-                        TemplateHierarchyServiceProvider::class,
-                        ViewServiceProvider::class
-                ] );
+		$providers = apply_filters( 'hybrid/app/providers', [
+			AttributesServiceProvider::class,
+			ConfigServiceProvider::class,
+			CustomizeServiceProvider::class,
+			LanguageServiceProvider::class,
+			MediaMetaServiceProvider::class,
+			ObjectTemplatesServiceProvider::class,
+			TemplateHierarchyServiceProvider::class,
+			ViewServiceProvider::class
+		] );
 
-                foreach ( $providers as $provider ) {
+		foreach ( $providers as $provider ) {
 
-                        $this->providers[ $provider ] = new $provider( $this );
+			$this->providers[ $provider ] = new $provider( $this );
 
-                        $this->providers[ $provider ]->register();
-                }
-        }
+			$this->providers[ $provider ]->register();
+		}
+	}
 
-        /**
-         * Calls the `boot()` method of all the registered service providers.
-         *
-         * @since  5.0.0
-         * @access public
-         * @return void
-         */
-        public function bootProviders() {
+	/**
+	 * Calls the `boot()` method of all the registered service providers.
+	 *
+	 * @since  5.0.0
+	 * @access public
+	 * @return void
+	 */
+	public function bootProviders() {
 
-                foreach ( $this->providers as $provider ) {
-                        $provider->boot();
-                }
-        }
+		foreach ( $this->providers as $provider ) {
+			$provider->boot();
+		}
+	}
 }
