@@ -14,6 +14,8 @@
 
 namespace Hybrid\Core;
 
+use Hybrid\Contracts\Application;
+
 /**
  * Service provider class.
  *

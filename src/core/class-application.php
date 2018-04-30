@@ -24,6 +24,7 @@ use Hybrid\Media\MediaMetaServiceProvider;
 use Hybrid\Template\ObjectTemplatesServiceProvider;
 use Hybrid\Template\TemplateHierarchyServiceProvider;
 use Hybrid\View\ViewServiceProvider;
+use Hybrid\Contracts\Application as ApplicationContract;
 
 /**
  * Application class.
@@ -31,7 +32,7 @@ use Hybrid\View\ViewServiceProvider;
  * @since  5.0.0
  * @access public
  */
-class Application extends Container {
+class Application extends Container implements ApplicationContract {
 
         /**
          * The current version of the framework.
