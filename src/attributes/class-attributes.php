@@ -16,13 +16,15 @@
 
 namespace Hybrid\Attributes;
 
+use Hybrid\Contracts\Attributes as AttributesContract;
+
 /**
  * Attributes class.
  *
  * @since  5.0.0
  * @access public
  */
-class Attributes {
+class Attributes implements AttributesContract {
 
 	/**
 	 * The name/ID of the element (e.g., `sidebar`).
