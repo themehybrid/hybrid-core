@@ -85,10 +85,10 @@ class SelectGroup extends Control {
 	 * Underscore JS template to handle the control's output.
 	 *
 	 * @since  5.0.0
-	 * @access public
+	 * @access protected
 	 * @return void
 	 */
-	public function content_template() { ?>
+	protected function content_template() { ?>
 
 		<# if ( ! data.choices && ! data.group ) {
 			return;

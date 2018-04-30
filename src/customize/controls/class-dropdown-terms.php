@@ -48,8 +48,10 @@ class DropdownTerms extends Control {
 	 * Displays the control content.
 	 *
 	 * @since 5.0.0
+	 * @access protected
+	 * @return void
 	 */
-	public function render_content() {
+	protected function render_content() {
 
 		// Allow devs to pass in custom arguments.
 		$args = wp_parse_args( $this->args, [
