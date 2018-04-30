@@ -19,7 +19,7 @@ namespace Hybrid\Contracts;
  * @since  5.0.0
  * @access public
  */
-interface View extends Renderable {
+interface View extends Fetchable, Renderable {
 
 	/**
 	 * Returns the located template.

@@ -19,7 +19,7 @@ namespace Hybrid\Contracts;
  * @since  5.0.0
  * @access public
  */
-interface Renderable extends Fetchable {
+interface Renderable {
 
 	/**
 	 * Renders the content.
