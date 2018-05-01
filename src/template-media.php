@@ -16,6 +16,39 @@ namespace Hybrid;
 
 use Hybrid\Media\Grabber as MediaGrabber;
 use Hybrid\Media\Meta as MediaMeta;
+use Hybrid\Media\Svg;
+
+/**
+ * Renders SVG output.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  string  $file
+ * @param  array   $attr
+ * @return void
+ */
+function svg( $file, $args = [] ) {
+
+	$svg = new Svg( $file, $args );
+
+	$svg->render();
+}
+
+/**
+ * Returns SVG output.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  string  $file
+ * @param  array   $attr
+ * @return string
+ */
+function get_svg( $file, $args = [] ) {
+
+	$svg = new Svg( $file, $args );
+
+	return $svg->fetch();
+}
 
 /**
  * Prints the post media from the media grabber.
