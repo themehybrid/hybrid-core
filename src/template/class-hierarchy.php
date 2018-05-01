@@ -92,7 +92,7 @@ class Hierarchy {
 	public function __construct() {
 
 		// Filter the front page template.
-		add_filter( 'frontpage_template_hierarchy',  [ $this, 'front_page' ], 5 );
+		add_filter( 'frontpage_template_hierarchy',  [ $this, 'frontPage' ], 5 );
 
 		// Filter the single, page, and attachment templates.
 		add_filter( 'single_template_hierarchy',     [ $this, 'single' ], 5 );
@@ -114,14 +114,14 @@ class Hierarchy {
 		foreach ( $this->types as $type ) {
 
 			// Capture the template hierarchy for each type.
-			add_filter( "{$type}_template_hierarchy", [ $this, 'template_hierarchy' ], PHP_INT_MAX );
+			add_filter( "{$type}_template_hierarchy", [ $this, 'templateHierarchy' ], PHP_INT_MAX );
 
 			// Capture the located template.
 			add_filter( "{$type}_template", [ $this, 'template' ], PHP_INT_MAX );
 		}
 
 		// Re-add the located template.
-		add_filter( 'template_include', [ $this, 'template_include' ], PHP_INT_MAX );
+		add_filter( 'template_include', [ $this, 'templateInclude' ], PHP_INT_MAX );
 	}
 
 	/**
@@ -143,7 +143,7 @@ class Hierarchy {
 	 * @param  array   $templates
 	 * @return array
 	 */
-	public function front_page( $templates ) {
+	public function frontPage( $templates ) {
 
 		$templates = [];
 
@@ -376,7 +376,7 @@ class Hierarchy {
 	 * @access public
 	 * @return array
 	 */
-	public function template_hierarchy( $templates ) {
+	public function templateHierarchy( $templates ) {
 
 		// Merge the current template's hierarchy with the overall
 		// hierarchy array.
@@ -427,7 +427,7 @@ class Hierarchy {
 	 * @param  string  $template
 	 * @return string
 	 */
-	public function template_include( $template ) {
+	public function templateInclude( $template ) {
 
 		// If the template is not a string at this point, it either
 		// doesn't exist or a plugin is telling us it's doing
