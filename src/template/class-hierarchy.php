@@ -67,20 +67,20 @@ class Hierarchy {
 	 * template hierarchy.
 	 *
 	 * @since  5.0.0
-	 * @access public
+	 * @access protected
 	 * @var    string
 	 */
-	public $located = '';
+	protected $located = '';
 
 	/**
 	 * An array of the entire template hierarchy for the current page view.
 	 * This hierarchy does not have the `.php` file name extension.
 	 *
 	 * @since  5.0.0
-	 * @access public
+	 * @access protected
 	 * @var    array
 	 */
-	public $hierarchy = [];
+	protected $hierarchy = [];
 
 	/**
 	 * Sets up template hierarchy filters.
@@ -122,6 +122,18 @@ class Hierarchy {
 
 		// Re-add the located template.
 		add_filter( 'template_include', [ $this, 'templateInclude' ], PHP_INT_MAX );
+	}
+	
+	/**
+	 * Returns the full template hierarchy for the current page load.
+	 *
+	 * @since  5.0.0
+	 * @access public 
+	 * @return array 
+	 */
+	public function hierarchy() {
+		
+		return $this->hierarchy;
 	}
 
 	/**

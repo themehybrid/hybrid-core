@@ -27,7 +27,7 @@ use Hybrid\Template\Pagination;
  */
 function get_global_hierarchy() {
 
-	return apply_filters( 'hybrid/hierarchy/global', app( 'template_hierarchy' )->hierarchy );
+	return apply_filters( 'hybrid/hierarchy/global', app( 'template_hierarchy' )->hierarchy() );
 }
 
 /**
