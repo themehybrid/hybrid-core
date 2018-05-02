@@ -15,7 +15,7 @@ namespace Hybrid\Media;
 
 use Hybrid\Contracts\Fetchable;
 use Hybrid\Contracts\Renderable;
-use Hybrid\Attributes\Attributes;
+use function Hybrid\attributes;
 
 class Svg implements Fetchable, Renderable {
 
@@ -98,7 +98,9 @@ class Svg implements Fetchable, Renderable {
 		}
 
 		// Get a name for use in hooks and such.
-		$this->name = $this->pathinfo['filename'];
+		$this->name = isset( $this->pathinfo['filename'] )
+		              ? $this->pathinfo['filename']
+			      : basename( $this->file );
 	}
 
 	/**
@@ -176,7 +178,7 @@ class Svg implements Fetchable, Renderable {
 			$attr['role'] = 'img';
 
 			// Get an attributes object.
-			$attr = new Attributes( 'svg', $this->name, $attr );
+			$attr = attributes( 'svg', $this->name, $attr );
 
 			$svg = sprintf( '<svg %s>%s</svg>', $attr->fetch(), $inner_html );
 		}
