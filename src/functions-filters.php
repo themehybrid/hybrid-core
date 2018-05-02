@@ -44,8 +44,9 @@ add_filter( 'the_title', __NAMESPACE__ . '\untitled_post' );
 add_filter( 'excerpt_more', __NAMESPACE__ . '\excerpt_more', 5 );
 
 # Adds custom CSS classes to nav menu items.
-add_filter( 'nav_menu_css_class',       __NAMESPACE__ . '\nav_menu_css_class',       5, 2 );
-add_filter( 'nav_menu_link_attributes', __NAMESPACE__ . '\nav_menu_link_attributes', 5    );
+add_filter( 'nav_menu_css_class',         __NAMESPACE__ . '\nav_menu_css_class',         5, 2 );
+add_filter( 'nav_menu_submenu_css_class', __NAMESPACE__ . '\nav_menu_submenu_css_class', 5    );
+add_filter( 'nav_menu_link_attributes',   __NAMESPACE__ . '\nav_menu_link_attributes',   5    );
 
 # Adds custom CSS classes to the comment form fields.
 add_filter( 'comment_form_default_fields', __NAMESPACE__ . '\comment_form_default_fields', ~PHP_INT_MAX );
@@ -270,6 +271,21 @@ function nav_menu_link_attributes( $attr ) {
 	$attr['class'] = 'menu__anchor';
 
 	return $attr;
+}
+
+/**
+ * Adds a custom class to the submenus in nav menus.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  array   $classes
+ * @return array
+ */
+function nav_menu_submenu_css_class( $classes ) {
+
+	$classes = [ 'menu__sub-menu' ];
+
+	return $classes;
 }
 
 /**
