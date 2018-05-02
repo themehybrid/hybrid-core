@@ -19,10 +19,6 @@ use Hybrid\Attributes\Attributes;
 
 class Svg implements Fetchable, Renderable {
 
-	// Can/should we use these with inline svgs?
-	protected $title = '';
-	protected $desc = '';
-
 	/**
 	 * The name of the SVG object.
 	 *
@@ -41,6 +37,24 @@ class Svg implements Fetchable, Renderable {
 	 * @var    string
 	 */
 	protected $file = '';
+
+	/**
+	 * Used to add or replace an existing `<title>` element in the SVG.
+	 *
+	 * @since  5.0.0
+	 * @access protected
+	 * @var    string
+	 */
+	protected $title = '';
+
+	/**
+	 * Used to add or replace an existing `<desc>` element in the SVG.
+	 *
+	 * @since  5.0.0
+	 * @access protected
+	 * @var    string
+	 */
+	protected $desc = '';
 
 	/**
 	 * Path info about the file.
@@ -111,8 +125,10 @@ class Svg implements Fetchable, Renderable {
 
 		if ( ! empty( $matches ) && isset( $matches[1] ) && isset( $matches[2] ) ) {
 
+			$inner_html = $matches[2];
+
 			// Create an array of existing attributes.
-			$atts = wp_kses_hair( $matches[1], [ 'http', 'https'] );
+			$atts = wp_kses_hair( $matches[1], [ 'http', 'https' ] );
 
 			// Sets up our attributes array.
 			$attr = array_combine(
@@ -123,9 +139,35 @@ class Svg implements Fetchable, Renderable {
 			// This doesn't actually help us in any way because we're
 			// not building the `<title>` and `<desc>` elements.
 			if ( $this->title ) {
+				$unique_id = esc_attr( uniqid() );
+
 				$attr['aria-labelledby'] = sprintf(
-					$this->desc ? 'title-%1$s desc-%1$s' : 'title-%s', uniqid()
+					$this->desc ? 'svg-title-%1$s svg-desc-%1$s' : 'svg-title-%s', $unique_id
 				);
+
+				$patterns = [
+					'/<title.*?<\/title>/is',
+					'/<desc.*?<\/desc>/is'
+				];
+
+				$inner_html = preg_replace( $patterns, '', $inner_html );
+
+				$title_desc = sprintf(
+					'<title id="svg-title-%s">%s</title>',
+					$unique_id,
+					esc_html( $this->title )
+				);
+
+				if ( $this->desc ) {
+					$title_desc .= sprintf(
+						'<desc id="svg-desc-%s">%s</desc>',
+						$unique_id,
+						esc_html( $this->desc )
+					);
+				}
+
+				$inner_html = $title_desc . $inner_html;
+
 			} else {
 				$attr['aria-hidden'] = 'true';
 				$attr['focusable']   = 'false';
@@ -136,7 +178,7 @@ class Svg implements Fetchable, Renderable {
 			// Get an attributes object.
 			$attr = new Attributes( 'svg', $this->name, $attr );
 
-			$svg = sprintf( '<svg %s>%s</svg>', $attr->fetch(), $matches[2] );
+			$svg = sprintf( '<svg %s>%s</svg>', $attr->fetch(), $inner_html );
 		}
 
 		return $svg;
