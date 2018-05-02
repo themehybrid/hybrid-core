@@ -372,32 +372,39 @@ function widget_class_filter( $params ) {
 	$instance  = $params[1]['number'];
 	$context   = str_replace( "-{$instance}", '', $widget_id );
 
-	// If the theme author is emplying BEM-style classes with the widget ID,
-	// let's remove the widget instance from the class.
-	if ( false !== strpos( $params[0]['before_widget'], " widget--{$widget_id}" ) ) {
+	// Check to see if we can find a class.
+	preg_match( '/((class=[\'"])(.*?)([\'"]))/i', $params[0]['before_widget'], $matches );
 
-		$pattern = " widget--{$widget_id}";
-		$replace = sprintf( " widget--%s", sanitize_html_class( $context ) );
+	// If we have matches for all 4 captured groups, let's go.
+	if ( ! empty( $matches ) && ! array_diff_key( array_flip( [ 1, 2, 3, 4 ] ), $matches ) ) {
 
-		$params[0]['before_widget'] = str_replace( $pattern, $replace, $params[0]['before_widget'] );
+		$classes  = explode( ' ', $matches[3] );
+		$_classes = [];
 
-	// If the theme author isn't employing BEM-style classes with the widget
-	// ID, let's add that in.
-	} elseif ( false === strpos( $params[0]['before_widget'], " widget--{$context}" ) ) {
+		// Create BEM-style widget classes.
+		$_classes[] = 'widget';
+		$_classes[] = sprintf( 'widget--%s', str_replace( '_', '-', esc_attr( $context ) ) );
 
-		$pattern = "widget ";
-		$replace = sprintf( 'widget widget--%s ', sanitize_html_class( $context ) );
+		// Build BEM-style classes from original classes.
+		foreach ( $classes as $class ) {
 
-		$params[0]['before_widget'] = str_replace( $pattern, $replace, $params[0]['before_widget'] );
-	}
+			$class = str_replace( [ 'widget-', 'widget_', 'widget' ], '', $class );
 
-	// If we get a double `widget--widget` class name, let's fix that.
-	if ( false !== strpos( $params[0]['before_widget'], ' widget--widget' ) ) {
+			if ( $class ) {
+				$_classes[] = sprintf( 'widget--%s', $class );
+			}
+		}
 
-		$pattern = [ ' widget--widget_', ' widget--widget-' ];
-		$replace = ' widget--';
+		// Merge original classes and make sure there are no duplicates.
+		$_classes = array_unique( array_merge( $_classes, $classes ) );
 
-		$params[0]['before_widget'] = str_replace( $pattern, $replace, $params[0]['before_widget'] );
+		// Replaces the exact class string we captured earlier with the
+		// new class string.
+		$params[0]['before_widget'] = str_replace(
+			$matches[1],
+			$matches[2] . join( ' ', $_classes ) . $matches[4],
+			$params[0]['before_widget']
+		);
 	}
 
 	return $params;
