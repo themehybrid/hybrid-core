@@ -13,8 +13,6 @@
 
 namespace Hybrid\Customize\Controls;
 
-use WP_Customize_Control as Control;
-
 /**
  * Theme Layout customize control class.
  *
@@ -74,15 +72,6 @@ class Palette extends Control {
 		$this->json['value']   = $this->value();
 		$this->json['id']      = $this->id;
 	}
-
-	/**
-	 * Don't render the content via PHP.  This control is handled with a JS template.
-	 *
-	 * @since  5.0.0
-	 * @access public
-	 * @return bool
-	 */
-	protected function render_content() {}
 
 	/**
 	 * Underscore JS template to handle the control's output.

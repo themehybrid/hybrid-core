@@ -16,8 +16,6 @@
 
 namespace Hybrid\Customize\Controls;
 
-use WP_Customize_Control as Control;
-
 /**
  * Dropdown terms customize control class.
  *
