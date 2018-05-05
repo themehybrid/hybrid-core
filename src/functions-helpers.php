@@ -15,7 +15,7 @@
 namespace Hybrid;
 
 use Hybrid\Core\Application;
-use Hybrid\Core\Collection;
+use Hybrid\Tools\Collection;
 
 /**
  * The single instance of the app. Use this function for quickly working with

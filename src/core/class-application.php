@@ -16,15 +16,17 @@
 
 namespace Hybrid\Core;
 
-use Hybrid\Attributes\AttributesServiceProvider;
-use Hybrid\Config\ConfigServiceProvider;
-use Hybrid\Customize\CustomizeServiceProvider;
-use Hybrid\Language\LanguageServiceProvider;
-use Hybrid\Media\MediaMetaServiceProvider;
-use Hybrid\Template\ObjectTemplatesServiceProvider;
-use Hybrid\Template\TemplateHierarchyServiceProvider;
-use Hybrid\View\ViewServiceProvider;
+use Hybrid\Container\Container;
 use Hybrid\Contracts\Application as ApplicationContract;
+
+use Hybrid\Providers\Attributes;
+use Hybrid\Providers\Config;
+use Hybrid\Providers\Customize;
+use Hybrid\Providers\Language;
+use Hybrid\Providers\MediaMeta;
+use Hybrid\Providers\ObjectTemplates;
+use Hybrid\Providers\TemplateHierarchy;
+use Hybrid\Providers\View;
 
 /**
  * Application class.
@@ -100,14 +102,14 @@ class Application extends Container implements ApplicationContract {
 	public function registerProviders() {
 
 		$providers = apply_filters( 'hybrid/app/providers', [
-			AttributesServiceProvider::class,
-			ConfigServiceProvider::class,
-			CustomizeServiceProvider::class,
-			LanguageServiceProvider::class,
-			MediaMetaServiceProvider::class,
-			ObjectTemplatesServiceProvider::class,
-			TemplateHierarchyServiceProvider::class,
-			ViewServiceProvider::class
+			Attributes::class,
+			Config::class,
+			Customize::class,
+			Language::class,
+			MediaMeta::class,
+			ObjectTemplates::class,
+			TemplateHierarchy::class,
+			View::class
 		] );
 
 		foreach ( $providers as $provider ) {

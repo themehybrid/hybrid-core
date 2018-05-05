@@ -13,10 +13,9 @@
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
-namespace Hybrid\Config;
+namespace Hybrid\Providers;
 
-use Hybrid\Core\Collection;
-use Hybrid\Core\ServiceProvider;
+use Hybrid\Tools\Collection;
 
 /**
  * Configuration provider.
@@ -24,8 +23,8 @@ use Hybrid\Core\ServiceProvider;
  * @since  5.0.0
  * @access public
  */
-class ConfigServiceProvider extends ServiceProvider {
-	
+class Config extends ServiceProvider {
+
 	/**
 	 * Registration callback that binds a single instance of the `Collection`
 	 * class to the container. The config is actually a collection of other

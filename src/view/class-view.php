@@ -22,7 +22,7 @@
 namespace Hybrid\View;
 
 use Hybrid\Contracts\View as ViewContract;
-use Hybrid\Core\Collection;
+use Hybrid\Tools\Collection;
 
 use function Hybrid\config;
 use function Hybrid\locate_template;

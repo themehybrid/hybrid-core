@@ -12,10 +12,9 @@
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
-namespace Hybrid\Template;
+namespace Hybrid\Providers;
 
-use Hybrid\Core\Collection;
-use Hybrid\Core\ServiceProvider;
+use Hybrid\Tools\Collection;
 
 /**
  * Object templates provider class.
@@ -23,7 +22,7 @@ use Hybrid\Core\ServiceProvider;
  * @since  5.0.0
  * @access public
  */
-class ObjectTemplatesServiceProvider extends ServiceProvider {
+class ObjectTemplates extends ServiceProvider {
 
 	/**
 	 * Registration callback that adds a single instance of the object

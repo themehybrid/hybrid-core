@@ -12,9 +12,9 @@
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
-namespace Hybrid\Template;
+namespace Hybrid\Providers;
 
-use Hybrid\Core\ServiceProvider;
+use Hybrid\TemplateHierarchy\Hierarchy;
 
 /**
  * Template hierarchy provider class.
@@ -22,7 +22,7 @@ use Hybrid\Core\ServiceProvider;
  * @since  5.0.0
  * @access public
  */
-class TemplateHierarchyServiceProvider extends ServiceProvider {
+class TemplateHierarchy extends ServiceProvider {
 
 	/**
 	 * Registration callback that adds a single instance of the template

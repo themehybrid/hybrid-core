@@ -14,9 +14,9 @@
 
 namespace Hybrid;
 
-use Hybrid\Media\Grabber as MediaGrabber;
-use Hybrid\Media\Meta as MediaMeta;
-use Hybrid\Media\Svg;
+use Hybrid\MediaGrabber\MediaGrabber;
+use Hybrid\MediaMeta\MediaMeta;
+use Hybrid\Svg\Svg;
 
 /**
  * Renders SVG output.

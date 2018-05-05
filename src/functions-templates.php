@@ -15,7 +15,7 @@
 
 namespace Hybrid;
 
-use Hybrid\Template\ObjectTemplate;
+use Hybrid\Template\Template;
 
 # Run hook for registering templates.
 add_action( 'init', __NAMESPACE__ . '\register_object_templates', 95 );

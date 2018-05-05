@@ -13,7 +13,7 @@
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
-namespace Hybrid\Media;
+namespace Hybrid\MediaMeta;
 
 use function Hybrid\get_attachment_type;
 
@@ -22,10 +22,10 @@ use function Hybrid\get_attachment_type;
  * formatted when returned so that theme authors can properly utilize it within
  * their themes.
  *
- * @since  3.0.0
+ * @since  5.0.0
  * @access public
  */
-class Meta {
+class MediaMeta {
 
 	/**
 	 * Arguments passed in.

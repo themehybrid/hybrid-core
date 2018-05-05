@@ -15,7 +15,7 @@
 
 namespace Hybrid;
 
-use Hybrid\Template\Pagination;
+use Hybrid\Pagination\Pagination;
 
 /**
  * Returns the global hierarchy. This is a wrapper around the values stored via

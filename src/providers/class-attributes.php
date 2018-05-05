@@ -12,9 +12,9 @@
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
-namespace Hybrid\Attributes;
+namespace Hybrid\Providers;
 
-use Hybrid\Core\ServiceProvider;
+use Hybrid\Attributes\Attributes as AttributesComponent;
 
 /**
  * Attributes provider class.
@@ -22,7 +22,7 @@ use Hybrid\Core\ServiceProvider;
  * @since  5.0.0
  * @access public
  */
-class AttributesServiceProvider extends ServiceProvider {
+class Attributes extends ServiceProvider {
 
 	/**
 	 * Registration callback that binds the `Attributes` class to the container.
@@ -35,7 +35,7 @@ class AttributesServiceProvider extends ServiceProvider {
 
 		$this->app->add( 'attr', function( $container, $params ) {
 
-			return new Attributes(
+			return new AttributesComponent(
 				$params['name'],
 				$params['context'],
 				$params['attr']

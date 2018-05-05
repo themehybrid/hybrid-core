@@ -15,7 +15,7 @@
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
-namespace Hybrid\Template;
+namespace Hybrid\TemplateHierarchy;
 
 use WP_User;
 use function Hybrid\clean_post_format_slug;
@@ -123,16 +123,16 @@ class Hierarchy {
 		// Re-add the located template.
 		add_filter( 'template_include', [ $this, 'templateInclude' ], PHP_INT_MAX );
 	}
-	
+
 	/**
 	 * Returns the full template hierarchy for the current page load.
 	 *
 	 * @since  5.0.0
-	 * @access public 
-	 * @return array 
+	 * @access public
+	 * @return array
 	 */
 	public function hierarchy() {
-		
+
 		return $this->hierarchy;
 	}
 

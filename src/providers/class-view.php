@@ -12,10 +12,10 @@
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
-namespace Hybrid\View;
+namespace Hybrid\Providers;
 
-use Hybrid\Core\Collection;
-use Hybrid\Core\ServiceProvider;
+use Hybrid\Tools\Collection;
+use Hybrid\View\View as ViewComponent;
 
 /**
  * View provider class.
@@ -23,7 +23,7 @@ use Hybrid\Core\ServiceProvider;
  * @since  5.0.0
  * @access public
  */
-class ViewServiceProvider extends ServiceProvider {
+class View extends ServiceProvider {
 
 	/**
 	 * Registration callback that binds the `View` class to the container.
@@ -36,7 +36,7 @@ class ViewServiceProvider extends ServiceProvider {
 
 		$this->app->add( 'view', function( $container, $params ) {
 
-			return new View(
+			return new ViewComponent(
 				$params['name'],
 				$params['slugs'],
 				$params['data'] instanceof Collection ? $params['data'] : new Collection( $params['data'] )

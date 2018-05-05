@@ -11,7 +11,7 @@
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
-namespace Hybrid\Media;
+namespace Hybrid\Svg;
 
 use Hybrid\Contracts\Fetchable;
 use Hybrid\Contracts\Renderable;
