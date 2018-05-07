@@ -71,6 +71,19 @@ class Attributes implements AttributesContract {
 	}
 
 	/**
+	 * When attempting to use the object as a string, return the attributes
+	 * output as a string.
+	 *
+	 * @since  5.0.0
+	 * @access public
+	 * @return string
+	 */
+	public function __toString() {
+
+		return $this->fetch();
+	}
+
+	/**
 	 * Outputs an escaped string of attributes for use in HTML.
 	 *
 	 * @since  5.0.0

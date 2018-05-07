@@ -110,10 +110,12 @@ function get_site_title( $args = [], $attr = [] ) {
 	if ( $title ) {
 		$link = sprintf( '<a href="%s">%s</a>', esc_url( home_url() ), $title );
 
+		$atts = $attr instanceof Attributes ? $attr : attributes( 'site-title', '', $attr );
+
 		$html = sprintf(
 			'<%1$s %2$s>%3$s</%1$s>',
 			tag_escape( $args['tag'] ),
-			attributes( 'site-title', '', $attr )->fetch(),
+			$atts->fetch(),
 			$link
 		);
 	}
