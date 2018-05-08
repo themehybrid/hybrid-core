@@ -88,8 +88,12 @@ function media_meta( $property, $args = [] ) {
  */
 function get_media_meta( $property, $args = [] ) {
 
+	$html = '';
+
 	$args = wp_parse_args( $args, [
 		'post_id' => get_the_ID(),
+		'itemtag' => 'span',
+		'label'   => '',
 		'text'    => '%s',
 		'before'  => '',
 		'after'   => '',
@@ -99,10 +103,28 @@ function get_media_meta( $property, $args = [] ) {
 	// Get the media metadata.
 	$meta_object = get_media_metadata( $args['post_id'] );
 
-	$meta = is_object( $meta_object ) ? $meta_object->get( $property ) : false;
+	$meta = is_object( $meta_object ) ? $meta_object->get( $property )->fetch() : '';
+
+	if ( $meta ) {
+
+		$label = $args['label'] ? sprintf( '<span class="media-meta__label">%s</span> ', $args['label'] ) : '';
+
+		$data = '<span class="media-meta__data">' . sprintf( $args['text'], $meta ) . '</span>';
+
+		$html = sprintf(
+			'<%1$s class="%2$s">%3$s</%1$s>',
+			tag_escape( $args['itemtag'] ),
+			esc_attr( "media-meta__item media-meta__item--{$property}" ),
+			$label . $data
+		);
+
+		$html = $args['before'] . $html . $args['after'];
+	}
+
+	return $html;
 
 	// Return the formatted meta or an empty string.
-	return $meta ? $args['before'] . sprintf( $args['wrap'], 'class="data"', sprintf( $args['text'], $meta ) ) . $args['after'] : '';
+	return $meta ? $args['before'] . sprintf( $args['wrap'], 'class="media-meta__data"', sprintf( $args['text'], $meta ) ) . $args['after'] : '';
 }
 
 /**
@@ -293,7 +315,7 @@ function attachment() {
 	$type = get_attachment_type();
 	$mime = get_post_mime_type();
 	$url  = wp_get_attachment_url();
-	$func = __NAMESPACE__ . "\{$type}_attachment";
+	$func = __NAMESPACE__ . "\\{$type}_attachment";
 
 	$attachment = function_exists( $func ) ? call_user_func( $func, $mime, $url ) : '';
 
