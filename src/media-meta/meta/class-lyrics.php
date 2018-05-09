@@ -1,11 +1,42 @@
 <?php
+/**
+ * Lyrics media meta class.
+ *
+ * Handles the formatting of a audio transcript/lyrics for output.
+ *
+ * @package   Hybrid
+ * @author    Justin Tadlock <justintadlock@gmail.com>
+ * @copyright Copyright (c) 2008 - 2018, Justin Tadlock
+ * @link      https://themehybrid.com/hybrid-core
+ * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ */
 
 namespace Hybrid\MediaMeta\Meta;
 
+/**
+ * Lyrics meta class.
+ *
+ * @since  5.0.0
+ * @access public
+ */
 class Lyrics extends Meta {
 
+	/**
+	 * The metadata name/key.
+	 *
+	 * @since  5.0.0
+	 * @access protected
+	 * @var    string
+	 */
 	protected $name = 'unsychronised_lyric';
 
+	/**
+	 * Returns the raw, unsanitized value.
+	 *
+	 * @since  5.0.0
+	 * @access public
+	 * @return mixed
+	 */
 	public function raw() {
 
 		$lyrics = '';
@@ -22,6 +53,13 @@ class Lyrics extends Meta {
 		return $lyrics;
 	}
 
+	/**
+	 * Returns the sanitized and formatted meta value.
+	 *
+	 * @since  5.0.0
+	 * @access public
+	 * @return mixed
+	 */
 	public function fetch() {
 
 		$lyrics = $this->raw();

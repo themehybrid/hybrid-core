@@ -15,7 +15,7 @@
 namespace Hybrid;
 
 use Hybrid\MediaGrabber\MediaGrabber;
-use Hybrid\MediaMeta\MediaMeta;
+use Hybrid\MediaMeta\Repository as MediaMetaRepository;
 
 /**
  * Prints the post media from the media grabber.
@@ -152,7 +152,7 @@ function get_media_metadata( $post_id ) {
 
 	if ( ! media_metadata()->has( $post_id ) ) {
 
-		media_metadata()->add( $post_id, new MediaMeta( $post_id ) );
+		media_metadata()->add( $post_id, new MediaMetaRepository( $post_id ) );
 	}
 
 	return media_metadata()->get( $post_id );
