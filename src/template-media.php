@@ -60,10 +60,28 @@ function media_grabber( $args = [] ) {
 }
 
 /**
- * Prints media meta directly to the screen.  The `$property` parameter can be
- * any of the public properties in the `Hybrid\MediaMeta` object.
+ * Returns an instance of a media meta repository based on the attachment ID.
  *
- * @see    Hybrid\MediaMeta
+ * @since  5.0.0
+ * @access public
+ * @param  int    $post_id
+ * @return object
+ */
+function media_meta_repo( $post_id ) {
+
+	$repositories = app( 'media_meta' );
+
+	if ( ! $repositories->has( $post_id ) ) {
+
+		$repositories[ $post_id ] = new MediaMetaRepository( $post_id );
+	}
+
+	return $repositories[ $post_id ];
+}
+
+/**
+ * Prints media meta directly to the screen.
+ *
  * @since  5.0.0
  * @access public
  * @param  string  $property
@@ -76,10 +94,8 @@ function media_meta( $property, $args = [] ) {
 }
 
 /**
- * Returns media meta from a media meta object.  The `$property` parameter can
- * be any of the public properties in the `Hybrid\MediaMeta` object.
+ * Returns media meta from a media meta object.
  *
- * @see    Hybrid\MediaMeta
  * @since  5.0.0
  * @access public
  * @param  string  $property
@@ -99,9 +115,10 @@ function get_media_meta( $property, $args = [] ) {
 		'after'   => ''
 	] );
 
-	// Get the media metadata.
-	$meta_object = get_media_metadata( $args['post_id'] );
+	// Get the media meta repository for this post.
+	$meta_object = media_meta_repo( $args['post_id'] );
 
+	// Retrieve the meta value that we want from the repository.
 	$meta = is_object( $meta_object ) ? $meta_object->get( $property )->fetch() : '';
 
 	if ( $meta ) {
@@ -121,37 +138,6 @@ function get_media_meta( $property, $args = [] ) {
 	}
 
 	return $html;
-}
-
-/**
- * Returns the registry of media metadata items.
- *
- * @since  5.0.0
- * @access public
- * @return object
- */
-function media_metadata() {
-
-	return app( 'media_meta' );
-}
-
-/**
- * Gets media metadata.  This function also serves to register meta on the fly
- * if nothing exists for the attachment ID yet.
- *
- * @since  5.0.0
- * @access public
- * @param  int     $post_id
- * @return object
- */
-function get_media_metadata( $post_id ) {
-
-	if ( ! media_metadata()->has( $post_id ) ) {
-
-		media_metadata()->add( $post_id, new MediaMetaRepository( $post_id ) );
-	}
-
-	return media_metadata()->get( $post_id );
 }
 
 /**
