@@ -96,8 +96,7 @@ function get_media_meta( $property, $args = [] ) {
 		'label'   => '',
 		'text'    => '%s',
 		'before'  => '',
-		'after'   => '',
-		'wrap'    => '<span %s>%s</span>'
+		'after'   => ''
 	] );
 
 	// Get the media metadata.
@@ -122,9 +121,6 @@ function get_media_meta( $property, $args = [] ) {
 	}
 
 	return $html;
-
-	// Return the formatted meta or an empty string.
-	return $meta ? $args['before'] . sprintf( $args['wrap'], 'class="media-meta__data"', sprintf( $args['text'], $meta ) ) . $args['after'] : '';
 }
 
 /**
