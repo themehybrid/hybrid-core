@@ -19,6 +19,8 @@
 
 namespace Hybrid\MediaGrabber;
 
+use Hybrid\Contracts\MediaGrabber as MediaGrabberContract;
+
 /**
  * Grabs media related to the post.
  *
@@ -26,7 +28,7 @@ namespace Hybrid\MediaGrabber;
  * @access public
  * @return void
  */
-class MediaGrabber {
+class MediaGrabber implements MediaGrabberContract {
 
 	/**
 	 * The HTML version of the media to return.
@@ -143,6 +145,17 @@ class MediaGrabber {
 		remove_filter( 'the_content', [ $this, 'split_media' ], 5 );
 	}
 
+	/**
+	 * Renders the found media.
+	 *
+	 * @since  5.0.0
+	 * @access public
+	 * @return void
+	 */
+	public function render() {
+
+		echo $this->fetch();
+	}
 
 	/**
 	 * Basic method for returning the media found.

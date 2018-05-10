@@ -18,6 +18,19 @@ use Hybrid\MediaGrabber\MediaGrabber;
 use Hybrid\MediaMeta\Repository as MediaMetaRepository;
 
 /**
+ * Returns a media grabber object. This is just a wrapper for the class.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  array   $args
+ * @return object
+ */
+function media_grabber( $args = [] ) {
+
+	return new MediaGrabber( $args );
+}
+
+/**
  * Prints the post media from the media grabber.
  *
  * @since  5.0.0
@@ -27,7 +40,7 @@ use Hybrid\MediaMeta\Repository as MediaMetaRepository;
  */
 function post_media( $args = [] ) {
 
-	echo get_post_media( $args );
+	media_grabber( $args )->render();
 }
 
 /**
@@ -40,23 +53,7 @@ function post_media( $args = [] ) {
  */
 function get_post_media( $args = [] ) {
 
-	return media_grabber( $args );
-}
-
-/**
- * Wrapper function for the `Hybrid\MediaGrabber` class.  Returns the HTML output
- * for the found media.
- *
- * @since  5.0.0
- * @access public
- * @param  array   $args
- * @return string
- */
-function media_grabber( $args = [] ) {
-
-	$media = new MediaGrabber( $args );
-
-	return $media->fetch();
+	return media_grabber( $args )->fetch();
 }
 
 /**
@@ -361,7 +358,7 @@ function text_attachment( $mime = '', $file = '' ) {
  */
 function audio_attachment() {
 
-	return media_grabber( [ 'type' => 'audio' ] );
+	return get_post_media( [ 'type' => 'audio' ] );
 }
 
 /**
@@ -374,5 +371,5 @@ function audio_attachment() {
  */
 function video_attachment() {
 
-	return media_grabber( [ 'type' => 'video' ] );
+	return get_post_media( [ 'type' => 'video' ] );
 }
