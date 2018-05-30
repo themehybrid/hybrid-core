@@ -255,6 +255,11 @@ function nav_menu_css_class( $classes, $item ) {
 		$_classes[] = 'menu__item--ancestor';
 	}
 
+	// Add a class if the menu item has children.
+	if ( in_array( 'menu-item-has-children', $classes ) ) {
+		$_classes[] = 'menu__item--has-children';
+	}
+
 	return $_classes;
 }
 
