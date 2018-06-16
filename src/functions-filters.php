@@ -260,6 +260,13 @@ function nav_menu_css_class( $classes, $item ) {
 		$_classes[] = 'menu__item--has-children';
 	}
 
+	// Add custom user-added classes if we have any.
+	$custom = get_post_meta( $item->ID, '_menu_item_classes', true );
+
+	if ( $custom ) {
+		$_classes = array_merge( $_classes, (array) $custom );
+	}
+
 	return $_classes;
 }
 
