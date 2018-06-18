@@ -23,7 +23,7 @@ namespace Hybrid;
  */
  function menu_location_name( $location ) {
 
-	 return esc_html( get_menu_location_name( $location ) );
+	 echo esc_html( get_menu_location_name( $location ) );
  }
 
 /**
