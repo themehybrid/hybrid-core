@@ -14,7 +14,7 @@
 
 namespace Hybrid\Providers;
 
-use Hybrid\Tools\Collection;
+use Hybrid\Templates\Manager;
 
 /**
  * Object templates provider class.
@@ -22,7 +22,7 @@ use Hybrid\Tools\Collection;
  * @since  5.0.0
  * @access public
  */
-class ObjectTemplates extends ServiceProvider {
+class Templates extends ServiceProvider {
 
 	/**
 	 * Registration callback that adds a single instance of the object
@@ -34,9 +34,9 @@ class ObjectTemplates extends ServiceProvider {
 	 */
 	public function register() {
 
-		$this->app->singleton( 'object_templates', function( $container ) {
+		$this->app->singleton( 'templates', function( $container ) {
 
-			return new Collection();
+			return new Manager();
 		} );
 	}
 }

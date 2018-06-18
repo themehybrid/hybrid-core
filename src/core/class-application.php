@@ -24,7 +24,7 @@ use Hybrid\Providers\Config;
 use Hybrid\Providers\Customize;
 use Hybrid\Providers\Language;
 use Hybrid\Providers\MediaMeta;
-use Hybrid\Providers\ObjectTemplates;
+use Hybrid\Providers\Templates;
 use Hybrid\Providers\TemplateHierarchy;
 use Hybrid\Providers\View;
 
@@ -107,7 +107,7 @@ class Application extends Container implements ApplicationContract {
 			Customize::class,
 			Language::class,
 			MediaMeta::class,
-			ObjectTemplates::class,
+			Templates::class,
 			TemplateHierarchy::class,
 			View::class
 		] );

@@ -28,7 +28,6 @@ array_map(
 		'functions-head',
 		'functions-helpers',
 		'functions-lang',
-		'functions-meta',
 		'functions-scripts',
 		'functions-styles',
 		'functions-templates',
