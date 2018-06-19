@@ -614,29 +614,106 @@ function pagination( $args = [] ) {
  */
 function posts_pagination( $args = [] ) {
 
-	echo pagination( $args )->fetch();
+	echo pagination( $args )->render();
 }
 
 /**
- * Single post pagination. This is a replacement for `wp_link_pages()` using our
- * `Pagination` class.
+ * Returns the posts pagination.
+ *
+ * @since  5.0.0
+ * @access public
+ * @return void
+ */
+function get_posts_pagination( $args = [] ) {
+
+	return pagination( $args )->fetch();
+}
+
+/**
+ * Outputs a single post's pagination.
  *
  * @since  5.0.0
  * @access public
  * @param  array  $args
- * @global int    $page
- * @global int    $numpages
  * @global bool   $multipage
- * @global bool   $more
- * @global object $wp_rewrite
  * @return void
  */
 function singular_pagination( $args = [] ) {
-	global $page, $numpages, $multipage, $more, $wp_rewrite;
+	global $multipage;
 
 	if ( ! $multipage ) {
 		return;
 	}
+
+	pagination( $args + singular_pagination_args() )->render();
+}
+
+/**
+ * Returns a single post's pagination.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  array  $args
+ * @global bool   $multipage
+ * @return void
+ */
+function get_singular_pagination( $args = [] ) {
+	global $multipage;
+
+	if ( ! $multipage ) {
+		return '';
+	}
+
+	return pagination( $args + singular_pagination_args() )->fetch();
+}
+
+/**
+ * Prints the comments pagination output.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  array  $args
+ * @return string
+ */
+function comments_pagination( $args = [] ) {
+
+	if ( ! is_singular() ) {
+		return;
+	}
+
+	pagination( $args + comments_pagination_args() )->render();
+}
+
+/**
+ * Returns the comments pagination output.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  array  $args
+ * @return string
+ */
+function get_comments_pagination( $args = [] ) {
+
+	if ( ! is_singular() ) {
+		return '';
+	}
+
+	return pagination( $args + comments_pagination_args() )->fetch();
+}
+
+/**
+ * Utility function for getting the base arguments for singular post pagination.
+ *
+ * @since  5.0.0
+ * @access public
+ * @global int    $page
+ * @global int    $numpages
+ * @global bool   $more
+ * @global object $wp_rewrite
+ * @return array
+ */
+function singular_pagination_args() {
+	global $page, $numpages, $more, $wp_rewrite;
 
 	$url_parts = explode( '?', html_entity_decode( get_permalink() ) );
 	$base      = trailingslashit( $url_parts[0] ) . '%_%';
@@ -644,12 +721,36 @@ function singular_pagination( $args = [] ) {
 	$format  = $wp_rewrite->using_index_permalinks() && ! strpos( $base, 'index.php' ) ? 'index.php/' : '';
 	$format .= $wp_rewrite->using_permalinks() ? user_trailingslashit( '%#%' ) : '?page=%#%';
 
-	$args = (array) $args + [
+	return [
 		'base'    => $base,
 		'format'  => $format,
 		'current' => ! $more && 1 === $page ? 0 : $page,
 		'total'   => $numpages
 	];
+}
 
-	echo pagination( $args )->fetch();
+/**
+ * Utility function for getting the base arguments for comments pagination.
+ *
+ * @since  5.0.0
+ * @access public
+ * @global object $wp_rewrite
+ * @return array
+ */
+function comments_pagination_args() {
+	global $wp_rewrite;
+
+	$base = add_query_arg( 'cpage', '%#%' );
+
+	if ( $wp_rewrite->using_permalinks() ) {
+		$base = user_trailingslashit( trailingslashit( get_permalink() ) . $wp_rewrite->comments_pagination_base . '-%#%', 'commentpaged' );
+	}
+
+	return [
+		'base'         => $base,
+		'format'       => '',
+		'total'        => get_comment_pages_count(),
+		'current'      => get_query_var( 'cpage' ) ?: 1,
+		'add_fragment' => '#comments'
+	];
 }

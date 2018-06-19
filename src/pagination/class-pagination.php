@@ -16,18 +16,20 @@
 
 namespace Hybrid\Pagination;
 
+use Hybrid\Contracts\Pagination as PaginationContract;
+
 /**
  * Pagination class.
  *
- * @since  1.0.0
+ * @since  5.0.0
  * @access public
  */
-class Pagination {
+class Pagination implements PaginationContract{
 
 	/**
 	 * Array of items in the pagination list.
 	 *
-	 * @since  1.0.0
+	 * @since  5.0.0
 	 * @access private
 	 * @var    array
 	 */
@@ -36,7 +38,7 @@ class Pagination {
 	/**
 	 * Array of arguments that will be passed to `paginate_links()`.
 	 *
-	 * @since  1.0.0
+	 * @since  5.0.0
 	 * @access private
 	 * @var    array
 	 */
@@ -45,7 +47,7 @@ class Pagination {
 	/**
 	 * Constructor method.
 	 *
-	 * @since  1.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @param  array  $args
 	 * @return void
@@ -72,62 +74,21 @@ class Pagination {
 	}
 
 	/**
-	 * Sets up the array of items.
+	 * Prints the pagination output.
 	 *
-	 * @since  1.0.0
-	 * @access private
-	 * @return void
+	 * @since  5.0.0
+	 * @access public
+	 * @return string
 	 */
-	private function get_items() {
+	public function render() {
 
-		$links = paginate_links( $this->args );
-
-		if ( ! $links ) {
-			return;
-		}
-
-		foreach ( $links as $link ) {
-
-			$item = [ 'type' => 'number' ];
-
-			// Capture the element attributes and text.
-			preg_match( "/<(?:a|span)(.+?)>(.+?)<\/(?:a|span)>/i", $link, $matches );
-
-			if ( ! empty( $matches ) && isset( $matches[1] ) && isset( $matches[2] ) ) {
-
-				// Get an array of the attributes.
-				$attr = wp_kses_hair( trim( $matches[1] ), [ 'http', 'https' ] );
-
-				if ( ! empty( $attr['class'] ) ) {
-
-					$intersection = array_intersect(
-						[ 'prev', 'next', 'current', 'dots' ],
-						explode( ' ', $attr['class']['value'] )
-					);
-
-					if ( $intersection ) {
-
-						$item['type'] = reset( $intersection );
-					}
-				}
-
-				// If there's an HREF attribute, it means we have a link.
-				if ( ! empty( $attr['href'] ) ) {
-
-					$item['href'] = esc_url( $attr['href']['value'] );
-				}
-
-				$item['text'] = esc_html( $matches[2] );
-			}
-
-			$this->items[] = $item;
-		}
+		echo $this->fetch();
 	}
 
 	/**
 	 * Return the pagination output.
 	 *
-	 * @since  1.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @return string
 	 */
@@ -177,36 +138,87 @@ class Pagination {
 	}
 
 	/**
+	 * Sets up the array of items.
+	 *
+	 * @since  5.0.0
+	 * @access private
+	 * @return void
+	 */
+	private function get_items() {
+
+		$links = paginate_links( $this->args );
+
+		if ( ! $links ) {
+			return;
+		}
+
+		foreach ( $links as $link ) {
+
+			// Capture the element attributes and text.
+			preg_match( "/<(?:a|span)(.+?)>(.+?)<\/(?:a|span)>/i", $link, $matches );
+
+			if ( ! empty( $matches ) && isset( $matches[1] ) && isset( $matches[2] ) ) {
+
+				// Get an array of the attributes.
+				$attr = wp_kses_hair( trim( $matches[1] ), [ 'http', 'https' ] );
+
+				$item['attr'] = array_column( $attr, 'value', 'name' );
+				$item['text'] = $matches[2];
+
+				if ( ! empty( $attr['class'] ) ) {
+
+					$intersection = array_intersect(
+						[ 'prev', 'next', 'current', 'dots' ],
+						explode( ' ', $attr['class']['value'] )
+					);
+
+					if ( $intersection ) {
+
+						$item['type'] = reset( $intersection );
+					}
+				}
+			}
+
+			$this->items[] = $item;
+		}
+	}
+
+	/**
 	 * Format an item's HTML output.
 	 *
-	 * @since  1.0.0
+	 * @since  5.0.0
 	 * @access private
 	 * @param  array   $item
 	 * @return string
 	 */
 	private function format_item( $item ) {
 
-		if ( isset( $item['href'] ) ) {
+		$is_link  = isset( $item['attr']['href'] );
+		$esc_attr = '';
 
-			$anchor = sprintf(
-				'<a href="%s" class="%s">%s</a>',
-				esc_url( $item['href'] ),
-				esc_attr( sprintf( $this->args['anchor_class'], 'link' ) ),
-				esc_html( $item['text'] )
-			);
-		} else {
-			$anchor = sprintf(
-				'<span class="%s">%s</span>',
-				esc_attr( sprintf( $this->args['anchor_class'], $item['type'] ) ),
-				esc_html( $item['text'] )
+		// Overwrite the class attribute.
+		$attr['class'] = sprintf(
+			$this->args['anchor_class'],
+			$is_link ? 'link' : $item['type']
+		);
+
+		// We need to re-add attributes to the item.
+		foreach ( $item['attr'] as $name => $value ) {
+
+			$esc_attr .= sprintf(
+				' %s="%s"',
+				esc_html( $name ),
+				'href' === $name ? esc_url( $value ) : esc_attr( $value )
 			);
 		}
 
 		return sprintf(
-			'<%1$s class="%2$s">%3$s</%1$s>',
+			'<%1$s class="%2$s"><%3$s %4$s>%5$s</%3$s></%1$s>',
 			tag_escape( $this->args['item_tag'] ),
 			esc_attr( sprintf( $this->args['item_class'], $item['type'] ) ),
-			$anchor
+			$is_link ? 'a' : 'span',
+			trim( $esc_attr ),
+			esc_html( $item['text'] )
 		);
 	}
 }
