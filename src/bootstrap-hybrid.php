@@ -30,6 +30,11 @@
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
+# Bail if we're not in the WP environment.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 # Define the directory path to the framework. This shouldn't need changing
 # unless doing something really out there or just for clarity.
 if ( ! defined( 'HYBRID_DIR' ) ) {
