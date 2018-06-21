@@ -197,7 +197,7 @@ class Pagination implements PaginationContract{
 		$esc_attr = '';
 
 		// Overwrite the class attribute.
-		$attr['class'] = sprintf(
+		$item['attr']['class'] = sprintf(
 			$this->args['anchor_class'],
 			$is_link ? 'link' : $item['type']
 		);
