@@ -154,6 +154,8 @@ class Pagination implements PaginationContract{
 
 		foreach ( $links as $link ) {
 
+			$item = [ 'type' => 'number' ];
+
 			// Capture the element attributes and text.
 			preg_match( "/<(?:a|span)(.+?)>(.+?)<\/(?:a|span)>/i", $link, $matches );
 
@@ -165,11 +167,11 @@ class Pagination implements PaginationContract{
 				$item['attr'] = array_column( $attr, 'value', 'name' );
 				$item['text'] = $matches[2];
 
-				if ( ! empty( $attr['class'] ) ) {
+				if ( ! empty( $item['attr']['class'] ) ) {
 
 					$intersection = array_intersect(
 						[ 'prev', 'next', 'current', 'dots' ],
-						explode( ' ', $attr['class']['value'] )
+						explode( ' ', $item['attr']['class'] )
 					);
 
 					if ( $intersection ) {
