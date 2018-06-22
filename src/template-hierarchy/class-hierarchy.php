@@ -23,8 +23,6 @@ use function Hybrid\filter_templates;
 use function Hybrid\get_attachment_type;
 use function Hybrid\get_attachment_subtype;
 use function Hybrid\get_post_template;
-use function Hybrid\get_term_template;
-use function Hybrid\get_user_template;
 
 /**
  * Overwrites the core WP template hierarchy.
@@ -257,13 +255,6 @@ class Hierarchy {
 		// Remove 'post-format' from the slug.
 		$slug = 'post_format' === $term->taxonomy ? clean_post_format_slug( $term->slug ) : urldecode( $term->slug );
 
-		// Check for a custom term template.
-		$custom = get_term_template( get_queried_object_id() );
-
-		if ( $custom ) {
-			$templates[] = $custom;
-		}
-
 		// Slug-based template.
 		$templates[] = "taxonomy-{$term->taxonomy}-{$slug}.php";
 
@@ -296,13 +287,6 @@ class Hierarchy {
 
 		// Get the user object.
 		$user = new WP_User( absint( get_query_var( 'author' ) ) );
-
-		// Check for a custom user template.
-		$custom = get_user_template( $user->ID );
-
-		if ( $custom ) {
-			$templates[] = $custom;
-		}
 
 		// Add the user nicename template.
 		$templates[] = "user-{$name}.php";

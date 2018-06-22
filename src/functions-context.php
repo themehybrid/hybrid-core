@@ -131,17 +131,9 @@ function body_class_filter( $classes, $class ) {
 
 			$slug = 'post_format' === $taxonomy ? clean_post_format_slug( $term->slug ) : $term->slug;
 
-			// Checks for custom template.
-			$template = str_replace(
-				[ "{$taxonomy}-template-", "{$taxonomy}-" ],
-				'',
-				basename( get_term_template( $term_id ), '.php' )
-			);
-
 			$classes[] = 'taxonomy';
 			$classes[] = "taxonomy-{$taxonomy}";
 			$classes[] = "taxonomy-{$taxonomy}-" . sanitize_html_class( $slug, $term_id );
-			$classes[] = $template ? "{$taxonomy}-template-{$template}" : "{$taxonomy}-template-default";
 		}
 
 		// User/author archives.
