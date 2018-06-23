@@ -507,7 +507,7 @@ class MediaGrabber implements MediaGrabberContract {
 			return do_shortcode( $this->filterDimensions( $shortcode ) );
 		}
 
-		return do_shortcode( $this->shortcode );
+		return do_shortcode( $shortcode );
 	}
 
 	/**
