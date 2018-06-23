@@ -73,7 +73,7 @@ function get_templates() {
  */
 function get_template( $name ) {
 
-	return( 'templates' )->get( $name );
+	return app( 'templates' )->get( $name );
 }
 
 /**
