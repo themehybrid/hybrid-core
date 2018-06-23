@@ -220,7 +220,7 @@ class Pagination implements PaginationContract{
 			esc_attr( sprintf( $this->args['item_class'], $item['type'] ) ),
 			$is_link ? 'a' : 'span',
 			trim( $esc_attr ),
-			esc_html( $item['text'] )
+			$item['text']
 		);
 	}
 }
