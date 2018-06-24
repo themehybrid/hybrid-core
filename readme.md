@@ -1,6 +1,6 @@
 # Hybrid Core: WordPress Theme Framework
 
-Hybrid Core is a framework for developing WordPress themes.  It allows theme developers to build themes without having to code much of the complex "logic" or other complicated functionality often needed in themes.  The framework takes care of a lot of these things so theme authors can get back to doing what matter the most:  developing and designing cool themes.  
+Hybrid Core is a framework for developing WordPress themes.  It allows theme developers to build themes without having to code much of the complex "logic" or other complicated functionality often needed in themes.  The framework takes care of a lot of these things so theme authors can get back to doing what matter the most:  developing and designing cool themes.
 
 The framework was built to make it easy for developers to include (or not include) specific, pre-coded features.  Themes handle all the markup, style, and scripts while the framework handles the logic.
 
