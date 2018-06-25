@@ -26,6 +26,8 @@ use Hybrid\Contracts\Pagination as PaginationContract;
  */
 class Pagination implements PaginationContract{
 
+	protected $context = 'posts';
+
 	protected $items = [];
 	protected $total = 0;
 	protected $current = 0;
@@ -33,9 +35,57 @@ class Pagination implements PaginationContract{
 	protected $mid_size = 0;
 	protected $dots = false;
 
-	public function __construct( $args = [] ) {
+	public function __construct( $context = 'posts', $args = [] ) {
+
+		$this->context = $context;
+
+		if ( 'singular' === $this->context ) {
+
+			$args = $args + $this->singularArgs();
+
+		} elseif ( 'comments' === $this->context ) {
+
+			$args = $args + $this->commentsArgs();
+		}
 
 		$this->args = $args;
+
+		$this->build();
+	}
+
+	protected function singularArgs() {
+		global $page, $numpages, $more, $wp_rewrite;
+
+		$url_parts = explode( '?', html_entity_decode( get_permalink() ) );
+		$base      = trailingslashit( $url_parts[0] ) . '%_%';
+
+		$format  = $wp_rewrite->using_index_permalinks() && ! strpos( $base, 'index.php' ) ? 'index.php/' : '';
+		$format .= $wp_rewrite->using_permalinks() ? user_trailingslashit( '%#%' ) : '?page=%#%';
+
+		return [
+			'base'    => $base,
+			'format'  => $format,
+			'current' => ! $more && 1 === $page ? 0 : $page,
+			'total'   => $numpages
+		];
+	}
+
+	protected function commentsArgs() {
+		global $wp_rewrite;
+
+		$base = add_query_arg( 'cpage', '%#%' );
+
+		if ( $wp_rewrite->using_permalinks() ) {
+			$base = user_trailingslashit( trailingslashit( get_permalink() ) . $wp_rewrite->comments_pagination_base . '-%#%', 'commentpaged' );
+		}
+
+		return [
+			'base'         => $base,
+			'format'       => '',
+			'total'        => get_comment_pages_count(),
+			'current'      => get_query_var( 'cpage' ) ?: 1,
+			'add_fragment' => '#comments'
+		];
 	}
 
 	public function render() {
@@ -44,8 +94,6 @@ class Pagination implements PaginationContract{
 	}
 
 	public function fetch() {
-
-		$this->build();
 
 		$title = $list = $template = '';
 
@@ -79,13 +127,18 @@ class Pagination implements PaginationContract{
 			$template = sprintf(
 				'<%1$s class="%2$s" role="navigation">%3$s%4$s</%1$s>',
 				tag_escape( $this->args['container_tag'] ),
-				esc_attr( $this->args['container_class'] ),
+				esc_attr( sprintf( $this->args['container_class'], $this->context ) ),
 				$title,
 				$list
 			);
 		}
 
 		return apply_filters( 'hybrid/pagination', $template, $this->args );
+	}
+
+	public function all() {
+
+		return $this->items();
 	}
 
 	/**
@@ -170,13 +223,15 @@ class Pagination implements PaginationContract{
 
 			'screen_reader_text' => '',
 			'container_tag'      => 'nav',
-			'container_class'    => 'pagination',
 			'title_tag'          => 'h2',
-			'title_class'        => 'pagination__title',
 			'title_text'         => '',
 			'list_tag'           => 'ul',
-			'list_class'         => 'pagination__items',
 			'item_tag'           => 'li',
+
+			// If no classes are set, we'll auto-build them.
+			'container_class'    => 'pagination pagination--%s',
+			'title_class'        => 'pagination__title',
+			'list_class'         => 'pagination__items',
 			'item_class'         => 'pagination__item pagination__item--%s',
 			'anchor_class'       => 'pagination__anchor pagination__anchor--%s'
 		);
