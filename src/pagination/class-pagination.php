@@ -26,75 +26,26 @@ use Hybrid\Contracts\Pagination as PaginationContract;
  */
 class Pagination implements PaginationContract{
 
-	/**
-	 * Array of items in the pagination list.
-	 *
-	 * @since  5.0.0
-	 * @access private
-	 * @var    array
-	 */
-	private $items = [];
+	protected $items = [];
+	protected $total = 0;
+	protected $current = 0;
+	protected $end_size = 0;
+	protected $mid_size = 0;
+	protected $dots = false;
 
-	/**
-	 * Array of arguments that will be passed to `paginate_links()`.
-	 *
-	 * @since  5.0.0
-	 * @access private
-	 * @var    array
-	 */
-	private $args = [];
-
-	/**
-	 * Constructor method.
-	 *
-	 * @since  5.0.0
-	 * @access public
-	 * @param  array  $args
-	 * @return void
-	 */
 	public function __construct( $args = [] ) {
 
-		$this->args = (array) $args + [
-			'mid_size'           => 1,
-			'screen_reader_text' => '',
-			'container_tag'      => 'nav',
-			'container_class'    => 'pagination',
-			'title_tag'          => 'h2',
-			'title_class'        => 'pagination__title',
-			'title_text'         => '',
-			'list_tag'           => 'ul',
-			'list_class'         => 'pagination__items',
-			'item_tag'           => 'li',
-			'item_class'         => 'pagination__item pagination__item--%s',
-			'anchor_class'       => 'pagination__anchor pagination__anchor--%s'
-		];
-
-		// Always want an array type so that we can build our own output.
-		$this->args['type'] = 'array';
+		$this->args = $args;
 	}
 
-	/**
-	 * Prints the pagination output.
-	 *
-	 * @since  5.0.0
-	 * @access public
-	 * @return string
-	 */
 	public function render() {
 
 		echo $this->fetch();
 	}
 
-	/**
-	 * Return the pagination output.
-	 *
-	 * @since  5.0.0
-	 * @access public
-	 * @return string
-	 */
-	 public function fetch() {
+	public function fetch() {
 
-		$this->get_items();
+		$this->build();
 
 		$title = $list = $template = '';
 
@@ -114,7 +65,7 @@ class Pagination implements PaginationContract{
 			// Loop through each of the items and format them into a list.
 			foreach ( $this->items as $item ) {
 
-				$list .= $this->format_item( $item );
+				$list .= $this->formatItem( $item );
 			}
 
 			$list = sprintf(
@@ -138,54 +89,6 @@ class Pagination implements PaginationContract{
 	}
 
 	/**
-	 * Sets up the array of items.
-	 *
-	 * @since  5.0.0
-	 * @access private
-	 * @return void
-	 */
-	private function get_items() {
-
-		$links = paginate_links( $this->args );
-
-		if ( ! $links ) {
-			return;
-		}
-
-		foreach ( $links as $link ) {
-
-			$item = [ 'type' => 'number' ];
-
-			// Capture the element attributes and text.
-			preg_match( "/<(?:a|span)(.+?)>(.+?)<\/(?:a|span)>/i", $link, $matches );
-
-			if ( ! empty( $matches ) && isset( $matches[1] ) && isset( $matches[2] ) ) {
-
-				// Get an array of the attributes.
-				$attr = wp_kses_hair( trim( $matches[1] ), [ 'http', 'https' ] );
-
-				$item['attr'] = array_column( $attr, 'value', 'name' );
-				$item['text'] = $matches[2];
-
-				if ( ! empty( $item['attr']['class'] ) ) {
-
-					$intersection = array_intersect(
-						[ 'prev', 'next', 'current', 'dots' ],
-						explode( ' ', $item['attr']['class'] )
-					);
-
-					if ( $intersection ) {
-
-						$item['type'] = reset( $intersection );
-					}
-				}
-			}
-
-			$this->items[] = $item;
-		}
-	}
-
-	/**
 	 * Format an item's HTML output.
 	 *
 	 * @since  5.0.0
@@ -193,19 +96,25 @@ class Pagination implements PaginationContract{
 	 * @param  array   $item
 	 * @return string
 	 */
-	private function format_item( $item ) {
+	private function formatItem( $item ) {
 
-		$is_link  = isset( $item['attr']['href'] );
+		$is_link  = isset( $item['url'] );
 		$esc_attr = '';
 
-		// Overwrite the class attribute.
-		$item['attr']['class'] = sprintf(
-			$this->args['anchor_class'],
-			$is_link ? 'link' : $item['type']
-		);
+		$attr = [
+			'class' => sprintf( $this->args['anchor_class'], $is_link ? 'link' : $item['type'] )
+		];
+
+		if ( $is_link ) {
+			$attr['href'] = $item['url'];
+		}
+
+		if ( 'current' === $item['type'] ) {
+			$attr['aria-current'] = $this->args['aria_current'];
+		}
 
 		// We need to re-add attributes to the item.
-		foreach ( $item['attr'] as $name => $value ) {
+		foreach ( $attr as $name => $value ) {
 
 			$esc_attr .= sprintf(
 				' %s="%s"',
@@ -220,7 +129,192 @@ class Pagination implements PaginationContract{
 			esc_attr( sprintf( $this->args['item_class'], $item['type'] ) ),
 			$is_link ? 'a' : 'span',
 			trim( $esc_attr ),
-			$item['text']
+			$item['content']
 		);
+	}
+
+	protected function build() {
+		global $wp_query, $wp_rewrite;
+
+		// Setting up default values based on the current URL.
+		$pagenum_link = html_entity_decode( get_pagenum_link() );
+		$url_parts    = explode( '?', $pagenum_link );
+
+		// Get max pages and current page out of the current query, if available.
+		$total   = isset( $wp_query->max_num_pages ) ? $wp_query->max_num_pages : 1;
+		$current = get_query_var( 'paged' ) ? intval( get_query_var( 'paged' ) ) : 1;
+
+		// Append the format placeholder to the base URL.
+		$pagenum_link = trailingslashit( $url_parts[0] ) . '%_%';
+
+		// URL base depends on permalink settings.
+		$format  = $wp_rewrite->using_index_permalinks() && ! strpos( $pagenum_link, 'index.php' ) ? 'index.php/' : '';
+		$format .= $wp_rewrite->using_permalinks() ? user_trailingslashit( $wp_rewrite->pagination_base . '/%#%', 'paged' ) : '?paged=%#%';
+
+		$defaults = array(
+			'base'               => $pagenum_link, // http://example.com/all_posts.php%_% : %_% is replaced by format (below)
+			'format'             => $format, // ?page=%#% : %#% is replaced by the page number
+			'total'              => $total,
+			'current'            => $current,
+			'aria_current'       => 'page',
+			'show_all'           => false,
+			'prev_next'          => true,
+			'prev_text'          => '',
+			'next_text'          => '',
+			'end_size'           => 1,
+			'mid_size'           => 1,
+			'add_args'           => [],
+			'add_fragment'       => '',
+			'before_page_number' => '',
+			'after_page_number'  => '',
+
+			'screen_reader_text' => '',
+			'container_tag'      => 'nav',
+			'container_class'    => 'pagination',
+			'title_tag'          => 'h2',
+			'title_class'        => 'pagination__title',
+			'title_text'         => '',
+			'list_tag'           => 'ul',
+			'list_class'         => 'pagination__items',
+			'item_tag'           => 'li',
+			'item_class'         => 'pagination__item pagination__item--%s',
+			'anchor_class'       => 'pagination__anchor pagination__anchor--%s'
+		);
+
+		$this->args = wp_parse_args( $this->args, $defaults );
+
+		if ( ! is_array( $this->args['add_args'] ) ) {
+			$this->args['add_args'] = [];
+		}
+
+		// Merge additional query vars found in the original URL into 'add_args' array.
+		if ( isset( $url_parts[1] ) ) {
+
+			// Find the format argument.
+			$format       = explode( '?', str_replace( '%_%', $this->args['format'], $this->args['base'] ) );
+			$format_query = isset( $format[1] ) ? $format[1] : '';
+			wp_parse_str( $format_query, $format_args );
+
+			// Find the query args of the requested URL.
+			wp_parse_str( $url_parts[1], $url_query_args );
+
+			// Remove the format argument from the array of query arguments, to avoid overwriting custom format.
+			foreach ( $format_args as $format_arg => $format_arg_value ) {
+				unset( $url_query_args[ $format_arg ] );
+			}
+
+			$this->args['add_args'] = array_merge( $this->args['add_args'], urlencode_deep( $url_query_args ) );
+		}
+
+		// Who knows what else people pass in $args
+		$this->total = (int) $this->args['total'];
+
+		if ( $this->total < 2 ) {
+			return;
+		}
+
+		$this->current = (int) $this->args['current'];
+
+		$this->end_size = (int) $this->args['end_size']; // Out of bounds?  Make it the default.
+
+		if ( $this->end_size < 1 ) {
+			$this->end_size = 1;
+		}
+
+		$this->mid_size = (int) $this->args['mid_size'];
+
+		if ( $this->mid_size < 0 ) {
+			$this->mid_size = 2;
+		}
+
+		$this->prevItem();
+
+		for ( $n = 1; $n <= $this->total; $n++ ) {
+			$this->pageItem( $n );
+		}
+
+		$this->nextItem();
+	}
+
+	protected function prevItem() {
+
+		if ( $this->args['prev_next'] && $this->current && 1 < $this->current ) {
+
+			$this->items[] = [
+				'type'    => 'prev',
+				'url'     => $this->buildUrl( 2 == $this->current ? '' : $this->args['format'], $this->current - 1 ),
+				'content' => $this->args['prev_text']
+			];
+		}
+	}
+
+	protected function nextItem() {
+
+		if ( $this->args['prev_next'] && $this->current && $this->current < $this->total ) {
+
+			$this->items[] = [
+				'type'    => 'next',
+				'url'     => $this->buildUrl( $this->args['format'], $this->current + 1 ),
+				'content' => $this->args['next_text']
+			];
+		}
+	}
+
+	protected function pageItem( $n ) {
+
+		if ( $n === $this->current ) {
+
+			$this->items[] = [
+				'type'    => 'current',
+				'content' => $this->args['before_page_number'] . number_format_i18n( $n ) . $this->args['after_page_number']
+			];
+
+			$this->dots = true;
+		} else {
+
+			if ( $this->args['show_all'] || ( $n <= $this->end_size || ( $this->current && $n >= $this->current - $this->mid_size && $n <= $this->current + $this->mid_size ) || $n > $this->total - $this->end_size ) ) {
+
+				$link = str_replace( '%_%', 1 == $n ? '' : $this->args['format'], $this->args['base'] );
+				$link = str_replace( '%#%', $n, $link );
+
+				if ( $this->args['add_args'] ) {
+					$link = add_query_arg( $this->args['add_args'], $link );
+				}
+
+				$link .= $this->args['add_fragment'];
+
+				$this->items[] = [
+					'type'    => 'number',
+					'url'     => $this->buildUrl( 1 == $n ? '' : $this->args['format'], $n ),
+					'content' => $this->args['before_page_number'] . number_format_i18n( $n ) . $this->args['after_page_number']
+				];
+
+				$this->dots = true;
+
+			} elseif ( $this->dots && ! $this->args['show_all'] ) {
+
+				$this->items[] = [
+					'type'    => 'dots',
+					'content' => __( '&hellip;', 'hybrid-core' )
+				];
+
+				$this->dots = false;
+			}
+		}
+	}
+
+	protected function buildUrl( $format, $number ) {
+
+		$link = str_replace( '%_%', $format, $this->args['base'] );
+
+		$link = str_replace( '%#%', $number, $link );
+
+		if ( $this->args['add_args'] ) {
+			$link = add_query_arg( $this->args['add_args'], $link );
+		}
+
+		$link .= $this->args['add_fragment'];
+
+		return apply_filters( 'paginate_links', $link );
 	}
 }
