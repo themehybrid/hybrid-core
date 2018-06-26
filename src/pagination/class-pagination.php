@@ -26,18 +26,94 @@ use Hybrid\Contracts\Pagination as PaginationContract;
  */
 class Pagination implements PaginationContract{
 
+	/**
+	 * The type of pagination to output.
+	 *
+	 * @since  5.0.0
+	 * @access protected
+	 * @var    string
+	 */
 	protected $context = 'posts';
 
+	/**
+	 * Whitelist of allowed contexts.
+	 *
+	 * @since  5.0.0
+	 * @access protected
+	 * @var    array
+	 */
+	protected $allowed_contexts = [
+		'posts',
+		'singular',
+		'comments'
+	];
+
+	/**
+	 * An array of the pagination items.
+	 *
+	 * @since  5.0.0
+	 * @access protected
+	 * @var    array
+	 */
 	protected $items = [];
+
+	/**
+	 * The total number of pages.
+	 *
+	 * @since  5.0.0
+	 * @access protected
+	 * @var    int
+	 */
 	protected $total = 0;
+
+	/**
+	 * The current page being viewed.
+	 *
+	 * @since  5.0.0
+	 * @access protected
+	 * @var    int
+	 */
 	protected $current = 0;
+
+	/**
+	 * The number of items to show on the ends.
+	 *
+	 * @since  5.0.0
+	 * @access protected
+	 * @var    int
+	 */
 	protected $end_size = 0;
+
+	/**
+	 * The number of items to show in the middle.
+	 *
+	 * @since  5.0.0
+	 * @access protected
+	 * @var    int
+	 */
 	protected $mid_size = 0;
+
+	/**
+	 * Helper for keeping track of whether to show dots instead of a number.
+	 *
+	 * @since  5.0.0
+	 * @access protected
+	 * @var    bool
+	 */
 	protected $dots = false;
 
+	/**
+	 * Create a new pagination object.
+	 *
+	 * @since  5.0.0
+	 * @access public
+	 * @param  string  $context
+	 * @param  array   $args
+	 * @return void
+	 */
 	public function __construct( $context = 'posts', $args = [] ) {
 
-		$this->context = $context;
+		$this->context = in_array( $context, $this->allowed_contexts ) ? $context : 'posts';
 
 		if ( 'singular' === $this->context ) {
 
@@ -53,6 +129,17 @@ class Pagination implements PaginationContract{
 		$this->build();
 	}
 
+	/**
+	 * Returns custom arguments for singular post pagination.
+	 *
+	 * @since  5.0.0
+	 * @access protected
+	 * @global int     $page
+	 * @global int     $numpages
+	 * @global bool    $more
+	 * @global object  $wp_rewrite
+	 * @return array
+	 */
 	protected function singularArgs() {
 		global $page, $numpages, $more, $wp_rewrite;
 
@@ -69,7 +156,14 @@ class Pagination implements PaginationContract{
 			'total'   => $numpages
 		];
 	}
-
+	/**
+	 * Returns custom arguments for comments pagination.
+	 *
+	 * @since  5.0.0
+	 * @access protected
+	 * @global object  $wp_rewrite
+	 * @return array
+	 */
 	protected function commentsArgs() {
 		global $wp_rewrite;
 
@@ -88,11 +182,25 @@ class Pagination implements PaginationContract{
 		];
 	}
 
+	/**
+	 * Renders the pagination output.
+	 *
+	 * @since  5.0.0
+	 * @access public
+	 * @return void
+	 */
 	public function render() {
 
 		echo $this->fetch();
 	}
 
+	/**
+	 * Returns the pagination output.
+	 *
+	 * @since  5.0.0
+	 * @access public
+	 * @return string
+	 */
 	public function fetch() {
 
 		$title = $list = $template = '';
@@ -133,12 +241,7 @@ class Pagination implements PaginationContract{
 			);
 		}
 
-		return apply_filters( 'hybrid/pagination', $template, $this->args );
-	}
-
-	public function all() {
-
-		return $this->items();
+		return apply_filters( "hybrid/pagination/{$this->context}", $template, $this->args );
 	}
 
 	/**
@@ -186,6 +289,13 @@ class Pagination implements PaginationContract{
 		);
 	}
 
+	/**
+	 * Builds the pagination `$items` array.
+	 *
+	 * @since  5.0.0
+	 * @access protected
+	 * @return void
+	 */
 	protected function build() {
 		global $wp_query, $wp_rewrite;
 
@@ -211,9 +321,6 @@ class Pagination implements PaginationContract{
 			'current'            => $current,
 			'aria_current'       => 'page',
 			'show_all'           => false,
-			'prev_next'          => true,
-			'prev_text'          => '',
-			'next_text'          => '',
 			'end_size'           => 1,
 			'mid_size'           => 1,
 			'add_args'           => [],
@@ -221,14 +328,17 @@ class Pagination implements PaginationContract{
 			'before_page_number' => '',
 			'after_page_number'  => '',
 
+			'prev_next'          => true,
+			'prev_text'          => '',
+			'next_text'          => '',
 			'screen_reader_text' => '',
+			'title_text'         => '',
+
 			'container_tag'      => 'nav',
 			'title_tag'          => 'h2',
-			'title_text'         => '',
 			'list_tag'           => 'ul',
 			'item_tag'           => 'li',
 
-			// If no classes are set, we'll auto-build them.
 			'container_class'    => 'pagination pagination--%s',
 			'title_class'        => 'pagination__title',
 			'list_class'         => 'pagination__items',
@@ -291,6 +401,13 @@ class Pagination implements PaginationContract{
 		$this->nextItem();
 	}
 
+	/**
+	 * Builds the previous item.
+	 *
+	 * @since  5.0.0
+	 * @access protected
+	 * @return void
+	 */
 	protected function prevItem() {
 
 		if ( $this->args['prev_next'] && $this->current && 1 < $this->current ) {
@@ -303,6 +420,13 @@ class Pagination implements PaginationContract{
 		}
 	}
 
+	/**
+	 * Builds the next item.
+	 *
+	 * @since  5.0.0
+	 * @access protected
+	 * @return void
+	 */
 	protected function nextItem() {
 
 		if ( $this->args['prev_next'] && $this->current && $this->current < $this->total ) {
@@ -315,6 +439,13 @@ class Pagination implements PaginationContract{
 		}
 	}
 
+	/**
+	 * Builds the numeric page link, current item, and dots item.
+	 *
+	 * @since  5.0.0
+	 * @access protected
+	 * @return void
+	 */
 	protected function pageItem( $n ) {
 
 		if ( $n === $this->current ) {
@@ -358,6 +489,15 @@ class Pagination implements PaginationContract{
 		}
 	}
 
+	/**
+	 * Builds and formats a page link URL.
+	 *
+	 * @since  5.0.0
+	 * @access protected
+	 * @param  string    $format
+	 * @param  int       $number
+	 * @return string
+	 */
 	protected function buildUrl( $format, $number ) {
 
 		$link = str_replace( '%_%', $format, $this->args['base'] );
