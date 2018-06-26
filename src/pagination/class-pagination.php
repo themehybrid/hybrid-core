@@ -2,10 +2,11 @@
 /**
  * Pagination class.
  *
- * This is a wrapper for the core WP `paginate_links()` class and is primarily
- * meant to replace `get_the_posts_pagination()`.  Unfortunately, core doesn't
- * give theme authors much flexibility for altering the markup and classes.
- * This class is meant to solve this issue.
+ * This is a fork of the core WordPress `paginate_links()` function to give
+ * theme authors full control over the output of their pagination. Unfortunately,
+ * core doesn't give theme authors much flexibility for altering the markup and
+ * classes. This class is meant to solve this issue.  It also standardizes the
+ * pagination used for posts, singular (multi-page) posts, and comments.
  *
  * @package   ABC
  * @author    Justin Tadlock <justintadlock@gmail.com>
@@ -27,26 +28,14 @@ use Hybrid\Contracts\Pagination as PaginationContract;
 class Pagination implements PaginationContract{
 
 	/**
-	 * The type of pagination to output.
+	 * The type of pagination to output.  `posts`, `comments`, and `singular`
+	 * are the default types that are handled.
 	 *
 	 * @since  5.0.0
 	 * @access protected
 	 * @var    string
 	 */
 	protected $context = 'posts';
-
-	/**
-	 * Whitelist of allowed contexts.
-	 *
-	 * @since  5.0.0
-	 * @access protected
-	 * @var    array
-	 */
-	protected $allowed_contexts = [
-		'posts',
-		'singular',
-		'comments'
-	];
 
 	/**
 	 * An array of the pagination items.
@@ -94,6 +83,15 @@ class Pagination implements PaginationContract{
 	protected $mid_size = 0;
 
 	/**
+	 * Helper property for tracking the URL parts of the current page.
+	 *
+	 * @since  5.0.0
+	 * @access protected
+	 * @var    array
+	 */
+	protected $url_parts = [];
+
+	/**
 	 * Helper for keeping track of whether to show dots instead of a number.
 	 *
 	 * @since  5.0.0
@@ -113,20 +111,152 @@ class Pagination implements PaginationContract{
 	 */
 	public function __construct( $context = 'posts', $args = [] ) {
 
-		$this->context = in_array( $context, $this->allowed_contexts ) ? $context : 'posts';
+		$this->context = $context;
 
-		if ( 'singular' === $this->context ) {
+		$defaults = [
+			// Base arguments imported from `paginate_links()`. It's
+			// best not to touch these unless rolling building out
+			// something custom.
+			'base'               => '',
+			'format'             => '',
+			'total'              => 0,
+			'current'            => 0,
+			'add_args'           => [],
+			'add_fragment'       => '',
 
-			$args = $args + $this->singularArgs();
+			// Customize the items that are shown.
+			'show_all'           => false,
+			'end_size'           => 1,
+			'mid_size'           => 1,
+			'prev_next'          => true,
 
-		} elseif ( 'comments' === $this->context ) {
+			// Custom text, content, and HTML.
+			'prev_text'          => '',
+			'next_text'          => '',
+			'screen_reader_text' => '',
+			'title_text'         => '',
+			'before_page_number' => '',
+			'after_page_number'  => '',
 
-			$args = $args + $this->commentsArgs();
+			// HTML tags.
+			'container_tag'      => 'nav',
+			'title_tag'          => 'h2',
+			'list_tag'           => 'ul',
+			'item_tag'           => 'li',
+
+			// Attributes.
+			'container_class'    => 'pagination pagination--%s',
+			'title_class'        => 'pagination__title',
+			'list_class'         => 'pagination__items',
+			'item_class'         => 'pagination__item pagination__item--%s',
+			'anchor_class'       => 'pagination__anchor pagination__anchor--%s',
+			'aria_current'       => 'page'
+		];
+
+		// Build the class method name for grabbing the default arguments
+		// based on the current context.
+		$method = "{$this->context}Args";
+
+		// Merge defaults and contextual default args.
+		$defaults = apply_filters(
+			"hybrid/pagination/{$this->context}/defaults",
+			array_merge(
+				$defaults,
+				method_exists( $this, $method ) ? $this->$method() : []
+			)
+		);
+
+		// Parse the args with the defaults.
+		$this->args = apply_filters(
+			"hybrid/pagination/{$this->context}/args",
+			wp_parse_args( $args, $defaults )
+		);
+
+		// Make sure query args is an array.
+		if ( ! is_array( $this->args['add_args'] ) ) {
+			$this->args['add_args'] = [];
 		}
 
-		$this->args = $args;
+		// Merge query vars found in the current page's URL into the
+		// `add_args` array so that they get appended to the final URL.
+		if ( isset( $this->url_parts[1] ) ) {
 
+			// Find the format argument.
+			$format       = explode( '?', str_replace( '%_%', $this->args['format'], $this->args['base'] ) );
+			$format_query = isset( $format[1] ) ? $format[1] : '';
+			wp_parse_str( $format_query, $format_args );
+
+			// Find the query args of the requested URL.
+			wp_parse_str( $this->url_parts[1], $url_query_args );
+
+			// Remove the format argument from the array of query
+			// arguments, to avoid overwriting custom format.
+			foreach ( $format_args as $format_arg => $format_arg_value ) {
+				unset( $url_query_args[ $format_arg ] );
+			}
+
+			// Merge original query args to `add_args`.
+			$this->args['add_args'] = array_merge(
+				$this->args['add_args'],
+				urlencode_deep( $url_query_args )
+			);
+		}
+
+		// Make sure that we have absolute integers.
+		$this->total    = absint( $this->args['total']    );
+		$this->current  = absint( $this->args['current']  );
+		$this->end_size = absint( $this->args['end_size'] );
+		$this->mid_size = absint( $this->args['mid_size'] );
+
+		// Bail if we don't have at least two pages.
+		if ( $this->total < 2 ) {
+			return;
+		}
+
+		// The end size must be at least 1.
+		if ( $this->end_size < 1 ) {
+			$this->end_size = 1;
+		}
+
+		// Build the pagination items.
 		$this->build();
+	}
+
+	/**
+	 * Returns custom arguments for normal, posts pagination.
+	 *
+	 * @since  5.0.0
+	 * @access protected
+	 * @global object  $wp_query
+	 * @global object  $wp_rewrite
+	 * @return array
+	 */
+	protected function postsArgs() {
+		global $wp_query, $wp_rewrite;
+
+		// Setting up default values based on the current URL.
+		$pagenum_link    = html_entity_decode( get_pagenum_link() );
+		$this->url_parts = explode( '?', $pagenum_link );
+
+		// Get total number of pages.
+		$total = isset( $wp_query->max_num_pages ) ? $wp_query->max_num_pages : 1;
+
+		// Get the current page.
+		$current = get_query_var( 'paged' ) ? intval( get_query_var( 'paged' ) ) : 1;
+
+		// Append the format placeholder to the base URL.
+		$base = trailingslashit( $this->url_parts[0] ) . '%_%';
+
+		// URL base depends on permalink settings.
+		$format  = $wp_rewrite->using_index_permalinks() && ! strpos( $pagenum_link, 'index.php' ) ? 'index.php/' : '';
+		$format .= $wp_rewrite->using_permalinks() ? user_trailingslashit( $wp_rewrite->pagination_base . '/%#%', 'paged' ) : '?paged=%#%';
+
+		return [
+			'base'    => $base,
+			'format'  => $format,
+			'total'   => $total,
+			'current' => $current
+		];
 	}
 
 	/**
@@ -143,9 +273,13 @@ class Pagination implements PaginationContract{
 	protected function singularArgs() {
 		global $page, $numpages, $more, $wp_rewrite;
 
-		$url_parts = explode( '?', html_entity_decode( get_permalink() ) );
-		$base      = trailingslashit( $url_parts[0] ) . '%_%';
+		// Split the current URL between the base and query string.
+		$this->url_parts = explode( '?', html_entity_decode( get_permalink() ) );
 
+		// Build the base without the query string.
+		$base = trailingslashit( $this->url_parts[0] ) . '%_%';
+
+		// Build URL format.
 		$format  = $wp_rewrite->using_index_permalinks() && ! strpos( $base, 'index.php' ) ? 'index.php/' : '';
 		$format .= $wp_rewrite->using_permalinks() ? user_trailingslashit( '%#%' ) : '?page=%#%';
 
@@ -168,6 +302,9 @@ class Pagination implements PaginationContract{
 		global $wp_rewrite;
 
 		$base = add_query_arg( 'cpage', '%#%' );
+
+		// Split the current URL between the base and query string.
+		$this->url_parts = explode( '?', html_entity_decode( get_pagenum_link() ) );
 
 		if ( $wp_rewrite->using_permalinks() ) {
 			$base = user_trailingslashit( trailingslashit( get_permalink() ) . $wp_rewrite->comments_pagination_base . '-%#%', 'commentpaged' );
@@ -218,12 +355,14 @@ class Pagination implements PaginationContract{
 				);
 			}
 
-			// Loop through each of the items and format them into a list.
+			// Loop through each of the items and format each into
+			// an HTML string.
 			foreach ( $this->items as $item ) {
 
 				$list .= $this->formatItem( $item );
 			}
 
+			// Format the list.
 			$list = sprintf(
 				'<%1$s class="%2$s">%3$s</%1$s>',
 				tag_escape( $this->args['list_tag'] ),
@@ -231,7 +370,7 @@ class Pagination implements PaginationContract{
 				$list
 			);
 
-			// Format the HTML output.
+			// Format the nav wrapper.
 			$template = sprintf(
 				'<%1$s class="%2$s" role="navigation">%3$s%4$s</%1$s>',
 				tag_escape( $this->args['container_tag'] ),
@@ -245,6 +384,24 @@ class Pagination implements PaginationContract{
 	}
 
 	/**
+	 * Builds the pagination `$items` array.
+	 *
+	 * @since  5.0.0
+	 * @access protected
+	 * @return void
+	 */
+	protected function build() {
+
+		$this->prevItem();
+
+		for ( $n = 1; $n <= $this->total; $n++ ) {
+			$this->pageItem( $n );
+		}
+
+		$this->nextItem();
+	}
+
+	/**
 	 * Format an item's HTML output.
 	 *
 	 * @since  5.0.0
@@ -255,21 +412,26 @@ class Pagination implements PaginationContract{
 	private function formatItem( $item ) {
 
 		$is_link  = isset( $item['url'] );
+		$attr     = [];
 		$esc_attr = '';
 
-		$attr = [
-			'class' => sprintf( $this->args['anchor_class'], $is_link ? 'link' : $item['type'] )
-		];
+		// Add the anchor/span class attribute.
+		$attr['class'] = sprintf(
+			$this->args['anchor_class'],
+			$is_link ? 'link' : $item['type']
+		);
 
+		// If this is a link, add the URL.
 		if ( $is_link ) {
 			$attr['href'] = $item['url'];
 		}
 
+		// If this is the current item, add the `aria-current` attribute.
 		if ( 'current' === $item['type'] ) {
 			$attr['aria-current'] = $this->args['aria_current'];
 		}
 
-		// We need to re-add attributes to the item.
+		// Loop through the attributes and format them into a string.
 		foreach ( $attr as $name => $value ) {
 
 			$esc_attr .= sprintf(
@@ -279,6 +441,7 @@ class Pagination implements PaginationContract{
 			);
 		}
 
+		// Builds and formats the list item.
 		return sprintf(
 			'<%1$s class="%2$s"><%3$s %4$s>%5$s</%3$s></%1$s>',
 			tag_escape( $this->args['item_tag'] ),
@@ -287,118 +450,6 @@ class Pagination implements PaginationContract{
 			trim( $esc_attr ),
 			$item['content']
 		);
-	}
-
-	/**
-	 * Builds the pagination `$items` array.
-	 *
-	 * @since  5.0.0
-	 * @access protected
-	 * @return void
-	 */
-	protected function build() {
-		global $wp_query, $wp_rewrite;
-
-		// Setting up default values based on the current URL.
-		$pagenum_link = html_entity_decode( get_pagenum_link() );
-		$url_parts    = explode( '?', $pagenum_link );
-
-		// Get max pages and current page out of the current query, if available.
-		$total   = isset( $wp_query->max_num_pages ) ? $wp_query->max_num_pages : 1;
-		$current = get_query_var( 'paged' ) ? intval( get_query_var( 'paged' ) ) : 1;
-
-		// Append the format placeholder to the base URL.
-		$pagenum_link = trailingslashit( $url_parts[0] ) . '%_%';
-
-		// URL base depends on permalink settings.
-		$format  = $wp_rewrite->using_index_permalinks() && ! strpos( $pagenum_link, 'index.php' ) ? 'index.php/' : '';
-		$format .= $wp_rewrite->using_permalinks() ? user_trailingslashit( $wp_rewrite->pagination_base . '/%#%', 'paged' ) : '?paged=%#%';
-
-		$defaults = array(
-			'base'               => $pagenum_link, // http://example.com/all_posts.php%_% : %_% is replaced by format (below)
-			'format'             => $format, // ?page=%#% : %#% is replaced by the page number
-			'total'              => $total,
-			'current'            => $current,
-			'aria_current'       => 'page',
-			'show_all'           => false,
-			'end_size'           => 1,
-			'mid_size'           => 1,
-			'add_args'           => [],
-			'add_fragment'       => '',
-			'before_page_number' => '',
-			'after_page_number'  => '',
-
-			'prev_next'          => true,
-			'prev_text'          => '',
-			'next_text'          => '',
-			'screen_reader_text' => '',
-			'title_text'         => '',
-
-			'container_tag'      => 'nav',
-			'title_tag'          => 'h2',
-			'list_tag'           => 'ul',
-			'item_tag'           => 'li',
-
-			'container_class'    => 'pagination pagination--%s',
-			'title_class'        => 'pagination__title',
-			'list_class'         => 'pagination__items',
-			'item_class'         => 'pagination__item pagination__item--%s',
-			'anchor_class'       => 'pagination__anchor pagination__anchor--%s'
-		);
-
-		$this->args = wp_parse_args( $this->args, $defaults );
-
-		if ( ! is_array( $this->args['add_args'] ) ) {
-			$this->args['add_args'] = [];
-		}
-
-		// Merge additional query vars found in the original URL into 'add_args' array.
-		if ( isset( $url_parts[1] ) ) {
-
-			// Find the format argument.
-			$format       = explode( '?', str_replace( '%_%', $this->args['format'], $this->args['base'] ) );
-			$format_query = isset( $format[1] ) ? $format[1] : '';
-			wp_parse_str( $format_query, $format_args );
-
-			// Find the query args of the requested URL.
-			wp_parse_str( $url_parts[1], $url_query_args );
-
-			// Remove the format argument from the array of query arguments, to avoid overwriting custom format.
-			foreach ( $format_args as $format_arg => $format_arg_value ) {
-				unset( $url_query_args[ $format_arg ] );
-			}
-
-			$this->args['add_args'] = array_merge( $this->args['add_args'], urlencode_deep( $url_query_args ) );
-		}
-
-		// Who knows what else people pass in $args
-		$this->total = (int) $this->args['total'];
-
-		if ( $this->total < 2 ) {
-			return;
-		}
-
-		$this->current = (int) $this->args['current'];
-
-		$this->end_size = (int) $this->args['end_size']; // Out of bounds?  Make it the default.
-
-		if ( $this->end_size < 1 ) {
-			$this->end_size = 1;
-		}
-
-		$this->mid_size = (int) $this->args['mid_size'];
-
-		if ( $this->mid_size < 0 ) {
-			$this->mid_size = 2;
-		}
-
-		$this->prevItem();
-
-		for ( $n = 1; $n <= $this->total; $n++ ) {
-			$this->pageItem( $n );
-		}
-
-		$this->nextItem();
 	}
 
 	/**
@@ -448,6 +499,8 @@ class Pagination implements PaginationContract{
 	 */
 	protected function pageItem( $n ) {
 
+		// If the current item we're building is for the current page
+		// being viewed.
 		if ( $n === $this->current ) {
 
 			$this->items[] = [
@@ -456,18 +509,11 @@ class Pagination implements PaginationContract{
 			];
 
 			$this->dots = true;
+
+		// If showing a linked number or dots.
 		} else {
 
 			if ( $this->args['show_all'] || ( $n <= $this->end_size || ( $this->current && $n >= $this->current - $this->mid_size && $n <= $this->current + $this->mid_size ) || $n > $this->total - $this->end_size ) ) {
-
-				$link = str_replace( '%_%', 1 == $n ? '' : $this->args['format'], $this->args['base'] );
-				$link = str_replace( '%#%', $n, $link );
-
-				if ( $this->args['add_args'] ) {
-					$link = add_query_arg( $this->args['add_args'], $link );
-				}
-
-				$link .= $this->args['add_fragment'];
 
 				$this->items[] = [
 					'type'    => 'number',
@@ -501,15 +547,17 @@ class Pagination implements PaginationContract{
 	protected function buildUrl( $format, $number ) {
 
 		$link = str_replace( '%_%', $format, $this->args['base'] );
-
 		$link = str_replace( '%#%', $number, $link );
 
+		// Adds any existing or new query vars to the URL.
 		if ( $this->args['add_args'] ) {
 			$link = add_query_arg( $this->args['add_args'], $link );
 		}
 
+		// Appends a fragment to the end of the URL.
 		$link .= $this->args['add_fragment'];
 
+		// Applies the core WP `paginate_links` filter hook.
 		return apply_filters( 'paginate_links', $link );
 	}
 }
