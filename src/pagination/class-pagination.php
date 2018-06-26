@@ -162,7 +162,7 @@ class Pagination implements PaginationContract{
 			"hybrid/pagination/{$this->context}/defaults",
 			array_merge(
 				$defaults,
-				method_exists( $this, $method ) ? $this->$method() : []
+				method_exists( $this, $method ) ? $this->$method() : $this->postArgs()
 			)
 		);
 
