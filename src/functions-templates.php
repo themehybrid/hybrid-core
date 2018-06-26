@@ -18,6 +18,9 @@ namespace Hybrid;
 # Run hook for registering templates.
 add_action( 'init', __NAMESPACE__ . '\register_templates', 95 );
 
+# Filter theme post templates to add registered templates.
+add_filter( 'theme_templates', __NAMESPACE__ . '\post_templates_filter', 5, 4 );
+
 /**
  * Executes the action hook for themes to register their templates. Themes should
  * always register on this hook.
@@ -29,13 +32,6 @@ add_action( 'init', __NAMESPACE__ . '\register_templates', 95 );
 function register_templates() {
 
 	do_action( 'hybrid/templates/register', app( 'templates' ) );
-
-	// Add a filter to each post type so that we can determine if that post
-	// type has any custom templates registered for it.
-	foreach ( get_post_types() as $type ) {
-
-		add_filter( "theme_{$type}_templates", __NAMESPACE__ . '\post_templates_filter', 5, 4 );
-	}
 }
 
 /**
@@ -131,26 +127,26 @@ function has_post_template( $template = '', $post_id = '' ) {
 }
 
 /**
- * Filter used on `theme_{$post_type}_templates` to add custom templates to the
- * template drop-down.
+ * Filter used on `theme_templates` to add custom templates to the template
+ * drop-down.
  *
  * @since  5.0.0
  * @access public
- * @param  array   $post_templates
+ * @param  array   $templates
  * @param  object  $theme
  * @param  object  $post
  * @param  string  $post_type
  * @return array
  */
-function post_templates_filter( $post_templates, $theme, $post, $post_type ) {
+function post_templates_filter( $templates, $theme, $post, $post_type ) {
 
 	foreach ( app( 'templates' )->all() as $template ) {
 
 		if ( $template->forPostType( $post_type ) ) {
 
-			$post_templates[ $template->filename() ] = esc_html( $template->label() );
+			$templates[ $template->filename() ] = esc_html( $template->label() );
 		}
 	}
 
-	return $post_templates;
+	return $templates;
 }
