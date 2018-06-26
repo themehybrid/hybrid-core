@@ -146,7 +146,7 @@ class Pagination implements PaginationContract{
 
 			// Attributes.
 			'container_class'    => 'pagination pagination--%s',
-			'title_class'        => 'pagination__title',
+			'title_class'        => 'pagination__title screen-reader-text',
 			'list_class'         => 'pagination__items',
 			'item_class'         => 'pagination__item pagination__item--%s',
 			'anchor_class'       => 'pagination__anchor pagination__anchor--%s',
