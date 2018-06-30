@@ -15,9 +15,6 @@
 
 namespace Hybrid;
 
-# Enqueue scripts.
-add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\enqueue_scripts', 5 );
-
 /**
  * Loads the `comment-reply` script when it's needed.
  *

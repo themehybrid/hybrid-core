@@ -16,11 +16,6 @@ namespace Hybrid;
 
 use WP_User;
 
-# Filters the WordPress element classes.
-add_filter( 'body_class',    __NAMESPACE__ . '\body_class_filter',    ~PHP_INT_MAX, 2 );
-add_filter( 'post_class',    __NAMESPACE__ . '\post_class_filter',    ~PHP_INT_MAX, 3 );
-add_filter( 'comment_class', __NAMESPACE__ . '\comment_class_filter', ~PHP_INT_MAX, 4 );
-
 /**
  * Filters the WordPress body class with a better set of classes that are more
  * consistently handled and are backwards compatible with the original body

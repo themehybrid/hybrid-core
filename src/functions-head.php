@@ -13,15 +13,6 @@
 
 namespace Hybrid;
 
-# Adds common theme items to <head>.
-add_action( 'wp_head', __NAMESPACE__ . '\meta_charset',   0 );
-add_action( 'wp_head', __NAMESPACE__ . '\meta_viewport',  1 );
-add_action( 'wp_head', __NAMESPACE__ . '\meta_generator', 1 );
-add_action( 'wp_head', __NAMESPACE__ . '\link_pingback',  3 );
-
-# Filter the WordPress title.
-add_filter( 'document_title_parts', __NAMESPACE__ . '\document_title_parts', 5 );
-
 /**
  * Adds the meta charset to the header.
  *

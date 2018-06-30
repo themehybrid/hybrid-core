@@ -11,9 +11,6 @@
 
 namespace Hybrid;
 
-# Remove the default emoji styles. We'll handle this in the stylesheet.
-remove_action( 'wp_print_styles', 'print_emoji_styles' );
-
 /**
  * Searches for a locale stylesheet.
  *

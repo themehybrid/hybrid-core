@@ -30,11 +30,6 @@
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
-# Bail if we're not in the WP environment.
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
-
 # Define the directory path to the framework. This shouldn't need changing
 # unless doing something really out there or just for clarity.
 if ( ! defined( 'HYBRID_DIR' ) ) {
@@ -47,22 +42,15 @@ if ( ! defined( 'HYBRID_DIR' ) ) {
 # defined for scripts/styles.
 if ( ! defined( 'HYBRID_URI' ) ) {
 
-	define( 'HYBRID_URI', str_replace(
-		get_template_directory(),
-		get_template_directory_uri(),
-		wp_normalize_path( __DIR__ )
-	) );
+	define( 'HYBRID_URI', '' );
 }
 
 # Check if the framework has been bootstrapped. If not, load the bootstrap files
 # and get the framework set up.
 if ( ! defined( 'HYBRID_BOOTSTRAPPED' ) ) {
 
-	require_once( trailingslashit( HYBRID_DIR ) . 'bootstrap-autoload.php'  );
-	require_once( trailingslashit( HYBRID_DIR ) . 'bootstrap-functions.php' );
-
-	# Boom!
-	Hybrid\app();
+	require_once( 'bootstrap-autoload.php'  );
+	require_once( 'bootstrap-functions.php' );
 
 	define( 'HYBRID_BOOTSTRAPPED', true );
 }

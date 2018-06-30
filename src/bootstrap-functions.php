@@ -16,7 +16,7 @@
 # Autoloads our custom functions files that are not loaded via the class loader.
 array_map(
 	function( $file ) {
-		require_once( trailingslashit( HYBRID_DIR ) . "{$file}.php" );
+		require_once( "{$file}.php" );
 	},
 	[
 		'functions-attr',

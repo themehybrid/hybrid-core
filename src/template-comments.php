@@ -13,9 +13,6 @@
 
 namespace Hybrid;
 
-# Filter the comments template.
-add_filter( 'comments_template', __NAMESPACE__ . '\comments_template', 5 );
-
 /**
  * Returns a hierarchy for the current comment.
  *

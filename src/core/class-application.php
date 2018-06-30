@@ -65,6 +65,7 @@ class Application extends Container implements ApplicationContract {
 	public function __construct() {
 
 		$this->registerDefaultBindings();
+		$this->bootstrapFilters();
 
 		// Register and providers at the earliest hook available to
 		// themes. This is so that themes can register service providers
@@ -82,14 +83,36 @@ class Application extends Container implements ApplicationContract {
 	 */
 	protected function registerDefaultBindings() {
 
+		$hybrid_uri = HYBRID_URI;
+
+		if ( ! $hybrid_uri ) {
+			$hybrid_uri = str_replace(
+				get_template_directory(),
+				get_template_directory_uri(),
+				wp_normalize_path( __DIR__ )
+			);
+		}
+
 		// Adds the directory path and URI for the framework. These
 		// should initially be defined via the `HYBRID_DIR` and
 		// `HYBRID_URI` constants to get the correct results.
-		$this->add( 'path', untrailingslashit( HYBRID_DIR ) );
-		$this->add( 'uri',  untrailingslashit( HYBRID_URI ) );
+		$this->add( 'path', untrailingslashit( HYBRID_DIR  ) );
+		$this->add( 'uri',  untrailingslashit( $hybrid_uri ) );
 
 		// Add the version for the framework.
 		$this->add( 'version', static::VERSION );
+	}
+
+	/**
+	 * Bootstrap action/filter hook calls.
+	 *
+	 * @since  5.0.0
+	 * @access protected
+	 * @return void
+	 */
+	protected function bootstrapFilters() {
+
+		require_once( $this->path . '/bootstrap-filters.php' );
 	}
 
 	/**

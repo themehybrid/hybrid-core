@@ -16,48 +16,6 @@
 
 namespace Hybrid;
 
-# Add extra support for post types.
-add_action( 'init', __NAMESPACE__ . '\post_type_support', 15 );
-
-# Filters the archive title and description.
-add_filter( 'get_the_archive_title',       __NAMESPACE__ . '\archive_title_filter',       5           );
-add_filter( 'get_the_archive_description', __NAMESPACE__ . '\archive_description_filter', 0           );
-add_filter( 'get_the_archive_description', __NAMESPACE__ . '\archive_description_format', PHP_INT_MAX );
-
-# Use same default filters as 'the_content' with a little more flexibility.
-add_filter( 'hybrid/archive_description', [ $GLOBALS['wp_embed'], 'run_shortcode' ],   5  );
-add_filter( 'hybrid/archive_description', [ $GLOBALS['wp_embed'], 'autoembed'     ],   5  );
-add_filter( 'hybrid/archive_description',                         'wptexturize',       10 );
-add_filter( 'hybrid/archive_description',                         'convert_smilies',   15 );
-add_filter( 'hybrid/archive_description',                         'convert_chars',     20 );
-add_filter( 'hybrid/archive_description',                         'wpautop',           25 );
-add_filter( 'hybrid/archive_description',                         'do_shortcode',      30 );
-add_filter( 'hybrid/archive_description',                         'shortcode_unautop', 35 );
-
-# Don't strip tags on single post titles.
-remove_filter( 'single_post_title', 'strip_tags' );
-
-# Filters the title for untitled posts.
-add_filter( 'the_title', __NAMESPACE__ . '\untitled_post' );
-
-# Default excerpt more.
-add_filter( 'excerpt_more', __NAMESPACE__ . '\excerpt_more', 5 );
-
-# Adds custom CSS classes to nav menu items.
-add_filter( 'nav_menu_css_class',         __NAMESPACE__ . '\nav_menu_css_class',         5, 2 );
-add_filter( 'nav_menu_submenu_css_class', __NAMESPACE__ . '\nav_menu_submenu_css_class', 5    );
-add_filter( 'nav_menu_link_attributes',   __NAMESPACE__ . '\nav_menu_link_attributes',   5    );
-
-# Adds custom CSS classes to the comment form fields.
-add_filter( 'comment_form_default_fields', __NAMESPACE__ . '\comment_form_default_fields', ~PHP_INT_MAX );
-add_filter( 'comment_form_defaults',       __NAMESPACE__ . '\comment_form_defaults',       ~PHP_INT_MAX );
-
-# Allow the posts page to be edited.
-add_action( 'edit_form_after_title', __NAMESPACE__ . '\enable_posts_page_editor', 0 );
-
-# Filters widget classes.
-add_filter( 'dynamic_sidebar_params', __NAMESPACE__ . '\widget_class_filter', ~PHP_INT_MAX );
-
 /**
  * This function is for adding extra support for features not default to the core post types.
  * Excerpts are added to the 'page' post type.  Comments and trackbacks are added for the

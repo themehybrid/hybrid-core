@@ -15,12 +15,6 @@
 
 namespace Hybrid;
 
-# Run hook for registering templates.
-add_action( 'init', __NAMESPACE__ . '\register_templates', 95 );
-
-# Filter theme post templates to add registered templates.
-add_filter( 'theme_templates', __NAMESPACE__ . '\post_templates_filter', 5, 4 );
-
 /**
  * Executes the action hook for themes to register their templates. Themes should
  * always register on this hook.

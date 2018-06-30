@@ -14,9 +14,6 @@
 
 namespace Hybrid;
 
-# Add support for structured post formats.
-add_action( 'wp_loaded', __NAMESPACE__ . '\structured_post_formats', 0 );
-
 /**
  * Theme compatibility for post formats.  This function adds appropriate filters
  * to `the_content` for the various post formats that a theme supports.
