@@ -14,7 +14,6 @@
 namespace Hybrid\Contracts;
 
 use Closure;
-use Psr\Container\ContainerInterface;
 
 /**
  * Container interface.
@@ -22,7 +21,10 @@ use Psr\Container\ContainerInterface;
  * @since  5.0.0
  * @access public
  */
-interface Container extends ContainerInterface {
+interface Container {
+
+	/**
+	 *
 
 	/**
 	 * Bind an object.
@@ -56,6 +58,32 @@ interface Container extends ContainerInterface {
 	 * @return mixed
 	 */
 	public function resolve( $abstract, $parameters = [] );
+
+	/**
+	 * Alias for `resolve()`.
+	 *
+	 * Follows the PSR-11 standard. Do not alter.
+	 * @link https://www.php-fig.org/psr/psr-11/
+	 *
+	 * @since  5.0.0
+	 * @access public
+	 * @param  string  $abstract
+	 * @return object
+	 */
+	public function get( $abstract );
+
+	/**
+	 * Check if an object exists.
+	 *
+	 * Follows the PSR-11 standard. Do not alter.
+	 * @link https://www.php-fig.org/psr/psr-11/
+	 *
+	 * @since  5.0.0
+	 * @access public
+	 * @param  string  $abstract
+	 * @return bool
+	 */
+	public function has( $abstract );
 
 	/**
 	 * Add a shared object.
