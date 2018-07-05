@@ -129,7 +129,7 @@ function document_title_parts( $doctitle ) {
 		$doctitle['title'] = get_single_week_title();
 
 	} elseif ( is_month() ) {
-		$doctitle['title'] = single_month_title( '', false );
+		$doctitle['title'] = single_month_title( ' ', false );
 
 	} elseif ( is_year() ) {
 		$doctitle['title'] = get_single_year_title();
