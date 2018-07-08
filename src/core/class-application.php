@@ -18,7 +18,7 @@ namespace Hybrid\Core;
 
 use Hybrid\Container\Container;
 use Hybrid\Contracts\Application as ApplicationContract;
-
+use Hybrid\Contracts\Bootable;
 use Hybrid\Providers\Attributes;
 use Hybrid\Providers\Config;
 use Hybrid\Providers\Customize;
@@ -34,7 +34,7 @@ use Hybrid\Providers\View;
  * @since  5.0.0
  * @access public
  */
-class Application extends Container implements ApplicationContract {
+class Application extends Container implements ApplicationContract, Bootable {
 
 	/**
 	 * The current version of the framework.
@@ -62,12 +62,13 @@ class Application extends Container implements ApplicationContract {
 	 * @access public
 	 * @return void
 	 */
-	public function __construct() {
+	public function boot() {
 
 		$this->registerDefaultBindings();
+		$this->registerDefaultProviders();
 		$this->bootstrapFilters();
 
-		// Register and providers at the earliest hook available to
+		// Register and boot providers at the earliest hook available to
 		// themes. This is so that themes can register service providers
 		// if they choose to do so.
 		add_action( 'after_setup_theme', [ $this, 'registerProviders' ], ~PHP_INT_MAX );
@@ -104,6 +105,29 @@ class Application extends Container implements ApplicationContract {
 	}
 
 	/**
+	 * Adds the default service providers for the framework.
+	 *
+	 * @since  5.0.0
+	 * @access protected
+	 * @return void
+	 */
+	protected function registerDefaultProviders() {
+
+		array_map( function( $provider ) {
+			$this->provider( $provider );
+		}, [
+			Attributes::class,
+			Config::class,
+			Customize::class,
+			Language::class,
+			MediaMeta::class,
+			Templates::class,
+			TemplateHierarchy::class,
+			View::class
+		] );
+	}
+
+	/**
 	 * Bootstrap action/filter hook calls.
 	 *
 	 * @since  5.0.0
@@ -116,6 +140,78 @@ class Application extends Container implements ApplicationContract {
 	}
 
 	/**
+	 * Adds a service provider.
+	 *
+	 * @since  5.0.0
+	 * @access public
+	 * @param  string|object  $provider
+	 * @return void
+	 */
+	public function provider( $provider ) {
+
+		if ( is_string( $provider ) ) {
+			$provider = $this->resolveProvider( $provider );
+		}
+
+		$this->providers[] = $provider;
+	}
+
+	/**
+	 * Creates a new instance of a service provider class.
+	 *
+	 * @since  5.0.0
+	 * @access protected
+	 * @param  string    $provider
+	 * @return object
+	 */
+	protected function resolveProvider( $provider ) {
+
+		return new $provider( $this );
+	}
+
+	/**
+	 * Calls a service provider's `register()` method if it exists.
+	 *
+	 * @since  5.0.0
+	 * @access protected
+	 * @param  string    $provider
+	 * @return void
+	 */
+	protected function registerProvider( $provider ) {
+
+		if ( method_exists( $provider, 'register' ) ) {
+			$provider->register();
+		}
+	}
+
+	/**
+	 * Calls a service provider's `boot()` method if it exists.
+	 *
+	 * @since  5.0.0
+	 * @access protected
+	 * @param  string    $provider
+	 * @return void
+	 */
+	protected function bootProvider( $provider ) {
+
+		if ( method_exists( $provider, 'boot' ) ) {
+			$provider->boot();
+		}
+	}
+
+	/**
+	 * Returns an array of service providers.
+	 *
+	 * @since  5.0.0
+	 * @access protected
+	 * @return array
+	 */
+	protected function getProviders() {
+
+		return $this->providers;
+	}
+
+	/**
 	 * Calls the `register()` method of all the available service providers.
 	 *
 	 * @since  5.0.0
@@ -124,22 +220,8 @@ class Application extends Container implements ApplicationContract {
 	 */
 	public function registerProviders() {
 
-		$providers = apply_filters( 'hybrid/app/providers', [
-			Attributes::class,
-			Config::class,
-			Customize::class,
-			Language::class,
-			MediaMeta::class,
-			Templates::class,
-			TemplateHierarchy::class,
-			View::class
-		] );
-
-		foreach ( $providers as $provider ) {
-
-			$this->providers[ $provider ] = new $provider( $this );
-
-			$this->providers[ $provider ]->register();
+		foreach ( $this->getProviders() as $provider ) {
+			$this->registerProvider( $provider );
 		}
 	}
 
@@ -152,8 +234,8 @@ class Application extends Container implements ApplicationContract {
 	 */
 	public function bootProviders() {
 
-		foreach ( $this->providers as $provider ) {
-			$provider->boot();
+		foreach ( $this->getProviders() as $provider ) {
+			$this->bootProvider( $provider );
 		}
 	}
 }

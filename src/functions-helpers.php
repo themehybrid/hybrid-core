@@ -36,6 +36,9 @@ function app( $abstract = '', $params = [] ) {
 	// application first. This essentially bootstraps the framework.
 	if ( is_null( $app ) ) {
 		$app = new Application();
+
+		// Boot the application.
+		$app->boot();
 	}
 
 	// If an abstract name was passed in, let's resolve it and return.

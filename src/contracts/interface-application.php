@@ -22,20 +22,13 @@ namespace Hybrid\Contracts;
 interface Application {
 
 	/**
-	 * Calls the `register()` method of all the available service providers.
+	 * Adds a service provider. Developers can pass in an object or a fully-
+	 * qualified class name.
 	 *
 	 * @since  5.0.0
 	 * @access public
+	 * @param  string|object  $provider
 	 * @return void
 	 */
-	public function registerProviders();
-
-	/**
-	 * Calls the `boot()` method of all the registered service providers.
-	 *
-	 * @since  5.0.0
-	 * @access public
-	 * @return void
-	 */
-	public function bootProviders();
+	public function provider( $provider );
 }
