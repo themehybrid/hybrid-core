@@ -73,17 +73,17 @@ class Language implements Bootable {
 	 */
 	public function boot() {
 
-		// Load the locale functions file(s).
-		add_action( 'after_setup_theme', [ $this, 'load_locale_functions' ], 0 );
+		// Load the locale functions files.
+		add_action( 'after_setup_theme', [ $this, 'loadLocaleFunctions' ], ~PHP_INT_MAX );
 
 		// Load translations for theme, child theme, and framework.
-		add_action( 'after_setup_theme', [ $this, 'load_textdomain' ], 5 );
+		add_action( 'after_setup_theme', [ $this, 'loadTextdomain' ], 5 );
 
 		// Overrides the load textdomain function for the 'hybrid-core' domain.
-		add_filter( 'override_load_textdomain', [ $this, 'override_load_textdomain' ], 5, 3 );
+		add_filter( 'override_load_textdomain', [ $this, 'overrideLoadTextdomain' ], 5, 3 );
 
 		// Filter the textdomain mofile to allow child themes to load the parent theme translation.
-		add_filter( 'load_textdomain_mofile', [ $this, 'load_textdomain_mofile' ], 10, 2 );
+		add_filter( 'load_textdomain_mofile', [ $this, 'loadTextdomainMofile' ], 10, 2 );
 	}
 
 	/**
@@ -98,14 +98,14 @@ class Language implements Bootable {
 	 * @access public
 	 * @return void
 	 */
-	public function load_locale_functions() {
+	public function loadLocaleFunctions() {
 
 		// Get the site's locale.
 		$locale = strtolower( str_replace( '_', '-', is_admin() ? get_user_locale() : get_locale() ) );
 
 		// Define locale functions files.
-		$child_func = $this->child_path(  "{$locale}.php" );
-		$theme_func = $this->parent_path( "{$locale}.php" );
+		$child_func = $this->childPath(  "{$locale}.php" );
+		$theme_func = $this->parentPath( "{$locale}.php" );
 
 		// If file exists in child theme.
 		if ( is_child_theme() && file_exists( $child_func ) ) {
@@ -129,15 +129,15 @@ class Language implements Bootable {
 	 * @access public
 	 * @return void
 	 */
-	public function load_textdomain() {
+	public function loadTextdomain() {
 
 		// Load theme textdomain.
-		load_theme_textdomain( $this->get_parent_textdomain(), $this->parent_path() );
+		load_theme_textdomain( $this->parentTextdomain(), $this->parentPath() );
 
 		// Load child theme textdomain.
 		if ( is_child_theme() ) {
 
-			load_child_theme_textdomain( $this->get_child_textdomain(), $this->child_path() );
+			load_child_theme_textdomain( $this->childTextdomain(), $this->childPath() );
 		}
 
 		// Load the framework textdomain.
@@ -159,14 +159,14 @@ class Language implements Bootable {
 	 * @param  string  $mofile
 	 * @return bool
 	 */
-	public function override_load_textdomain( $override, $domain, $mofile ) {
+	public function overrideLoadTextdomain( $override, $domain, $mofile ) {
 		global $l10n;
 
 		// Check if the domain is one of our framework domains.
 		if ( 'hybrid-core' === $domain ) {
 
 			// Get the theme's textdomain.
-			$theme_textdomain = $this->get_parent_textdomain();
+			$theme_textdomain = $this->parentTextdomain();
 
 			// If the theme's textdomain is loaded, use its translations instead.
 			if ( $theme_textdomain && isset( $l10n[ $theme_textdomain ] ) ) {
@@ -194,17 +194,17 @@ class Language implements Bootable {
 	 * @param  string $domain The textdomain currently being filtered.
 	 * @return string
 	 */
-	 public function load_textdomain_mofile( $mofile, $domain ) {
+	 public function loadTextdomainMofile( $mofile, $domain ) {
 
 		// If the `$domain` is for the parent or child theme, search for a `$domain-$locale.mo` file.
-		if ( $domain == $this->get_parent_textdomain() || $domain == $this->get_child_textdomain() ) {
+		if ( $domain == $this->parentTextdomain() || $domain == $this->childTextdomain() ) {
 
 			// Get the locale.
 			$locale = is_admin() ? get_user_locale() : get_locale();
 
 			// Define locale functions files.
-			$child_mofile = $this->child_path(  "{$domain}-{$locale}.mo" );
-			$theme_mofile = $this->parent_path( "{$domain}-{$locale}.mo" );
+			$child_mofile = $this->childPath(  "{$domain}-{$locale}.mo" );
+			$theme_mofile = $this->parentPath( "{$domain}-{$locale}.mo" );
 
 			// Overwrite the mofile if it exists.
 			if ( is_child_theme() && file_exists( $child_mofile ) ) {
@@ -228,7 +228,7 @@ class Language implements Bootable {
 	 * @access public
 	 * @return string
 	 */
-	public function get_parent_textdomain() {
+	public function parentTextdomain() {
 
 		if ( is_null( $this->parent_textdomain ) ) {
 
@@ -246,7 +246,7 @@ class Language implements Bootable {
 	 * @access public
 	 * @return string
 	 */
-	public function get_child_textdomain() {
+	public function childTextdomain() {
 
 		if ( is_null( $this->child_textdomain ) ) {
 
@@ -265,7 +265,7 @@ class Language implements Bootable {
 	 * @param  string  $file
 	 * @return string
 	 */
-	public function parent_path( $file = '' ) {
+	public function parentPath( $file = '' ) {
 
 		if ( is_null( $this->parent_path ) ) {
 
@@ -286,7 +286,7 @@ class Language implements Bootable {
 	 * @param  string  $file
 	 * @return string
 	 */
-	public function child_path( $file = '' ) {
+	public function childPath( $file = '' ) {
 
 		if ( is_null( $this->child_path ) ) {
 
