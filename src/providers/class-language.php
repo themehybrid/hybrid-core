@@ -36,4 +36,16 @@ class Language extends ServiceProvider {
 
 		$this->app->instance( 'language', new LanguageComponent() );
 	}
+
+	/**
+	 * Boots the language system by firing its hooks in the `boot()` method.
+	 *
+	 * @since  5.0.0
+	 * @access public
+	 * @return void
+	 */
+	public function boot() {
+
+		$this->app->resolve( 'language' )->boot();
+	}
 }

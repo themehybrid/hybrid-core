@@ -36,4 +36,16 @@ class Customize extends ServiceProvider {
 
 		$this->app->instance( 'customize', new CustomizeComponent() );
 	}
+
+	/**
+	 * Boots the customize component by firing its hooks in the `boot()` method.
+	 *
+	 * @since  5.0.0
+	 * @access public
+	 * @return void
+	 */
+	public function boot() {
+
+		$this->app->resolve( 'customize' )->boot();
+	}
 }

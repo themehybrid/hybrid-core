@@ -14,13 +14,15 @@
 
 namespace Hybrid\Language;
 
+use Hybrid\Contracts\Bootable;
+
 /**
  * Language class.
  *
  * @since  5.0.0
  * @access public
  */
-class Language {
+class Language implements Bootable {
 
 	/**
 	 * The parent theme's textdomain. Gets set to the value of the `Text
@@ -69,7 +71,7 @@ class Language {
 	 * @access public
 	 * @return void
 	 */
-	public function __construct() {
+	public function boot() {
 
 		// Load the locale functions file(s).
 		add_action( 'after_setup_theme', [ $this, 'load_locale_functions' ], 0 );

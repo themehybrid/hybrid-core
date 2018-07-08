@@ -18,6 +18,7 @@
 namespace Hybrid\TemplateHierarchy;
 
 use WP_User;
+use Hybrid\Contracts\Bootable;
 use function Hybrid\clean_post_format_slug;
 use function Hybrid\filter_templates;
 use function Hybrid\get_attachment_type;
@@ -30,7 +31,7 @@ use function Hybrid\get_post_template;
  * @since  5.0.0
  * @access public
  */
-class Hierarchy {
+class Hierarchy implements Bootable {
 
 	/**
 	 * Array of template types in core WP.
@@ -87,7 +88,7 @@ class Hierarchy {
 	 * @access public
 	 * @return void
 	 */
-	public function __construct() {
+	public function boot() {
 
 		// Filter the front page template.
 		add_filter( 'frontpage_template_hierarchy',  [ $this, 'frontPage' ], 5 );

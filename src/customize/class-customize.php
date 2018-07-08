@@ -16,6 +16,7 @@
 namespace Hybrid\Customize;
 
 use WP_Customize_Manager;
+use Hybrid\Contracts\Bootable;
 use Hybrid\Customize\Controls\CheckboxMultiple;
 use Hybrid\Customize\Controls\Palette;
 use Hybrid\Customize\Controls\RadioImage;
@@ -32,7 +33,7 @@ use function Hybrid\version;
  * @since  5.0.0
  * @access public
  */
-class Customize {
+class Customize implements Bootable {
 
 	/**
 	 * Adds our customizer-related actions to the appropriate hooks.
@@ -41,7 +42,7 @@ class Customize {
 	 * @access public
 	 * @return void
 	 */
-	public function __construct() {
+	public function boot() {
 
 		// Register panels, sections, settings, controls, and partials.
 		add_action( 'customize_register', [ $this, 'registerControls' ], 0 );

@@ -36,4 +36,16 @@ class TemplateHierarchy extends ServiceProvider {
 
 		$this->app->instance( 'template_hierarchy', new Hierarchy() );
 	}
+
+	/**
+	 * Boots the hierarchy by firing its hooks in the `boot()` method.
+	 *
+	 * @since  5.0.0
+	 * @access public
+	 * @return void
+	 */
+	public function boot() {
+
+		$this->app->resolve( 'template_hierarchy' )->boot();
+	}
 }
