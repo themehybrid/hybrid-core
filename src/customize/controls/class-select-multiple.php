@@ -32,17 +32,6 @@ class SelectMultiple extends Control {
 	public $type = 'hybrid-select-multiple';
 
 	/**
-	 * Loads the framework scripts/styles.
-	 *
-	 * @since  5.0.0
-	 * @access public
-	 * @return void
-	 */
-	public function enqueue() {
-		wp_enqueue_script( 'hybrid-customize-controls' );
-	}
-
-	/**
 	 * Add custom parameters to pass to the JS via JSON.
 	 *
 	 * @since  5.0.0

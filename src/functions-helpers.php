@@ -93,22 +93,6 @@ function path( $file = '' ) {
 }
 
 /**
- * Returns the directory URI of the framework. If a file is passed in, it'll be
- * appended to the end of the URI.
- *
- * @since  5.0.0
- * @access public
- * @param  string  $file
- * @return string
- */
-function uri( $file = '' ) {
-
-	$file = ltrim( $file, '/' );
-
-	return $file ? trailingslashit( app( 'uri' ) ) . $file : app( 'uri' );
-}
-
-/**
  * Returns the framework version.
  *
  * @since  5.0.0

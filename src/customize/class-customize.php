@@ -23,10 +23,6 @@ use Hybrid\Customize\Controls\RadioImage;
 use Hybrid\Customize\Controls\SelectGroup;
 use Hybrid\Customize\Controls\SelectMultiple;
 
-use function Hybrid\get_min_suffix;
-use function Hybrid\uri;
-use function Hybrid\version;
-
 /**
  * Customize class.
  *
@@ -46,9 +42,6 @@ class Customize implements Bootable {
 
 		// Register panels, sections, settings, controls, and partials.
 		add_action( 'customize_register', [ $this, 'registerControls' ], 0 );
-
-		// Enqueue scripts and styles.
-		add_action( 'customize_controls_enqueue_scripts', [ $this, 'controlsEnqueue'] );
 	}
 
 	/**
@@ -74,33 +67,5 @@ class Customize implements Bootable {
 			$manager->register_control_type( $control );
 
 		}, $controls );
-	}
-
-	/**
-	 * Register or enqueue scripts/styles for the controls that are output
-	 * in the controls frame.
-	 *
-	 * @since  5.0.0
-	 * @access public
-	 * @return void
-	 */
-	public function controlsEnqueue() {
-
-		$suffix = get_min_suffix();
-
-		wp_register_script(
-			'hybrid-customize-controls',
-			uri( "resources/scripts/customize-controls{$suffix}.js" ),
-			[ 'customize-controls', 'jquery' ],
-			version(),
-			true
-		);
-
-		wp_register_style(
-			'hybrid-customize-controls',
-			uri( "resources/styles/customize-controls{$suffix}.css" ),
-			[],
-			version()
-		);
 	}
 }

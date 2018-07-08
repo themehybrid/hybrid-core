@@ -37,14 +37,6 @@ if ( ! defined( 'HYBRID_DIR' ) ) {
 	define( 'HYBRID_DIR', __DIR__ );
 }
 
-# Define the directory URI to the framework. The assumption is that the framework
-# is loaded from the parent theme folder. If not, this definitely needs to be
-# defined for scripts/styles.
-if ( ! defined( 'HYBRID_URI' ) ) {
-
-	define( 'HYBRID_URI', '' );
-}
-
 # Check if the framework has been bootstrapped. If not, load the bootstrap files
 # and get the framework set up.
 if ( ! defined( 'HYBRID_BOOTSTRAPPED' ) ) {
