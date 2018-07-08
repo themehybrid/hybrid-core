@@ -24,9 +24,6 @@ use Closure;
 interface Container {
 
 	/**
-	 *
-
-	/**
 	 * Bind an object.
 	 *
 	 * @since  5.0.0
