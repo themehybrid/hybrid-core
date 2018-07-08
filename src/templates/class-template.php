@@ -44,7 +44,7 @@ class Template implements TemplateContract {
 	 * @access protected
 	 * @var    string
 	 */
-	protected $name = '';
+	protected $filename = '';
 
 	/**
 	 * Internationalized text label.
@@ -74,7 +74,7 @@ class Template implements TemplateContract {
 	 */
 	public function __toString() {
 
-		return $this->name;
+		return $this->filename();
 	}
 
 	/**
@@ -82,11 +82,11 @@ class Template implements TemplateContract {
 	 *
 	 * @since  5.0.0
 	 * @access public
-	 * @param  string  $name
+	 * @param  string  $filename
 	 * @param  array   $args
 	 * @return void
 	 */
-	public function __construct( $name, array $args = [] ) {
+	public function __construct( $filename, array $args = [] ) {
 
 		foreach ( array_keys( get_object_vars( $this ) ) as $key ) {
 
@@ -95,7 +95,7 @@ class Template implements TemplateContract {
 			}
 		}
 
-		$this->name = $name;
+		$this->filename = $filename;
 	}
 
 	/**
@@ -107,7 +107,7 @@ class Template implements TemplateContract {
 	 */
 	public function filename() {
 
-		return $this->name;
+		return $this->filename;
 	}
 
 	/**
