@@ -1,10 +1,8 @@
 <?php
 /**
- * Scripts functions.
+ * Asset functions.
  *
- * Functions for handling JavaScript in the framework.  Themes can add support
- * for the 'hybrid-core-scripts' feature to allow the framework to handle loading
- * the stylesheets into the theme header or footer at an appropriate time.
+ * Functions for handling scripts and styles in the framework.
  *
  * @package   HybridCore
  * @author    Justin Tadlock <justintadlock@gmail.com>
@@ -27,4 +25,23 @@ function enqueue_scripts() {
 	if ( is_singular() && get_option( 'thread_comments' ) && comments_open() ) {
 		wp_enqueue_script( 'comment-reply' );
 	}
+}
+
+/**
+ * Searches for a locale stylesheet.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  string  $slug
+ * @return string
+ */
+function get_locale_style( $slug = '' ) {
+
+	$styles = array_map( function( $hier ) use ( $slug ) {
+
+		return $slug ? "{$slug}-{$hier}.css" : "{$hier}.css";
+
+	}, get_lang_hierarchy() );
+
+	return locate_file_uri( $styles );
 }

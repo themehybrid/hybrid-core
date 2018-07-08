@@ -19,6 +19,7 @@ array_map(
 		require_once( "{$file}.php" );
 	},
 	[
+		'functions-assets',
 		'functions-attr',
 		'functions-context',
 		'functions-deprecated',
@@ -28,8 +29,6 @@ array_map(
 		'functions-head',
 		'functions-helpers',
 		'functions-lang',
-		'functions-scripts',
-		'functions-styles',
 		'functions-templates',
 		'functions-utility',
 		'template-comments',
