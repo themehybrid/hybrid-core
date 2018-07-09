@@ -1,0 +1,16 @@
+/**
+ * Customize controls styles.
+ *
+ * This file imports all of the customize control styles. Import it into your
+ * Sass files if using all of the controls with custom styles. Or, import
+ * individual styles if just using some controls.
+ *
+ * @package   HybridCore
+ * @author    Justin Tadlock <justintadlock@gmail.com>
+ * @copyright Copyright (c) 2008 - 2018, Justin Tadlock
+ * @link      https://themehybrid.com/hybrid-core
+ * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ */
+
+@import 'customize-controls/palette';
+@import 'customize-controls/radio-image';

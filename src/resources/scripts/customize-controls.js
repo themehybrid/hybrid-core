@@ -1,100 +1,19 @@
-( function( $, api ) {
+/**
+ * Customize controls scripts.
+ *
+ * This file imports all of the customize controls. Import it into your own JS
+ * files if you're working with all of the customize controls. Otherwise, you
+ * should import them individually.
+ *
+ * @package   HybridCore
+ * @author    Justin Tadlock <justintadlock@gmail.com>
+ * @copyright Copyright (c) 2008 - 2018, Justin Tadlock
+ * @link      https://themehybrid.com/hybrid-core
+ * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ */
 
-	/* === Checkbox Multiple Control === */
-
-	api.controlConstructor['hybrid-checkbox-multiple'] = api.Control.extend( {
-		ready: function() {
-			var control = this;
-
-			$( 'input:checkbox', control.container ).change(
-				function() {
-
-					// Get all of the checkbox values.
-					var checkbox_values = $( 'input[type="checkbox"]:checked', control.container ).map(
-						function() {
-							return this.value;
-						}
-					).get();
-
-					// Set the value.
-					if ( null === checkbox_values ) {
-						control.setting.set( '' );
-					} else {
-						control.setting.set( checkbox_values );
-					}
-				}
-			);
-		}
-	} );
-
-	/* === Palette Control === */
-
-	api.controlConstructor['hybrid-palette'] = api.Control.extend( {
-		ready: function() {
-			var control = this;
-
-			// Adds a `.selected` class to the label of checked inputs.
-			$( 'input:radio:checked', control.container ).parent( 'label' ).addClass( 'selected' );
-
-			$( 'input:radio', control.container ).change(
-				function() {
-
-					// Removes the `.selected` class from other labels and adds it to the new one.
-					$( 'label.selected', control.container ).removeClass( 'selected' );
-					$( this ).parent( 'label' ).addClass( 'selected' );
-
-					control.setting.set( $( this ).val() );
-				}
-			);
-		}
-	} );
-
-	/* === Radio Image Control === */
-
-	api.controlConstructor['hybrid-radio-image'] = api.Control.extend( {
-		ready: function() {
-			var control = this;
-
-			$( 'input:radio', control.container ).change(
-				function() {
-					control.setting.set( $( this ).val() );
-				}
-			);
-		}
-	} );
-
-	/* === Select Group Control === */
-
-	api.controlConstructor['hybrid-select-group'] = api.Control.extend( {
-		ready: function() {
-			var control = this;
-
-			$( 'select', control.container ).change(
-				function() {
-					control.setting.set( $( this ).val() );
-				}
-			);
-		}
-	} );
-
-	/* === Select Multiple Control === */
-
-	api.controlConstructor['hybrid-select-multiple'] = api.Control.extend( {
-		ready: function() {
-			var control = this;
-
-			$( 'select', control.container ).change(
-				function() {
-					var value = $( this ).val();
-
-					if ( null === value ) {
-						control.setting.set( '' );
-					} else {
-						control.setting.set( value );
-					}
-				}
-			);
-		}
-	} );
-
-} )( jQuery, wp.customize );
+import checkboxMultiple from './customize-controls/checkbox-multiple.js';
+import palette          from './customize-controls/palette.js';
+import radioImage       from './customize-controls/radio-image.js';
+import selectGroup      from './customize-controls/select-group.js';
+import selectMultiple   from './customize-controls/select-multiple.js';

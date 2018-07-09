@@ -83,15 +83,15 @@ class Palette extends Control {
 		<# } #>
 
 		<# _.each( data.choices, function( palette, choice ) { #>
-			<label>
+			<label class="palette">
 				<input type="radio" value="{{ choice }}" name="_customize-{{ data.type }}-{{ data.id }}" {{{ data.link }}} <# if ( choice === data.value ) { #> checked="checked" <# } #> />
 
-				<span class="palette-label">{{ palette.label }}</span>
+				<span class="palette__label">{{ palette.label }}</span>
 
-				<div class="palette-block">
+				<div class="palette__block">
 
 					<# _.each( palette.colors, function( color ) { #>
-						<span class="palette-color" style="background-color: {{ color }}">&nbsp;</span>
+						<span class="palette__color" style="background-color: {{ color }}">&nbsp;</span>
 					<# } ) #>
 
 				</div>

@@ -75,12 +75,12 @@ class RadioImage extends Control {
 		<# } #>
 
 		<# _.each( data.choices, function( args, choice ) { #>
-			<label>
-				<input type="radio" value="{{ choice }}" name="_customize-{{ data.type }}-{{ data.id }}" {{{ data.link }}} <# if ( choice === data.value ) { #> checked="checked" <# } #> />
+			<label class="radio-image">
+				<input type="radio" class="radio-image__radio" value="{{ choice }}" name="_customize-{{ data.type }}-{{ data.id }}" {{{ data.link }}} <# if ( choice === data.value ) { #> checked="checked" <# } #> />
 
-				<span class="screen-reader-text">{{ args.label }}</span>
+				<span class="radio-image__label screen-reader-text">{{ args.label }}</span>
 
-				<img src="{{ args.url }}" alt="{{ args.label }}" />
+				<img class="radio-image__image" src="{{ args.url }}" alt="{{ args.label }}" />
 			</label>
 		<# } ) #>
 	<?php }
