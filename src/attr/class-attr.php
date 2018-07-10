@@ -14,9 +14,9 @@
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
-namespace Hybrid\Attributes;
+namespace Hybrid\Attr;
 
-use Hybrid\Contracts\Attributes as AttributesContract;
+use Hybrid\Contracts\Attributes;
 
 /**
  * Attributes class.
@@ -24,7 +24,7 @@ use Hybrid\Contracts\Attributes as AttributesContract;
  * @since  5.0.0
  * @access public
  */
-class Attributes implements AttributesContract {
+class Attr implements Attributes {
 
 	/**
 	 * The name/ID of the element (e.g., `sidebar`).

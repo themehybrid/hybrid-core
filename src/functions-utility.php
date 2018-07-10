@@ -499,3 +499,18 @@ function verify_nonce_request( $action = '', $arg = '_wpnonce' ) {
 	       ? wp_verify_nonce( sanitize_key( $_REQUEST[ $arg ] ), $action )
 	       : false;
 }
+
+/**
+ * Checks if a widget exists.  Pass in the widget class name.  This function is
+ * useful for checking if the widget exists before directly calling `the_widget()`
+ * within a template.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  string  $widget
+ * @return bool
+ */
+function widget_exists( $widget ) {
+
+	return isset( $GLOBALS['wp_widget_factory']->widgets[ $widget ] );
+}

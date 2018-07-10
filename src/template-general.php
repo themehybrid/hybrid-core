@@ -15,8 +15,6 @@
 
 namespace Hybrid;
 
-use Hybrid\Pagination\Pagination;
-
 /**
  * Returns the global hierarchy. This is a wrapper around the values stored via
  * the template hierarchy object.
@@ -78,94 +76,6 @@ function get_post_hierarchy() {
 }
 
 /**
- * Outputs the site title.
- *
- * @since  5.0.0
- * @access public
- * @param  array   $args
- * @param  array   $attr
- * @return void
- */
-function site_title( $args = [], $attr = [] ) {
-
-	echo get_site_title( $args, $attr );
-}
-
-/**
- * Returns the site title.
- *
- * @since  5.0.0
- * @access public
- * @param  array   $args
- * @param  array   $attr
- * @return string
- */
-function get_site_title( $args = [], $attr = [] ) {
-
-	$html  = '';
-	$title = get_bloginfo( 'name', 'display' );
-
-	$args = wp_parse_args( $args, [ 'tag' => is_front_page() ? 'h1' : 'div' ] );
-
-	if ( $title ) {
-		$link = sprintf( '<a href="%s">%s</a>', esc_url( home_url() ), $title );
-
-		$atts = $attr instanceof Attributes ? $attr : attributes( 'site-title', '', $attr );
-
-		$html = sprintf(
-			'<%1$s %2$s>%3$s</%1$s>',
-			tag_escape( $args['tag'] ),
-			$atts->fetch(),
-			$link
-		);
-	}
-
-	return apply_filters( 'hybrid/site_title', $html );
-}
-
-/**
- * Outputs the site description.
- *
- * @since  5.0.0
- * @access public
- * @param  array   $args
- * @param  array   $attr
- * @return void
- */
-function site_description( $args = [], $attr = [] ) {
-
-	echo get_site_description( $args, $attr );
-}
-
-/**
- * Returns the site title.
- *
- * @since  5.0.0
- * @access public
- * @param  array   $args
- * @param  array   $attr
- * @return string
- */
-function get_site_description( $args = [], $attr = [] ) {
-
-	$html = '';
-	$desc = get_bloginfo( 'description', 'display' );
-
-	$args = wp_parse_args( $args, [ 'tag' => 'div' ] );
-
-	if ( $desc ) {
-		$html = sprintf(
-			'<%1$s %2$s>%3$s</%1$s>',
-			tag_escape( $args['tag'] ),
-			attributes( 'site-description', '', $attr )->fetch(),
-			$desc
-		);
-	}
-
-	return apply_filters( 'hybrid/site_description', $html );
-}
-
-/**
  * Outputs the link back to the site.
  *
  * @since  5.0.0
@@ -218,86 +128,6 @@ function get_wp_link() {
 		'<a class="wp-link" href="%s">%s</a>',
 		esc_url( __( 'https://wordpress.org', 'hybrid-core' ) ),
 		esc_html__( 'WordPress', 'hybrid-core' )
-	);
-}
-
-/**
- * Displays a link to the parent theme URI.
- *
- * @since  5.0.0
- * @access public
- * @return void
- */
-function theme_link() {
-
-	echo get_theme_link();
-}
-
-/**
- * Returns a link to the parent theme URI.
- *
- * @since  5.0.0
- * @access public
- * @return string
- */
-function get_theme_link() {
-
-	$theme = wp_get_theme( \get_template() );
-
-	$allowed = [
-		'abbr'    => [ 'title' => true ],
-		'acronym' => [ 'title' => true ],
-		'code'    => true,
-		'em'      => true,
-		'strong'  => true
-	];
-
-	return sprintf(
-		'<a class="theme-link" href="%s">%s</a>',
-		esc_url( $theme->display( 'ThemeURI' ) ),
-		wp_kses( $theme->display( 'Name' ), $allowed )
-	);
-}
-
-/**
- * Displays a link to the child theme URI.
- *
- * @since  5.0.0
- * @access public
- * @return void
- */
-function child_theme_link() {
-
-	echo get_child_theme_link();
-}
-
-/**
- * Returns a link to the child theme URI.
- *
- * @since  5.0.0
- * @access public
- * @return string
- */
-function get_child_theme_link() {
-
-	if ( ! is_child_theme() ) {
-		return '';
-	}
-
-	$theme = wp_get_theme();
-
-	$allowed = [
-		'abbr'    => [ 'title' => true ],
-		'acronym' => [ 'title' => true ],
-		'code'    => true,
-		'em'      => true,
-		'strong'  => true
-	];
-
-	return sprintf(
-		'<a class="child-link" href="%s">%s</a>',
-		esc_url( $theme->display( 'ThemeURI' ) ),
-		wp_kses( $theme->display( 'Name' ), $allowed )
 	);
 }
 
@@ -590,46 +420,4 @@ function error_title() {
 function get_error_title() {
 
 	return esc_html__( '404 Not Found', 'hybrid-core' );
-}
-
-/**
- * Returns a new `Pagination` object.
- *
- * @since  5.0.0
- * @access public
- * @param  string $context
- * @param  array  $args
- * @return object
- */
-function pagination( $context = 'posts', $args = [] ) {
-
-	return new Pagination( $context, $args );
-}
-
-/**
- * Renders the pagination output.
- *
- * @since  5.0.0
- * @access public
- * @param  string $context
- * @param  array  $args
- * @return object
- */
-function render_pagination( $context = 'posts', $args = [] ) {
-
-	pagination( $context, $args )->render();
-}
-
-/**
- * Returns the pagination output.
- *
- * @since  5.0.0
- * @access public
- * @param  string $context
- * @param  array  $args
- * @return object
- */
-function fetch_pagination( $context = 'posts', $args = [] ) {
-
-	return pagination( $context, $args )->fetch();
 }

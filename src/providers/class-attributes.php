@@ -14,7 +14,7 @@
 
 namespace Hybrid\Providers;
 
-use Hybrid\Attributes\Attributes as AttributesComponent;
+use Hybrid\Attr\Attr;
 
 /**
  * Attributes provider class.
@@ -35,7 +35,7 @@ class Attributes extends ServiceProvider {
 
 		$this->app->add( 'attr', function( $container, $params ) {
 
-			return new AttributesComponent(
+			return new Attr(
 				$params['name'],
 				$params['context'],
 				$params['attr']

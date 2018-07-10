@@ -20,51 +20,6 @@
 namespace Hybrid;
 
 /**
- * Wrapper for creating a new `Attributes` object.
- *
- * @since  5.0.0
- * @access public
- * @param  string  $name
- * @param  string  $context
- * @param  array   $attr
- * @return object
- */
-function attributes( $name, $context = '', $attr = [] ) {
-
-	return app( 'attr', compact( 'name', 'context', 'attr' ) );
-}
-
-/**
- * Outputs an HTML element's attributes.
- *
- * @since  5.0.0
- * @access public
- * @param  string  $slug
- * @param  string  $context
- * @param  array   $attr
- * @return void
- */
-function attr( $slug, $context = '', $attr = [] ) {
-
-	attributes( $slug, $context, $attr )->render();
-}
-
-/**
- * Returns an HTML element's attributes.
- *
- * @since  5.0.0
- * @access public
- * @param  string  $slug
- * @param  string  $context
- * @param  array   $attr
- * @return string
- */
-function get_attr( $slug, $context = '', $attr = [] ) {
-
-	return attributes( $slug, $context, $attr )->fetch();
-}
-
-/**
  * `<html>` element attributes.
  *
  * @since  5.0.0

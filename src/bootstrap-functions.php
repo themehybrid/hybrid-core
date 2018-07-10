@@ -22,7 +22,6 @@ array_map(
 		'functions-assets',
 		'functions-attr',
 		'functions-context',
-		'functions-deprecated',
 		'functions-filters',
 		'functions-fonts',
 		'functions-formats',
@@ -34,9 +33,17 @@ array_map(
 		'template-comments',
 		'template-general',
 		'template-media',
-		'template-menus',
 		'template-post',
-		'template-sidebars',
-		'template-view'
+
+		'attr/template-attr',
+		'media-grabber/template-media-grabber',
+		'media-meta/template-media-meta',
+		'menu/template-menu',
+		'pagination/template-pagination',
+		'post/template-post',
+		'sidebar/template-sidebar',
+		'site/template-site',
+		'theme/template-theme',
+		'view/template-view'
 	]
 );

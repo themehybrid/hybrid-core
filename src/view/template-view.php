@@ -11,7 +11,9 @@
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
-namespace Hybrid;
+namespace Hybrid\View;
+
+use function Hybrid\app;
 
 /**
  * Returns a view object.
@@ -38,7 +40,7 @@ function view( $name, $slugs = [], $data = [] ) {
  * @param  array         $data
  * @return void
  */
-function render_view( $name, $slugs = [], $data = [] ) {
+function render( $name, $slugs = [], $data = [] ) {
 
 	view( $name, $slugs, $data )->render();
 }
@@ -53,7 +55,7 @@ function render_view( $name, $slugs = [], $data = [] ) {
  * @param  array         $data
  * @return string
  */
-function fetch_view( $name, $slugs = [], $data = [] ) {
+function fetch( $name, $slugs = [], $data = [] ) {
 
 	return view( $name, $slugs, $data )->fetch();
 }
