@@ -33,7 +33,6 @@ array_map(
 		'template-comments',
 		'template-general',
 		'template-media',
-		'template-post',
 
 		'attr/template-attr',
 		'media-grabber/template-media-grabber',

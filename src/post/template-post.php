@@ -3,6 +3,53 @@
 namespace Hybrid\Post;
 
 /**
+ * Creates a hierarchy based on the current post. It's primary purpose is for
+ * use with post views/templates.
+ *
+ * @since  5.0.0
+ * @access public
+ * @return array
+ */
+function hierarchy() {
+
+	// Set up an empty array and get the post type.
+	$hierarchy = [];
+	$post_type = get_post_type();
+
+	// If attachment, add attachment type templates.
+	if ( 'attachment' === $post_type ) {
+
+		$type    = get_attachment_type();
+		$subtype = get_attachment_subtype();
+
+		if ( $subtype ) {
+			$hierarchy[] = "attachment-{$type}-{$subtype}";
+			$hierarchy[] = "attachment-{$subtype}";
+		}
+
+		$hierarchy[] = "attachment-{$type}";
+	}
+
+	// If the post type supports 'post-formats', get the template based on the format.
+	if ( post_type_supports( $post_type, 'post-formats' ) ) {
+
+		// Get the post format.
+		$post_format = get_post_format() ?: 'standard';
+
+		// Template based off post type and post format.
+		$hierarchy[] = "{$post_type}-{$post_format}";
+
+		// Template based off the post format.
+		$hierarchy[] = $post_format;
+	}
+
+	// Template based off the post type.
+	$hierarchy[] = $post_type;
+
+	return apply_filters( 'hybrid/post/hierarchy', $hierarchy );
+}
+
+/**
  * Renders the post author HTML.
  *
  * @since  5.0.0
@@ -236,4 +283,54 @@ function fetch_format( array $args = [] ) {
 		'hybrid/post/format',
 		$args['before'] . $html . $args['after']
 	);
+}
+
+/**
+ * Checks if a post has any content. Useful if you need to check if the user has
+ * written any content before performing any actions.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  \WP_Post|int  $post  A post object or post ID.
+ * @return bool
+ */
+function has_content( $post = null ) {
+	$post = get_post( $post );
+
+	return ! empty( $post->post_content );
+}
+
+/**
+ * Returns the number of items in all the galleries for the post.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  \WP_Post|int  $post  A post object or ID.
+ * @return int
+ */
+function gallery_count( $post = null ) {
+
+	$post   = get_post( $post );
+	$images = [];
+
+	// `get_post_galleries_images()` passes an array of arrays, so we need
+	// to merge them all together.
+	foreach ( get_post_galleries_images( $post ) as $gallery_images ) {
+		$images = array_merge( $images, $gallery_images );
+	}
+
+	// If there are no images in the array, just grab the attached images.
+	if ( ! $images ) {
+
+		$images = get_posts( [
+			'fields'         => 'ids',
+			'post_parent'    => $post->ID,
+			'post_type'      => 'attachment',
+			'post_mime_type' => 'image',
+			'numberposts'    => -1
+		] );
+	}
+
+	// Return the count of the images.
+	return count( $images );
 }
