@@ -62,32 +62,6 @@ function get_attachment_subtype( $post_id = 0 ) {
 }
 
 /**
- * Checks if the current post has a mime type of 'audio'.
- *
- * @since  5.0.0
- * @access public
- * @param  int    $post_id
- * @return bool
- */
-function attachment_is_audio( $post_id = 0 ) {
-
-	return 'audio' === get_attachment_type( $post_id );
-}
-
-/**
- * Checks if the current post has a mime type of 'video'.
- *
- * @since  5.0.0
- * @access public
- * @param  int    $post_id
- * @return bool
- */
-function attachment_is_video( $post_id = 0 ) {
-
-	return 'video' === get_attachment_type( $post_id );
-}
-
-/**
  * Returns a set of image attachment links based on size.
  *
  * @since  5.0.0
