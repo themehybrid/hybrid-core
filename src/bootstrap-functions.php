@@ -30,11 +30,11 @@ array_map(
 		'functions-lang',
 		'functions-templates',
 		'functions-utility',
-		'template-comments',
 		'template-general',
 		'template-media',
 
 		'attr/template-attr',
+		'comment/template-comment',
 		'media-grabber/template-media-grabber',
 		'media-meta/template-media-meta',
 		'menu/template-menu',
