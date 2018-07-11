@@ -76,62 +76,6 @@ function get_post_hierarchy() {
 }
 
 /**
- * Outputs the link back to the site.
- *
- * @since  5.0.0
- * @access public
- * @return void
- */
-function site_link() {
-
-	echo get_site_link();
-}
-
-/**
- * Returns a link back to the site.
- *
- * @since  5.0.0
- * @access public
- * @return string
- */
-function get_site_link() {
-
-	return sprintf(
-		'<a class="site-link" href="%s" rel="home">%s</a>',
-		esc_url( home_url() ),
-		get_bloginfo( 'name' )
-	);
-}
-
-/**
- * Displays a link to WordPress.org.
- *
- * @since  5.0.0
- * @access public
- * @return void
- */
-function wp_link() {
-
-	echo get_wp_link();
-}
-
-/**
- * Returns a link to WordPress.org.
- *
- * @since  5.0.0
- * @access public
- * @return string
- */
-function get_wp_link() {
-
-	return sprintf(
-		'<a class="wp-link" href="%s">%s</a>',
-		esc_url( __( 'https://wordpress.org', 'hybrid-core' ) ),
-		esc_html__( 'WordPress', 'hybrid-core' )
-	);
-}
-
-/**
  * Gets the "blog" (posts page) page URL.  `home_url()` will not always work for
  * this because it returns the front page URL.  Sometimes the blog page URL is
  * set to a different page.  This function handles both scenarios.
