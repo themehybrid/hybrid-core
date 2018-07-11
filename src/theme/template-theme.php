@@ -3,27 +3,36 @@
 namespace Hybrid\Theme;
 
 /**
- * Displays a link to the parent theme URI.
+ * Renders the [parent] theme link HTML.
  *
  * @since  5.0.0
  * @access public
+ * @param  array  $args
  * @return void
  */
-function render_link() {
+function render_link( array $args = [] ) {
 
-	echo fetch_link();
+	echo fetch_link( $args );
 }
 
 /**
- * Returns a link to the parent theme URI.
+ * Returns the [parent] theme link HTML.
  *
  * @since  5.0.0
  * @access public
+ * @param  array  $args
  * @return string
  */
-function fetch_link() {
+function fetch_link( array $args = [] ) {
+
+	$args = wp_parse_args( $args, [
+		'component' => '',
+		'before'    => '',
+		'after'     => ''
+	] );
 
 	$theme = wp_get_theme( get_template() );
+	$class = $args['component'] ? "{$args['component']}__theme-link" : 'theme-link';
 
 	$allowed = [
 		'abbr'    => [ 'title' => true ],
@@ -33,39 +42,54 @@ function fetch_link() {
 		'strong'  => true
 	];
 
-	return sprintf(
-		'<a class="theme-link" href="%s">%s</a>',
+	$html = sprintf(
+		'<a class="%s" href="%s">%s</a>',
+		esc_attr( $class ),
 		esc_url( $theme->display( 'ThemeURI' ) ),
 		wp_kses( $theme->display( 'Name' ), $allowed )
+	);
+
+	return apply_filters(
+		'hybrid/theme/link/parent',
+		$args['before'] . $html . $args['after']
 	);
 }
 
 /**
- * Displays a link to the child theme URI.
+ * Renders the child theme link HTML.
  *
  * @since  5.0.0
  * @access public
+ * @param  array  $args
  * @return void
  */
-function render_child_link() {
+function render_child_link( array $args = [] ) {
 
-	echo fetch_child_link();
+	echo fetch_child_link( $args );
 }
 
 /**
- * Returns a link to the child theme URI.
+ * Returns the child theme link HTML.
  *
  * @since  5.0.0
  * @access public
+ * @param  array  $args
  * @return string
  */
-function fetch_child_link() {
+function fetch_child_link( array $args = [] ) {
 
 	if ( ! is_child_theme() ) {
 		return '';
 	}
 
+	$args = wp_parse_args( $args, [
+		'component' => '',
+		'before'    => '',
+		'after'     => ''
+	] );
+
 	$theme = wp_get_theme();
+	$class = $args['component'] ? "{$args['component']}__child-link" : 'child-link';
 
 	$allowed = [
 		'abbr'    => [ 'title' => true ],
@@ -75,9 +99,15 @@ function fetch_child_link() {
 		'strong'  => true
 	];
 
-	return sprintf(
-		'<a class="child-link" href="%s">%s</a>',
+	$html = sprintf(
+		'<a class="%s" href="%s">%s</a>',
+		esc_attr( $class ),
 		esc_url( $theme->display( 'ThemeURI' ) ),
 		wp_kses( $theme->display( 'Name' ), $allowed )
+	);
+
+	return apply_filters(
+		'hybrid/theme/link/child',
+		$args['before'] . $html . $args['after']
 	);
 }

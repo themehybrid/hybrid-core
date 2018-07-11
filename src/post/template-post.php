@@ -2,13 +2,27 @@
 
 namespace Hybrid\Post;
 
-use function Hybrid\Attr\attr;
-
+/**
+ * Renders the post author HTML.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  array  $args
+ * @return void
+ */
 function render_author( array $args = [] ) {
 
 	echo fetch_author( $args );
 }
 
+/**
+ * Returns the post author HTML.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  array  $args
+ * @return string
+ */
 function fetch_author( array $args = [] ) {
 
 	$args = wp_parse_args( $args, [
@@ -17,25 +31,41 @@ function fetch_author( array $args = [] ) {
 		'after'  => ''
 	] );
 
-	$attr = [
-		'href'  => get_author_posts_url( get_the_author_meta( 'ID' ) ),
-		'class' => 'entry__author'
-	];
+	$url = get_author_posts_url( get_the_author_meta( 'ID' ) );
 
 	$html = sprintf(
-		'<a %s>%s</a>',
-		attr( 'entry-author', '', $attr )->fetch(),
+		'<a class="entry__author" href="%s">%s</a>',
+		esc_url( $url ),
 		sprintf( $args['text'], get_the_author() )
 	);
 
-	return $args['before'] . $html . $args['after'];
+	return apply_filters(
+		'hybrid/post/author',
+		$args['before'] . $html . $args['after']
+	);
 }
 
+/**
+ * Renders the post date HTML.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  array  $args
+ * @return void
+ */
 function render_date( array $args = [] ) {
 
 	echo fetch_date( $args );
 }
 
+/**
+ * Returns the post date HTML.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  array  $args
+ * @return string
+ */
 function fetch_date( array $args = [] ) {
 
 	$args = wp_parse_args( $args, [
@@ -45,22 +75,38 @@ function fetch_date( array $args = [] ) {
 		'after'  => ''
 	] );
 
-	$attr = [ 'class' => 'entry__published' ];
-
 	$html = sprintf(
-		'<time %s>%s</time>',
-		attr( 'entry-published', '', $attr ),
+		'<time class="entry__published">%s</time>',
 		sprintf( $args['text'], get_the_date( $args['format'] ) )
 	);
 
-	return $args['before'] . $html . $args['after'];
+	return apply_filters(
+		'hybrid/post/date',
+		$args['before'] . $html . $args['after']
+	);
 }
 
+/**
+ * Renders the post comments link HTML.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  array  $args
+ * @return void
+ */
 function render_comments_link( array $args = [] ) {
 
 	echo fetch_comments_link( $args );
 }
 
+/**
+ * Returns the post comments link HTML.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  array  $args
+ * @return string
+ */
 function fetch_comments_link( array $args = [] ) {
 
 	$args = wp_parse_args( $args, [
@@ -77,27 +123,42 @@ function fetch_comments_link( array $args = [] ) {
 		return '';
 	}
 
-	$attr = [
-		'href'  => get_comments_link(),
-		'class' => 'entry__comments'
-	];
-
+	$url  = get_comments_link();
 	$text = get_comments_number( $args['zero'], $args['one'], $args['more'] );
 
 	$html = sprintf(
-		'<a %s>%s</a>',
-		attr( 'entry-comments', '', $attr ),
+		'<a class="entry__comments" href="%s">%s</a>',
+		esc_url( $url ),
 		$text
 	);
 
-	return $args['before'] . $html . $args['after'];
+	return apply_filters(
+		'hybrid/post/comments',
+		$args['before'] . $html . $args['after']
+	);
 }
 
+/**
+ * Renders the post terms HTML.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  array  $args
+ * @return void
+ */
 function render_terms( array $args = [] ) {
 
 	echo fetch_terms( $args );
 }
 
+/**
+ * Returns the post terms HTML.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  array  $args
+ * @return string
+ */
 function fetch_terms( array $args = [] ) {
 
 	$html = '';
@@ -115,27 +176,44 @@ function fetch_terms( array $args = [] ) {
 
 	if ( $terms ) {
 
-		$attr = [
-			'class' => "entry__terms entry__terms--{$args['taxonomy']}"
-		];
+		$class = "entry__terms entry__terms--{$args['taxonomy']}";
 
 		$html = sprintf(
-			'<span %s>%s</span>',
-			attr( 'entry-terms', $args['taxonomy'], $attr )->fetch(),
+			'<span class="%s">%s</span>',
+			esc_attr( $class ),
 			sprintf( $args['text'], $terms )
 		);
 
 		$html = $args['before'] . $html . $args['after'];
 	}
 
-	return $html;
+	return apply_filters(
+		'hybrid/post/terms',
+		$args['before'] . $html . $args['after']
+	);
 }
 
+/**
+ * Renders the post format HTML.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  array  $args
+ * @return void
+ */
 function render_format( array $args = [] ) {
 
 	echo fetch_format( $args );
 }
 
+/**
+ * Returns the post format HTML.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  array  $args
+ * @return string
+ */
 function fetch_format( array $args = [] ) {
 
 	$args = wp_parse_args( $args, [
@@ -148,16 +226,14 @@ function fetch_format( array $args = [] ) {
 	$url    = $format ? get_post_format_link( $format ) : get_permalink();
 	$string = get_post_format_string( $format );
 
-	$attr = [
-		'href'  => $url,
-		'class' => 'entry__format'
-	];
-
 	$html = sprintf(
-		'<a %s>%s</a>',
-		attr( 'entry-format', '', $attr )->fetch(),
+		'<a class="entry__format" href="%s">%s</a>',
+		esc_url( $url ),
 		sprintf( $args['text'], $string )
 	);
 
-	return $args['before'] . $html . $args['after'];
+	return apply_filters(
+		'hybrid/post/format',
+		$args['before'] . $html . $args['after']
+	);
 }

@@ -2,13 +2,27 @@
 
 namespace Hybrid\Site;
 
-use function Hybrid\Attr\attr;
-
+/**
+ * Renders the site title HTML.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  array  $args
+ * @return void
+ */
 function render_title( array $args = [] ) {
 
 	echo fetch_title( $args );
 }
 
+/**
+ * Returns the site title HTML.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  array  $args
+ * @return string
+ */
 function fetch_title( array $args = [] ) {
 
 	$args = wp_parse_args( $args, [
@@ -22,16 +36,12 @@ function fetch_title( array $args = [] ) {
 	if ( $title ) {
 		$link = sprintf( '<a href="%s">%s</a>', esc_url( home_url() ), $title );
 
-		$attr = [];
-
-		if ( $args['component'] ) {
-			$attr['class'] = "{$args['component']}__title";
-		}
+		$class = $args['component'] ? "{$args['component']}__title" : 'site-title';
 
 		$html = sprintf(
-			'<%1$s %2$s>%3$s</%1$s>',
+			'<%1$s class="%2$s">%3$s</%1$s>',
 			tag_escape( $args['tag'] ),
-			attr( 'site-title', $args['component'], $attr )->fetch(),
+			esc_attr( $class ),
 			$link
 		);
 	}
@@ -39,11 +49,27 @@ function fetch_title( array $args = [] ) {
 	return apply_filters( 'hybrid/site/title', $html );
 }
 
+/**
+ * Renders the site description HTML.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  array  $args
+ * @return void
+ */
 function render_description( array $args = [] ) {
 
 	echo fetch_description( $args );
 }
 
+/**
+ * Returns the site description HTML.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  array  $args
+ * @return string
+ */
 function fetch_description( array $args = [] ) {
 
 	$args = wp_parse_args( $args, [
@@ -56,16 +82,12 @@ function fetch_description( array $args = [] ) {
 
 	if ( $desc ) {
 
-		$attr = [];
-
-		if ( $args['component'] ) {
-			$attr['class'] = "{$args['component']}__description";
-		}
+		$class = $args['component'] ? "{$args['component']}__description" : 'site-description';
 
 		$html = sprintf(
-			'<%1$s %2$s>%3$s</%1$s>',
+			'<%1$s class="%2$s">%3$s</%1$s>',
 			tag_escape( $args['tag'] ),
-			attr( 'site-description', $args['component'], $attr )->fetch(),
+			esc_attr( $class ),
 			$desc
 		);
 	}
