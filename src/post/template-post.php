@@ -19,8 +19,7 @@ function hierarchy() {
 	// If attachment, add attachment type templates.
 	if ( 'attachment' === $post_type ) {
 
-		$type    = get_attachment_type();
-		$subtype = get_attachment_subtype();
+		extract( mime_types() );
 
 		if ( $subtype ) {
 			$hierarchy[] = "attachment-{$type}-{$subtype}";
@@ -283,6 +282,30 @@ function fetch_format( array $args = [] ) {
 		'hybrid/post/format',
 		$args['before'] . $html . $args['after']
 	);
+}
+
+/**
+ * Splits the post mime type into two distinct parts: type / subtype
+ * (e.g., image / png). Returns an array of the parts.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  \WP_Post|int  $post  A post object or ID.
+ * @return array
+ */
+function mime_types( $post = null ) {
+
+	$type    = get_post_mime_type( $post );
+	$subtype = '';
+
+	if ( false !== strpos( $type, '/' ) ) {
+		list( $type, $subtype ) = explode( '/', $type );
+	}
+
+	return [
+		'type'    => $type,
+		'subtype' => $subtype
+	];
 }
 
 /**

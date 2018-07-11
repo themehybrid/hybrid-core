@@ -21,9 +21,8 @@ use WP_User;
 use Hybrid\Contracts\Bootable;
 use function Hybrid\clean_post_format_slug;
 use function Hybrid\filter_templates;
-use function Hybrid\get_attachment_type;
-use function Hybrid\get_attachment_subtype;
 use function Hybrid\get_post_template;
+use function Hybrid\Post\mime_types;
 
 /**
  * Overwrites the core WP template hierarchy.
@@ -203,8 +202,7 @@ class Hierarchy implements Bootable {
 		if ( is_attachment() ) {
 
 			// Split the mime type into two distinct parts.
-			$type    = get_attachment_type();
-			$subtype = get_attachment_subtype();
+			extract( mime_types() );
 
 			if ( $subtype ) {
 				$templates[] = "attachment-{$type}-{$subtype}.php";
