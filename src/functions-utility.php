@@ -422,3 +422,174 @@ function widget_exists( $widget ) {
 
 	return isset( $GLOBALS['wp_widget_factory']->widgets[ $widget ] );
 }
+
+/**
+ * Gets the "blog" (posts page) page URL.  `home_url()` will not always work for
+ * this because it returns the front page URL.  Sometimes the blog page URL is
+ * set to a different page.  This function handles both scenarios.
+ *
+ * @since  5.0.0
+ * @access public
+ * @return string
+ */
+function get_blog_url() {
+
+	$blog_url = '';
+
+	if ( 'posts' === get_option( 'show_on_front' ) ) {
+		$blog_url = home_url();
+
+	} elseif ( 0 < ( $page_for_posts = get_option( 'page_for_posts' ) ) ) {
+		$blog_url = get_permalink( $page_for_posts );
+	}
+
+	return $blog_url ? esc_url( $blog_url ) : '';
+}
+
+/**
+ * Function for figuring out if we're viewing a "plural" page.  In WP, these
+ * pages are archives, search results, and the home/blog posts index.  Note that
+ * this is similar to, but not quite the same as `! is_singular()`, which
+ * wouldn't account for the 404 page.
+ *
+ * @since  5.0.0
+ * @access public
+ * @return bool
+ */
+function is_plural() {
+
+	return is_home() || is_archive() || is_search();
+}
+
+/**
+ * Retrieve the general archive title.
+ *
+ * @since  5.0.0
+ * @access public
+ * @return string
+ */
+function archive_title() {
+
+	return esc_html__( 'Archives', 'hybrid-core' );
+}
+
+/**
+ * Retrieve the author archive title.
+ *
+ * @since  5.0.0
+ * @access public
+ * @return string
+ */
+function author_title() {
+
+	return get_the_author_meta( 'display_name', absint( get_query_var( 'author' ) ) );
+}
+
+/**
+ * Retrieve the year archive title.
+ *
+ * @since  5.0.0
+ * @access public
+ * @return string
+ */
+function year_title() {
+
+	return get_the_date( esc_html_x( 'Y', 'yearly archives date format', 'hybrid-core' ) );
+}
+
+/**
+ * Retrieve the week archive title.
+ *
+ * @since  5.0.0
+ * @access public
+ * @return string
+ */
+function week_title() {
+
+	return sprintf(
+		// Translators: 1 is the week number and 2 is the year.
+		esc_html__( 'Week %1$s of %2$s', 'hybrid-core' ),
+		get_the_time( esc_html_x( 'W', 'weekly archives date format', 'hybrid-core' ) ),
+		get_the_time( esc_html_x( 'Y', 'yearly archives date format', 'hybrid-core' ) )
+	);
+}
+
+/**
+ * Retrieve the day archive title.
+ *
+ * @since  5.0.0
+ * @access public
+ * @return string
+ */
+function day_title() {
+
+	return get_the_date( esc_html_x( 'F j, Y', 'daily archives date format', 'hybrid-core' ) );
+}
+
+/**
+ * Retrieve the hour archive title.
+ *
+ * @since  5.0.0
+ * @access public
+ * @return string
+ */
+function hour_title() {
+
+	return get_the_time( esc_html_x( 'g a', 'hour archives time format', 'hybrid-core' ) );
+}
+
+/**
+ * Retrieve the minute archive title.
+ *
+ * @since  5.0.0
+ * @access public
+ * @return string
+ */
+function minute_title() {
+
+	return sprintf(
+		// Translators: Minute archive title. %s is the minute time format.
+		esc_html__( 'Minute %s', 'hybrid-core' ),
+		get_the_time( esc_html_x( 'i', 'minute archives time format', 'hybrid-core' ) )
+	);
+}
+
+/**
+ * Retrieve the minute + hour archive title.
+ *
+ * @since  5.0.0
+ * @access public
+ * @return string
+ */
+function minute_hour_title() {
+
+	return get_the_time( esc_html_x( 'g:i a', 'minute and hour archives time format', 'hybrid-core' ) );
+}
+
+/**
+ * Retrieve the search results title.
+ *
+ * @since  5.0.0
+ * @access public
+ * @return string
+ */
+function search_title() {
+
+	return sprintf(
+		// Translators: %s is the search query.
+		esc_html__( 'Search results for: %s', 'hybrid-core' ),
+		get_search_query()
+	);
+}
+
+/**
+ * Retrieve the 404 page title.
+ *
+ * @since  5.0.0
+ * @access public
+ * @return string
+ */
+function error_title() {
+
+	return esc_html__( '404 Not Found', 'hybrid-core' );
+}

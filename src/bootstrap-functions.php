@@ -29,7 +29,6 @@ array_map(
 		'functions-helpers',
 		'functions-lang',
 		'functions-utility',
-		'template-general',
 
 		'attr/template-attr',
 		'comment/template-comment',

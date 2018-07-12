@@ -111,37 +111,37 @@ function document_title_parts( $doctitle ) {
 		$doctitle['title'] = post_type_archive_title( '', false );
 
 	} elseif ( is_author() ) {
-		$doctitle['title'] = get_single_author_title();
+		$doctitle['title'] = author_title();
 
 	} elseif ( get_query_var( 'minute' ) && get_query_var( 'hour' ) ) {
-		$doctitle['title'] = get_single_minute_hour_title();
+		$doctitle['title'] = minute_hour_title();
 
 	} elseif ( get_query_var( 'minute' ) ) {
-		$doctitle['title'] = get_single_minute_title();
+		$doctitle['title'] = minute_title();
 
 	} elseif ( get_query_var( 'hour' ) ) {
-		$doctitle['title'] = get_single_hour_title();
+		$doctitle['title'] = hour_title();
 
 	} elseif ( is_day() ) {
-		$doctitle['title'] = get_single_day_title();
+		$doctitle['title'] = day_title();
 
 	} elseif ( get_query_var( 'w' ) ) {
-		$doctitle['title'] = get_single_week_title();
+		$doctitle['title'] = week_title();
 
 	} elseif ( is_month() ) {
 		$doctitle['title'] = single_month_title( ' ', false );
 
 	} elseif ( is_year() ) {
-		$doctitle['title'] = get_single_year_title();
+		$doctitle['title'] = year_title();
 
 	} elseif ( is_archive() ) {
-		$doctitle['title'] = get_single_archive_title();
+		$doctitle['title'] = archive_title();
 
 	} elseif ( is_search() ) {
-		$doctitle['title'] = get_search_title();
+		$doctitle['title'] = search_title();
 
 	} elseif ( is_404() ) {
-		$doctitle['title'] = get_error_title();
+		$doctitle['title'] = error_title();
 	}
 
 	// Return the title and make sure to strip tags.

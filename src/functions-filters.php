@@ -61,37 +61,37 @@ function archive_title_filter( $title ) {
 		$title = single_term_title( '', false );
 
 	} elseif ( is_author() ) {
-		$title = get_single_author_title();
+		$title = author_title();
 
 	} elseif ( is_search() ) {
-		$title = get_search_title();
+		$title = search_title();
 
 	} elseif ( is_post_type_archive() ) {
 		$title = post_type_archive_title( '', false );
 
 	} elseif ( get_query_var( 'minute' ) && get_query_var( 'hour' ) ) {
-		$title = get_single_minute_hour_title();
+		$title = minute_hour_title();
 
 	} elseif ( get_query_var( 'minute' ) ) {
-		$title = get_single_minute_title();
+		$title = minute_title();
 
 	} elseif ( get_query_var( 'hour' ) ) {
-		$title = get_single_hour_title();
+		$title = hour_title();
 
 	} elseif ( is_day() ) {
-		$title = get_single_day_title();
+		$title = day_title();
 
 	} elseif ( get_query_var( 'w' ) ) {
-		$title = get_single_week_title();
+		$title = week_title();
 
 	} elseif ( is_month() ) {
 		$title = single_month_title( ' ', false );
 
 	} elseif ( is_year() ) {
-		$title = get_single_year_title();
+		$title = year_title();
 
 	} elseif ( is_archive() ) {
-		$title = get_single_archive_title();
+		$title = archive_title();
 	}
 
 	return apply_filters( 'hybrid/achive_title', $title );
