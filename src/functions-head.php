@@ -23,7 +23,7 @@ namespace Hybrid;
 function meta_charset() {
 
 	echo apply_filters(
-		'hybrid/meta_charset',
+		'hybrid/head/meta/charset',
 		sprintf( '<meta charset="%s" />' . "\n", esc_attr( get_bloginfo( 'charset' ) ) )
 	);
 }
@@ -38,7 +38,7 @@ function meta_charset() {
 function meta_viewport() {
 
 	echo apply_filters(
-		'hybrid/meta_viewport',
+		'hybrid/head/meta/viewport',
 		'<meta name="viewport" content="width=device-width, initial-scale=1" />' . "\n"
 	);
 }
@@ -60,7 +60,7 @@ function meta_generator() {
 		esc_attr( $theme->get( 'Version' ) )
 	);
 
-	echo apply_filters( 'hybrid_meta_generator', $generator );
+	echo apply_filters( 'hybrid/head/meta/generator', $generator );
 }
 
 /**
@@ -82,7 +82,7 @@ function link_pingback() {
 		);
 	}
 
-	echo apply_filters( 'hybrid/link_pingback', $link );
+	echo apply_filters( 'hybrid/head/link/pingback', $link );
 }
 
 /**
