@@ -15,11 +15,11 @@
 namespace Hybrid;
 
 # Attributes for a few default elements.
-add_filter( 'hybrid/attr/html/defaults',    __NAMESPACE__ . '\attr_html',    ~PHP_INT_MAX );
-add_filter( 'hybrid/attr/body/defaults',    __NAMESPACE__ . '\attr_body',    ~PHP_INT_MAX );
-add_filter( 'hybrid/attr/post/defaults',    __NAMESPACE__ . '\attr_post',    ~PHP_INT_MAX );
-add_filter( 'hybrid/attr/entry/defaults',   __NAMESPACE__ . '\attr_post',    ~PHP_INT_MAX ); // Alternate for "post".
-add_filter( 'hybrid/attr/comment/defaults', __NAMESPACE__ . '\attr_comment', ~PHP_INT_MAX );
+add_filter( 'hybrid/attr/html/defaults',    __NAMESPACE__ . '\Attr\filter_html',    ~PHP_INT_MAX );
+add_filter( 'hybrid/attr/body/defaults',    __NAMESPACE__ . '\Attr\filter_body',    ~PHP_INT_MAX );
+add_filter( 'hybrid/attr/post/defaults',    __NAMESPACE__ . '\Attr\filter_post',    ~PHP_INT_MAX );
+add_filter( 'hybrid/attr/entry/defaults',   __NAMESPACE__ . '\Attr\filter_post',    ~PHP_INT_MAX ); // Alternate for "post".
+add_filter( 'hybrid/attr/comment/defaults', __NAMESPACE__ . '\Attr\filter_comment', ~PHP_INT_MAX );
 
 # Filters the WordPress element classes.
 add_filter( 'body_class',    __NAMESPACE__ . '\body_class_filter',    ~PHP_INT_MAX, 2 );

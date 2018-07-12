@@ -18,7 +18,6 @@ array_map( function( $file ) {
 	require_once( "{$file}.php" );
 }, [
 	'functions-assets',
-	'functions-attr',
 	'functions-context',
 	'functions-filters',
 	'functions-fonts',
