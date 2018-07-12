@@ -16,6 +16,8 @@ namespace Hybrid;
 
 use WP_User;
 
+use function Hybrid\Lang\language;
+
 /**
  * Filters the WordPress body class with a better set of classes that are more
  * consistently handled and are backwards compatible with the original body
@@ -36,7 +38,7 @@ function body_class_filter( $classes, $class ) {
 
 	// Locale and language.
 	$locale = get_locale();
-	$lang   = get_language( $locale );
+	$lang   = language( $locale );
 
 	if ( $locale !== $lang ) {
 		$classes[] = $lang;

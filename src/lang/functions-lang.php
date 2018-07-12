@@ -12,7 +12,7 @@
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
-namespace Hybrid;
+namespace Hybrid\Lang;
 
 /**
  * Returns a hierarchy based on the locale, language, region, and text direction.
@@ -24,11 +24,11 @@ namespace Hybrid;
  * @access public
  * @return array
  */
-function get_lang_hierarchy() {
+function hierarchy() {
 
 	$locale = strtolower( str_replace( '_', '-', is_admin() ? get_user_locale() : get_locale() ) );
-	$lang   = strtolower( get_language() );
-	$region = strtolower( get_region() );
+	$lang   = strtolower( language() );
+	$region = strtolower( region() );
 
 	$hier = [ $locale ];
 
@@ -42,7 +42,7 @@ function get_lang_hierarchy() {
 
 	$hier[] = is_rtl() ? 'rtl' : 'ltr';
 
-	return apply_filters( 'hybrid/hierarchy/lang', $hier );
+	return apply_filters( 'hybrid/lang/hierarchy', $hier );
 }
 
 /**
@@ -54,7 +54,7 @@ function get_lang_hierarchy() {
  * @param  string  $locale
  * @return string
  */
-function get_language( $locale = '' ) {
+function language( $locale = '' ) {
 
 	if ( ! $locale ) {
 		$locale = is_admin() ? get_user_locale() : get_locale();
@@ -66,14 +66,14 @@ function get_language( $locale = '' ) {
 /**
  * Gets the region for the currently viewed page.  It strips the language from
  * the locale if needed.  Note that not all locales will have a region, so this
- * might actually return the same thing as `get_language()`.
+ * might actually return the same thing as `language()`.
  *
  * @since  5.0.0
  * @access public
  * @param  string  $locale
  * @return string
  */
-function get_region( $locale = '' ) {
+function region( $locale = '' ) {
 
 	if ( ! $locale ) {
 		$locale = is_admin() ? get_user_locale() : get_locale();

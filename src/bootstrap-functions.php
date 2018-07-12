@@ -23,7 +23,6 @@ array_map( function( $file ) {
 	'functions-fonts',
 	'functions-head',
 	'functions-helpers',
-	'functions-lang',
 	'functions-utility',
 ] );
 
@@ -33,6 +32,7 @@ array_map( function( $name ) {
 }, [
 	'attr',
 	'comment',
+	'lang',
 	'media',
 	'media-grabber',
 	'media-meta',

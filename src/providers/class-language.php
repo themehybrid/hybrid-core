@@ -14,7 +14,7 @@
 
 namespace Hybrid\Providers;
 
-use Hybrid\Language\Language as LanguageComponent;
+use Hybrid\Lang\Language as LanguageComponent;
 
 /**
  * Language provider.
