@@ -447,6 +447,19 @@ function get_blog_url() {
 }
 
 /**
+ * Strips the `post-format-` prefix from a post format (term) slug.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  string  $slug
+ * @return string
+ */
+function clean_post_format_slug( $slug ) {
+
+	return str_replace( 'post-format-', '', $slug );
+}
+
+/**
  * Function for figuring out if we're viewing a "plural" page.  In WP, these
  * pages are archives, search results, and the home/blog posts index.  Note that
  * this is similar to, but not quite the same as `! is_singular()`, which

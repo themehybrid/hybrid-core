@@ -22,7 +22,6 @@ array_map( function( $file ) {
 	'functions-context',
 	'functions-filters',
 	'functions-fonts',
-	'functions-formats',
 	'functions-head',
 	'functions-helpers',
 	'functions-lang',
