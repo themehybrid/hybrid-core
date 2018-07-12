@@ -25,7 +25,7 @@ use Hybrid\Contracts\View as ViewContract;
 use Hybrid\Tools\Collection;
 
 use function Hybrid\config;
-use function Hybrid\locate_template;
+use function Hybrid\Template\locate as locate_template;
 
 /**
  * View class.

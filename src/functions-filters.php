@@ -16,6 +16,8 @@
 
 namespace Hybrid;
 
+use function Hybrid\Template\locate as locate_template;
+
 /**
  * This function is for adding extra support for features not default to the core post types.
  * Excerpts are added to the 'page' post type.  Comments and trackbacks are added for the

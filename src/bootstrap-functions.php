@@ -28,7 +28,6 @@ array_map(
 		'functions-head',
 		'functions-helpers',
 		'functions-lang',
-		'functions-templates',
 		'functions-utility',
 		'template-general',
 
@@ -42,6 +41,7 @@ array_map(
 		'post/template-post',
 		'sidebar/template-sidebar',
 		'site/template-site',
+		'template/functions-template',
 		'theme/template-theme',
 		'view/template-view'
 	]

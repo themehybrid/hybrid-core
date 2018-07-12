@@ -87,10 +87,10 @@ add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\enqueue_scripts', 5 );
 remove_action( 'wp_print_styles', 'print_emoji_styles' );
 
 # Run hook for registering templates.
-add_action( 'init', __NAMESPACE__ . '\register_templates', 95 );
+add_action( 'init', __NAMESPACE__ . '\Template\register_templates', 95 );
 
 # Filter theme post templates to add registered templates.
-add_filter( 'theme_templates', __NAMESPACE__ . '\post_templates_filter', 5, 4 );
+add_filter( 'theme_templates', __NAMESPACE__ . '\Template\post_templates_filter', 5, 4 );
 
 # Filter the comments template.
 add_filter( 'comments_template', __NAMESPACE__ . '\comments_template', 5 );

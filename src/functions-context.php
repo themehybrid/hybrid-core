@@ -82,7 +82,7 @@ function body_class_filter( $classes, $class ) {
 		$template = str_replace(
 			[ "{$post_type}-template-", "{$post_type}-" ],
 			'',
-			basename( get_post_template( $post_id ), '.php' )
+			basename( get_page_template_slug( $post_id ), '.php' )
 		);
 
 		$classes[] = $template ? "{$post_type}-template-{$template}" : "{$post_type}-template-default";

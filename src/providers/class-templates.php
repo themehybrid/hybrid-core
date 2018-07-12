@@ -14,7 +14,7 @@
 
 namespace Hybrid\Providers;
 
-use Hybrid\Templates\Manager;
+use Hybrid\Template\Templates as Manager;
 
 /**
  * Object templates provider class.
@@ -34,7 +34,7 @@ class Templates extends ServiceProvider {
 	 */
 	public function register() {
 
-		$this->app->singleton( 'templates', function( $container ) {
+		$this->app->singleton( 'template/templates', function( $container ) {
 
 			return new Manager();
 		} );

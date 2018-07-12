@@ -130,81 +130,6 @@ function get_content_width() {
 }
 
 /**
- * Filters an array of templates and prefixes them with the view path.
- *
- * @since  5.0.0
- * @access public
- * @param  array  $templates
- * @return array
- */
-function filter_templates( $templates ) {
-
-	array_walk( $templates, function( &$template, $key ) {
-
-		$path = config( 'view' )->path;
-
-		$template = ltrim( str_replace( $path, '', $template ), '/' );
-
-		$template = "{$path}/{$template}";
-	} );
-
-	return $templates;
-}
-
-/**
- * Returns an array of locations to look for templates.
- *
- * Note that this won't work with the core WP template hierarchy due to an
- * issue that hasn't been addressed since 2010.
- *
- * @link   https://core.trac.wordpress.org/ticket/13239
- * @since  5.0.0
- * @access public
- * @return array
- */
-function get_template_locations() {
-
-	$path = config( 'view' )->path ? '/' . config( 'view' )->path : '';
-
-	$locations = [ get_stylesheet_directory() . $path ];
-
-	if ( is_child_theme() ) {
-		$locations[] = get_template_directory() . $path;
-	}
-
-	return apply_filters( 'hybrid/template_locations', $locations );
-}
-
-/**
- * A better `locate_template()` function than what core WP provides. Note that
- * this function merely locates templates and does no loading. Use the core
- * `load_template()` function for actually loading the template.
- *
- * @since  5.0.0
- * @access public
- * @param  array|string  $template_names
- * @return string
- */
-function locate_template( $template_names ) {
-	$located = '';
-
-	foreach ( (array) $template_names as $template ) {
-
-		foreach ( (array) get_template_locations() as $location ) {
-
-			$file = trailingslashit( $location ) . $template;
-
-			if ( file_exists( $file ) ) {
-				$located = $file;
-				break 2;
-			}
-		}
-	}
-
-	return $located;
-}
-
-/**
  * Loops through an array of file names within both the child and parent theme
  * directories.  Once a file is found, the full path to the file is returned.
  *
@@ -385,23 +310,6 @@ function replace_html_class( $class, $html ) {
 		$html,
 		1
 	);
-}
-
-/**
- * Compatibility function that stores the old post template using the core WP
- * post template naming scheme added in WordPress 4.7.0.  Deletes the old meta.
- *
- * @since  5.0.0
- * @access public
- * @param  int     $post_id
- * @param  string  $template
- * @return void
- */
-function post_template_compat( $post_id, $template ) {
-
-	update_post_meta( $post_id, '_wp_page_template', $template );
-
-	delete_post_meta( $post_id, sprintf( '_wp_%s_template', get_post_type( $post_id ) ) );
 }
 
 /**

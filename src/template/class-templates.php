@@ -13,7 +13,7 @@
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
-namespace Hybrid\Templates;
+namespace Hybrid\Template;
 
 use Hybrid\Tools\Collection;
 
@@ -23,7 +23,7 @@ use Hybrid\Tools\Collection;
  * @since  5.0.0
  * @access public
  */
-class Manager extends Collection {
+class Templates extends Collection {
 
 	/**
 	 * Add a new template.

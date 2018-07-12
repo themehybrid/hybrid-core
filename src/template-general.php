@@ -16,19 +16,6 @@
 namespace Hybrid;
 
 /**
- * Returns the global hierarchy. This is a wrapper around the values stored via
- * the template hierarchy object.
- *
- * @since  5.0.0
- * @access public
- * @return array
- */
-function get_global_hierarchy() {
-
-	return apply_filters( 'hybrid/hierarchy/global', app( 'template_hierarchy' )->hierarchy() );
-}
-
-/**
  * Gets the "blog" (posts page) page URL.  `home_url()` will not always work for
  * this because it returns the front page URL.  Sometimes the blog page URL is
  * set to a different page.  This function handles both scenarios.

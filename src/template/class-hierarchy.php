@@ -15,14 +15,10 @@
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
-namespace Hybrid\TemplateHierarchy;
+namespace Hybrid\Template;
 
 use WP_User;
 use Hybrid\Contracts\Bootable;
-use function Hybrid\clean_post_format_slug;
-use function Hybrid\filter_templates;
-use function Hybrid\get_post_template;
-use function Hybrid\Post\mime_types;
 
 /**
  * Overwrites the core WP template hierarchy.
@@ -159,7 +155,7 @@ class Hierarchy implements Bootable {
 
 		if ( ! is_home() ) {
 
-			$custom = get_post_template( get_queried_object_id() );
+			$custom = get_page_template_slug( get_queried_object_id() );
 
 			if ( $custom ) {
 				$templates[] = $custom;
@@ -192,7 +188,7 @@ class Hierarchy implements Bootable {
 		$name = urldecode( $post->post_name );
 
 		// Check for a custom post template.
-		$custom = get_post_template( $post->ID );
+		$custom = get_page_template_slug( $post->ID );
 
 		if ( $custom ) {
 			$templates[] = $custom;
@@ -202,7 +198,12 @@ class Hierarchy implements Bootable {
 		if ( is_attachment() ) {
 
 			// Split the mime type into two distinct parts.
-			extract( mime_types() );
+			$type    = get_post_mime_type( $post );
+			$subtype = '';
+
+			if ( false !== strpos( $type, '/' ) ) {
+				list( $type, $subtype ) = explode( '/', $type );
+			}
 
 			if ( $subtype ) {
 				$templates[] = "attachment-{$type}-{$subtype}.php";
@@ -250,9 +251,12 @@ class Hierarchy implements Bootable {
 
 		// Get the queried term object.
 		$term = get_queried_object();
+		$slug = urldecode( $term->slug );
 
 		// Remove 'post-format' from the slug.
-		$slug = 'post_format' === $term->taxonomy ? clean_post_format_slug( $term->slug ) : urldecode( $term->slug );
+		if ( 'post_format' === $term->taxonomy ) {
+			$slug = str_replace( 'post-format-', '', $slug );
+		}
 
 		// Slug-based template.
 		$templates[] = "taxonomy-{$term->taxonomy}-{$slug}.php";

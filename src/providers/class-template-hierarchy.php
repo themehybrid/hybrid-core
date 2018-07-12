@@ -14,7 +14,7 @@
 
 namespace Hybrid\Providers;
 
-use Hybrid\TemplateHierarchy\Hierarchy;
+use Hybrid\Template\Hierarchy;
 
 /**
  * Template hierarchy provider class.
@@ -34,7 +34,7 @@ class TemplateHierarchy extends ServiceProvider {
 	 */
 	public function register() {
 
-		$this->app->instance( 'template_hierarchy', new Hierarchy() );
+		$this->app->instance( 'template/hierarchy', new Hierarchy() );
 	}
 
 	/**
@@ -46,6 +46,6 @@ class TemplateHierarchy extends ServiceProvider {
 	 */
 	public function boot() {
 
-		$this->app->resolve( 'template_hierarchy' )->boot();
+		$this->app->resolve( 'template/hierarchy' )->boot();
 	}
 }
