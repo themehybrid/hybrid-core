@@ -2,6 +2,115 @@
 
 namespace Hybrid\Media;
 
+use function Hybrid\app;
+
+/**
+ * Renders the media grabber HTML.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  array  $args
+ * @return void
+ */
+function render( array $args = [] ) {
+
+	( new Grabber( $args ) )->render();
+}
+
+/**
+ * Returns the media grabber HTML.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  array  $args
+ * @return string
+ */
+function fetch( array $args = [] ) {
+
+	return ( new Grabber( $args ) )->fetch();
+}
+
+/**
+ * Returns an instance of a media meta repository based on the attachment ID.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  int    $post_id
+ * @return Meta
+ */
+function meta_repo( $post_id ) {
+
+	$repositories = app( 'media/meta' );
+
+	if ( ! $repositories->has( $post_id ) ) {
+
+		$repositories[ $post_id ] = new Meta( $post_id );
+	}
+
+	return $repositories[ $post_id ];
+}
+
+/**
+ * Prints media meta directly to the screen.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  string  $property
+ * @param  array   $args
+ * @return void
+ */
+function render_meta( $property, $args = [] ) {
+
+	echo fetch_meta( $property, $args );
+}
+
+/**
+ * Returns media meta from a media meta object.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  string  $property
+ * @param  array   $args
+ * @return string
+ */
+function fetch_meta( $property, array $args = [] ) {
+
+	$html = '';
+
+	$args = wp_parse_args( $args, [
+		'post_id' => get_the_ID(),
+		'tag'     => 'span',
+		'label'   => '',
+		'text'    => '%s',
+		'before'  => '',
+		'after'   => ''
+	] );
+
+	// Get the media meta repository for this post.
+	$meta_object = meta_repo( $args['post_id'] );
+
+	// Retrieve the meta value that we want from the repository.
+	$meta = $meta_object->get( $property );
+
+	if ( $meta ) {
+
+		$label = $args['label'] ? sprintf( '<span class="media-meta__label">%s</span> ', $args['label'] ) : '';
+
+		$data = '<span class="media-meta__data">' . sprintf( $args['text'], $meta ) . '</span>';
+
+		$html = sprintf(
+			'<%1$s class="%2$s">%3$s</%1$s>',
+			tag_escape( $args['tag'] ),
+			esc_attr( "media-meta__item media-meta__item--{$property}" ),
+			$label . $data
+		);
+
+		$html = $args['before'] . $html . $args['after'];
+	}
+
+	return $html;
+}
+
 /**
  * Renders the image size links HTML.
  *

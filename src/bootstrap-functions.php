@@ -34,8 +34,6 @@ array_map( function( $name ) {
 	'comment',
 	'lang',
 	'media',
-	'media-grabber',
-	'media-meta',
 	'menu',
 	'pagination',
 	'post',

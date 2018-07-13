@@ -34,7 +34,7 @@ class MediaMeta extends ServiceProvider {
 	 */
 	public function register() {
 
-		$this->app->singleton( 'media_meta', function( $container ) {
+		$this->app->singleton( 'media/meta', function( $container ) {
 
 			return new Collection();
 		} );

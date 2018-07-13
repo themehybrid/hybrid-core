@@ -1,6 +1,6 @@
 <?php
 /**
- * Hybrid Media Grabber - A script for grabbing media related to a post.
+ * Media Grabber - A script for grabbing media related to a post.
  *
  * Hybrid Media Grabber is a script for pulling media either from the post
  * content or attached to the post.  It's an attempt to consolidate the various
@@ -17,9 +17,9 @@
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
-namespace Hybrid\MediaGrabber;
+namespace Hybrid\Media;
 
-use Hybrid\Contracts\MediaGrabber as MediaGrabberContract;
+use Hybrid\Contracts\MediaGrabber;
 
 /**
  * Grabs media related to the post.
@@ -28,7 +28,7 @@ use Hybrid\Contracts\MediaGrabber as MediaGrabberContract;
  * @access public
  * @return void
  */
-class MediaGrabber implements MediaGrabberContract {
+class Grabber implements MediaGrabber {
 
 	/**
 	 * The HTML version of the media to return.

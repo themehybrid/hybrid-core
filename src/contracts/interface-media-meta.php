@@ -19,14 +19,15 @@ namespace Hybrid\Contracts;
  * @since  5.0.0
  * @access public
  */
-interface MediaMeta extends Fetchable {
+interface MediaMeta {
 
 	/**
-	 * Returns the raw data.
+	 * Returns the escaped and formatted media meta.
 	 *
 	 * @since  5.0.0
 	 * @access public
+	 * @param  string  $key
 	 * @return mixed
 	 */
-	public function raw();
+	public function get( $key );
 }
