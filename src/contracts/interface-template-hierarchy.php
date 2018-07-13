@@ -14,7 +14,7 @@
 namespace Hybrid\Contracts;
 
 /**
- * Template interface.
+ * Template hierarchy interface.
  *
  * @since  5.0.0
  * @access public
