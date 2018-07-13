@@ -23,8 +23,6 @@ namespace Hybrid\View;
 
 use Hybrid\Contracts\View as ViewContract;
 use Hybrid\Tools\Collection;
-
-use function Hybrid\config;
 use function Hybrid\Template\locate as locate_template;
 
 /**
@@ -182,12 +180,12 @@ class View implements ViewContract {
 			// Maybe remove core WP's `prepend_attachment`.
 			$this->maybeShiftAttachment();
 
-			// Make `$data` available to the template.
-			${ config( 'view' )->name } = $this->data;
+			// Make the `$data` variable available to the template.
+			$data = $this->data;
 
-			// Extract the data into individual variables if set.
-			if ( config( 'view' )->extract && $this->data instanceof Collection ) {
-
+			// Extract the data into individual variables. Each of
+			// these variables will be available in the template.
+			if ( $this->data instanceof Collection ) {
 				extract( $this->data->all() );
 			}
 

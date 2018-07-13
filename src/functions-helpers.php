@@ -51,19 +51,6 @@ function app( $abstract = '', $params = [] ) {
 }
 
 /**
- * Returns a configuration object.
- *
- * @since  5.0.0
- * @access public
- * @param  string  $name
- * @return object
- */
-function config( $name = '' ) {
-
-	return $name ? app( 'config' )->$name : app( 'config' );
-}
-
-/**
  * Wrapper function for the `Collection` class.
  *
  * @since  5.0.0

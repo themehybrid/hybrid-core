@@ -3,7 +3,6 @@
 namespace Hybrid\Template;
 
 use function Hybrid\app;
-use function Hybrid\config;
 
 /**
  * Returns the global hierarchy. This is a wrapper around the values stored via
@@ -48,6 +47,18 @@ function locate( $templates ) {
 }
 
 /**
+ * Returns the relative path to where templates are held in the theme.
+ *
+ * @since  5.0.0
+ * @access public
+ * @return string
+ */
+function path() {
+
+	return apply_filters( 'hybrid/template/path', 'resources/views' );
+}
+
+/**
  * Returns an array of locations to look for templates.
  *
  * Note that this won't work with the core WP template hierarchy due to an
@@ -60,14 +71,14 @@ function locate( $templates ) {
  */
 function locations() {
 
-	$path = config( 'view' )->path ? '/' . config( 'view' )->path : '';
+	$path = ltrim( path(), '/' );
 
 	// Add active theme path.
-	$locations = [ get_stylesheet_directory() . $path ];
+	$locations = [ get_stylesheet_directory() . "/{$path}" ];
 
 	// If child theme, add parent theme path second.
 	if ( is_child_theme() ) {
-		$locations[] = get_template_directory() . $path;
+		$locations[] = get_template_directory() . "/{$path}";
 	}
 
 	return (array) apply_filters( 'hybrid/template/locations', $locations );
@@ -83,14 +94,16 @@ function locations() {
  */
 function filter_templates( $templates ) {
 
-	array_walk( $templates, function( &$template, $key ) {
+	$path = path();
 
-		$path = config( 'view' )->path;
+	if ( $path ) {
+		array_walk( $templates, function( &$template, $key ) use ( $path ) {
 
-		$template = ltrim( str_replace( $path, '', $template ), '/' );
+			$template = ltrim( str_replace( $path, '', $template ), '/' );
 
-		$template = "{$path}/{$template}";
-	} );
+			$template = "{$path}/{$template}";
+		} );
+	}
 
 	return $templates;
 }

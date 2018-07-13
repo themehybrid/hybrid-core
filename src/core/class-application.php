@@ -20,7 +20,6 @@ use Hybrid\Container\Container;
 use Hybrid\Contracts\Application as ApplicationContract;
 use Hybrid\Contracts\Bootable;
 use Hybrid\Providers\Attributes;
-use Hybrid\Providers\Config;
 use Hybrid\Providers\Customize;
 use Hybrid\Providers\Language;
 use Hybrid\Providers\MediaMeta;
@@ -104,7 +103,6 @@ class Application extends Container implements ApplicationContract, Bootable {
 			$this->provider( $provider );
 		}, [
 			Attributes::class,
-			Config::class,
 			Customize::class,
 			Language::class,
 			MediaMeta::class,
