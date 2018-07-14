@@ -1,8 +1,60 @@
 # Hybrid Core: WordPress Theme Framework
 
-Hybrid Core is a framework for developing WordPress themes.  It allows theme developers to build themes without having to code much of the complex "logic" or other complicated functionality often needed in themes.  The framework takes care of a lot of these things so theme authors can get back to doing what matter the most:  developing and designing cool themes.
+Hybrid Core (HC) is a framework for developing WordPress themes.
 
-The framework was built to make it easy for developers to include (or not include) specific, pre-coded features.  Themes handle all the markup, style, and scripts while the framework handles the logic.
+It is a drop-in library/package that simplifies some of the complexities of theme development.  Its goal is to provide elegant functions, classes, and interfaces for writing code without having to rebuild everything from scratch for each theme.
+
+## Requirements
+
+* PHP 5.6+ (7.0+ recommended).
+* [Composer](https://getcomposer.org/) for managing PHP dependencies.
+
+The framework is coded to work on PHP 5.6+, but only 7.0+ is officially supported.
+
+To ease developers into Composer, version 5.0 is a standalone package with no dependencies. Therefore, theme authors can still drop this directly into their theme. However, no such guarantee exists for future versions.
+
+## Documentation
+
+The documentation is handled via Hybrid Core's [wiki](https://github.com/justintadlock/hybrid-core/wiki).  This is community-contributed documentation that I hope you will add to if you use the framework.
+
+### Installation
+
+**Composer**
+
+Use the following command to install the package.
+
+```
+composer require justintadlock/hybrid-core
+```
+
+If bundling this directly in your theme, you'll need to add the following code to your `functions.php` to autoload the project (and any other dependencies).
+
+```
+if ( file_exists( get_parent_theme_file_path( 'vendor/autoload.php' ) ) ) {
+	require_once( get_parent_theme_file_path( 'vendor/autoload.php' ) );
+}
+```
+
+**Drop-in**
+
+If just dropping Hybrid Core into your theme (assuming a folder name of `hybrid-core`), you'll want to add the following line of code to load up the framework.
+
+```
+require_once( get_parent_theme_file_path( 'hybrid-core/src/bootstrap-hybrid.php' ) );
+```
+
+### Bootstrapping Hybrid Core
+
+Hybrid Core isn't launched until its `app()` function is called for the first time, which is under the `Hybrid` namespace.  Assuming you're namespacing your code (you should be), this should look something like:
+
+```
+namespace ThemeName;
+
+use function Hybrid\app;
+
+# Bootstrap Hybrid Core.
+app();
+```
 
 ## FAQ
 
@@ -14,20 +66,7 @@ In 2008, I started work on Hybrid Core.  At the time, it was used in only one of
 
 Primarily, Hybrid Core is for me, Justin Tadlock.  I use it to build all of my [WordPress themes](https://themehybrid.com/themes) at Theme Hybrid, which is my plugin and theme site.
 
-However, I also maintain it for other theme authors who need a solid framework behind their themes that doesn't force them into certain markup and gives them ultimate flexibility.
-
-### How do I install Hybrid Core?
-
-The most basic method is to add the framework folder to your theme folder.  Assuming a folder name of `hybrid-core` (you can name the folder anything), you'd add this code to your theme's `functions.php` file:
-
-	// Launch the Hybrid Core framework.
-	require_once( trailingslashit( get_template_directory() ) . 'hybrid-core/hybrid.php' );
-
-That will load and initialize the framework.  You'll have to learn the ins-and-outs of the framework though to actually make use of it.  The code itself is very well documented.
-
-### Where can I find documentation?
-
-The documentation is handled via Hybrid Core's [wiki](https://github.com/justintadlock/hybrid-core/wiki).  This is community-contributed documentation that I hope you will add to if you use the framework.
+However, I also maintain it for other theme authors who need a solid framework behind their themes.
 
 ### Where can I ask support questions?
 
@@ -55,4 +94,4 @@ I make little money directly from Hybrid Core.  Developers (those who use the fr
 
 This project is licensed under the [GNU GPL](http://www.gnu.org/licenses/old-licenses/gpl-2.0.html), version 2 or later.
 
-2008&thinsp;&ndash;&thinsp;2017 &copy; [Justin Tadlock](http://justintadlock.com).
+2008&thinsp;&ndash;&thinsp;2018 &copy; [Justin Tadlock](http://justintadlock.com).
