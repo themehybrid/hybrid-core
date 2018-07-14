@@ -51,11 +51,15 @@ function locate( $templates ) {
  *
  * @since  5.0.0
  * @access public
+ * @param  string  $file
  * @return string
  */
-function path() {
+function path( $file = '' ) {
 
-	return apply_filters( 'hybrid/template/path', 'resources/views' );
+	$file = ltrim( $file, '/' );
+	$path = apply_filters( 'hybrid/template/path', 'resources/views' );
+
+	return $file ? trailingslashit( $path ) . $file : $path;
 }
 
 /**
