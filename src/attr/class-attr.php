@@ -51,7 +51,7 @@ class Attr implements Attributes {
 	 * @access protected
 	 * @var    array
 	 */
-	public $attr = [];
+	protected $attr = [];
 
 	/**
 	 * Outputs an HTML element's attributes.
