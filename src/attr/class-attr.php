@@ -45,6 +45,15 @@ class Attr implements Attributes {
 	protected $context = '';
 
 	/**
+	 * The input attributes first passed in.
+	 *
+	 * @since  5.0.0
+	 * @access protected
+	 * @var    array
+	 */
+	protected $intput = [];
+
+	/**
 	 * Stored array of attributes.
 	 *
 	 * @since  5.0.0
@@ -67,7 +76,7 @@ class Attr implements Attributes {
 
 		$this->name    = $name;
 		$this->context = $context;
-		$this->attr    = $attr;
+		$this->input   = $attr;
 	}
 
 	/**
@@ -104,11 +113,9 @@ class Attr implements Attributes {
 	 */
 	public function fetch() {
 
-		$this->filter();
-
 		$html = '';
 
-		foreach ( $this->attr as $name => $value ) {
+		foreach ( $this->all() as $name => $value ) {
 
 			$esc_value = '';
 
@@ -116,7 +123,6 @@ class Attr implements Attributes {
 			if ( $value !== false && 'href' === $name ) {
 				$esc_value = esc_url( $value );
 
-			// Else, use `esc_attr()`.
 			} elseif ( $value !== false ) {
 				$esc_value = esc_attr( $value );
 			}
@@ -128,13 +134,18 @@ class Attr implements Attributes {
 	}
 
 	/**
-	 * Filters the array of attributes.
+	 * Filters and returns the array of attributes.
 	 *
 	 * @since  5.0.0
 	 * @access protected
 	 * @return void
 	 */
-	protected function filter() {
+	public function all() {
+
+		// If we already have attributes, let's return them and bail.
+		if ( $this->attr ) {
+			return $this->attr;
+		}
 
 		$defaults = [];
 
@@ -142,12 +153,12 @@ class Attr implements Attributes {
 		// the default class.  That way, filters can know early on that
 		// a class has already been declared. Any filters on the defaults
 		// should, ideally, respect any classes that already exist.
-		if ( isset( $this->attr['class'] ) ) {
-			$defaults['class'] = $this->attr['class'];
+		if ( isset( $this->input['class'] ) ) {
+			$defaults['class'] = $this->input['class'];
 
 			// This is kind of a hacky way to keep the class input
 			// from overwriting everything later.
-			unset( $this->attr['class'] );
+			unset( $this->input['class'] );
 
 		// If no class was input, let's build a custom default.
 		} else {
@@ -158,7 +169,7 @@ class Attr implements Attributes {
 		$defaults = apply_filters( "hybrid/attr/{$this->name}/defaults", $defaults, $this->context, $this );
 
 		// Merge the attributes with the defaults.
-		$this->attr = wp_parse_args( $this->attr, $defaults );
+		$this->attr = wp_parse_args( $this->input, $defaults );
 
 		// Apply filters to the parsed attributes.
 		$this->attr = apply_filters( 'hybrid/attr', $this->attr, $this->name, $this->context );
@@ -177,5 +188,7 @@ class Attr implements Attributes {
 				apply_filters( $hook, explode( ' ', $value ), $this->context )
 			) );
 		}
+
+		return $this->attr;
 	}
 }

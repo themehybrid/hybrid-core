@@ -1,8 +1,10 @@
 <?php
 /**
- * Attributes interface.
+ * Attributes contract.
  *
- * Defines the interface that attributes classes must use.
+ * Defines the contract that classes for building HTML attributes must adhere to.
+ * Extends the `Fetchable` and `Renderable` contracts for handling output.
+ * Attributes are meant to be used for HTML elements.
  *
  * @package   HybridCore
  * @author    Justin Tadlock <justintadlock@gmail.com>
@@ -19,4 +21,15 @@ namespace Hybrid\Contracts;
  * @since  5.0.0
  * @access public
  */
-interface Attributes extends Fetchable, Renderable {}
+interface Attributes extends Fetchable, Renderable {
+
+	/**
+	 * Returns an array of HTML attributes in name/value pairs. Attributes
+	 * are not expected to be escaped. Escaping should be handled on output.
+	 *
+	 * @since  5.0.0
+	 * @access public
+	 * @return array
+	 */
+	public function all();
+}
