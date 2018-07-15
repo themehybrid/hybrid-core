@@ -19,7 +19,7 @@
 
 namespace Hybrid\Attr;
 
-use function Hybrid\app;
+use Hybrid\Proxies\App;
 
 /**
  * Wrapper for creating a new `Attributes` object.
@@ -33,7 +33,7 @@ use function Hybrid\app;
  */
 function attr( $name, $context = '', $attr = [] ) {
 
-	return app( 'attr', compact( 'name', 'context', 'attr' ) );
+	return App::resolve( 'attr', compact( 'name', 'context', 'attr' ) );
 }
 
 /**

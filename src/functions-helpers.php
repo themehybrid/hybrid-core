@@ -14,13 +14,14 @@
 
 namespace Hybrid;
 
-use Hybrid\Core\Application;
+use Hybrid\Proxies\App;
 use Hybrid\Tools\Collection;
 
 /**
  * The single instance of the app. Use this function for quickly working with
- * data.  Returns an instance of the `Application` class. If the `$abstract`
- * parameter is passed in, it'll resolve and return the value from the container.
+ * data.  Returns an instance of the `\Hybrid\Core\Application` class. If the
+ * `$abstract` parameter is passed in, it'll resolve and return the value from
+ * the container.
  *
  * @since  5.0.0
  * @access public
@@ -30,24 +31,7 @@ use Hybrid\Tools\Collection;
  */
 function app( $abstract = '', $params = [] ) {
 
-	static $app = null;
-
-	// If this is the first time calling `app()`, let's set up a new
-	// application first. This essentially bootstraps the framework.
-	if ( is_null( $app ) ) {
-		$app = new Application();
-
-		// Boot the application.
-		$app->boot();
-	}
-
-	// If an abstract name was passed in, let's resolve it and return.
-	if ( $abstract ) {
-		return $app->resolve( $abstract, $params );
-	}
-
-	// Return the application instance.
-	return $app;
+	return App::resolve( $abstract ?: 'app', $params );
 }
 
 /**
@@ -76,7 +60,7 @@ function path( $file = '' ) {
 
 	$file = ltrim( $file, '/' );
 
-	return $file ? trailingslashit( app( 'path') ) . $file : app( 'path' );
+	return $file ? App::resolve( 'path' ) . "/{$file}" : App::resolve( 'path' );
 }
 
 /**
@@ -88,5 +72,5 @@ function path( $file = '' ) {
  */
  function version() {
 
-	 return app( 'version' );
+	 return App::resolve( 'version' );
  }

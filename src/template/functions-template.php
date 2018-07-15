@@ -2,7 +2,7 @@
 
 namespace Hybrid\Template;
 
-use function Hybrid\app;
+use Hybrid\Proxies\App;
 
 /**
  * Returns the global hierarchy. This is a wrapper around the values stored via
@@ -14,7 +14,10 @@ use function Hybrid\app;
  */
 function hierarchy() {
 
-	return apply_filters( 'hybrid/template/hierarchy', app( 'template/hierarchy' )->hierarchy() );
+	return apply_filters(
+		'hybrid/template/hierarchy',
+		App::resolve( 'template/hierarchy' )->hierarchy()
+	);
 }
 
 /**
@@ -122,7 +125,7 @@ function filter_templates( $templates ) {
  */
 function register_templates() {
 
-	do_action( 'hybrid/templates/register', app( 'template/templates' ) );
+	do_action( 'hybrid/templates/register', App::resolve( 'template/templates' ) );
 }
 
 /**
@@ -139,7 +142,7 @@ function register_templates() {
  */
 function post_templates_filter( $templates, $theme, $post, $post_type ) {
 
-	foreach ( app( 'template/templates' )->all() as $template ) {
+	foreach ( App::resolve( 'template/templates' )->all() as $template ) {
 
 		if ( $template->forPostType( $post_type ) ) {
 

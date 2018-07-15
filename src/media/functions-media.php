@@ -2,7 +2,7 @@
 
 namespace Hybrid\Media;
 
-use function Hybrid\app;
+use Hybrid\Proxies\App;
 
 /**
  * Renders the media grabber HTML.
@@ -40,7 +40,7 @@ function fetch( array $args = [] ) {
  */
 function meta_repo( $post_id ) {
 
-	$repositories = app( 'media/meta' );
+	$repositories = App::resolve( 'media/meta' );
 
 	if ( ! $repositories->has( $post_id ) ) {
 

@@ -19,7 +19,7 @@ namespace Hybrid\Contracts;
  * @since  5.0.0
  * @access public
  */
-interface Application {
+interface Application extends Container {
 
 	/**
 	 * Adds a service provider. Developers can pass in an object or a fully-
@@ -31,4 +31,16 @@ interface Application {
 	 * @return void
 	 */
 	public function provider( $provider );
+
+	/**
+	 * Adds a static proxy alias. Developers must pass in fully-qualified
+	 * class name and alias class name.
+	 *
+	 * @since  5.0.0
+	 * @access public
+	 * @param  string  $class_name
+	 * @param  string  $alias
+	 * @return void
+	 */
+	public function proxy( $class_name, $alias );
 }

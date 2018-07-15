@@ -26,6 +26,8 @@ use Hybrid\Providers\MediaMeta;
 use Hybrid\Providers\Templates;
 use Hybrid\Providers\TemplateHierarchy;
 use Hybrid\Providers\View;
+use Hybrid\Proxies\Proxy;
+use Hybrid\Proxies\App;
 
 /**
  * Application class.
@@ -54,8 +56,32 @@ class Application extends Container implements ApplicationContract, Bootable {
 	protected $providers = [];
 
 	/**
-	 * Calls the functions to register the framework directory paths,
-	 * register service providers, and boot the service providers.
+	 * Array of static proxy classes and aliases.
+	 *
+	 * @since  5.0.0
+	 * @access protected
+	 * @var    array
+	 */
+	protected $proxies = [];
+
+	/**
+	 * Registers the default bindings, providers, and proxies for the
+	 * framework.
+	 *
+	 * @since  5.0.0
+	 * @access public
+	 * @return void
+	 */
+	public function __construct() {
+
+		$this->registerDefaultBindings();
+		$this->registerDefaultProviders();
+		$this->registerDefaultProxies();
+		$this->bootstrapFilters();
+	}
+
+	/**
+	 * Calls the functions to register and boot providers and proxies.
 	 *
 	 * @since  5.0.0
 	 * @access public
@@ -63,15 +89,9 @@ class Application extends Container implements ApplicationContract, Bootable {
 	 */
 	public function boot() {
 
-		$this->registerDefaultBindings();
-		$this->registerDefaultProviders();
-		$this->bootstrapFilters();
-
-		// Register and boot providers at the earliest hook available to
-		// themes. This is so that themes can register service providers
-		// if they choose to do so.
-		add_action( 'after_setup_theme', [ $this, 'registerProviders' ], ~PHP_INT_MAX );
-		add_action( 'after_setup_theme', [ $this, 'bootProviders'     ], ~PHP_INT_MAX );
+		$this->registerProviders();
+		$this->bootProviders();
+		$this->registerProxies();
 	}
 
 	/**
@@ -82,6 +102,8 @@ class Application extends Container implements ApplicationContract, Bootable {
 	 * @return void
 	 */
 	protected function registerDefaultBindings() {
+
+		$this->singleton( 'app', $this );
 
 		// Adds the directory path for the framework.
 		$this->add( 'path', untrailingslashit( HYBRID_DIR  ) );
@@ -110,6 +132,18 @@ class Application extends Container implements ApplicationContract, Bootable {
 			TemplateHierarchy::class,
 			View::class
 		] );
+	}
+
+	/**
+	 * Adds the default static proxy classes.
+	 *
+	 * @since  5.0.0
+	 * @access protected
+	 * @return void
+	 */
+	protected function registerDefaultProxies() {
+
+		$this->proxy( App::class, '\Hybrid\App' );
 	}
 
 	/**
@@ -200,10 +234,10 @@ class Application extends Container implements ApplicationContract, Bootable {
 	 * Calls the `register()` method of all the available service providers.
 	 *
 	 * @since  5.0.0
-	 * @access public
+	 * @access protected
 	 * @return void
 	 */
-	public function registerProviders() {
+	protected function registerProviders() {
 
 		foreach ( $this->getProviders() as $provider ) {
 			$this->registerProvider( $provider );
@@ -214,13 +248,44 @@ class Application extends Container implements ApplicationContract, Bootable {
 	 * Calls the `boot()` method of all the registered service providers.
 	 *
 	 * @since  5.0.0
-	 * @access public
+	 * @access protected
 	 * @return void
 	 */
-	public function bootProviders() {
+	protected function bootProviders() {
 
 		foreach ( $this->getProviders() as $provider ) {
 			$this->bootProvider( $provider );
+		}
+	}
+
+	/**
+	 * Adds a static proxy alias. Developers must pass in fully-qualified
+	 * class name and alias class name.
+	 *
+	 * @since  5.0.0
+	 * @access public
+	 * @param  string  $class_name
+	 * @param  string  $alias
+	 * @return void
+	 */
+	public function proxy( $class_name, $alias ) {
+
+		$this->proxies[ $class_name ] = $alias;
+	}
+
+	/**
+	 * Registers the static proxy classes.
+	 *
+	 * @since  5.0.0
+	 * @access protected
+	 * @return void
+	 */
+	protected function registerProxies() {
+
+		Proxy::setContainer( $this );
+
+		foreach ( $this->proxies as $class => $alias ) {
+			class_alias( $class, $alias );
 		}
 	}
 }

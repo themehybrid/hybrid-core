@@ -13,7 +13,7 @@
 
 namespace Hybrid\View;
 
-use function Hybrid\app;
+use Hybrid\Proxies\App;
 
 /**
  * Returns a view object.
@@ -27,7 +27,7 @@ use function Hybrid\app;
  */
 function view( $name, $slugs = [], $data = [] ) {
 
-	return app( 'view', compact( 'name', 'slugs', 'data' ) );
+	return App::resolve( 'view', compact( 'name', 'slugs', 'data' ) );
 }
 
 /**
