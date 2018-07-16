@@ -233,10 +233,7 @@ function fetch_terms( array $args = [] ) {
 		$html = $args['before'] . $html . $args['after'];
 	}
 
-	return apply_filters(
-		'hybrid/post/terms',
-		$args['before'] . $html . $args['after']
-	);
+	return apply_filters( 'hybrid/post/terms', $html );
 }
 
 /**
