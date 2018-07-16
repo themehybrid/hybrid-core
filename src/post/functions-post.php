@@ -73,6 +73,7 @@ function fetch_author( array $args = [] ) {
 
 	$args = wp_parse_args( $args, [
 		'text'   => '%s',
+		'class'  => 'entry__author',
 		'before' => '',
 		'after'  => ''
 	] );
@@ -80,7 +81,8 @@ function fetch_author( array $args = [] ) {
 	$url = get_author_posts_url( get_the_author_meta( 'ID' ) );
 
 	$html = sprintf(
-		'<a class="entry__author" href="%s">%s</a>',
+		'<a class="%s" href="%s">%s</a>',
+		esc_attr( $args['class'] ),
 		esc_url( $url ),
 		sprintf( $args['text'], get_the_author() )
 	);
@@ -116,13 +118,15 @@ function fetch_date( array $args = [] ) {
 
 	$args = wp_parse_args( $args, [
 		'text'   => '%s',
+		'class'  => 'entry__published',
 		'format' => '',
 		'before' => '',
 		'after'  => ''
 	] );
 
 	$html = sprintf(
-		'<time class="entry__published">%s</time>',
+		'<time class="%s">%s</time>',
+		esc_attr( $args['class'] ),
 		sprintf( $args['text'], get_the_date( $args['format'] ) )
 	);
 
@@ -159,6 +163,7 @@ function fetch_comments_link( array $args = [] ) {
 		'zero'   => false,
 		'one'    => false,
 		'more'   => false,
+		'class'  => 'entry__comments',
 		'before' => '',
 		'after'  => ''
 	] );
@@ -173,7 +178,8 @@ function fetch_comments_link( array $args = [] ) {
 	$text = get_comments_number( $args['zero'], $args['one'], $args['more'] );
 
 	$html = sprintf(
-		'<a class="entry__comments" href="%s">%s</a>',
+		'<a class="%s" href="%s">%s</a>',
+		esc_attr( $args['class'] ),
 		esc_url( $url ),
 		$text
 	);
@@ -212,21 +218,25 @@ function fetch_terms( array $args = [] ) {
 	$args = wp_parse_args( $args, [
 		'taxonomy' => 'category',
 		'text'     => '%s',
+		'class'    => '',
 		// Translators: Separates tags, categories, etc. when displaying a post.
 		'sep'      => _x( ', ', 'taxonomy terms separator', 'hybrid-core' ),
 		'before'   => '',
 		'after'    => ''
 	] );
 
+	// Append taxonomy to class name.
+	if ( ! $args['class'] ) {
+		$args['class'] = "entry__terms entry__terms--{$args['taxonomy']}";
+	}
+
 	$terms = get_the_term_list( get_the_ID(), $args['taxonomy'], '', $args['sep'], '' );
 
 	if ( $terms ) {
 
-		$class = "entry__terms entry__terms--{$args['taxonomy']}";
-
 		$html = sprintf(
 			'<span class="%s">%s</span>',
-			esc_attr( $class ),
+			esc_attr( $args['class'] ),
 			sprintf( $args['text'], $terms )
 		);
 
@@ -261,6 +271,7 @@ function fetch_format( array $args = [] ) {
 
 	$args = wp_parse_args( $args, [
 		'text'   => '%s',
+		'class'  => 'entry__format',
 		'before' => '',
 		'after'  => ''
 	] );
@@ -270,7 +281,8 @@ function fetch_format( array $args = [] ) {
 	$string = get_post_format_string( $format );
 
 	$html = sprintf(
-		'<a class="entry__format" href="%s">%s</a>',
+		'<a class="%s" href="%s">%s</a>',
+		esc_attr( $args['class'] ),
 		esc_url( $url ),
 		sprintf( $args['text'], $string )
 	);

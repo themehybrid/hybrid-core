@@ -26,13 +26,12 @@ function render_link( array $args = [] ) {
 function fetch_link( array $args = [] ) {
 
 	$args = wp_parse_args( $args, [
-		'component' => '',
-		'before'    => '',
-		'after'     => ''
+		'class'  => 'theme-link',
+		'before' => '',
+		'after'  => ''
 	] );
 
 	$theme = wp_get_theme( get_template() );
-	$class = $args['component'] ? "{$args['component']}__theme-link" : 'theme-link';
 
 	$allowed = [
 		'abbr'    => [ 'title' => true ],
@@ -44,7 +43,7 @@ function fetch_link( array $args = [] ) {
 
 	$html = sprintf(
 		'<a class="%s" href="%s">%s</a>',
-		esc_attr( $class ),
+		esc_attr( $args['class'] ),
 		esc_url( $theme->display( 'ThemeURI' ) ),
 		wp_kses( $theme->display( 'Name' ), $allowed )
 	);
@@ -83,13 +82,12 @@ function fetch_child_link( array $args = [] ) {
 	}
 
 	$args = wp_parse_args( $args, [
-		'component' => '',
-		'before'    => '',
-		'after'     => ''
+		'class'  => 'child-link',
+		'before' => '',
+		'after'  => ''
 	] );
 
 	$theme = wp_get_theme();
-	$class = $args['component'] ? "{$args['component']}__child-link" : 'child-link';
 
 	$allowed = [
 		'abbr'    => [ 'title' => true ],
@@ -101,7 +99,7 @@ function fetch_child_link( array $args = [] ) {
 
 	$html = sprintf(
 		'<a class="%s" href="%s">%s</a>',
-		esc_attr( $class ),
+		esc_attr( $args['class'] ),
 		esc_url( $theme->display( 'ThemeURI' ) ),
 		wp_kses( $theme->display( 'Name' ), $allowed )
 	);

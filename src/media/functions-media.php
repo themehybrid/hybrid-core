@@ -75,16 +75,28 @@ function render_meta( $property, $args = [] ) {
  */
 function fetch_meta( $property, array $args = [] ) {
 
-	$html = '';
+	$html = $label = '';
 
 	$args = wp_parse_args( $args, [
-		'post_id' => get_the_ID(),
-		'tag'     => 'span',
-		'label'   => '',
-		'text'    => '%s',
-		'before'  => '',
-		'after'   => ''
+		'post_id'     => get_the_ID(),
+		'tag'         => 'span',
+		'label'       => '',
+		'text'        => '%s',
+		'class'       => 'media-meta__item',
+		'label_class' => 'media-meta__label',
+		'data_class'  => 'media-meta__data',
+		'before'      => '',
+		'after'       => ''
 	] );
+
+	// Append formatted property to class name.
+	if ( ! $args['class'] ) {
+
+		$args['class'] = sprintf(
+			'media-meta__item media-meta__item--',
+			strtolower( str_replace( '_', '-', $property ) )
+		);
+	}
 
 	// Get the media meta repository for this post.
 	$meta_object = meta_repo( $args['post_id'] );
@@ -94,14 +106,25 @@ function fetch_meta( $property, array $args = [] ) {
 
 	if ( $meta ) {
 
-		$label = $args['label'] ? sprintf( '<span class="media-meta__label">%s</span> ', $args['label'] ) : '';
+		if ( $args['label'] ) {
 
-		$data = '<span class="media-meta__data">' . sprintf( $args['text'], $meta ) . '</span>';
+			$label = sprintf(
+				'<span class="%s">%s</span> ',
+				esc_attr( $args['label_class'] ),
+				$args['label']
+			);
+		}
+
+		$data = sprintf(
+			'<span class="%s">%s</span>',
+			esc_attr( $args['data_class'] ),
+			sprintf( $args['text'], $meta )
+		);
 
 		$html = sprintf(
 			'<%1$s class="%2$s">%3$s</%1$s>',
 			tag_escape( $args['tag'] ),
-			esc_attr( "media-meta__item media-meta__item--{$property}" ),
+			esc_attr( $args['class'] ),
 			$label . $data
 		);
 
@@ -139,15 +162,13 @@ function fetch_image_sizes( array $args = [] ) {
 	}
 
 	$args = wp_parse_args( $args, [
-		'text'      => '%s',
-		'sep'       => '/',
-		'component' => 'entry',
-		'before'    => '',
-		'after'     => ''
+		'text'       => '%s',
+		'sep'        => '/',
+		'class'      => 'entry__image-sizes',
+		'size_class' => 'entry__image-size-link',
+		'before'     => '',
+		'after'      => ''
 	] );
-
-	$wrap_class = $args['component'] ? "{$args['component']}__image-sizes"     : 'image-sizes';
-	$size_class = $args['component'] ? "{$args['component']}__image-size-link" : 'image-sizes__image-link';
 
 	// Set up an empty array for the links.
 	$links = [];
@@ -175,7 +196,7 @@ function fetch_image_sizes( array $args = [] ) {
 
 			$links[] = sprintf(
 				'<a class="%s" href="%s">%s</a>',
-				esc_attr( $size_class ),
+				esc_attr( $args['size_class'] ),
 				esc_url( $image[0] ),
 				$label
 			);
@@ -186,7 +207,7 @@ function fetch_image_sizes( array $args = [] ) {
 
 	$html = sprintf(
 		'<span class="%s">%s</span>',
-		esc_attr( $wrap_class ),
+		esc_attr( $args['class'] ),
 		sprintf( $args['text'], join( " {$sep} ", $links ) )
 	);
 

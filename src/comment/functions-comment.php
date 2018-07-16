@@ -94,6 +94,7 @@ function fetch_parent_link( $args = [] ) {
 	$args = wp_parse_args( $args, [
 		'text'   => '%s', // Defaults to parent comment author.
 		'depth'  => 2,    // At what level should the link show.
+		'class'  => 'comment__parent-link',
 		'before' => '',
 		'after'  => ''
 	] );
@@ -112,7 +113,8 @@ function fetch_parent_link( $args = [] ) {
 			$text = sprintf( $args['text'], get_comment_author( $parent ) );
 
 			$html = sprintf(
-				'<a class="comment__parent-link" href="%s">%s</a>',
+				'<a class="%s" href="%s">%s</a>',
+				esc_attr( $args['class'] ),
 				esc_url( $url ),
 				esc_html( $text )
 			);

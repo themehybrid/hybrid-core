@@ -26,20 +26,19 @@ function render_title( array $args = [] ) {
 function fetch_title( array $args = [] ) {
 
 	$args = wp_parse_args( $args, [
-		'tag'       => is_front_page() ? 'h1' : 'div',
-		'component' => 'app-header'
+		'tag'   => is_front_page() ? 'h1' : 'div',
+		'class' => 'app-header__title'
 	] );
 
 	$html  = '';
 	$title = get_bloginfo( 'name', 'display' );
 
 	if ( $title ) {
-		$class = $args['component'] ? "{$args['component']}__title" : 'site-title';
 
 		$html = sprintf(
 			'<%1$s class="%2$s">%3$s</%1$s>',
 			tag_escape( $args['tag'] ),
-			esc_attr( $class ),
+			esc_attr( $args['class'] ),
 			fetch_home_link( [ 'text' => $title ] )
 		);
 	}
@@ -71,8 +70,8 @@ function render_description( array $args = [] ) {
 function fetch_description( array $args = [] ) {
 
 	$args = wp_parse_args( $args, [
-		'tag'       => 'div',
-		'component' => 'app-header',
+		'tag'   => 'div',
+		'class' => 'app-header__description',
 	] );
 
 	$html = '';
@@ -80,12 +79,10 @@ function fetch_description( array $args = [] ) {
 
 	if ( $desc ) {
 
-		$class = $args['component'] ? "{$args['component']}__description" : 'site-description';
-
 		$html = sprintf(
 			'<%1$s class="%2$s">%3$s</%1$s>',
 			tag_escape( $args['tag'] ),
-			esc_attr( $class ),
+			esc_attr( $args['class'] ),
 			$desc
 		);
 	}
@@ -118,12 +115,14 @@ function fetch_home_link( array $args = [] ) {
 
 	$args = wp_parse_args( $args, [
 		'text'   => '%s',
+		'class'  => 'home-link',
 		'before' => '',
 		'after'  => ''
 	] );
 
 	$html = sprintf(
-		'<a class="home-link" href="%s" rel="home">%s</a>',
+		'<a class="%s" href="%s" rel="home">%s</a>',
+		esc_attr( $args['class'] ),
 		esc_url( home_url() ),
 		sprintf( $args['text'], get_bloginfo( 'name', 'display' ) )
 	);
@@ -159,12 +158,14 @@ function fetch_wp_link( array $args = [] ) {
 
 	$args = wp_parse_args( $args, [
 		'text'   => '%s',
+		'class'  => 'wp-link',
 		'before' => '',
 		'after'  => ''
 	] );
 
 	$html = sprintf(
-		'<a class="wp-link" href="%s">%s</a>',
+		'<a class="%s" href="%s">%s</a>',
+		esc_attr( $args['class'] ),
 		esc_url( __( 'https://wordpress.org', 'hybrid-core' ) ),
 		sprintf( $args['text'], esc_html__( 'WordPress', 'hybrid-core' ) )
 	);
