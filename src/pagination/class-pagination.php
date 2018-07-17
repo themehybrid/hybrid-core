@@ -208,11 +208,6 @@ class Pagination implements PaginationContract{
 		$this->end_size = absint( $this->args['end_size'] );
 		$this->mid_size = absint( $this->args['mid_size'] );
 
-		// Bail if we don't have at least two pages.
-		if ( $this->total < 2 ) {
-			return;
-		}
-
 		// The end size must be at least 1.
 		if ( $this->end_size < 1 ) {
 			$this->end_size = 1;
@@ -389,13 +384,16 @@ class Pagination implements PaginationContract{
 	 */
 	public function make() {
 
-		$this->prevItem();
+		if ( 2 <= $this->total ) {
 
-		for ( $n = 1; $n <= $this->total; $n++ ) {
-			$this->pageItem( $n );
+			$this->prevItem();
+
+			for ( $n = 1; $n <= $this->total; $n++ ) {
+				$this->pageItem( $n );
+			}
+
+			$this->nextItem();
 		}
-
-		$this->nextItem();
 
 		return $this;
 	}
