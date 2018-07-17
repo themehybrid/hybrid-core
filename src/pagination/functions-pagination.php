@@ -13,7 +13,7 @@ namespace Hybrid\Pagination;
  */
 function render( $context = 'posts', array $args = [] ) {
 
-	( new Pagination( $context, $args ) )->render();
+	( new Pagination( $context, $args ) )->make()->render();
 }
 
 /**
@@ -27,5 +27,5 @@ function render( $context = 'posts', array $args = [] ) {
  */
 function fetch( $context = 'posts', array $args = [] ) {
 
-	return ( new Pagination( $context, $args ) )->fetch();
+	return ( new Pagination( $context, $args ) )->make()->fetch();
 }

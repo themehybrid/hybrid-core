@@ -19,4 +19,14 @@ namespace Hybrid\Contracts;
  * @since  5.0.0
  * @access public
  */
-interface Pagination extends Fetchable, Renderable {}
+interface Pagination extends Fetchable, Renderable {
+
+	/**
+	 * Builds the pagination.
+	 *
+	 * @since  5.0.0
+	 * @access public
+	 * @return Pagination
+	 */
+	public function make();
+}

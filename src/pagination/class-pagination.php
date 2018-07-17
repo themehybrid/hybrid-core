@@ -217,9 +217,6 @@ class Pagination implements PaginationContract{
 		if ( $this->end_size < 1 ) {
 			$this->end_size = 1;
 		}
-
-		// Build the pagination items.
-		$this->build();
 	}
 
 	/**
@@ -387,10 +384,10 @@ class Pagination implements PaginationContract{
 	 * Builds the pagination `$items` array.
 	 *
 	 * @since  5.0.0
-	 * @access protected
-	 * @return void
+	 * @access public
+	 * @return PaginationContract
 	 */
-	protected function build() {
+	public function make() {
 
 		$this->prevItem();
 
@@ -399,6 +396,8 @@ class Pagination implements PaginationContract{
 		}
 
 		$this->nextItem();
+
+		return $this;
 	}
 
 	/**
