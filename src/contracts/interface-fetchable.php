@@ -1,8 +1,13 @@
 <?php
 /**
- * Fetchable interface.
+ * Fetchable contract.
  *
- * Defines the interface that any class that fetches output should use.
+ * Fetchable classes should implement a `fetch()` method that returns an HTML
+ * string ready for output to the screen. While there's no way to ensure this
+ * via the contract, the intent here is for anything that's fetchable to already
+ * be escaped. For clarity in the code, when returning raw data, it is
+ * recommended to use an alternate method name, such as `get()`, and not use
+ * this contract.
  *
  * @package   HybridCore
  * @author    Justin Tadlock <justintadlock@gmail.com>
@@ -22,7 +27,7 @@ namespace Hybrid\Contracts;
 interface Fetchable {
 
 	/**
-	 * Fetches the content.
+	 * Returns an HTML string for output.
 	 *
 	 * @since  5.0.0
 	 * @access public

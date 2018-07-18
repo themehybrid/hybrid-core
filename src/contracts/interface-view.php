@@ -1,8 +1,9 @@
 <?php
 /**
- * View interface.
+ * View contract.
  *
- * Defines the interface that view classes must use.
+ * View classes represent a template partial, generally speaking. Their purpose
+ * should be to find a template file and fetch/render the output.
  *
  * @package   HybridCore
  * @author    Justin Tadlock <justintadlock@gmail.com>
@@ -22,7 +23,7 @@ namespace Hybrid\Contracts;
 interface View extends Fetchable, Renderable {
 
 	/**
-	 * Returns the located template.
+	 * Returns the absolute path to the template file.
 	 *
 	 * @since  5.0.0
 	 * @access public

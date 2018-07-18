@@ -1,8 +1,9 @@
 <?php
 /**
- * Application interface.
+ * Application contract.
  *
- * Defines the interface for the applications.
+ * The Application class should be the be the primary class for working with and
+ * launching the app. It extends the `Container` contract.
  *
  * @package   HybridCore
  * @author    Justin Tadlock <justintadlock@gmail.com>

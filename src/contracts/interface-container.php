@@ -1,8 +1,9 @@
 <?php
 /**
- * Container interface.
+ * Container contract.
  *
- * Defines the interface that containers must use.
+ * Container classes should be used for storing, retrieving, and resolving
+ * classes/objects passed into them.
  *
  * @package   HybridCore
  * @author    Justin Tadlock <justintadlock@gmail.com>

@@ -1,8 +1,10 @@
 <?php
 /**
- * Renderable interface.
+ * Renderable contract.
  *
- * Defines the interface that any class that renders output should use.
+ * Renderable classes should implement a `render()` method. The intent of this
+ * method is to output an HTML string to the screen. This data should already be
+ * escaped prior to being output.
  *
  * @package   HybridCore
  * @author    Justin Tadlock <justintadlock@gmail.com>
@@ -22,7 +24,7 @@ namespace Hybrid\Contracts;
 interface Renderable {
 
 	/**
-	 * Renders the content.
+	 * Renders the HTML string.
 	 *
 	 * @since  5.0.0
 	 * @access public
