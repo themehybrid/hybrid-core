@@ -25,6 +25,218 @@ function hierarchy() {
 }
 
 /**
+ * Renders the comment author HTML.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  array   $args
+ * @return void
+ */
+function render_author( array $args = [] ) {
+
+	echo fetch_author( $args );
+}
+
+/**
+ * Returns the comment author HTML.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  array   $args
+ * @return string
+ */
+function fetch_author( array $args = [] ) {
+
+	$args = wp_parse_args( $args, [
+		'text'   => '%s',
+		'class'  => 'comment__author',
+		'before' => '',
+		'after'  => ''
+	] );
+
+	$html = sprintf(
+		'<span class="%s">%s</span>',
+		esc_attr( $args['class'] ),
+		get_comment_author_link()
+	);
+
+	return apply_filters( 'hybrid/comment/author', $args['before'] . $html . $args['after'] );
+}
+
+/**
+ * Renders the comment permalink HTML.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  array   $args
+ * @return void
+ */
+function render_permalink( array $args = [] ) {
+
+	echo fetch_permalink( $args );
+}
+
+/**
+ * Returns the comment permalink HTML.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  array   $args
+ * @return string
+ */
+function fetch_permalink( array $args = [] ) {
+
+	$args = wp_parse_args( $args, [
+		'text'   => '%s',
+		'class'  => 'comment__permalink',
+		'before' => '',
+		'after'  => ''
+	] );
+
+	$url = get_comment_link();
+
+	$html = sprintf(
+		'<a class="%s" href="%s">%s</a>',
+		esc_attr( $args['class'] ),
+		esc_url( $url ),
+		sprintf( $args['text'], esc_url( $url ) )
+	);
+
+	return apply_filters( 'hybrid/comment/permalink', $args['before'] . $html . $args['after'] );
+}
+
+/**
+ * Renders the comment date HTML.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  array   $args
+ * @return void
+ */
+function render_date( array $args = [] ) {
+
+	echo fetch_date( $args );
+}
+
+/**
+ * Returns the comment date HTML.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  array   $args
+ * @return string
+ */
+function fetch_date( array $args = [] ) {
+
+	$args = wp_parse_args( $args, [
+		'text'   => '%s',
+		'format' => '',
+		'class'  => 'comment__date',
+		'before' => '',
+		'after'  => ''
+	] );
+
+	$url = get_comment_link();
+
+	$html = sprintf(
+		'<time class="%s">%s</time>',
+		esc_attr( $args['class'] ),
+		sprintf( $args['text'], esc_html( get_comment_date( $args['format'] ) ) )
+	);
+
+	return apply_filters( 'hybrid/comment/date', $args['before'] . $html . $args['after'] );
+}
+
+/**
+ * Renders the comment time HTML.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  array   $args
+ * @return void
+ */
+function render_time( array $args = [] ) {
+
+	echo fetch_time( $args );
+}
+
+/**
+ * Returns the comment time HTML.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  array   $args
+ * @return string
+ */
+function fetch_time( array $args = [] ) {
+
+	$args = wp_parse_args( $args, [
+		'text'   => '%s',
+		'format' => '',
+		'class'  => 'comment__time',
+		'before' => '',
+		'after'  => ''
+	] );
+
+	$url = get_comment_link();
+
+	$html = sprintf(
+		'<time class="%s">%s</time>',
+		esc_attr( $args['class'] ),
+		sprintf( $args['text'], esc_html( get_comment_time( $args['format'] ) ) )
+	);
+
+	return apply_filters( 'hybrid/comment/time', $args['before'] . $html . $args['after'] );
+}
+
+/**
+ * Renders the comment edit link HTML.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  array   $args
+ * @return void
+ */
+function render_edit_link( array $args = [] ) {
+
+	echo fetch_edit_link( $args );
+}
+
+/**
+ * Returns the comment edit link HTML.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  array   $args
+ * @return string
+ */
+function fetch_edit_link( array $args = [] ) {
+
+	$args = wp_parse_args( $args, [
+		'text'   => __( 'Edit', 'hybrid-core' ),
+		'class'  => 'comment__edit',
+		'before' => '',
+		'after'  => ''
+	] );
+
+	$url = get_edit_comment_link();
+
+	if ( $url ) {
+
+		$html = sprintf(
+			'<a class="%s" href="%s">%s</a>',
+			esc_attr( $args['class'] ),
+			esc_url( $url ),
+			$args['text']
+		);
+
+		$html = $args['before'] . $html . $args['after'];
+	}
+
+	return apply_filters( 'hybrid/comment/edit_link', $html );
+}
+
+/**
  * Renders the comment reply link HTML.
  *
  * @since  5.0.0
@@ -61,11 +273,26 @@ function fetch_reply_link( array $args = [] ) {
 	}
 
 	$args = wp_parse_args( $args, [
+		'before'    => '',
+		'after'     => '',
 		'depth'     => intval( $GLOBALS['comment_depth'] ),
-		'max_depth' => get_option( 'thread_comments_depth' )
+		'max_depth' => get_option( 'thread_comments_depth' ),
+		'class'     => 'comment__reply'
 	] );
 
-	return get_comment_reply_link( $args );
+	$before = $args['before'];
+	$after  = $args['after'];
+
+	unset( $args['before'], $args['after'] );
+
+	$html = preg_replace(
+		"/class=(['\"]).+?(['\"])/i",
+		'class=$1' . esc_attr( $args['class'] ) . '$2',
+		get_comment_reply_link( $args ),
+		1
+	);
+
+	return apply_filters( 'hybrid/comment/reply_link', $before . $html . $after );
 }
 
 /**
@@ -124,4 +351,10 @@ function fetch_parent_link( $args = [] ) {
 	}
 
 	return apply_filters( 'hybrid/comment/parent_link', $html, $args );
+}
+
+function is_approved( $comment = null ) {
+	$comment = get_comment( $comment );
+
+	return 0 < absint( $comment->comment_approved );
 }
