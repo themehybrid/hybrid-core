@@ -2,8 +2,8 @@
 /**
  * Language class.
  *
- * This file holds the `Lang` class, which deals with loading theme textdomains
- * and locale-specific functions files.
+ * This file holds the `Lang` class, which deals with loading textdomains and
+ * locale-specific function files.
  *
  * @package   HybridCore
  * @author    Justin Tadlock <justintadlock@gmail.com>
@@ -76,8 +76,8 @@ class Language implements Bootable {
 		// Load the locale functions files.
 		add_action( 'after_setup_theme', [ $this, 'loadLocaleFunctions' ], ~PHP_INT_MAX );
 
-		// Load translations for theme, child theme, and framework.
-		add_action( 'after_setup_theme', [ $this, 'loadTextdomain' ], 5 );
+		// Load framework textdomain.
+		add_action( 'after_setup_theme', [ $this, 'loadTextdomain' ], 95 );
 
 		// Overrides the load textdomain function for the 'hybrid-core' domain.
 		add_filter( 'override_load_textdomain', [ $this, 'overrideLoadTextdomain' ], 5, 3 );
@@ -101,7 +101,8 @@ class Language implements Bootable {
 	public function loadLocaleFunctions() {
 
 		// Get the site's locale.
-		$locale = strtolower( str_replace( '_', '-', is_admin() ? get_user_locale() : get_locale() ) );
+		$locale = is_admin() ? get_user_locale() : get_locale();
+		$locale = strtolower( str_replace( '_', '-', $locale ) );
 
 		// Define locale functions files.
 		$child_func = $this->childPath(  "{$locale}.php" );
@@ -119,11 +120,9 @@ class Language implements Bootable {
 	}
 
 	/**
-	 * Loads the theme, child theme, and framework textdomains automatically.
-	 * No need for theme authors to do this. This also utilizes the `Domain
-	 * Path` header from `style.css`.  It defaults to the `languages` folder.
-	 * Theme authors should define this as `/lang`, `/languages` or some
-	 * other variation of their choosing.
+	 * Loads the framework textdomain. Note that we're just dropping in an
+	 * empty string for the MO file path. This gets overwritten by the
+	 * `overrideLoadTextdomain()` filter.
 	 *
 	 * @since  5.0.0
 	 * @access public
@@ -131,24 +130,14 @@ class Language implements Bootable {
 	 */
 	public function loadTextdomain() {
 
-		// Load theme textdomain.
-		load_theme_textdomain( $this->parentTextdomain(), $this->parentPath() );
-
-		// Load child theme textdomain.
-		if ( is_child_theme() ) {
-
-			load_child_theme_textdomain( $this->childTextdomain(), $this->childPath() );
-		}
-
-		// Load the framework textdomain.
 		load_textdomain( 'hybrid-core', '' );
 	}
 
 	/**
-	 * Overrides the load textdomain functionality when 'hybrid-core' is
-	 * the domain in use.  The purpose of this is to allow theme translations
+	 * Overrides the load textdomain functionality when `hybrid-core` is
+	 * the domain in use. The purpose of this is to allow theme translations
 	 * to handle the framework's strings.  What this function does is sets
-	 * the 'hybrid-core' domain's translations to the theme's.  That way,
+	 * the `hybrid-core` domain's translations to the theme's. That way,
 	 * we're not loading multiple of the same MO files.
 	 *
 	 * @since  5.0.0
@@ -182,11 +171,10 @@ class Language implements Bootable {
 	}
 
 	/**
-	 * Filters the 'load_textdomain_mofile' filter hook so that we can change
-	 * the directory and file name of the mofile for translations.  This
-	 * allows child themes to have a folder called /languages with translations
-	 * of their parent theme so that the translations aren't lost on a parent
-	 * theme upgrade.
+	 * Filters the `load_textdomain_mofile` filter hook so that we can
+	 * prepend the theme textdomain to the mofile filename. This also allows
+	 * child themes to house a copy of the parent theme translations so that
+	 * it doesn't get overwritten when a parent theme is updated.
 	 *
 	 * @since  5.0.0
 	 * @access public
@@ -196,7 +184,8 @@ class Language implements Bootable {
 	 */
 	 public function loadTextdomainMofile( $mofile, $domain ) {
 
-		// If the `$domain` is for the parent or child theme, search for a `$domain-$locale.mo` file.
+		// If the `$domain` is for the parent or child theme, search for
+		// a `$domain-$locale.mo` file.
 		if ( $domain == $this->parentTextdomain() || $domain == $this->childTextdomain() ) {
 
 			// Get the locale.
@@ -230,7 +219,7 @@ class Language implements Bootable {
 	 */
 	public function parentTextdomain() {
 
-		if ( is_null( $this->parent_textdomain ) ) {
+		if ( ! $this->parent_textdomain ) {
 
 			$this->parent_textdomain = wp_get_theme( \get_template() )->get( 'TextDomain' );
 		}
@@ -248,7 +237,7 @@ class Language implements Bootable {
 	 */
 	public function childTextdomain() {
 
-		if ( is_null( $this->child_textdomain ) ) {
+		if ( ! $this->child_textdomain ) {
 
 			$this->child_textdomain = wp_get_theme()->get( 'TextDomain' );
 		}
@@ -267,7 +256,7 @@ class Language implements Bootable {
 	 */
 	public function parentPath( $file = '' ) {
 
-		if ( is_null( $this->parent_path ) ) {
+		if ( ! $this->parent_path ) {
 
 			$path = trim( wp_get_theme( \get_template() )->get( 'DomainPath' ), '/' );
 
@@ -288,7 +277,7 @@ class Language implements Bootable {
 	 */
 	public function childPath( $file = '' ) {
 
-		if ( is_null( $this->child_path ) ) {
+		if ( ! $this->child_path ) {
 
 			$path = trim( wp_get_theme()->get( 'DomainPath' ), '/' );
 
