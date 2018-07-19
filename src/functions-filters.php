@@ -179,7 +179,7 @@ function excerpt_more( $text ) {
 	if ( 0 !== strpos( $text, '<a' ) ) {
 
 		$text = sprintf(
-			' <a href="%s" class="more-link">%s</a>',
+			' <a href="%s" class="entry__more-link">%s</a>',
 			esc_url( get_permalink() ),
 			trim( $text )
 		);
