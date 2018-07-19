@@ -217,7 +217,7 @@ function nav_menu_css_class( $classes, $item ) {
 
 	// Add a class if the menu item has children.
 	if ( in_array( 'menu-item-has-children', $classes ) ) {
-		$_classes[] = 'menu__item--has-children';
+		$_classes[] = 'has-children';
 	}
 
 	// Add custom user-added classes if we have any.

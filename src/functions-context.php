@@ -82,7 +82,7 @@ function body_class_filter( $classes, $class ) {
 
 		// Checks for custom template.
 		$template = str_replace(
-			[ "{$post_type}-template-", "{$post_type}-" ],
+			[ "{$post_type}-template-", "{$post_type}-", 'template-', 'tmpl-' ],
 			'',
 			basename( get_page_template_slug( $post_id ), '.php' )
 		);
@@ -256,6 +256,9 @@ function post_class_filter( $classes, $class, $post_id ) {
 	$classes[] = sprintf( 'entry--%s',      $post_id        );
 	$classes[] = sprintf( 'entry--type-%s', get_post_type() );
 
+	// Status class.
+	$classes[] = sprintf( 'entry--status-%s', get_post_status() );
+
 	// Author class.
 	$classes[] = sprintf(
 		'entry--author-%s',
@@ -275,7 +278,7 @@ function post_class_filter( $classes, $class, $post_id ) {
 
 	// Add taxonomy term classes.  By default, no taxonomies (except for
 	// post formats added above) are added.
-	$taxonomies = apply_filters( 'hybrid/post_class_taxonomy', [] );
+	$taxonomies = apply_filters( 'hybrid/attr/post/class/taxonomy', [] );
 
 	foreach ( (array) $taxonomies as $taxonomy ) {
 
@@ -356,7 +359,12 @@ function comment_class_filter( $classes, $class, $comment_id, $post_id ) {
 	$classes[] = sprintf( 'comment--type-%s', $comment->comment_type ?: 'comment' );
 
 	if ( in_array( $comment->comment_type, [ 'pingback', 'trackback'] ) ) {
-		$classes[] = 'comment--ping';
+		$classes[] = 'comment--type-ping';
+	}
+
+	// Status class. Note that status can be `null`.
+	if ( $status = wp_get_comment_status( $comment_id ) ) {
+		$classes[] = sprintf( 'comment--status-%s', $status );
 	}
 
 	// Depth class.
