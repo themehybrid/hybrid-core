@@ -388,7 +388,7 @@ function widget_class_filter( $params ) {
 
 		// Create BEM-style widget classes.
 		$_classes[] = 'widget';
-		$_classes[] = sprintf( 'widget--%s', str_replace( '_', '-', esc_attr( $context ) ) );
+		$_classes[] = sprintf( 'widget--%s', str_replace( '_', '-', $context ) );
 
 		// Build BEM-style classes from original classes.
 		foreach ( $classes as $class ) {
@@ -401,7 +401,10 @@ function widget_class_filter( $params ) {
 		}
 
 		// Merge original classes and make sure there are no duplicates.
-		$_classes = array_unique( array_merge( $_classes, $classes ) );
+		$_classes = array_map(
+			'sanitize_html_class',
+			array_unique( array_merge( $_classes, $classes ) )
+		);
 
 		// Replaces the exact class string we captured earlier with the
 		// new class string.
