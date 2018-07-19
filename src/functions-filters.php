@@ -94,7 +94,7 @@ function archive_title_filter( $title ) {
 		$title = archive_title();
 	}
 
-	return apply_filters( 'hybrid/achive_title', $title );
+	return apply_filters( 'hybrid/achive/title', $title );
 }
 
 /**
@@ -141,7 +141,7 @@ function archive_description_filter( $desc ) {
  */
 function archive_description_format( $desc ) {
 
-	return apply_filters( 'hybrid/archive_description', $desc );
+	return apply_filters( 'hybrid/archive/description', $desc );
 }
 
 /**
