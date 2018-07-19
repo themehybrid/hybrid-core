@@ -83,7 +83,7 @@ function fetch_title( array $args = [] ) {
 		'after'  => ''
 	] );
 
-	$text = sprintf( $args['text'], $is_single ? single_post_title() : the_title( '', '', false ) );
+	$text = sprintf( $args['text'], $is_single ? single_post_title( '', false ) : the_title( '', '', false ) );
 
 	if ( $args['link'] ) {
 		$text = fetch_permalink( [ 'text' => $text ] );
