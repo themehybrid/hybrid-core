@@ -14,20 +14,6 @@
 namespace Hybrid;
 
 /**
- * Loads the `comment-reply` script when it's needed.
- *
- * @since  5.0.0
- * @access public
- * @return void
- */
-function enqueue_scripts() {
-
-	if ( is_singular() && get_option( 'thread_comments' ) && comments_open() ) {
-		wp_enqueue_script( 'comment-reply' );
-	}
-}
-
-/**
  * Searches for a locale stylesheet.
  *
  * @since  5.0.0

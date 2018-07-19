@@ -80,9 +80,6 @@ add_action( 'wp_head', __NAMESPACE__ . '\link_pingback',  3 );
 # Filter the WordPress title.
 add_filter( 'document_title_parts', __NAMESPACE__ . '\document_title_parts', 5 );
 
-# Enqueue scripts.
-add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\enqueue_scripts', 5 );
-
 # Remove the default emoji styles. We'll handle this in the stylesheet.
 remove_action( 'wp_print_styles', 'print_emoji_styles' );
 
