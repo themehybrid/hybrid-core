@@ -49,6 +49,99 @@ function hierarchy() {
 }
 
 /**
+ * Renders the post title HTML.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  array  $args
+ * @return void
+ */
+function render_title( array $args = [] ) {
+
+	echo fetch_title( $args );
+}
+
+/**
+ * Returns the post title HTML.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  array  $args
+ * @return string
+ */
+function fetch_title( array $args = [] ) {
+
+	$post_id   = get_the_ID();
+	$is_single = is_single( $post_id ) || is_page( $post_id ) || is_attachment( $post_id );
+
+	$args = wp_parse_args( $args, [
+		'text'   => '%s',
+		'tag'    => $is_single ? 'h1' : 'h2',
+		'link'   => ! $is_single,
+		'class'  => 'entry__title',
+		'before' => '',
+		'after'  => ''
+	] );
+
+	$text = sprintf( $args['text'], $is_single ? single_post_title() : the_title( '', '', false ) );
+
+	if ( $args['link'] ) {
+		$text = fetch_permalink( [ 'text' => $text ] );
+	}
+
+	$html = sprintf(
+		'<%1$s class="%2$s">%3$s</%1$s>',
+		tag_escape( $args['tag'] ),
+		esc_attr( $args['class'] ),
+		$text
+	);
+
+	return apply_filters( 'hybrid/post/title', $args['before'] . $html . $args['after'] );
+}
+
+/**
+ * Renders the post permalink HTML.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  array  $args
+ * @return void
+ */
+function render_permalink( array $args = [] ) {
+
+	echo fetch_permalink( $args );
+}
+
+/**
+ * Returns the post permalink HTML.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  array  $args
+ * @return string
+ */
+function fetch_permalink( array $args = [] ) {
+
+	$args = wp_parse_args( $args, [
+		'text'   => '%s',
+		'class'  => 'entry__permalink',
+		'before' => '',
+		'after'  => ''
+	] );
+
+	$url = get_permalink();
+
+	$html = sprintf(
+		'<a class="%s" href="%s">%s</a>',
+		esc_attr( $args['class'] ),
+		esc_url( $url ),
+		sprintf( $args['text'], esc_url( $url ) )
+	);
+
+	return apply_filters( 'hybrid/post/permalink', $args['before'] . $html . $args['after'] );
+}
+
+/**
  * Renders the post author HTML.
  *
  * @since  5.0.0
