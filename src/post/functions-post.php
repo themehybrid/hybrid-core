@@ -3,7 +3,7 @@
 namespace Hybrid\Post;
 
 /**
- * Creates a hierarchy based on the current post. It's primary purpose is for
+ * Creates a hierarchy based on the current post. Its primary purpose is for
  * use with post views/templates.
  *
  * @since  5.0.0
