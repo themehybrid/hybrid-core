@@ -353,8 +353,16 @@ function fetch_parent_link( $args = [] ) {
 	return apply_filters( 'hybrid/comment/parent_link', $html, $args );
 }
 
+/**
+ * Conditional function to check if a comment is approved.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  \WP_Comment|int  Comment object or ID.
+ * @return bool
+ */
 function is_approved( $comment = null ) {
 	$comment = get_comment( $comment );
 
-	return 0 < absint( $comment->comment_approved );
+	return 'approved' === wp_get_comment_status( $comment->ID );
 }
