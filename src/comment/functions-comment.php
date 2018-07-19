@@ -287,7 +287,7 @@ function fetch_reply_link( array $args = [] ) {
 
 	$html = preg_replace(
 		"/class=(['\"]).+?(['\"])/i",
-		'class=$1' . esc_attr( $args['class'] ) . '$2',
+		'class=$1' . esc_attr( $args['class'] ) . ' comment-reply-link$2',
 		get_comment_reply_link( $args ),
 		1
 	);
