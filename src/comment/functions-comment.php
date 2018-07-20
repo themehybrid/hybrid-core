@@ -219,7 +219,8 @@ function fetch_edit_link( array $args = [] ) {
 		'after'  => ''
 	] );
 
-	$url = get_edit_comment_link();
+	$html = '';
+	$url  = get_edit_comment_link();
 
 	if ( $url ) {
 
