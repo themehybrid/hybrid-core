@@ -57,6 +57,7 @@ add_filter( 'excerpt_more', __NAMESPACE__ . '\excerpt_more', 5 );
 add_filter( 'nav_menu_css_class',         __NAMESPACE__ . '\nav_menu_css_class',         5, 2 );
 add_filter( 'nav_menu_submenu_css_class', __NAMESPACE__ . '\nav_menu_submenu_css_class', 5    );
 add_filter( 'nav_menu_link_attributes',   __NAMESPACE__ . '\nav_menu_link_attributes',   5    );
+add_filter( 'widget_nav_menu_args',       __NAMESPACE__ . '\widget_nav_menu_args',       5, 2 );
 
 # Adds custom CSS classes to the comment form fields.
 add_filter( 'comment_form_default_fields', __NAMESPACE__ . '\comment_form_default_fields', ~PHP_INT_MAX );

@@ -261,6 +261,29 @@ function nav_menu_submenu_css_class( $classes ) {
 }
 
 /**
+ * Filters the nav menu args when used for a widget.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  array    $args
+ * @param  \WP_Term $menu
+ * @return array
+ */
+function widget_nav_menu_args( $args, $menu ) {
+
+	$args['container_class'] = sprintf(
+		'menu menu--widget menu--%s',
+		sanitize_html_class( $menu->slug )
+	);
+
+	$args['container_id'] = '';
+	$args['menu_id']      = '';
+	$args['menu_class']   = 'menu__items';
+
+	return $args;
+}
+
+/**
  * Overwrites the HTML classes for the comment form default fields.
  *
  * @since  5.0.0
