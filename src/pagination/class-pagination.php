@@ -111,7 +111,7 @@ class Pagination implements PaginationContract{
 	 */
 	public function __construct( $context = 'posts', $args = [] ) {
 
-		$this->context = $context;
+		$this->context = 'singular' === $context ? 'post' : $context;
 
 		$defaults = [
 			// Base arguments imported from `paginate_links()`. It's
@@ -262,7 +262,7 @@ class Pagination implements PaginationContract{
 	 * @global object  $wp_rewrite
 	 * @return array
 	 */
-	protected function singularArgs() {
+	protected function postArgs() {
 		global $page, $numpages, $more, $wp_rewrite;
 
 		// Split the current URL between the base and query string.
