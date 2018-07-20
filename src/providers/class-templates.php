@@ -14,7 +14,8 @@
 
 namespace Hybrid\Providers;
 
-use Hybrid\Template\Templates as Manager;
+use Hybrid\Template\Manager;
+use Hybrid\Template\Templates as TemplateCollection;
 
 /**
  * Object templates provider class.
@@ -25,8 +26,7 @@ use Hybrid\Template\Templates as Manager;
 class Templates extends ServiceProvider {
 
 	/**
-	 * Registration callback that adds a single instance of the object
-	 * templates collection to the container.
+	 * Registers the templates collection and manager.
 	 *
 	 * @since  5.0.0
 	 * @access public
@@ -34,9 +34,26 @@ class Templates extends ServiceProvider {
 	 */
 	public function register() {
 
-		$this->app->singleton( 'template/templates', function( $container ) {
+		$this->app->singleton( 'template/templates', function() {
 
-			return new Manager();
+			return new TemplateCollection();
 		} );
+
+		$this->app->singleton( 'template/manager', function( $container ) {
+
+			return new Manager( $container['template/templates'] );
+		} );
+	}
+
+	/**
+	 * Boots the manager by firing its hooks in the `boot()` method.
+	 *
+	 * @since  5.0.0
+	 * @access public
+	 * @return void
+	 */
+	public function boot() {
+
+		$this->app->resolve( 'template/manager' )->boot();
 	}
 }
