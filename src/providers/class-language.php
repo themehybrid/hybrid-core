@@ -14,6 +14,7 @@
 
 namespace Hybrid\Providers;
 
+use Hybrid\Contracts\Language as LanguageContract;
 use Hybrid\Lang\Language as LanguageComponent;
 
 /**
@@ -34,9 +35,9 @@ class Language extends ServiceProvider {
 	 */
 	public function register() {
 
-		$this->app->singleton( LanguageComponent::class );
+		$this->app->singleton( LanguageContract::class, LanguageComponent::class );
 
-		$this->app->alias( LanguageComponent::class, 'language' );
+		$this->app->alias( LanguageContract::class, 'language' );
 	}
 
 	/**

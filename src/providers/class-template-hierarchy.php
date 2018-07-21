@@ -14,7 +14,8 @@
 
 namespace Hybrid\Providers;
 
-use Hybrid\Template\Hierarchy;
+use Hybrid\Contracts\TemplateHierarchy as HierarchyContract;
+use Hybrid\Template\Hierarchy as HierarchyComponent;
 
 /**
  * Template hierarchy provider class.
@@ -34,9 +35,9 @@ class TemplateHierarchy extends ServiceProvider {
 	 */
 	public function register() {
 
-		$this->app->singleton( Hierarchy::class );
+		$this->app->singleton( HierarchyContract::class, HierarchyComponent::class );
 
-		$this->app->alias( Hierarchy::class, 'template/hierarchy' );
+		$this->app->alias( HierarchyContract::class, 'template/hierarchy' );
 	}
 
 	/**
