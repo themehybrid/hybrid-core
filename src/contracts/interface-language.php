@@ -19,7 +19,7 @@ namespace Hybrid\Contracts;
  * @since  5.0.0
  * @access public
  */
-interface Language {
+interface Language extends Bootable {
 
 	/**
 	 * Returns the parent theme textdomain.

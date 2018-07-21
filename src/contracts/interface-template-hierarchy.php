@@ -19,7 +19,7 @@ namespace Hybrid\Contracts;
  * @since  5.0.0
  * @access public
  */
-interface TemplateHierarchy {
+interface TemplateHierarchy extends Bootable {
 
 	/**
 	 * Should return an array of template file names without the file

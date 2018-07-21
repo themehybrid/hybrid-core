@@ -14,7 +14,6 @@
 
 namespace Hybrid\Lang;
 
-use Hybrid\Contracts\Bootable;
 use Hybrid\Contracts\Language as LanguageContract;
 
 /**
@@ -23,7 +22,7 @@ use Hybrid\Contracts\Language as LanguageContract;
  * @since  5.0.0
  * @access public
  */
-class Language implements LanguageContract, Bootable {
+class Language implements LanguageContract {
 
 	/**
 	 * The parent theme's textdomain. Gets set to the value of the `Text

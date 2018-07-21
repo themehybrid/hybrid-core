@@ -18,7 +18,6 @@
 namespace Hybrid\Template;
 
 use WP_User;
-use Hybrid\Contracts\Bootable;
 use Hybrid\Contracts\TemplateHierarchy;
 
 /**
@@ -27,7 +26,7 @@ use Hybrid\Contracts\TemplateHierarchy;
  * @since  5.0.0
  * @access public
  */
-class Hierarchy implements TemplateHierarchy, Bootable {
+class Hierarchy implements TemplateHierarchy {
 
 	/**
 	 * Array of template types in core WP.
