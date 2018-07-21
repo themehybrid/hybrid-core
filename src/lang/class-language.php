@@ -15,6 +15,7 @@
 namespace Hybrid\Lang;
 
 use Hybrid\Contracts\Bootable;
+use Hybrid\Contracts\Language as LanguageContract;
 
 /**
  * Language class.
@@ -22,7 +23,7 @@ use Hybrid\Contracts\Bootable;
  * @since  5.0.0
  * @access public
  */
-class Language implements Bootable {
+class Language implements LanguageContract, Bootable {
 
 	/**
 	 * The parent theme's textdomain. Gets set to the value of the `Text
@@ -30,9 +31,9 @@ class Language implements Bootable {
 	 *
 	 * @since  5.0.0
 	 * @access protected
-	 * @var    string|null
+	 * @var    string
 	 */
-	protected $parent_textdomain = null;
+	protected $parent_textdomain = '';
 
 	/**
 	 * The child theme's textdomain. Gets set to the value of the `Text
@@ -40,9 +41,9 @@ class Language implements Bootable {
 	 *
 	 * @since  5.0.0
 	 * @access protected
-	 * @var    string|null
+	 * @var    string
 	 */
-	protected $child_textdomain = null;
+	protected $child_textdomain = '';
 
 	/**
 	 * Absolute path to the parent theme's language folder. Theme authors
@@ -50,9 +51,9 @@ class Language implements Bootable {
 	 *
 	 * @since  5.0.0
 	 * @access protected
-	 * @var    string|null
+	 * @var    string
 	 */
-	protected $parent_path = null;
+	protected $parent_path = '';
 
 	/**
 	 * Absolute path to the child theme's language folder. Theme authors
@@ -62,7 +63,29 @@ class Language implements Bootable {
 	 * @access protected
 	 * @var    string|null
 	 */
-	protected $child_path = null;
+	protected $child_path = '';
+
+	/**
+	 * Stores the language-related theme info into class properties.
+	 *
+	 * @since  5.0.0
+	 * @access public
+	 * @return void
+	 */
+	public function __construct() {
+
+		$theme = wp_get_theme( get_template() );
+
+		$this->parent_textdomain = $theme->get( 'TextDomain' );
+		$this->parent_path       = trim( $theme->get( 'DomainPath' ), '/' );
+
+		if ( is_child_theme() ) {
+			$child = wp_get_theme();
+
+			$this->child_textdomain = $child->get( 'TextDomain' );
+			$this->child_path       = trim( $child->get( 'DomainPath' ), '/' );
+		}
+	}
 
 	/**
 	 * Adds the class' actions and filters.
@@ -84,6 +107,64 @@ class Language implements Bootable {
 
 		// Filter the textdomain mofile to allow child themes to load the parent theme translation.
 		add_filter( 'load_textdomain_mofile', [ $this, 'loadTextdomainMofile' ], 10, 2 );
+	}
+
+	/**
+	 * Gets the parent theme textdomain. This allows the framework to
+	 * recognize the proper textdomain of the parent theme.
+	 *
+	 * @since  5.0.0
+	 * @access public
+	 * @return string
+	 */
+	public function parentTextdomain() {
+
+		return $this->parent_textdomain;
+	}
+
+	/**
+	 * Gets the child theme textdomain. This allows the framework to
+	 * recognize the proper textdomain of the child theme.
+	 *
+	 * @since  5.0.0
+	 * @access public
+	 * @return string
+	 */
+	public function childTextdomain() {
+
+		return $this->child_textdomain;
+	}
+
+	/**
+	 * Returns the full directory path for the parent theme's domain path set
+	 * in `style.css`. No trailing slash.
+	 *
+	 * @since  5.0.0
+	 * @access public
+	 * @param  string  $file
+	 * @return string
+	 */
+	public function parentPath( $file = '' ) {
+
+		$file = ltrim( $file, '/' );
+
+		return $file ? "{$this->parent_path}/{$file}" : $this->parent_path;
+	}
+
+	/**
+	 * Returns the full directory path for the child theme's domain path set
+	 * in `style.css`. No trailing slash.
+	 *
+	 * @since  5.0.0
+	 * @access public
+	 * @param  string  $file
+	 * @return string
+	 */
+	public function childPath( $file = '' ) {
+
+		$file = ltrim( $file, '/' );
+
+		return $file ? "{$this->child_path}/{$file}" : $this->child_path;
 	}
 
 	/**
@@ -207,83 +288,5 @@ class Language implements Bootable {
 		}
 
 		return $mofile;
-	}
-
-	/**
-	 * Gets the parent theme textdomain. This allows the framework to
-	 * recognize the proper textdomain of the parent theme.
-	 *
-	 * @since  5.0.0
-	 * @access public
-	 * @return string
-	 */
-	public function parentTextdomain() {
-
-		if ( ! $this->parent_textdomain ) {
-
-			$this->parent_textdomain = wp_get_theme( \get_template() )->get( 'TextDomain' );
-		}
-
-		return $this->parent_textdomain;
-	}
-
-	/**
-	 * Gets the child theme textdomain. This allows the framework to
-	 * recognize the proper textdomain of the child theme.
-	 *
-	 * @since  5.0.0
-	 * @access public
-	 * @return string
-	 */
-	public function childTextdomain() {
-
-		if ( ! $this->child_textdomain ) {
-
-			$this->child_textdomain = wp_get_theme()->get( 'TextDomain' );
-		}
-
-		return $this->child_textdomain;
-	}
-
-	/**
-	 * Returns the full directory path for the parent theme's domain path set
-	 * in `style.css`. No trailing slash.
-	 *
-	 * @since  5.0.0
-	 * @access public
-	 * @param  string  $file
-	 * @return string
-	 */
-	public function parentPath( $file = '' ) {
-
-		if ( ! $this->parent_path ) {
-
-			$path = trim( wp_get_theme( \get_template() )->get( 'DomainPath' ), '/' );
-
-			$this->parent_path = get_template_directory() . "/{$path}";
-		}
-
-		return $file ? "{$this->parent_path}/{$file}" : $this->parent_path;
-	}
-
-	/**
-	 * Returns the full directory path for the child theme's domain path set
-	 * in `style.css`. No trailing slash.
-	 *
-	 * @since  5.0.0
-	 * @access public
-	 * @param  string  $file
-	 * @return string
-	 */
-	public function childPath( $file = '' ) {
-
-		if ( ! $this->child_path ) {
-
-			$path = trim( wp_get_theme()->get( 'DomainPath' ), '/' );
-
-			$this->child_path = get_stylesheet_directory() . "/{$path}";
-		}
-
-		return $file ? "{$this->child_path}/{$file}" : $this->child_path;
 	}
 }
