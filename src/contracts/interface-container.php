@@ -115,4 +115,15 @@ interface Container {
 	  * @return void
 	  */
 	 public function extend( $abstract, Closure $closure );
+
+	 /**
+	  * Create an alias for an abstract type.
+	  *
+	  * @since  5.0.0
+	  * @access public
+	  * @param  string  $abstract
+	  * @param  string  $alias
+	  * @return void
+	  */
+	 public function alias( $abstract, $alias );
 }

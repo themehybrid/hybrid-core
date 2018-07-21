@@ -335,12 +335,12 @@ class Container implements ContainerContract, ArrayAccess {
 	 * the dependencies for the class and return a new object.
 	 *
 	 * @since  5.0.0
-	 * @access public
+	 * @access protected
 	 * @param  mixed  $concrete
 	 * @param  array  $parameters
 	 * @return object
 	 */
-	public function build( $concrete, array $parameters = [] ) {
+	protected function build( $concrete, array $parameters = [] ) {
 
 		if ( $concrete instanceof Closure ) {
 			return $concrete( $this, $parameters );
