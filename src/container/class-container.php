@@ -94,9 +94,7 @@ class Container implements ContainerContract, ArrayAccess {
 	*/
 	public function bind( $abstract, $concrete = null, $shared = false ) {
 
-		if ( isset( $this->bindings[ $abstract ] ) ) {
-			return;
-		}
+		unset( $this->instances[ $abstract ] );
 
 		if ( is_null( $concrete ) ) {
 			$concrete = $abstract;
