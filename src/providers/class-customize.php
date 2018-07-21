@@ -34,7 +34,9 @@ class Customize extends ServiceProvider {
 	 */
 	public function register() {
 
-		$this->app->instance( 'customize', new CustomizeComponent() );
+		$this->app->singleton( CustomizeComponent::class );
+
+		$this->app->alias( CustomizeComponent::class, 'customize' );
 	}
 
 	/**

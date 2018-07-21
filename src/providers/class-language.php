@@ -34,7 +34,9 @@ class Language extends ServiceProvider {
 	 */
 	public function register() {
 
-		$this->app->instance( 'language', new LanguageComponent() );
+		$this->app->singleton( LanguageComponent::class );
+
+		$this->app->alias( LanguageComponent::class, 'language' );
 	}
 
 	/**

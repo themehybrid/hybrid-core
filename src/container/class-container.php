@@ -40,6 +40,15 @@ class Container implements ContainerContract, ArrayAccess {
 	protected $bindings = [];
 
 	/**
+	 * Array of aliases for bindings.
+	 *
+	 * @since  5.0.0
+	 * @access protected
+	 * @var    array
+	 */
+	protected $aliases = [];
+
+	/**
 	* Array of single instance objects.
 	*
 	* @since  5.0.0
@@ -93,8 +102,7 @@ class Container implements ContainerContract, ArrayAccess {
 			$concrete = $abstract;
 		}
 
-		$this->bindings[ $abstract ] = compact( 'concrete', 'shared' );
-
+		$this->bindings[ $abstract ]   = compact( 'concrete', 'shared' );
 		$this->extensions[ $abstract ] = [];
 	}
 
@@ -140,6 +148,9 @@ class Container implements ContainerContract, ArrayAccess {
 	*/
 	public function resolve( $abstract, $parameters = [] ) {
 
+		// Get the true abstract name.
+		$abstract = $this->getAbstract( $abstract );
+
 		// If this is being managed as an instance and we already have
 		// the instance, return it now.
 		if ( isset( $this->instances[ $abstract ] ) ) {
@@ -147,7 +158,7 @@ class Container implements ContainerContract, ArrayAccess {
 			return $this->instances[ $abstract ];
 		}
 
-		// Get the definition.
+		// Get the concrete implementation.
 		$concrete = $this->getConcrete( $abstract );
 
 		// If we can't build an object, assume we should return the value.
@@ -177,6 +188,21 @@ class Container implements ContainerContract, ArrayAccess {
 
 		// Return the object.
 		return $object;
+	}
+
+	/**
+	 * Creates an alias for an abstract. This allows you to add names that
+	 * are easy to access without remembering more complex class names.
+	 *
+	 * @since  5.0.0
+	 * @access public
+	 * @param  string  $abstract
+	 * @param  string  $alias
+	 * @return void
+	 */
+	public function alias( $abstract, $alias ) {
+
+		$this->aliases[ $alias ] = $abstract;
 	}
 
 	/**
@@ -247,7 +273,27 @@ class Container implements ContainerContract, ArrayAccess {
 	 */
 	public function extend( $abstract, Closure $closure ) {
 
+		$abstract = $this->getAbstract( $abstract );
+
 		$this->extensions[ $abstract ][] = $closure;
+	}
+
+	/**
+	 * Checks if we're dealing with an alias and returns the abstract. If
+	 * not an alias, return the abstract passed in.
+	 *
+	 * @since  5.0.0
+	 * @access protected
+	 * @param  string    $abstract
+	 * @return string
+	 */
+	protected function getAbstract( $abstract ) {
+
+		if ( isset( $this->aliases[ $abstract ] ) ) {
+			return $this->aliases[ $abstract ];
+		}
+
+		return $abstract;
 	}
 
 	/**
@@ -260,13 +306,14 @@ class Container implements ContainerContract, ArrayAccess {
 	 */
 	protected function getConcrete( $abstract ) {
 
-		$concrete = $abstract;
+		$concrete = false;
+		$abstract = $this->getAbstract( $abstract );
 
 		if ( $this->has( $abstract ) ) {
 			$concrete = $this->bindings[ $abstract ]['concrete'];
 		}
 
-		return $concrete;
+		return $concrete ?: $abstract;
 	}
 
 	/**
@@ -289,7 +336,7 @@ class Container implements ContainerContract, ArrayAccess {
 	 * the closure and pass the included parameters. Otherwise, we'll resolve
 	 * the dependencies for the class and return a new object.
 	 *
-	 * @since  @5.0.0
+	 * @since  5.0.0
 	 * @access public
 	 * @param  mixed  $concrete
 	 * @param  array  $parameters
@@ -301,15 +348,15 @@ class Container implements ContainerContract, ArrayAccess {
 			return $concrete( $this, $parameters );
 		}
 
-		$reflectionClass = new ReflectionClass( $concrete );
+		$reflect = new ReflectionClass( $concrete );
 
-		$constructor = $reflectionClass->getConstructor();
+		$constructor = $reflect->getConstructor();
 
 		if ( ! $constructor ) {
 			return new $concrete();
 		}
 
-		return $reflectionClass->newInstanceArgs(
+		return $reflect->newInstanceArgs(
 			$this->resolveDependencies( $constructor->getParameters() )
 		);
 	}

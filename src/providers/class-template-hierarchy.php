@@ -34,7 +34,9 @@ class TemplateHierarchy extends ServiceProvider {
 	 */
 	public function register() {
 
-		$this->app->instance( 'template/hierarchy', new Hierarchy() );
+		$this->app->singleton( Hierarchy::class );
+
+		$this->app->alias( Hierarchy::class, 'template/hierarchy' );
 	}
 
 	/**

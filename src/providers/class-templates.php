@@ -34,6 +34,8 @@ class Templates extends ServiceProvider {
 	public function register() {
 
 		$this->app->singleton( Manager::class );
+
+		$this->app->alias( Manager::class, 'template/manager' );
 	}
 
 	/**
@@ -45,6 +47,6 @@ class Templates extends ServiceProvider {
 	 */
 	public function boot() {
 
-		$this->app->resolve( Manager::class )->boot();
+		$this->app->resolve( 'template/manager' )->boot();
 	}
 }
