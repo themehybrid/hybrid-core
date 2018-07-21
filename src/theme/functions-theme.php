@@ -3,6 +3,26 @@
 namespace Hybrid\Theme;
 
 /**
+ * This is a wrapper function for core WP's `get_theme_mod()` function.  Core
+ * doesn't provide a filter hook for the default value (useful for child themes).
+ * The purpose of this function is to provide that additional filter hook.  To
+ * filter the final theme mod, use the core `theme_mod_{$name}` filter hook.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  string  $name
+ * @param  mixed   $default
+ * @return mixed
+ */
+function mod( $name, $default = false ) {
+
+	return get_theme_mod(
+		$name,
+		apply_filters( "hybrid/theme/mod/{$name}/default", $default )
+	);
+}
+
+/**
  * Renders the [parent] theme link HTML.
  *
  * @since  5.0.0
