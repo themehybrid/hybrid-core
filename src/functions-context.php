@@ -126,7 +126,7 @@ function body_class_filter( $classes, $class ) {
 			$term_id  = get_queried_object_id();
 			$taxonomy = $term->taxonomy;
 
-			$slug = 'post_format' === $taxonomy ? clean_post_format_slug( $term->slug ) : $term->slug;
+			$slug = 'post_format' === $taxonomy ? str_replace( 'post-format-', '', $term->slug ) : $term->slug;
 
 			$classes[] = 'taxonomy';
 			$classes[] = "taxonomy-{$taxonomy}";

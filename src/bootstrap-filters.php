@@ -69,9 +69,6 @@ add_action( 'edit_form_after_title', __NAMESPACE__ . '\enable_posts_page_editor'
 # Filters widget classes.
 add_filter( 'dynamic_sidebar_params', __NAMESPACE__ . '\widget_class_filter', ~PHP_INT_MAX );
 
-# Add support for structured post formats.
-add_action( 'wp_loaded', __NAMESPACE__ . '\structured_post_formats', 0 );
-
 # Adds common theme items to <head>.
 add_action( 'wp_head', __NAMESPACE__ . '\meta_charset',   0 );
 add_action( 'wp_head', __NAMESPACE__ . '\meta_viewport',  1 );

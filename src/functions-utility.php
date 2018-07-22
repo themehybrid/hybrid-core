@@ -84,93 +84,29 @@ function autoload( $class, $args = [] ) {
 }
 
 /**
- * Function for setting the content width of a theme.  This does not check if a
- * content width has been set; it simply overwrites whatever the content width is.
+ * Replaces `%1$s` and `%2$s` with the template and stylesheet directory paths.
  *
  * @since  5.0.0
  * @access public
- * @param  int    $width
- * @return void
- */
-function set_content_width( $width = '' ) {
-
-	$GLOBALS['content_width'] = absint( $width );
-}
-
-/**
- * Function for getting the theme's content width.
- *
- * @since  5.0.0
- * @access public
- * @return int
- */
-function get_content_width() {
-
-	return absint( $GLOBALS['content_width'] );
-}
-
-/**
- * Loops through an array of file names within both the child and parent theme
- * directories.  Once a file is found, the full path to the file is returned.
- *
- * @since  5.0.0
- * @access public
- * @param  array|string  $file_names
+ * @param  string  $value
  * @return string
  */
-function locate_file_path( $file_names ) {
-	$located = '';
+function sprintf_theme_dir( $value ) {
 
-	// Loops through each of the given file names.
-	foreach ( (array) $file_names as $file ) {
-
-		// If the file exists in the stylesheet (child theme) directory.
-		if ( is_child_theme() && file_exists( get_child_file_path( $file ) ) ) {
-
-			$located = get_child_file_path( $file );
-			break;
-
-		// If the file exists in the template (parent theme) directory.
-		} elseif ( file_exists( get_parent_file_path( $file ) ) ) {
-
-			$located = get_parent_file_path( $file );
-			break;
-		}
-	}
-
-	return $located;
+	return sprintf( $value, get_template_directory(), get_stylesheet_directory() );
 }
 
 /**
- * Loops through an array of file names within both the child and parent theme
- * directories.  Once a file is found, the URI to the file is returned.
+ * Replaces `%1$s` and `%2$s` with the template and stylesheet directory URIs.
  *
  * @since  5.0.0
  * @access public
- * @param  array|string  $file_names
+ * @param  string  $value
  * @return string
  */
-function locate_file_uri( $file_names ) {
-	$located = '';
+function sprintf_theme_uri( $value ) {
 
-	// Loops through each of the given file names.
-	foreach ( (array) $file_names as $file ) {
-
-		// If the file exists in the child theme directory.
-		if ( is_child_theme() && file_exists( get_child_file_path( $file ) ) ) {
-
-			$located = get_child_file_uri( $file );
-			break;
-
-		// If the file exists in the parent theme directory.
-		} elseif ( file_exists( get_parent_file_path( $file ) ) ) {
-
-			$located = get_parent_file_uri( $file );
-			break;
-		}
-	}
-
-	return $located;
+	return sprintf( $value, get_template_directory_uri(), get_stylesheet_directory_uri() );
 }
 
 /**
@@ -201,18 +137,6 @@ function hex_to_rgb( $hex ) {
 }
 
 /**
- * Helper function for getting the script/style `.min` suffix for minified files.
- *
- * @since  5.0.0
- * @access public
- * @return string
- */
-function get_min_suffix() {
-
-	return is_script_debug() ? '' : '.min';
-}
-
-/**
  * Conditional check to determine if we are in script debug mode.  This is
  * generally used to decide whether to load development versions of scripts/styles.
  *
@@ -222,54 +146,7 @@ function get_min_suffix() {
  */
 function is_script_debug() {
 
-	return apply_filters(
-		'hybrid/is_script_debug',
-		defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG
-	);
-}
-
-/**
- * Replaces `%1$s` and `%2$s` with the template and stylesheet directory paths.
- *
- * @since  5.0.0
- * @access public
- * @param  string  $value
- * @return string
- */
-function sprintf_theme_dir( $value ) {
-
-	return sprintf( $value, get_template_directory(), get_stylesheet_directory() );
-}
-
-/**
- * Replaces `%1$s` and `%2$s` with the template and stylesheet directory URIs.
- *
- * @since  5.0.0
- * @access public
- * @param  string  $value
- * @return string
- */
-function sprintf_theme_uri( $value ) {
-
-	return sprintf( $value, get_template_directory_uri(), get_stylesheet_directory_uri() );
-}
-
-/**
- * Utility function for including a file if a theme feature is supported and the
- * file exists. Note that the core WP `require_if_theme_supports()` function
- * doesn't check if the file exists before loading.
- *
- * @since  5.0.0
- * @access public
- * @param  string  $feature
- * @param  string  $file
- * @return void
- */
-function require_if_theme_supports( $feature, $file ) {
-
-	if ( current_theme_supports( $feature ) && file_exists( $file ) ) {
-		require_once( $file );
-	}
+	return defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG;
 }
 
 /**
@@ -290,102 +167,6 @@ function replace_html_class( $class, $html ) {
 		$html,
 		1
 	);
-}
-
-/**
- * Returns the directory path of the parent theme. If a file is passed in, it'll
- * be appended to the end of the path.
- *
- * @since  5.0.0
- * @access public
- * @param  string  $file
- * @return string
- */
-function get_parent_file_path( $file = '' ) {
-
-	return \get_parent_theme_file_path( $file );
-}
-
-/**
- * Returns the directory path of the child theme. If a file is passed in, it'll
- * be appended to the end of the path.
- *
- * @since  5.0.0
- * @access public
- * @param  string  $file
- * @return string
- */
-function get_child_file_path( $file = '' ) {
-
-	$file = ltrim( $file, '/' );
-
-	return $file
-	       ? trailingslashit( get_stylesheet_directory() ) . $file
-	       : get_stylesheet_directory();
-}
-
-/**
- * Returns the directory URI of the parent theme. If a file is passed in, it'll
- * be appended to the end of the URI.
- *
- * @since  5.0.0
- * @access public
- * @param  string  $file
- * @return string
- */
-function get_parent_file_uri( $file = '' ) {
-
-	return \get_parent_theme_file_uri( $file );
-}
-
-/**
- * Returns the directory URI of the child theme. If a file is passed in, it'll
- * be appended to the end of the URI.
- *
- * @since  5.0.0
- * @access public
- * @param  string  $file
- * @return string
- */
-function get_child_file_uri( $file = '' ) {
-
-	$file = ltrim( $file, '/' );
-
-	return $file
-	       ? trailingslashit( get_stylesheet_directory_uri() ) . $file
-	       : get_stylesheet_directory_uri();
-}
-
-/**
- * Wrapper function for `wp_verify_nonce()` with a posted value.
- *
- * @since  5.0.0
- * @access public
- * @param  string  $action
- * @param  string  $arg
- * @return bool
- */
-function verify_nonce_post( $action = '', $arg = '_wpnonce' ) {
-
-	return isset( $_POST[ $arg ] )
-	       ? wp_verify_nonce( sanitize_key( $_POST[ $arg ] ), $action )
-	       : false;
-}
-
-/**
- * Wrapper function for `wp_verify_nonce()` with a request value.
- *
- * @since  5.0.0
- * @access public
- * @param  string  $action
- * @param  string  $arg
- * @return bool
- */
-function verify_nonce_request( $action = '', $arg = '_wpnonce' ) {
-
-	return isset( $_REQUEST[ $arg ] )
-	       ? wp_verify_nonce( sanitize_key( $_REQUEST[ $arg ] ), $action )
-	       : false;
 }
 
 /**
@@ -412,7 +193,7 @@ function widget_exists( $widget ) {
  * @access public
  * @return string
  */
-function get_blog_url() {
+function blog_url() {
 
 	$blog_url = '';
 
@@ -423,20 +204,7 @@ function get_blog_url() {
 		$blog_url = get_permalink( $page_for_posts );
 	}
 
-	return $blog_url ? esc_url( $blog_url ) : '';
-}
-
-/**
- * Strips the `post-format-` prefix from a post format (term) slug.
- *
- * @since  5.0.0
- * @access public
- * @param  string  $slug
- * @return string
- */
-function clean_post_format_slug( $slug ) {
-
-	return str_replace( 'post-format-', '', $slug );
+	return $blog_url ?: '';
 }
 
 /**

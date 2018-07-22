@@ -17,7 +17,6 @@
 array_map( function( $file ) {
 	require_once( "{$file}.php" );
 }, [
-	'functions-assets',
 	'functions-context',
 	'functions-filters',
 	'functions-head',
