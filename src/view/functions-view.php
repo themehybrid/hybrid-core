@@ -39,9 +39,9 @@ function view( $name, $slugs = [], $data = [] ) {
  *
  * @since  5.0.0
  * @access public
- * @param  string        $name
- * @param  array|string  $slugs
- * @param  array         $data
+ * @param  string            $name
+ * @param  array|string      $slugs
+ * @param  array|Collection  $data
  * @return void
  */
 function render( $name, $slugs = [], $data = [] ) {
@@ -54,9 +54,9 @@ function render( $name, $slugs = [], $data = [] ) {
  *
  * @since  5.0.0
  * @access public
- * @param  string        $name
- * @param  array|string  $slugs
- * @param  array         $data
+ * @param  string            $name
+ * @param  array|string      $slugs
+ * @param  array|Collection  $data
  * @return string
  */
 function fetch( $name, $slugs = [], $data = [] ) {
