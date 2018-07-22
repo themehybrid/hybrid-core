@@ -19,8 +19,6 @@
 
 namespace Hybrid\Attr;
 
-use Hybrid\Proxies\App;
-
 /**
  * Wrapper for creating a new `Attributes` object.
  *
@@ -31,9 +29,9 @@ use Hybrid\Proxies\App;
  * @param  array   $attr
  * @return object
  */
-function attr( $name, $context = '', $attr = [] ) {
+function attr( $name, $context = '', array $attr = [] ) {
 
-	return App::resolve( 'attr', compact( 'name', 'context', 'attr' ) );
+	return new Attr( $name, $context, $attr );
 }
 
 /**

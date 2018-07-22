@@ -13,21 +13,25 @@
 
 namespace Hybrid\View;
 
-use Hybrid\Proxies\App;
+use Hybrid\Tools\Collection;
 
 /**
  * Returns a view object.
  *
  * @since  5.0.0
  * @access public
- * @param  string        $name
- * @param  array|string  $slugs
- * @param  array         $data
+ * @param  string            $name
+ * @param  array|string      $slugs
+ * @param  array|Collection  $data
  * @return object
  */
 function view( $name, $slugs = [], $data = [] ) {
 
-	return App::resolve( 'view', compact( 'name', 'slugs', 'data' ) );
+	return new View(
+		$name,
+		$slugs,
+		$data instanceof Collection ? $data : new Collection( $data )
+	);
 }
 
 /**
