@@ -1,4 +1,15 @@
 <?php
+/**
+ * Sidebar functions.
+ *
+ * Helper functions and template tags related to sidebars.
+ *
+ * @package   HybridCore
+ * @author    Justin Tadlock <justintadlock@gmail.com>
+ * @copyright Copyright (c) 2008 - 2018, Justin Tadlock
+ * @link      https://themehybrid.com/hybrid-core
+ * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ */
 
 namespace Hybrid\Sidebar;
 
