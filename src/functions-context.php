@@ -16,8 +16,6 @@ namespace Hybrid;
 
 use WP_User;
 
-use function Hybrid\Lang\language;
-
 /**
  * Filters the WordPress body class with a better set of classes that are more
  * consistently handled and are backwards compatible with the original body
@@ -38,22 +36,20 @@ function body_class_filter( $classes, $class ) {
 
 	// Locale and language.
 	$locale = get_locale();
-	$lang   = language( $locale );
+	$lang   = substr( $locale, 0, strpos( $locale, '_' ) );
 
-	if ( $locale !== $lang ) {
+	if ( $lang && $locale !== $lang ) {
 		$classes[] = $lang;
 	}
 
 	$classes[] = strtolower( str_replace( '_', '-', $locale ) );
-
-	// Check if the current theme is a parent or child theme.
-	$classes[] = is_child_theme() ? 'child-theme' : 'parent-theme';
 
 	// Multisite check adds the 'multisite' class and the blog ID.
 	if ( is_multisite() ) {
 		$classes[] = 'multisite';
 		$classes[] = 'blog-' . get_current_blog_id();
 	}
+
 	// Plural/multiple-post view (opposite of singular).
 	if ( is_plural() ) {
 		$classes[] = 'plural';
