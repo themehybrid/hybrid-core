@@ -101,13 +101,14 @@ class Application extends Container implements ApplicationContract, Bootable {
 	 */
 	protected function registerDefaultBindings() {
 
-		$this->singleton( 'app', $this );
+		// Add the instance of this application.
+		$this->instance( 'app', $this );
 
 		// Adds the directory path for the framework.
-		$this->add( 'path', untrailingslashit( HYBRID_DIR  ) );
+		$this->instance( 'path', untrailingslashit( HYBRID_DIR  ) );
 
 		// Add the version for the framework.
-		$this->add( 'version', static::VERSION );
+		$this->instance( 'version', static::VERSION );
 	}
 
 	/**
