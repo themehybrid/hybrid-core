@@ -12,9 +12,10 @@
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
-namespace Hybrid\Providers;
+namespace Hybrid\Media;
 
 use Hybrid\Tools\Collection;
+use Hybrid\Tools\ServiceProvider;
 
 /**
  * Media meta provider class.
@@ -22,7 +23,7 @@ use Hybrid\Tools\Collection;
  * @since  5.0.0
  * @access public
  */
-class MediaMeta extends ServiceProvider {
+class MetaProvider extends ServiceProvider {
 
 	/**
 	 * Registration callback that adds a single instance of the media meta

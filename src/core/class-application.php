@@ -19,13 +19,13 @@ namespace Hybrid\Core;
 use Hybrid\Container\Container;
 use Hybrid\Contracts\Application as ApplicationContract;
 use Hybrid\Contracts\Bootable;
-use Hybrid\Providers\Customize;
-use Hybrid\Providers\Language;
-use Hybrid\Providers\MediaMeta;
-use Hybrid\Providers\Templates;
-use Hybrid\Providers\TemplateHierarchy;
+use Hybrid\Customize\CustomizeProvider;
+use Hybrid\Lang\LanguageProvider;
+use Hybrid\Media\MetaProvider;
 use Hybrid\Proxies\Proxy;
 use Hybrid\Proxies\App;
+use Hybrid\Template\HierarchyProvider;
+use Hybrid\Template\TemplatesProvider;
 
 /**
  * Application class.
@@ -123,11 +123,11 @@ class Application extends Container implements ApplicationContract, Bootable {
 		array_map( function( $provider ) {
 			$this->provider( $provider );
 		}, [
-			Customize::class,
-			Language::class,
-			MediaMeta::class,
-			Templates::class,
-			TemplateHierarchy::class
+			CustomizeProvider::class,
+			LanguageProvider::class,
+			MetaProvider::class,
+			TemplatesProvider::class,
+			HierarchyProvider::class
 		] );
 	}
 

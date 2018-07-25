@@ -12,9 +12,9 @@
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
-namespace Hybrid\Providers;
+namespace Hybrid\Customize;
 
-use Hybrid\Customize\Customize as CustomizeComponent;
+use Hybrid\Tools\ServiceProvider;
 
 /**
  * Customize provider.
@@ -22,7 +22,7 @@ use Hybrid\Customize\Customize as CustomizeComponent;
  * @since  5.0.0
  * @access public
  */
-class Customize extends ServiceProvider {
+class CustomizeProvider extends ServiceProvider {
 
 	/**
 	 * Registration callback that adds a single instance of the customize
@@ -34,9 +34,9 @@ class Customize extends ServiceProvider {
 	 */
 	public function register() {
 
-		$this->app->singleton( CustomizeComponent::class );
+		$this->app->singleton( Customize::class );
 
-		$this->app->alias( CustomizeComponent::class, 'customize' );
+		$this->app->alias( Customize::class, 'customize' );
 	}
 
 	/**

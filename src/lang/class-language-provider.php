@@ -12,10 +12,10 @@
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
-namespace Hybrid\Providers;
+namespace Hybrid\Lang;
 
 use Hybrid\Contracts\Language as LanguageContract;
-use Hybrid\Lang\Language as LanguageComponent;
+use Hybrid\Tools\ServiceProvider;
 
 /**
  * Language provider.
@@ -23,7 +23,7 @@ use Hybrid\Lang\Language as LanguageComponent;
  * @since  5.0.0
  * @access public
  */
-class Language extends ServiceProvider {
+class LanguageProvider extends ServiceProvider {
 
 	/**
 	 * Registration callback that adds a single instance of the language
@@ -35,7 +35,7 @@ class Language extends ServiceProvider {
 	 */
 	public function register() {
 
-		$this->app->singleton( LanguageContract::class, LanguageComponent::class );
+		$this->app->singleton( LanguageContract::class, Language::class );
 
 		$this->app->alias( LanguageContract::class, 'language' );
 	}

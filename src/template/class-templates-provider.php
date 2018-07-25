@@ -12,9 +12,9 @@
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
-namespace Hybrid\Providers;
+namespace Hybrid\Template;
 
-use Hybrid\Template\Manager;
+use Hybrid\Tools\ServiceProvider;
 
 /**
  * Object templates provider class.
@@ -22,7 +22,7 @@ use Hybrid\Template\Manager;
  * @since  5.0.0
  * @access public
  */
-class Templates extends ServiceProvider {
+class TemplatesProvider extends ServiceProvider {
 
 	/**
 	 * Registers the templates collection and manager.

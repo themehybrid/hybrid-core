@@ -12,10 +12,10 @@
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
-namespace Hybrid\Providers;
+namespace Hybrid\Template;
 
-use Hybrid\Contracts\TemplateHierarchy as HierarchyContract;
-use Hybrid\Template\Hierarchy as HierarchyComponent;
+use Hybrid\Contracts\TemplateHierarchy;
+use Hybrid\Tools\ServiceProvider;
 
 /**
  * Template hierarchy provider class.
@@ -23,7 +23,7 @@ use Hybrid\Template\Hierarchy as HierarchyComponent;
  * @since  5.0.0
  * @access public
  */
-class TemplateHierarchy extends ServiceProvider {
+class HierarchyProvider extends ServiceProvider {
 
 	/**
 	 * Registration callback that adds a single instance of the template
@@ -35,9 +35,9 @@ class TemplateHierarchy extends ServiceProvider {
 	 */
 	public function register() {
 
-		$this->app->singleton( HierarchyContract::class, HierarchyComponent::class );
+		$this->app->singleton( TemplateHierarchy::class, Hierarchy::class );
 
-		$this->app->alias( HierarchyContract::class, 'template/hierarchy' );
+		$this->app->alias( TemplateHierarchy::class, 'template/hierarchy' );
 	}
 
 	/**
