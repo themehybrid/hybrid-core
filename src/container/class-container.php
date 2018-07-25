@@ -161,6 +161,12 @@ class Container implements ContainerContract, ArrayAccess {
 
 		// If we can't build an object, assume we should return the value.
 		if ( ! $this->isBuildable( $concrete ) ) {
+
+			// If we don't actually have this, return false.
+			if ( ! $this->has( $abstract ) ) {
+				return false;
+			}
+
 			return $concrete;
 		}
 
