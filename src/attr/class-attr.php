@@ -51,7 +51,7 @@ class Attr implements Attributes {
 	 * @access protected
 	 * @var    array
 	 */
-	protected $intput = [];
+	protected $input = [];
 
 	/**
 	 * Stored array of attributes.
