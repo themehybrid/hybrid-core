@@ -128,7 +128,7 @@ function archive_description_filter( $desc ) {
 		$new_desc = get_post_type_object( get_query_var( 'post_type' ) )->description;
 	}
 
-	return $new_desc ? $new_desc : $desc;
+	return $new_desc ?: $desc;
 }
 
 /**

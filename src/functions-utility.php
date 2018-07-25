@@ -63,7 +63,7 @@ function autoload( $class, $args = [] ) {
 	}
 
 	// Gets the prefix. `class-` for classes and `interface-` for interfaces.
-	$prefix = !! array_intersect( [ 'contract', 'contracts', 'interface', 'interface' ], $new_pieces )
+	$prefix = !! array_intersect( [ 'contract', 'contracts', 'interface', 'interfaces' ], $new_pieces )
 	          ? 'interface'
 		  : 'class';
 
