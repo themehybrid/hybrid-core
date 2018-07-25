@@ -44,6 +44,7 @@ function autoload( $class, $args = [] ) {
 
 	$file       = '';
 	$new_pieces = [];
+	$prefix     = 'class';
 
 	// Remove the namespace.
 	$class = str_replace( $args['namespace'], '', $class );
@@ -62,10 +63,13 @@ function autoload( $class, $args = [] ) {
 		$new_pieces[] = strtolower( join( '-', $pascal ) );
 	}
 
-	// Gets the prefix. `class-` for classes and `interface-` for interfaces.
-	$prefix = !! array_intersect( [ 'contract', 'contracts', 'interface', 'interfaces' ], $new_pieces )
-	          ? 'interface'
-		  : 'class';
+	// If a contract/interface or trait, change the filename prefix.
+	if ( !! array_intersect( [ 'contract', 'contracts', 'interface', 'interfaces' ], $new_pieces ) ) {
+		$prefix = 'interface';
+
+	} elseif ( !! array_intersect( [ 'trait', 'traits' ], $new_pieces ) ) {
+		$prefix = 'trait';
+	}
 
 	// Pop the last item off the array and re-add it with the `class-` prefix
 	// and the `.php` file extension.  This is our class file.
