@@ -180,6 +180,12 @@ class Attr implements Attributes {
 			$defaults['class'] = $this->context ? "{$this->name} {$this->name}--{$this->context}" : $this->name;
 		}
 
+		// Compatibility with core WP attributes.
+		if ( method_exists( $this, $this->name ) ) {
+			$method   = $this->name;
+			$defaults = $this->$method( $defaults );
+		}
+
 		// Filter the default attributes.
 		$defaults = apply_filters( "hybrid/attr/{$this->name}/defaults", $defaults, $this->context, $this );
 
@@ -205,5 +211,98 @@ class Attr implements Attributes {
 		}
 
 		return $this->attr;
+	}
+
+	/**
+	 * `<html>` element attributes.
+	 *
+	 * @since  5.0.0
+	 * @access protected
+	 * @param  array   $attr
+	 * @return array
+	 */
+	protected function html( $attr ) {
+
+		$attr = [];
+
+		$parts = wp_kses_hair( get_language_attributes(), [ 'http', 'https' ] );
+
+		if ( $parts ) {
+
+			foreach ( $parts as $part ) {
+
+				$attr[ $part['name'] ] = $part['value'];
+			}
+		}
+
+		return $attr;
+	}
+
+	/**
+	 * `<body>` element attributes.
+	 *
+	 * @since  5.0.0
+	 * @access protected
+	 * @param  array   $attr
+	 * @return array
+	 */
+	protected function body( $attr ) {
+
+		$class = isset( $attr['class'] ) && 'body' !== $attr['class'] ? $attr['class'] : '';
+
+		$attr['class'] = join( ' ', get_body_class( $class ) );
+		$attr['dir']   = is_rtl() ? 'rtl' : 'ltr';
+
+		return $attr;
+	}
+
+	/**
+	 * Post `<article>` element attributes.
+	 *
+	 * @since  5.0.0
+	 * @access protected
+	 * @param  array   $attr
+	 * @return array
+	 */
+	protected function post( $attr ) {
+
+		$post  = get_post();
+		$class = isset( $attr['class'] ) ? $attr['class'] : '';
+
+		$attr['id']    = ! empty( $post ) ? sprintf( 'post-%d', get_the_ID() ) : 'post-0';
+		$attr['class'] = join( ' ', get_post_class( $class ) );
+
+		return $attr;
+	}
+
+	/**
+	 * Alias for `post()`.
+	 *
+	 * @since  5.0.0
+	 * @access protected
+	 * @param  array   $attr
+	 * @return array
+	 */
+	protected function entry( $attr ) {
+
+		return $this->post( $attr );
+	}
+
+	/**
+	 * Comment wrapper attributes.
+	 *
+	 * @since  5.0.0
+	 * @access protected
+	 * @param  array   $attr
+	 * @return array
+	 */
+	protected function comment( $attr ) {
+
+		$class = isset( $attr['class'] ) ? $attr['class'] : '';
+
+		$attr['id']    = 'comment-' . get_comment_ID();
+		$attr['class'] = join( ' ', get_comment_class( $class ) );
+
+		return $attr;
 	}
 }
