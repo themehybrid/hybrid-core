@@ -32,4 +32,14 @@ interface Attributes extends Fetchable, Renderable {
 	 * @return array
 	 */
 	public function all();
+
+	/**
+	 * Returns a single, unescaped attribute's value.
+	 *
+	 * @since  5.0.0
+	 * @access public
+	 * @param  string  $name
+	 * @return string
+	 */
+	public function get( $name );
 }

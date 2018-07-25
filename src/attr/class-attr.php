@@ -134,6 +134,21 @@ class Attr implements Attributes {
 	}
 
 	/**
+	 * Returns a single, unescaped attribute's value.
+	 *
+	 * @since  5.0.0
+	 * @access public
+	 * @param  string  $name
+	 * @return string
+	 */
+	public function get( $name ) {
+
+		$attr = $this->all();
+
+		return isset( $attr[ $name ] ) ? $attr[ $name ] : '';
+	}
+
+	/**
 	 * Filters and returns the array of attributes.
 	 *
 	 * @since  5.0.0
