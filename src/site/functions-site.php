@@ -37,8 +37,9 @@ function render_title( array $args = [] ) {
 function fetch_title( array $args = [] ) {
 
 	$args = wp_parse_args( $args, [
-		'tag'   => is_front_page() ? 'h1' : 'div',
-		'class' => 'app-header__title'
+		'tag'        => is_front_page() ? 'h1' : 'div',
+		'class'      => 'app-header__title',
+		'link_class' => 'app-header__title-link'
 	] );
 
 	$html  = '';
@@ -46,11 +47,16 @@ function fetch_title( array $args = [] ) {
 
 	if ( $title ) {
 
+		$link = fetch_home_link( [
+			'text'  => $title,
+			'class' => $args['link_class']
+		] );
+
 		$html = sprintf(
 			'<%1$s class="%2$s">%3$s</%1$s>',
 			tag_escape( $args['tag'] ),
 			esc_attr( $args['class'] ),
-			fetch_home_link( [ 'text' => $title ] )
+			$link
 		);
 	}
 
