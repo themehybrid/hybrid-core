@@ -38,6 +38,16 @@ class Template implements TemplateContract {
 	protected $type = 'post';
 
 	/**
+	 * Array of subtypes template works with. This defaults to a subtype for
+	 * use with the `post` type.
+	 *
+	 * @since  5.0.0
+	 * @access protected
+	 * @var    array
+	 */
+	protected $subtype = [ 'page' ];
+
+	/**
 	 * Filename of the template.
 	 *
 	 * @since  5.0.0
@@ -54,15 +64,6 @@ class Template implements TemplateContract {
 	 * @var    string
 	 */
 	protected $label = '';
-
-	/**
-	 * Array of post types template works with.
-	 *
-	 * @since  5.0.0
-	 * @access protected
-	 * @var    array
-	 */
-	protected $post_types = [ 'page' ];
 
 	/**
 	 * Magic method to use in case someone tries to output the object as a
@@ -93,6 +94,11 @@ class Template implements TemplateContract {
 			if ( isset( $args[ $key ] ) ) {
 				$this->$key = $args[ $key ];
 			}
+		}
+
+		// Allow `post_types` as an alias for `subtype`.
+		if ( isset( $args['post_types'] ) ) {
+			$this->subtype = (array) $args['post_types'];
 		}
 
 		$this->filename = $filename;
@@ -135,6 +141,18 @@ class Template implements TemplateContract {
 	}
 
 	/**
+	 * Conditional function to check if the template has a specific subtype.
+	 *
+	 * @since  5.0.0
+	 * @access public
+	 * @return bool
+	 */
+	public function hasSubtype( $subtype ) {
+
+		return in_array( $subtype, (array) $this->subtype );
+	}
+
+	/**
 	 * Conditional function to check if the template is for a post type.
 	 *
 	 * @since  5.0.0
@@ -143,6 +161,6 @@ class Template implements TemplateContract {
 	 */
 	public function forPostType( $type ) {
 
-		return $this->isType( 'post' ) && in_array( $type, $this->post_types );
+		return $this->isType( 'post' ) && $this->hasSubtype( $type );
 	}
 }

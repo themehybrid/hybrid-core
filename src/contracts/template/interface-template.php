@@ -38,4 +38,31 @@ interface Template {
 	 * @return string
 	 */
 	public function label();
+
+	/**
+	 * Conditional function to check what type of template this is.
+	 *
+	 * @since  5.0.0
+	 * @access public
+	 * @return bool
+	 */
+	public function isType( $type );
+
+	/**
+	 * Conditional function to check if the template has a specific subtype.
+	 *
+	 * @since  5.0.0
+	 * @access public
+	 * @return bool
+	 */
+	public function hasSubtype( $subtype );
+
+	/**
+	 * Conditional function to check if the template is for a post type.
+	 *
+	 * @since  5.0.0
+	 * @access public
+	 * @return bool
+	 */
+	public function forPostType( $type );
 }
