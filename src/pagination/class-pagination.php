@@ -17,7 +17,7 @@
 
 namespace Hybrid\Pagination;
 
-use Hybrid\Contracts\Pagination as PaginationContract;
+use Hybrid\Contracts\Pagination\Pagination as PaginationContract;
 
 /**
  * Pagination class.

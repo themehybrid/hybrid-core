@@ -1,9 +1,8 @@
 <?php
 /**
- * View contract.
+ * Media meta interface.
  *
- * View classes represent a template partial, generally speaking. Their purpose
- * should be to find a template file and fetch/render the output.
+ * Defines the interface that media metadata classes must use.
  *
  * @package   HybridCore
  * @author    Justin Tadlock <justintadlock@gmail.com>
@@ -12,22 +11,23 @@
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
-namespace Hybrid\Contracts;
+namespace Hybrid\Contracts\Media;
 
 /**
- * View interface.
+ * Media meta interface.
  *
  * @since  5.0.0
  * @access public
  */
-interface View extends Fetchable, Renderable {
+interface Meta {
 
 	/**
-	 * Returns the absolute path to the template file.
+	 * Returns the escaped and formatted media meta.
 	 *
 	 * @since  5.0.0
 	 * @access public
-	 * @return string
+	 * @param  string  $key
+	 * @return mixed
 	 */
-	public function template();
+	public function get( $key );
 }

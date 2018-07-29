@@ -11,7 +11,10 @@
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
-namespace Hybrid\Contracts;
+namespace Hybrid\Contracts\Media;
+
+use Hybrid\Contracts\Fetchable;
+use Hybrid\Contracts\Renderable;
 
 /**
  * Attributes interface.
@@ -19,4 +22,4 @@ namespace Hybrid\Contracts;
  * @since  5.0.0
  * @access public
  */
-interface MediaGrabber extends Fetchable, Renderable {}
+interface Grabber extends Fetchable, Renderable {}

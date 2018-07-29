@@ -1,6 +1,6 @@
 <?php
 /**
- * Template hierarchy contract.
+ * Template interface.
  *
  * Defines the interface that template classes must use.
  *
@@ -11,23 +11,31 @@
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
-namespace Hybrid\Contracts;
+namespace Hybrid\Contracts\Template;
 
 /**
- * Template hierarchy interface.
+ * Template interface.
  *
  * @since  5.0.0
  * @access public
  */
-interface TemplateHierarchy extends Bootable {
+interface Template {
 
 	/**
-	 * Should return an array of template file names without the file
-	 * extension (`.php`).
+	 * Returns the filename relative to the templates location.
 	 *
 	 * @since  5.0.0
 	 * @access public
-	 * @return array
+	 * @return string
 	 */
-	public function hierarchy();
+	public function filename();
+
+	/**
+	 * Returns the internationalized text label for the template.
+	 *
+	 * @since  5.0.0
+	 * @access public
+	 * @return string
+	 */
+	public function label();
 }

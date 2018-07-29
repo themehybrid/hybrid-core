@@ -16,7 +16,7 @@
 
 namespace Hybrid\Attr;
 
-use Hybrid\Contracts\Attributes;
+use Hybrid\Contracts\Attr\Attributes;
 
 /**
  * Attributes class.

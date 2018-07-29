@@ -17,7 +17,7 @@
 namespace Hybrid\Core;
 
 use Hybrid\Container\Container;
-use Hybrid\Contracts\Application as ApplicationContract;
+use Hybrid\Contracts\Core\Application as ApplicationContract;
 use Hybrid\Contracts\Bootable;
 use Hybrid\Customize\CustomizeProvider;
 use Hybrid\Lang\LanguageProvider;

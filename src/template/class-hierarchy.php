@@ -18,7 +18,7 @@
 namespace Hybrid\Template;
 
 use WP_User;
-use Hybrid\Contracts\TemplateHierarchy;
+use Hybrid\Contracts\Template\Hierarchy as TemplateHierarchy;
 
 /**
  * Overwrites the core WP template hierarchy.

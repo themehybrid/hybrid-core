@@ -14,7 +14,7 @@
 
 namespace Hybrid\Lang;
 
-use Hybrid\Contracts\Language as LanguageContract;
+use Hybrid\Contracts\Lang\Language as LanguageContract;
 use Hybrid\Tools\ServiceProvider;
 
 /**

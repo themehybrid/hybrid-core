@@ -14,7 +14,7 @@
 
 namespace Hybrid\Template;
 
-use Hybrid\Contracts\TemplateHierarchy;
+use Hybrid\Contracts\Template\Hierarchy as TemplateHierarchy;
 use Hybrid\Tools\ServiceProvider;
 
 /**

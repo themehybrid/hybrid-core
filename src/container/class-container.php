@@ -20,7 +20,7 @@ namespace Hybrid\Container;
 use ArrayAccess;
 use Closure;
 use ReflectionClass;
-use Hybrid\Contracts\Container as ContainerContract;
+use Hybrid\Contracts\Container\Container as ContainerContract;
 
 /**
  * A simple container for objects.

@@ -13,7 +13,10 @@
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
-namespace Hybrid\Contracts;
+namespace Hybrid\Contracts\Attr;
+
+use Hybrid\Contracts\Fetchable;
+use Hybrid\Contracts\Renderable;
 
 /**
  * Attributes interface.

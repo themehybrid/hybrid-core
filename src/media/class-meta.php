@@ -16,7 +16,7 @@
 
 namespace Hybrid\Media;
 
-use Hybrid\Contracts\MediaMeta;
+use Hybrid\Contracts\Media\Meta as MediaMeta;
 
 /**
  * Media meta class.

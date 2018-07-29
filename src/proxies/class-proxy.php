@@ -14,7 +14,7 @@
 
 namespace Hybrid\Proxies;
 
-use Hybrid\Contracts\Container;
+use Hybrid\Contracts\Container\Container;
 
 /**
  * Base static proxy class.

@@ -19,7 +19,7 @@
 
 namespace Hybrid\Media;
 
-use Hybrid\Contracts\MediaGrabber;
+use Hybrid\Contracts\Media\Grabber as MediaGrabber;
 
 /**
  * Grabs media related to the post.

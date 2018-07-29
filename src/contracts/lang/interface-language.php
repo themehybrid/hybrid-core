@@ -11,7 +11,9 @@
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
-namespace Hybrid\Contracts;
+namespace Hybrid\Contracts\Lang;
+
+use Hybrid\Contracts\Bootable;
 
 /**
  * Language interface.
