@@ -14,30 +14,17 @@
  */
 
 # Autoloads our custom functions files that are not loaded via the class loader.
-array_map( function( $file ) {
-	require_once( "{$file}.php" );
-}, [
-	'functions-context',
-	'functions-filters',
-	'functions-head',
-	'functions-helpers',
-	'functions-utility',
-] );
-
-# Autoloads functions files in component folders.
-array_map( function( $name ) {
-	require_once( "{$name}/functions-{$name}.php" );
-}, [
-	'attr',
-	'comment',
-	'lang',
-	'media',
-	'menu',
-	'pagination',
-	'post',
-	'sidebar',
-	'site',
-	'template',
-	'theme',
-	'view'
-] );
+require_once( 'functions-filters.php'               );
+require_once( 'functions-helpers.php'               );
+require_once( 'attr/functions-attr.php'             );
+require_once( 'comment/functions-comment.php'       );
+require_once( 'lang/functions-lang.php'             );
+require_once( 'media/functions-media.php'           );
+require_once( 'menu/functions-menu.php'             );
+require_once( 'pagination/functions-pagination.php' );
+require_once( 'post/functions-post.php'             );
+require_once( 'sidebar/functions-sidebar.php'       );
+require_once( 'site/functions-site.php'             );
+require_once( 'template/functions-template.php'     );
+require_once( 'theme/functions-theme.php'           );
+require_once( 'view/functions-view.php'             );
