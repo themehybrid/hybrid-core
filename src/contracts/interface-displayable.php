@@ -1,8 +1,8 @@
 <?php
 /**
- * Renderable contract.
+ * Displayable contract.
  *
- * Renderable classes should implement a `render()` method. The intent of this
+ * Displayable classes should implement a `display()` method. The intent of this
  * method is to output an HTML string to the screen. This data should already be
  * escaped prior to being output.
  *
@@ -16,19 +16,19 @@
 namespace Hybrid\Contracts;
 
 /**
- * Renderable interface.
+ * Displayable interface.
  *
  * @since  5.0.0
  * @access public
  */
-interface Renderable {
+interface Displayable {
 
 	/**
-	 * Renders the HTML string.
+	 * Prints the HTML string.
 	 *
 	 * @since  5.0.0
 	 * @access public
 	 * @return void
 	 */
-	public function render();
+	public function display();
 }

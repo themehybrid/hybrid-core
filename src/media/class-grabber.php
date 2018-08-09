@@ -248,13 +248,13 @@ class Grabber implements MediaGrabber {
 	}
 
 	/**
-	 * Renders the found media.
+	 * Outputs the found media.
 	 *
 	 * @since  5.0.0
 	 * @access public
 	 * @return void
 	 */
-	public function render() {
+	public function display() {
 
 		echo $this->fetch();
 	}

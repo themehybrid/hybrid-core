@@ -44,9 +44,9 @@ function view( $name, $slugs = [], $data = [] ) {
  * @param  array|Collection  $data
  * @return void
  */
-function render( $name, $slugs = [], $data = [] ) {
+function display( $name, $slugs = [], $data = [] ) {
 
-	view( $name, $slugs, $data )->render();
+	view( $name, $slugs, $data )->display();
 }
 
 /**

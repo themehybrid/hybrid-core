@@ -25,7 +25,7 @@ namespace Hybrid\Customize\Controls;
 class DropdownTerms extends Control {
 
 	/**
-	 * The type of customize control being rendered.
+	 * The type of customize control being fetched.
 	 *
 	 * @since  5.0.0
 	 * @access public
@@ -49,7 +49,7 @@ class DropdownTerms extends Control {
 	 * @access protected
 	 * @return void
 	 */
-	protected function render_content() {
+	protected function fetch_content() {
 
 		// Allow devs to pass in custom arguments.
 		$args = wp_parse_args( $this->args, [

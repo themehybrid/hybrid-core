@@ -24,7 +24,7 @@ use WP_Customize_Control;
 abstract class Control extends WP_Customize_Control {
 
 	/**
-	 * This is the PHP callback for rendering the control content. JS-based
+	 * This is the PHP callback for fetching the control content. JS-based
 	 * controls require this method to be empty. Because most of our classes
 	 * utilize JS templates, we're defining this in the base class to not
 	 * worry about it in our sub-classes.
@@ -33,5 +33,5 @@ abstract class Control extends WP_Customize_Control {
 	 * @access public
 	 * @return bool
 	 */
-	protected function render_content() {}
+	protected function fetch_content() {}
 }

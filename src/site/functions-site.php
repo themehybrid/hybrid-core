@@ -14,14 +14,14 @@
 namespace Hybrid\Site;
 
 /**
- * Renders the site title HTML.
+ * Outputs the site title HTML.
  *
  * @since  5.0.0
  * @access public
  * @param  array  $args
  * @return void
  */
-function render_title( array $args = [] ) {
+function display_title( array $args = [] ) {
 
 	echo fetch_title( $args );
 }
@@ -64,14 +64,14 @@ function fetch_title( array $args = [] ) {
 }
 
 /**
- * Renders the site description HTML.
+ * Outputs the site description HTML.
  *
  * @since  5.0.0
  * @access public
  * @param  array  $args
  * @return void
  */
-function render_description( array $args = [] ) {
+function display_description( array $args = [] ) {
 
 	echo fetch_description( $args );
 }
@@ -108,14 +108,14 @@ function fetch_description( array $args = [] ) {
 }
 
 /**
- * Renders the site link HTML.
+ * Outputs the site link HTML.
  *
  * @since  5.0.0
  * @access public
  * @param  array  $args
  * @return void
  */
-function render_home_link( array $args = [] ) {
+function display_home_link( array $args = [] ) {
 
 	echo fetch_home_link( $args );
 }
@@ -151,14 +151,14 @@ function fetch_home_link( array $args = [] ) {
 }
 
 /**
- * Renders the WordPress.org link HTML.
+ * Outputs the WordPress.org link HTML.
  *
  * @since  5.0.0
  * @access public
  * @param  array  $args
  * @return void
  */
-function render_wp_link( array $args = [] ) {
+function display_wp_link( array $args = [] ) {
 
 	echo fetch_wp_link();
 }

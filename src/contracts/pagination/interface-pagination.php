@@ -14,7 +14,7 @@
 namespace Hybrid\Contracts\Pagination;
 
 use Hybrid\Contracts\Fetchable;
-use Hybrid\Contracts\Renderable;
+use Hybrid\Contracts\Displayable;
 
 /**
  * Pagination interface.
@@ -22,7 +22,7 @@ use Hybrid\Contracts\Renderable;
  * @since  5.0.0
  * @access public
  */
-interface Pagination extends Fetchable, Renderable {
+interface Pagination extends Fetchable, Displayable {
 
 	/**
 	 * Builds the pagination.

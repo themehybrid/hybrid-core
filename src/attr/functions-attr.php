@@ -44,9 +44,9 @@ function attr( $name, $context = '', array $attr = [] ) {
  * @param  array   $attr
  * @return void
  */
-function render( $slug, $context = '', $attr = [] ) {
+function display( $slug, $context = '', $attr = [] ) {
 
-	attr( $slug, $context, $attr )->render();
+	attr( $slug, $context, $attr )->display();
 }
 
 /**

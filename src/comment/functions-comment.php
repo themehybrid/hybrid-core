@@ -36,14 +36,14 @@ function hierarchy() {
 }
 
 /**
- * Renders the comment author HTML.
+ * Outputs the comment author HTML.
  *
  * @since  5.0.0
  * @access public
  * @param  array   $args
  * @return void
  */
-function render_author( array $args = [] ) {
+function display_author( array $args = [] ) {
 
 	echo fetch_author( $args );
 }
@@ -75,14 +75,14 @@ function fetch_author( array $args = [] ) {
 }
 
 /**
- * Renders the comment permalink HTML.
+ * Outputs the comment permalink HTML.
  *
  * @since  5.0.0
  * @access public
  * @param  array   $args
  * @return void
  */
-function render_permalink( array $args = [] ) {
+function display_permalink( array $args = [] ) {
 
 	echo fetch_permalink( $args );
 }
@@ -117,14 +117,14 @@ function fetch_permalink( array $args = [] ) {
 }
 
 /**
- * Renders the comment date HTML.
+ * Outputs the comment date HTML.
  *
  * @since  5.0.0
  * @access public
  * @param  array   $args
  * @return void
  */
-function render_date( array $args = [] ) {
+function display_date( array $args = [] ) {
 
 	echo fetch_date( $args );
 }
@@ -159,14 +159,14 @@ function fetch_date( array $args = [] ) {
 }
 
 /**
- * Renders the comment time HTML.
+ * Outputs the comment time HTML.
  *
  * @since  5.0.0
  * @access public
  * @param  array   $args
  * @return void
  */
-function render_time( array $args = [] ) {
+function display_time( array $args = [] ) {
 
 	echo fetch_time( $args );
 }
@@ -201,14 +201,14 @@ function fetch_time( array $args = [] ) {
 }
 
 /**
- * Renders the comment edit link HTML.
+ * Outputs the comment edit link HTML.
  *
  * @since  5.0.0
  * @access public
  * @param  array   $args
  * @return void
  */
-function render_edit_link( array $args = [] ) {
+function display_edit_link( array $args = [] ) {
 
 	echo fetch_edit_link( $args );
 }
@@ -249,14 +249,14 @@ function fetch_edit_link( array $args = [] ) {
 }
 
 /**
- * Renders the comment reply link HTML.
+ * Outputs the comment reply link HTML.
  *
  * @since  5.0.0
  * @access public
  * @param  array   $args
  * @return void
  */
-function render_reply_link( array $args = [] ) {
+function display_reply_link( array $args = [] ) {
 
 	echo fetch_reply_link( $args );
 }
@@ -308,14 +308,14 @@ function fetch_reply_link( array $args = [] ) {
 }
 
 /**
- * Renders the comment parent link HTML.
+ * Outputs the comment parent link HTML.
  *
  * @since  5.0.0
  * @access public
  * @param  array   $args
  * @return void
  */
-function render_parent_link( array $args = [] ) {
+function display_parent_link( array $args = [] ) {
 
 	echo fetch_parent_link( $args );
 }

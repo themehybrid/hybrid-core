@@ -14,7 +14,7 @@
 namespace Hybrid\Pagination;
 
 /**
- * Renders the pagination output.
+ * Outputs the pagination output.
  *
  * @since  5.0.0
  * @access public
@@ -22,9 +22,9 @@ namespace Hybrid\Pagination;
  * @param  array  $args
  * @return object
  */
-function render( $context = 'posts', array $args = [] ) {
+function display( $context = 'posts', array $args = [] ) {
 
-	( new Pagination( $context, $args ) )->make()->render();
+	( new Pagination( $context, $args ) )->make()->display();
 }
 
 /**

@@ -22,7 +22,7 @@ namespace Hybrid\Customize\Controls;
 class Palette extends Control {
 
 	/**
-	 * The type of customize control being rendered.
+	 * The type of customize control being fetched.
 	 *
 	 * @since  5.0.0
 	 * @access public

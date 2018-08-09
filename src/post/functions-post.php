@@ -60,14 +60,14 @@ function hierarchy() {
 }
 
 /**
- * Renders the post title HTML.
+ * Outputs the post title HTML.
  *
  * @since  5.0.0
  * @access public
  * @param  array  $args
  * @return void
  */
-function render_title( array $args = [] ) {
+function display_title( array $args = [] ) {
 
 	echo fetch_title( $args );
 }
@@ -111,14 +111,14 @@ function fetch_title( array $args = [] ) {
 }
 
 /**
- * Renders the post permalink HTML.
+ * Outputs the post permalink HTML.
  *
  * @since  5.0.0
  * @access public
  * @param  array  $args
  * @return void
  */
-function render_permalink( array $args = [] ) {
+function display_permalink( array $args = [] ) {
 
 	echo fetch_permalink( $args );
 }
@@ -153,14 +153,14 @@ function fetch_permalink( array $args = [] ) {
 }
 
 /**
- * Renders the post author HTML.
+ * Outputs the post author HTML.
  *
  * @since  5.0.0
  * @access public
  * @param  array  $args
  * @return void
  */
-function render_author( array $args = [] ) {
+function display_author( array $args = [] ) {
 
 	echo fetch_author( $args );
 }
@@ -198,14 +198,14 @@ function fetch_author( array $args = [] ) {
 }
 
 /**
- * Renders the post date HTML.
+ * Outputs the post date HTML.
  *
  * @since  5.0.0
  * @access public
  * @param  array  $args
  * @return void
  */
-function render_date( array $args = [] ) {
+function display_date( array $args = [] ) {
 
 	echo fetch_date( $args );
 }
@@ -241,14 +241,14 @@ function fetch_date( array $args = [] ) {
 }
 
 /**
- * Renders the post comments link HTML.
+ * Outputs the post comments link HTML.
  *
  * @since  5.0.0
  * @access public
  * @param  array  $args
  * @return void
  */
-function render_comments_link( array $args = [] ) {
+function display_comments_link( array $args = [] ) {
 
 	echo fetch_comments_link( $args );
 }
@@ -295,14 +295,14 @@ function fetch_comments_link( array $args = [] ) {
 }
 
 /**
- * Renders the post terms HTML.
+ * Outputs the post terms HTML.
  *
  * @since  5.0.0
  * @access public
  * @param  array  $args
  * @return void
  */
-function render_terms( array $args = [] ) {
+function display_terms( array $args = [] ) {
 
 	echo fetch_terms( $args );
 }
@@ -351,14 +351,14 @@ function fetch_terms( array $args = [] ) {
 }
 
 /**
- * Renders the post format HTML.
+ * Outputs the post format HTML.
  *
  * @since  5.0.0
  * @access public
  * @param  array  $args
  * @return void
  */
-function render_format( array $args = [] ) {
+function display_format( array $args = [] ) {
 
 	echo fetch_format( $args );
 }

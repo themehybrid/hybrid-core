@@ -16,16 +16,16 @@ namespace Hybrid\Media;
 use Hybrid\Proxies\App;
 
 /**
- * Renders the media grabber HTML.
+ * Outputs the media grabber HTML.
  *
  * @since  5.0.0
  * @access public
  * @param  array  $args
  * @return void
  */
-function render( array $args = [] ) {
+function display( array $args = [] ) {
 
-	( new Grabber( $args ) )->render();
+	( new Grabber( $args ) )->display();
 }
 
 /**
@@ -70,7 +70,7 @@ function meta_repo( $post_id ) {
  * @param  array   $args
  * @return void
  */
-function render_meta( $property, $args = [] ) {
+function display_meta( $property, $args = [] ) {
 
 	echo fetch_meta( $property, $args );
 }
@@ -146,14 +146,14 @@ function fetch_meta( $property, array $args = [] ) {
 }
 
 /**
- * Renders the image size links HTML.
+ * Outputs the image size links HTML.
  *
  * @since  5.0.0
  * @access public
  * @param  array  $args
  * @return void
  */
-function render_image_sizes( array $args = [] ) {
+function display_image_sizes( array $args = [] ) {
 
 	echo fetch_image_sizes( $args );
 }

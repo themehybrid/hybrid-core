@@ -21,7 +21,7 @@ namespace Hybrid\Sidebar;
  * @param  string  $sidebar_id
  * @return void
  */
-function render_name( $sidebar_id ) {
+function display_name( $sidebar_id ) {
 
 	echo esc_html( fetch_name( $sidebar_id ) );
 }

@@ -34,14 +34,14 @@ function mod( $name, $default = false ) {
 }
 
 /**
- * Renders the [parent] theme link HTML.
+ * Outputs the [parent] theme link HTML.
  *
  * @since  5.0.0
  * @access public
  * @param  array  $args
  * @return void
  */
-function render_link( array $args = [] ) {
+function display_link( array $args = [] ) {
 
 	echo fetch_link( $args );
 }
@@ -86,14 +86,14 @@ function fetch_link( array $args = [] ) {
 }
 
 /**
- * Renders the child theme link HTML.
+ * Outputs the child theme link HTML.
  *
  * @since  5.0.0
  * @access public
  * @param  array  $args
  * @return void
  */
-function render_child_link( array $args = [] ) {
+function display_child_link( array $args = [] ) {
 
 	echo fetch_child_link( $args );
 }

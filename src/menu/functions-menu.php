@@ -21,7 +21,7 @@ namespace Hybrid\Menu;
  * @param  string  $location
  * @return void
  */
- function render_name( $location ) {
+ function display_name( $location ) {
 
 	 echo esc_html( fetch_name( $location ) );
  }
@@ -51,7 +51,7 @@ function fetch_name( $location ) {
  * @param  string  $location
  * @return void
  */
-function render_location( $location ) {
+function display_location( $location ) {
 
 	echo esc_html( fetch_location( $location ) );
 }

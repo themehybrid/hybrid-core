@@ -312,13 +312,13 @@ class Pagination implements PaginationContract{
 	}
 
 	/**
-	 * Renders the pagination output.
+	 * Outputs the pagination output.
 	 *
 	 * @since  5.0.0
 	 * @access public
 	 * @return void
 	 */
-	public function render() {
+	public function display() {
 
 		echo $this->fetch();
 	}

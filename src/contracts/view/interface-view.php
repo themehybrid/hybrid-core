@@ -3,7 +3,7 @@
  * View contract.
  *
  * View classes represent a template partial, generally speaking. Their purpose
- * should be to find a template file and fetch/render the output.
+ * should be to find a template file and fetch or display the output.
  *
  * @package   HybridCore
  * @author    Justin Tadlock <justintadlock@gmail.com>
@@ -15,7 +15,7 @@
 namespace Hybrid\Contracts\View;
 
 use Hybrid\Contracts\Fetchable;
-use Hybrid\Contracts\Renderable;
+use Hybrid\Contracts\Displayable;
 
 /**
  * View interface.
@@ -23,7 +23,7 @@ use Hybrid\Contracts\Renderable;
  * @since  5.0.0
  * @access public
  */
-interface View extends Fetchable, Renderable {
+interface View extends Fetchable, Displayable {
 
 	/**
 	 * Returns the absolute path to the template file.

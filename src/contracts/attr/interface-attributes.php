@@ -3,7 +3,7 @@
  * Attributes contract.
  *
  * Defines the contract that classes for building HTML attributes must adhere to.
- * Extends the `Fetchable` and `Renderable` contracts for handling output.
+ * Extends the `Fetchable` and `Displayable` contracts for handling output.
  * Attributes are meant to be used for HTML elements.
  *
  * @package   HybridCore
@@ -16,7 +16,7 @@
 namespace Hybrid\Contracts\Attr;
 
 use Hybrid\Contracts\Fetchable;
-use Hybrid\Contracts\Renderable;
+use Hybrid\Contracts\Displayable;
 
 /**
  * Attributes interface.
@@ -24,7 +24,7 @@ use Hybrid\Contracts\Renderable;
  * @since  5.0.0
  * @access public
  */
-interface Attributes extends Fetchable, Renderable {
+interface Attributes extends Fetchable, Displayable {
 
 	/**
 	 * Returns an array of HTML attributes in name/value pairs. Attributes
