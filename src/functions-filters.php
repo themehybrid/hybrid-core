@@ -235,6 +235,31 @@ function excerpt_more( $text ) {
 }
 
 /**
+ * Adds custom classes to the core WP logo.
+ *
+ * @since  5.0.0
+ * @access public
+ * @param  string  $logo
+ * @return string
+ */
+function custom_logo_class( $logo ) {
+
+	$logo = preg_replace(
+		"/(<a.+?)class=(['\"])(.+?)(['\"])/i",
+		'$1class=$2app-header__logo-link $3$4',
+		$logo,
+		1
+	);
+
+	return preg_replace(
+		"/(<img.+?)class=(['\"])(.+?)(['\"])/i",
+		'$1class=$2app-header__logo $3$4',
+		$logo,
+		1
+	);
+}
+
+/**
  * Simplifies the nav menu class system.
  *
  * @since  5.0.0

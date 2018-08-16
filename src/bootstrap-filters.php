@@ -46,6 +46,9 @@ add_filter( 'the_title', __NAMESPACE__ . '\untitled_post' );
 # Default excerpt more.
 add_filter( 'excerpt_more', __NAMESPACE__ . '\excerpt_more', 5 );
 
+# Adds custom CSS classes to the custom logo.
+add_filter( 'get_custom_logo', __NAMESPACE__ . '\custom_logo_class', 5 );
+
 # Adds custom CSS classes to nav menu items.
 add_filter( 'nav_menu_css_class',         __NAMESPACE__ . '\nav_menu_css_class',         5, 2 );
 add_filter( 'nav_menu_submenu_css_class', __NAMESPACE__ . '\nav_menu_submenu_css_class', 5    );
