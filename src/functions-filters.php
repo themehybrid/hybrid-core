@@ -286,7 +286,7 @@ function nav_menu_css_class( $classes, $item ) {
  */
 function nav_menu_link_attributes( $attr ) {
 
-	$attr['class'] = 'menu__anchor';
+	$attr['class'] = 'menu__link';
 
 	return $attr;
 }
