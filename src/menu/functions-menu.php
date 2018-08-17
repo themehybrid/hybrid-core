@@ -23,7 +23,7 @@ namespace Hybrid\Menu;
  */
  function display_name( $location ) {
 
-	 echo esc_html( fetch_name( $location ) );
+	 echo esc_html( render_name( $location ) );
  }
 
 /**
@@ -34,7 +34,7 @@ namespace Hybrid\Menu;
  * @param  string  $location
  * @return string
  */
-function fetch_name( $location ) {
+function render_name( $location ) {
 
 	$locations = get_nav_menu_locations();
 
@@ -53,7 +53,7 @@ function fetch_name( $location ) {
  */
 function display_location( $location ) {
 
-	echo esc_html( fetch_location( $location ) );
+	echo esc_html( render_location( $location ) );
 }
 
 /**
@@ -64,7 +64,7 @@ function display_location( $location ) {
  * @param  string  $location
  * @return string
  */
-function fetch_location( $location ) {
+function render_location( $location ) {
 
 	$locations = get_registered_nav_menus();
 

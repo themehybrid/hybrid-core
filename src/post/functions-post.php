@@ -69,7 +69,7 @@ function hierarchy() {
  */
 function display_title( array $args = [] ) {
 
-	echo fetch_title( $args );
+	echo render_title( $args );
 }
 
 /**
@@ -80,7 +80,7 @@ function display_title( array $args = [] ) {
  * @param  array  $args
  * @return string
  */
-function fetch_title( array $args = [] ) {
+function render_title( array $args = [] ) {
 
 	$post_id   = get_the_ID();
 	$is_single = is_single( $post_id ) || is_page( $post_id ) || is_attachment( $post_id );
@@ -97,7 +97,7 @@ function fetch_title( array $args = [] ) {
 	$text = sprintf( $args['text'], $is_single ? single_post_title( '', false ) : the_title( '', '', false ) );
 
 	if ( $args['link'] ) {
-		$text = fetch_permalink( [ 'text' => $text ] );
+		$text = render_permalink( [ 'text' => $text ] );
 	}
 
 	$html = sprintf(
@@ -120,7 +120,7 @@ function fetch_title( array $args = [] ) {
  */
 function display_permalink( array $args = [] ) {
 
-	echo fetch_permalink( $args );
+	echo render_permalink( $args );
 }
 
 /**
@@ -131,7 +131,7 @@ function display_permalink( array $args = [] ) {
  * @param  array  $args
  * @return string
  */
-function fetch_permalink( array $args = [] ) {
+function render_permalink( array $args = [] ) {
 
 	$args = wp_parse_args( $args, [
 		'text'   => '%s',
@@ -162,7 +162,7 @@ function fetch_permalink( array $args = [] ) {
  */
 function display_author( array $args = [] ) {
 
-	echo fetch_author( $args );
+	echo render_author( $args );
 }
 
 /**
@@ -173,7 +173,7 @@ function display_author( array $args = [] ) {
  * @param  array  $args
  * @return string
  */
-function fetch_author( array $args = [] ) {
+function render_author( array $args = [] ) {
 
 	$args = wp_parse_args( $args, [
 		'text'   => '%s',
@@ -207,7 +207,7 @@ function fetch_author( array $args = [] ) {
  */
 function display_date( array $args = [] ) {
 
-	echo fetch_date( $args );
+	echo render_date( $args );
 }
 
 /**
@@ -218,7 +218,7 @@ function display_date( array $args = [] ) {
  * @param  array  $args
  * @return string
  */
-function fetch_date( array $args = [] ) {
+function render_date( array $args = [] ) {
 
 	$args = wp_parse_args( $args, [
 		'text'   => '%s',
@@ -250,7 +250,7 @@ function fetch_date( array $args = [] ) {
  */
 function display_comments_link( array $args = [] ) {
 
-	echo fetch_comments_link( $args );
+	echo render_comments_link( $args );
 }
 
 /**
@@ -261,7 +261,7 @@ function display_comments_link( array $args = [] ) {
  * @param  array  $args
  * @return string
  */
-function fetch_comments_link( array $args = [] ) {
+function render_comments_link( array $args = [] ) {
 
 	$args = wp_parse_args( $args, [
 		'zero'   => false,
@@ -304,7 +304,7 @@ function fetch_comments_link( array $args = [] ) {
  */
 function display_terms( array $args = [] ) {
 
-	echo fetch_terms( $args );
+	echo render_terms( $args );
 }
 
 /**
@@ -315,7 +315,7 @@ function display_terms( array $args = [] ) {
  * @param  array  $args
  * @return string
  */
-function fetch_terms( array $args = [] ) {
+function render_terms( array $args = [] ) {
 
 	$html = '';
 
@@ -360,7 +360,7 @@ function fetch_terms( array $args = [] ) {
  */
 function display_format( array $args = [] ) {
 
-	echo fetch_format( $args );
+	echo render_format( $args );
 }
 
 /**
@@ -371,7 +371,7 @@ function display_format( array $args = [] ) {
  * @param  array  $args
  * @return string
  */
-function fetch_format( array $args = [] ) {
+function render_format( array $args = [] ) {
 
 	$args = wp_parse_args( $args, [
 		'text'   => '%s',

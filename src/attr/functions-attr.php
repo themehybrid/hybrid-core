@@ -59,7 +59,7 @@ function display( $slug, $context = '', $attr = [] ) {
  * @param  array   $attr
  * @return string
  */
-function fetch( $slug, $context = '', $attr = [] ) {
+function render( $slug, $context = '', $attr = [] ) {
 
-	return attr( $slug, $context, $attr )->fetch();
+	return attr( $slug, $context, $attr )->render();
 }

@@ -36,9 +36,9 @@ function display( array $args = [] ) {
  * @param  array  $args
  * @return string
  */
-function fetch( array $args = [] ) {
+function render( array $args = [] ) {
 
-	return ( new Grabber( $args ) )->fetch();
+	return ( new Grabber( $args ) )->render();
 }
 
 /**
@@ -72,7 +72,7 @@ function meta_repo( $post_id ) {
  */
 function display_meta( $property, $args = [] ) {
 
-	echo fetch_meta( $property, $args );
+	echo render_meta( $property, $args );
 }
 
 /**
@@ -84,7 +84,7 @@ function display_meta( $property, $args = [] ) {
  * @param  array   $args
  * @return string
  */
-function fetch_meta( $property, array $args = [] ) {
+function render_meta( $property, array $args = [] ) {
 
 	$html = $label = '';
 
@@ -155,7 +155,7 @@ function fetch_meta( $property, array $args = [] ) {
  */
 function display_image_sizes( array $args = [] ) {
 
-	echo fetch_image_sizes( $args );
+	echo render_image_sizes( $args );
 }
 
 /**
@@ -165,7 +165,7 @@ function display_image_sizes( array $args = [] ) {
  * @access public
  * @return string
  */
-function fetch_image_sizes( array $args = [] ) {
+function render_image_sizes( array $args = [] ) {
 
 	// If not viewing an image attachment page, return.
 	if ( ! wp_attachment_is_image( get_the_ID() ) ) {

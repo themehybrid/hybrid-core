@@ -256,7 +256,7 @@ class Grabber implements MediaGrabber {
 	 */
 	public function display() {
 
-		echo $this->fetch();
+		echo $this->render();
 	}
 
 	/**
@@ -266,7 +266,7 @@ class Grabber implements MediaGrabber {
 	 * @access public
 	 * @return string
 	 */
-	public function fetch() {
+	public function render() {
 
 		return apply_filters( 'hybrid/media/grabber/media', $this->locate(), $this );
 	}

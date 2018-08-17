@@ -23,7 +23,7 @@ namespace Hybrid\Sidebar;
  */
 function display_name( $sidebar_id ) {
 
-	echo esc_html( fetch_name( $sidebar_id ) );
+	echo esc_html( render_name( $sidebar_id ) );
 }
 
 /**
@@ -35,7 +35,7 @@ function display_name( $sidebar_id ) {
  * @param  string  $sidebar_id
  * @return string
  */
-function fetch_name( $sidebar_id ) {
+function render_name( $sidebar_id ) {
 	global $wp_registered_sidebars;
 
 	return isset( $wp_registered_sidebars[ $sidebar_id ] )

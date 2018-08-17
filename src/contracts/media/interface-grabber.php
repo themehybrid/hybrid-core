@@ -13,7 +13,7 @@
 
 namespace Hybrid\Contracts\Media;
 
-use Hybrid\Contracts\Fetchable;
+use Hybrid\Contracts\Renderable;
 use Hybrid\Contracts\Displayable;
 
 /**
@@ -22,4 +22,4 @@ use Hybrid\Contracts\Displayable;
  * @since  5.0.0
  * @access public
  */
-interface Grabber extends Fetchable, Displayable {}
+interface Grabber extends Renderable, Displayable {}

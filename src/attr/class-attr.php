@@ -89,7 +89,7 @@ class Attr implements Attributes {
 	 */
 	public function __toString() {
 
-		return $this->fetch();
+		return $this->render();
 	}
 
 	/**
@@ -101,7 +101,7 @@ class Attr implements Attributes {
 	 */
 	public function display() {
 
-		echo $this->fetch();
+		echo $this->render();
 	}
 
 	/**
@@ -111,7 +111,7 @@ class Attr implements Attributes {
 	 * @access public
 	 * @return string
 	 */
-	public function fetch() {
+	public function render() {
 
 		$html = '';
 

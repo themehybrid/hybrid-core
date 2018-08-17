@@ -2,7 +2,7 @@
 /**
  * View class.
  *
- * This file maintains the `View` class.  It's used for setting up and fetching
+ * This file maintains the `View` class.  It's used for setting up and rendering
  * theme template files.  Views are a bit like a suped-up version of the core
  * WordPress `get_template_part()` function.  However, it allows you to build a
  * hierarchy of potential templates as well as pass in any arbitrary data to your
@@ -103,7 +103,7 @@ class View implements ViewContract {
 	 */
 	public function __toString() {
 
-		return $this->fetch();
+		return $this->render();
 	}
 
 	/**
@@ -164,7 +164,7 @@ class View implements ViewContract {
 	}
 
 	/**
-	 * Sets up data to be passed to the template and fetchs it.
+	 * Sets up data to be passed to the template and renders it.
 	 *
 	 * @since  5.0.0
 	 * @access public
@@ -201,7 +201,7 @@ class View implements ViewContract {
 	 * @access public
 	 * @return string
 	 */
-	public function fetch() {
+	public function render() {
 
 		ob_start();
 		$this->display();

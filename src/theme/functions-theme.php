@@ -43,7 +43,7 @@ function mod( $name, $default = false ) {
  */
 function display_link( array $args = [] ) {
 
-	echo fetch_link( $args );
+	echo render_link( $args );
 }
 
 /**
@@ -54,7 +54,7 @@ function display_link( array $args = [] ) {
  * @param  array  $args
  * @return string
  */
-function fetch_link( array $args = [] ) {
+function render_link( array $args = [] ) {
 
 	$args = wp_parse_args( $args, [
 		'class'  => 'theme-link',
@@ -95,7 +95,7 @@ function fetch_link( array $args = [] ) {
  */
 function display_child_link( array $args = [] ) {
 
-	echo fetch_child_link( $args );
+	echo render_child_link( $args );
 }
 
 /**
@@ -106,7 +106,7 @@ function display_child_link( array $args = [] ) {
  * @param  array  $args
  * @return string
  */
-function fetch_child_link( array $args = [] ) {
+function render_child_link( array $args = [] ) {
 
 	if ( ! is_child_theme() ) {
 		return '';

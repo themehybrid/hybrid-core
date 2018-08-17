@@ -45,7 +45,7 @@ function hierarchy() {
  */
 function display_author( array $args = [] ) {
 
-	echo fetch_author( $args );
+	echo render_author( $args );
 }
 
 /**
@@ -56,7 +56,7 @@ function display_author( array $args = [] ) {
  * @param  array   $args
  * @return string
  */
-function fetch_author( array $args = [] ) {
+function render_author( array $args = [] ) {
 
 	$args = wp_parse_args( $args, [
 		'text'   => '%s',
@@ -84,7 +84,7 @@ function fetch_author( array $args = [] ) {
  */
 function display_permalink( array $args = [] ) {
 
-	echo fetch_permalink( $args );
+	echo render_permalink( $args );
 }
 
 /**
@@ -95,7 +95,7 @@ function display_permalink( array $args = [] ) {
  * @param  array   $args
  * @return string
  */
-function fetch_permalink( array $args = [] ) {
+function render_permalink( array $args = [] ) {
 
 	$args = wp_parse_args( $args, [
 		'text'   => '%s',
@@ -126,7 +126,7 @@ function fetch_permalink( array $args = [] ) {
  */
 function display_date( array $args = [] ) {
 
-	echo fetch_date( $args );
+	echo render_date( $args );
 }
 
 /**
@@ -137,7 +137,7 @@ function display_date( array $args = [] ) {
  * @param  array   $args
  * @return string
  */
-function fetch_date( array $args = [] ) {
+function render_date( array $args = [] ) {
 
 	$args = wp_parse_args( $args, [
 		'text'   => '%s',
@@ -168,7 +168,7 @@ function fetch_date( array $args = [] ) {
  */
 function display_time( array $args = [] ) {
 
-	echo fetch_time( $args );
+	echo render_time( $args );
 }
 
 /**
@@ -179,7 +179,7 @@ function display_time( array $args = [] ) {
  * @param  array   $args
  * @return string
  */
-function fetch_time( array $args = [] ) {
+function render_time( array $args = [] ) {
 
 	$args = wp_parse_args( $args, [
 		'text'   => '%s',
@@ -210,7 +210,7 @@ function fetch_time( array $args = [] ) {
  */
 function display_edit_link( array $args = [] ) {
 
-	echo fetch_edit_link( $args );
+	echo render_edit_link( $args );
 }
 
 /**
@@ -221,7 +221,7 @@ function display_edit_link( array $args = [] ) {
  * @param  array   $args
  * @return string
  */
-function fetch_edit_link( array $args = [] ) {
+function render_edit_link( array $args = [] ) {
 
 	$args = wp_parse_args( $args, [
 		'text'   => __( 'Edit', 'hybrid-core' ),
@@ -258,7 +258,7 @@ function fetch_edit_link( array $args = [] ) {
  */
 function display_reply_link( array $args = [] ) {
 
-	echo fetch_reply_link( $args );
+	echo render_reply_link( $args );
 }
 
 /**
@@ -272,7 +272,7 @@ function display_reply_link( array $args = [] ) {
  * @param  array  $args
  * @return string
  */
-function fetch_reply_link( array $args = [] ) {
+function render_reply_link( array $args = [] ) {
 
 	// Array of comment types that are not allowed to have replies.
 	$disallowed = [
@@ -317,7 +317,7 @@ function fetch_reply_link( array $args = [] ) {
  */
 function display_parent_link( array $args = [] ) {
 
-	echo fetch_parent_link( $args );
+	echo render_parent_link( $args );
 }
 
 /**
@@ -328,7 +328,7 @@ function display_parent_link( array $args = [] ) {
  * @param  array   $args
  * @return string
  */
-function fetch_parent_link( $args = [] ) {
+function render_parent_link( $args = [] ) {
 
 	$args = wp_parse_args( $args, [
 		'text'   => '%s', // Defaults to parent comment author.

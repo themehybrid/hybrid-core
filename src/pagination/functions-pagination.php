@@ -36,7 +36,7 @@ function display( $context = 'posts', array $args = [] ) {
  * @param  array  $args
  * @return object
  */
-function fetch( $context = 'posts', array $args = [] ) {
+function render( $context = 'posts', array $args = [] ) {
 
-	return ( new Pagination( $context, $args ) )->make()->fetch();
+	return ( new Pagination( $context, $args ) )->make()->render();
 }

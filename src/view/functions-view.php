@@ -59,7 +59,7 @@ function display( $name, $slugs = [], $data = [] ) {
  * @param  array|Collection  $data
  * @return string
  */
-function fetch( $name, $slugs = [], $data = [] ) {
+function render( $name, $slugs = [], $data = [] ) {
 
-	return view( $name, $slugs, $data )->fetch();
+	return view( $name, $slugs, $data )->render();
 }

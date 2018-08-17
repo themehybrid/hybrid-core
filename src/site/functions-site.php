@@ -23,7 +23,7 @@ namespace Hybrid\Site;
  */
 function display_title( array $args = [] ) {
 
-	echo fetch_title( $args );
+	echo render_title( $args );
 }
 
 /**
@@ -34,7 +34,7 @@ function display_title( array $args = [] ) {
  * @param  array  $args
  * @return string
  */
-function fetch_title( array $args = [] ) {
+function render_title( array $args = [] ) {
 
 	$args = wp_parse_args( $args, [
 		'tag'        => is_front_page() ? 'h1' : 'div',
@@ -47,7 +47,7 @@ function fetch_title( array $args = [] ) {
 
 	if ( $title ) {
 
-		$link = fetch_home_link( [
+		$link = render_home_link( [
 			'text'  => $title,
 			'class' => $args['link_class']
 		] );
@@ -73,7 +73,7 @@ function fetch_title( array $args = [] ) {
  */
 function display_description( array $args = [] ) {
 
-	echo fetch_description( $args );
+	echo render_description( $args );
 }
 
 /**
@@ -84,7 +84,7 @@ function display_description( array $args = [] ) {
  * @param  array  $args
  * @return string
  */
-function fetch_description( array $args = [] ) {
+function render_description( array $args = [] ) {
 
 	$args = wp_parse_args( $args, [
 		'tag'   => 'div',
@@ -117,7 +117,7 @@ function fetch_description( array $args = [] ) {
  */
 function display_home_link( array $args = [] ) {
 
-	echo fetch_home_link( $args );
+	echo render_home_link( $args );
 }
 
 /**
@@ -128,7 +128,7 @@ function display_home_link( array $args = [] ) {
  * @param  array  $args
  * @return string
  */
-function fetch_home_link( array $args = [] ) {
+function render_home_link( array $args = [] ) {
 
 	$args = wp_parse_args( $args, [
 		'text'   => '%s',
@@ -160,7 +160,7 @@ function fetch_home_link( array $args = [] ) {
  */
 function display_wp_link( array $args = [] ) {
 
-	echo fetch_wp_link();
+	echo render_wp_link();
 }
 
 /**
@@ -171,7 +171,7 @@ function display_wp_link( array $args = [] ) {
  * @param  array  $args
  * @return string
  */
-function fetch_wp_link( array $args = [] ) {
+function render_wp_link( array $args = [] ) {
 
 	$args = wp_parse_args( $args, [
 		'text'   => '%s',

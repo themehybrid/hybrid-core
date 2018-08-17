@@ -320,7 +320,7 @@ class Pagination implements PaginationContract{
 	 */
 	public function display() {
 
-		echo $this->fetch();
+		echo $this->render();
 	}
 
 	/**
@@ -330,7 +330,7 @@ class Pagination implements PaginationContract{
 	 * @access public
 	 * @return string
 	 */
-	public function fetch() {
+	public function render() {
 
 		$title = $list = $template = '';
 
