@@ -377,6 +377,14 @@ class Hierarchy implements TemplateHierarchy {
 	 */
 	public function templateHierarchy( $templates ) {
 
+		// WooCommerce kind of does its own thing on `template_include`.
+		// It's top-level `woocommerce.php` template isn't added to the
+		// hierarchy until then. So, we're going prepend it to the
+		// hierarchy here to make the `woocommerce.php` template available.
+		if ( function_exists( 'is_woocommerce' ) && is_woocommerce() && ! in_array( 'woocommerce', $this->hierarchy ) ) {
+			$templates = [ 'woocommerce.php' ] + $templates;
+		}
+
 		// Merge the current template's hierarchy with the overall
 		// hierarchy array.
 		$this->hierarchy = array_merge(
