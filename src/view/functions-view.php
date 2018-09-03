@@ -13,6 +13,7 @@
 
 namespace Hybrid\View;
 
+use Hybrid\Proxies\App;
 use Hybrid\Tools\Collection;
 
 /**
@@ -27,11 +28,11 @@ use Hybrid\Tools\Collection;
  */
 function view( $name, $slugs = [], $data = [] ) {
 
-	return new View(
-		$name,
-		$slugs,
-		$data instanceof Collection ? $data : new Collection( $data )
-	);
+	if ( ! $data instanceof Collection ) {
+		$data = new Collection( $data );
+	}
+
+	return App::resolve( 'view', compact( 'name', 'slugs', 'data' ) );
 }
 
 /**

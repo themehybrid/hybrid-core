@@ -26,6 +26,7 @@ use Hybrid\Proxies\Proxy;
 use Hybrid\Proxies\App;
 use Hybrid\Template\HierarchyProvider;
 use Hybrid\Template\TemplatesProvider;
+use Hybrid\View\ViewProvider;
 
 /**
  * Application class.
@@ -127,7 +128,8 @@ class Application extends Container implements ApplicationContract, Bootable {
 			LanguageProvider::class,
 			MetaProvider::class,
 			TemplatesProvider::class,
-			HierarchyProvider::class
+			HierarchyProvider::class,
+			ViewProvider::class
 		] );
 	}
 
