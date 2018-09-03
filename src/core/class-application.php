@@ -16,6 +16,7 @@
 
 namespace Hybrid\Core;
 
+use Hybrid\Attr\AttrProvider;
 use Hybrid\Container\Container;
 use Hybrid\Contracts\Core\Application as ApplicationContract;
 use Hybrid\Contracts\Bootable;
@@ -124,6 +125,7 @@ class Application extends Container implements ApplicationContract, Bootable {
 		array_map( function( $provider ) {
 			$this->provider( $provider );
 		}, [
+			AttrProvider::class,
 			CustomizeProvider::class,
 			LanguageProvider::class,
 			MetaProvider::class,

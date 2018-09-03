@@ -24,7 +24,7 @@ use Hybrid\Tools\Collection;
  * @param  string            $name
  * @param  array|string      $slugs
  * @param  array|Collection  $data
- * @return object
+ * @return \Hybrid\Contracts\View\View
  */
 function view( $name, $slugs = [], $data = [] ) {
 
