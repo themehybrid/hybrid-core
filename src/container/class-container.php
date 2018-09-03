@@ -361,7 +361,7 @@ class Container implements ContainerContract, ArrayAccess {
 		}
 
 		return $reflect->newInstanceArgs(
-			$this->resolveDependencies( $constructor->getParameters() )
+			$this->resolveDependencies( $constructor->getParameters(), $parameters )
 		);
 	}
 
@@ -375,23 +375,30 @@ class Container implements ContainerContract, ArrayAccess {
 	 * @param  array     $dependencies
 	 * @return array
 	 */
-	protected function resolveDependencies( array $dependencies ) {
+	protected function resolveDependencies( array $dependencies, array $parameters ) {
 
-		$params = [];
+		$args = [];
 
 		foreach ( $dependencies as $dependency ) {
 
-			if ( ! is_null( $dependency->getClass() ) ) {
+			// If a dependency is set via the parameters passed in, use it.
+			if ( isset( $parameters[ $dependency->getName() ] ) ) {
 
-				$params[] = $this->resolve( $dependency->getClass()->getName() );
+				$args[] = $parameters[ $dependency->getName() ];
 
+			// If the parameter is a class, resolve it.
+			} elseif ( ! is_null( $dependency->getClass() ) ) {
+
+				$args[] = $this->resolve( $dependency->getClass()->getName() );
+
+			// Else, use the default parameter value.
 			} elseif ( $dependency->isDefaultValueAvailable() ) {
 
-				$params[] = $dependency->getDefaultValue();
+				$args[] = $dependency->getDefaultValue();
 			}
 		}
 
-		return $params;
+		return $args;
 	}
 
 	/**
