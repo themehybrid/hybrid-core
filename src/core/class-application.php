@@ -20,7 +20,6 @@ use Hybrid\Attr\AttrProvider;
 use Hybrid\Container\Container;
 use Hybrid\Contracts\Core\Application as ApplicationContract;
 use Hybrid\Contracts\Bootable;
-use Hybrid\Customize\CustomizeProvider;
 use Hybrid\Lang\LanguageProvider;
 use Hybrid\Media\MetaProvider;
 use Hybrid\Proxies\Proxy;
@@ -126,7 +125,6 @@ class Application extends Container implements ApplicationContract, Bootable {
 			$this->provider( $provider );
 		}, [
 			AttrProvider::class,
-			CustomizeProvider::class,
 			LanguageProvider::class,
 			MetaProvider::class,
 			TemplatesProvider::class,
