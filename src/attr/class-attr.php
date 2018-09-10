@@ -205,9 +205,8 @@ class Attr implements Attributes {
 
 		if ( isset( $this->attr['class'] ) && has_filter( $hook ) ) {
 
-			$this->attr[ $name ] = join( ' ', array_unique(
-				apply_filters( $hook, explode( ' ', $value ), $this->context )
-			) );
+			$classes             = apply_filters( $hook, explode( ' ', $this->attr['class'] ), $this->context );
+			$this->attr['class'] = join( ' ', array_unique( $classes ) );
 		}
 
 		return $this->attr;
