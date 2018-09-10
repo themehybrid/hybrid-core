@@ -23,13 +23,13 @@ The documentation is handled via Hybrid Core's [wiki](https://github.com/justint
 
 Use the following command to install the package.
 
-```
+```bash
 composer require justintadlock/hybrid-core
 ```
 
 If bundling this directly in your theme, you'll need to add the following code to your `functions.php` to autoload the project (and any other dependencies).
 
-```
+```php
 if ( file_exists( get_parent_theme_file_path( 'vendor/autoload.php' ) ) ) {
 	require_once( get_parent_theme_file_path( 'vendor/autoload.php' ) );
 }
@@ -71,15 +71,16 @@ spl_autoload_register( function( $class ) {
 
 ### Bootstrapping Hybrid Core
 
-Hybrid Core isn't launched until its `app()` function is called for the first time, which is under the `Hybrid` namespace.  Assuming you're namespacing your code (you should be), this should look something like:
+Hybrid Core isn't launched until an instance of its `Hybrid\Core\Application` class is created and booted, which should look something like the following.
 
-```
-namespace ThemeName;
+```php
+// Create a new application.
+$themeslug = new \Hybrid\Core\Application();
 
-use function Hybrid\app;
+// Add service providers, bindings, etc.
 
-# Bootstrap Hybrid Core.
-app();
+// Bootstrap the application.
+$themeslug->boot();
 ```
 
 ## FAQ
