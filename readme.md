@@ -39,8 +39,34 @@ if ( file_exists( get_parent_theme_file_path( 'vendor/autoload.php' ) ) ) {
 
 If just dropping Hybrid Core into your theme (assuming a folder name of `hybrid-core`), you'll want to add the following line of code to load up the framework.
 
-```
+```php
 require_once( get_parent_theme_file_path( 'hybrid-core/src/bootstrap-hybrid.php' ) );
+```
+
+You'll also need to register an autoloader to handle loading Hybrid Core's classes. Typically, this is done via Composer. Since you've opted against using Composer, you need to manually handle loading classes.
+
+```php
+spl_autoload_register( function( $class ) {
+
+	$namespace = 'Hybrid\\';
+
+	// Bail if the class is not in our namespace.
+	if ( 0 !== strpos( $class, $namespace ) ) {
+		return;
+	}
+
+	// Remove the namespace.
+	$class = str_replace( $namespace, '', $class );
+
+	// Build the filename.
+	$file = str_replace( '\\', '/', $class );
+	$file = get_parent_theme_file_path( "hybrid-core/src/{$file}.php" );
+
+	// If the file exists for the class name, load it.
+	if ( file_exists( $file ) ) {
+		include( $file );
+	}
+} );
 ```
 
 ### Bootstrapping Hybrid Core

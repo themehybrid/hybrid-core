@@ -17,6 +17,9 @@
 		"forum"  : "https://themehybrid.com/board/forums/hybrid-core"
 	},
 	"autoload"    : {
+		"psr-4" : {
+			"Hybrid\\" : "src/"
+		},
 		"files" : [
 			"src/bootstrap-hybrid.php"
 		]

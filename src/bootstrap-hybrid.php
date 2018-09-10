@@ -41,7 +41,6 @@ if ( ! defined( 'HYBRID_DIR' ) ) {
 # and get the framework set up.
 if ( ! defined( 'HYBRID_BOOTSTRAPPED' ) ) {
 
-	require_once( 'bootstrap-autoload.php'  );
 	require_once( 'bootstrap-functions.php' );
 
 	define( 'HYBRID_BOOTSTRAPPED', true );
