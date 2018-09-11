@@ -13,6 +13,7 @@
 
 namespace Hybrid\Template;
 
+use Hybrid\Contracts\Template\Hierarchy;
 use Hybrid\Proxies\App;
 
 /**
@@ -27,7 +28,7 @@ function hierarchy() {
 
 	return apply_filters(
 		'hybrid/template/hierarchy',
-		App::resolve( 'template/hierarchy' )->hierarchy()
+		App::resolve( Hierarchy::class )->hierarchy()
 	);
 }
 

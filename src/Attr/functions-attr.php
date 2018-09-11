@@ -19,6 +19,7 @@
 
 namespace Hybrid\Attr;
 
+use Hybrid\Contracts\Attr\Attributes;
 use Hybrid\Proxies\App;
 
 /**
@@ -29,11 +30,11 @@ use Hybrid\Proxies\App;
  * @param  string  $name
  * @param  string  $context
  * @param  array   $attr
- * @return \Hybrid\Contracts\Attr\Attributes
+ * @return Attributes
  */
 function attr( $name, $context = '', array $attr = [] ) {
 
-	return App::resolve( 'attr', compact( 'name', 'context', 'attr' ) );
+	return App::resolve( Attributes::class, compact( 'name', 'context', 'attr' ) );
 }
 
 /**

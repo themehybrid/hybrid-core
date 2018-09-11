@@ -13,6 +13,7 @@
 
 namespace Hybrid\View;
 
+use Hybrid\Contracts\View\View;
 use Hybrid\Proxies\App;
 use Hybrid\Tools\Collection;
 
@@ -24,7 +25,7 @@ use Hybrid\Tools\Collection;
  * @param  string            $name
  * @param  array|string      $slugs
  * @param  array|Collection  $data
- * @return \Hybrid\Contracts\View\View
+ * @return View
  */
 function view( $name, $slugs = [], $data = [] ) {
 
@@ -32,7 +33,7 @@ function view( $name, $slugs = [], $data = [] ) {
 		$data = new Collection( $data );
 	}
 
-	return App::resolve( 'view', compact( 'name', 'slugs', 'data' ) );
+	return App::resolve( View::class, compact( 'name', 'slugs', 'data' ) );
 }
 
 /**
