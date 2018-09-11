@@ -25,19 +25,33 @@ use Closure;
 interface Container {
 
 	/**
-	 * Bind an object.
+	 * Add a binding. The abstract should be a key, abstract class name, or
+	 * interface name. The concrete should be the concrete implementation of
+	 * the abstract.
 	 *
 	 * @since  5.0.0
 	 * @access public
 	 * @param  string  $abstract
-	 * @param  object  $concrete
+	 * @param  mixed   $concrete
 	 * @param  bool    $shared
 	 * @return void
 	 */
 	public function bind( $abstract, $concrete = null, $shared = false );
 
 	/**
-	 * Remove an object.
+	* Alias for `bind()`.
+	*
+	* @since  5.0.0
+	* @access public
+	* @param  string  $abstract
+	* @param  mixed   $concrete
+	* @param  bool    $shared
+	* @return void
+	*/
+	public function add( $abstract, $concrete = null, $shared = false );
+
+	/**
+	 * Remove a binding.
 	 *
 	 * @since  5.0.0
 	 * @access public
@@ -47,7 +61,7 @@ interface Container {
 	public function remove( $abstract );
 
 	/**
-	 * Resolve and return the definition.
+	 * Resolve and return the binding.
 	 *
 	 * @since  5.0.0
 	 * @access public
@@ -55,7 +69,7 @@ interface Container {
 	 * @param  array   $parameters
 	 * @return mixed
 	 */
-	public function resolve( $abstract, $parameters = [] );
+	public function resolve( $abstract, array $parameters = [] );
 
 	/**
 	 * Alias for `resolve()`.
@@ -71,7 +85,7 @@ interface Container {
 	public function get( $abstract );
 
 	/**
-	 * Check if an object exists.
+	 * Check if a binding exists.
 	 *
 	 * Follows the PSR-11 standard. Do not alter.
 	 * @link https://www.php-fig.org/psr/psr-11/
@@ -84,7 +98,7 @@ interface Container {
 	public function has( $abstract );
 
 	/**
-	 * Add a shared object.
+	 * Add a shared binding.
 	 *
 	 * @since  5.0.0
 	 * @access public
@@ -95,7 +109,7 @@ interface Container {
 	public function singleton( $abstract, $concrete = null );
 
 	/**
-	 * Add an instance of an object.
+	 * Add an existing instance.
 	 *
 	 * @since  5.0.0
 	 * @access public

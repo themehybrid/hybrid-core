@@ -83,15 +83,18 @@ class Container implements ContainerContract, ArrayAccess {
 	}
 
 	/**
-	* Add an object.
-	*
-	* @since  5.0.0
-	* @access public
-	* @param  string  $abstract
-	* @param  object  $concrete
-	* @param  bool    $shared
-	* @return void
-	*/
+	 * Add a binding. The abstract should be a key, abstract class name, or
+	 * interface name. The concrete should be the concrete implementation of
+	 * the abstract. If no concrete is given, its assumed the abstract
+	 * handles the concrete implementation.
+	 *
+	 * @since  5.0.0
+	 * @access public
+	 * @param  string  $abstract
+	 * @param  mixed   $concrete
+	 * @param  bool    $shared
+	 * @return void
+	 */
 	public function bind( $abstract, $concrete = null, $shared = false ) {
 
 		unset( $this->instances[ $abstract ] );
@@ -110,7 +113,7 @@ class Container implements ContainerContract, ArrayAccess {
 	* @since  5.0.0
 	* @access public
 	* @param  string  $abstract
-	* @param  object  $concrete
+	* @param  mixed   $concrete
 	* @param  bool    $shared
 	* @return void
 	*/
@@ -120,13 +123,13 @@ class Container implements ContainerContract, ArrayAccess {
 	}
 
 	/**
-	* Remove an object.
-	*
-	* @since  5.0.0
-	* @access public
-	* @param  string  $abstract
-	* @return void
-	*/
+	 * Remove a binding.
+	 *
+	 * @since  5.0.0
+	 * @access public
+	 * @param  string  $abstract
+	 * @return void
+	 */
 	public function remove( $abstract ) {
 
 		if ( $this->has( $abstract ) ) {
@@ -136,15 +139,15 @@ class Container implements ContainerContract, ArrayAccess {
 	}
 
 	/**
-	* Resolve and return the definition.
-	*
-	* @since  5.0.0
-	* @access public
-	* @param  string  $abstract
-	* @param  array   $parameters
-	* @return mixed
-	*/
-	public function resolve( $abstract, $parameters = [] ) {
+	 * Resolve and return the binding.
+	 *
+	 * @since  5.0.0
+	 * @access public
+	 * @param  string  $abstract
+	 * @param  array   $parameters
+	 * @return mixed
+	 */
+	public function resolve( $abstract, array $parameters = [] ) {
 
 		// Get the true abstract name.
 		$abstract = $this->getAbstract( $abstract );
@@ -223,7 +226,7 @@ class Container implements ContainerContract, ArrayAccess {
 	}
 
 	/**
-	* Check if an object exists.
+	* Check if a binding exists.
 	*
 	* @since  5.0.0
 	* @access public
@@ -236,28 +239,29 @@ class Container implements ContainerContract, ArrayAccess {
 	}
 
 	/**
-	* Add a shared object.
-	*
-	* @since  5.0.0
-	* @access public
-	* @param  string  $abstract
-	* @param  object  $concrete
-	* @return void
-	*/
+	 * Add a shared binding.
+	 *
+	 * @since  5.0.0
+	 * @access public
+	 * @param  string  $abstract
+	 * @param  object  $concrete
+	 * @return void
+	 */
 	public function singleton( $abstract, $concrete = null ) {
 
 		$this->add( $abstract, $concrete, true );
 	}
 
 	/**
-	* Add an instance of an object.
-	*
-	* @since  5.0.0
-	* @access public
-	* @param  string  $abstract
-	* @param  mixed   $instance
-	* @return mixed
-	*/
+	 * Add an existing instance. This can be an instance of an object or a
+	 * single value that should be stored.
+	 *
+	 * @since  5.0.0
+	 * @access public
+	 * @param  string  $abstract
+	 * @param  mixed   $instance
+	 * @return mixed
+	 */
 	public function instance( $abstract, $instance ) {
 
 		$this->instances[ $abstract ] = $instance;
@@ -366,13 +370,14 @@ class Container implements ContainerContract, ArrayAccess {
 	}
 
 	/**
-	 * Resolves the dependencies for a class' parameters.
+	 * Resolves the dependencies for a method's parameters.
 	 *
 	 * @todo Handle errors when we can't solve a dependency.
 	 *
 	 * @since  5.0.0
 	 * @access protected
 	 * @param  array     $dependencies
+	 * @param  array     $parameters
 	 * @return array
 	 */
 	protected function resolveDependencies( array $dependencies, array $parameters ) {
