@@ -8,10 +8,10 @@
  * classes. This class is meant to solve this issue.  It also standardizes the
  * pagination used for posts, singular (multi-page) posts, and comments.
  *
- * @package   ABC
+ * @package   HybridCore
  * @author    Justin Tadlock <justintadlock@gmail.com>
- * @copyright Copyright (c) 2018, Justin Tadlock
- * @link      https://themehybrid.com/themes/abc
+ * @copyright Copyright (c) 2008 - 2018, Justin Tadlock
+ * @link      https://themehybrid.com/hybrid-core
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
@@ -25,7 +25,7 @@ use Hybrid\Contracts\Pagination\Pagination as PaginationContract;
  * @since  5.0.0
  * @access public
  */
-class Pagination implements PaginationContract{
+class Pagination implements PaginationContract {
 
 	/**
 	 * The type of pagination to output.  `posts`, `comments`, and `singular`
@@ -115,8 +115,7 @@ class Pagination implements PaginationContract{
 
 		$defaults = [
 			// Base arguments imported from `paginate_links()`. It's
-			// best not to touch these unless rolling building out
-			// something custom.
+			// best not to change unless building something custom.
 			'base'               => '',
 			'format'             => '',
 			'total'              => 0,
