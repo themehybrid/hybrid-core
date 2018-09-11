@@ -25,7 +25,7 @@ use Hybrid\Contracts\View\View as ViewContract;
  * @since  5.0.0
  * @access public
  */
-class ViewProvider extends ServiceProvider {
+class ViewServiceProvider extends ServiceProvider {
 
 	/**
 	 * Binds the implementation of the view contract to the container.

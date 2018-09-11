@@ -22,7 +22,7 @@ use Hybrid\Tools\ServiceProvider;
  * @since  5.0.0
  * @access public
  */
-class TemplatesProvider extends ServiceProvider {
+class TemplatesServiceProvider extends ServiceProvider {
 
 	/**
 	 * Registers the templates collection and manager.

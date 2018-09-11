@@ -23,7 +23,7 @@ use Hybrid\Tools\ServiceProvider;
  * @since  5.0.0
  * @access public
  */
-class MetaProvider extends ServiceProvider {
+class MetaServiceProvider extends ServiceProvider {
 
 	/**
 	 * Registration callback that adds a single instance of the media meta

@@ -25,7 +25,7 @@ use Hybrid\Contracts\Attr\Attributes;
  * @since  5.0.0
  * @access public
  */
-class AttrProvider extends ServiceProvider {
+class AttrServiceProvider extends ServiceProvider {
 
 	/**
 	 * Binds the implementation of the attributes contract to the container.

@@ -23,7 +23,7 @@ use Hybrid\Tools\ServiceProvider;
  * @since  5.0.0
  * @access public
  */
-class LanguageProvider extends ServiceProvider {
+class LanguageServiceProvider extends ServiceProvider {
 
 	/**
 	 * Registration callback that adds a single instance of the language
