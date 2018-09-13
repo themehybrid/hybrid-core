@@ -6,6 +6,7 @@ It is a package that simplifies some of the complexities of theme development an
 
 ## Requirements
 
+* WordPress 4.9.6+.
 * PHP 5.6+ (7.0+ recommended).
 * [Composer](https://getcomposer.org/) for managing PHP dependencies.
 
