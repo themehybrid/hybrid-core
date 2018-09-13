@@ -14,6 +14,7 @@ Version 5.0.0 represents a complete break from earlier versions. The framework w
 - A collection class was created for storing key/value pairs. This class allows you to interact with the collection of data as an object or array, depending on your needs.
 - A pagination class was added for consistent handling of pagination for posts, comments, and multi-page single views.
 - The view system overhauls how template parts are handled. It allows theme authors to utilize sub-folders for housing files, creating a hierarchy, and passing data to templates.
+- Created filters for many front-end features of WordPress to utilize a BEM-style HTML class naming scheme.
 
 ### Changed
 
@@ -21,11 +22,10 @@ Version 5.0.0 represents a complete break from earlier versions. The framework w
 - A minimum of PHP 5.6+ is now required for all themes built from the framework. PHP 7.0+ is strongly recommended, and theme authors are encouraged to bump their own minimums up if possible.
 - Using PHP namespaces is perhaps the biggest change of all. Everything within the framework now falls under the `Hybrid` namespace.  Nearly every class and function beyond that is properly categorized in a sub-namespace based on the feature.
 - Composer is required for including the framework with the theme. While it's possible to download and drop the framework into a theme folder and build a custom autoloader, that method is no longer officially supported and will likely be tough to do in the future if dependencies are added.
-- Classes and folder names now follow the [PSR-4 autloading standard](https://www.php-fig.org/psr/psr-4/).  This means that the files and folders are named literally based on the class name and sub-namespace, respectively. We no longer prefix classes with `class-`.
+- Classes and folder names now follow the [PSR-4 autloading standard](https://www.php-fig.org/psr/psr-4/).  This means that the files and folders are named literally based on the class name and sub-namespace, respectively. We no longer prefix class files with `class-`.
 - Classes are now loaded via the PSR-4 autoloader included with Composer.
-- Hooks are now namespaced and closely follow our PHP namespaces (for the most part). Hooks are in the form of `hybrid/{$subnamespace}/{$hook}`.
+- Hooks are namespaced and closely follow our PHP namespaces (for the most part). Hooks are in the form of `hybrid/{$subnamespace}/{$hook}`.
 - The framework no longer auto-loads translations for themes.  Both parent and child themes should handle this on their own.
-- Filters for many front-end features of WordPress to utilize a BEM-style HTML class naming scheme.
 - We no longer auto-enqueue the comment reply script and are leaving this for theme authors to decide what to do on their own.
 
 ### Removed
