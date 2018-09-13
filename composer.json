@@ -1,6 +1,6 @@
 {
 	"name"        : "justintadlock/hybrid-core",
-	"description" : "Hybrid Core WordPress theme framework",
+	"description" : "Hybrid Core: A theme framework for developing modern WordPress themes.",
 	"keywords"    : [ "wordpress" ],
 	"homepage"    : "https://themehybrid.com/hybrid-core",
 	"license"     : "GPL-2.0-or-later",
