@@ -2,6 +2,43 @@
 
 You can see the changes made via the [commit log](https://github.com/justintadlock/hybrid-core/commits/master) for the latest release.
 
+## [5.0.0] - 2018-09-13
+
+Version 5.0.0 represents a complete break from earlier versions. The framework was essentially rewritten from the ground up to utilize more modern PHP practices. The notes below will be a bit more broad than focusing on the minute details because nearly every line of code in the project has changed.
+
+### Added
+
+- An application class was added to have a formal method of booting the framework from the theme. This solved a lot of problems like auto-loading code that wasn't needed and providing a point of contact between the theme and the framework to work together. This allows theme authors to create service providers and bind things to the container.
+- The framework now has a container for managing class dependencies and dependency injection. For the purposes of theme development, this will allow theme authors to write better classes, avoid globals and singletons, and create shared instances of objects/data.
+- Contracts (interfaces) now play an integral role in how the framework functions. Nearly every class implements one of the available contracts. When used in conjunction with the container, this allows theme authors to plug in custom implementations for features they want to change. Contracts are self-documenting by providing an overview of how any given class works by exposing its public methods.
+- A collection class was created for storing key/value pairs. This class allows you to interact with the collection of data as an object or array, depending on your needs.
+- A pagination class was added for consistent handling of pagination for posts, comments, and multi-page single views.
+- The view system overhauls how template parts are handled. It allows theme authors to utilize sub-folders for housing files, creating a hierarchy, and passing data to templates.
+- Created filters for many front-end features of WordPress to utilize a BEM-style HTML class naming scheme.
+
+### Changed
+
+- A minimum of WordPress 4.9.6 is now required.
+- A minimum of PHP 5.6+ is now required for all themes built from the framework. PHP 7.0+ is strongly recommended, and theme authors are encouraged to bump their own minimums up if possible.
+- Using PHP namespaces is perhaps the biggest change of all. Everything within the framework now falls under the `Hybrid` namespace.  Nearly every class and function beyond that is properly categorized in a sub-namespace based on the feature.
+- Composer is required for including the framework with the theme. While it's possible to download and drop the framework into a theme folder and build a custom autoloader, that method is no longer officially supported and will likely be tough to do in the future if dependencies are added.
+- Classes and folder names now follow the [PSR-4 autloading standard](https://www.php-fig.org/psr/psr-4/).  This means that the files and folders are named literally based on the class name and sub-namespace, respectively. We no longer prefix class files with `class-`.
+- Classes are now loaded via the PSR-4 autoloader included with Composer.
+- Hooks are namespaced and closely follow our PHP namespaces (for the most part). Hooks are in the form of `hybrid/{$subnamespace}/{$hook}`.
+- The framework no longer auto-loads translations for themes.  Both parent and child themes should handle this on their own.
+- We no longer auto-enqueue the comment reply script and are leaving this for theme authors to decide what to do on their own.
+
+### Removed
+
+- The Breadcrumb Trail extension is now a separate package named [Hybrid Breadcrumbs](https://github.com/justintadlock/hybrid-breadcrumbs).
+- The Get the Image extension is now a separate packaged named [Hybrid Carbon](https://github.com/justintadlock/hybrid-carbon).
+- The customizer controls, settings, and related code were ported to the [Hybrid Customize](https://github.com/justintadlock/hybrid-customize) project.
+- The Google font system was ported to the [Hybrid Font](https://github.com/justintadlock/hybrid-font) project.
+- Theme Layouts was removed but will likely return as a separate, add-on repository.
+- Cleaner Gallery was likewise removed. Whether it becomes a new project will depend on feedback.
+- `HYBRID_URI` constant. The framework no longer ships any assets. Therefore, this is unnecessary.
+- Automatic post format support by filtering `the_content`. It seems that core WP is never going to address the shortcomings of post formats, so we've just been fighting a losing battle that most theme authors aren't even participating in.
+
 ## [4.0.0] - 2017-07-31
 
 ### Added

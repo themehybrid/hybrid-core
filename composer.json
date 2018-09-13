@@ -1,21 +1,30 @@
 {
-	"name"       : "justintadlock/hybrid-core",
-	"description": "Hybrid Core WordPress theme framework",
-	"keywords"   : ["wordpress"],
-	"homepage"   : "https://themehybrid.com/hybrid-core",
-	"license"    : "GPL-2.0+",
-	"authors"    : [
+	"name"        : "justintadlock/hybrid-core",
+	"description" : "Hybrid Core: A theme framework for developing modern WordPress themes.",
+	"keywords"    : [ "wordpress" ],
+	"homepage"    : "https://themehybrid.com/hybrid-core",
+	"license"     : "GPL-2.0-or-later",
+	"authors"     : [
 		{
-			"name"    : "Justin Tadlock",
-			"email"   : "justin@justintadlock.com",
-			"homepage": "http://justintadlock.com"
+			"name"     : "Justin Tadlock",
+			"email"    : "justintadlock@gmail.com",
+			"homepage" : "http://justintadlock.com",
+			"role"     : "Developer"
 		}
 	],
-	"support"    : {
-		"issues": "https://github.com/justintadlock/hybrid-core/issues",
-		"forum" : "https://themehybrid.com/board/forums/hybrid-core"
+	"support"     : {
+		"issues" : "https://github.com/justintadlock/hybrid-core/issues",
+		"forum"  : "https://themehybrid.com/board/forums/hybrid-core"
 	},
-	"autoload"   : {
-		"classmap": ["hybrid.php"]
+	"autoload"    : {
+		"psr-4" : {
+			"Hybrid\\" : "src/"
+		},
+		"files" : [
+			"src/bootstrap-hybrid.php"
+		]
+	},
+	"require"     : {
+		"php" : ">=5.6"
 	}
 }

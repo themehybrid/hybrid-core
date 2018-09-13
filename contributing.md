@@ -8,7 +8,7 @@ Problem first.  Solution second.
 
 Pull requests should have a ticket open for discussion first.  I rarely accept pull requests that aren't for a specific issue for various reasons.  It's far better to post an issue and let me or the community provide feedback prior to creating a pull request.
 
-Please don't make pull requests against the `master` branch.  This is the latest, stable code.  You can make a pull request against one of the point branches or the `dev` (future release) branch.
+Please don't make pull requests against the `master` branch.  This is the latest, stable code.  You can make a pull request against one of the point branches.
 
 ## Theme review guidelines
 
@@ -16,11 +16,14 @@ Hybrid Core is developed with the WordPress.org [theme review guidelines](https:
 
 ## Coding standards
 
-In general, Hybrid Core follows all WordPress [coding standards](https://make.wordpress.org/core/handbook/best-practices/coding-standards).  There are instances where it doesn't, opting for personal choices of my own, but in terms of contributing, following the WordPress standards is best practice.
+Hybrid Core follows a mixture of the following standards.
 
-## Script and style files
+- [PSR-1: Basic Coding Standard](https://www.php-fig.org/psr/psr-1)
+- [PSR-2: Coding Style](https://www.php-fig.org/psr/psr-2/)
+- [PSR-4: Autoloading Standard](https://www.php-fig.org/psr/psr-4)
+- [WordPress Coding Standards](https://make.wordpress.org/core/handbook/best-practices/coding-standards)
 
-The framework consists of several script and style files.  When making patches or pull requests with changes to these files, only do so to the primary file.  Don't create patches for the minified (`.min`) versions of the files.  Those will be minified after a patch is merged into the code base.
+There are instances where I opt for personal choices of my own.  In terms of contributing, stick to the standard you're most familiar with or fall back to the WordPress coding standards.  I'll make any adjustments later if the need arises.
 
 ## Language
 
