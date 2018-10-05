@@ -193,7 +193,12 @@ class Breadcrumb_Trail {
 				preg_match( '/(<a.*?>)(.*)(<\/a>)/i', $item, $matches );
 
 				// Wrap the item text with appropriate itemprop.
-				$item = !empty( $matches ) ? sprintf( '%s<span itemprop="name">%s</span>%s', $matches[1], $matches[2], $matches[3] ) : sprintf( '<span itemprop="name">%s</span>', $item );
+				$item = ! empty( $matches ) ? sprintf( '%s<span itemprop="name">%s</span>%s', $matches[1], $matches[2], $matches[3] ) : sprintf( '<span itemprop="name">%s</span>', $item );
+
+				// Wrap the item with its itemprop.
+				$item = ! empty( $matches )
+					? preg_replace( '/(<a.*?)([\'"])>/i', '$1$2 itemprop=$2item$2>', $item )
+					: sprintf( '<span itemprop="item">%s</span>', $item );
 
 				// Add list item classes.
 				$item_class = 'trail-item';
