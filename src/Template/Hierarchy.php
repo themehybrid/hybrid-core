@@ -401,6 +401,9 @@ class Hierarchy implements TemplateHierarchy {
 			}, $templates )
 		);
 
+		// Make sure there are no duplicates in the hierarchy.
+		$this->hierarchy = array_unique( $this->heirarchy );
+
 		return filter_templates( $templates );
 	}
 
