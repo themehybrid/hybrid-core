@@ -282,7 +282,7 @@ function nav_menu_css_class( $classes, $item ) {
 
 	// If the menu item is a post type archive and we're viewing a single
 	// post of that post type, the menu item should be an ancestor.
-	if ( 'post_type' === $item->type && is_singular( $item->object ) && ! in_array( 'menu__item--ancestor', $_classes ) ) {
+	if ( 'post_type_archive' === $item->type && is_singular( $item->object ) && ! in_array( 'menu__item--ancestor', $_classes ) ) {
 		$_classes[] = 'menu__item--ancestor';
 	}
 

@@ -2,6 +2,15 @@
 
 You can see the changes made via the [commit log](https://github.com/justintadlock/hybrid-core/commits/master) for the latest release.
 
+## [5.0.1] - 2018-12-11
+
+### Fixed
+
+- Corrected inline doc `@return` value for `Hybrid\View\View::locate()`.
+- Runs the template hierarchy through `array_unique()` to avoid duplicates when other plugins hook into core WP's template hierarchy.
+- Adds missing `datetime` attributes to `<time>` elements.
+- Correctly show `.menu__item--ancestor` class when viewing single posts of a given post type when that post type archive is the menu item.  This fixes the issue with the class incorrectly appearing on normal pages.
+
 ## [5.0.0] - 2018-09-13
 
 Version 5.0.0 represents a complete break from earlier versions. The framework was essentially rewritten from the ground up to utilize more modern PHP practices. The notes below will be a bit more broad than focusing on the minute details because nearly every line of code in the project has changed.

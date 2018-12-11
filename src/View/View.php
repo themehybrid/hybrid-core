@@ -140,7 +140,7 @@ class View implements ViewContract {
 	 *
 	 * @since  5.0.0
 	 * @access protected
-	 * @return void
+	 * @return string
 	 */
 	protected function locate() {
 

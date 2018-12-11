@@ -229,8 +229,9 @@ function render_date( array $args = [] ) {
 	] );
 
 	$html = sprintf(
-		'<time class="%s">%s</time>',
+		'<time class="%s" datetime="%s">%s</time>',
 		esc_attr( $args['class'] ),
+		esc_attr( get_the_date( DATE_W3C ) ),
 		sprintf( $args['text'], get_the_date( $args['format'] ) )
 	);
 

@@ -150,8 +150,9 @@ function render_date( array $args = [] ) {
 	$url = get_comment_link();
 
 	$html = sprintf(
-		'<time class="%s">%s</time>',
+		'<time class="%s" datetime="%s">%s</time>',
 		esc_attr( $args['class'] ),
+		esc_attr( get_comment_date( DATE_W3C ) ),
 		sprintf( $args['text'], esc_html( get_comment_date( $args['format'] ) ) )
 	);
 
@@ -192,8 +193,9 @@ function render_time( array $args = [] ) {
 	$url = get_comment_link();
 
 	$html = sprintf(
-		'<time class="%s">%s</time>',
+		'<time class="%s" datetime="%s">%s</time>',
 		esc_attr( $args['class'] ),
+		esc_attr( get_comment_date( DATE_W3C ) ),
 		sprintf( $args['text'], esc_html( get_comment_time( $args['format'] ) ) )
 	);
 
