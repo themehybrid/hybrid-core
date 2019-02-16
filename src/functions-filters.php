@@ -140,7 +140,7 @@ function document_title_parts( $doctitle ) {
  */
 function archive_title_filter( $title ) {
 
-	return apply_filters( 'hybrid/achive/title', Title::current() );
+	return apply_filters( 'hybrid/archive/title', Title::current() );
 }
 
 /**
