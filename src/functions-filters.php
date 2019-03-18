@@ -712,6 +712,11 @@ function body_class_filter( $classes, $class ) {
 		$classes[] = 'wp-custom-logo';
 	}
 
+	// Add the `.wp-embed-responsive` class if the theme supports it.
+	if ( current_theme_supports( 'responsive-embeds' ) ) {
+		$classes[] = 'wp-embed-responsive';
+	}
+
 	// Add the '.display-header-text' class if the user chose to display it.
 	if ( display_header_text() ) {
 		$classes[] = 'display-header-text';
