@@ -280,7 +280,7 @@ function render_comments_link( array $args = [] ) {
 	}
 
 	$url  = get_comments_link();
-	$text = get_comments_number( $args['zero'], $args['one'], $args['more'] );
+	$text = get_comments_number_text( $args['zero'], $args['one'], $args['more'] );
 
 	$html = sprintf(
 		'<a class="%s" href="%s">%s</a>',
