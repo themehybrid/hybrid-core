@@ -178,18 +178,24 @@ function render_author( array $args = [] ) {
 	$args = wp_parse_args( $args, [
 		'text'   => '%s',
 		'class'  => 'entry__author',
+		'link'   => true,
 		'before' => '',
 		'after'  => ''
 	] );
 
-	$url = get_author_posts_url( get_the_author_meta( 'ID' ) );
+	$author = get_the_author();
 
-	$html = sprintf(
-		'<a class="%s" href="%s">%s</a>',
-		esc_attr( $args['class'] ),
-		esc_url( $url ),
-		sprintf( $args['text'], get_the_author() )
-	);
+	if ( $args['link'] ) {
+		$url = get_author_posts_url( get_the_author_meta( 'ID' ) );
+
+		$author = sprintf(
+			'<a class="entry__author-link" href="%s">%s</a>',
+			esc_url( $url ),
+			$author
+		);
+	}
+
+	$html = sprintf( '<span class="%s">%s</span>', esc_attr( $args['class'] ), $author );
 
 	return apply_filters(
 		'hybrid/post/author',
@@ -280,7 +286,7 @@ function render_comments_link( array $args = [] ) {
 	}
 
 	$url  = get_comments_link();
-	$text = get_comments_number( $args['zero'], $args['one'], $args['more'] );
+	$text = get_comments_number_text( $args['zero'], $args['one'], $args['more'] );
 
 	$html = sprintf(
 		'<a class="%s" href="%s">%s</a>',

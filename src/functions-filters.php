@@ -140,7 +140,7 @@ function document_title_parts( $doctitle ) {
  */
 function archive_title_filter( $title ) {
 
-	return apply_filters( 'hybrid/achive/title', Title::current() );
+	return apply_filters( 'hybrid/archive/title', Title::current() );
 }
 
 /**
@@ -710,6 +710,11 @@ function body_class_filter( $classes, $class ) {
 	// Add the `.custom-logo` class if user is using a custom logo.
 	if ( function_exists( 'has_custom_logo' ) && has_custom_logo() ) {
 		$classes[] = 'wp-custom-logo';
+	}
+
+	// Add the `.wp-embed-responsive` class if the theme supports it.
+	if ( current_theme_supports( 'responsive-embeds' ) ) {
+		$classes[] = 'wp-embed-responsive';
 	}
 
 	// Add the '.display-header-text' class if the user chose to display it.

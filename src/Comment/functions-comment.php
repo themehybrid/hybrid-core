@@ -299,14 +299,21 @@ function render_reply_link( array $args = [] ) {
 
 	unset( $args['before'], $args['after'] );
 
-	$html = preg_replace(
-		"/class=(['\"]).+?(['\"])/i",
-		'class=$1' . esc_attr( $args['class'] ) . ' comment-reply-link$2',
-		get_comment_reply_link( $args ),
-		1
-	);
+	$html = get_comment_reply_link( $args );
 
-	return apply_filters( 'hybrid/comment/reply_link', $before . $html . $after );
+	if ( $html ) {
+
+		$html = preg_replace(
+			"/class=(['\"]).+?(['\"])/i",
+			'class=$1' . esc_attr( $args['class'] ) . ' comment-reply-link$2',
+			$html,
+			1
+		);
+
+		$html = $before . $html . $after;
+	}
+
+	return apply_filters( 'hybrid/comment/reply_link', $html );
 }
 
 /**

@@ -2,6 +2,19 @@
 
 You can see the changes made via the [commit log](https://github.com/justintadlock/hybrid-core/commits/master) for the latest release.
 
+## [5.0.2] - 2019-04-04
+
+### Added
+
+- New `link` argument to enable/disable the link for `Hybrid\Post\render_author()`.
+
+### Fixed
+
+- Corrected misspelling of `archive` in the `hybrid/archive/title` hook.
+- Use `get_comments_number_text()` instead of `get_comments_number()` to get appropriate comments text.
+- Added the missing `.wp-embed-responsive` body class if supported.
+- Make sure to show `$before` and `$after` args for the comment reply link if there's a link.
+
 ## [5.0.1] - 2018-12-11
 
 ### Fixed
