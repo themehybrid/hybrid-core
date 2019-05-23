@@ -264,9 +264,9 @@ class Attr implements Attributes {
 	 * @param  array   $attr
 	 * @return array
 	 */
-	protected function post( $attr ) {
+	protected function post( $attr, $post = null ) {
 
-		$post  = get_post();
+		$post  = get_post( $post );
 		$class = isset( $attr['class'] ) ? $attr['class'] : '';
 
 		$attr['id']    = ! empty( $post ) ? sprintf( 'post-%d', get_the_ID() ) : 'post-0';
