@@ -77,7 +77,8 @@ final class Hybrid_Admin_Post_Layout {
 	 */
 	public function add_meta_boxes( $post_type ) {
 
-		if ( post_type_supports( $post_type, 'theme-layouts' ) && current_user_can( 'edit_theme_options' ) ) {
+		// @see https://github.com/justintadlock/hybrid-core/issues/169
+		if ( post_type_supports( $post_type, 'theme-layouts' ) && current_user_can( 'edit_pages' ) ) {
 
 			// Add meta box.
 			add_meta_box( 'hybrid-post-layout', esc_html__( 'Layout', 'hybrid-core' ), array( $this, 'meta_box' ), $post_type, 'side', 'default' );
