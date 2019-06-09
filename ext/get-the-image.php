@@ -295,7 +295,7 @@ final class Get_The_Image {
 	public function find() {
 
 		// Get cache key based on $this->args.
-		$key = md5( serialize( compact( array_keys( $this->args ) ) ) );
+		$key = md5( serialize( $this->args ) );
 
 		// Check for a cached image.
 		$image_cache = wp_cache_get( $this->args['post_id'], 'get_the_image' );
