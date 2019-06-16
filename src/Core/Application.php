@@ -43,7 +43,7 @@ class Application extends Container implements ApplicationContract, Bootable {
 	 * @access public
 	 * @var    string
 	 */
-	const VERSION = '5.0.2';
+	const VERSION = '5.0.3-alpha';
 
 	/**
 	 * Array of service provider objects.
