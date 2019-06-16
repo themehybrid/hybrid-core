@@ -60,4 +60,4 @@ Check out the officially-supported [Mythic starter theme](https://github.com/jus
 
 This project is licensed under the [GNU GPL](http://www.gnu.org/licenses/old-licenses/gpl-2.0.html), version 2 or later.
 
-2008&thinsp;&ndash;&thinsp;2018 &copy; [Justin Tadlock](http://justintadlock.com).
+2008&thinsp;&ndash;&thinsp;2019 &copy; [Justin Tadlock](http://justintadlock.com).

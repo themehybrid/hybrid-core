@@ -38,14 +38,13 @@ class Template implements TemplateContract {
 	protected $type = 'post';
 
 	/**
-	 * Array of subtypes template works with. This defaults to a subtype for
-	 * use with the `post` type.
+	 * Array of subtypes template works with.
 	 *
 	 * @since  5.0.0
 	 * @access protected
 	 * @var    array
 	 */
-	protected $subtype = [ 'page' ];
+	protected $subtype = [];
 
 	/**
 	 * Filename of the template.
@@ -149,7 +148,7 @@ class Template implements TemplateContract {
 	 */
 	public function hasSubtype( $subtype ) {
 
-		return in_array( $subtype, (array) $this->subtype );
+		return ! $this->subtype || in_array( $subtype, (array) $this->subtype );
 	}
 
 	/**

@@ -9,7 +9,7 @@
  *
  * @package   HybridCore
  * @author    Justin Tadlock <justintadlock@gmail.com>
- * @copyright Copyright (c) 2008 - 2018, Justin Tadlock
+ * @copyright Copyright (c) 2008 - 2019, Justin Tadlock
  * @link      https://themehybrid.com/hybrid-core
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
@@ -43,7 +43,7 @@ class Application extends Container implements ApplicationContract, Bootable {
 	 * @access public
 	 * @var    string
 	 */
-	const VERSION = '5.0.2';
+	const VERSION = '5.0.3';
 
 	/**
 	 * Array of service provider objects.

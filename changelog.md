@@ -2,6 +2,12 @@
 
 You can see the changes made via the [commit log](https://github.com/justintadlock/hybrid-core/commits/master) for the latest release.
 
+## [5.0.3] - 2019-06-16
+
+### Changed
+
+- The `Template` class should not have a defined `$subtype` by default. Any templates registered should work with all subtypes (post types in most cases) unless otherwise specified.
+
 ## [5.0.2] - 2019-04-04
 
 ### Added
