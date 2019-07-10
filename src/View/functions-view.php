@@ -13,7 +13,7 @@
 
 namespace Hybrid\View;
 
-use Hybrid\Contracts\View\View;
+use Hybrid\Contracts\View\Engine;
 use Hybrid\Proxies\App;
 use Hybrid\Tools\Collection;
 
@@ -29,11 +29,7 @@ use Hybrid\Tools\Collection;
  */
 function view( $name, $slugs = [], $data = [] ) {
 
-	if ( ! $data instanceof Collection ) {
-		$data = new Collection( $data );
-	}
-
-	return App::resolve( View::class, compact( 'name', 'slugs', 'data' ) );
+	return App::resolve( Engine::class )->view( $name, $slugs, $data );
 }
 
 /**

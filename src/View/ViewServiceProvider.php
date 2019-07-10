@@ -37,9 +37,13 @@ class ViewServiceProvider extends ServiceProvider {
 	 */
 	public function register() {
 
-		$this->app->bind( ViewContract::class,   View::class   );
-		$this->app->bind( EngineContract::class, Engine::class );
+		// Bind the view contract.
+		$this->app->bind( ViewContract::class, View::class );
 
+		// Bind a single instance of the engine contract.
+		$this->app->singleton( EngineContract::class, Engine::class );
+
+		// Create aliases for the view and engine.
 		$this->app->alias( ViewContract::class,   'view'        );
 		$this->app->alias( EngineContract::class, 'view/engine' );
 	}
