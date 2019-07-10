@@ -17,7 +17,8 @@
 namespace Hybrid\View;
 
 use Hybrid\Tools\ServiceProvider;
-use Hybrid\Contracts\View\View as ViewContract;
+use Hybrid\Contracts\View\Engine as EngineContract;
+use Hybrid\Contracts\View\View   as ViewContract;
 
 /**
  * View provider class.
@@ -36,8 +37,10 @@ class ViewServiceProvider extends ServiceProvider {
 	 */
 	public function register() {
 
-		$this->app->bind( ViewContract::class, View::class );
+		$this->app->bind( ViewContract::class,   View::class   );
+		$this->app->bind( EngineContract::class, Engine::class );
 
-		$this->app->alias( ViewContract::class, 'view' );
+		$this->app->alias( ViewContract::class,   'view'        );
+		$this->app->alias( EngineContract::class, 'view/engine' );
 	}
 }
