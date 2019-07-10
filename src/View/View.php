@@ -180,14 +180,15 @@ class View implements ViewContract {
 			// Maybe remove core WP's `prepend_attachment`.
 			$this->maybeShiftAttachment();
 
-			// Make the `$data` variable available to the template.
-			$data = $this->data;
-
 			// Extract the data into individual variables. Each of
 			// these variables will be available in the template.
 			if ( $this->data instanceof Collection ) {
 				extract( $this->data->all() );
 			}
+
+			// Make `$data` and `$view` variables available to templates.
+			$data = $this->data;
+			$view = $this;
 
 			// Load the template.
 			include( $this->template() );
