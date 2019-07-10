@@ -107,6 +107,18 @@ class View implements ViewContract {
 	}
 
 	/**
+	 * Returns the array of slugs.
+	 *
+	 * @since  5.1.0
+	 * @access public
+	 * @return array
+	 */
+	public function slugs() {
+
+		return (array) $this->slugs;
+	}
+
+	/**
 	 * Uses the array of template slugs to build a hierarchy of potential
 	 * templates that can be used.
 	 *
