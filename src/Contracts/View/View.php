@@ -26,6 +26,15 @@ use Hybrid\Contracts\Displayable;
 interface View extends Renderable, Displayable {
 
 	/**
+	 * Returns the array of slugs.
+	 *
+	 * @since  5.1.0
+	 * @access public
+	 * @return array
+	 */
+	public function slugs();
+
+	/**
 	 * Returns the absolute path to the template file.
 	 *
 	 * @since  5.0.0
