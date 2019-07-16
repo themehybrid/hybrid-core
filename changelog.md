@@ -2,6 +2,13 @@
 
 You can see the changes made via the [commit log](https://github.com/justintadlock/hybrid-core/commits/master) for the latest release.
 
+## [5.1.0] - 2019-07-16
+
+### Added
+
+- New `Hybrid\View\Engine` wrapper class for the view system, which gets passed to view templates as the `$engine` variable.
+- The `View` instances gets passed to view templates as the `$view` variable.
+
 ## [5.0.3] - 2019-06-16
 
 ### Changed
