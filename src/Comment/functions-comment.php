@@ -68,10 +68,57 @@ function render_author( array $args = [] ) {
 	$html = sprintf(
 		'<span class="%s">%s</span>',
 		esc_attr( $args['class'] ),
-		get_comment_author_link()
+		sprintf( $args['text'], get_comment_author_link() )
 	);
 
 	return apply_filters( 'hybrid/comment/author', $args['before'] . $html . $args['after'] );
+}
+
+/**
+ * Displays the comment author link HTML.
+ *
+ * @since  5.2.0
+ * @access public
+ * @param  array   $args
+ * @return void
+ */
+function display_author_link( array $args = [] ) {
+
+	echo render_author_link( $args );
+}
+
+/**
+ * Returns the comment author link HTML.
+ *
+ * @since  5.2.0
+ * @access public
+ * @param  array   $args
+ * @return string
+ */
+function render_author_link( array $args = [] ) {
+
+	$args = wp_parse_args( $args, [
+		'text'   => '%s',
+		'class'  => 'comment__author-link',
+		'before' => '',
+		'after'  => ''
+	] );
+
+	$comment = get_comment();
+	$url     = get_comment_author_url( $comment );
+	$author  = get_comment_author( $comment );
+	$html    = sprintf( $args['text'], esc_html( $author ) );
+
+	if ( $url && 'http://' !== $url ) {
+		$html = sprintf(
+			'<a href="%s" class="%s" rel="external nofollow">%s</a>',
+			esc_url( $url ),
+			esc_attr( $args['class'] ),
+			$html
+		);
+	}
+
+	return apply_filters( 'hybrid/comment/author/link', $args['before'] . $html . $args['after'] );
 }
 
 /**
