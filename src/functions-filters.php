@@ -795,7 +795,7 @@ function post_class_filter( $classes, $class, $post_id ) {
 
 	// Sticky posts.
 	if ( is_home() && ! is_paged() && is_sticky( $post_id ) ) {
-		$classes[] = 'sticky';
+		$classes[] = 'is-sticky';
 	}
 
 	// Password-protected posts.
