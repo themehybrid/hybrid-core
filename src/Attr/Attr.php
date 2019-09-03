@@ -63,6 +63,15 @@ class Attr implements Attributes {
 	protected $attr = [];
 
 	/**
+	 * Stored array of data.
+	 *
+	 * @since  5.0.0
+	 * @access protected
+	 * @var    array
+	 */
+	protected $data = [];
+
+	/**
 	 * Outputs an HTML element's attributes.
 	 *
 	 * @since  5.0.0
@@ -131,6 +140,26 @@ class Attr implements Attributes {
 		}
 
 		return trim( $html );
+	}
+
+	/**
+	 * Adds custom data to the attribute object.
+	 *
+	 * @since  5.2.0
+	 * @access public
+	 * @param  string|array  $name
+	 * @param  mixed         $value
+	 * @return $this
+	 */
+	public function with( $name, $value = null ) {
+
+		if ( is_array( $name ) ) {
+			$this->data = array_merge( $this->data, $name );
+		} else {
+			$this->data[ $name ] = $value;
+		}
+
+		return $this;
 	}
 
 	/**
@@ -266,11 +295,11 @@ class Attr implements Attributes {
 	 */
 	protected function post( $attr ) {
 
-		$post  = get_post();
+		$post  = isset( $this->data['post'] ) ? get_post( $this->data['post'] ) : get_post();
 		$class = isset( $attr['class'] ) ? $attr['class'] : '';
 
-		$attr['id']    = ! empty( $post ) ? sprintf( 'post-%d', get_the_ID() ) : 'post-0';
-		$attr['class'] = join( ' ', get_post_class( $class ) );
+		$attr['id']    = ! empty( $post ) ? sprintf( 'post-%d', $post->ID ) : 'post-0';
+		$attr['class'] = join( ' ', get_post_class( $class, $post ) );
 
 		return $attr;
 	}

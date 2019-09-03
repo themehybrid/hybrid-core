@@ -45,4 +45,15 @@ interface Attributes extends Renderable, Displayable {
 	 * @return string
 	 */
 	public function get( $name );
+
+	/**
+	 * Adds custom data to the attribute object.
+	 *
+	 * @since  5.2.0
+	 * @access public
+	 * @param  string|array  $name
+	 * @param  mixed         $value
+	 * @return $this
+	 */
+	public function with( $key, $value = null );
 }
