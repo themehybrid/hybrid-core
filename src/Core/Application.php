@@ -18,7 +18,11 @@ namespace Hybrid\Core;
 
 use Hybrid\Container\Container;
 use Hybrid\Contracts\Core\Application as ApplicationContract;
+<<<<<<< HEAD
 use Hybrid\Support\Contracts\Bootable;
+=======
+use Hybrid\Contracts\Bootable;
+>>>>>>> 81eee0c (cleanup of HC)
 use Hybrid\Proxies\Proxy;
 use Hybrid\Proxies\App;
 
