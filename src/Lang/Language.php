@@ -78,7 +78,7 @@ class Language implements LanguageContract {
 		$this->parent_textdomain = $theme->get( 'TextDomain' );
 		$this->parent_path       = trim( $theme->get( 'DomainPath' ), '/' );
 
-		if ( is_child_theme() ) {
+		if ( \Hybrid\is_child_theme() ) {
 			$child = wp_get_theme();
 
 			$this->child_textdomain = $child->get( 'TextDomain' );
@@ -189,7 +189,7 @@ class Language implements LanguageContract {
 		$theme_func = $this->parentPath( "{$locale}.php" );
 
 		// If file exists in child theme.
-		if ( is_child_theme() && file_exists( $child_func ) ) {
+		if ( \Hybrid\is_child_theme() && file_exists( $child_func ) ) {
 			require_once( $child_func );
 		}
 
@@ -276,7 +276,7 @@ class Language implements LanguageContract {
 			$theme_mofile = $this->parentPath( "{$domain}-{$locale}.mo" );
 
 			// Overwrite the mofile if it exists.
-			if ( is_child_theme() && file_exists( $child_mofile ) ) {
+			if ( \Hybrid\is_child_theme() && file_exists( $child_mofile ) ) {
 
 				$mofile = $child_mofile;
 

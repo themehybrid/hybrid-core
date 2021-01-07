@@ -213,3 +213,18 @@ function is_plural() {
 
 	return is_home() || is_archive() || is_search();
 }
+
+/**
+ * Whether a child theme is in use.
+ * Using custom function, so we can avoid undefined constant TEMPLATEPATH - assumed 'TEMPLATEPATH' warning.
+ * When used before 'after_theme_setup' hook.
+ *
+ * @see https://developer.wordpress.org/reference/functions/is_child_theme/#user-contributed-notes
+ *
+ * @since  5.0.3
+ * @access public
+ * @return bool True if a child theme is in use, false otherwise.
+ */
+function is_child_theme() {
+	return ( get_template_directory() !== get_stylesheet_directory() );
+}

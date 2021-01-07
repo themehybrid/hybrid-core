@@ -96,7 +96,7 @@ function locations() {
 	$locations = [ get_stylesheet_directory() . "/{$path}" ];
 
 	// If child theme, add parent theme path second.
-	if ( is_child_theme() ) {
+	if ( \Hybrid\is_child_theme() ) {
 		$locations[] = get_template_directory() . "/{$path}";
 	}
 

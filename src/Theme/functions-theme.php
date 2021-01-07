@@ -108,7 +108,7 @@ function display_child_link( array $args = [] ) {
  */
 function render_child_link( array $args = [] ) {
 
-	if ( ! is_child_theme() ) {
+	if ( ! \Hybrid\is_child_theme() ) {
 		return '';
 	}
 
