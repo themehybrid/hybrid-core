@@ -284,7 +284,9 @@ class Application extends Container implements ApplicationContract, Bootable {
 		Proxy::setContainer( $this );
 
 		foreach ( $this->proxies as $class => $alias ) {
-			class_alias( $class, $alias );
+			if ( ! class_exists( $alias ) ) {
+				class_alias( $class, $alias );
+			}
 		}
 	}
 }
