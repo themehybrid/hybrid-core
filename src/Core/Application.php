@@ -16,17 +16,11 @@
 
 namespace Hybrid\Core;
 
-use Hybrid\Attr\AttrServiceProvider;
 use Hybrid\Container\Container;
 use Hybrid\Contracts\Core\Application as ApplicationContract;
 use Hybrid\Contracts\Bootable;
-use Hybrid\Lang\LanguageServiceProvider;
-use Hybrid\Media\MetaServiceProvider;
 use Hybrid\Proxies\Proxy;
 use Hybrid\Proxies\App;
-use Hybrid\Template\HierarchyServiceProvider;
-use Hybrid\Template\TemplatesServiceProvider;
-use Hybrid\View\ViewServiceProvider;
 
 /**
  * Application class.
@@ -74,9 +68,7 @@ class Application extends Container implements ApplicationContract, Bootable {
 	public function __construct() {
 
 		$this->registerDefaultBindings();
-		$this->registerDefaultProviders();
 		$this->registerDefaultProxies();
-		$this->bootstrapFilters();
 	}
 
 	/**
@@ -113,27 +105,6 @@ class Application extends Container implements ApplicationContract, Bootable {
 	}
 
 	/**
-	 * Adds the default service providers for the framework.
-	 *
-	 * @since  5.0.0
-	 * @access protected
-	 * @return void
-	 */
-	protected function registerDefaultProviders() {
-
-		array_map( function( $provider ) {
-			$this->provider( $provider );
-		}, [
-			AttrServiceProvider::class,
-			LanguageServiceProvider::class,
-			MetaServiceProvider::class,
-			TemplatesServiceProvider::class,
-			HierarchyServiceProvider::class,
-			ViewServiceProvider::class
-		] );
-	}
-
-	/**
 	 * Adds the default static proxy classes.
 	 *
 	 * @since  5.0.0
@@ -143,18 +114,6 @@ class Application extends Container implements ApplicationContract, Bootable {
 	protected function registerDefaultProxies() {
 
 		$this->proxy( App::class, '\Hybrid\App' );
-	}
-
-	/**
-	 * Bootstrap action/filter hook calls.
-	 *
-	 * @since  5.0.0
-	 * @access protected
-	 * @return void
-	 */
-	protected function bootstrapFilters() {
-
-		require_once( $this->path . '/bootstrap-filters.php' );
 	}
 
 	/**
