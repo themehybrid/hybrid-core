@@ -22,14 +22,14 @@ Hybrid Core is free.  However, I ask that you purchase a support membership at [
 
 ## Documentation
 
-The documentation is handled via Hybrid Core's [wiki](https://github.com/justintadlock/hybrid-core/wiki).  This is community-contributed documentation that I hope you will add to if you use the framework.
+The documentation is handled via Hybrid Core's [wiki](https://github.com/themehybrid/hybrid-core/wiki).  This is community-contributed documentation that I hope you will add to if you use the framework.
 
 ### Installation
 
 Use the following command from your preferred command line utility to install the package.
 
 ```bash
-composer require justintadlock/hybrid-core
+composer require themehybrid/hybrid-core
 ```
 
 If bundling this directly in your theme, you'll need to add the following code to your `functions.php` to autoload the project (and any other dependencies).
