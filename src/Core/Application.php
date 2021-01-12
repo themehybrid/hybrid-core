@@ -18,7 +18,7 @@ namespace Hybrid\Core;
 
 use Hybrid\Container\Container;
 use Hybrid\Contracts\Core\Application as ApplicationContract;
-use Hybrid\Contracts\Bootable;
+use Hybrid\Support\Contracts\Bootable;
 use Hybrid\Proxies\Proxy;
 use Hybrid\Proxies\App;
 
