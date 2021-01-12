@@ -1,6 +1,21 @@
 # Change Log
 
-You can see the changes made via the [commit log](https://github.com/justintadlock/hybrid-core/commits/master) for the latest release.
+You can see the changes made via the [commit log](https://github.com/themehybrid/hybrid-core/commits/master) for the latest release.
+
+## [6.0.0] - 2021-03-11
+Version 6.0.0 represents a complete overhaul of the framework. The framework is essentially stripped down to basic framework only. Splitting modules into their own unique packages.
+
+### Removed
+These packages are removed from Hybrid Core, and have their own repos now.
+
+- [Hybrid Attr](https://github.com/themehybrid/hybrid-attr) is an HTML attributes class system.
+- [Hybrid Lang](https://github.com/themehybrid/hybrid-lang) holds the Lang class, which deals with loading textdomains and locale-specific function files.
+- [Hybrid Media](https://github.com/themehybrid/hybrid-media) Grabber is a script for pulling media either from the post content or attached to the post.
+- [Hybrid Pagination](https://github.com/themehybrid/hybrid-pagination) is a fork of the core WordPress paginate_links() function to give theme authors full control over the output of their pagination.
+- [Hybrid Support](https://github.com/themehybrid/hybrid-support) is a collection of interfaces and tools, such as Bootable interface, ServiceProvider abstract class etc.
+- [Hybrid Template](https://github.com/themehybrid/hybrid-template) is a template management system for Hybrid Core framework.
+- [Hybrid Theme](https://github.com/themehybrid/hybrid-theme) is a collection of optimizations and helper tools to aid in Theme development.
+- [Hybrid View](https://github.com/themehybrid/hybrid-view) maintains the View class. It's used for setting up and rendering theme template files.
 
 ## [5.2.0] - 2019-09-03
 
@@ -77,10 +92,10 @@ Version 5.0.0 represents a complete break from earlier versions. The framework w
 
 ### Removed
 
-- The Breadcrumb Trail extension is now a separate package named [Hybrid Breadcrumbs](https://github.com/justintadlock/hybrid-breadcrumbs).
-- The Get the Image extension is now a separate packaged named [Hybrid Carbon](https://github.com/justintadlock/hybrid-carbon).
-- The customizer controls, settings, and related code were ported to the [Hybrid Customize](https://github.com/justintadlock/hybrid-customize) project.
-- The Google font system was ported to the [Hybrid Font](https://github.com/justintadlock/hybrid-font) project.
+- The Breadcrumb Trail extension is now a separate package named [Hybrid Breadcrumbs](https://github.com/themehybrid/hybrid-breadcrumbs).
+- The Get the Image extension is now a separate packaged named [Hybrid Carbon](https://github.com/themehybrid/hybrid-carbon).
+- The customizer controls, settings, and related code were ported to the [Hybrid Customize](https://github.com/themehybrid/hybrid-customize) project.
+- The Google font system was ported to the [Hybrid Font](https://github.com/themehybrid/hybrid-font) project.
 - Theme Layouts was removed but will likely return as a separate, add-on repository.
 - Cleaner Gallery was likewise removed. Whether it becomes a new project will depend on feedback.
 - `HYBRID_URI` constant. The framework no longer ships any assets. Therefore, this is unnecessary.
@@ -238,27 +253,27 @@ Version 5.0.0 represents a complete break from earlier versions. The framework w
 
 Versions prior to 3.0.0 do not have change logs. However, you can view the commit logs for each version.
 
-* [2.0.4](https://github.com/justintadlock/hybrid-core/tree/2.0.4)
-* [2.0.3](https://github.com/justintadlock/hybrid-core/tree/2.0.3)
-* [2.0.2](https://github.com/justintadlock/hybrid-core/tree/2.0.2)
-* [2.0.1](https://github.com/justintadlock/hybrid-core/tree/2.0.1)
-* [2.0.0](https://github.com/justintadlock/hybrid-core/commits/2.0)
-* [1.6.2](https://github.com/justintadlock/hybrid-core/tree/1.6.2)
-* [1.6.1](https://github.com/justintadlock/hybrid-core/tree/1.6.1)
-* [1.6.0](https://github.com/justintadlock/hybrid-core/tree/1.6.0)
-* [1.5.5](https://github.com/justintadlock/hybrid-core/tree/1.5.5)
-* [1.5.4](https://github.com/justintadlock/hybrid-core/tree/1.5.4)
-* [1.5.3](https://github.com/justintadlock/hybrid-core/tree/1.5.3)
-* [1.5.2](https://github.com/justintadlock/hybrid-core/tree/1.5.2)
-* [1.5.1](https://github.com/justintadlock/hybrid-core/tree/1.5.1)
-* [1.5.0](https://github.com/justintadlock/hybrid-core/tree/1.5)
-* [1.4.3](https://github.com/justintadlock/hybrid-core/tree/1.4.3)
-* [1.4.2](https://github.com/justintadlock/hybrid-core/tree/1.4.2)
-* [1.4.1](https://github.com/justintadlock/hybrid-core/tree/1.4.1)
-* [1.4.0](https://github.com/justintadlock/hybrid-core/tree/1.4)
-* [1.3.1](https://github.com/justintadlock/hybrid-core/tree/1.3.1)
-* [1.3.0](https://github.com/justintadlock/hybrid-core/tree/1.3)
-* [1.2.1](https://github.com/justintadlock/hybrid-core/tree/1.2.1)
-* [1.2.0](https://github.com/justintadlock/hybrid-core/tree/1.2)
-* [1.1.1](https://github.com/justintadlock/hybrid-core/tree/1.1.1)
-* [1.1.0](https://github.com/justintadlock/hybrid-core/tree/1.1)
+* [2.0.4](https://github.com/themehybrid/hybrid-core/tree/2.0.4)
+* [2.0.3](https://github.com/themehybrid/hybrid-core/tree/2.0.3)
+* [2.0.2](https://github.com/themehybrid/hybrid-core/tree/2.0.2)
+* [2.0.1](https://github.com/themehybrid/hybrid-core/tree/2.0.1)
+* [2.0.0](https://github.com/themehybrid/hybrid-core/commits/2.0)
+* [1.6.2](https://github.com/themehybrid/hybrid-core/tree/1.6.2)
+* [1.6.1](https://github.com/themehybrid/hybrid-core/tree/1.6.1)
+* [1.6.0](https://github.com/themehybrid/hybrid-core/tree/1.6.0)
+* [1.5.5](https://github.com/themehybrid/hybrid-core/tree/1.5.5)
+* [1.5.4](https://github.com/themehybrid/hybrid-core/tree/1.5.4)
+* [1.5.3](https://github.com/themehybrid/hybrid-core/tree/1.5.3)
+* [1.5.2](https://github.com/themehybrid/hybrid-core/tree/1.5.2)
+* [1.5.1](https://github.com/themehybrid/hybrid-core/tree/1.5.1)
+* [1.5.0](https://github.com/themehybrid/hybrid-core/tree/1.5)
+* [1.4.3](https://github.com/themehybrid/hybrid-core/tree/1.4.3)
+* [1.4.2](https://github.com/themehybrid/hybrid-core/tree/1.4.2)
+* [1.4.1](https://github.com/themehybrid/hybrid-core/tree/1.4.1)
+* [1.4.0](https://github.com/themehybrid/hybrid-core/tree/1.4)
+* [1.3.1](https://github.com/themehybrid/hybrid-core/tree/1.3.1)
+* [1.3.0](https://github.com/themehybrid/hybrid-core/tree/1.3)
+* [1.2.1](https://github.com/themehybrid/hybrid-core/tree/1.2.1)
+* [1.2.0](https://github.com/themehybrid/hybrid-core/tree/1.2)
+* [1.1.1](https://github.com/themehybrid/hybrid-core/tree/1.1.1)
+* [1.1.0](https://github.com/themehybrid/hybrid-core/tree/1.1)
