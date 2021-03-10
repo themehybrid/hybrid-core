@@ -2,6 +2,18 @@
 
 You can see the changes made via the [commit log](https://github.com/justintadlock/hybrid-core/commits/master) for the latest release.
 
+## [5.2.0] - 2019-09-03
+
+### Added
+
+- New `Hybrid\Attr\Attr\with()` method for passing data into the attributes system.
+- Above `with()` method will auto-handle a `'post'` parameter of `WP_Post` for post attributes.
+- New `Hybrid\Comment\render_author_link()` and `display_author_link()` function.
+
+### Changed
+
+- `.sticky` class renamed to `.is-sticky`.
+
 ## [5.1.0] - 2019-07-16
 
 ### Added
