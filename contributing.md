@@ -1,6 +1,6 @@
 # Contributing
 
-The code for the framework is handled via its [GitHub Repository](https://github.com/justintadlock/hybrid-core).  You can open tickets, create patches, and send pull requests there.
+The code for the framework is handled via its [GitHub Repository](https://github.com/themehybrid/hybrid-core).  You can open tickets, create patches, and send pull requests there.
 
 ## Pull requests
 

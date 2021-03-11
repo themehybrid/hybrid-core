@@ -1,5 +1,5 @@
 {
-	"name"        : "justintadlock/hybrid-core",
+	"name"        : "themehybrid/hybrid-core",
 	"description" : "Hybrid Core: A theme framework for developing modern WordPress themes.",
 	"keywords"    : [ "wordpress" ],
 	"homepage"    : "https://themehybrid.com/hybrid-core",
@@ -13,7 +13,7 @@
 		}
 	],
 	"support"     : {
-		"issues" : "https://github.com/justintadlock/hybrid-core/issues",
+		"issues" : "https://github.com/themehybrid/hybrid-core/issues",
 		"forum"  : "https://themehybrid.com/board/forums/hybrid-core"
 	},
 	"repositories": [
@@ -32,7 +32,7 @@
 	},
 	"require"     : {
 		"php" : ">=5.6",
-		"justintadlock/hybrid-support": "dev-main#5d07b82"
+		"themehybrid/hybrid-support": "dev-main#5d07b82"
 	},
 	"config": {
 		"optimize-autoloader": true,
