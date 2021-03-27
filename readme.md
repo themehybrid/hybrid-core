@@ -29,7 +29,7 @@ The documentation is handled via Hybrid Core's [wiki](https://github.com/themehy
 Use the following command from your preferred command line utility to install the package.
 
 ```bash
-composer require themehybrid/hybrid-core
+composer require justintadlock/hybrid-core
 ```
 
 If bundling this directly in your theme, you'll need to add the following code to your `functions.php` to autoload the project (and any other dependencies).
