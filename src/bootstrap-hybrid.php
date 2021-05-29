@@ -12,8 +12,13 @@
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
-# Define the directory path to the framework. This shouldn't need changing
-# unless doing something really out there or just for clarity.
+/**
+ * Define the directory path to the framework. This shouldn't need changing
+ * unless doing something really out there or just for clarity.
+ *
+ * @deprecated 6.0
+ * @deprecated Use $themeslug->instance( 'path', '/path/to/hybrid-core );
+ */
 if ( ! defined( 'HYBRID_DIR' ) ) {
 
 	define( 'HYBRID_DIR', __DIR__ );
