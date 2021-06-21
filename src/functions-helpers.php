@@ -35,6 +35,20 @@ function app( $abstract = '', $params = [] ) {
 }
 
 /**
+ * Conditional function for checking whether the application has been booted.
+ * Use before launching a new application. If booted, reference the `app()`
+ * instance directly.
+ *
+ * @since  6.0.0
+ * @access public
+ * @return bool
+ */
+function booted() {
+
+	return defined( 'HYBRID_BOOTED' ) && true === HYBRID_BOOTED;
+}
+
+/**
  * Wrapper function for the `Collection` class.
  *
  * @since  5.0.0

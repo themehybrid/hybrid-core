@@ -58,6 +58,24 @@ class Application extends Container implements ApplicationContract, Bootable {
 	protected $proxies = [];
 
 	/**
+	 * Array of booted service providers.
+	 *
+	 * @since  6.0.0
+	 * @access protected
+	 * @var    array
+	 */
+	protected $booted_providers = [];
+
+	/**
+	 * Array of registered proxies.
+	 *
+	 * @since  6.0.0
+	 * @access protected
+	 * @var    array
+	 */
+	protected $registered_proxies = [];
+
+	/**
 	 * Registers the default bindings, providers, and proxies for the
 	 * framework.
 	 *
@@ -83,6 +101,10 @@ class Application extends Container implements ApplicationContract, Bootable {
 		$this->registerProviders();
 		$this->bootProviders();
 		$this->registerProxies();
+
+		if ( ! defined( 'HYBRID_BOOTED' ) ) {
+			define( 'HYBRID_BOOTED', true );
+		}
 	}
 
 	/**
@@ -98,10 +120,7 @@ class Application extends Container implements ApplicationContract, Bootable {
 		$this->instance( 'app', $this );
 
 		// Adds the directory path for the framework.
-		// This shouldn't need changing
-		// unless doing something really out there or just for clarity.
 		if ( ! $this->has( 'path' ) ) {
-			// Adds the directory path for the framework.
 			$this->instance( 'path', untrailingslashit( HYBRID_DIR ) );
 		}
 
@@ -176,8 +195,14 @@ class Application extends Container implements ApplicationContract, Bootable {
 	 */
 	protected function bootProvider( $provider ) {
 
+		// Bail if the provider has already been booted.
+		if ( in_array( $provider, $this->booted_providers ) ) {
+			return;
+		}
+
 		if ( method_exists( $provider, 'boot' ) ) {
 			$provider->boot();
+			$this->booted_providers[] = $provider;
 		}
 	}
 
@@ -245,11 +270,16 @@ class Application extends Container implements ApplicationContract, Bootable {
 	 */
 	protected function registerProxies() {
 
-		Proxy::setContainer( $this );
+		// Only set the container on first instance.
+		if ( ! $this->registered_proxies ) {
+			Proxy::setContainer( $this );
+		}
 
 		foreach ( $this->proxies as $class => $alias ) {
-			if ( ! class_exists( $alias ) ) {
+
+			if ( ! in_array( $alias, $this->registered_proxies ) ) {
 				class_alias( $class, $alias );
+				$this->registered_proxies[] = $alias;
 			}
 		}
 	}
