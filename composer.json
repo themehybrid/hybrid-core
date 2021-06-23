@@ -28,11 +28,5 @@
 		"php" : ">=5.6",
 		"themehybrid/hybrid-contracts" : "dev-master",
 		"themehybrid/hybrid-tools" : "dev-master"
-	},
-	"config": {
-		"optimize-autoloader": true,
-		"sort-packages": true
-	},
-	"minimum-stability": "dev",
-	"prefer-stable": true
+	}
 }
