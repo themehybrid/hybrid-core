@@ -17,74 +17,82 @@ namespace Hybrid;
 use Hybrid\Proxies\App;
 use Hybrid\Tools\Collection;
 
-/**
- * The single instance of the app. Use this function for quickly working with
- * data.  Returns an instance of the `\Hybrid\Core\Application` class. If the
- * `$abstract` parameter is passed in, it'll resolve and return the value from
- * the container.
- *
- * @since  5.0.0
- * @access public
- * @param  string  $abstract
- * @param  array   $params
- * @return mixed
- */
-function app( $abstract = '', $params = [] ) {
-
-	return App::resolve( $abstract ?: 'app', $params );
+if ( ! function_exists( __NAMESPACE__ . '\\app' ) ) {
+	/**
+	 * The single instance of the app. Use this function for quickly working
+	 * with data.  Returns an instance of the `\Hybrid\Core\Application`
+	 * class. If the `$abstract` parameter is passed in, it'll resolve and
+	 * return the value from the container.
+	 *
+	 * @since  5.0.0
+	 * @access public
+	 * @param  string  $abstract
+	 * @param  array   $params
+	 * @return mixed
+	 */
+	function app( $abstract = '', $params = [] ) {
+		return App::resolve( $abstract ?: 'app', $params );
+	}
 }
 
-/**
- * Conditional function for checking whether the application has been booted.
- * Use before launching a new application. If booted, reference the `app()`
- * instance directly.
- *
- * @since  6.0.0
- * @access public
- * @return bool
- */
-function booted() {
-
-	return defined( 'HYBRID_BOOTED' ) && true === HYBRID_BOOTED;
+if ( ! function_exists( __NAMESPACE__ . '\\booted' ) ) {
+	/**
+	 * Conditional function for checking whether the application has been
+	 * booted. Use before launching a new application. If booted, reference
+	 * the `app()` instance directly.
+	 *
+	 * @since  6.0.0
+	 * @access public
+	 * @return bool
+	 */
+	function booted() {
+		return defined( 'HYBRID_BOOTED' ) && true === HYBRID_BOOTED;
+	}
 }
 
-/**
- * Wrapper function for the `Collection` class.
- *
- * @since  5.0.0
- * @access public
- * @param  array   $items
- * @return object
- */
-function collect( $items = [] ) {
-
-	return new Collection( $items );
+if ( ! function_exists( __NAMESPACE__ . '\\collect' ) ) {
+	/**
+	 * Wrapper function for the `Collection` class.
+	 *
+	 * @since  5.0.0
+	 * @access public
+	 * @param  array   $items
+	 * @return object
+	 */
+	function collect( $items = [] ) {
+		return new Collection( $items );
+	}
 }
 
-/**
- * Returns the directory path of the framework. If a file is passed in, it'll be
- * appended to the end of the path.
- *
- * @since  5.0.0
- * @access public
- * @param  string  $file
- * @return string
- */
-function path( $file = '' ) {
+if ( ! function_exists( __NAMESPACE__ . '\\path' ) ) {
+	/**
+	 * Returns the directory path of the framework. If a file is passed in,
+	 * it'll be appended to the end of the path.
+	 *
+	 * @since  5.0.0
+	 * @access public
+	 * @param  string  $file
+	 * @return string
+	 */
+	function path( $file = '' ) {
 
-	$file = ltrim( $file, '/' );
+		$file = ltrim( $file, '/' );
 
-	return $file ? App::resolve( 'path' ) . "/{$file}" : App::resolve( 'path' );
+		return $file
+		       ? App::resolve( 'path' ) . "/{$file}"
+		       : App::resolve( 'path' );
+	}
 }
 
-/**
- * Returns the framework version.
- *
- * @since  5.0.0
- * @access public
- * @return string
- */
-function version() {
-
-	return App::resolve( 'version' );
+if ( ! function_exists( __NAMESPACE__ . '\\version' ) ) {
+	/**
+	 * Returns the framework version.
+	 *
+	 * @since  5.0.0
+	 * @access public
+	 * @return string
+	 */
+	function version() {
+		return App::resolve( 'version' );
+	}
 }
