@@ -1,6 +1,6 @@
 {
 	"name"        : "themehybrid/hybrid-core",
-	"description" : "Hybrid Core: A theme framework for developing modern WordPress themes.",
+	"description" : "Hybrid Core: A framework for developing modern WordPress plugins and themes.",
 	"keywords"    : [ "wordpress" ],
 	"homepage"    : "https://themehybrid.com/hybrid-core",
 	"license"     : "GPL-2.0-or-later",
@@ -13,7 +13,7 @@
 		}
 	],
 	"support"     : {
-		"issues" : "https://github.com/justintadlock/hybrid-core/issues",
+		"issues" : "https://github.com/themehybrid/hybrid-core/issues",
 		"forum"  : "https://themehybrid.com/board/forums/hybrid-core"
 	},
 	"autoload"    : {
@@ -21,10 +21,18 @@
 			"Hybrid\\" : "src/"
 		},
 		"files" : [
-			"src/bootstrap-hybrid.php"
+			"src/functions-helpers.php"
 		]
 	},
 	"require"     : {
-		"php" : ">=5.6"
-	}
+		"php" : ">=5.6",
+		"themehybrid/hybrid-contracts" : "dev-master",
+		"themehybrid/hybrid-tools"     : "dev-master"
+	},
+	"config": {
+		"optimize-autoloader": true,
+		"sort-packages": true
+	},
+	"minimum-stability": "dev",
+	"prefer-stable": true
 }

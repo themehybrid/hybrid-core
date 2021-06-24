@@ -22,7 +22,7 @@ Hybrid Core is free.  However, I ask that you purchase a support membership at [
 
 ## Documentation
 
-The documentation is handled via Hybrid Core's [wiki](https://github.com/justintadlock/hybrid-core/wiki).  This is community-contributed documentation that I hope you will add to if you use the framework.
+The documentation is handled via Hybrid Core's [wiki](https://github.com/themehybrid/hybrid-core/wiki).  This is community-contributed documentation that I hope you will add to if you use the framework.
 
 ### Installation
 
@@ -60,4 +60,4 @@ Check out the officially-supported [Mythic starter theme](https://github.com/jus
 
 This project is licensed under the [GNU GPL](http://www.gnu.org/licenses/old-licenses/gpl-2.0.html), version 2 or later.
 
-2008&thinsp;&ndash;&thinsp;2019 &copy; [Justin Tadlock](http://justintadlock.com).
+2008&thinsp;&ndash;&thinsp;2021 &copy; [Justin Tadlock](http://justintadlock.com).

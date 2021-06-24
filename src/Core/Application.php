@@ -9,24 +9,18 @@
  *
  * @package   HybridCore
  * @author    Justin Tadlock <justintadlock@gmail.com>
- * @copyright Copyright (c) 2008 - 2019, Justin Tadlock
+ * @copyright Copyright (c) 2008 - 2021, Justin Tadlock
  * @link      https://themehybrid.com/hybrid-core
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 namespace Hybrid\Core;
 
-use Hybrid\Attr\AttrServiceProvider;
 use Hybrid\Container\Container;
 use Hybrid\Contracts\Core\Application as ApplicationContract;
 use Hybrid\Contracts\Bootable;
-use Hybrid\Lang\LanguageServiceProvider;
-use Hybrid\Media\MetaServiceProvider;
 use Hybrid\Proxies\Proxy;
 use Hybrid\Proxies\App;
-use Hybrid\Template\HierarchyServiceProvider;
-use Hybrid\Template\TemplatesServiceProvider;
-use Hybrid\View\ViewServiceProvider;
 
 /**
  * Application class.
@@ -43,7 +37,7 @@ class Application extends Container implements ApplicationContract, Bootable {
 	 * @access public
 	 * @var    string
 	 */
-	const VERSION = '5.2.0';
+	const VERSION = '6.0.0';
 
 	/**
 	 * Array of service provider objects.
@@ -64,6 +58,24 @@ class Application extends Container implements ApplicationContract, Bootable {
 	protected $proxies = [];
 
 	/**
+	 * Array of booted service providers.
+	 *
+	 * @since  6.0.0
+	 * @access protected
+	 * @var    array
+	 */
+	protected $booted_providers = [];
+
+	/**
+	 * Array of registered proxies.
+	 *
+	 * @since  6.0.0
+	 * @access protected
+	 * @var    array
+	 */
+	protected $registered_proxies = [];
+
+	/**
 	 * Registers the default bindings, providers, and proxies for the
 	 * framework.
 	 *
@@ -74,9 +86,7 @@ class Application extends Container implements ApplicationContract, Bootable {
 	public function __construct() {
 
 		$this->registerDefaultBindings();
-		$this->registerDefaultProviders();
 		$this->registerDefaultProxies();
-		$this->bootstrapFilters();
 	}
 
 	/**
@@ -91,6 +101,10 @@ class Application extends Container implements ApplicationContract, Bootable {
 		$this->registerProviders();
 		$this->bootProviders();
 		$this->registerProxies();
+
+		if ( ! defined( 'HYBRID_BOOTED' ) ) {
+			define( 'HYBRID_BOOTED', true );
+		}
 	}
 
 	/**
@@ -106,31 +120,10 @@ class Application extends Container implements ApplicationContract, Bootable {
 		$this->instance( 'app', $this );
 
 		// Adds the directory path for the framework.
-		$this->instance( 'path', untrailingslashit( HYBRID_DIR  ) );
+		$this->instance( 'path', untrailingslashit( __DIR__ . '/..' ) );
 
 		// Add the version for the framework.
 		$this->instance( 'version', static::VERSION );
-	}
-
-	/**
-	 * Adds the default service providers for the framework.
-	 *
-	 * @since  5.0.0
-	 * @access protected
-	 * @return void
-	 */
-	protected function registerDefaultProviders() {
-
-		array_map( function( $provider ) {
-			$this->provider( $provider );
-		}, [
-			AttrServiceProvider::class,
-			LanguageServiceProvider::class,
-			MetaServiceProvider::class,
-			TemplatesServiceProvider::class,
-			HierarchyServiceProvider::class,
-			ViewServiceProvider::class
-		] );
 	}
 
 	/**
@@ -143,18 +136,6 @@ class Application extends Container implements ApplicationContract, Bootable {
 	protected function registerDefaultProxies() {
 
 		$this->proxy( App::class, '\Hybrid\App' );
-	}
-
-	/**
-	 * Bootstrap action/filter hook calls.
-	 *
-	 * @since  5.0.0
-	 * @access protected
-	 * @return void
-	 */
-	protected function bootstrapFilters() {
-
-		require_once( $this->path . '/bootstrap-filters.php' );
 	}
 
 	/**
@@ -212,8 +193,14 @@ class Application extends Container implements ApplicationContract, Bootable {
 	 */
 	protected function bootProvider( $provider ) {
 
+		// Bail if the provider has already been booted.
+		if ( in_array( $provider, $this->booted_providers ) ) {
+			return;
+		}
+
 		if ( method_exists( $provider, 'boot' ) ) {
 			$provider->boot();
+			$this->booted_providers[] = $provider;
 		}
 	}
 
@@ -281,10 +268,17 @@ class Application extends Container implements ApplicationContract, Bootable {
 	 */
 	protected function registerProxies() {
 
-		Proxy::setContainer( $this );
+		// Only set the container on first instance.
+		if ( ! $this->registered_proxies ) {
+			Proxy::setContainer( $this );
+		}
 
 		foreach ( $this->proxies as $class => $alias ) {
-			class_alias( $class, $alias );
+
+			if ( ! in_array( $alias, $this->registered_proxies ) ) {
+				class_alias( $class, $alias );
+				$this->registered_proxies[] = $alias;
+			}
 		}
 	}
 }
