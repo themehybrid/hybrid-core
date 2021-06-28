@@ -1,24 +1,22 @@
-# Hybrid Core: WordPress Theme Framework
+# Hybrid Core: WordPress Framework
 
-Hybrid Core is a framework for developing WordPress themes.
+Hybrid Core is a framework for developing WordPress plugins and themes.
 
-It is a package that simplifies some of the complexities of theme development and helps you write more modern PHP code.  Its goal is to provide elegant functions, classes, and interfaces for writing code without having to rebuild everything from scratch for each theme.
+The core package is the application layer that primarily consists of a service container.  It can be used alone or alongside any of the available [Hybrid* packages](https://github.com/themehybrid/).
+
+The framework simplifies many of the complexities of WordPress development and helps you write more modern PHP code.  Its goal is to provide elegant functions, classes, and interfaces for writing code without the need to rebuild everything from scratch with each project.
 
 ## Requirements
 
-* WordPress 4.9.6+.
+* WordPress 5.7+.
 * PHP 5.6+ (7.0+ recommended).
 * [Composer](https://getcomposer.org/) for managing PHP dependencies.
 
 The framework is coded to work on PHP 5.6+, but only 7.0+ is officially supported.
 
-To ease developers into Composer, version 5.0 is a standalone package with no dependencies. Therefore, theme authors can still drop this directly into their theme and use a custom class autoloader. However, no such guarantee exists for future versions.
-
 ## Purchase or donate
 
-Hybrid Core is free.  However, I ask that you purchase a support membership at [Theme Hybrid](https://themehybrid.com).  Even if you don't need support, every purchase helps fund the development of this project.
-
-[Donations to the project](https://themehybrid.com/donate) are also welcome.
+Hybrid Core is free.  However, [donations to the project](https://themehybrid.com/donate) are also welcome.
 
 ## Documentation
 
@@ -29,10 +27,20 @@ The documentation is handled via Hybrid Core's [wiki](https://github.com/themehy
 Use the following command from your preferred command line utility to install the package.
 
 ```bash
-composer require justintadlock/hybrid-core
+composer require themehybrid/hybrid-core
 ```
 
-If bundling this directly in your theme, you'll need to add the following code to your `functions.php` to autoload the project (and any other dependencies).
+If bundling this directly in your plugin, add the following code.
+
+**For plugins:**
+
+```php
+if ( file_exists( 'vendor/autoload.php' ) ) {
+        require_once 'vendor/autoload.php';
+}
+```
+
+**For themes:**
 
 ```php
 if ( file_exists( get_parent_theme_file_path( 'vendor/autoload.php' ) ) ) {
@@ -42,19 +50,19 @@ if ( file_exists( get_parent_theme_file_path( 'vendor/autoload.php' ) ) ) {
 
 ### Bootstrapping Hybrid Core
 
-Hybrid Core isn't launched until an instance of its `Hybrid\Core\Application` class is created and booted, which should look something like the following.
+Hybrid Core isn't launched until an instance of its `Hybrid\Core\Application` class is created and its `boot()` method has been called.
+
+Because the `Application` class can be called multiple times via both plugins and themes, developers need to check the `Hybrid\booted()` function before attempting to create a new app.  If one exists, they should use the existing instance via the `Hybrid\app()` helper function.
 
 ```php
 // Create a new application.
-$themeslug = new \Hybrid\Core\Application();
+$slug = \Hybrid\booted() ? \Hybrid\app() : new \Hybrid\Core\Application();
 
-// Add service providers, bindings, etc.
+// Add service providers.
 
 // Bootstrap the application.
-$themeslug->boot();
+$slug->boot();
 ```
-
-Check out the officially-supported [Mythic starter theme](https://github.com/justintadlock/mythic) for example code or as a good starting point for your HC-based project.
 
 ## Copyright and License
 
