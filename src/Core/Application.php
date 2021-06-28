@@ -84,7 +84,6 @@ class Application extends Container implements ApplicationContract, Bootable {
 	 * @return void
 	 */
 	public function __construct() {
-
 		$this->registerDefaultBindings();
 		$this->registerDefaultProxies();
 	}
@@ -97,8 +96,6 @@ class Application extends Container implements ApplicationContract, Bootable {
 	 * @return void
 	 */
 	public function boot() {
-
-		$this->registerProviders();
 		$this->bootProviders();
 		$this->registerProxies();
 
@@ -135,6 +132,7 @@ class Application extends Container implements ApplicationContract, Bootable {
 	 */
 	protected function registerDefaultProxies() {
 
+		// Makes the `Hybrid\App` class an alias for the app.
 		$this->proxy( App::class, '\Hybrid\App' );
 	}
 
@@ -148,10 +146,15 @@ class Application extends Container implements ApplicationContract, Bootable {
 	 */
 	public function provider( $provider ) {
 
+		// If passed a class name, resolve provider.
 		if ( is_string( $provider ) ) {
 			$provider = $this->resolveProvider( $provider );
 		}
 
+		// Register the provider.
+		$this->registerProvider( $provider );
+
+		// Store the provider.
 		$this->providers[] = $provider;
 	}
 
@@ -160,11 +163,10 @@ class Application extends Container implements ApplicationContract, Bootable {
 	 *
 	 * @since  5.0.0
 	 * @access protected
-	 * @param  string    $provider
+	 * @param  object    $provider
 	 * @return object
 	 */
 	protected function resolveProvider( $provider ) {
-
 		return new $provider( $this );
 	}
 
@@ -173,7 +175,7 @@ class Application extends Container implements ApplicationContract, Bootable {
 	 *
 	 * @since  5.0.0
 	 * @access protected
-	 * @param  string    $provider
+	 * @param  object    $provider
 	 * @return void
 	 */
 	protected function registerProvider( $provider ) {
@@ -188,19 +190,21 @@ class Application extends Container implements ApplicationContract, Bootable {
 	 *
 	 * @since  5.0.0
 	 * @access protected
-	 * @param  string    $provider
+	 * @param  object    $provider
 	 * @return void
 	 */
 	protected function bootProvider( $provider ) {
 
+		$class_name = get_class( $provider );
+
 		// Bail if the provider has already been booted.
-		if ( in_array( $provider, $this->booted_providers ) ) {
+		if ( in_array( $class_name, $this->booted_providers ) ) {
 			return;
 		}
 
 		if ( method_exists( $provider, 'boot' ) ) {
 			$provider->boot();
-			$this->booted_providers[] = $provider;
+			$this->booted_providers[] = $class_name;
 		}
 	}
 
@@ -212,22 +216,7 @@ class Application extends Container implements ApplicationContract, Bootable {
 	 * @return array
 	 */
 	protected function getProviders() {
-
 		return $this->providers;
-	}
-
-	/**
-	 * Calls the `register()` method of all the available service providers.
-	 *
-	 * @since  5.0.0
-	 * @access protected
-	 * @return void
-	 */
-	protected function registerProviders() {
-
-		foreach ( $this->getProviders() as $provider ) {
-			$this->registerProvider( $provider );
-		}
 	}
 
 	/**
@@ -250,13 +239,28 @@ class Application extends Container implements ApplicationContract, Bootable {
 	 *
 	 * @since  5.0.0
 	 * @access public
-	 * @param  string  $class_name
+	 * @param  string  $class
 	 * @param  string  $alias
 	 * @return void
 	 */
-	public function proxy( $class_name, $alias ) {
+	public function proxy( $class, $alias ) {
+		$this->proxies[ $class ] = $alias;
+	}
 
-		$this->proxies[ $class_name ] = $alias;
+	/**
+	 * Registers a static proxy class alias.
+	 *
+	 * @since  6.0.0
+	 * @access public
+	 * @param  string  $class
+	 * @param  string  $alias
+	 * @return void
+	 */
+	protected function registerProxy( $class, $alias ) {
+
+		class_alias( $class, $alias );
+
+		$this->registered_proxies[] = $alias;
 	}
 
 	/**
@@ -268,16 +272,16 @@ class Application extends Container implements ApplicationContract, Bootable {
 	 */
 	protected function registerProxies() {
 
-		// Only set the container on first instance.
+		// Only set the container on the first call.
 		if ( ! $this->registered_proxies ) {
 			Proxy::setContainer( $this );
 		}
 
 		foreach ( $this->proxies as $class => $alias ) {
 
+			// Register proxy if not already registered.
 			if ( ! in_array( $alias, $this->registered_proxies ) ) {
-				class_alias( $class, $alias );
-				$this->registered_proxies[] = $alias;
+				$this->registerProxy( $class, $alias );
 			}
 		}
 	}
