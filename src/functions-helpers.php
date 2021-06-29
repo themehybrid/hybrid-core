@@ -15,7 +15,6 @@
 namespace Hybrid;
 
 use Hybrid\Proxies\App;
-use Hybrid\Tools\Collection;
 
 if ( ! function_exists( __NAMESPACE__ . '\\app' ) ) {
 	/**
@@ -47,20 +46,6 @@ if ( ! function_exists( __NAMESPACE__ . '\\booted' ) ) {
 	 */
 	function booted() {
 		return defined( 'HYBRID_BOOTED' ) && true === HYBRID_BOOTED;
-	}
-}
-
-if ( ! function_exists( __NAMESPACE__ . '\\collect' ) ) {
-	/**
-	 * Wrapper function for the `Collection` class.
-	 *
-	 * @since  5.0.0
-	 * @access public
-	 * @param  array   $items
-	 * @return object
-	 */
-	function collect( $items = [] ) {
-		return new Collection( $items );
 	}
 }
 

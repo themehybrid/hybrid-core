@@ -26,8 +26,7 @@
 	},
 	"require"     : {
 		"php" : ">=5.6",
-		"themehybrid/hybrid-contracts" : "dev-master",
-		"themehybrid/hybrid-tools"     : "dev-master"
+		"themehybrid/hybrid-contracts" : "dev-master"
 	},
 	"config": {
 		"optimize-autoloader": true,
