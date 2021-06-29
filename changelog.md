@@ -3,19 +3,25 @@
 You can see the changes made via the [commit log](https://github.com/themehybrid/hybrid-core/commits/master) for the latest release.
 
 ## [6.0.0] - 2021-03-11
-Version 6.0.0 represents a complete overhaul of the framework. The framework is essentially stripped down to basic framework only. Splitting modules into their own unique packages.
+
+### Changed
+
+- Version 6.0.0 represents a complete overhaul of the framework. It is essentially stripped down to the Application and Container layers.  Other modules now exist as separate repositories.
 
 ### Removed
-These packages are removed from Hybrid Core, and have their own repos now.
 
-- [Hybrid Attr](https://github.com/themehybrid/hybrid-attr) is an HTML attributes class system.
-- [Hybrid Lang](https://github.com/themehybrid/hybrid-lang) holds the Lang class, which deals with loading textdomains and locale-specific function files.
-- [Hybrid Media](https://github.com/themehybrid/hybrid-media) Grabber is a script for pulling media either from the post content or attached to the post.
-- [Hybrid Pagination](https://github.com/themehybrid/hybrid-pagination) is a fork of the core WordPress paginate_links() function to give theme authors full control over the output of their pagination.
-- [Hybrid Support](https://github.com/themehybrid/hybrid-support) is a collection of interfaces and tools, such as Bootable interface, ServiceProvider abstract class etc.
-- [Hybrid Template](https://github.com/themehybrid/hybrid-template) is a template management system for Hybrid Core framework.
-- [Hybrid Theme](https://github.com/themehybrid/hybrid-theme) is a collection of optimizations and helper tools to aid in Theme development.
-- [Hybrid View](https://github.com/themehybrid/hybrid-view) maintains the View class. It's used for setting up and rendering theme template files.
+- `Hybrid\Attr` moved to [Hybrid Attr](https://github.com/themehybrid/hybrid-attr).
+- `Hybrid\Lang` moved to [Hybrid Lang](https://github.com/themehybrid/hybrid-lang).
+- `Hybrid\Media` split to:
+	- [Hybrid Media Grabber](https://github.com/themehybrid/hybrid-media-grabber).
+	- [Hybrid Media Meta](https://github.com/themehybrid/hybrid-media-meta)
+- `Hybrid\Pagination` moved to [Hybrid Pagination](https://github.com/themehybrid/hybrid-pagination).
+- `Hybrid\Template` split to:
+	- [Hybrid Template Hierarchy](https://github.com/themehybrid/hybrid-template-hierarchy).
+	- [Hybrid Template Manager](https://github.com/themehybrid/hybrid-template-manager).
+- `Hybrid\Tools` moved to [Hybrid Tools](https://github.com/themehybrid/hybrid-tools).
+- `Hybrid\View` moved to [Hybrid View](https://github.com/themehybrid/hybrid-view)
+- `Hybrid\Comment`, `Hybrid\Menu`, `Hybrid\Post`, `Hybrid\Sidebar`, `Hybrid\Site`, `Hybrid\Theme`, and `Hybrid\Util` moved to [Hybrid Theme](https://github.com/themehybrid/hybrid-theme).
 
 ## [5.2.0] - 2019-09-03
 
