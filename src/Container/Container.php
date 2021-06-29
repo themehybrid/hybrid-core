@@ -392,9 +392,9 @@ class Container implements ContainerContract, ArrayAccess {
 				$args[] = $parameters[ $dependency->getName() ];
 
 			// If the parameter is a class, resolve it.
-			} elseif ( ! is_null( $dependency->getClass() ) ) {
+			} elseif ( ! is_null( $dependency->getType() ) && class_exists( $dependency->getType()->getName() ) ) {
 
-				$args[] = $this->resolve( $dependency->getClass()->getName() );
+				$args[] = $this->resolve( $dependency->getType()->getName() );
 
 			// Else, use the default parameter value.
 			} elseif ( $dependency->isDefaultValueAvailable() ) {
