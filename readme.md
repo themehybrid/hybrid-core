@@ -2,19 +2,17 @@
 
 Hybrid Core is a framework for developing WordPress plugins and themes.
 
-The core package is the application layer that primarily consists of a service container.  It can be used alone or alongside any of the available [Hybrid* packages](https://github.com/themehybrid/).
+The core package is the application layer that primarily consists of a service container.  It can be used alone or alongside any of the available [Hybrid packages](https://github.com/themehybrid/).
 
 The framework simplifies many of the complexities of WordPress development and helps you write more modern PHP code.  Its goal is to provide elegant functions, classes, and interfaces for writing code without the need to rebuild everything from scratch with each project.
 
 ## Requirements
 
-* WordPress 5.7+.
-* PHP 5.6+ (7.0+ recommended).
-* [Composer](https://getcomposer.org/) for managing PHP dependencies.
+* WordPress 5.7+
+* PHP 7.0+
+* Composer 2.0+
 
-The framework is coded to work on PHP 5.6+, but only 7.0+ is officially supported.
-
-## Purchase or donate
+## Donations
 
 Hybrid Core is free.  However, [donations to the project](https://themehybrid.com/donate) are also welcome.
 
@@ -59,6 +57,7 @@ Because the `Application` class can be called multiple times via both plugins an
 $slug = \Hybrid\booted() ? \Hybrid\app() : new \Hybrid\Core\Application();
 
 // Add service providers.
+$slug->provider( \YourProject\Provider::class );
 
 // Bootstrap the application.
 $slug->boot();
