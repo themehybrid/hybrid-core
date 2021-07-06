@@ -258,7 +258,9 @@ class Application extends Container implements ApplicationContract, Bootable {
 	 */
 	protected function registerProxy( $class, $alias ) {
 
-		class_alias( $class, $alias );
+		if ( ! class_exists( $alias ) ) {
+			class_alias( $class, $alias );
+		}
 
 		$this->registered_proxies[] = $alias;
 	}
