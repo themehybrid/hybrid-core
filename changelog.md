@@ -2,7 +2,7 @@
 
 You can see the changes made via the [commit log](https://github.com/themehybrid/hybrid-core/commits/master) for the latest release.
 
-## [6.0.0] - 2021-03-11
+## [6.0.0] - 2021-08-01
 
 ### Changed
 
@@ -17,6 +17,7 @@ You can see the changes made via the [commit log](https://github.com/themehybrid
 	- [Hybrid Media Meta](https://github.com/themehybrid/hybrid-media-meta)
 - `Hybrid\Pagination` moved to [Hybrid Pagination](https://github.com/themehybrid/hybrid-pagination).
 - `Hybrid\Template` split to:
+	- [Hybrid Template](https://github.com/themehybrid/hybrid-template).
 	- [Hybrid Template Hierarchy](https://github.com/themehybrid/hybrid-template-hierarchy).
 	- [Hybrid Template Manager](https://github.com/themehybrid/hybrid-template-manager).
 - `Hybrid\Tools` moved to [Hybrid Tools](https://github.com/themehybrid/hybrid-tools).

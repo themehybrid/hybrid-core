@@ -41,7 +41,6 @@ class Proxy {
 	 * @return string
 	 */
 	protected static function accessor() {
-
 		return '';
 	}
 
@@ -53,7 +52,6 @@ class Proxy {
 	 * @return void
 	 */
 	public static function setContainer( Container $container ) {
-
 		static::$container = $container;
 	}
 
@@ -65,7 +63,6 @@ class Proxy {
 	 * @return object
 	 */
 	protected static function instance() {
-
 		return static::$container->resolve( static::accessor() );
 	}
 

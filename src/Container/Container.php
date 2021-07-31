@@ -77,7 +77,6 @@ class Container implements ContainerContract, ArrayAccess {
 	public function __construct( array $definitions = [] ) {
 
 		foreach ( $definitions as $abstract => $concrete ) {
-
 			$this->add( $abstract, $concrete );
 		}
 	}
@@ -118,7 +117,6 @@ class Container implements ContainerContract, ArrayAccess {
 	* @return void
 	*/
 	public function add( $abstract, $concrete = null, $shared = false ) {
-
 		$this->bind( $abstract, $concrete, $shared );
 	}
 
@@ -133,7 +131,6 @@ class Container implements ContainerContract, ArrayAccess {
 	public function remove( $abstract ) {
 
 		if ( $this->has( $abstract ) ) {
-
 			unset( $this->bindings[ $abstract ], $this->instances[ $abstract ] );
 		}
 	}
@@ -155,7 +152,6 @@ class Container implements ContainerContract, ArrayAccess {
 		// If this is being managed as an instance and we already have
 		// the instance, return it now.
 		if ( isset( $this->instances[ $abstract ] ) ) {
-
 			return $this->instances[ $abstract ];
 		}
 
@@ -183,13 +179,11 @@ class Container implements ContainerContract, ArrayAccess {
 		// If shared instance, make sure to store it in the instances
 		// array so that we're not creating new objects later.
 		if ( $this->bindings[ $abstract ]['shared'] && ! isset( $this->instances[ $abstract ] ) ) {
-
 			$this->instances[ $abstract ] = $object;
 		}
 
 		// Run through each of the extensions for the object.
 		foreach ( $this->extensions[ $abstract ] as $extension ) {
-
 			$object = new $extension( $object, $this );
 		}
 
@@ -208,7 +202,6 @@ class Container implements ContainerContract, ArrayAccess {
 	 * @return void
 	 */
 	public function alias( $abstract, $alias ) {
-
 		$this->aliases[ $alias ] = $abstract;
 	}
 
@@ -221,7 +214,6 @@ class Container implements ContainerContract, ArrayAccess {
 	* @return object
 	*/
 	public function get( $abstract ) {
-
 		return $this->resolve( $abstract );
 	}
 
@@ -234,7 +226,6 @@ class Container implements ContainerContract, ArrayAccess {
 	* @return bool
 	*/
 	public function has( $abstract ) {
-
 		return isset( $this->bindings[ $abstract ] ) || isset( $this->instances[ $abstract ] );
 	}
 
@@ -248,7 +239,6 @@ class Container implements ContainerContract, ArrayAccess {
 	 * @return void
 	 */
 	public function singleton( $abstract, $concrete = null ) {
-
 		$this->add( $abstract, $concrete, true );
 	}
 
@@ -416,7 +406,6 @@ class Container implements ContainerContract, ArrayAccess {
 	* @return void
 	*/
 	public function offsetSet( $name, $value ) {
-
 		$this->add( $name, $value );
 	}
 
@@ -429,7 +418,6 @@ class Container implements ContainerContract, ArrayAccess {
 	* @return void
 	*/
 	public function offsetUnset( $name ) {
-
 		$this->remove( $name );
 	}
 
@@ -442,7 +430,6 @@ class Container implements ContainerContract, ArrayAccess {
 	* @return bool
 	*/
 	public function offsetExists( $name ) {
-
 		return $this->has( $name );
 	}
 
@@ -455,7 +442,6 @@ class Container implements ContainerContract, ArrayAccess {
 	* @return mixed
 	*/
 	public function offsetGet( $name ) {
-
 		return $this->get( $name );
 	}
 
@@ -470,7 +456,6 @@ class Container implements ContainerContract, ArrayAccess {
 	* @return void
 	*/
 	public function __set( $name, $value ) {
-
 		$this->add( $name, $value );
 	}
 
@@ -483,7 +468,6 @@ class Container implements ContainerContract, ArrayAccess {
 	* @return void
 	*/
 	public function __unset( $name ) {
-
 		$this->remove( $name );
 	}
 
@@ -496,7 +480,6 @@ class Container implements ContainerContract, ArrayAccess {
 	* @return bool
 	*/
 	public function __isset( $name ) {
-
 		return $this->has( $name );
 	}
 
@@ -509,7 +492,6 @@ class Container implements ContainerContract, ArrayAccess {
 	* @return mixed
 	*/
 	public function __get( $name ) {
-
 		return $this->get( $name );
 	}
 }

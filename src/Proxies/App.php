@@ -29,7 +29,6 @@ class App extends Proxy {
 	 * @return string
 	 */
 	protected static function accessor() {
-
 		return 'app';
 	}
 }
