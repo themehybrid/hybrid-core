@@ -978,18 +978,33 @@ class Container implements ContainerContract, ArrayAccess {
 				continue;
 			}
 
-			// If the class is null, it means the dependency is a string or some other
-			// primitive type which we can not resolve since it is not a class and
-			// we will just bomb out with an error since we have no-where to go.
-			$result = is_null( Util::getParameterClassName( $dependency ) )
-				? $this->resolvePrimitive( $dependency )
-				: $this->resolveClass( $dependency );
+			// try / catch to suppress unresolvablePrimitive() => `Unresolvable dependency resolving`.
+			try {
+				// If the class is null, it means the dependency is a string or some other
+				// primitive type which we can not resolve since it is not a class and
+				// we will just bomb out with an error since we have no-where to go.
+				$result = is_null( Util::getParameterClassName( $dependency ) )
+					? $this->resolvePrimitive( $dependency )
+					: $this->resolveClass( $dependency );
 
-			if ( $dependency->isVariadic() ) {
-				$results = array_merge( $results, $result );
-			} else {
-				$results[] = $result;
+				if ( $dependency->isVariadic() ) {
+					$results = array_merge( $results, $result );
+				} else {
+					$results[] = $result;
+				}
+			} catch ( BindingResolutionException $ex ) {
+				/*
+				// Suppress the fatal error, but log it.
+				$msg =
+					"--- Unresolvable Start ---\n"
+					. $ex->getMessage() . "\n"
+					. print_r($dependency, true) . "\n"
+					. "--- Unresolvable End ---";
+
+				error_log( $msg );
+				*/
 			}
+
 		}
 
 		return $results;
