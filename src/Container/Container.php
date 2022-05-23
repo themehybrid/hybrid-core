@@ -601,7 +601,7 @@ class Container implements ContainerContract, ArrayAccess {
 				throw $e;
 			}
 
-			throw new EntryNotFoundException($id, $e->getCode(), $e);
+			throw new EntryNotFoundException($id, is_int($e->getCode()) ? $e->getCode() : 0, $e);
 		}
 	}
 
