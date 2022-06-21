@@ -2,6 +2,12 @@
 
 You can see the changes made via the [commit log](https://github.com/justintadlock/hybrid-core/commits/master) for the latest release.
 
+## [5.2.1] - 2022-06-21
+
+### Changed
+
+- Fix inconsistent reflection return type with PHP8's `ReflectionParameter::getType()`.
+- 
 ## [5.2.0] - 2019-09-03
 
 ### Added
