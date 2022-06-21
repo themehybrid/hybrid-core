@@ -2,11 +2,17 @@
 
 You can see the changes made via the [commit log](https://github.com/themehybrid/hybrid-core/commits/master) for the latest release.
 
+## [6.0.1] - 2022-06-21
+
+### Changed
+
+- Fix inconsistent reflection return type with PHP8's `ReflectionParameter::getType()`.
+
 ## [6.0.0] - 2021-08-01
 
 ### Changed
 
-- Version 6.0.0 represents a complete overhaul of the framework. It is essentially stripped down to the Application and Container layers.  Other modules now exist as separate repositories.
+- Version 6.0.0 represents a complete overhaul of the framework. It is essentially stripped down to the Application and Container layers. Other modules now exist as separate repositories.
 
 ### Removed
 

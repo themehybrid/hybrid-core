@@ -9,8 +9,8 @@
  * containers available in the larger PHP world.
  *
  * @package   HybridCore
- * @author    Justin Tadlock <justintadlock@gmail.com>
- * @copyright Copyright (c) 2008 - 2021, Justin Tadlock
+ * @author    Theme Hybrid
+ * @copyright Copyright (c) 2008 - 2022, Theme Hybrid
  * @link      https://themehybrid.com/hybrid-core
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
@@ -381,19 +381,61 @@ class Container implements ContainerContract, ArrayAccess {
 
 				$args[] = $parameters[ $dependency->getName() ];
 
-			// If the parameter is a class, resolve it.
-			} elseif ( ! is_null( $dependency->getType() ) && class_exists( $dependency->getType()->getName() ) ) {
+				continue;
+			}
 
-				$args[] = $this->resolve( $dependency->getType()->getName() );
+			// If the parameter is a class, resolve it.
+			$types = $this->getReflectionTypes( $dependency );
+
+			if ( $types ) {
+				$resolved_type = false;
+
+				foreach ( $types as $type ) {
+					if ( class_exists( $type->getName() ) ) {
+						$args[] = $this->resolve(
+							$type->getName()
+						);
+						$resolved_type = true;
+					}
+				}
+
+				if ( $resolved_type ) {
+					continue;
+				}
+			}
 
 			// Else, use the default parameter value.
-			} elseif ( $dependency->isDefaultValueAvailable() ) {
+			if ( $dependency->isDefaultValueAvailable() ) {
 
 				$args[] = $dependency->getDefaultValue();
 			}
 		}
 
 		return $args;
+	}
+
+	/**
+	 * `ReflectionParameter::getType()` in PHP may return an instance of
+	 * `ReflectionNamedType` or an `ReflectionUnionType`.  The latter class's
+	 * `getTypes()` method returns and array of the former objects. This
+	 * method ensures that we always get an array of `ReflectionNamedType`
+	 * objects.
+	 *
+	 * @since  6.1.0
+	 * @access protected
+	 * @param  object    $dependency
+	 * @return array
+	 */
+	protected function getReflectionTypes( $dependency ) {
+		$types = $dependency->getType();
+
+		if ( ! $types ) {
+			return [];
+		} elseif ( class_exists( 'ReflectionUnionType' ) && $types instanceof \ReflectionUnionType ) {
+			return $types->getTypes();
+		}
+
+		return [ $types ];
 	}
 
 	/**
