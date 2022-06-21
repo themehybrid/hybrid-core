@@ -15,6 +15,7 @@
 namespace Hybrid\Contracts\Container;
 
 use Closure;
+use Psr\Container\ContainerInterface;
 
 /**
  * Container interface.
@@ -22,7 +23,15 @@ use Closure;
  * @since  5.0.0
  * @access public
  */
-interface Container {
+interface Container extends ContainerInterface {
+
+	/**
+	 * Determine if the given abstract type has been bound.
+	 *
+	 * @param  string  $abstract
+	 * @return bool
+	 */
+	public function bound( $abstract );
 
 	/**
 	 * Add a binding. The abstract should be a key, abstract class name, or
@@ -32,11 +41,23 @@ interface Container {
 	 * @since  5.0.0
 	 * @access public
 	 * @param  string  $abstract
-	 * @param  mixed   $concrete
+	 * @param  \Closure|string|null  $concrete
 	 * @param  bool    $shared
 	 * @return void
 	 */
 	public function bind( $abstract, $concrete = null, $shared = false );
+
+	/**
+	 * Register a binding if it hasn't already been registered.
+	 *
+	 * @since  5.0.0
+	 * @access public
+	 * @param  string  $abstract
+	 * @param  \Closure|string|null  $concrete
+	 * @param  bool  $shared
+	 * @return void
+	 */
+	public function bindIf( $abstract, $concrete = null, $shared = false );
 
 	/**
 	* Alias for `bind()`.
@@ -72,30 +93,15 @@ interface Container {
 	public function resolve( $abstract, array $parameters = [] );
 
 	/**
-	 * Alias for `resolve()`.
+	 * Resolve the given type from the container.
 	 *
-	 * Follows the PSR-11 standard. Do not alter.
-	 * @link https://www.php-fig.org/psr/psr-11/
-	 *
-	 * @since  5.0.0
-	 * @access public
 	 * @param  string  $abstract
-	 * @return object
-	 */
-	public function get( $abstract );
-
-	/**
-	 * Check if a binding exists.
+	 * @param  array  $parameters
+	 * @return mixed
 	 *
-	 * Follows the PSR-11 standard. Do not alter.
-	 * @link https://www.php-fig.org/psr/psr-11/
-	 *
-	 * @since  5.0.0
-	 * @access public
-	 * @param  string  $abstract
-	 * @return bool
+	 * @throws BindingResolutionException
 	 */
-	public function has( $abstract );
+	public function make( $abstract, array $parameters = [] );
 
 	/**
 	 * Add a shared binding.
@@ -103,10 +109,39 @@ interface Container {
 	 * @since  5.0.0
 	 * @access public
 	 * @param  string  $abstract
-	 * @param  object  $concrete
+	 * @param  \Closure|string|null  $concrete
 	 * @return void
 	 */
 	public function singleton( $abstract, $concrete = null );
+
+	/**
+	 * Add a shared binding if it hasn't already been registered.
+	 *
+	 * @since  5.0.0
+	 * @access public
+	 * @param  string  $abstract
+	 * @param  \Closure|string|null  $concrete
+	 * @return void
+	 */
+	public function singletonIf( $abstract, $concrete = null );
+
+	/**
+	 * Register a scoped binding in the container.
+	 *
+	 * @param  string  $abstract
+	 * @param  \Closure|string|null  $concrete
+	 * @return void
+	 */
+	public function scoped( $abstract, $concrete = null );
+
+	/**
+	 * Register a scoped binding if it hasn't already been registered.
+	 *
+	 * @param  string  $abstract
+	 * @param  \Closure|string|null  $concrete
+	 * @return void
+	 */
+	public function scopedIf( $abstract, $concrete = null );
 
 	/**
 	 * Add an existing instance.
@@ -120,24 +155,123 @@ interface Container {
 	 public function instance( $abstract, $instance );
 
 	 /**
-	  * Extend a binding.
+	  * Extend an abstract type.
 	  *
 	  * @since  5.0.0
 	  * @access public
 	  * @param  string  $abstract
-	  * @param  Closure $closure
+	  * @param  \Closure  $closure
 	  * @return void
+	  *
+	  * @throws \InvalidArgumentException
 	  */
 	 public function extend( $abstract, Closure $closure );
 
-	 /**
-	  * Create an alias for an abstract type.
-	  *
-	  * @since  5.0.0
-	  * @access public
-	  * @param  string  $abstract
-	  * @param  string  $alias
-	  * @return void
-	  */
-	 public function alias( $abstract, $alias );
+	/**
+	 * Alias a type to a different name.
+	 *
+	 * @since  5.0.0
+	 * @access public
+	 * @param  string  $abstract
+	 * @param  string  $alias
+	 * @return void
+	 *
+	 * @throws \LogicException
+	 */
+	public function alias( $abstract, $alias );
+
+	/**
+	 * Assign a set of tags to a given binding.
+	 *
+	 * @param  array|string  $abstracts
+	 * @param  array|mixed  ...$tags
+	 * @return void
+	 */
+	public function tag( $abstracts, $tags );
+
+	/**
+	 * Resolve all of the bindings for a given tag.
+	 *
+	 * @param  string  $tag
+	 * @return iterable
+	 */
+	public function tagged( $tag );
+
+	/**
+	 * Add a contextual binding.
+	 *
+	 * @param  string  $concrete
+	 * @param  string  $abstract
+	 * @param  \Closure|string  $implementation
+	 * @return void
+	 */
+	public function addContextualBinding( $concrete, $abstract, $implementation );
+
+	/**
+	 * Define a contextual binding.
+	 *
+	 * @param  string|array  $concrete
+	 * @return ContextualBindingBuilder
+	 */
+	public function when( $concrete );
+
+	/**
+	 * Get a closure to resolve the given type from the container.
+	 *
+	 * @param  string  $abstract
+	 * @return \Closure
+	 */
+	public function factory($abstract);
+
+	/**
+	 * Flush the container of all bindings and resolved instances.
+	 *
+	 * @return void
+	 */
+	public function flush();
+
+	/**
+	 * Call the given Closure / class@method and inject its dependencies.
+	 *
+	 * @param  callable|string  $callback
+	 * @param  array  $parameters
+	 * @param  string|null  $defaultMethod
+	 * @return mixed
+	 */
+	public function call( $callback, array $parameters = [], $defaultMethod = null );
+
+	/**
+	 * Determine if the given abstract type has been resolved.
+	 *
+	 * @param  string  $abstract
+	 * @return bool
+	 */
+	public function resolved( $abstract );
+
+	/**
+	 * Register a new before resolving callback.
+	 *
+	 * @param  \Closure|string  $abstract
+	 * @param  \Closure|null  $callback
+	 * @return void
+	 */
+	public function beforeResolving( $abstract, Closure $callback = null );
+
+	/**
+	 * Register a new resolving callback.
+	 *
+	 * @param  \Closure|string  $abstract
+	 * @param  \Closure|null  $callback
+	 * @return void
+	 */
+	public function resolving( $abstract, Closure $callback = null );
+
+	/**
+	 * Register a new after resolving callback.
+	 *
+	 * @param  \Closure|string  $abstract
+	 * @param  \Closure|null  $callback
+	 * @return void
+	 */
+	public function afterResolving( $abstract, Closure $callback = null );
 }
