@@ -6,8 +6,8 @@
  * classes around shared objects in the container.
  *
  * @package   HybridCore
- * @author    Justin Tadlock <justintadlock@gmail.com>
- * @copyright Copyright (c) 2008 - 2021, Justin Tadlock
+ * @author    Theme Hybrid
+ * @copyright Copyright (c) 2008 - 2022, Theme Hybrid
  * @link      https://themehybrid.com/hybrid-core
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */

@@ -1,4 +1,7 @@
 <?php
+/**
+ * @license https://opensource.org/licenses/MIT
+ */
 
 namespace Hybrid\Contracts\Container;
 
