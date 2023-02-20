@@ -2,6 +2,27 @@
 
 You can see the changes made via the [commit log](https://github.com/themehybrid/hybrid-core/commits/master) for the latest release.
 
+## [7.0.0.alpha.2] - 2023-02-20
+
+### Added
+
+- `Core\AliasLoader`
+- `Core\Bootstrap\BootProviders`
+- `Core\Bootstrap\GenerateStorageStructures`
+- `Core\Bootstrap\LoadConfiguration`
+- `Core\Bootstrap\LoadEnvironmentVariables`
+- `Core\Bootstrap\RegisterFacades`
+- `Core\Bootstrap\RegisterProviders`
+- `Core\EnvironmentDetector`
+- `Core\EnvironmentDetector`
+- `Core\Mix`
+- `Core\PackageManifest`
+- `Core\ProviderRepository`
+
+### Changed
+
+- Proxies are replaced with Facade's
+
 ## [6.0.0] - 2021-08-01
 
 ### Changed
