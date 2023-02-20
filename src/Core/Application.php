@@ -609,6 +609,19 @@ class Application extends Container implements ApplicationContract, Bootable {
     }
 
     /**
+     * Adds a service provider.
+     *
+     * @param  string|object $provider
+     * @return void
+     * @deprecated Use register() instead.
+     */
+    public function provider( $provider ) {
+        @trigger_error( __METHOD__ . '() is deprecated, use Application::register().', E_USER_DEPRECATED );
+
+        $this->register( $provider );
+    }
+
+    /**
      * Register a service provider with the application.
      *
      * @param  \Hybrid\Core\ServiceProvider|string $provider
