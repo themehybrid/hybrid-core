@@ -2,6 +2,12 @@
 
 You can see the changes made via the [commit log](https://github.com/themehybrid/hybrid-core/commits/master) for the latest release.
 
+## [7.0.0-alpha.3] - 2023-06-07
+
+### Changed
+
+- Bumped `hybrid-filesystem, hybrid-events, hybrid-contracts & hybrid-tools`
+
 ## [7.0.0.alpha.2] - 2023-02-20
 
 ### Added
