@@ -51,7 +51,7 @@ class Application extends Container implements ApplicationContract, Bootable {
      *
      * @var string
      */
-    const VERSION = '7.0.0.alpha.2';
+    const VERSION = '7.0.0-alpha.3';
 
     /**
      * The base path for the Hybrid installation.
