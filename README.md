@@ -9,7 +9,7 @@ The framework simplifies many of the complexities of WordPress development and h
 ## Requirements
 
 * WordPress 5.7+
-* PHP 7.0+
+* PHP 7.4+
 * Composer 2.0+
 
 ## Donations
