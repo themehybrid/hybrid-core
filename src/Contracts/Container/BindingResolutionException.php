@@ -5,8 +5,8 @@
  * @package   HybridCore
  * @link      https://github.com/themehybrid/hybrid-core
  *
- * @author    Justin Tadlock <justintadlock@gmail.com>
- * @copyright Copyright (c) 2008 - 2022, Justin Tadlock
+ * @author    Theme Hybrid
+ * @copyright Copyright (c) 2008 - 2023, Theme Hybrid
  * @license   https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
