@@ -2,7 +2,7 @@
 	"name"        : "themehybrid/hybrid-core",
 	"description" : "Hybrid Core: A framework for developing modern WordPress plugins and themes.",
 	"keywords"    : [ "wordpress" ],
-	"homepage"    : "https://themehybrid.com/hybrid-core",
+	"homepage"    : "https://github.com/themehybrid/hybrid-core",
 	"license"     : "GPL-2.0-or-later",
 	"authors"     : [
 		{
