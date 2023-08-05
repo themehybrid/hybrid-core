@@ -30,16 +30,6 @@
 	"provide": {
 		"psr/container-implementation": "1.1"
 	},
-	"repositories": [
-		{
-			"type": "vcs",
-			"url": "https://github.com/themehybrid/hybrid-events"
-		},
-		{
-			"type": "vcs",
-			"url": "https://github.com/themehybrid/hybrid-filesystem"
-		}
-	],
 	"minimum-stability": "dev",
 	"prefer-stable": true,
 	"autoload": {
