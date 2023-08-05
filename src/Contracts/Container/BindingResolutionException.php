@@ -3,7 +3,7 @@
  * Container Exception class.
  *
  * @package   HybridCore
- * @link      https://themehybrid.com/hybrid-core
+ * @link      https://github.com/themehybrid/hybrid-core
  *
  * @author    Justin Tadlock <justintadlock@gmail.com>
  * @copyright Copyright (c) 2008 - 2022, Justin Tadlock

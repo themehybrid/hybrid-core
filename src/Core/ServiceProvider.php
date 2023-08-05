@@ -6,7 +6,7 @@
  * be extended to create new service providers for the application.
  *
  * @package   HybridCore
- * @link      https://themehybrid.com/hybrid-core
+ * @link      https://github.com/themehybrid/hybrid-core
  *
  * @author    Theme Hybrid
  * @copyright Copyright (c) 2008 - 2022, Theme Hybrid

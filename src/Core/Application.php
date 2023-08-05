@@ -8,7 +8,7 @@
  * that interact with the container.
  *
  * @package   HybridCore
- * @link      https://themehybrid.com/hybrid-core
+ * @link      https://github.com/themehybrid/hybrid-core
  *
  * @author    Theme Hybrid
  * @copyright Copyright (c) 2008 - 2022, Theme Hybrid
