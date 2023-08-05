@@ -28,7 +28,6 @@ class HandleExceptions {
     /**
      * Bootstrap the given application.
      *
-     * @param  \Hybrid\Contracts\Core\Application $app
      * @return void
      */
     public function bootstrap( Application $app ) {
@@ -102,7 +101,7 @@ class HandleExceptions {
 
         try {
             $logger = static::$app->make( LogManager::class );
-        } catch ( \Throwable $e ) {
+        } catch ( \Throwable ) {
             return;
         }
 
@@ -167,7 +166,6 @@ class HandleExceptions {
      * the HTTP and Console kernels. But, fatal error exceptions must
      * be handled differently since they are not normal exceptions.
      *
-     * @param  \Throwable $e
      * @return void
      */
     public function handleException( \Throwable $e ) {
@@ -188,7 +186,6 @@ class HandleExceptions {
     /**
      * Render an exception to the console.
      *
-     * @param  \Throwable $e
      * @return void
      */
     protected function renderForConsole( \Throwable $e ) {
@@ -198,7 +195,6 @@ class HandleExceptions {
     /**
      * Render an exception as an HTTP response and send it.
      *
-     * @param  \Throwable $e
      * @return void
      */
     protected function renderHttpResponse( \Throwable $e ) {

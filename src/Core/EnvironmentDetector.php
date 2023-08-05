@@ -9,7 +9,6 @@ class EnvironmentDetector {
     /**
      * Detect the application's current environment.
      *
-     * @param  \Closure   $callback
      * @param  array|null $consoleArgs
      * @return string
      */
@@ -24,7 +23,6 @@ class EnvironmentDetector {
     /**
      * Set the application environment for a web request.
      *
-     * @param  \Closure $callback
      * @return string
      */
     protected function detectWebEnvironment( Closure $callback ) {
@@ -34,8 +32,7 @@ class EnvironmentDetector {
     /**
      * Set the application environment from command-line arguments.
      *
-     * @param  \Closure $callback
-     * @param  array    $args
+     * @param  array $args
      * @return string
      */
     protected function detectConsoleEnvironment( Closure $callback, array $args ) {

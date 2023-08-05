@@ -3,7 +3,6 @@
 namespace Hybrid\Core\Facades;
 
 use Closure;
-
 use function Hybrid\Tools\collect;
 
 abstract class Facade {
@@ -32,7 +31,6 @@ abstract class Facade {
     /**
      * Run a Closure when the facade has been resolved.
      *
-     * @param  \Closure $callback
      * @return void
      */
     public static function resolved( Closure $callback ) {

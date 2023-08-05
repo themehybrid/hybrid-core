@@ -35,8 +35,7 @@ class ContextualBindingBuilder implements ContextualBindingBuilderContract {
     /**
      * Create a new contextual binding builder.
      *
-     * @param \Hybrid\Contracts\Container\Container $container
-     * @param string|array                          $concrete
+     * @param string|array $concrete
      */
     public function __construct( Container $container, $concrete ) {
         $this->concrete  = $concrete;

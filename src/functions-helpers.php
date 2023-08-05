@@ -81,8 +81,8 @@ if ( ! function_exists( __NAMESPACE__ . '\\path' ) ) {
         $file = ltrim( $file, '/' );
 
         return $file
-               ? App::resolve( 'path' ) . "/{$file}"
-               : App::resolve( 'path' );
+                ? App::resolve( 'path' ) . "/{$file}"
+                : App::resolve( 'path' );
     }
 }
 
@@ -100,18 +100,17 @@ if ( ! function_exists( __NAMESPACE__ . '\\version' ) ) {
     }
 }
 
-if (! function_exists('event')) {
+if ( ! function_exists( 'event' ) ) {
     /**
      * Dispatch an event and call the listeners.
      *
-     * @param  string|object  $event
-     * @param  mixed  $payload
-     * @param  bool  $halt
+     * @param  string|object $event
+     * @param  mixed         $payload
+     * @param  bool          $halt
      * @return array|null
      */
-    function event(...$args)
-    {
-        return app('events')->dispatch(...$args);
+    function event( ...$args ) {
+        return app( 'events' )->dispatch( ...$args );
     }
 }
 

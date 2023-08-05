@@ -7,7 +7,7 @@ class CoreServiceProvider extends AggregateServiceProvider {
     /**
      * The provider class names.
      *
-     * @var string[]
+     * @var array<string>
      */
     protected $providers = [];
 

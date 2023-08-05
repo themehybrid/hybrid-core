@@ -48,8 +48,6 @@ class Application extends Container implements ApplicationContract, Bootable {
 
     /**
      * The current version of the framework.
-     *
-     * @var string
      */
     const VERSION = '7.0.0-alpha.3';
 
@@ -77,21 +75,21 @@ class Application extends Container implements ApplicationContract, Bootable {
     /**
      * The array of booting callbacks.
      *
-     * @var callable[]
+     * @var array<callable>
      */
     protected $bootingCallbacks = [];
 
     /**
      * The array of booted callbacks.
      *
-     * @var callable[]
+     * @var array<callable>
      */
     protected $bootedCallbacks = [];
 
     /**
      * All of the registered service providers.
      *
-     * @var \Hybrid\Core\ServiceProvider[]
+     * @var array<\Hybrid\Core\ServiceProvider>
      */
     protected $serviceProviders = [];
 
@@ -161,14 +159,14 @@ class Application extends Container implements ApplicationContract, Bootable {
     /**
      * The prefixes of absolute cache paths for use during normalization.
      *
-     * @var string[]
+     * @var array<string>
      */
     protected $absoluteCachePathPrefixes = [ '/', '\\' ];
 
     /**
      * The bootstrap classes for the application.
      *
-     * @var string[]
+     * @var array<string>
      */
     protected $bootstrappers = [
         LoadEnvironmentVariables::class,
@@ -250,7 +248,7 @@ class Application extends Container implements ApplicationContract, Bootable {
     /**
      * Run the given array of bootstrap classes.
      *
-     * @param  string[] $bootstrappers
+     * @param  array<string> $bootstrappers
      * @return void
      */
     public function bootstrapWith( array $bootstrappers ) {
@@ -268,7 +266,6 @@ class Application extends Container implements ApplicationContract, Bootable {
     /**
      * Register a callback to run after loading the environment.
      *
-     * @param  \Closure $callback
      * @return void
      */
     public function afterLoadingEnvironment( Closure $callback ) {
@@ -278,8 +275,7 @@ class Application extends Container implements ApplicationContract, Bootable {
     /**
      * Register a callback to run before a bootstrapper.
      *
-     * @param  string   $bootstrapper
-     * @param  \Closure $callback
+     * @param  string $bootstrapper
      * @return void
      */
     public function beforeBootstrapping( $bootstrapper, Closure $callback ) {
@@ -289,8 +285,7 @@ class Application extends Container implements ApplicationContract, Bootable {
     /**
      * Register a callback to run after a bootstrapper.
      *
-     * @param  string   $bootstrapper
-     * @param  \Closure $callback
+     * @param  string $bootstrapper
      * @return void
      */
     public function afterBootstrapping( $bootstrapper, Closure $callback ) {
@@ -553,7 +548,6 @@ class Application extends Container implements ApplicationContract, Bootable {
     /**
      * Detect the application's current environment.
      *
-     * @param  \Closure $callback
      * @return string
      */
     public function detectEnvironment( Closure $callback ) {
@@ -866,7 +860,6 @@ class Application extends Container implements ApplicationContract, Bootable {
     /**
      * Boot the given service provider.
      *
-     * @param  \Hybrid\Core\ServiceProvider $provider
      * @return void
      */
     protected function bootProvider( ServiceProvider $provider ) {
@@ -927,7 +920,7 @@ class Application extends Container implements ApplicationContract, Bootable {
     /**
      * Call the booting callbacks for the application.
      *
-     * @param  callable[] $callbacks
+     * @param  array<callable> $callbacks
      * @return void
      */
     protected function fireAppCallbacks( array &$callbacks ) {
@@ -936,7 +929,7 @@ class Application extends Container implements ApplicationContract, Bootable {
         while ( $index < count( $callbacks ) ) {
             $callbacks[ $index ]( $this );
 
-            $index++;
+            ++$index;
         }
     }
 
@@ -1035,7 +1028,6 @@ class Application extends Container implements ApplicationContract, Bootable {
     /**
      * Determine if the given service provider is loaded.
      *
-     * @param  string $provider
      * @return bool
      */
     public function providerIsLoaded( string $provider ) {
@@ -1109,7 +1101,6 @@ class Application extends Container implements ApplicationContract, Bootable {
                 $this->alias( $key, $alias );
             }
         }
-
     }
 
     /**

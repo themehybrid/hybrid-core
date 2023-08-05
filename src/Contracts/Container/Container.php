@@ -161,17 +161,16 @@ interface Container extends ContainerInterface {
      */
     public function instance( $abstract, $instance );
 
-     /**
-      * "Extend" an abstract type in the container.
-      *
-      * @since  5.0.0
-      * @param  string   $abstract
-      * @param  \Closure $closure
-      * @return void
-      * @throws \InvalidArgumentException
-      *
-      * @access public
-      */
+    /**
+     * "Extend" an abstract type in the container.
+     *
+     * @since  5.0.0
+     * @param  string $abstract
+     * @return void
+     * @throws \InvalidArgumentException
+     *
+     * @access public
+     */
     public function extend( $abstract, Closure $closure );
 
     /**
@@ -259,27 +258,24 @@ interface Container extends ContainerInterface {
      * Register a new before resolving callback.
      *
      * @param  \Closure|string $abstract
-     * @param  \Closure|null   $callback
      * @return void
      */
-    public function beforeResolving( $abstract, Closure $callback = null );
+    public function beforeResolving( $abstract, ?Closure $callback = null );
 
     /**
      * Register a new resolving callback.
      *
      * @param  \Closure|string $abstract
-     * @param  \Closure|null   $callback
      * @return void
      */
-    public function resolving( $abstract, Closure $callback = null );
+    public function resolving( $abstract, ?Closure $callback = null );
 
     /**
      * Register a new after resolving callback.
      *
      * @param  \Closure|string $abstract
-     * @param  \Closure|null   $callback
      * @return void
      */
-    public function afterResolving( $abstract, Closure $callback = null );
+    public function afterResolving( $abstract, ?Closure $callback = null );
 
 }

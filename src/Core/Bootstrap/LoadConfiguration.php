@@ -13,7 +13,6 @@ class LoadConfiguration {
     /**
      * Bootstrap the given application.
      *
-     * @param  \Hybrid\Contracts\Core\Application $app
      * @return void
      */
     public function bootstrap( Application $app ) {
@@ -46,8 +45,6 @@ class LoadConfiguration {
     /**
      * Load the configuration items from all of the files.
      *
-     * @param  \Hybrid\Contracts\Core\Application  $app
-     * @param  \Hybrid\Contracts\Config\Repository $repository
      * @return void
      * @throws \Exception
      */
@@ -68,7 +65,6 @@ class LoadConfiguration {
     /**
      * Get all of the configuration files for the application.
      *
-     * @param  \Hybrid\Contracts\Core\Application $app
      * @return array
      */
     protected function getConfigurationFiles( Application $app ) {
@@ -94,8 +90,7 @@ class LoadConfiguration {
     /**
      * Get the configuration file nesting path.
      *
-     * @param  \SplFileInfo $file
-     * @param  string       $configPath
+     * @param  string $configPath
      * @return string
      */
     protected function getNestedDirectory( SplFileInfo $file, $configPath ) {

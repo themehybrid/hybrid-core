@@ -55,7 +55,6 @@ abstract class ServiceProvider {
      * Accepts the application and sets it to the `$app` property.
      *
      * @since  6.0.0
-     * @param  \Hybrid\Contracts\Core\Application $app
      * @return void
      *
      * @access public
@@ -117,7 +116,7 @@ abstract class ServiceProvider {
         while ( $index < count( $this->bootingCallbacks ) ) {
             $this->app->call( $this->bootingCallbacks[ $index ] );
 
-            $index++;
+            ++$index;
         }
     }
 
@@ -132,7 +131,7 @@ abstract class ServiceProvider {
         while ( $index < count( $this->bootedCallbacks ) ) {
             $this->app->call( $this->bootedCallbacks[ $index ] );
 
-            $index++;
+            ++$index;
         }
     }
 

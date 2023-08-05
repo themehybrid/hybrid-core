@@ -13,7 +13,6 @@ class LoadEnvironmentVariables {
     /**
      * Bootstrap the given application.
      *
-     * @param  \Hybrid\Contracts\Core\Application $app
      * @return void
      */
     public function bootstrap( Application $app ) {
@@ -88,7 +87,6 @@ class LoadEnvironmentVariables {
     /**
      * Write the error information to the screen and exit.
      *
-     * @param  \Dotenv\Exception\InvalidFileException $e
      * @return void
      */
     protected function writeErrorAndDie( \Dotenv\Exception\InvalidFileException $e ) {

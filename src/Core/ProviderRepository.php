@@ -31,9 +31,7 @@ class ProviderRepository {
     /**
      * Create a new service repository instance.
      *
-     * @param  \Hybrid\Contracts\Core\Application $app
-     * @param  \Hybrid\Filesystem\Filesystem      $files
-     * @param  string                             $manifestPath
+     * @param  string $manifestPath
      * @return void
      */
     public function __construct( ApplicationContract $app, Filesystem $files, $manifestPath ) {
@@ -166,9 +164,9 @@ class ProviderRepository {
      */
     protected function freshManifest( array $providers ) {
         return [
-            'providers' => $providers,
-            'eager'     => [],
             'deferred'  => [],
+            'eager'     => [],
+            'providers' => $providers,
         ];
     }
 
