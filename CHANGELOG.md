@@ -2,6 +2,16 @@
 
 You can see the changes made via the [commit log](https://github.com/themehybrid/hybrid-core/commits/master) for the latest release.
 
+## [6.0.2] - 2023-08-05
+
+### Changed
+
+- lint php files & cleanup
+- lint composer.json
+- update copyright date
+- bump php req from 7.0 to 7.4+
+- replace http to https
+
 ## [6.0.1] - 2022-06-21
 
 ### Changed
