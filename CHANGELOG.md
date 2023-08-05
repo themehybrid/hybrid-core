@@ -2,6 +2,15 @@
 
 You can see the changes made via the [commit log](https://github.com/themehybrid/hybrid-core/commits/master) for the latest release.
 
+## [7.0.0-beta.1] - 2023-08-05
+
+### Changed
+
+- lint php files & cleanup
+- update copyright date & author
+- downgrade php req from 8.1 to 8.0+
+- replace http to https
+
 ## [7.0.0-alpha.3] - 2023-06-07
 
 ### Changed
