@@ -2,6 +2,8 @@
 
 You can see the changes made via the [commit log](https://github.com/themehybrid/hybrid-core/commits/master) for the latest release.
 
+## [7.0.0] - 2023-08-23
+
 ## [7.0.0-beta.1] - 2023-08-05
 
 ### Changed
