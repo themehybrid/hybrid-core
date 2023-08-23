@@ -31,8 +31,8 @@ All text strings follow U.S. English by default.  While such guides are generall
 
 ## Licensing
 
-Any code contributed to Hybrid Core via patches, pull requests, or other means will be licensed under the [GPL version 2](http://www.gnu.org/licenses/old-licenses/gpl-2.0.html) or later.  By contributing code to the project, you provide consent to use such code under this license.  The exception to this rule is when bringing in third-party code with an alternate open source license.
+Any code contributed to Hybrid Core via patches, pull requests, or other means will be licensed under the [GPL version 2](https://www.gnu.org/licenses/old-licenses/gpl-2.0.html) or later.  By contributing code to the project, you provide consent to use such code under this license.  The exception to this rule is when bringing in third-party code with an alternate open source license.
 
 ## Versioning
 
-Hybrid Core uses [semantic versioning](http://semver.org).  Version numbers will look like `3.2.1` where `3` is the "major" release, `2` is the minor release, and `1` is the patch release.
+Hybrid Core uses [semantic versioning](https://semver.org).  Version numbers will look like `3.2.1` where `3` is the "major" release, `2` is the minor release, and `1` is the patch release.
