@@ -8,6 +8,7 @@ use Hybrid\Tools\Log\LogManager;
 use Monolog\Handler\NullHandler;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\ErrorHandler\Error\FatalError;
+use function Hybrid\Tools\with;
 
 class HandleExceptions {
 
@@ -231,7 +232,7 @@ class HandleExceptions {
      * @return callable
      */
     protected function forwardsTo( $method ) {
-        return fn( ...$arguments) => static::$app
+        return fn( ...$arguments ) => static::$app
             ? $this->{$method}( ...$arguments )
             : false;
     }

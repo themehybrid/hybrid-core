@@ -39,12 +39,16 @@ use Hybrid\Tools\Collection;
 use Hybrid\Tools\Config\Repository;
 use Hybrid\Tools\Env;
 use Hybrid\Tools\Str;
+use Hybrid\Tools\Traits\Macroable;
 use Psr\Container\ContainerInterface;
+use function Hybrid\Tools\value;
 
 /**
  * Application class.
  */
 class Application extends Container implements ApplicationContract, Bootable {
+
+    use Macroable;
 
     /**
      * The current version of the framework.
@@ -87,6 +91,13 @@ class Application extends Container implements ApplicationContract, Bootable {
     protected $bootedCallbacks = [];
 
     /**
+     * The array of terminating callbacks.
+     *
+     * @var array<callable>
+     */
+    protected $terminatingCallbacks = [];
+
+    /**
      * All of the registered service providers.
      *
      * @var array<\Hybrid\Core\ServiceProvider>
@@ -108,11 +119,32 @@ class Application extends Container implements ApplicationContract, Bootable {
     protected $deferredServices = [];
 
     /**
+     * The custom bootstrap path defined by the developer.
+     *
+     * @var string
+     */
+    protected $bootstrapPath;
+
+    /**
      * The custom application path defined by the developer.
      *
      * @var string
      */
     protected $appPath;
+
+    /**
+     * The custom configuration path defined by the developer.
+     *
+     * @var string
+     */
+    protected $configPath;
+
+    /**
+     * The custom public / web path defined by the developer.
+     *
+     * @var string
+     */
+    protected $publicPath;
 
     /**
      * The custom storage path defined by the developer.
@@ -122,11 +154,11 @@ class Application extends Container implements ApplicationContract, Bootable {
     protected $storagePath;
 
     /**
-     * The custom config path defined by the developer.
+     * The custom resources path defined by the developer.
      *
      * @var string
      */
-    protected $configPath;
+    protected $resourcesPath;
 
     /**
      * The custom environment path defined by the developer.
@@ -321,10 +353,16 @@ class Application extends Container implements ApplicationContract, Bootable {
      * @return void
      */
     protected function bindPathsInContainer() {
+        $this->instance( 'path', $this->path() );
         $this->instance( 'path.base', $this->basePath() );
         $this->instance( 'path.config', $this->configPath() );
+        $this->instance( 'path.public', $this->publicPath() );
+        $this->instance( 'path.resources', $this->resourcePath() );
         $this->instance( 'path.storage', $this->storagePath() );
-        $this->instance( 'path.bootstrap', $this->bootstrapPath() );
+
+        $this->useBootstrapPath(value(fn() => is_dir( $directory = $this->basePath( '.hybrid-core' ) )
+                ? $directory
+        : $this->basePath( 'bootstrap' )));
     }
 
     /**
@@ -334,9 +372,7 @@ class Application extends Container implements ApplicationContract, Bootable {
      * @return string
      */
     public function path( $path = '' ) {
-        $appPath = $this->appPath ?: $this->basePath . DIRECTORY_SEPARATOR . 'app';
-
-        return $appPath . ( $path !== '' ? DIRECTORY_SEPARATOR . $path : '' );
+        return $this->joinPaths( $this->appPath ?: $this->basePath( 'app' ), $path );
     }
 
     /**
@@ -360,7 +396,7 @@ class Application extends Container implements ApplicationContract, Bootable {
      * @return string
      */
     public function basePath( $path = '' ) {
-        return $this->basePath . ( $path !== '' ? DIRECTORY_SEPARATOR . $path : '' );
+        return $this->joinPaths( $this->basePath, $path );
     }
 
     /**
@@ -370,7 +406,21 @@ class Application extends Container implements ApplicationContract, Bootable {
      * @return string
      */
     public function bootstrapPath( $path = '' ) {
-        return $this->basePath . DIRECTORY_SEPARATOR . 'bootstrap' . ( $path !== '' ? DIRECTORY_SEPARATOR . $path : '' );
+        return $this->joinPaths( $this->bootstrapPath, $path );
+    }
+
+    /**
+     * Set the bootstrap file directory.
+     *
+     * @param  string $path
+     * @return $this
+     */
+    public function useBootstrapPath( $path ) {
+        $this->bootstrapPath = $path;
+
+        $this->instance( 'path.bootstrap', $path );
+
+        return $this;
     }
 
     /**
@@ -380,17 +430,45 @@ class Application extends Container implements ApplicationContract, Bootable {
      * @return string
      */
     public function configPath( $path = '' ) {
-        return ( $this->configPath ?: $this->basePath . DIRECTORY_SEPARATOR . 'config' )
-            . ( $path !== '' ? DIRECTORY_SEPARATOR . $path : '' );
+        return $this->joinPaths( $this->configPath ?: $this->basePath( 'config' ), $path );
+    }
+
+    /**
+     * Set the configuration directory.
+     *
+     * @param  string $path
+     * @return $this
+     */
+    public function useConfigPath( $path ) {
+        $this->configPath = $path;
+
+        $this->instance( 'path.config', $path );
+
+        return $this;
     }
 
     /**
      * Get the path to the public / web directory.
      *
+     * @param  string $path
      * @return string
      */
-    public function publicPath() {
-        return $this->basePath . DIRECTORY_SEPARATOR . 'public';
+    public function publicPath( $path = '' ) {
+        return $this->joinPaths( $this->publicPath ?: $this->basePath( 'public' ), $path );
+    }
+
+    /**
+     * Set the public / web directory.
+     *
+     * @param  string $path
+     * @return $this
+     */
+    public function usePublicPath( $path ) {
+        $this->publicPath = $path;
+
+        $this->instance( 'path.public', $path );
+
+        return $this;
     }
 
     /**
@@ -400,8 +478,11 @@ class Application extends Container implements ApplicationContract, Bootable {
      * @return string
      */
     public function storagePath( $path = '' ) {
-        return ( $this->storagePath ?: $this->basePath . DIRECTORY_SEPARATOR . 'storage' )
-            . ( $path !== '' ? DIRECTORY_SEPARATOR . $path : '' );
+        if ( isset( $_ENV['HYBRID_CORE_STORAGE_PATH'] ) ) {
+            return $this->joinPaths( $this->storagePath ?: $_ENV['HYBRID_CORE_STORAGE_PATH'], $path );
+        }
+
+        return $this->joinPaths( $this->storagePath ?: $this->basePath( 'storage' ), $path );
     }
 
     /**
@@ -419,27 +500,27 @@ class Application extends Container implements ApplicationContract, Bootable {
     }
 
     /**
-     * Set the config directory.
-     *
-     * @param  string $path
-     * @return $this
-     */
-    public function useConfigPath( $path ) {
-        $this->configPath = $path;
-
-        $this->instance( 'path.config', $path );
-
-        return $this;
-    }
-
-    /**
      * Get the path to the resources directory.
      *
      * @param  string $path
      * @return string
      */
     public function resourcePath( $path = '' ) {
-        return $this->basePath . DIRECTORY_SEPARATOR . 'resources' . ( $path !== '' ? DIRECTORY_SEPARATOR . $path : '' );
+        return $this->joinPaths( $this->resourcesPath ?: $this->basePath( 'resources' ), $path );
+    }
+
+    /**
+     * Set the resources directory.
+     *
+     * @param  string $path
+     * @return $this
+     */
+    public function useResourcePath( $path ) {
+        $this->resourcesPath = $path;
+
+        $this->instance( 'path.resources', $path );
+
+        return $this;
     }
 
     /**
@@ -455,9 +536,20 @@ class Application extends Container implements ApplicationContract, Bootable {
             return '';
         }
 
-        $basePath = $this['config']->get( 'view.paths' )[0];
+        $viewPath = rtrim( $this['config']->get( 'view.paths' )[0], DIRECTORY_SEPARATOR );
 
-        return rtrim( $basePath, DIRECTORY_SEPARATOR ) . ( $path !== '' ? DIRECTORY_SEPARATOR . $path : '' );
+        return $this->joinPaths( $viewPath, $path );
+    }
+
+    /**
+     * Join the given paths together.
+     *
+     * @param  string $basePath
+     * @param  string $path
+     * @return string
+     */
+    public function joinPaths( $basePath, $path = '' ) {
+        return $basePath . ( $path != '' ? DIRECTORY_SEPARATOR . ltrim( $path, DIRECTORY_SEPARATOR ) : '' );
     }
 
     /**
@@ -514,7 +606,7 @@ class Application extends Container implements ApplicationContract, Bootable {
     /**
      * Get or check the current application environment.
      *
-     * @param  string|array $environments
+     * @param  string|array ...$environments
      * @return string|bool
      */
     public function environment( ...$environments ) {
@@ -563,7 +655,7 @@ class Application extends Container implements ApplicationContract, Bootable {
      */
     public function runningInConsole() {
         if ( $this->isRunningInConsole === null ) {
-            $this->isRunningInConsole = Env::get( 'APP_RUNNING_IN_CONSOLE' ) ?? ( \PHP_SAPI === 'cli' || \PHP_SAPI === 'phpdbg' );
+            $this->isRunningInConsole = Env::get( 'HYBRID_CORE_RUNNING_IN_CONSOLE' ) ?? ( \PHP_SAPI === 'cli' || \PHP_SAPI === 'phpdbg' );
         }
 
         return $this->isRunningInConsole;
@@ -850,8 +942,8 @@ class Application extends Container implements ApplicationContract, Bootable {
 
         $this->booted = true;
 
-        if ( ! defined( 'HYBRID_BOOTED' ) ) {
-            define( 'HYBRID_BOOTED', true );
+        if ( ! defined( 'HYBRID_CORE_BOOTED' ) ) {
+            define( 'HYBRID_CORE_BOOTED', true );
         }
 
         $this->fireAppCallbacks( $this->bootedCallbacks );
@@ -939,7 +1031,7 @@ class Application extends Container implements ApplicationContract, Bootable {
      * @return string
      */
     public function getCachedServicesPath() {
-        return $this->normalizeCachePath( 'APP_SERVICES_CACHE', 'cache/services.php' );
+        return $this->normalizeCachePath( 'HYBRID_CORE_SERVICES_CACHE', 'cache/services.php' );
     }
 
     /**
@@ -948,7 +1040,7 @@ class Application extends Container implements ApplicationContract, Bootable {
      * @return string
      */
     public function getCachedPackagesPath() {
-        return $this->normalizeCachePath( 'APP_PACKAGES_CACHE', 'cache/packages.php' );
+        return $this->normalizeCachePath( 'HYBRID_CORE_PACKAGES_CACHE', 'cache/packages.php' );
     }
 
     /**
@@ -966,7 +1058,7 @@ class Application extends Container implements ApplicationContract, Bootable {
      * @return string
      */
     public function getCachedConfigPath() {
-        return $this->normalizeCachePath( 'APP_CONFIG_CACHE', 'cache/config.php' );
+        return $this->normalizeCachePath( 'HYBRID_CORE_CONFIG_CACHE', 'cache/config.php' );
     }
 
     /**
@@ -984,7 +1076,7 @@ class Application extends Container implements ApplicationContract, Bootable {
      * @return string
      */
     public function getCachedEventsPath() {
-        return $this->normalizeCachePath( 'APP_EVENTS_CACHE', 'cache/events.php' );
+        return $this->normalizeCachePath( 'HYBRID_CORE_EVENTS_CACHE', 'cache/events.php' );
     }
 
     /**
@@ -1014,6 +1106,33 @@ class Application extends Container implements ApplicationContract, Bootable {
         $this->absoluteCachePathPrefixes[] = $prefix;
 
         return $this;
+    }
+
+    /**
+     * Register a terminating callback with the application.
+     *
+     * @param  callable|string $callback
+     * @return $this
+     */
+    public function terminating( $callback ) {
+        $this->terminatingCallbacks[] = $callback;
+
+        return $this;
+    }
+
+    /**
+     * Terminate the application.
+     *
+     * @return void
+     */
+    public function terminate() {
+        $index = 0;
+
+        while ( $index < count( $this->terminatingCallbacks ) ) {
+            $this->call( $this->terminatingCallbacks[ $index ] );
+
+            ++$index;
+        }
     }
 
     /**

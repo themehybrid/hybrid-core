@@ -23,6 +23,7 @@ use Closure;
 use Hybrid\Contracts\Container\Container as ContainerContract;
 use Hybrid\Util;
 use ReflectionClass;
+use ReflectionFunction;
 use ReflectionParameter;
 
 /**
@@ -395,7 +396,9 @@ class Container implements ContainerContract, ArrayAccess {
         // We're ready to instantiate an instance of the concrete type registered for
         // the binding. This will instantiate the types, as well as resolve any of
         // its "nested" dependencies recursively until all have gotten resolved.
-        $object = $this->isBuildable( $concrete, $abstract ) ? $this->build( $concrete ) : $this->make( $concrete );
+        $object = $this->isBuildable( $concrete, $abstract )
+            ? $this->build( $concrete )
+            : $this->make( $concrete );
 
         // If we defined any extenders for this type, we'll need to spin through them
         // and apply them to the object being built. This allows for the extension
@@ -518,7 +521,51 @@ class Container implements ContainerContract, ArrayAccess {
      * @throws \InvalidArgumentException|\ReflectionException
      */
     public function call( $callback, array $parameters = [], $defaultMethod = null ) {
-        return BoundMethod::call( $this, $callback, $parameters, $defaultMethod );
+        $pushedToBuildStack = false;
+
+        if ( ( $className = $this->getClassForCallable( $callback ) ) && ! in_array(
+            $className,
+            $this->buildStack,
+            true
+        ) ) {
+            $this->buildStack[] = $className;
+
+            $pushedToBuildStack = true;
+        }
+
+        $result = BoundMethod::call( $this, $callback, $parameters, $defaultMethod );
+
+        if ( $pushedToBuildStack ) {
+            array_pop( $this->buildStack );
+        }
+
+        return $result;
+    }
+
+    /**
+     * Get the class name for the given callback, if one can be determined.
+     *
+     * @param  callable|string $callback
+     * @return string|false
+     */
+    protected function getClassForCallable( $callback ) {
+        // Sanity check.
+        if ( ! is_callable( $callback ) ) {
+            return false;
+        }
+
+        // Note: Downgraded it to ensure PHP 8.0 compatibility,
+        // as the `$callback( ... )` syntax is available in versions >8.1.
+        // Thus, utilizing `\Closure::fromCallable( $callback )` instead.
+        // @see https://wiki.php.net/rfc/first_class_callable_syntax
+        $reflector = new ReflectionFunction( Closure::fromCallable( $callback ) );
+
+        // Note: I added this conditional check to ensure PHP 8.0 compatibility since `isAnonymous()` is available in versions >8.2.
+        if ( ! ( method_exists( $reflector, 'isAnonymous' ) ? $reflector->isAnonymous() : str_contains( $reflector->name, '{closure}' ) ) ) {
+            return $reflector->getClosureScopeClass()->name ?? false;
+        }
+
+        return false;
     }
 
     /**
@@ -558,13 +605,10 @@ class Container implements ContainerContract, ArrayAccess {
     /**
      * Alias for `resolve()`.
      *
-     * @since  5.0.0
      * @param  string $id
      * @return mixed
      * @throws \Hybrid\Contracts\Container\CircularDependencyException
      * @throws \Hybrid\Container\EntryNotFoundException
-     *
-     * @access public
      */
     public function get( $id ) {
         try {
@@ -1029,6 +1073,10 @@ class Container implements ContainerContract, ArrayAccess {
 
         if ( $parameter->isDefaultValueAvailable() ) {
             return $parameter->getDefaultValue();
+        }
+
+        if ( $parameter->isVariadic() ) {
+            return [];
         }
 
         $this->unresolvablePrimitive( $parameter );

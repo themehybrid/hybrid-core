@@ -30,7 +30,7 @@ class LoadEnvironmentVariables {
     }
 
     /**
-     * Detect if a custom environment file matching the APP_ENV exists.
+     * Detect if a custom environment file matching the HYBRID_CORE_ENV exists.
      *
      * @param  \Hybrid\Contracts\Core\Application $app
      * @return void
@@ -38,11 +38,12 @@ class LoadEnvironmentVariables {
     protected function checkForSpecificEnvironmentFile( $app ) {
         if ( $app->runningInConsole() &&
             ( $input = new ArgvInput() )->hasParameterOption( '--env' ) &&
-            $this->setEnvironmentFilePath( $app, $app->environmentFile() . '.' . $input->getParameterOption( '--env' ) ) ) {
+            $this->setEnvironmentFilePath( $app, $app->environmentFile() . '.' . $input->getParameterOption( '--env' ) )
+        ) {
             return;
         }
 
-        $environment = Env::get( 'APP_ENV' );
+        $environment = Env::get( 'HYBRID_CORE_ENV' );
 
         if ( ! $environment ) {
             return;

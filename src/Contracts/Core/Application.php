@@ -68,7 +68,7 @@ interface Application extends Container {
     /**
      * Get or check the current application environment.
      *
-     * @param  string|array $environments
+     * @param  string|array ...$environments
      * @return string|bool
      */
     public function environment( ...$environments );
@@ -180,5 +180,20 @@ interface Application extends Container {
      * @return void
      */
     public function loadDeferredProviders();
+
+    /**
+     * Register a terminating callback with the application.
+     *
+     * @param  callable|string $callback
+     * @return \Hybrid\Contracts\Core\Application
+     */
+    public function terminating( $callback );
+
+    /**
+     * Terminate the application.
+     *
+     * @return void
+     */
+    public function terminate();
 
 }

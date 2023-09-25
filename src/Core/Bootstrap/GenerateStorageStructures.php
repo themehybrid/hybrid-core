@@ -13,20 +13,16 @@ class GenerateStorageStructures {
      * @return void
      */
     public function bootstrap( Application $app ) {
-
         $directories = [
-            'bootstrap/cache',
-            'storage/app/public',
-            'storage/framework/cache',
-            'storage/framework/views',
-            'storage/logs',
+            $app->storagePath(),
+            $app->getCachedServicesPath(),
+            $app->getCachedPackagesPath(),
+            $app->getCachedConfigPath(),
+            $app->getCachedEventsPath(),
         ];
 
-        $rootDirectory = $app->resolve( 'path.base' );
-
         foreach ( $directories as $directory ) {
-
-            $directory = $rootDirectory . '/' . $directory;
+            $directory = dirname( $directory );
 
             if ( ( new Filesystem() )->exists( $directory ) ) {
                 continue;

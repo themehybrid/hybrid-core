@@ -16,7 +16,7 @@
 namespace Hybrid;
 
 use Hybrid\Container\Container;
-use Hybrid\Foundation\Mix;
+use Hybrid\Core\Mix;
 
 if ( ! function_exists( __NAMESPACE__ . '\\app' ) ) {
     /**
@@ -24,7 +24,7 @@ if ( ! function_exists( __NAMESPACE__ . '\\app' ) ) {
      *
      * @param  string|null $abstract
      * @param  array       $parameters
-     * @return mixed|\Hybrid\Contracts\Foundation\Application
+     * @return mixed|\Hybrid\Contracts\Core\Application
      */
     function app( $abstract = null, array $parameters = [] ) {
         if ( is_null( $abstract ) ) {
@@ -35,17 +35,15 @@ if ( ! function_exists( __NAMESPACE__ . '\\app' ) ) {
     }
 }
 
-if ( ! function_exists( __NAMESPACE__ . '\\resolve' ) ) {
-
+if ( ! function_exists( __NAMESPACE__ . '\\app_path' ) ) {
     /**
-     * Resolve a service from the container.
+     * Get the path to the application folder.
      *
-     * @param  string $name
-     * @param  array  $parameters
-     * @return mixed
+     * @param  string $path
+     * @return string
      */
-    function resolve( $name, array $parameters = [] ) {
-        return app( $name, $parameters );
+    function app_path( $path = '' ) {
+        return app()->path( $path );
     }
 }
 
@@ -55,13 +53,10 @@ if ( ! function_exists( __NAMESPACE__ . '\\booted' ) ) {
      * booted. Use before launching a new application. If booted, reference
      * the `app()` instance directly.
      *
-     * @since  6.0.0
      * @return bool
-     *
-     * @access public
      */
     function booted() {
-        return defined( 'HYBRID_BOOTED' ) && true === HYBRID_BOOTED;
+        return defined( 'HYBRID_CORE_BOOTED' ) && true === HYBRID_CORE_BOOTED;
     }
 }
 
@@ -70,14 +65,10 @@ if ( ! function_exists( __NAMESPACE__ . '\\path' ) ) {
      * Returns the directory path of the framework. If a file is passed in,
      * it'll be appended to the end of the path.
      *
-     * @since  5.0.0
      * @param  string $file
      * @return string
-     *
-     * @access public
      */
     function path( $file = '' ) {
-
         $file = ltrim( $file, '/' );
 
         return $file
@@ -90,10 +81,7 @@ if ( ! function_exists( __NAMESPACE__ . '\\version' ) ) {
     /**
      * Returns the framework version.
      *
-     * @since  5.0.0
      * @return string
-     *
-     * @access public
      */
     function version() {
         return App::resolve( 'version' );
@@ -114,39 +102,14 @@ if ( ! function_exists( 'event' ) ) {
     }
 }
 
-if ( ! function_exists( __NAMESPACE__ . '\\__app_path' ) ) {
-    /**
-     * Get the path to the application folder.
-     *
-     * @param  string $path
-     * @return string
-     */
-    function __app_path( $path = '' ) {
-        return app()->path( $path );
-    }
-}
-
-if ( ! function_exists( __NAMESPACE__ . '\\__asset' ) ) {
-    /**
-     * Generate an asset path for the application.
-     *
-     * @param  string    $path
-     * @param  bool|null $secure
-     * @return string
-     */
-    function __asset( $path, $secure = null ) {
-        return app( 'url' )->asset( $path, $secure );
-    }
-}
-
-if ( ! function_exists( __NAMESPACE__ . '\\__base_path' ) ) {
+if ( ! function_exists( __NAMESPACE__ . '\\base_path' ) ) {
     /**
      * Get the path to the base of the install.
      *
      * @param  string $path
      * @return string
      */
-    function __base_path( $path = '' ) {
+    function base_path( $path = '' ) {
         return app()->basePath( $path );
     }
 }
@@ -186,7 +149,7 @@ if ( ! function_exists( __NAMESPACE__ . '\\config_path' ) ) {
     }
 }
 
-if ( ! function_exists( __NAMESPACE__ . '\\__mix' ) ) {
+if ( ! function_exists( __NAMESPACE__ . '\\mix' ) ) {
     /**
      * Get the path to a versioned Mix file.
      *
@@ -195,20 +158,34 @@ if ( ! function_exists( __NAMESPACE__ . '\\__mix' ) ) {
      * @return \Hybrid\Tools\HtmlString|string
      * @throws \Exception
      */
-    function __mix( $path, $manifestDirectory = '' ) {
+    function mix( $path, $manifestDirectory = '' ) {
         return app( Mix::class )( ...func_get_args() );
     }
 }
 
-if ( ! function_exists( __NAMESPACE__ . '\\__public_path' ) ) {
+if ( ! function_exists( __NAMESPACE__ . '\\public_path' ) ) {
     /**
      * Get the path to the public folder.
      *
      * @param  string $path
      * @return string
      */
-    function __public_path( $path = '' ) {
-        return app()->make( 'path.public' ) . ( $path ? DIRECTORY_SEPARATOR . ltrim( $path, DIRECTORY_SEPARATOR ) : $path );
+    function public_path( $path = '' ) {
+        return app()->publicPath( $path );
+    }
+}
+
+if ( ! function_exists( __NAMESPACE__ . '\\resolve' ) ) {
+
+    /**
+     * Resolve a service from the container.
+     *
+     * @param  string $name
+     * @param  array  $parameters
+     * @return mixed
+     */
+    function resolve( $name, array $parameters = [] ) {
+        return app( $name, $parameters );
     }
 }
 
@@ -221,18 +198,6 @@ if ( ! function_exists( __NAMESPACE__ . '\\resource_path' ) ) {
      */
     function resource_path( $path = '' ) {
         return app()->resourcePath( $path );
-    }
-}
-
-if ( ! function_exists( __NAMESPACE__ . '\\__secure_asset' ) ) {
-    /**
-     * Generate an asset path for the application.
-     *
-     * @param  string $path
-     * @return string
-     */
-    function __secure_asset( $path ) {
-        return asset( $path, true );
     }
 }
 
