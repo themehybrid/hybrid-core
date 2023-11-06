@@ -63,6 +63,10 @@ $slug->provider( \YourProject\Provider::class );
 $slug->boot();
 ```
 
+## Resources
+
+[Join Slack Community](https://join.slack.com/t/themehybrid/shared_invite/zt-26e8ju9mu-iBgtE4WeaA3RvyysFvWiBw)
+
 ## Copyright and License
 
 This project is licensed under the [GNU GPL](https://www.gnu.org/licenses/old-licenses/gpl-2.0.html), version 2 or later.
