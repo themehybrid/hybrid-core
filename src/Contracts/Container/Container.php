@@ -49,6 +49,15 @@ interface Container extends ContainerInterface {
     public function bind( $abstract, $concrete = null, $shared = false );
 
     /**
+     * Bind a callback to resolve with Container::call.
+     *
+     * @param  array|string $method
+     * @param  \Closure     $callback
+     * @return void
+     */
+    public function bindMethod( $method, $callback );
+
+    /**
      * Register a binding if it hasn't already been registered.
      *
      * @since  5.0.0
@@ -227,7 +236,7 @@ interface Container extends ContainerInterface {
      * @param  string $abstract
      * @return \Closure
      */
-    public function factory( $abstract);
+    public function factory( $abstract );
 
     /**
      * Flush the container of all bindings and resolved instances.

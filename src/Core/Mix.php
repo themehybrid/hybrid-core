@@ -4,6 +4,8 @@ namespace Hybrid\Core;
 
 use Hybrid\Tools\HtmlString;
 use Hybrid\Tools\Str;
+use function Hybrid\app;
+use function Hybrid\public_path;
 
 class Mix {
 
@@ -35,7 +37,7 @@ class Mix {
                 return new HtmlString( "{$customUrl}{$path}" );
             }
 
-            if ( Str::startsWith( $url, [ 'https://', 'https://' ] ) ) {
+            if ( Str::startsWith( $url, [ 'http://', 'https://' ] ) ) {
                 return new HtmlString( Str::after( $url, ':' ) . $path );
             }
 

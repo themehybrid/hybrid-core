@@ -20,20 +20,13 @@ use Hybrid\Contracts\Core\CachesConfiguration;
 
 /**
  * Service provider class.
- *
- * @since  6.0.0
- *
- * @access public
  */
 abstract class ServiceProvider {
 
     /**
      * The application instance.
      *
-     * @since  6.0.0
      * @var    \Hybrid\Contracts\Core\Application
-     *
-     * @access protected
      */
     protected $app;
 
@@ -213,6 +206,15 @@ abstract class ServiceProvider {
      */
     public function isDeferred() {
         return $this instanceof DeferrableProvider;
+    }
+
+    /**
+     * Get the default providers for a Laravel application.
+     *
+     * @return \Hybrid\Core\DefaultProviders
+     */
+    public static function defaultProviders() {
+        return new DefaultProviders();
     }
 
 }
