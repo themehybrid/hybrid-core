@@ -2,6 +2,21 @@
 
 You can see the changes made via the [commit log](https://github.com/themehybrid/hybrid-core/commits/master) for the latest release.
 
+## [7.0.1] - 2023-11-06
+
+### Changed
+
+- sync with https://github.com/illuminate/contracts/releases/tag/v10.25.1
+- sync with https://github.com/illuminate/container/releases/tag/v10.25.2
+- sync with https://github.com/laravel/framework/releases/tag/v10.25.2
+- add missing use import for `Hybrid\Tools\with` helper function
+- sync with https://github.com/illuminate/container/commit/78cbe88cdc7300efd4cf90244abec2e3c42219bb
+  - downgrade to PHP 8.0 using DowngradeFirstClassCallableSyntaxRector (https://wiki.php.net/rfc/first_class_callable_syntax)
+  - https://github.com/laravel/framework/pull/46611#issuecomment-1495263975
+- for prefixed support, enable configuration changes for resources and public paths.
+- to prevent conflicts with other global constants, prefix constants with `HYBRID_CORE_` instead of `APP_`.
+- make the generation of directory structures dynamic to ensure it respects custom paths.
+
 ## [7.0.0] - 2023-08-23
 
 ## [7.0.0-beta.1] - 2023-08-05
