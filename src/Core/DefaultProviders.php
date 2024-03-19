@@ -2,6 +2,8 @@
 
 namespace Hybrid\Core;
 
+use function Hybrid\Tools\collect;
+
 class DefaultProviders {
 
     /**
@@ -27,7 +29,6 @@ class DefaultProviders {
     /**
      * Merge the given providers into the provider collection.
      *
-     * @param  array $providers
      * @return static
      */
     public function merge( array $providers ) {
@@ -57,7 +58,6 @@ class DefaultProviders {
     /**
      * Disable the given providers.
      *
-     * @param  array $providers
      * @return static
      */
     public function except( array $providers ) {
