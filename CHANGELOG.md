@@ -2,6 +2,15 @@
 
 You can see the changes made via the [commit log](https://github.com/themehybrid/hybrid-core/commits/master) for the latest release.
 
+## [7.0.2] - 2024-03-23
+
+### Changed
+
+- composer.json
+  - Add "symfony/console": "^5.0 || ^6.0" to require
+- src\Core\DefaultProviders.php
+  - Add missing import statement
+
 ## [7.0.1] - 2023-11-06
 
 ### Changed
