@@ -22,6 +22,11 @@ class LoadEnvironmentVariables {
 
         $this->checkForSpecificEnvironmentFile( $app );
 
+        // Check if the .env file exists before proceeding further.
+        if ( ! file_exists( $app->environmentFilePath() ) ) {
+            return;
+        }
+
         try {
             $this->createDotenv( $app )->safeLoad();
         } catch ( \Dotenv\Exception\InvalidFileException $e ) {
