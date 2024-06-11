@@ -2,6 +2,12 @@
 
 You can see the changes made via the [commit log](https://github.com/themehybrid/hybrid-core/commits/master) for the latest release.
 
+## [7.0.3] - 2024-06-11
+
+### Changed
+
+- add check for .env file existence to prevent warning
+
 ## [7.0.2] - 2024-03-23
 
 ### Changed
