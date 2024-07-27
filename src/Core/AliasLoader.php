@@ -99,9 +99,9 @@ class AliasLoader {
             return $path;
         }
 
-        file_put_contents($path, $this->formatFacadeStub(
+        file_put_contents( $path, $this->formatFacadeStub(
             $alias, file_get_contents( __DIR__ . '/stubs/facade.stub' )
-        ));
+        ) );
 
         return $path;
     }
@@ -221,6 +221,6 @@ class AliasLoader {
      *
      * @return void
      */
-    private function __clone() { }
+    private function __clone() {}
 
 }

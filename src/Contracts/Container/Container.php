@@ -20,10 +20,6 @@ use Psr\Container\ContainerInterface;
 
 /**
  * Container interface.
- *
- * @since  5.0.0
- *
- * @access public
  */
 interface Container extends ContainerInterface {
 
@@ -38,13 +34,10 @@ interface Container extends ContainerInterface {
     /**
      * Register a binding with the container.
      *
-     * @since  5.0.0
      * @param  string               $abstract
      * @param  \Closure|string|null $concrete
      * @param  bool                 $shared
      * @return void
-     *
-     * @access public
      */
     public function bind( $abstract, $concrete = null, $shared = false );
 
@@ -60,49 +53,38 @@ interface Container extends ContainerInterface {
     /**
      * Register a binding if it hasn't already been registered.
      *
-     * @since  5.0.0
      * @param  string               $abstract
      * @param  \Closure|string|null $concrete
      * @param  bool                 $shared
      * @return void
-     *
-     * @access public
      */
     public function bindIf( $abstract, $concrete = null, $shared = false );
 
     /**
      * Alias for `bind()`.
      *
-     * @since  5.0.0
      * @param  string $abstract
      * @param  mixed  $concrete
      * @param  bool   $shared
      * @return void
-     *
-     * @access public
+     * @deprecated Use bind() instead.
      */
     public function add( $abstract, $concrete = null, $shared = false );
 
     /**
      * Remove a binding.
      *
-     * @since  5.0.0
      * @param  string $abstract
      * @return void
-     *
-     * @access public
      */
     public function remove( $abstract );
 
     /**
      * Resolve and return the binding.
      *
-     * @since  5.0.0
      * @param  string $abstract
      * @param  array  $parameters
      * @return mixed
-     *
-     * @access public
      */
     public function resolve( $abstract, array $parameters = [] );
 
@@ -119,24 +101,18 @@ interface Container extends ContainerInterface {
     /**
      * Register a shared binding in the container.
      *
-     * @since  5.0.0
      * @param  string               $abstract
      * @param  \Closure|string|null $concrete
      * @return void
-     *
-     * @access public
      */
     public function singleton( $abstract, $concrete = null );
 
     /**
      * Register a shared binding if it hasn't already been registered.
      *
-     * @since  5.0.0
      * @param  string               $abstract
      * @param  \Closure|string|null $concrete
      * @return void
-     *
-     * @access public
      */
     public function singletonIf( $abstract, $concrete = null );
 
@@ -161,37 +137,28 @@ interface Container extends ContainerInterface {
     /**
      * Register an existing instance as shared in the container.
      *
-     * @since  5.0.0
      * @param  string $abstract
      * @param  mixed  $instance
      * @return mixed
-     *
-     * @access public
      */
     public function instance( $abstract, $instance );
 
     /**
      * "Extend" an abstract type in the container.
      *
-     * @since  5.0.0
      * @param  string $abstract
      * @return void
      * @throws \InvalidArgumentException
-     *
-     * @access public
      */
     public function extend( $abstract, Closure $closure );
 
     /**
      * Alias a type to a different name.
      *
-     * @since  5.0.0
      * @param  string $abstract
      * @param  string $alias
      * @return void
      * @throws \LogicException
-     *
-     * @access public
      */
     public function alias( $abstract, $alias );
 

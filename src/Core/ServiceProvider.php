@@ -17,6 +17,7 @@ namespace Hybrid\Core;
 
 use Hybrid\Contracts\Core\Application;
 use Hybrid\Contracts\Core\CachesConfiguration;
+use Hybrid\Contracts\Core\DeferrableProvider;
 
 /**
  * Service provider class.
@@ -26,7 +27,7 @@ abstract class ServiceProvider {
     /**
      * The application instance.
      *
-     * @var    \Hybrid\Contracts\Core\Application
+     * @var \Hybrid\Contracts\Core\Application
      */
     protected $app;
 
@@ -45,12 +46,10 @@ abstract class ServiceProvider {
     protected $bootedCallbacks = [];
 
     /**
-     * Accepts the application and sets it to the `$app` property.
+     * Create a new service provider instance.
      *
-     * @since  6.0.0
+     * @param  \Hybrid\Contracts\Core\Application $app
      * @return void
-     *
-     * @access public
      */
     public function __construct( Application $app ) {
         $this->app = $app;
@@ -59,24 +58,9 @@ abstract class ServiceProvider {
     /**
      * Register any application services.
      *
-     * @since  6.0.0
      * @return void
-     *
-     * @access public
      */
     public function register() {}
-
-    /**
-     * Callback executed after all the service providers have been registered.
-     * This is particularly useful for single-instance container objects that
-     * only need to be loaded once per page and need to be resolved early.
-     *
-     * @since  6.0.0
-     * @return void
-     *
-     * @access public
-     */
-    public function boot() {}
 
     /**
      * Register a booting callback to be run before the "boot" method is called.
@@ -106,7 +90,7 @@ abstract class ServiceProvider {
     public function callBootingCallbacks() {
         $index = 0;
 
-        while ( $index < count( $this->bootingCallbacks ) ) {
+        while ( count( $this->bootingCallbacks ) > $index ) {
             $this->app->call( $this->bootingCallbacks[ $index ] );
 
             ++$index;
@@ -121,7 +105,7 @@ abstract class ServiceProvider {
     public function callBootedCallbacks() {
         $index = 0;
 
-        while ( $index < count( $this->bootedCallbacks ) ) {
+        while ( count( $this->bootedCallbacks ) > $index ) {
             $this->app->call( $this->bootedCallbacks[ $index ] );
 
             ++$index;
@@ -139,9 +123,26 @@ abstract class ServiceProvider {
         if ( ! ( $this->app instanceof CachesConfiguration && $this->app->configurationIsCached() ) ) {
             $config = $this->app->make( 'config' );
 
-            $config->set($key, array_merge(
+            $config->set( $key, array_merge(
                 require $path, $config->get( $key, [] )
-            ));
+            ) );
+        }
+    }
+
+    /**
+     * Replace the given configuration with the existing configuration recursively.
+     *
+     * @param  string $path
+     * @param  string $key
+     * @return void
+     */
+    protected function replaceConfigRecursivelyFrom( $path, $key ) {
+        if ( ! ( $this->app instanceof CachesConfiguration && $this->app->configurationIsCached() ) ) {
+            $config = $this->app->make( 'config' );
+
+            $config->set( $key, array_replace_recursive(
+                require $path, $config->get( $key, [] )
+            ) );
         }
     }
 
@@ -153,7 +154,7 @@ abstract class ServiceProvider {
      * @return void
      */
     protected function loadViewsFrom( $path, $namespace ) {
-        $this->callAfterResolving('view', function ( $view ) use ( $path, $namespace ) {
+        $this->callAfterResolving( 'view', function ( $view ) use ( $path, $namespace ) {
             if ( isset( $this->app->config['view']['paths'] ) && is_array( $this->app->config['view']['paths'] ) ) {
                 foreach ( $this->app->config['view']['paths'] as $viewPath ) {
                     if ( is_dir( $appPath = $viewPath . '/vendor/' . $namespace ) ) {
@@ -163,7 +164,7 @@ abstract class ServiceProvider {
             }
 
             $view->addNamespace( $namespace, $path );
-        });
+        } );
     }
 
     /**
@@ -215,6 +216,43 @@ abstract class ServiceProvider {
      */
     public static function defaultProviders() {
         return new DefaultProviders();
+    }
+
+    /**
+     * Add the given provider to the application's provider bootstrap file.
+     *
+     * @param  string $provider
+     * @param  string $path
+     * @return bool
+     */
+    public static function addProviderToBootstrapFile( string $provider, ?string $path = null ) {
+        $path ??= app()->getBootstrapProvidersPath();
+
+        if ( ! file_exists( $path ) ) {
+            return false;
+        }
+
+        if ( function_exists( 'opcache_invalidate' ) ) {
+            opcache_invalidate( $path, true );
+        }
+
+        $providers = collect( require $path )
+            ->merge( [ $provider ] )
+            ->unique()
+            ->sort()
+            ->values()
+            ->map( static fn( $p ) => '    ' . $p . '::class,' )
+            ->implode( PHP_EOL );
+
+        $content = '<?php
+
+return [
+' . $providers . '
+];';
+
+        file_put_contents( $path, $content . PHP_EOL );
+
+        return true;
     }
 
 }

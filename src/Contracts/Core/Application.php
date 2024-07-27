@@ -21,8 +21,6 @@ use Hybrid\Contracts\Container\Container;
  * Application interface.
  *
  * @since  5.0.0
- *
- * @access public
  */
 interface Application extends Container {
 

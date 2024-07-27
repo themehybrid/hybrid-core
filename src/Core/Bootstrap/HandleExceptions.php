@@ -110,15 +110,15 @@ class HandleExceptions {
 
         $options = static::$app['config']->get( 'logging.deprecations' ) ?? [];
 
-        with($logger->channel( 'deprecations' ), static function ( $log ) use ( $message, $file, $line, $level, $options ) {
+        with( $logger->channel( 'deprecations' ), static function ( $log ) use ( $message, $file, $line, $level, $options ) {
             if ( $options['trace'] ?? false ) {
                 $log->warning( (string) new \ErrorException( $message, 0, $level, $file, $line ) );
             } else {
-                $log->warning(sprintf('%s in %s on line %s',
+                $log->warning( sprintf( '%s in %s on line %s',
                     $message, $file, $line
-                ));
+                ) );
             }
-        });
+        } );
     }
 
     /**
@@ -127,7 +127,7 @@ class HandleExceptions {
      * @return void
      */
     protected function ensureDeprecationLoggerIsConfigured() {
-        with(static::$app['config'], function ( $config ) {
+        with( static::$app['config'], function ( $config ) {
             if ( $config->get( 'logging.channels.deprecations' ) ) {
                 return;
             }
@@ -139,7 +139,7 @@ class HandleExceptions {
             $driver = is_array( $options ) ? $options['channel'] : ( $options ?? 'null' );
 
             $config->set( 'logging.channels.deprecations', $config->get( "logging.channels.{$driver}" ) );
-        });
+        } );
     }
 
     /**
@@ -148,16 +148,16 @@ class HandleExceptions {
      * @return void
      */
     protected function ensureNullLogDriverIsConfigured() {
-        with(static::$app['config'], static function ( $config ) {
+        with( static::$app['config'], static function ( $config ) {
             if ( $config->get( 'logging.channels.null' ) ) {
                 return;
             }
 
-            $config->set('logging.channels.null', [
+            $config->set( 'logging.channels.null', [
                 'driver'  => 'monolog',
                 'handler' => NullHandler::class,
-            ]);
-        });
+            ] );
+        } );
     }
 
     /**

@@ -19,19 +19,19 @@ class CoreServiceProvider extends AggregateServiceProvider {
     public $singletons = [];
 
     /**
-     * Boot the service provider.
-     *
-     * @return void
-     */
-    public function boot() {}
-
-    /**
-     * Register the service provider.
+     * Register any application services.
      *
      * @return void
      */
     public function register() {
         parent::register();
     }
+
+    /**
+     * Bootstrap any application services.
+     *
+     * @return void
+     */
+    public function boot() {}
 
 }

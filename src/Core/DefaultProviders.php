@@ -40,7 +40,7 @@ class DefaultProviders {
     /**
      * Replace the given providers with other providers.
      *
-     * @param  array $items
+     * @param  array $replacements
      * @return static
      */
     public function replace( array $replacements ) {
@@ -49,7 +49,7 @@ class DefaultProviders {
         foreach ( $replacements as $from => $to ) {
             $key = $current->search( $from );
 
-            $current = $key ? $current->replace( [ $key => $to ] ) : $current;
+            $current = is_int( $key ) ? $current->replace( [ $key => $to ] ) : $current;
         }
 
         return new static( $current->values()->toArray() );
@@ -61,10 +61,10 @@ class DefaultProviders {
      * @return static
      */
     public function except( array $providers ) {
-        return new static(collect( $this->providers )
-                ->reject( static fn( $p ) => in_array( $p, $providers ) )
-                ->values()
-        ->toArray());
+        return new static( collect( $this->providers )
+            ->reject( static fn( $p ) => in_array( $p, $providers ) )
+            ->values()
+            ->toArray() );
     }
 
     /**

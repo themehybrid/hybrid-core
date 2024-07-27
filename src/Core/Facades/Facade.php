@@ -10,7 +10,7 @@ abstract class Facade {
     /**
      * The application instance being facaded.
      *
-     * @var \Hybrid\Contracts\Core\Application
+     * @var \Hybrid\Contracts\Core\Application|null
      */
     protected static $app;
 
@@ -36,13 +36,13 @@ abstract class Facade {
     public static function resolved( Closure $callback ) {
         $accessor = static::getFacadeAccessor();
 
-        if ( static::$app->resolved( $accessor ) === true ) {
-            $callback( static::getFacadeRoot() );
+        if ( true === static::$app->resolved( $accessor ) ) {
+            $callback( static::getFacadeRoot(), static::$app );
         }
 
-        static::$app->afterResolving($accessor, static function ( $service ) use ( $callback ) {
-            $callback( $service );
-        });
+        static::$app->afterResolving( $accessor, static function ( $service, $app ) use ( $callback ) {
+            $callback( $service, $app );
+        } );
     }
 
     /**
@@ -123,15 +123,15 @@ abstract class Facade {
      * @return \Hybrid\Tools\Collection
      */
     public static function defaultAliases() {
-        return collect([
+        return collect( [
             'Hybrid\App' => App::class,
-        ]);
+        ] );
     }
 
     /**
      * Get the application instance behind the facade.
      *
-     * @return \Hybrid\Contracts\Core\Application
+     * @return \Hybrid\Contracts\Core\Application|null
      */
     public static function getFacadeApplication() {
         return static::$app;
@@ -140,7 +140,7 @@ abstract class Facade {
     /**
      * Set the application instance.
      *
-     * @param  \Hybrid\Contracts\Core\Application $app
+     * @param  \Hybrid\Contracts\Core\Application|null $app
      * @return void
      */
     public static function setFacadeApplication( $app ) {

@@ -4,7 +4,10 @@ namespace Hybrid\Core\Facades;
 
 /**
  * @see \Hybrid\Contracts\Core\Application
+ * @phpcsSuppress SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint.DisallowedMixedTypeHint
  *
+ * @method static \Hybrid\Core\Configuration\ApplicationBuilder configure(string|null $basePath = null)
+ * @method static string inferBasePath()
  * @method static \Hybrid\Core\Application loadEnvironmentFrom(string $file)
  * @method static \Hybrid\Core\ServiceProvider register(\Hybrid\Core\ServiceProvider|string $provider, bool $force = false)
  * @method static \Hybrid\Core\ServiceProvider|null getProvider(\Hybrid\Core\ServiceProvider|string $provider)
@@ -18,6 +21,7 @@ namespace Hybrid\Core\Facades;
  * @method static void resolving(\Closure|string $abstract, \Closure|null $callback = null)
  * @method static void beforeResolving(\Closure|string $abstract, \Closure|null $callback = null)
  * @method static void afterResolving(\Closure|string $abstract, \Closure|null $callback = null)
+ * @method static void afterResolvingAttribute(string $attribute, \Closure $callback)
  * @method static array getBindings()
  * @method static string getAlias(string $abstract)
  * @method static void forgetExtenders(string $abstract)
@@ -33,14 +37,17 @@ namespace Hybrid\Core\Facades;
  * @method static bool isProduction()
  * @method static string basePath(string $path = '')
  * @method static string bootstrapPath(string $path = '')
+ * @method static string getBootstrapProvidersPath()
  * @method static \Hybrid\Core\Application useBootstrapPath(string $path)
  * @method static string configPath(string $path = '')
  * @method static \Hybrid\Core\Application useConfigPath(string $path)
  * @method static \Hybrid\Core\Application usePublicPath(string $path)
  * @method static string detectEnvironment(\Closure $callback)
  * @method static bool runningInConsole()
+ * @method static bool runningConsoleCommand(string|array ...$commands)
  * @method static bool runningUnitTests()
  * @method static bool hasDebugModeEnabled()
+ * @method static void registered(callable $callback)
  * @method static string environmentFile()
  * @method static string environmentFilePath()
  * @method static string environmentPath()
@@ -71,6 +78,7 @@ namespace Hybrid\Core\Facades;
  * @method static string getNamespace()
  * @method static \Hybrid\Contracts\Container\ContextualBindingBuilder when(array|string $concrete)
  * @method static bool has(string $id)
+ * @method static void whenHasAttribute(string $attribute, \Closure $handler)
  * @method static bool isShared(string $abstract)
  * @method static bool isAlias(string $name)
  * @method static void bind(string $abstract, \Closure|string|null $concrete = null, bool $shared = false)
@@ -110,10 +118,13 @@ namespace Hybrid\Core\Facades;
  * @method static void loadDeferredProvider(string $service)
  * @method static void registerConfiguredProviders()
  * @method static void registerDeferredProvider(string $provider, string $service = null)
- * @method static void macro(string $name, object|callable $macro)
+ * @method static void macro(string $name, object|callable $macro, object|callable $macro = null)
  * @method static void mixin(object $mixin, bool $replace = true)
  * @method static bool hasMacro(string $name)
  * @method static void flushMacros()
+ * @method static int handleCommand(\Symfony\Component\Console\Input\InputInterface $input)
+ * @method static bool shouldMergeFrameworkConfiguration()
+ * @method static \Hybrid\Core\Application dontMergeFrameworkConfiguration()
  */
 class App extends Facade {
 

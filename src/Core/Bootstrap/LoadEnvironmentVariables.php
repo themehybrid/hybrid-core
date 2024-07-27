@@ -13,6 +13,7 @@ class LoadEnvironmentVariables {
     /**
      * Bootstrap the given application.
      *
+     * @param  \Hybrid\Contracts\Core\Application $app
      * @return void
      */
     public function bootstrap( Application $app ) {
@@ -23,6 +24,9 @@ class LoadEnvironmentVariables {
         $this->checkForSpecificEnvironmentFile( $app );
 
         // Check if the .env file exists before proceeding further.
+        // In Hybrid Core, the presence of a .env file is optional. The application
+        // can function without it, depending on the specific configuration and setup.
+        // If the .env file does not exist, simply return to avoid unnecessary processing.
         if ( ! file_exists( $app->environmentFilePath() ) ) {
             return;
         }
@@ -93,7 +97,8 @@ class LoadEnvironmentVariables {
     /**
      * Write the error information to the screen and exit.
      *
-     * @return void
+     * @param  \Dotenv\Exception\InvalidFileException $e
+     * @return never
      */
     protected function writeErrorAndDie( \Dotenv\Exception\InvalidFileException $e ) {
         $output = ( new ConsoleOutput() )->getErrorOutput();

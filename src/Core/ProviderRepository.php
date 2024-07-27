@@ -31,7 +31,9 @@ class ProviderRepository {
     /**
      * Create a new service repository instance.
      *
-     * @param  string $manifestPath
+     * @param  \Hybrid\Contracts\Core\Application $app
+     * @param  \Hybrid\Filesystem\Filesystem      $files
+     * @param  string                             $manifestPath
      * @return void
      */
     public function __construct( ApplicationContract $app, Filesystem $files, $manifestPath ) {
@@ -99,7 +101,7 @@ class ProviderRepository {
      * @return bool
      */
     public function shouldRecompile( $manifest, $providers ) {
-        return is_null( $manifest ) || $manifest['providers'] !== $providers;
+        return is_null( $manifest ) || $manifest['providers'] != $providers;
     }
 
     /**
@@ -114,9 +116,9 @@ class ProviderRepository {
             return;
         }
 
-        $this->app->make( 'events' )->listen($events, function () use ( $provider ) {
+        $this->app->make( 'events' )->listen( $events, function () use ( $provider ) {
             $this->app->register( $provider );
-        });
+        } );
     }
 
     /**

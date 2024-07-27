@@ -51,11 +51,11 @@ class Util {
         $name = $type->getName();
 
         if ( ! is_null( $class = $parameter->getDeclaringClass() ) ) {
-            if ( $name === 'self' ) {
+            if ( 'self' === $name ) {
                 return $class->getName();
             }
 
-            if ( $name === 'parent' && $parent = $class->getParentClass() ) {
+            if ( 'parent' === $name && $parent = $class->getParentClass() ) {
                 return $parent->getName();
             }
         }

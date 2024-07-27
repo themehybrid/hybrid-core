@@ -9,6 +9,7 @@ class EnvironmentDetector {
     /**
      * Detect the application's current environment.
      *
+     * @param  \Closure   $callback
      * @param  array|null $consoleArgs
      * @return string
      */
@@ -23,6 +24,7 @@ class EnvironmentDetector {
     /**
      * Set the application environment for a web request.
      *
+     * @param  \Closure $callback
      * @return string
      */
     protected function detectWebEnvironment( Closure $callback ) {
@@ -54,7 +56,7 @@ class EnvironmentDetector {
      */
     protected function getEnvironmentArgument( array $args ) {
         foreach ( $args as $i => $value ) {
-            if ( $value === '--env' ) {
+            if ( '--env' === $value ) {
                 return $args[ $i + 1 ] ?? null;
             }
 
