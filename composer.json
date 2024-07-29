@@ -40,5 +40,8 @@
 		"files": [
 			"src/functions-helpers.php"
 		]
+	},
+	"config": {
+		"sort-packages": true
 	}
 }
