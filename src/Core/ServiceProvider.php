@@ -48,7 +48,7 @@ abstract class ServiceProvider {
     /**
      * Create a new service provider instance.
      *
-     * @param  \Hybrid\Contracts\Core\Application $app
+     * @param \Hybrid\Contracts\Core\Application $app
      * @return void
      */
     public function __construct( Application $app ) {
@@ -65,7 +65,7 @@ abstract class ServiceProvider {
     /**
      * Register a booting callback to be run before the "boot" method is called.
      *
-     * @param  \Closure $callback
+     * @param \Closure $callback
      * @return void
      */
     public function booting( Closure $callback ) {
@@ -75,7 +75,7 @@ abstract class ServiceProvider {
     /**
      * Register a booted callback to be run after the "boot" method is called.
      *
-     * @param  \Closure $callback
+     * @param \Closure $callback
      * @return void
      */
     public function booted( Closure $callback ) {
@@ -115,8 +115,8 @@ abstract class ServiceProvider {
     /**
      * Merge the given configuration with the existing configuration.
      *
-     * @param  string $path
-     * @param  string $key
+     * @param string $path
+     * @param string $key
      * @return void
      */
     protected function mergeConfigFrom( $path, $key ) {
@@ -132,8 +132,8 @@ abstract class ServiceProvider {
     /**
      * Replace the given configuration with the existing configuration recursively.
      *
-     * @param  string $path
-     * @param  string $key
+     * @param string $path
+     * @param string $key
      * @return void
      */
     protected function replaceConfigRecursivelyFrom( $path, $key ) {
@@ -149,8 +149,8 @@ abstract class ServiceProvider {
     /**
      * Register a view file namespace.
      *
-     * @param  string|array $path
-     * @param  string       $namespace
+     * @param string|array $path
+     * @param string       $namespace
      * @return void
      */
     protected function loadViewsFrom( $path, $namespace ) {
@@ -170,8 +170,8 @@ abstract class ServiceProvider {
     /**
      * Setup an after resolving listener, or fire immediately if already resolved.
      *
-     * @param  string   $name
-     * @param  callable $callback
+     * @param string   $name
+     * @param callable $callback
      * @return void
      */
     protected function callAfterResolving( $name, $callback ) {
@@ -221,8 +221,8 @@ abstract class ServiceProvider {
     /**
      * Add the given provider to the application's provider bootstrap file.
      *
-     * @param  string $provider
-     * @param  string $path
+     * @param string $provider
+     * @param string $path
      * @return bool
      */
     public static function addProviderToBootstrapFile( string $provider, ?string $path = null ) {

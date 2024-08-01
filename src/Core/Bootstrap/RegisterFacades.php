@@ -12,7 +12,7 @@ class RegisterFacades {
     /**
      * Bootstrap the given application.
      *
-     * @param  \Hybrid\Contracts\Core\Application $app
+     * @param \Hybrid\Contracts\Core\Application $app
      * @return void
      */
     public function bootstrap( Application $app ) {

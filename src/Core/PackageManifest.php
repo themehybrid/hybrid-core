@@ -46,9 +46,9 @@ class PackageManifest {
     /**
      * Create a new package manifest instance.
      *
-     * @param  \Hybrid\Filesystem\Filesystem $files
-     * @param  string                        $basePath
-     * @param  string                        $manifestPath
+     * @param \Hybrid\Filesystem\Filesystem $files
+     * @param string                        $basePath
+     * @param string                        $manifestPath
      * @return void
      */
     public function __construct( Filesystem $files, $basePath, $manifestPath ) {
@@ -79,7 +79,7 @@ class PackageManifest {
     /**
      * Get all of the values for all packages for the given configuration name.
      *
-     * @param  string $key
+     * @param string $key
      * @return array
      */
     public function config( $key ) {
@@ -129,7 +129,7 @@ class PackageManifest {
     /**
      * Format the given package name.
      *
-     * @param  string $package
+     * @param string $package
      * @return string
      */
     protected function format( $package ) {
@@ -154,7 +154,7 @@ class PackageManifest {
     /**
      * Write the given manifest array to disk.
      *
-     * @param  array $manifest
+     * @param array $manifest
      * @return void
      * @throws \Exception
      */

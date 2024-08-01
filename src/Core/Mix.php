@@ -12,8 +12,8 @@ class Mix {
     /**
      * Get the path to a versioned Mix file.
      *
-     * @param  string $path
-     * @param  string $manifestDirectory
+     * @param string $path
+     * @param string $manifestDirectory
      * @return \Hybrid\Tools\HtmlString|string
      * @throws \Hybrid\Core\MixManifestNotFoundException
      */

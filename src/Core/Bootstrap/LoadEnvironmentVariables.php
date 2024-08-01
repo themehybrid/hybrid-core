@@ -13,7 +13,7 @@ class LoadEnvironmentVariables {
     /**
      * Bootstrap the given application.
      *
-     * @param  \Hybrid\Contracts\Core\Application $app
+     * @param \Hybrid\Contracts\Core\Application $app
      * @return void
      */
     public function bootstrap( Application $app ) {
@@ -41,7 +41,7 @@ class LoadEnvironmentVariables {
     /**
      * Detect if a custom environment file matching the HYBRID_CORE_ENV exists.
      *
-     * @param  \Hybrid\Contracts\Core\Application $app
+     * @param \Hybrid\Contracts\Core\Application $app
      * @return void
      */
     protected function checkForSpecificEnvironmentFile( $app ) {
@@ -66,8 +66,8 @@ class LoadEnvironmentVariables {
     /**
      * Load a custom environment file.
      *
-     * @param  \Hybrid\Contracts\Core\Application $app
-     * @param  string                             $file
+     * @param \Hybrid\Contracts\Core\Application $app
+     * @param string                             $file
      * @return bool
      */
     protected function setEnvironmentFilePath( $app, $file ) {
@@ -83,7 +83,7 @@ class LoadEnvironmentVariables {
     /**
      * Create a Dotenv instance.
      *
-     * @param  \Hybrid\Contracts\Core\Application $app
+     * @param \Hybrid\Contracts\Core\Application $app
      * @return \Dotenv\Dotenv
      */
     protected function createDotenv( $app ) {
@@ -97,7 +97,7 @@ class LoadEnvironmentVariables {
     /**
      * Write the error information to the screen and exit.
      *
-     * @param  \Dotenv\Exception\InvalidFileException $e
+     * @param \Dotenv\Exception\InvalidFileException $e
      * @return never
      */
     protected function writeErrorAndDie( \Dotenv\Exception\InvalidFileException $e ) {

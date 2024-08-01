@@ -26,8 +26,8 @@ class ApplicationBuilder {
     /**
      * Register additional service providers.
      *
-     * @param  array $providers
-     * @param  bool  $withBootstrapProviders
+     * @param array $providers
+     * @param bool  $withBootstrapProviders
      * @return $this
      */
     public function withProviders( array $providers = [], bool $withBootstrapProviders = true ) {
@@ -44,7 +44,7 @@ class ApplicationBuilder {
     /**
      * Register the core event service provider for the application.
      *
-     * @param  array|bool $discover
+     * @param array|bool $discover
      * @return $this
      */
     public function withEvents( array|bool $discover = [] ) {
@@ -70,7 +70,7 @@ class ApplicationBuilder {
     /**
      * Register and configure the application's exception handler.
      *
-     * @param  callable|null $using
+     * @param callable|null $using
      * @return $this
      */
     public function withExceptions( ?callable $using = null ) {
@@ -89,7 +89,7 @@ class ApplicationBuilder {
     /**
      * Register an array of container bindings to be bound when the application is booting.
      *
-     * @param  array $bindings
+     * @param array $bindings
      * @return $this
      */
     public function withBindings( array $bindings ) {
@@ -103,7 +103,7 @@ class ApplicationBuilder {
     /**
      * Register an array of singleton container bindings to be bound when the application is booting.
      *
-     * @param  array $singletons
+     * @param array $singletons
      * @return $this
      */
     public function withSingletons( array $singletons ) {
@@ -121,7 +121,7 @@ class ApplicationBuilder {
     /**
      * Register a callback to be invoked when the application's service providers are registered.
      *
-     * @param  callable $callback
+     * @param callable $callback
      * @return $this
      */
     public function registered( callable $callback ) {
@@ -133,7 +133,7 @@ class ApplicationBuilder {
     /**
      * Register a callback to be invoked when the application is "booting".
      *
-     * @param  callable $callback
+     * @param callable $callback
      * @return $this
      */
     public function booting( callable $callback ) {
@@ -145,7 +145,7 @@ class ApplicationBuilder {
     /**
      * Register a callback to be invoked when the application is "booted".
      *
-     * @param  callable $callback
+     * @param callable $callback
      * @return $this
      */
     public function booted( callable $callback ) {

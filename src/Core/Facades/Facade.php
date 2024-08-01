@@ -48,7 +48,7 @@ abstract class Facade {
     /**
      * Hotswap the underlying instance behind the facade.
      *
-     * @param  mixed $instance
+     * @param mixed $instance
      * @return void
      */
     public static function swap( $instance ) {
@@ -81,7 +81,7 @@ abstract class Facade {
     /**
      * Resolve the facade root instance from the container.
      *
-     * @param  string $name
+     * @param string $name
      * @return mixed
      */
     protected static function resolveFacadeInstance( $name ) {
@@ -101,7 +101,7 @@ abstract class Facade {
     /**
      * Clear a resolved facade instance.
      *
-     * @param  string $name
+     * @param string $name
      * @return void
      */
     public static function clearResolvedInstance( $name ) {
@@ -140,7 +140,7 @@ abstract class Facade {
     /**
      * Set the application instance.
      *
-     * @param  \Hybrid\Contracts\Core\Application|null $app
+     * @param \Hybrid\Contracts\Core\Application|null $app
      * @return void
      */
     public static function setFacadeApplication( $app ) {
@@ -150,8 +150,8 @@ abstract class Facade {
     /**
      * Handle dynamic, static calls to the object.
      *
-     * @param  string $method
-     * @param  array  $args
+     * @param string $method
+     * @param array  $args
      * @return mixed
      * @throws \RuntimeException
      */
