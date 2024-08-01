@@ -75,4 +75,4 @@ Hybrid Core uses code from Laravel Framework.
 The Laravel framework is open-sourced software licensed under the MIT license.
 License: MIT - https://opensource.org/licenses/MIT
 
-2008&thinsp;&ndash;&thinsp;2023 &copy; [Theme Hybrid](https://themehybrid.com).
+2008&thinsp;&ndash;&thinsp;2024 &copy; [Theme Hybrid](https://themehybrid.com).

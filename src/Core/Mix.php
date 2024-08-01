@@ -12,10 +12,10 @@ class Mix {
     /**
      * Get the path to a versioned Mix file.
      *
-     * @param  string $path
-     * @param  string $manifestDirectory
+     * @param string $path
+     * @param string $manifestDirectory
      * @return \Hybrid\Tools\HtmlString|string
-     * @throws \Exception
+     * @throws \Hybrid\Core\MixManifestNotFoundException
      */
     public function __invoke( $path, $manifestDirectory = '' ) {
         static $manifests = [];
@@ -48,7 +48,7 @@ class Mix {
 
         if ( ! isset( $manifests[ $manifestPath ] ) ) {
             if ( ! is_file( $manifestPath ) ) {
-                throw new \Exception( "Mix manifest not found at: {$manifestPath}" );
+                throw new \Hybrid\Core\MixManifestNotFoundException( "Mix manifest not found at: {$manifestPath}" );
             }
 
             $manifests[ $manifestPath ] = json_decode( file_get_contents( $manifestPath ), true );

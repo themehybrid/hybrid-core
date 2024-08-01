@@ -11,16 +11,18 @@
  * @link      https://github.com/themehybrid/hybrid-core
  *
  * @author    Theme Hybrid
- * @copyright Copyright (c) 2008 - 2023, Theme Hybrid
+ * @copyright Copyright (c) 2008 - 2024, Theme Hybrid
  * @license   https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 namespace Hybrid\Core;
 
 use Closure;
+use Composer\Autoload\ClassLoader;
 use Hybrid\Container\Container;
 use Hybrid\Contracts\Bootable;
 use Hybrid\Contracts\Core\Application as ApplicationContract;
+use Hybrid\Contracts\Core\CachesConfiguration;
 use Hybrid\Contracts\Filesystem\Factory;
 use Hybrid\Core\Bootstrap\BootProviders;
 use Hybrid\Core\Bootstrap\GenerateStorageStructures;
@@ -41,26 +43,34 @@ use Hybrid\Tools\Env;
 use Hybrid\Tools\Str;
 use Hybrid\Tools\Traits\Macroable;
 use Psr\Container\ContainerInterface;
+use function Hybrid\Filesystem\join_paths;
 use function Hybrid\Tools\value;
 
 /**
  * Application class.
  */
-class Application extends Container implements ApplicationContract, Bootable {
+class Application extends Container implements ApplicationContract, Bootable, CachesConfiguration {
 
     use Macroable;
 
     /**
-     * The current version of the framework.
+     * The Hybrid Core framework version.
      */
     const VERSION = '7.0.0-alpha.3';
 
     /**
-     * The base path for the Hybrid installation.
+     * The base path for the Hybrid Core installation.
      *
      * @var string
      */
     protected $basePath;
+
+    /**
+     * The array of registered callbacks.
+     *
+     * @var array<callable>
+     */
+    protected $registeredCallbacks = [];
 
     /**
      * Indicates if the application has been bootstrapped before.
@@ -100,7 +110,7 @@ class Application extends Container implements ApplicationContract, Bootable {
     /**
      * All of the registered service providers.
      *
-     * @var array<\Hybrid\Core\ServiceProvider>
+     * @var array<string, \Hybrid\Core\ServiceProvider>
      */
     protected $serviceProviders = [];
 
@@ -189,6 +199,13 @@ class Application extends Container implements ApplicationContract, Bootable {
     protected $namespace;
 
     /**
+     * Indicates if the framework's base configuration should be merged.
+     *
+     * @var bool
+     */
+    protected $mergeFrameworkConfiguration = true;
+
+    /**
      * The prefixes of absolute cache paths for use during normalization.
      *
      * @var array<string>
@@ -213,7 +230,7 @@ class Application extends Container implements ApplicationContract, Bootable {
     /**
      * Create a new Hybrid Core application instance.
      *
-     * @param  string|null $basePath
+     * @param string|null $basePath
      * @return void
      */
     public function __construct( $basePath = null, $bootstrap = true ) {
@@ -240,6 +257,35 @@ class Application extends Container implements ApplicationContract, Bootable {
     }
 
     /**
+     * Begin configuring a new Hybrid Core application instance.
+     *
+     * @param string|null $basePath
+     * @return \Hybrid\Core\Configuration\ApplicationBuilder
+     */
+    public static function configure( ?string $basePath = null ) {
+        $basePath = match ( true ) {
+            is_string( $basePath ) => $basePath,
+            default => static::inferBasePath(),
+        };
+
+        return ( new Configuration\ApplicationBuilder( new static( $basePath ) ) )
+            ->withEvents()
+            ->withProviders();
+    }
+
+    /**
+     * Infer the application's base directory from the environment.
+     *
+     * @return string
+     */
+    public static function inferBasePath() {
+        return match ( true ) {
+            isset( $_ENV['HYBRID_CORE_BASE_PATH'] ) => $_ENV['HYBRID_CORE_BASE_PATH'],
+            default => dirname( array_keys( ClassLoader::getRegisteredLoaders() )[0] ),
+        };
+    }
+
+    /**
      * Get the version number of the application.
      *
      * @return string
@@ -261,9 +307,9 @@ class Application extends Container implements ApplicationContract, Bootable {
         $this->instance( Container::class, $this );
         $this->singleton( Mix::class );
 
-        $this->singleton(PackageManifest::class, fn() => new PackageManifest(
+        $this->singleton( PackageManifest::class, fn() => new PackageManifest(
             new Filesystem(), $this->basePath(), $this->getCachedPackagesPath()
-        ));
+        ) );
     }
 
     /**
@@ -275,12 +321,13 @@ class Application extends Container implements ApplicationContract, Bootable {
         $this->register( new CoreServiceProvider( $this ) );
         $this->register( new EventServiceProvider( $this ) );
         $this->register( new FilesystemServiceProvider( $this ) );
+        // $this->register( new ContextServiceProvider( $this ) );
     }
 
     /**
      * Run the given array of bootstrap classes.
      *
-     * @param  array<string> $bootstrappers
+     * @param array<string> $bootstrappers
      * @return void
      */
     public function bootstrapWith( array $bootstrappers ) {
@@ -298,6 +345,7 @@ class Application extends Container implements ApplicationContract, Bootable {
     /**
      * Register a callback to run after loading the environment.
      *
+     * @param \Closure $callback
      * @return void
      */
     public function afterLoadingEnvironment( Closure $callback ) {
@@ -307,7 +355,8 @@ class Application extends Container implements ApplicationContract, Bootable {
     /**
      * Register a callback to run before a bootstrapper.
      *
-     * @param  string $bootstrapper
+     * @param string   $bootstrapper
+     * @param \Closure $callback
      * @return void
      */
     public function beforeBootstrapping( $bootstrapper, Closure $callback ) {
@@ -317,7 +366,8 @@ class Application extends Container implements ApplicationContract, Bootable {
     /**
      * Register a callback to run after a bootstrapper.
      *
-     * @param  string $bootstrapper
+     * @param string   $bootstrapper
+     * @param \Closure $callback
      * @return void
      */
     public function afterBootstrapping( $bootstrapper, Closure $callback ) {
@@ -336,7 +386,7 @@ class Application extends Container implements ApplicationContract, Bootable {
     /**
      * Set the base path for the application.
      *
-     * @param  string $basePath
+     * @param string $basePath
      * @return $this
      */
     public function setBasePath( $basePath ) {
@@ -360,15 +410,15 @@ class Application extends Container implements ApplicationContract, Bootable {
         $this->instance( 'path.resources', $this->resourcePath() );
         $this->instance( 'path.storage', $this->storagePath() );
 
-        $this->useBootstrapPath(value(fn() => is_dir( $directory = $this->basePath( '.hybrid-core' ) )
+        $this->useBootstrapPath( value( fn() => is_dir( $directory = $this->basePath( '.hybrid-core' ) )
                 ? $directory
-        : $this->basePath( 'bootstrap' )));
+                : $this->basePath( 'bootstrap' ) ) );
     }
 
     /**
      * Get the path to the application "app" directory.
      *
-     * @param  string $path
+     * @param string $path
      * @return string
      */
     public function path( $path = '' ) {
@@ -378,7 +428,7 @@ class Application extends Container implements ApplicationContract, Bootable {
     /**
      * Set the application directory.
      *
-     * @param  string $path
+     * @param string $path
      * @return $this
      */
     public function useAppPath( $path ) {
@@ -390,9 +440,9 @@ class Application extends Container implements ApplicationContract, Bootable {
     }
 
     /**
-     * Get the base path of the Hybrid installation.
+     * Get the base path of the Hybrid Core installation.
      *
-     * @param  string $path
+     * @param string $path
      * @return string
      */
     public function basePath( $path = '' ) {
@@ -402,7 +452,7 @@ class Application extends Container implements ApplicationContract, Bootable {
     /**
      * Get the path to the bootstrap directory.
      *
-     * @param  string $path
+     * @param string $path
      * @return string
      */
     public function bootstrapPath( $path = '' ) {
@@ -410,9 +460,18 @@ class Application extends Container implements ApplicationContract, Bootable {
     }
 
     /**
+     * Get the path to the service provider list in the bootstrap directory.
+     *
+     * @return string
+     */
+    public function getBootstrapProvidersPath() {
+        return $this->bootstrapPath( 'providers.php' );
+    }
+
+    /**
      * Set the bootstrap file directory.
      *
-     * @param  string $path
+     * @param string $path
      * @return $this
      */
     public function useBootstrapPath( $path ) {
@@ -426,7 +485,7 @@ class Application extends Container implements ApplicationContract, Bootable {
     /**
      * Get the path to the application configuration files.
      *
-     * @param  string $path
+     * @param string $path
      * @return string
      */
     public function configPath( $path = '' ) {
@@ -436,7 +495,7 @@ class Application extends Container implements ApplicationContract, Bootable {
     /**
      * Set the configuration directory.
      *
-     * @param  string $path
+     * @param string $path
      * @return $this
      */
     public function useConfigPath( $path ) {
@@ -450,7 +509,7 @@ class Application extends Container implements ApplicationContract, Bootable {
     /**
      * Get the path to the public / web directory.
      *
-     * @param  string $path
+     * @param string $path
      * @return string
      */
     public function publicPath( $path = '' ) {
@@ -460,7 +519,7 @@ class Application extends Container implements ApplicationContract, Bootable {
     /**
      * Set the public / web directory.
      *
-     * @param  string $path
+     * @param string $path
      * @return $this
      */
     public function usePublicPath( $path ) {
@@ -474,12 +533,16 @@ class Application extends Container implements ApplicationContract, Bootable {
     /**
      * Get the path to the storage directory.
      *
-     * @param  string $path
+     * @param string $path
      * @return string
      */
     public function storagePath( $path = '' ) {
         if ( isset( $_ENV['HYBRID_CORE_STORAGE_PATH'] ) ) {
             return $this->joinPaths( $this->storagePath ?: $_ENV['HYBRID_CORE_STORAGE_PATH'], $path );
+        }
+
+        if ( isset( $_SERVER['HYBRID_CORE_STORAGE_PATH'] ) ) {
+            return $this->joinPaths( $this->storagePath ?: $_SERVER['HYBRID_CORE_STORAGE_PATH'], $path );
         }
 
         return $this->joinPaths( $this->storagePath ?: $this->basePath( 'storage' ), $path );
@@ -488,7 +551,7 @@ class Application extends Container implements ApplicationContract, Bootable {
     /**
      * Set the storage directory.
      *
-     * @param  string $path
+     * @param string $path
      * @return $this
      */
     public function useStoragePath( $path ) {
@@ -502,7 +565,7 @@ class Application extends Container implements ApplicationContract, Bootable {
     /**
      * Get the path to the resources directory.
      *
-     * @param  string $path
+     * @param string $path
      * @return string
      */
     public function resourcePath( $path = '' ) {
@@ -512,7 +575,7 @@ class Application extends Container implements ApplicationContract, Bootable {
     /**
      * Set the resources directory.
      *
-     * @param  string $path
+     * @param string $path
      * @return $this
      */
     public function useResourcePath( $path ) {
@@ -528,7 +591,7 @@ class Application extends Container implements ApplicationContract, Bootable {
      *
      * This method returns the first configured path in the array of view paths.
      *
-     * @param  string $path
+     * @param string $path
      * @return string
      */
     public function viewPath( $path = '' ) {
@@ -544,12 +607,12 @@ class Application extends Container implements ApplicationContract, Bootable {
     /**
      * Join the given paths together.
      *
-     * @param  string $basePath
-     * @param  string $path
+     * @param string $basePath
+     * @param string $path
      * @return string
      */
     public function joinPaths( $basePath, $path = '' ) {
-        return $basePath . ( $path != '' ? DIRECTORY_SEPARATOR . ltrim( $path, DIRECTORY_SEPARATOR ) : '' );
+        return join_paths( $basePath, $path );
     }
 
     /**
@@ -564,7 +627,7 @@ class Application extends Container implements ApplicationContract, Bootable {
     /**
      * Set the directory for the environment file.
      *
-     * @param  string $path
+     * @param string $path
      * @return $this
      */
     public function useEnvironmentPath( $path ) {
@@ -576,7 +639,7 @@ class Application extends Container implements ApplicationContract, Bootable {
     /**
      * Set the environment file to be loaded during bootstrapping.
      *
-     * @param  string $file
+     * @param string $file
      * @return $this
      */
     public function loadEnvironmentFrom( $file ) {
@@ -606,7 +669,7 @@ class Application extends Container implements ApplicationContract, Bootable {
     /**
      * Get or check the current application environment.
      *
-     * @param  string|array ...$environments
+     * @param string|array ...$environments
      * @return string|bool
      */
     public function environment( ...$environments ) {
@@ -625,7 +688,7 @@ class Application extends Container implements ApplicationContract, Bootable {
      * @return bool
      */
     public function isLocal() {
-        return $this['env'] === 'local';
+        return 'local' === $this['env'];
     }
 
     /**
@@ -634,7 +697,7 @@ class Application extends Container implements ApplicationContract, Bootable {
      * @return bool
      */
     public function isProduction() {
-        return $this['env'] === 'production';
+        return 'production' === $this['env'];
     }
 
     /**
@@ -654,11 +717,28 @@ class Application extends Container implements ApplicationContract, Bootable {
      * @return bool
      */
     public function runningInConsole() {
-        if ( $this->isRunningInConsole === null ) {
+        if ( null === $this->isRunningInConsole ) {
             $this->isRunningInConsole = Env::get( 'HYBRID_CORE_RUNNING_IN_CONSOLE' ) ?? ( \PHP_SAPI === 'cli' || \PHP_SAPI === 'phpdbg' );
         }
 
         return $this->isRunningInConsole;
+    }
+
+    /**
+     * Determine if the application is running any of the given console commands.
+     *
+     * @param string|array ...$commands
+     * @return bool
+     */
+    public function runningConsoleCommand( ...$commands ) {
+        if ( ! $this->runningInConsole() ) {
+            return false;
+        }
+
+        return in_array(
+            $_SERVER['argv'][1] ?? null,
+            is_array( $commands[0] ) ? $commands[0] : $commands
+        );
     }
 
     /**
@@ -667,7 +747,7 @@ class Application extends Container implements ApplicationContract, Bootable {
      * @return bool
      */
     public function runningUnitTests() {
-        return $this->bound( 'env' ) && $this['env'] === 'testing';
+        return $this->bound( 'env' ) && 'testing' === $this['env'];
     }
 
     /**
@@ -677,6 +757,16 @@ class Application extends Container implements ApplicationContract, Bootable {
      */
     public function hasDebugModeEnabled() {
         return (bool) $this['config']->get( 'app.debug' );
+    }
+
+    /**
+     * Register a new registered listener.
+     *
+     * @param callable $callback
+     * @return void
+     */
+    public function registered( $callback ) {
+        $this->registeredCallbacks[] = $callback;
     }
 
     /**
@@ -692,12 +782,14 @@ class Application extends Container implements ApplicationContract, Bootable {
 
         ( new ProviderRepository( $this, new Filesystem(), $this->getCachedServicesPath() ) )
             ->load( $providers->collapse()->toArray() );
+
+        $this->fireAppCallbacks( $this->registeredCallbacks );
     }
 
     /**
      * Adds a service provider.
      *
-     * @param  string|object $provider
+     * @param string|object $provider
      * @return void
      * @deprecated Use register() instead.
      */
@@ -710,8 +802,8 @@ class Application extends Container implements ApplicationContract, Bootable {
     /**
      * Register a service provider with the application.
      *
-     * @param  \Hybrid\Core\ServiceProvider|string $provider
-     * @param  bool                                $force
+     * @param \Hybrid\Core\ServiceProvider|string $provider
+     * @param bool                                $force
      * @return \Hybrid\Core\ServiceProvider
      */
     public function register( $provider, $force = false ) {
@@ -760,17 +852,19 @@ class Application extends Container implements ApplicationContract, Bootable {
     /**
      * Get the registered service provider instance if it exists.
      *
-     * @param  \Hybrid\Core\ServiceProvider|string $provider
+     * @param \Hybrid\Core\ServiceProvider|string $provider
      * @return \Hybrid\Core\ServiceProvider|null
      */
     public function getProvider( $provider ) {
-        return array_values( $this->getProviders( $provider ) )[0] ?? null;
+        $name = is_string( $provider ) ? $provider : get_class( $provider );
+
+        return $this->serviceProviders[ $name ] ?? null;
     }
 
     /**
      * Get the registered service provider instances if any exist.
      *
-     * @param  \Hybrid\Core\ServiceProvider|string $provider
+     * @param \Hybrid\Core\ServiceProvider|string $provider
      * @return array
      */
     public function getProviders( $provider ) {
@@ -782,7 +876,7 @@ class Application extends Container implements ApplicationContract, Bootable {
     /**
      * Resolve a service provider instance from the class name.
      *
-     * @param  string $provider
+     * @param string $provider
      * @return \Hybrid\Core\ServiceProvider
      */
     public function resolveProvider( $provider ) {
@@ -792,13 +886,15 @@ class Application extends Container implements ApplicationContract, Bootable {
     /**
      * Mark the given provider as registered.
      *
-     * @param  \Hybrid\Core\ServiceProvider $provider
+     * @param \Hybrid\Core\ServiceProvider $provider
      * @return void
      */
     protected function markAsRegistered( $provider ) {
-        $this->serviceProviders[] = $provider;
+        $class = get_class( $provider );
 
-        $this->loadedProviders[ get_class( $provider ) ] = true;
+        $this->serviceProviders[ $class ] = $provider;
+
+        $this->loadedProviders[ $class ] = true;
     }
 
     /**
@@ -820,7 +916,7 @@ class Application extends Container implements ApplicationContract, Bootable {
     /**
      * Load the provider for a deferred service.
      *
-     * @param  string $service
+     * @param string $service
      * @return void
      */
     public function loadDeferredProvider( $service ) {
@@ -841,8 +937,8 @@ class Application extends Container implements ApplicationContract, Bootable {
     /**
      * Register a deferred provider and service.
      *
-     * @param  string      $provider
-     * @param  string|null $service
+     * @param string      $provider
+     * @param string|null $service
      * @return void
      */
     public function registerDeferredProvider( $provider, $service = null ) {
@@ -856,18 +952,19 @@ class Application extends Container implements ApplicationContract, Bootable {
         $this->register( $instance = new $provider( $this ) );
 
         if ( ! $this->isBooted() ) {
-            $this->booting(function () use ( $instance ) {
+            $this->booting( function () use ( $instance ) {
                 $this->bootProvider( $instance );
-            });
+            } );
         }
     }
 
     /**
      * Resolve the given type from the container.
      *
-     * @param  string $abstract
-     * @param  array  $parameters
+     * @param string $abstract
+     * @param array  $parameters
      * @return mixed
+     * @throws \Hybrid\Contracts\Container\BindingResolutionException
      */
     public function make( $abstract, array $parameters = [] ) {
         $this->loadDeferredProviderIfNeeded( $abstract = $this->getAlias( $abstract ) );
@@ -878,10 +975,12 @@ class Application extends Container implements ApplicationContract, Bootable {
     /**
      * Resolve the given type from the container.
      *
-     * @param  string $abstract
-     * @param  array  $parameters
-     * @param  bool   $raiseEvents
+     * @param string $abstract
+     * @param array  $parameters
+     * @param bool   $raiseEvents
      * @return mixed
+     * @throws \Hybrid\Contracts\Container\BindingResolutionException
+     * @throws \Hybrid\Contracts\Container\CircularDependencyException
      */
     public function resolve( $abstract, $parameters = [], $raiseEvents = true ) {
         $this->loadDeferredProviderIfNeeded( $abstract = $this->getAlias( $abstract ) );
@@ -892,7 +991,7 @@ class Application extends Container implements ApplicationContract, Bootable {
     /**
      * Load the deferred provider if the given type is a deferred service and the instance has not been loaded.
      *
-     * @param  string $abstract
+     * @param string $abstract
      * @return void
      */
     protected function loadDeferredProviderIfNeeded( $abstract ) {
@@ -904,7 +1003,7 @@ class Application extends Container implements ApplicationContract, Bootable {
     /**
      * Determine if the given abstract type has been bound.
      *
-     * @param  string $abstract
+     * @param string $abstract
      * @return bool
      */
     public function bound( $abstract ) {
@@ -936,9 +1035,9 @@ class Application extends Container implements ApplicationContract, Bootable {
         // finished. This is useful when ordering the boot-up processes we run.
         $this->fireAppCallbacks( $this->bootingCallbacks );
 
-        array_walk($this->serviceProviders, function ( $p ) {
+        array_walk( $this->serviceProviders, function ( $p ) {
             $this->bootProvider( $p );
-        });
+        } );
 
         $this->booted = true;
 
@@ -988,7 +1087,7 @@ class Application extends Container implements ApplicationContract, Bootable {
     /**
      * Register a new boot listener.
      *
-     * @param  callable $callback
+     * @param callable $callback
      * @return void
      */
     public function booting( $callback ) {
@@ -998,7 +1097,7 @@ class Application extends Container implements ApplicationContract, Bootable {
     /**
      * Register a new "booted" listener.
      *
-     * @param  callable $callback
+     * @param callable $callback
      * @return void
      */
     public function booted( $callback ) {
@@ -1012,17 +1111,37 @@ class Application extends Container implements ApplicationContract, Bootable {
     /**
      * Call the booting callbacks for the application.
      *
-     * @param  array<callable> $callbacks
+     * @param array<callable> $callbacks
      * @return void
      */
     protected function fireAppCallbacks( array &$callbacks ) {
         $index = 0;
 
-        while ( $index < count( $callbacks ) ) {
+        while ( count( $callbacks ) > $index ) {
             $callbacks[ $index ]( $this );
 
             ++$index;
         }
+    }
+
+    /**
+     * Determine if the framework's base configuration should be merged.
+     *
+     * @return bool
+     */
+    public function shouldMergeFrameworkConfiguration() {
+        return $this->mergeFrameworkConfiguration;
+    }
+
+    /**
+     * Indicate that the framework's base configuration should not be merged.
+     *
+     * @return $this
+     */
+    public function dontMergeFrameworkConfiguration() {
+        $this->mergeFrameworkConfiguration = false;
+
+        return $this;
     }
 
     /**
@@ -1082,8 +1201,8 @@ class Application extends Container implements ApplicationContract, Bootable {
     /**
      * Normalize a relative or absolute path to a cache file.
      *
-     * @param  string $key
-     * @param  string $default
+     * @param string $key
+     * @param string $default
      * @return string
      */
     protected function normalizeCachePath( $key, $default ) {
@@ -1099,7 +1218,7 @@ class Application extends Container implements ApplicationContract, Bootable {
     /**
      * Add new prefix to list of absolute path prefixes.
      *
-     * @param  string $prefix
+     * @param string $prefix
      * @return $this
      */
     public function addAbsoluteCachePathPrefix( $prefix ) {
@@ -1111,7 +1230,7 @@ class Application extends Container implements ApplicationContract, Bootable {
     /**
      * Register a terminating callback with the application.
      *
-     * @param  callable|string $callback
+     * @param callable|string $callback
      * @return $this
      */
     public function terminating( $callback ) {
@@ -1128,7 +1247,7 @@ class Application extends Container implements ApplicationContract, Bootable {
     public function terminate() {
         $index = 0;
 
-        while ( $index < count( $this->terminatingCallbacks ) ) {
+        while ( count( $this->terminatingCallbacks ) > $index ) {
             $this->call( $this->terminatingCallbacks[ $index ] );
 
             ++$index;
@@ -1138,7 +1257,7 @@ class Application extends Container implements ApplicationContract, Bootable {
     /**
      * Get the service providers that have been loaded.
      *
-     * @return array
+     * @return array<string, bool>
      */
     public function getLoadedProviders() {
         return $this->loadedProviders;
@@ -1147,6 +1266,7 @@ class Application extends Container implements ApplicationContract, Bootable {
     /**
      * Determine if the given service provider is loaded.
      *
+     * @param string $provider
      * @return bool
      */
     public function providerIsLoaded( string $provider ) {
@@ -1165,7 +1285,7 @@ class Application extends Container implements ApplicationContract, Bootable {
     /**
      * Set the application's deferred services.
      *
-     * @param  array $services
+     * @param array $services
      * @return void
      */
     public function setDeferredServices( array $services ) {
@@ -1175,7 +1295,7 @@ class Application extends Container implements ApplicationContract, Bootable {
     /**
      * Add an array of services to the application's deferred services.
      *
-     * @param  array $services
+     * @param array $services
      * @return void
      */
     public function addDeferredServices( array $services ) {
@@ -1185,7 +1305,7 @@ class Application extends Container implements ApplicationContract, Bootable {
     /**
      * Determine if the given service is a deferred service.
      *
-     * @param  string $service
+     * @param string $service
      * @return bool
      */
     public function isDeferredService( $service ) {
@@ -1195,7 +1315,7 @@ class Application extends Container implements ApplicationContract, Bootable {
     /**
      * Configure the real-time facade namespace.
      *
-     * @param  string $namespace
+     * @param string $namespace
      * @return void
      */
     public function provideFacades( $namespace ) {

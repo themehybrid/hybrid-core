@@ -12,6 +12,7 @@ class RegisterFacades {
     /**
      * Bootstrap the given application.
      *
+     * @param \Hybrid\Contracts\Core\Application $app
      * @return void
      */
     public function bootstrap( Application $app ) {
@@ -21,9 +22,9 @@ class RegisterFacades {
 
         $aliases = $app->make( 'config' )->get( 'app.aliases', [] );
 
-        // If app doesn't define 'aliases' in `app.php`,
-        // Hybrid Core wouldn't be able to use its default aliases.
-        // so will have to initiate it here.
+        // If the application configuration does not define any 'aliases' in `app.php`,
+        // Hybrid Core will be unable to use its default aliases.
+        // Therefore, we need to initialize the default aliases here.
         if ( count( $aliases ) === 0 ) {
             $aliases = Facade::defaultAliases()->merge( [] )->toArray();
         }

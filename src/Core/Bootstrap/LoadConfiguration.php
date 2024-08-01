@@ -13,6 +13,7 @@ class LoadConfiguration {
     /**
      * Bootstrap the given application.
      *
+     * @param \Hybrid\Contracts\Core\Application $app
      * @return void
      */
     public function bootstrap( Application $app ) {
@@ -24,7 +25,7 @@ class LoadConfiguration {
         if ( file_exists( $cached = $app->getCachedConfigPath() ) ) {
             $items = require $cached;
 
-            $loadedFromCache = true;
+            $app->instance( 'config_loaded_from_cache', $loadedFromCache = true );
         }
 
         // Next we will spin through all of the configuration files in the configuration
@@ -45,26 +46,80 @@ class LoadConfiguration {
     /**
      * Load the configuration items from all of the files.
      *
+     * @param \Hybrid\Contracts\Core\Application  $app
+     * @param \Hybrid\Contracts\Config\Repository $repository
      * @return void
      * @throws \Exception
      */
     protected function loadConfigurationFiles( Application $app, RepositoryContract $repository ) {
         $files = $this->getConfigurationFiles( $app );
 
-        /*
-        if ( ! isset( $files['app'] ) ) {
-            throw new \Exception( 'Unable to load the "app" configuration file.' );
-        }
-        */
+        $shouldMerge = method_exists( $app, 'shouldMergeFrameworkConfiguration' )
+            ? $app->shouldMergeFrameworkConfiguration()
+            : true;
 
-        foreach ( $files as $key => $path ) {
-            $repository->set( $key, require $path );
+        $base = $shouldMerge
+            ? $this->getBaseConfiguration()
+            : [];
+
+        foreach ( array_diff( array_keys( $base ), array_keys( $files ) ) as $name => $config ) {
+            $repository->set( $name, $config );
         }
+
+        foreach ( $files as $name => $path ) {
+            $base = $this->loadConfigurationFile( $repository, $name, $path, $base );
+        }
+
+        foreach ( $base as $name => $config ) {
+            $repository->set( $name, $config );
+        }
+    }
+
+    /**
+     * Load the given configuration file.
+     *
+     * @param \Hybrid\Contracts\Config\Repository $repository
+     * @param string                              $name
+     * @param string                              $path
+     * @param array                               $base
+     * @return array
+     */
+    protected function loadConfigurationFile( RepositoryContract $repository, $name, $path, array $base ) {
+        $config = require $path;
+
+        if ( isset( $base[ $name ] ) ) {
+            $config = array_merge( $base[ $name ], $config );
+
+            foreach ( $this->mergeableOptions( $name ) as $option ) {
+                if ( isset( $config[ $option ] ) ) {
+                    $config[ $option ] = array_merge( $base[ $name ][ $option ], $config[ $option ] );
+                }
+            }
+
+            unset( $base[ $name ] );
+        }
+
+        $repository->set( $name, $config );
+
+        return $base;
+    }
+
+    /**
+     * Get the options within the configuration file that should be merged again.
+     *
+     * @param string $name
+     * @return array
+     */
+    protected function mergeableOptions( $name ) {
+        return [
+            'logging' => [ 'channels' ],
+        ][ $name ] ?? [];
     }
 
     /**
      * Get all of the configuration files for the application.
      *
+     * @param \Hybrid\Contracts\Core\Application $app
      * @return array
      */
     protected function getConfigurationFiles( Application $app ) {
@@ -73,7 +128,7 @@ class LoadConfiguration {
         $configPath = realpath( $app->configPath() );
 
         if ( ! $configPath ) {
-            return $files;
+            return [];
         }
 
         foreach ( Finder::create()->files()->name( '*.php' )->in( $configPath ) as $file ) {
@@ -90,7 +145,8 @@ class LoadConfiguration {
     /**
      * Get the configuration file nesting path.
      *
-     * @param  string $configPath
+     * @param \SplFileInfo $file
+     * @param string       $configPath
      * @return string
      */
     protected function getNestedDirectory( SplFileInfo $file, $configPath ) {
@@ -101,6 +157,30 @@ class LoadConfiguration {
         }
 
         return $nested;
+    }
+
+    /**
+     * Get the base configuration files.
+     *
+     * @return array
+     */
+    protected function getBaseConfiguration() {
+        $config = [];
+
+        $configPath = __DIR__ . '/../../../../config';
+
+        // Check if the configuration directory exists.
+        // In Hybrid Core, the base configuration is optional and depends on the application's setup.
+        // Return an empty configuration array if the directory does not exist.
+        if ( ! is_dir( $configPath ) ) {
+            return $config;
+        }
+
+        foreach ( Finder::create()->files()->name( '*.php' )->in( $configPath ) as $file ) {
+            $config[ basename( $file->getRealPath(), '.php' ) ] = require $file->getRealPath();
+        }
+
+        return $config;
     }
 
 }

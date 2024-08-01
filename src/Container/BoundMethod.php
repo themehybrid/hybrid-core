@@ -15,10 +15,10 @@ class BoundMethod {
     /**
      * Call the given Closure / class@method and inject its dependencies.
      *
-     * @param  \Hybrid\Container\Container $container
-     * @param  callable|string             $callback
-     * @param  array                       $parameters
-     * @param  string|null                 $defaultMethod
+     * @param \Hybrid\Container\Container $container
+     * @param callable|string             $callback
+     * @param array                       $parameters
+     * @param string|null                 $defaultMethod
      * @return mixed
      * @throws \ReflectionException
      * @throws \InvalidArgumentException
@@ -39,9 +39,9 @@ class BoundMethod {
      * Call a string reference to a class using Class@method syntax.
      *
      * @param \Hybrid\Container\Container $container
-     * @param  string                      $target
-     * @param  array                       $parameters
-     * @param  string|null                 $defaultMethod
+     * @param string                      $target
+     * @param array                       $parameters
+     * @param string|null                 $defaultMethod
      * @return mixed
      * @throws \InvalidArgumentException
      */
@@ -67,8 +67,8 @@ class BoundMethod {
      * Call a method that has been bound to the container.
      *
      * @param \Hybrid\Container\Container $container
-     * @param  callable                    $callback
-     * @param  mixed                       $default
+     * @param callable                    $callback
+     * @param mixed                       $default
      * @return mixed
      */
     protected static function callBoundMethod( $container, $callback, $default ) {
@@ -91,7 +91,7 @@ class BoundMethod {
     /**
      * Normalize the given callback into a Class@method string.
      *
-     * @param  callable $callback
+     * @param callable $callback
      * @return string
      */
     protected static function normalizeMethod( $callback ) {
@@ -104,8 +104,8 @@ class BoundMethod {
      * Get all dependencies for a given method.
      *
      * @param \Hybrid\Container\Container $container
-     * @param  callable|string             $callback
-     * @param  array                       $parameters
+     * @param callable|string             $callback
+     * @param array                       $parameters
      * @return array
      * @throws \ReflectionException
      */
@@ -122,7 +122,7 @@ class BoundMethod {
     /**
      * Get the proper reflection instance for the given callback.
      *
-     * @param  callable|string $callback
+     * @param callable|string $callback
      * @return \ReflectionFunctionAbstract
      * @throws \ReflectionException
      */
@@ -142,9 +142,9 @@ class BoundMethod {
      * Get the dependency for the given call parameter.
      *
      * @param \Hybrid\Container\Container $container
-     * @param  \ReflectionParameter        $parameter
-     * @param  array                       $parameters
-     * @param  array                       $dependencies
+     * @param \ReflectionParameter        $parameter
+     * @param array                       $parameters
+     * @param array                       $dependencies
      * @return void
      * @throws \Hybrid\Contracts\Container\BindingResolutionException
      */
@@ -161,9 +161,9 @@ class BoundMethod {
             } elseif ( $parameter->isVariadic() ) {
                 $variadicDependencies = $container->make( $className );
 
-                $dependencies = array_merge($dependencies, is_array( $variadicDependencies )
+                $dependencies = array_merge( $dependencies, is_array( $variadicDependencies )
                     ? $variadicDependencies
-                : [ $variadicDependencies ]);
+                : [ $variadicDependencies ] );
             } else {
                 $dependencies[] = $container->make( $className );
             }
@@ -179,7 +179,7 @@ class BoundMethod {
     /**
      * Determine if the given string is in Class@method syntax.
      *
-     * @param  mixed $callback
+     * @param mixed $callback
      * @return bool
      */
     protected static function isCallableWithAtSign( $callback ) {

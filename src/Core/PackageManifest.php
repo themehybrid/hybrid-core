@@ -2,13 +2,12 @@
 
 namespace Hybrid\Core;
 
-use Exception;
 use Hybrid\Filesystem\Filesystem;
 use Hybrid\Tools\Env;
-
 use function Hybrid\Tools\collect;
 
 class PackageManifest {
+
     /**
      * The filesystem instance.
      *
@@ -47,17 +46,16 @@ class PackageManifest {
     /**
      * Create a new package manifest instance.
      *
-     * @param  \Hybrid\Filesystem\Filesystem  $files
-     * @param  string  $basePath
-     * @param  string  $manifestPath
+     * @param \Hybrid\Filesystem\Filesystem $files
+     * @param string                        $basePath
+     * @param string                        $manifestPath
      * @return void
      */
-    public function __construct(Filesystem $files, $basePath, $manifestPath)
-    {
-        $this->files = $files;
-        $this->basePath = $basePath;
+    public function __construct( Filesystem $files, $basePath, $manifestPath ) {
+        $this->files        = $files;
+        $this->basePath     = $basePath;
         $this->manifestPath = $manifestPath;
-        $this->vendorPath = Env::get('COMPOSER_VENDOR_DIR') ?: $basePath.'/vendor';
+        $this->vendorPath   = Env::get( 'COMPOSER_VENDOR_DIR' ) ?: $basePath . '/vendor';
     }
 
     /**
@@ -65,9 +63,8 @@ class PackageManifest {
      *
      * @return array
      */
-    public function providers()
-    {
-        return $this->config('providers');
+    public function providers() {
+        return $this->config( 'providers' );
     }
 
     /**
@@ -75,22 +72,18 @@ class PackageManifest {
      *
      * @return array
      */
-    public function aliases()
-    {
-        return $this->config('aliases');
+    public function aliases() {
+        return $this->config( 'aliases' );
     }
 
     /**
      * Get all of the values for all packages for the given configuration name.
      *
-     * @param  string  $key
+     * @param string $key
      * @return array
      */
-    public function config($key)
-    {
-        return collect($this->getManifest())->flatMap(function ($configuration) use ($key) {
-            return (array) ($configuration[$key] ?? []);
-        })->filter()->all();
+    public function config( $key ) {
+        return collect( $this->getManifest() )->flatMap( static fn( $configuration ) => (array) ( $configuration[ $key ] ?? [] ) )->filter()->all();
     }
 
     /**
@@ -98,18 +91,18 @@ class PackageManifest {
      *
      * @return array
      */
-    protected function getManifest()
-    {
-        if (! is_null($this->manifest)) {
+    protected function getManifest() {
+        if ( ! is_null( $this->manifest ) ) {
             return $this->manifest;
         }
 
-        if (! is_file($this->manifestPath)) {
+        if ( ! is_file( $this->manifestPath ) ) {
             $this->build();
         }
 
-        return $this->manifest = is_file($this->manifestPath) ?
-            $this->files->getRequire($this->manifestPath) : [];
+        return $this->manifest = is_file( $this->manifestPath )
+            ? $this->files->getRequire( $this->manifestPath )
+            : [];
     }
 
     /**
@@ -117,36 +110,30 @@ class PackageManifest {
      *
      * @return void
      */
-    public function build()
-    {
+    public function build() {
         $packages = [];
 
-        if ($this->files->exists($path = $this->vendorPath.'/composer/installed.json')) {
-            $installed = json_decode($this->files->get($path), true);
+        if ( $this->files->exists( $path = $this->vendorPath . '/composer/installed.json' ) ) {
+            $installed = json_decode( $this->files->get( $path ), true );
 
             $packages = $installed['packages'] ?? $installed;
         }
 
-        $ignoreAll = in_array('*', $ignore = $this->packagesToIgnore());
+        $ignoreAll = in_array( '*', $ignore = $this->packagesToIgnore() );
 
-        $this->write(collect($packages)->mapWithKeys(function ($package) {
-            return [$this->format($package['name']) => $package['extra']['hybrid-core'] ?? []];
-        })->each(function ($configuration) use (&$ignore) {
-            $ignore = array_merge($ignore, $configuration['dont-discover'] ?? []);
-        })->reject(function ($configuration, $package) use ($ignore, $ignoreAll) {
-            return $ignoreAll || in_array($package, $ignore);
-        })->filter()->all());
+        $this->write( collect( $packages )->mapWithKeys( fn( $package ) => [ $this->format( $package['name'] ) => $package['extra']['hybrid-core'] ?? [] ] )->each( static function ( $configuration ) use ( &$ignore ) {
+            $ignore = array_merge( $ignore, $configuration['dont-discover'] ?? [] );
+        } )->reject( static fn( $configuration, $package ) => $ignoreAll || in_array( $package, $ignore ) )->filter()->all() );
     }
 
     /**
      * Format the given package name.
      *
-     * @param  string  $package
+     * @param string $package
      * @return string
      */
-    protected function format($package)
-    {
-        return str_replace($this->vendorPath.'/', '', $package);
+    protected function format( $package ) {
+        return str_replace( $this->vendorPath . '/', '', $package );
     }
 
     /**
@@ -154,33 +141,31 @@ class PackageManifest {
      *
      * @return array
      */
-    protected function packagesToIgnore()
-    {
-        if (! is_file($this->basePath.'/composer.json')) {
+    protected function packagesToIgnore() {
+        if ( ! is_file( $this->basePath . '/composer.json' ) ) {
             return [];
         }
 
-        return json_decode(file_get_contents(
-            $this->basePath.'/composer.json'
-        ), true)['extra']['hybrid-core']['dont-discover'] ?? [];
+        return json_decode( file_get_contents(
+            $this->basePath . '/composer.json'
+        ), true )['extra']['hybrid-core']['dont-discover'] ?? [];
     }
 
     /**
      * Write the given manifest array to disk.
      *
-     * @param  array  $manifest
+     * @param array $manifest
      * @return void
-     *
      * @throws \Exception
      */
-    protected function write(array $manifest)
-    {
-        if (! is_writable($dirname = dirname($this->manifestPath))) {
-            throw new Exception("The {$dirname} directory must be present and writable.");
+    protected function write( array $manifest ) {
+        if ( ! is_writable( $dirname = dirname( $this->manifestPath ) ) ) {
+            throw new \Exception( "The {$dirname} directory must be present and writable." );
         }
 
         $this->files->replace(
-            $this->manifestPath, '<?php return '.var_export($manifest, true).';'
+            $this->manifestPath, '<?php return ' . var_export( $manifest, true ) . ';'
         );
     }
+
 }

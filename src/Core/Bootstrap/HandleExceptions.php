@@ -52,11 +52,11 @@ class HandleExceptions {
     /**
      * Report PHP deprecations, or convert PHP errors to ErrorException instances.
      *
-     * @param  int    $level
-     * @param  string $message
-     * @param  string $file
-     * @param  int    $line
-     * @param  array  $context
+     * @param int    $level
+     * @param string $message
+     * @param string $file
+     * @param int    $line
+     * @param array  $context
      * @return void
      * @throws \ErrorException
      */
@@ -73,9 +73,9 @@ class HandleExceptions {
     /**
      * Reports a deprecation to the "deprecations" logger.
      *
-     * @param  string $message
-     * @param  string $file
-     * @param  int    $line
+     * @param string $message
+     * @param string $file
+     * @param int    $line
      * @return void
      * @deprecated Use handleDeprecationError instead.
      */
@@ -86,10 +86,10 @@ class HandleExceptions {
     /**
      * Reports a deprecation to the "deprecations" logger.
      *
-     * @param  string $message
-     * @param  string $file
-     * @param  int    $line
-     * @param  int    $level
+     * @param string $message
+     * @param string $file
+     * @param int    $line
+     * @param int    $level
      * @return void
      */
     public function handleDeprecationError( $message, $file, $line, $level = E_DEPRECATED ) {
@@ -110,15 +110,15 @@ class HandleExceptions {
 
         $options = static::$app['config']->get( 'logging.deprecations' ) ?? [];
 
-        with($logger->channel( 'deprecations' ), static function ( $log ) use ( $message, $file, $line, $level, $options ) {
+        with( $logger->channel( 'deprecations' ), static function ( $log ) use ( $message, $file, $line, $level, $options ) {
             if ( $options['trace'] ?? false ) {
                 $log->warning( (string) new \ErrorException( $message, 0, $level, $file, $line ) );
             } else {
-                $log->warning(sprintf('%s in %s on line %s',
+                $log->warning( sprintf( '%s in %s on line %s',
                     $message, $file, $line
-                ));
+                ) );
             }
-        });
+        } );
     }
 
     /**
@@ -127,7 +127,7 @@ class HandleExceptions {
      * @return void
      */
     protected function ensureDeprecationLoggerIsConfigured() {
-        with(static::$app['config'], function ( $config ) {
+        with( static::$app['config'], function ( $config ) {
             if ( $config->get( 'logging.channels.deprecations' ) ) {
                 return;
             }
@@ -139,7 +139,7 @@ class HandleExceptions {
             $driver = is_array( $options ) ? $options['channel'] : ( $options ?? 'null' );
 
             $config->set( 'logging.channels.deprecations', $config->get( "logging.channels.{$driver}" ) );
-        });
+        } );
     }
 
     /**
@@ -148,16 +148,16 @@ class HandleExceptions {
      * @return void
      */
     protected function ensureNullLogDriverIsConfigured() {
-        with(static::$app['config'], static function ( $config ) {
+        with( static::$app['config'], static function ( $config ) {
             if ( $config->get( 'logging.channels.null' ) ) {
                 return;
             }
 
-            $config->set('logging.channels.null', [
+            $config->set( 'logging.channels.null', [
                 'driver'  => 'monolog',
                 'handler' => NullHandler::class,
-            ]);
-        });
+            ] );
+        } );
     }
 
     /**
@@ -218,8 +218,8 @@ class HandleExceptions {
     /**
      * Create a new fatal error instance from an error array.
      *
-     * @param  array    $error
-     * @param  int|null $traceOffset
+     * @param array    $error
+     * @param int|null $traceOffset
      * @return \Symfony\Component\ErrorHandler\Error\FatalError
      */
     protected function fatalErrorFromPhpError( array $error, $traceOffset = null ) {
@@ -240,7 +240,7 @@ class HandleExceptions {
     /**
      * Determine if the error level is a deprecation.
      *
-     * @param  int $level
+     * @param int $level
      * @return bool
      */
     protected function isDeprecation( $level ) {
@@ -250,7 +250,7 @@ class HandleExceptions {
     /**
      * Determine if the error type is fatal.
      *
-     * @param  int $type
+     * @param int $type
      * @return bool
      */
     protected function isFatal( $type ) {

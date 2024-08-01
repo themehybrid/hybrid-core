@@ -31,7 +31,9 @@ class ProviderRepository {
     /**
      * Create a new service repository instance.
      *
-     * @param  string $manifestPath
+     * @param \Hybrid\Contracts\Core\Application $app
+     * @param \Hybrid\Filesystem\Filesystem      $files
+     * @param string                             $manifestPath
      * @return void
      */
     public function __construct( ApplicationContract $app, Filesystem $files, $manifestPath ) {
@@ -43,7 +45,7 @@ class ProviderRepository {
     /**
      * Register the application service providers.
      *
-     * @param  array $providers
+     * @param array $providers
      * @return void
      */
     public function load( array $providers ) {
@@ -94,19 +96,19 @@ class ProviderRepository {
     /**
      * Determine if the manifest should be compiled.
      *
-     * @param  array $manifest
-     * @param  array $providers
+     * @param array $manifest
+     * @param array $providers
      * @return bool
      */
     public function shouldRecompile( $manifest, $providers ) {
-        return is_null( $manifest ) || $manifest['providers'] !== $providers;
+        return is_null( $manifest ) || $manifest['providers'] != $providers;
     }
 
     /**
      * Register the load events for the given provider.
      *
-     * @param  string $provider
-     * @param  array  $events
+     * @param string $provider
+     * @param array  $events
      * @return void
      */
     protected function registerLoadEvents( $provider, array $events ) {
@@ -114,15 +116,15 @@ class ProviderRepository {
             return;
         }
 
-        $this->app->make( 'events' )->listen($events, function () use ( $provider ) {
+        $this->app->make( 'events' )->listen( $events, function () use ( $provider ) {
             $this->app->register( $provider );
-        });
+        } );
     }
 
     /**
      * Compile the application service manifest file.
      *
-     * @param  array $providers
+     * @param array $providers
      * @return array
      */
     protected function compileManifest( $providers ) {
@@ -159,7 +161,7 @@ class ProviderRepository {
     /**
      * Create a fresh service manifest data structure.
      *
-     * @param  array $providers
+     * @param array $providers
      * @return array
      */
     protected function freshManifest( array $providers ) {
@@ -173,7 +175,7 @@ class ProviderRepository {
     /**
      * Write the service manifest file to disk.
      *
-     * @param  array $manifest
+     * @param array $manifest
      * @return array
      * @throws \Exception
      */
@@ -192,7 +194,7 @@ class ProviderRepository {
     /**
      * Create a new provider instance.
      *
-     * @param  string $provider
+     * @param string $provider
      * @return \Hybrid\Core\ServiceProvider
      */
     public function createProvider( $provider ) {

@@ -2,6 +2,17 @@
 
 You can see the changes made via the [commit log](https://github.com/themehybrid/hybrid-core/commits/master) for the latest release.
 
+## [7.0.4] - 2024-08-01
+
+### Changed
+
+- sync with https://github.com/illuminate/support/releases/tag/v11.18.1
+- sync with https://github.com/illuminate/contracts/releases/tag/v11.18.1
+- sync with https://github.com/illuminate/container/releases/tag/v11.18.1
+- sync with https://github.com/laravel/framework/releases/tag/v11.18.1
+- Add composer sort-packages configuration
+- Update copyright date
+
 ## [7.0.3] - 2024-06-11
 
 ### Changed

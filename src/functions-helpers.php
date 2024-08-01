@@ -9,7 +9,7 @@
  * @link      https://github.com/themehybrid/hybrid-core
  *
  * @author    Theme Hybrid
- * @copyright Copyright (c) 2008 - 2023, Theme Hybrid
+ * @copyright Copyright (c) 2008 - 2024, Theme Hybrid
  * @license   https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
@@ -22,9 +22,11 @@ if ( ! function_exists( __NAMESPACE__ . '\\app' ) ) {
     /**
      * Get the available container instance.
      *
-     * @param  string|null $abstract
-     * @param  array       $parameters
-     * @return mixed|\Hybrid\Contracts\Core\Application
+     * @param string|class-string<TClass>|null $abstract
+     * @param array                            $parameters
+     * @return ($abstract is class-string<TClass> ? TClass : ($abstract is null ? \Hybrid\Core\Application : mixed))
+     *
+     * @template TClass
      */
     function app( $abstract = null, array $parameters = [] ) {
         if ( is_null( $abstract ) ) {
@@ -39,7 +41,7 @@ if ( ! function_exists( __NAMESPACE__ . '\\app_path' ) ) {
     /**
      * Get the path to the application folder.
      *
-     * @param  string $path
+     * @param string $path
      * @return string
      */
     function app_path( $path = '' ) {
@@ -65,7 +67,7 @@ if ( ! function_exists( __NAMESPACE__ . '\\path' ) ) {
      * Returns the directory path of the framework. If a file is passed in,
      * it'll be appended to the end of the path.
      *
-     * @param  string $file
+     * @param string $file
      * @return string
      */
     function path( $file = '' ) {
@@ -92,9 +94,9 @@ if ( ! function_exists( 'event' ) ) {
     /**
      * Dispatch an event and call the listeners.
      *
-     * @param  string|object $event
-     * @param  mixed         $payload
-     * @param  bool          $halt
+     * @param string|object $event
+     * @param mixed         $payload
+     * @param bool          $halt
      * @return array|null
      */
     function event( ...$args ) {
@@ -106,7 +108,7 @@ if ( ! function_exists( __NAMESPACE__ . '\\base_path' ) ) {
     /**
      * Get the path to the base of the install.
      *
-     * @param  string $path
+     * @param string $path
      * @return string
      */
     function base_path( $path = '' ) {
@@ -120,9 +122,9 @@ if ( ! function_exists( __NAMESPACE__ . '\\config' ) ) {
      *
      * If an array is passed as the key, we will assume you want to set an array of values.
      *
-     * @param  array|string|null $key
-     * @param  mixed             $default
-     * @return mixed|\Hybrid\Tools\Config\Repository
+     * @param array<string, mixed>|string|null $key
+     * @param mixed                            $default
+     * @return ($key is null ? \Hybrid\Tools\Config\Repository : ($key is string ? mixed : null))
      */
     function config( $key = null, $default = null ) {
         if ( is_null( $key ) ) {
@@ -141,7 +143,7 @@ if ( ! function_exists( __NAMESPACE__ . '\\config_path' ) ) {
     /**
      * Get the configuration path.
      *
-     * @param  string $path
+     * @param string $path
      * @return string
      */
     function config_path( $path = '' ) {
@@ -153,8 +155,8 @@ if ( ! function_exists( __NAMESPACE__ . '\\mix' ) ) {
     /**
      * Get the path to a versioned Mix file.
      *
-     * @param  string $path
-     * @param  string $manifestDirectory
+     * @param string $path
+     * @param string $manifestDirectory
      * @return \Hybrid\Tools\HtmlString|string
      * @throws \Exception
      */
@@ -167,7 +169,7 @@ if ( ! function_exists( __NAMESPACE__ . '\\public_path' ) ) {
     /**
      * Get the path to the public folder.
      *
-     * @param  string $path
+     * @param string $path
      * @return string
      */
     function public_path( $path = '' ) {
@@ -180,9 +182,11 @@ if ( ! function_exists( __NAMESPACE__ . '\\resolve' ) ) {
     /**
      * Resolve a service from the container.
      *
-     * @param  string $name
-     * @param  array  $parameters
-     * @return mixed
+     * @param string|class-string<TClass> $name
+     * @param array                       $parameters
+     * @return ($name is class-string<TClass> ? TClass : mixed)
+     *
+     * @template TClass
      */
     function resolve( $name, array $parameters = [] ) {
         return app( $name, $parameters );
@@ -193,7 +197,7 @@ if ( ! function_exists( __NAMESPACE__ . '\\resource_path' ) ) {
     /**
      * Get the path to the resources folder.
      *
-     * @param  string $path
+     * @param string $path
      * @return string
      */
     function resource_path( $path = '' ) {
@@ -205,7 +209,7 @@ if ( ! function_exists( __NAMESPACE__ . '\\storage_path' ) ) {
     /**
      * Get the path to the storage folder.
      *
-     * @param  string $path
+     * @param string $path
      * @return string
      */
     function storage_path( $path = '' ) {
