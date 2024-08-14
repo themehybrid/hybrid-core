@@ -56,7 +56,7 @@ class Application extends Container implements ApplicationContract, Bootable, Ca
     /**
      * The Hybrid Core framework version.
      */
-    const VERSION = '7.0.0-alpha.3';
+    const VERSION = '7.0.4';
 
     /**
      * The base path for the Hybrid Core installation.
