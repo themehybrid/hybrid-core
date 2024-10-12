@@ -2,12 +2,19 @@
 
 You can see the changes made via the [commit log](https://github.com/justintadlock/hybrid-core/commits/master) for the latest release.
 
+## [5.2.2] - 2024-10-12
+
+### Changed
+
+- Resolved deprecation warnings related to return type declarations in PHP 8+.
+- Addressed dynamic property creation warnings in pagination for PHP 8+ compatibility.
+
 ## [5.2.1] - 2022-06-21
 
 ### Changed
 
 - Fix inconsistent reflection return type with PHP8's `ReflectionParameter::getType()`.
-- 
+-
 ## [5.2.0] - 2019-09-03
 
 ### Added
