@@ -14,7 +14,7 @@ You can see the changes made via the [commit log](https://github.com/justintadlo
 ### Changed
 
 - Fix inconsistent reflection return type with PHP8's `ReflectionParameter::getType()`.
--
+
 ## [5.2.0] - 2019-09-03
 
 ### Added
