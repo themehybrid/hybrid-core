@@ -101,6 +101,15 @@ class Pagination implements PaginationContract {
 	protected $dots = false;
 
 	/**
+	 * Helper property for tracking arguments passed to pagination.
+	 *
+	 * @since  5.0.0
+	 * @access protected
+	 * @var    array
+	 */
+	protected $args = [];
+
+	/**
 	 * Create a new pagination object.
 	 *
 	 * @since  5.0.0

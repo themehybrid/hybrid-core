@@ -457,6 +457,7 @@ class Container implements ContainerContract, ArrayAccess {
 	* @param  mixed   $value
 	* @return void
 	*/
+	#[\ReturnTypeWillChange]
 	public function offsetSet( $name, $value ) {
 
 		$this->add( $name, $value );
@@ -470,6 +471,7 @@ class Container implements ContainerContract, ArrayAccess {
 	* @param  string  $name
 	* @return void
 	*/
+	#[\ReturnTypeWillChange]
 	public function offsetUnset( $name ) {
 
 		$this->remove( $name );
@@ -483,6 +485,7 @@ class Container implements ContainerContract, ArrayAccess {
 	* @param  string  $name
 	* @return bool
 	*/
+	#[\ReturnTypeWillChange]
 	public function offsetExists( $name ) {
 
 		return $this->has( $name );
@@ -496,6 +499,7 @@ class Container implements ContainerContract, ArrayAccess {
 	* @param  string  $name
 	* @return mixed
 	*/
+	#[\ReturnTypeWillChange]
 	public function offsetGet( $name ) {
 
 		return $this->get( $name );
