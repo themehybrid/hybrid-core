@@ -2,12 +2,12 @@
 
 namespace Hybrid\Core;
 
+use Exception;
 use Hybrid\Filesystem\Filesystem;
+use Hybrid\Tools\Collection;
 use Hybrid\Tools\Env;
-use function Hybrid\Tools\collect;
 
 class PackageManifest {
-
     /**
      * The filesystem instance.
      *
@@ -49,7 +49,6 @@ class PackageManifest {
      * @param \Hybrid\Filesystem\Filesystem $files
      * @param string                        $basePath
      * @param string                        $manifestPath
-     * @return void
      */
     public function __construct( Filesystem $files, $basePath, $manifestPath ) {
         $this->files        = $files;
@@ -80,10 +79,14 @@ class PackageManifest {
      * Get all of the values for all packages for the given configuration name.
      *
      * @param string $key
+     *
      * @return array
      */
     public function config( $key ) {
-        return collect( $this->getManifest() )->flatMap( static fn( $configuration ) => (array) ( $configuration[ $key ] ?? [] ) )->filter()->all();
+        return ( new Collection( $this->getManifest() ) )
+            ->flatMap( fn( $configuration ) => (array) ( $configuration[ $key ] ?? [] ) )
+            ->filter()
+            ->all();
     }
 
     /**
@@ -121,15 +124,20 @@ class PackageManifest {
 
         $ignoreAll = in_array( '*', $ignore = $this->packagesToIgnore() );
 
-        $this->write( collect( $packages )->mapWithKeys( fn( $package ) => [ $this->format( $package['name'] ) => $package['extra']['hybrid-core'] ?? [] ] )->each( static function ( $configuration ) use ( &$ignore ) {
+        $this->write( ( new Collection( $packages ) )->mapWithKeys( function ( $package ) {
+            return [ $this->format( $package['name'] ) => $package['extra']['hybrid-core'] ?? [] ];
+        } )->each( function ( $configuration ) use ( &$ignore ) {
             $ignore = array_merge( $ignore, $configuration['dont-discover'] ?? [] );
-        } )->reject( static fn( $configuration, $package ) => $ignoreAll || in_array( $package, $ignore ) )->filter()->all() );
+        } )->reject( function ( $configuration, $package ) use ( $ignore, $ignoreAll ) {
+            return $ignoreAll || in_array( $package, $ignore );
+        } )->filter()->all() );
     }
 
     /**
      * Format the given package name.
      *
      * @param string $package
+     *
      * @return string
      */
     protected function format( $package ) {
@@ -155,17 +163,18 @@ class PackageManifest {
      * Write the given manifest array to disk.
      *
      * @param array $manifest
+     *
      * @return void
+     *
      * @throws \Exception
      */
     protected function write( array $manifest ) {
         if ( ! is_writable( $dirname = dirname( $this->manifestPath ) ) ) {
-            throw new \Exception( "The {$dirname} directory must be present and writable." );
+            throw new Exception( "The {$dirname} directory must be present and writable." );
         }
 
         $this->files->replace(
             $this->manifestPath, '<?php return ' . var_export( $manifest, true ) . ';'
         );
     }
-
 }

@@ -3,7 +3,6 @@
 namespace Hybrid\Contracts\Core;
 
 interface CachesConfiguration {
-
     /**
      * Determine if the application configuration is cached.
      *
@@ -24,5 +23,4 @@ interface CachesConfiguration {
      * @return string
      */
     public function getCachedServicesPath();
-
 }

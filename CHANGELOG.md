@@ -2,6 +2,17 @@
 
 You can see the changes made via the [commit log](https://github.com/themehybrid/hybrid-core/commits/master) for the latest release.
 
+## [7.0.5] - 2026-03-26
+
+### Changed
+
+- sync with https://github.com/illuminate/support/releases/tag/v12.55.1
+- sync with https://github.com/illuminate/contracts/releases/tag/v12.55.1
+- sync with https://github.com/illuminate/container/releases/tag/v12.55.1
+- sync with https://github.com/laravel/framework/releases/tag/v12.55.1
+- Update copyright date
+- Requires PHP 8.2 as minimum version
+
 ## [7.0.4] - 2024-08-01
 
 ### Changed

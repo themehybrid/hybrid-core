@@ -1,7 +1,4 @@
 <?php
-/**
- * @license https://opensource.org/licenses/MIT
- */
 
 namespace Hybrid\Container;
 
@@ -10,7 +7,6 @@ use IteratorAggregate;
 use Traversable;
 
 class RewindableGenerator implements Countable, IteratorAggregate {
-
     /**
      * The generator callback.
      *
@@ -28,8 +24,8 @@ class RewindableGenerator implements Countable, IteratorAggregate {
     /**
      * Create a new generator instance.
      *
+     * @param callable     $generator
      * @param callable|int $count
-     * @return void
      */
     public function __construct( callable $generator, $count ) {
         $this->count     = $count;
@@ -53,5 +49,4 @@ class RewindableGenerator implements Countable, IteratorAggregate {
 
         return $this->count;
     }
-
 }

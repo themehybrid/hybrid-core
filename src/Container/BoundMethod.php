@@ -1,17 +1,15 @@
 <?php
-/**
- * @license https://opensource.org/licenses/MIT
- */
 
 namespace Hybrid\Container;
 
 use Closure;
+use Hybrid\Contracts\Container\BindingResolutionException;
 use Hybrid\Util;
+use InvalidArgumentException;
 use ReflectionFunction;
 use ReflectionMethod;
 
 class BoundMethod {
-
     /**
      * Call the given Closure / class@method and inject its dependencies.
      *
@@ -19,7 +17,9 @@ class BoundMethod {
      * @param callable|string             $callback
      * @param array                       $parameters
      * @param string|null                 $defaultMethod
+     *
      * @return mixed
+     *
      * @throws \ReflectionException
      * @throws \InvalidArgumentException
      */
@@ -32,7 +32,9 @@ class BoundMethod {
             return static::callClass( $container, $callback, $parameters, $defaultMethod );
         }
 
-        return static::callBoundMethod( $container, $callback, static fn() => $callback( ...array_values( static::getMethodDependencies( $container, $callback, $parameters ) ) ) );
+        return static::callBoundMethod( $container, $callback, function () use ( $container, $callback, $parameters ) {
+            return $callback( ...array_values( static::getMethodDependencies( $container, $callback, $parameters ) ) );
+        } );
     }
 
     /**
@@ -42,7 +44,9 @@ class BoundMethod {
      * @param string                      $target
      * @param array                       $parameters
      * @param string|null                 $defaultMethod
+     *
      * @return mixed
+     *
      * @throws \InvalidArgumentException
      */
     protected static function callClass( $container, $target, array $parameters = [], $defaultMethod = null ) {
@@ -52,14 +56,17 @@ class BoundMethod {
         // name. We will split on this @ sign and then build a callable array that
         // we can pass right back into the "call" method for dependency binding.
         $method = count( $segments ) === 2
-            ? $segments[1] : $defaultMethod;
+            ? $segments[1]
+            : $defaultMethod;
 
         if ( is_null( $method ) ) {
-            throw new \InvalidArgumentException( 'Method not provided.' );
+            throw new InvalidArgumentException( 'Method not provided.' );
         }
 
         return static::call(
-            $container, [ $container->make( $segments[0] ), $method ], $parameters
+            $container,
+            [ $container->make( $segments[0] ), $method ],
+            $parameters
         );
     }
 
@@ -69,6 +76,7 @@ class BoundMethod {
      * @param \Hybrid\Container\Container $container
      * @param callable                    $callback
      * @param mixed                       $default
+     *
      * @return mixed
      */
     protected static function callBoundMethod( $container, $callback, $default ) {
@@ -92,6 +100,7 @@ class BoundMethod {
      * Normalize the given callback into a Class@method string.
      *
      * @param callable $callback
+     *
      * @return string
      */
     protected static function normalizeMethod( $callback ) {
@@ -106,7 +115,9 @@ class BoundMethod {
      * @param \Hybrid\Container\Container $container
      * @param callable|string             $callback
      * @param array                       $parameters
+     *
      * @return array
+     *
      * @throws \ReflectionException
      */
     protected static function getMethodDependencies( $container, $callback, array $parameters = [] ) {
@@ -123,7 +134,9 @@ class BoundMethod {
      * Get the proper reflection instance for the given callback.
      *
      * @param callable|string $callback
+     *
      * @return \ReflectionFunctionAbstract
+     *
      * @throws \ReflectionException
      */
     protected static function getCallReflector( $callback ) {
@@ -145,45 +158,62 @@ class BoundMethod {
      * @param \ReflectionParameter        $parameter
      * @param array                       $parameters
      * @param array                       $dependencies
+     *
      * @return void
+     *
      * @throws \Hybrid\Contracts\Container\BindingResolutionException
      */
-    protected static function addDependencyForCallParameter( $container, $parameter, array &$parameters, &$dependencies ) {
+    protected static function addDependencyForCallParameter(
+        $container,
+        $parameter,
+        array &$parameters,
+        &$dependencies
+    ) {
+        $pendingDependencies = [];
+
         if ( array_key_exists( $paramName = $parameter->getName(), $parameters ) ) {
-            $dependencies[] = $parameters[ $paramName ];
+            $pendingDependencies[] = $parameters[ $paramName ];
 
             unset( $parameters[ $paramName ] );
+        } elseif ( $attribute = Util::getContextualAttributeFromDependency( $parameter ) ) {
+            $pendingDependencies[] = $container->resolveFromAttribute( $attribute );
         } elseif ( ! is_null( $className = Util::getParameterClassName( $parameter ) ) ) {
             if ( array_key_exists( $className, $parameters ) ) {
-                $dependencies[] = $parameters[ $className ];
+                $pendingDependencies[] = $parameters[ $className ];
 
                 unset( $parameters[ $className ] );
             } elseif ( $parameter->isVariadic() ) {
                 $variadicDependencies = $container->make( $className );
 
-                $dependencies = array_merge( $dependencies, is_array( $variadicDependencies )
+                $pendingDependencies = array_merge( $pendingDependencies, is_array( $variadicDependencies )
                     ? $variadicDependencies
                 : [ $variadicDependencies ] );
             } else {
-                $dependencies[] = $container->make( $className );
+                $pendingDependencies[] = $container->make( $className );
             }
         } elseif ( $parameter->isDefaultValueAvailable() ) {
-            $dependencies[] = $parameter->getDefaultValue();
+            $pendingDependencies[] = $parameter->getDefaultValue();
         } elseif ( ! $parameter->isOptional() && ! array_key_exists( $paramName, $parameters ) ) {
             $message = "Unable to resolve dependency [{$parameter}] in class {$parameter->getDeclaringClass()->getName()}";
 
-            throw new \Hybrid\Contracts\Container\BindingResolutionException( $message );
+            throw new BindingResolutionException( $message );
         }
+
+        foreach ( $pendingDependencies as $dependency ) {
+            $container->fireAfterResolvingAttributeCallbacks( $parameter->getAttributes(), $dependency );
+        }
+
+        $dependencies = array_merge( $dependencies, $pendingDependencies );
     }
 
     /**
      * Determine if the given string is in Class@method syntax.
      *
      * @param mixed $callback
+     *
      * @return bool
      */
     protected static function isCallableWithAtSign( $callback ) {
         return is_string( $callback ) && str_contains( $callback, '@' );
     }
-
 }

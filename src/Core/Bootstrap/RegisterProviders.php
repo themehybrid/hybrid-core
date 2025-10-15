@@ -6,7 +6,6 @@ use Hybrid\Contracts\Core\Application;
 use Hybrid\Core\ServiceProvider;
 
 class RegisterProviders {
-
     /**
      * The service providers that should be merged before registration.
      *
@@ -25,10 +24,12 @@ class RegisterProviders {
      * Bootstrap the given application.
      *
      * @param \Hybrid\Contracts\Core\Application $app
+     *
      * @return void
      */
     public function bootstrap( Application $app ) {
-        if ( ! $app->bound( 'config_loaded_from_cache' ) || $app->make( 'config_loaded_from_cache' ) === false ) {
+        if ( ! $app->bound( 'config_loaded_from_cache' )
+            || $app->make( 'config_loaded_from_cache' ) === false ) {
             $this->mergeAdditionalProviders( $app );
         }
 
@@ -41,7 +42,8 @@ class RegisterProviders {
      * @param \Hybrid\Contracts\Core\Application $app
      */
     protected function mergeAdditionalProviders( Application $app ) {
-        if ( static::$bootstrapProviderPath && file_exists( static::$bootstrapProviderPath ) ) {
+        if ( static::$bootstrapProviderPath
+            && file_exists( static::$bootstrapProviderPath ) ) {
             $packageProviders = require static::$bootstrapProviderPath;
 
             foreach ( $packageProviders as $index => $provider ) {
@@ -66,6 +68,7 @@ class RegisterProviders {
      *
      * @param array       $providers
      * @param string|null $bootstrapProviderPath
+     *
      * @return void
      */
     public static function merge( array $providers, ?string $bootstrapProviderPath = null ) {
@@ -86,5 +89,4 @@ class RegisterProviders {
 
         static::$merge = [];
     }
-
 }

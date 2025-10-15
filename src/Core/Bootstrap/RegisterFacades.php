@@ -8,11 +8,11 @@ use Hybrid\Core\Facades\Facade;
 use Hybrid\Core\PackageManifest;
 
 class RegisterFacades {
-
     /**
      * Bootstrap the given application.
      *
      * @param \Hybrid\Contracts\Core\Application $app
+     *
      * @return void
      */
     public function bootstrap( Application $app ) {
@@ -36,5 +36,4 @@ class RegisterFacades {
 
         AliasLoader::getInstance( $aliases )->register();
     }
-
 }
