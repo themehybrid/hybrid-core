@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @license https://opensource.org/licenses/MIT
  */
@@ -35,7 +36,8 @@ class ContextualBindingBuilder implements ContextualBindingBuilderContract {
     /**
      * Create a new contextual binding builder.
      *
-     * @param string|array $concrete
+     * @param \Hybrid\Contracts\Container\Container $container
+     * @param string|array                          $concrete
      */
     public function __construct( Container $container, $concrete ) {
         $this->concrete  = $concrete;
@@ -64,6 +66,8 @@ class ContextualBindingBuilder implements ContextualBindingBuilderContract {
         foreach ( Util::arrayWrap( $this->concrete ) as $concrete ) {
             $this->container->addContextualBinding( $concrete, $this->needs, $implementation );
         }
+
+        return $this;
     }
 
     /**
@@ -73,7 +77,7 @@ class ContextualBindingBuilder implements ContextualBindingBuilderContract {
      * @return void
      */
     public function giveTagged( $tag ) {
-        $this->give( static function ( $container ) use ( $tag ) {
+        return $this->give( function ( $container ) use ( $tag ) {
             $taggedServices = $container->tagged( $tag );
 
             return is_array( $taggedServices ) ? $taggedServices : iterator_to_array( $taggedServices );
@@ -88,7 +92,7 @@ class ContextualBindingBuilder implements ContextualBindingBuilderContract {
      * @return void
      */
     public function giveConfig( $key, $default = null ) {
-        $this->give( static fn( $container ) => $container->get( 'config' )->get( $key, $default ) );
+        return $this->give( fn( $container ) => $container->get( 'config' )->get( $key, $default ) );
     }
 
 }

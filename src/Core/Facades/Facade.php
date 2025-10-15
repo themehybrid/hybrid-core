@@ -3,7 +3,14 @@
 namespace Hybrid\Core\Facades;
 
 use Closure;
-use function Hybrid\Tools\collect;
+use Hybrid\Events\Facades\Event;
+use Hybrid\Filesystem\Facades\File;
+use Hybrid\Tools\Arr;
+use Hybrid\Tools\Benchmark;
+use Hybrid\Tools\Collection;
+use Hybrid\Tools\Facades\Config;
+use Hybrid\Tools\Str;
+use RuntimeException;
 
 abstract class Facade {
 
@@ -31,6 +38,7 @@ abstract class Facade {
     /**
      * Run a Closure when the facade has been resolved.
      *
+     * @param \Closure $callback
      * @return void
      */
     public static function resolved( Closure $callback ) {
@@ -40,7 +48,7 @@ abstract class Facade {
             $callback( static::getFacadeRoot(), static::$app );
         }
 
-        static::$app->afterResolving( $accessor, static function ( $service, $app ) use ( $callback ) {
+        static::$app->afterResolving( $accessor, function ( $service, $app ) use ( $callback ) {
             $callback( $service, $app );
         } );
     }
@@ -75,7 +83,7 @@ abstract class Facade {
      * @throws \RuntimeException
      */
     protected static function getFacadeAccessor() {
-        throw new \RuntimeException( 'Facade does not implement getFacadeAccessor method.' );
+        throw new RuntimeException( 'Facade does not implement getFacadeAccessor method.' );
     }
 
     /**
@@ -123,8 +131,15 @@ abstract class Facade {
      * @return \Hybrid\Tools\Collection
      */
     public static function defaultAliases() {
-        return collect( [
+        return new Collection( [
             'Hybrid\App' => App::class,
+            'Arr'        => Arr::class,
+            'Benchmark'  => Benchmark::class,
+            'Config'     => Config::class,
+            // 'Context' => Context::class,
+            'Event'      => Event::class,
+            'File'       => File::class,
+            'Str'        => Str::class,
         ] );
     }
 
@@ -159,7 +174,7 @@ abstract class Facade {
         $instance = static::getFacadeRoot();
 
         if ( ! $instance ) {
-            throw new \RuntimeException( 'A facade root has not been set.' );
+            throw new RuntimeException( 'A facade root has not been set.' );
         }
 
         return $instance->$method( ...$args );

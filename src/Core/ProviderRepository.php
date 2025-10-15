@@ -2,6 +2,7 @@
 
 namespace Hybrid\Core;
 
+use Exception;
 use Hybrid\Contracts\Core\Application as ApplicationContract;
 use Hybrid\Filesystem\Filesystem;
 
@@ -34,7 +35,6 @@ class ProviderRepository {
      * @param \Hybrid\Contracts\Core\Application $app
      * @param \Hybrid\Filesystem\Filesystem      $files
      * @param string                             $manifestPath
-     * @return void
      */
     public function __construct( ApplicationContract $app, Filesystem $files, $manifestPath ) {
         $this->app          = $app;
@@ -116,9 +116,7 @@ class ProviderRepository {
             return;
         }
 
-        $this->app->make( 'events' )->listen( $events, function () use ( $provider ) {
-            $this->app->register( $provider );
-        } );
+        $this->app->make( 'events' )->listen( $events, fn() => $this->app->register( $provider ) );
     }
 
     /**
@@ -181,7 +179,7 @@ class ProviderRepository {
      */
     public function writeManifest( $manifest ) {
         if ( ! is_writable( $dirname = dirname( $this->manifestPath ) ) ) {
-            throw new \Exception( "The {$dirname} directory must be present and writable." );
+            throw new Exception( "The {$dirname} directory must be present and writable." );
         }
 
         $this->files->replace(

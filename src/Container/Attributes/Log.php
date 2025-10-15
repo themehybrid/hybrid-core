@@ -7,22 +7,22 @@ use Hybrid\Contracts\Container\Container;
 use Hybrid\Contracts\Container\ContextualAttribute;
 
 #[Attribute( Attribute::TARGET_PARAMETER )]
-class Config implements ContextualAttribute {
+class Log implements ContextualAttribute {
 
     /**
      * Create a new class instance.
      */
-    public function __construct( public string $key, public mixed $default = null ) {}
+    public function __construct( public ?string $channel = null ) {}
 
     /**
-     * Resolve the configuration value.
+     * Resolve the log channel.
      *
      * @param self                                  $attribute
      * @param \Hybrid\Contracts\Container\Container $container
-     * @return mixed
+     * @return \Psr\Log\LoggerInterface
      */
     public static function resolve( self $attribute, Container $container ) {
-        return $container->make( 'config' )->get( $attribute->key, $attribute->default );
+        return $container->make( 'log' )->channel( $attribute->channel );
     }
 
 }

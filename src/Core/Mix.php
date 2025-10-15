@@ -15,7 +15,7 @@ class Mix {
      * @param string $path
      * @param string $manifestDirectory
      * @return \Hybrid\Tools\HtmlString|string
-     * @throws \Hybrid\Core\MixManifestNotFoundException
+     * @throws \Hybrid\Core\MixManifestNotFoundException|\Hybrid\Core\MixFileNotFoundException
      */
     public function __invoke( $path, $manifestDirectory = '' ) {
         static $manifests = [];
@@ -48,7 +48,7 @@ class Mix {
 
         if ( ! isset( $manifests[ $manifestPath ] ) ) {
             if ( ! is_file( $manifestPath ) ) {
-                throw new \Hybrid\Core\MixManifestNotFoundException( "Mix manifest not found at: {$manifestPath}" );
+                throw new MixManifestNotFoundException( "Mix manifest not found at: {$manifestPath}" );
             }
 
             $manifests[ $manifestPath ] = json_decode( file_get_contents( $manifestPath ), true );
@@ -57,7 +57,7 @@ class Mix {
         $manifest = $manifests[ $manifestPath ];
 
         if ( ! isset( $manifest[ $path ] ) ) {
-            $exception = new \Exception( "Unable to locate Mix file: {$path}." );
+            $exception = new MixFileNotFoundException( "Unable to locate Mix file: {$path}." );
 
             if ( ! app( 'config' )->get( 'app.debug' ) ) {
                 report( $exception );

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @license https://opensource.org/licenses/MIT
  */
@@ -28,8 +29,8 @@ class RewindableGenerator implements Countable, IteratorAggregate {
     /**
      * Create a new generator instance.
      *
+     * @param callable     $generator
      * @param callable|int $count
-     * @return void
      */
     public function __construct( callable $generator, $count ) {
         $this->count     = $count;

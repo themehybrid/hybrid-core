@@ -28,7 +28,8 @@ class RegisterProviders {
      * @return void
      */
     public function bootstrap( Application $app ) {
-        if ( ! $app->bound( 'config_loaded_from_cache' ) || $app->make( 'config_loaded_from_cache' ) === false ) {
+        if ( ! $app->bound( 'config_loaded_from_cache' )
+            || $app->make( 'config_loaded_from_cache' ) === false ) {
             $this->mergeAdditionalProviders( $app );
         }
 
@@ -41,7 +42,8 @@ class RegisterProviders {
      * @param \Hybrid\Contracts\Core\Application $app
      */
     protected function mergeAdditionalProviders( Application $app ) {
-        if ( static::$bootstrapProviderPath && file_exists( static::$bootstrapProviderPath ) ) {
+        if ( static::$bootstrapProviderPath
+            && file_exists( static::$bootstrapProviderPath ) ) {
             $packageProviders = require static::$bootstrapProviderPath;
 
             foreach ( $packageProviders as $index => $provider ) {

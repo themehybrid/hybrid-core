@@ -2,6 +2,8 @@
 
 namespace Hybrid\Core;
 
-class MixManifestNotFoundException extends \Exception {
+use Exception;
+
+class MixManifestNotFoundException extends Exception {
 
 }

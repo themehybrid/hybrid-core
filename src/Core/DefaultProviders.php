@@ -2,7 +2,7 @@
 
 namespace Hybrid\Core;
 
-use function Hybrid\Tools\collect;
+use Hybrid\Tools\Collection;
 
 class DefaultProviders {
 
@@ -15,8 +15,6 @@ class DefaultProviders {
 
     /**
      * Create a new default provider collection.
-     *
-     * @return void
      */
     public function __construct( ?array $providers = null ) {
         $this->providers = $providers ?: [
@@ -29,6 +27,7 @@ class DefaultProviders {
     /**
      * Merge the given providers into the provider collection.
      *
+     * @param array $providers
      * @return static
      */
     public function merge( array $providers ) {
@@ -44,7 +43,7 @@ class DefaultProviders {
      * @return static
      */
     public function replace( array $replacements ) {
-        $current = collect( $this->providers );
+        $current = new Collection( $this->providers );
 
         foreach ( $replacements as $from => $to ) {
             $key = $current->search( $from );
@@ -58,11 +57,12 @@ class DefaultProviders {
     /**
      * Disable the given providers.
      *
+     * @param array $providers
      * @return static
      */
     public function except( array $providers ) {
-        return new static( collect( $this->providers )
-            ->reject( static fn( $p ) => in_array( $p, $providers ) )
+        return new static( ( new Collection( $this->providers ) )
+            ->reject( fn( $p ) => in_array( $p, $providers ) )
             ->values()
             ->toArray() );
     }

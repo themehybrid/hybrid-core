@@ -2,9 +2,10 @@
 
 namespace Hybrid\Core;
 
+use Exception;
 use Hybrid\Filesystem\Filesystem;
+use Hybrid\Tools\Collection;
 use Hybrid\Tools\Env;
-use function Hybrid\Tools\collect;
 
 class PackageManifest {
 
@@ -83,7 +84,10 @@ class PackageManifest {
      * @return array
      */
     public function config( $key ) {
-        return collect( $this->getManifest() )->flatMap( static fn( $configuration ) => (array) ( $configuration[ $key ] ?? [] ) )->filter()->all();
+        return ( new Collection( $this->getManifest() ) )
+            ->flatMap( fn( $configuration ) => (array) ( $configuration[ $key ] ?? [] ) )
+            ->filter()
+            ->all();
     }
 
     /**
@@ -121,9 +125,13 @@ class PackageManifest {
 
         $ignoreAll = in_array( '*', $ignore = $this->packagesToIgnore() );
 
-        $this->write( collect( $packages )->mapWithKeys( fn( $package ) => [ $this->format( $package['name'] ) => $package['extra']['hybrid-core'] ?? [] ] )->each( static function ( $configuration ) use ( &$ignore ) {
+        $this->write( ( new Collection( $packages ) )->mapWithKeys( function ( $package ) {
+            return [ $this->format( $package['name'] ) => $package['extra']['hybrid-core'] ?? [] ];
+        } )->each( function ( $configuration ) use ( &$ignore ) {
             $ignore = array_merge( $ignore, $configuration['dont-discover'] ?? [] );
-        } )->reject( static fn( $configuration, $package ) => $ignoreAll || in_array( $package, $ignore ) )->filter()->all() );
+        } )->reject( function ( $configuration, $package ) use ( $ignore, $ignoreAll ) {
+            return $ignoreAll || in_array( $package, $ignore );
+        } )->filter()->all() );
     }
 
     /**
@@ -160,7 +168,7 @@ class PackageManifest {
      */
     protected function write( array $manifest ) {
         if ( ! is_writable( $dirname = dirname( $this->manifestPath ) ) ) {
-            throw new \Exception( "The {$dirname} directory must be present and writable." );
+            throw new Exception( "The {$dirname} directory must be present and writable." );
         }
 
         $this->files->replace(

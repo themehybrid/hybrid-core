@@ -7,22 +7,22 @@ use Hybrid\Contracts\Container\Container;
 use Hybrid\Contracts\Container\ContextualAttribute;
 
 #[Attribute( Attribute::TARGET_PARAMETER )]
-class Config implements ContextualAttribute {
+class Cache implements ContextualAttribute {
 
     /**
      * Create a new class instance.
      */
-    public function __construct( public string $key, public mixed $default = null ) {}
+    public function __construct( public ?string $store = null ) {}
 
     /**
-     * Resolve the configuration value.
+     * Resolve the cache store.
      *
      * @param self                                  $attribute
      * @param \Hybrid\Contracts\Container\Container $container
-     * @return mixed
+     * @return \Hybrid\Contracts\Cache\Repository
      */
     public static function resolve( self $attribute, Container $container ) {
-        return $container->make( 'config' )->get( $attribute->key, $attribute->default );
+        return $container->make( 'cache' )->store( $attribute->store );
     }
 
 }

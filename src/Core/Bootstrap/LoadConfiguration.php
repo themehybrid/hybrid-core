@@ -4,6 +4,7 @@ namespace Hybrid\Core\Bootstrap;
 
 use Hybrid\Contracts\Config\Repository as RepositoryContract;
 use Hybrid\Contracts\Core\Application;
+use Hybrid\Tools\Collection;
 use Hybrid\Tools\Config\Repository;
 use SplFileInfo;
 use Symfony\Component\Finder\Finder;
@@ -40,7 +41,9 @@ class LoadConfiguration {
         // Finally, we will set the application's environment based on the configuration
         // values that were loaded. We will pass a callback which will be used to get
         // the environment in a web context where an "--env" switch is not present.
-        $app->detectEnvironment( static fn() => $config->get( 'app.env', 'production' ) );
+        $app->detectEnvironment( fn() => $config->get( 'app.env', 'production' ) );
+
+        $app->resolveEnvironmentUsing( $app->environment( ...) );
     }
 
     /**
@@ -62,7 +65,7 @@ class LoadConfiguration {
             ? $this->getBaseConfiguration()
             : [];
 
-        foreach ( array_diff( array_keys( $base ), array_keys( $files ) ) as $name => $config ) {
+        foreach ( ( new Collection( $base ) )->diffKeys( $files ) as $name => $config ) {
             $repository->set( $name, $config );
         }
 
@@ -85,7 +88,7 @@ class LoadConfiguration {
      * @return array
      */
     protected function loadConfigurationFile( RepositoryContract $repository, $name, $path, array $base ) {
-        $config = require $path;
+        $config = ( fn() => require $path )();
 
         if ( isset( $base[ $name ] ) ) {
             $config = array_merge( $base[ $name ], $config );

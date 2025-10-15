@@ -47,8 +47,8 @@ class ApplicationBuilder {
      * @param array|bool $discover
      * @return $this
      */
-    public function withEvents( array|bool $discover = [] ) {
-        if ( is_array( $discover ) && count( $discover ) > 0 ) {
+    public function withEvents( iterable|bool $discover = true ) {
+        if ( is_iterable( $discover ) ) {
             AppEventServiceProvider::setEventDiscoveryPaths( $discover );
         }
 
@@ -74,13 +74,16 @@ class ApplicationBuilder {
      * @return $this
      */
     public function withExceptions( ?callable $using = null ) {
-        $this->app->singleton( \Hybrid\Contracts\Debug\ExceptionHandler::class, \Hybrid\Core\Exceptions\Handler::class );
+        $this->app->singleton(
+            \Hybrid\Contracts\Debug\ExceptionHandler::class,
+            \Hybrid\Core\Exceptions\Handler::class
+        );
 
-        $using ??= static fn() => true;
+        $using ??= fn() => true;
 
         $this->app->afterResolving(
             \Hybrid\Core\Exceptions\Handler::class,
-            static fn( $handler ) => $using( new Exceptions( $handler ) )
+            fn( $handler ) => $using( new Exceptions( $handler ) )
         );
 
         return $this;
@@ -93,7 +96,7 @@ class ApplicationBuilder {
      * @return $this
      */
     public function withBindings( array $bindings ) {
-        return $this->registered( static function ( $app ) use ( $bindings ) {
+        return $this->registered( function ( $app ) use ( $bindings ) {
             foreach ( $bindings as $abstract => $concrete ) {
                 $app->bind( $abstract, $concrete );
             }
@@ -107,12 +110,30 @@ class ApplicationBuilder {
      * @return $this
      */
     public function withSingletons( array $singletons ) {
-        return $this->registered( static function ( $app ) use ( $singletons ) {
+        return $this->registered( function ( $app ) use ( $singletons ) {
             foreach ( $singletons as $abstract => $concrete ) {
                 if ( is_string( $abstract ) ) {
                     $app->singleton( $abstract, $concrete );
                 } else {
                     $app->singleton( $concrete );
+                }
+            }
+        } );
+    }
+
+    /**
+     * Register an array of scoped singleton container bindings to be bound when the application is booting.
+     *
+     * @param array $scopedSingletons
+     * @return $this
+     */
+    public function withScopedSingletons( array $scopedSingletons ) {
+        return $this->registered( function ( $app ) use ( $scopedSingletons ) {
+            foreach ( $scopedSingletons as $abstract => $concrete ) {
+                if ( is_string( $abstract ) ) {
+                    $app->scoped( $abstract, $concrete );
+                } else {
+                    $app->scoped( $concrete );
                 }
             }
         } );

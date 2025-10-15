@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Application class.
  *
@@ -43,6 +44,7 @@ use Hybrid\Tools\Env;
 use Hybrid\Tools\Str;
 use Hybrid\Tools\Traits\Macroable;
 use Psr\Container\ContainerInterface;
+use RuntimeException;
 use function Hybrid\Filesystem\join_paths;
 use function Hybrid\Tools\value;
 
@@ -231,7 +233,6 @@ class Application extends Container implements ApplicationContract, Bootable, Ca
      * Create a new Hybrid Core application instance.
      *
      * @param string|null $basePath
-     * @return void
      */
     public function __construct( $basePath = null, $bootstrap = true ) {
         if ( ! $basePath && defined( 'WP_CONTENT_DIR' ) ) {
@@ -281,7 +282,11 @@ class Application extends Container implements ApplicationContract, Bootable, Ca
     public static function inferBasePath() {
         return match ( true ) {
             isset( $_ENV['HYBRID_CORE_BASE_PATH'] ) => $_ENV['HYBRID_CORE_BASE_PATH'],
-            default => dirname( array_keys( ClassLoader::getRegisteredLoaders() )[0] ),
+            isset( $_SERVER['HYBRID_CORE_BASE_PATH'] ) => $_SERVER['HYBRID_CORE_BASE_PATH'],
+            default => dirname( array_values( array_filter(
+                array_keys( ClassLoader::getRegisteredLoaders() ),
+                fn( $path ) => ! str_starts_with( $path, 'phar://' )
+            ) )[0] ),
         };
     }
 
@@ -321,7 +326,6 @@ class Application extends Container implements ApplicationContract, Bootable, Ca
         $this->register( new CoreServiceProvider( $this ) );
         $this->register( new EventServiceProvider( $this ) );
         $this->register( new FilesystemServiceProvider( $this ) );
-        // $this->register( new ContextServiceProvider( $this ) );
     }
 
     /**
@@ -349,7 +353,9 @@ class Application extends Container implements ApplicationContract, Bootable, Ca
      * @return void
      */
     public function afterLoadingEnvironment( Closure $callback ) {
-        $this->afterBootstrapping( LoadEnvironmentVariables::class, $callback );
+        $this->afterBootstrapping(
+            LoadEnvironmentVariables::class, $callback
+        );
     }
 
     /**
@@ -703,10 +709,13 @@ class Application extends Container implements ApplicationContract, Bootable, Ca
     /**
      * Detect the application's current environment.
      *
+     * @param \Closure $callback
      * @return string
      */
     public function detectEnvironment( Closure $callback ) {
-        $args = $_SERVER['argv'] ?? null;
+        $args = $this->runningInConsole() && isset( $_SERVER['argv'] )
+            ? $_SERVER['argv']
+            : null;
 
         return $this['env'] = ( new EnvironmentDetector() )->detect( $callback, $args );
     }
@@ -775,8 +784,8 @@ class Application extends Container implements ApplicationContract, Bootable, Ca
      * @return void
      */
     public function registerConfiguredProviders() {
-        $providers = Collection::make( $this->make( 'config' )->get( 'app.providers' ) )
-            ->partition( static fn( $provider ) => str_starts_with( $provider, 'Hybrid\\' ) );
+        $providers = ( new Collection( $this->make( 'config' )->get( 'app.providers' ) ) )
+            ->partition( fn( $provider ) => str_starts_with( $provider, 'Hybrid\\' ) );
 
         $providers->splice( 1, 0, [ $this->make( PackageManifest::class )->providers() ] );
 
@@ -784,19 +793,6 @@ class Application extends Container implements ApplicationContract, Bootable, Ca
             ->load( $providers->collapse()->toArray() );
 
         $this->fireAppCallbacks( $this->registeredCallbacks );
-    }
-
-    /**
-     * Adds a service provider.
-     *
-     * @param string|object $provider
-     * @return void
-     * @deprecated Use register() instead.
-     */
-    public function provider( $provider ) {
-        @trigger_error( __METHOD__ . '() is deprecated, use Application::register().', E_USER_DEPRECATED );
-
-        $this->register( $provider );
     }
 
     /**
@@ -870,7 +866,7 @@ class Application extends Container implements ApplicationContract, Bootable, Ca
     public function getProviders( $provider ) {
         $name = is_string( $provider ) ? $provider : get_class( $provider );
 
-        return Arr::where( $this->serviceProviders, static fn( $value ) => $value instanceof $name );
+        return Arr::where( $this->serviceProviders, fn( $value ) => $value instanceof $name );
     }
 
     /**
@@ -961,9 +957,10 @@ class Application extends Container implements ApplicationContract, Bootable, Ca
     /**
      * Resolve the given type from the container.
      *
-     * @param string $abstract
-     * @param array  $parameters
-     * @return mixed
+     * @template TClass of object
+     * @param string|class-string<TClass> $abstract
+     * @param array                       $parameters
+     * @return ($abstract is class-string<TClass> ? TClass : mixed)
      * @throws \Hybrid\Contracts\Container\BindingResolutionException
      */
     public function make( $abstract, array $parameters = [] ) {
@@ -975,9 +972,13 @@ class Application extends Container implements ApplicationContract, Bootable, Ca
     /**
      * Resolve the given type from the container.
      *
-     * @param string $abstract
-     * @param array  $parameters
-     * @param bool   $raiseEvents
+     * Note: Intentionally set the method to public instead of protected, as it was being called in a public context.
+     *
+     * @template TClass of object
+     * @param string|class-string<TClass>|callable $abstract
+     * @param array                                $parameters
+     * @param bool                                 $raiseEvents
+     * @return ($abstract is class-string<TClass> ? TClass : mixed)
      * @return mixed
      * @throws \Hybrid\Contracts\Container\BindingResolutionException
      * @throws \Hybrid\Contracts\Container\CircularDependencyException
@@ -1025,7 +1026,6 @@ class Application extends Container implements ApplicationContract, Bootable, Ca
      * @return void
      */
     public function boot() {
-
         if ( $this->isBooted() ) {
             return;
         }
@@ -1051,10 +1051,10 @@ class Application extends Container implements ApplicationContract, Bootable, Ca
     /**
      * Boot the given service provider.
      *
+     * @param \Hybrid\Core\ServiceProvider $provider
      * @return void
      */
     protected function bootProvider( ServiceProvider $provider ) {
-
         $provider->callBootingCallbacks();
 
         if ( method_exists( $provider, 'boot' ) ) {
@@ -1120,7 +1120,7 @@ class Application extends Container implements ApplicationContract, Bootable, Ca
         while ( count( $callbacks ) > $index ) {
             $callbacks[ $index ]( $this );
 
-            ++$index;
+            $index++;
         }
     }
 
@@ -1250,7 +1250,7 @@ class Application extends Container implements ApplicationContract, Bootable, Ca
         while ( count( $this->terminatingCallbacks ) > $index ) {
             $this->call( $this->terminatingCallbacks[ $index ] );
 
-            ++$index;
+            $index++;
         }
     }
 
@@ -1293,6 +1293,16 @@ class Application extends Container implements ApplicationContract, Bootable, Ca
     }
 
     /**
+     * Determine if the given service is a deferred service.
+     *
+     * @param string $service
+     * @return bool
+     */
+    public function isDeferredService( $service ) {
+        return isset( $this->deferredServices[ $service ] );
+    }
+
+    /**
      * Add an array of services to the application's deferred services.
      *
      * @param array $services
@@ -1303,13 +1313,15 @@ class Application extends Container implements ApplicationContract, Bootable, Ca
     }
 
     /**
-     * Determine if the given service is a deferred service.
+     * Remove an array of services from the application's deferred services.
      *
-     * @param string $service
-     * @return bool
+     * @param array $services
+     * @return void
      */
-    public function isDeferredService( $service ) {
-        return isset( $this->deferredServices[ $service ] );
+    public function removeDeferredServices( array $services ) {
+        foreach ( $services as $service ) {
+            unset( $this->deferredServices[ $service ] );
+        }
     }
 
     /**
@@ -1387,7 +1399,7 @@ class Application extends Container implements ApplicationContract, Bootable, Ca
             }
         }
 
-        throw new \RuntimeException( 'Unable to detect application namespace.' );
+        throw new RuntimeException( 'Unable to detect application namespace.' );
     }
 
 }

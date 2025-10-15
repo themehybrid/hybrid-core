@@ -3,6 +3,7 @@
 namespace Hybrid\Core\Bootstrap;
 
 use Dotenv\Dotenv;
+use Dotenv\Exception\InvalidFileException;
 use Hybrid\Contracts\Core\Application;
 use Hybrid\Tools\Env;
 use Symfony\Component\Console\Input\ArgvInput;
@@ -33,7 +34,7 @@ class LoadEnvironmentVariables {
 
         try {
             $this->createDotenv( $app )->safeLoad();
-        } catch ( \Dotenv\Exception\InvalidFileException $e ) {
+        } catch ( InvalidFileException $e ) {
             $this->writeErrorAndDie( $e );
         }
     }
@@ -100,7 +101,7 @@ class LoadEnvironmentVariables {
      * @param \Dotenv\Exception\InvalidFileException $e
      * @return never
      */
-    protected function writeErrorAndDie( \Dotenv\Exception\InvalidFileException $e ) {
+    protected function writeErrorAndDie( InvalidFileException $e ) {
         $output = ( new ConsoleOutput() )->getErrorOutput();
 
         $output->writeln( 'The environment file is invalid!' );

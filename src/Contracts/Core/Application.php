@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Application contract.
  *
@@ -19,8 +20,6 @@ use Hybrid\Contracts\Container\Container;
 
 /**
  * Application interface.
- *
- * @since  5.0.0
  */
 interface Application extends Container {
 

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Base service provider.
  *
@@ -15,12 +16,14 @@
 
 namespace Hybrid\Core;
 
-use Hybrid\Contracts\Core\Application;
 use Hybrid\Contracts\Core\CachesConfiguration;
 use Hybrid\Contracts\Core\DeferrableProvider;
 
 /**
- * Service provider class.
+ * Service provider abstract class.
+ *
+ * @property array<string, string> $bindings All of the container bindings that should be registered.
+ * @property array<array-key, string> $singletons All of the singletons that should be registered.
  */
 abstract class ServiceProvider {
 
@@ -49,9 +52,8 @@ abstract class ServiceProvider {
      * Create a new service provider instance.
      *
      * @param \Hybrid\Contracts\Core\Application $app
-     * @return void
      */
-    public function __construct( Application $app ) {
+    public function __construct( $app ) {
         $this->app = $app;
     }
 
@@ -93,7 +95,7 @@ abstract class ServiceProvider {
         while ( count( $this->bootingCallbacks ) > $index ) {
             $this->app->call( $this->bootingCallbacks[ $index ] );
 
-            ++$index;
+            $index++;
         }
     }
 
@@ -108,7 +110,7 @@ abstract class ServiceProvider {
         while ( count( $this->bootedCallbacks ) > $index ) {
             $this->app->call( $this->bootedCallbacks[ $index ] );
 
-            ++$index;
+            $index++;
         }
     }
 
@@ -155,7 +157,8 @@ abstract class ServiceProvider {
      */
     protected function loadViewsFrom( $path, $namespace ) {
         $this->callAfterResolving( 'view', function ( $view ) use ( $path, $namespace ) {
-            if ( isset( $this->app->config['view']['paths'] ) && is_array( $this->app->config['view']['paths'] ) ) {
+            if ( isset( $this->app->config['view']['paths'] )
+                && is_array( $this->app->config['view']['paths'] ) ) {
                 foreach ( $this->app->config['view']['paths'] as $viewPath ) {
                     if ( is_dir( $appPath = $viewPath . '/vendor/' . $namespace ) ) {
                         $view->addNamespace( $namespace, $appPath );
@@ -236,12 +239,60 @@ abstract class ServiceProvider {
             opcache_invalidate( $path, true );
         }
 
-        $providers = collect( require $path )
+        $providers = ( new Collection( require $path ) )
             ->merge( [ $provider ] )
             ->unique()
             ->sort()
             ->values()
-            ->map( static fn( $p ) => '    ' . $p . '::class,' )
+            ->map( fn( $p ) => '    ' . $p . '::class,' )
+            ->implode( PHP_EOL );
+
+        $content = '<?php
+
+return [
+' . $providers . '
+];';
+
+        file_put_contents( $path, $content . PHP_EOL );
+
+        return true;
+    }
+
+    /**
+     * Remove a provider from the application's provider bootstrap file.
+     *
+     * @param string|array $providersToRemove
+     * @param string|null  $path
+     * @param bool         $strict
+     * @return bool
+     */
+    public static function removeProviderFromBootstrapFile(
+        string|array $providersToRemove,
+        ?string $path = null,
+        bool $strict = false
+    ) {
+        $path ??= app()->getBootstrapProvidersPath();
+
+        if ( ! file_exists( $path ) ) {
+            return false;
+        }
+
+        if ( function_exists( 'opcache_invalidate' ) ) {
+            opcache_invalidate( $path, true );
+        }
+
+        $providersToRemove = Arr::wrap( $providersToRemove );
+
+        $providers = ( new Collection( require $path ) )
+            ->unique()
+            ->sort()
+            ->values()
+            ->when(
+                $strict,
+                static fn( Collection $providerCollection ) => $providerCollection->reject( fn( string $p ) => in_array( $p, $providersToRemove, true ) ),
+                static fn( Collection $providerCollection ) => $providerCollection->reject( fn( string $p ) => Str::contains( $p, $providersToRemove ) )
+            )
+            ->map( fn( $p ) => '    ' . $p . '::class,' )
             ->implode( PHP_EOL );
 
         $content = '<?php
