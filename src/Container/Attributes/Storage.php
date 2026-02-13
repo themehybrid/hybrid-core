@@ -8,7 +8,6 @@ use Hybrid\Contracts\Container\ContextualAttribute;
 
 #[Attribute( Attribute::TARGET_PARAMETER )]
 class Storage implements ContextualAttribute {
-
     /**
      * Create a new class instance.
      */
@@ -19,10 +18,10 @@ class Storage implements ContextualAttribute {
      *
      * @param self                                  $attribute
      * @param \Hybrid\Contracts\Container\Container $container
+     *
      * @return \Hybrid\Contracts\Filesystem\Filesystem
      */
     public static function resolve( self $attribute, Container $container ) {
         return $container->make( 'filesystem' )->disk( $attribute->disk );
     }
-
 }

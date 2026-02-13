@@ -7,7 +7,6 @@ use Hybrid\Contracts\Core\Application as ApplicationContract;
 use Hybrid\Filesystem\Filesystem;
 
 class ProviderRepository {
-
     /**
      * The application implementation.
      *
@@ -46,6 +45,7 @@ class ProviderRepository {
      * Register the application service providers.
      *
      * @param array $providers
+     *
      * @return void
      */
     public function load( array $providers ) {
@@ -98,6 +98,7 @@ class ProviderRepository {
      *
      * @param array $manifest
      * @param array $providers
+     *
      * @return bool
      */
     public function shouldRecompile( $manifest, $providers ) {
@@ -109,6 +110,7 @@ class ProviderRepository {
      *
      * @param string $provider
      * @param array  $events
+     *
      * @return void
      */
     protected function registerLoadEvents( $provider, array $events ) {
@@ -123,6 +125,7 @@ class ProviderRepository {
      * Compile the application service manifest file.
      *
      * @param array $providers
+     *
      * @return array
      */
     protected function compileManifest( $providers ) {
@@ -160,6 +163,7 @@ class ProviderRepository {
      * Create a fresh service manifest data structure.
      *
      * @param array $providers
+     *
      * @return array
      */
     protected function freshManifest( array $providers ) {
@@ -174,7 +178,9 @@ class ProviderRepository {
      * Write the service manifest file to disk.
      *
      * @param array $manifest
+     *
      * @return array
+     *
      * @throws \Exception
      */
     public function writeManifest( $manifest ) {
@@ -193,10 +199,10 @@ class ProviderRepository {
      * Create a new provider instance.
      *
      * @param string $provider
+     *
      * @return \Hybrid\Core\ServiceProvider
      */
     public function createProvider( $provider ) {
         return new $provider( $this->app );
     }
-
 }

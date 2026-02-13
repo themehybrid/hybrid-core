@@ -8,7 +8,6 @@ use Hybrid\Tools\Collection;
 use Hybrid\Tools\Env;
 
 class PackageManifest {
-
     /**
      * The filesystem instance.
      *
@@ -50,7 +49,6 @@ class PackageManifest {
      * @param \Hybrid\Filesystem\Filesystem $files
      * @param string                        $basePath
      * @param string                        $manifestPath
-     * @return void
      */
     public function __construct( Filesystem $files, $basePath, $manifestPath ) {
         $this->files        = $files;
@@ -81,6 +79,7 @@ class PackageManifest {
      * Get all of the values for all packages for the given configuration name.
      *
      * @param string $key
+     *
      * @return array
      */
     public function config( $key ) {
@@ -138,6 +137,7 @@ class PackageManifest {
      * Format the given package name.
      *
      * @param string $package
+     *
      * @return string
      */
     protected function format( $package ) {
@@ -163,7 +163,9 @@ class PackageManifest {
      * Write the given manifest array to disk.
      *
      * @param array $manifest
+     *
      * @return void
+     *
      * @throws \Exception
      */
     protected function write( array $manifest ) {
@@ -175,5 +177,4 @@ class PackageManifest {
             $this->manifestPath, '<?php return ' . var_export( $manifest, true ) . ';'
         );
     }
-
 }

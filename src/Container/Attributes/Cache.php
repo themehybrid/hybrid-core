@@ -8,7 +8,6 @@ use Hybrid\Contracts\Container\ContextualAttribute;
 
 #[Attribute( Attribute::TARGET_PARAMETER )]
 class Cache implements ContextualAttribute {
-
     /**
      * Create a new class instance.
      */
@@ -19,10 +18,10 @@ class Cache implements ContextualAttribute {
      *
      * @param self                                  $attribute
      * @param \Hybrid\Contracts\Container\Container $container
+     *
      * @return \Hybrid\Contracts\Cache\Repository
      */
     public static function resolve( self $attribute, Container $container ) {
         return $container->make( 'cache' )->store( $attribute->store );
     }
-
 }

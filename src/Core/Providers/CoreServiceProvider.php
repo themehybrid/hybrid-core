@@ -3,7 +3,6 @@
 namespace Hybrid\Core\Providers;
 
 class CoreServiceProvider extends AggregateServiceProvider {
-
     /**
      * The provider class names.
      *
@@ -33,5 +32,4 @@ class CoreServiceProvider extends AggregateServiceProvider {
      * @return void
      */
     public function boot() {}
-
 }

@@ -10,11 +10,11 @@ use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
 class LoadEnvironmentVariables {
-
     /**
      * Bootstrap the given application.
      *
      * @param \Hybrid\Contracts\Core\Application $app
+     *
      * @return void
      */
     public function bootstrap( Application $app ) {
@@ -43,11 +43,12 @@ class LoadEnvironmentVariables {
      * Detect if a custom environment file matching the HYBRID_CORE_ENV exists.
      *
      * @param \Hybrid\Contracts\Core\Application $app
+     *
      * @return void
      */
     protected function checkForSpecificEnvironmentFile( $app ) {
         if ( $app->runningInConsole() &&
-            ( $input = new ArgvInput() )->hasParameterOption( '--env' ) &&
+            ( $input = new ArgvInput )->hasParameterOption( '--env' ) &&
             $this->setEnvironmentFilePath( $app, $app->environmentFile() . '.' . $input->getParameterOption( '--env' ) )
         ) {
             return;
@@ -69,6 +70,7 @@ class LoadEnvironmentVariables {
      *
      * @param \Hybrid\Contracts\Core\Application $app
      * @param string                             $file
+     *
      * @return bool
      */
     protected function setEnvironmentFilePath( $app, $file ) {
@@ -85,6 +87,7 @@ class LoadEnvironmentVariables {
      * Create a Dotenv instance.
      *
      * @param \Hybrid\Contracts\Core\Application $app
+     *
      * @return \Dotenv\Dotenv
      */
     protected function createDotenv( $app ) {
@@ -99,15 +102,17 @@ class LoadEnvironmentVariables {
      * Write the error information to the screen and exit.
      *
      * @param \Dotenv\Exception\InvalidFileException $e
+     *
      * @return never
      */
     protected function writeErrorAndDie( InvalidFileException $e ) {
-        $output = ( new ConsoleOutput() )->getErrorOutput();
+        $output = ( new ConsoleOutput )->getErrorOutput();
 
         $output->writeln( 'The environment file is invalid!' );
         $output->writeln( $e->getMessage() );
 
+        // http_response_code( 500 ); // We don't use the HTTP kernel, so this is commented out.
+
         exit( 1 );
     }
-
 }

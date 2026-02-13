@@ -11,7 +11,6 @@ use IteratorAggregate;
 use Traversable;
 
 class RewindableGenerator implements Countable, IteratorAggregate {
-
     /**
      * The generator callback.
      *
@@ -54,5 +53,4 @@ class RewindableGenerator implements Countable, IteratorAggregate {
 
         return $this->count;
     }
-
 }

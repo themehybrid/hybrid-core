@@ -1,34 +1,18 @@
 <?php
 
-/**
- * Container contract.
- *
- * Container classes should be used for storing, retrieving, and resolving
- * classes/objects passed into them.
- *
- * @package   HybridCore
- * @link      https://github.com/themehybrid/hybrid-core
- *
- * @author    Theme Hybrid
- * @copyright Copyright (c) 2008 - 2024, Theme Hybrid
- * @license   https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
- */
-
 namespace Hybrid\Contracts\Container;
 
 use Closure;
 use Psr\Container\ContainerInterface;
 
-/**
- * Container interface.
- */
 interface Container extends ContainerInterface {
-
     /**
      * {@inheritDoc}
      *
      * @template TClass of object
+     *
      * @param string|class-string<TClass> $id
+     *
      * @return ($id is class-string<TClass> ? TClass : mixed)
      */
     public function get( string $id );
@@ -37,6 +21,7 @@ interface Container extends ContainerInterface {
      * Determine if the given abstract type has been bound.
      *
      * @param string $abstract
+     *
      * @return bool
      */
     public function bound( $abstract );
@@ -46,7 +31,9 @@ interface Container extends ContainerInterface {
      *
      * @param string $abstract
      * @param string $alias
+     *
      * @return void
+     *
      * @throws \LogicException
      */
     public function alias( $abstract, $alias );
@@ -56,6 +43,7 @@ interface Container extends ContainerInterface {
      *
      * @param array|string $abstracts
      * @param array|mixed  ...$tags
+     *
      * @return void
      */
     public function tag( $abstracts, $tags );
@@ -64,6 +52,7 @@ interface Container extends ContainerInterface {
      * Resolve all of the bindings for a given tag.
      *
      * @param string $tag
+     *
      * @return iterable
      */
     public function tagged( $tag );
@@ -71,9 +60,10 @@ interface Container extends ContainerInterface {
     /**
      * Register a binding with the container.
      *
-     * @param string               $abstract
+     * @param \Closure|string      $abstract
      * @param \Closure|string|null $concrete
      * @param bool                 $shared
+     *
      * @return void
      */
     public function bind( $abstract, $concrete = null, $shared = false );
@@ -83,6 +73,7 @@ interface Container extends ContainerInterface {
      *
      * @param array|string $method
      * @param \Closure     $callback
+     *
      * @return void
      */
     public function bindMethod( $method, $callback );
@@ -90,9 +81,10 @@ interface Container extends ContainerInterface {
     /**
      * Register a binding if it hasn't already been registered.
      *
-     * @param string               $abstract
+     * @param \Closure|string      $abstract
      * @param \Closure|string|null $concrete
      * @param bool                 $shared
+     *
      * @return void
      */
     public function bindIf( $abstract, $concrete = null, $shared = false );
@@ -100,8 +92,9 @@ interface Container extends ContainerInterface {
     /**
      * Register a shared binding in the container.
      *
-     * @param string               $abstract
+     * @param \Closure|string      $abstract
      * @param \Closure|string|null $concrete
+     *
      * @return void
      */
     public function singleton( $abstract, $concrete = null );
@@ -109,8 +102,9 @@ interface Container extends ContainerInterface {
     /**
      * Register a shared binding if it hasn't already been registered.
      *
-     * @param string               $abstract
+     * @param \Closure|string      $abstract
      * @param \Closure|string|null $concrete
+     *
      * @return void
      */
     public function singletonIf( $abstract, $concrete = null );
@@ -118,8 +112,9 @@ interface Container extends ContainerInterface {
     /**
      * Register a scoped binding in the container.
      *
-     * @param string               $abstract
+     * @param \Closure|string      $abstract
      * @param \Closure|string|null $concrete
+     *
      * @return void
      */
     public function scoped( $abstract, $concrete = null );
@@ -127,8 +122,9 @@ interface Container extends ContainerInterface {
     /**
      * Register a scoped binding if it hasn't already been registered.
      *
-     * @param string               $abstract
+     * @param \Closure|string      $abstract
      * @param \Closure|string|null $concrete
+     *
      * @return void
      */
     public function scopedIf( $abstract, $concrete = null );
@@ -136,9 +132,11 @@ interface Container extends ContainerInterface {
     /**
      * "Extend" an abstract type in the container.
      *
-     * @param string   $abstract
-     * @param \Closure $closure
+     * @param \Closure|string $abstract
+     * @param \Closure        $closure
+     *
      * @return void
+     *
      * @throws \InvalidArgumentException
      */
     public function extend( $abstract, Closure $closure );
@@ -146,9 +144,11 @@ interface Container extends ContainerInterface {
     /**
      * Register an existing instance as shared in the container.
      *
-     * @param string          $abstract
+     * @template TInstance of mixed
+     *
      * @param \Closure|string $abstract
      * @param TInstance       $instance
+     *
      * @return TInstance
      */
     public function instance( $abstract, $instance );
@@ -157,8 +157,9 @@ interface Container extends ContainerInterface {
      * Add a contextual binding to the container.
      *
      * @param string          $concrete
-     * @param string          $abstract
+     * @param \Closure|string $abstract
      * @param \Closure|string $implementation
+     *
      * @return void
      */
     public function addContextualBinding( $concrete, $abstract, $implementation );
@@ -167,6 +168,7 @@ interface Container extends ContainerInterface {
      * Define a contextual binding.
      *
      * @param string|array $concrete
+     *
      * @return \Hybrid\Contracts\Container\ContextualBindingBuilder
      */
     public function when( $concrete );
@@ -175,7 +177,9 @@ interface Container extends ContainerInterface {
      * Get a closure to resolve the given type from the container.
      *
      * @template TClass of object
+     *
      * @param string|class-string<TClass> $abstract
+     *
      * @return ($abstract is class-string<TClass> ? \Closure(): TClass : \Closure(): mixed)
      */
     public function factory( $abstract );
@@ -191,9 +195,12 @@ interface Container extends ContainerInterface {
      * Resolve the given type from the container.
      *
      * @template TClass of object
+     *
      * @param string|class-string<TClass> $abstract
      * @param array                       $parameters
+     *
      * @return ($abstract is class-string<TClass> ? TClass : mixed)
+     *
      * @throws \Hybrid\Contracts\Container\BindingResolutionException
      */
     public function make( $abstract, array $parameters = [] );
@@ -204,6 +211,7 @@ interface Container extends ContainerInterface {
      * @param callable|string $callback
      * @param array           $parameters
      * @param string|null     $defaultMethod
+     *
      * @return mixed
      */
     public function call( $callback, array $parameters = [], $defaultMethod = null );
@@ -212,6 +220,7 @@ interface Container extends ContainerInterface {
      * Determine if the given abstract type has been resolved.
      *
      * @param string $abstract
+     *
      * @return bool
      */
     public function resolved( $abstract );
@@ -221,6 +230,7 @@ interface Container extends ContainerInterface {
      *
      * @param \Closure|string $abstract
      * @param \Closure|null   $callback
+     *
      * @return void
      */
     public function beforeResolving( $abstract, ?Closure $callback = null );
@@ -230,6 +240,7 @@ interface Container extends ContainerInterface {
      *
      * @param \Closure|string $abstract
      * @param \Closure|null   $callback
+     *
      * @return void
      */
     public function resolving( $abstract, ?Closure $callback = null );
@@ -239,6 +250,7 @@ interface Container extends ContainerInterface {
      *
      * @param \Closure|string $abstract
      * @param \Closure|null   $callback
+     *
      * @return void
      */
     public function afterResolving( $abstract, ?Closure $callback = null );
@@ -250,6 +262,7 @@ interface Container extends ContainerInterface {
      *
      * @param string $abstract
      * @param array  $parameters
+     *
      * @return mixed
      */
     public function resolve( $abstract, array $parameters = [] );
@@ -262,7 +275,9 @@ interface Container extends ContainerInterface {
      * @param string $abstract
      * @param mixed  $concrete
      * @param bool   $shared
+     *
      * @return void
+     *
      * @deprecated Use bind() instead.
      */
     public function add( $abstract, $concrete = null, $shared = false );
@@ -273,8 +288,8 @@ interface Container extends ContainerInterface {
      * Note: custom function
      *
      * @param string $abstract
+     *
      * @return void
      */
     public function remove( $abstract );
-
 }

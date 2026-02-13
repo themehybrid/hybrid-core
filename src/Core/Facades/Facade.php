@@ -13,7 +13,6 @@ use Hybrid\Tools\Str;
 use RuntimeException;
 
 abstract class Facade {
-
     /**
      * The application instance being facaded.
      *
@@ -39,6 +38,7 @@ abstract class Facade {
      * Run a Closure when the facade has been resolved.
      *
      * @param \Closure $callback
+     *
      * @return void
      */
     public static function resolved( Closure $callback ) {
@@ -57,6 +57,7 @@ abstract class Facade {
      * Hotswap the underlying instance behind the facade.
      *
      * @param mixed $instance
+     *
      * @return void
      */
     public static function swap( $instance ) {
@@ -80,6 +81,7 @@ abstract class Facade {
      * Get the registered name of the component.
      *
      * @return string
+     *
      * @throws \RuntimeException
      */
     protected static function getFacadeAccessor() {
@@ -90,6 +92,7 @@ abstract class Facade {
      * Resolve the facade root instance from the container.
      *
      * @param string $name
+     *
      * @return mixed
      */
     protected static function resolveFacadeInstance( $name ) {
@@ -110,10 +113,11 @@ abstract class Facade {
      * Clear a resolved facade instance.
      *
      * @param string $name
+     *
      * @return void
      */
-    public static function clearResolvedInstance( $name ) {
-        unset( static::$resolvedInstance[ $name ] );
+    public static function clearResolvedInstance( $name = null ) {
+        unset( static::$resolvedInstance[ $name ?? static::getFacadeAccessor() ] );
     }
 
     /**
@@ -156,6 +160,7 @@ abstract class Facade {
      * Set the application instance.
      *
      * @param \Hybrid\Contracts\Core\Application|null $app
+     *
      * @return void
      */
     public static function setFacadeApplication( $app ) {
@@ -167,7 +172,9 @@ abstract class Facade {
      *
      * @param string $method
      * @param array  $args
+     *
      * @return mixed
+     *
      * @throws \RuntimeException
      */
     public static function __callStatic( $method, $args ) {
@@ -179,5 +186,4 @@ abstract class Facade {
 
         return $instance->$method( ...$args );
     }
-
 }

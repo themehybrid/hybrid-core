@@ -7,7 +7,6 @@ use Hybrid\Core\Exceptions\Handler;
 use Hybrid\Tools\Arr;
 
 class Exceptions {
-
     /**
      * Create a new exception handling configuration instance.
      *
@@ -19,6 +18,7 @@ class Exceptions {
      * Register a reportable callback.
      *
      * @param callable $using
+     *
      * @return \Hybrid\Core\Exceptions\ReportableHandler
      */
     public function report( callable $using ) {
@@ -29,6 +29,7 @@ class Exceptions {
      * Register a reportable callback.
      *
      * @param callable $reportUsing
+     *
      * @return \Hybrid\Core\Exceptions\ReportableHandler
      */
     public function reportable( callable $reportUsing ) {
@@ -39,6 +40,7 @@ class Exceptions {
      * Register a renderable callback.
      *
      * @param callable $using
+     *
      * @return $this
      */
     public function render( callable $using ) {
@@ -51,6 +53,7 @@ class Exceptions {
      * Register a renderable callback.
      *
      * @param callable $renderUsing
+     *
      * @return $this
      */
     public function renderable( callable $renderUsing ) {
@@ -63,6 +66,7 @@ class Exceptions {
      * Register a callback to prepare the final, rendered exception response.
      *
      * @param callable $using
+     *
      * @return $this
      */
     public function respond( callable $using ) {
@@ -75,6 +79,7 @@ class Exceptions {
      * Specify the callback that should be used to throttle reportable exceptions.
      *
      * @param callable $throttleUsing
+     *
      * @return $this
      */
     public function throttle( callable $throttleUsing ) {
@@ -88,7 +93,9 @@ class Exceptions {
      *
      * @param \Closure|string      $from
      * @param \Closure|string|null $to
+     *
      * @return $this
+     *
      * @throws \InvalidArgumentException
      */
     public function map( $from, $to = null ) {
@@ -102,6 +109,7 @@ class Exceptions {
      *
      * @param class-string<\Throwable> $type
      * @param \Psr\Log\LogLevel::*     $level
+     *
      * @return $this
      */
     public function level( string $type, string $level ) {
@@ -114,6 +122,7 @@ class Exceptions {
      * Register a closure that should be used to build exception context data.
      *
      * @param \Closure $contextCallback
+     *
      * @return $this
      */
     public function context( Closure $contextCallback ) {
@@ -126,6 +135,7 @@ class Exceptions {
      * Indicate that the given exception type should not be reported.
      *
      * @param array|string $class
+     *
      * @return $this
      */
     public function dontReport( array|string $class ) {
@@ -140,6 +150,7 @@ class Exceptions {
      * Register a callback to determine if an exception should not be reported.
      *
      * @param (\Closure(\Throwable): bool) $dontReportWhen
+     *
      * @return $this
      */
     public function dontReportWhen( Closure $dontReportWhen ) {
@@ -163,6 +174,7 @@ class Exceptions {
      * Indicate that the given attributes should never be flashed to the session on validation errors.
      *
      * @param array|string $attributes
+     *
      * @return $this
      */
     public function dontFlash( array|string $attributes ) {
@@ -175,6 +187,7 @@ class Exceptions {
      * Register the callable that determines if the exception handler response should be JSON.
      *
      * @param callable(\Hybrid\Http\Request $request, \Throwable): bool $callback
+     *
      * @return $this
      */
     public function shouldRenderJsonWhen( callable $callback ) {
@@ -187,6 +200,7 @@ class Exceptions {
      * Indicate that the given exception class should not be ignored.
      *
      * @param array<int, class-string<\Throwable>>|class-string<\Throwable> $class
+     *
      * @return $this
      */
     public function stopIgnoring( array|string $class ) {
@@ -194,5 +208,4 @@ class Exceptions {
 
         return $this;
     }
-
 }

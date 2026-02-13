@@ -9,7 +9,6 @@ use Hybrid\Log\Context\Repository;
 
 #[Attribute( Attribute::TARGET_PARAMETER )]
 class Context implements ContextualAttribute {
-
     /**
      * Create a new attribute instance.
      */
@@ -29,5 +28,4 @@ class Context implements ContextualAttribute {
             false => $repository->get( $attribute->key, $attribute->default ),
         };
     }
-
 }

@@ -1,28 +1,10 @@
 <?php
 
-/**
- * Application contract.
- *
- * The Application class should be the be the primary class for working with and
- * launching the app. It extends the `Container` contract.
- *
- * @package   HybridCore
- * @link      https://github.com/themehybrid/hybrid-core
- *
- * @author    Theme Hybrid
- * @copyright Copyright (c) 2008 - 2024, Theme Hybrid
- * @license   https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
- */
-
 namespace Hybrid\Contracts\Core;
 
 use Hybrid\Contracts\Container\Container;
 
-/**
- * Application interface.
- */
 interface Application extends Container {
-
     /**
      * Get the version number of the application.
      *
@@ -34,6 +16,7 @@ interface Application extends Container {
      * Get the base path of the Hybrid installation.
      *
      * @param string $path
+     *
      * @return string
      */
     public function basePath( $path = '' );
@@ -42,6 +25,7 @@ interface Application extends Container {
      * Get the path to the bootstrap directory.
      *
      * @param string $path
+     *
      * @return string
      */
     public function bootstrapPath( $path = '' );
@@ -50,22 +34,43 @@ interface Application extends Container {
      * Get the path to the application configuration files.
      *
      * @param string $path
+     *
      * @return string
      */
     public function configPath( $path = '' );
 
     /**
+     * Get the path to the public directory.
+     *
+     * @param string $path
+     *
+     * @return string
+     */
+    public function publicPath( $path = '' );
+
+    /**
      * Get the path to the resources directory.
      *
      * @param string $path
+     *
      * @return string
      */
     public function resourcePath( $path = '' );
 
     /**
+     * Get the path to the storage directory.
+     *
+     * @param string $path
+     *
+     * @return string
+     */
+    public function storagePath( $path = '' );
+
+    /**
      * Get or check the current application environment.
      *
      * @param string|array ...$environments
+     *
      * @return string|bool
      */
     public function environment( ...$environments );
@@ -85,6 +90,27 @@ interface Application extends Container {
     public function runningUnitTests();
 
     /**
+     * Determine if the application is running with debug mode enabled.
+     *
+     * @return bool
+     */
+    public function hasDebugModeEnabled();
+
+    /**
+     * Get an instance of the maintenance mode manager implementation.
+     *
+     * @return \Hybrid\Contracts\MaintenanceMode
+     */
+    public function maintenanceMode();
+
+    /**
+     * Determine if the application is currently down for maintenance.
+     *
+     * @return bool
+     */
+    public function isDownForMaintenance();
+
+    /**
      * Register all of the configured providers.
      *
      * @return void
@@ -96,6 +122,7 @@ interface Application extends Container {
      *
      * @param \Hybrid\Core\ServiceProvider|string $provider
      * @param bool                                $force
+     *
      * @return \Hybrid\Core\ServiceProvider
      */
     public function register( $provider, $force = false );
@@ -105,6 +132,7 @@ interface Application extends Container {
      *
      * @param string      $provider
      * @param string|null $service
+     *
      * @return void
      */
     public function registerDeferredProvider( $provider, $service = null );
@@ -113,6 +141,7 @@ interface Application extends Container {
      * Resolve a service provider instance from the class name.
      *
      * @param string $provider
+     *
      * @return \Hybrid\Core\ServiceProvider
      */
     public function resolveProvider( $provider );
@@ -128,6 +157,7 @@ interface Application extends Container {
      * Register a new boot listener.
      *
      * @param callable $callback
+     *
      * @return void
      */
     public function booting( $callback );
@@ -136,6 +166,7 @@ interface Application extends Container {
      * Register a new "booted" listener.
      *
      * @param callable $callback
+     *
      * @return void
      */
     public function booted( $callback );
@@ -144,14 +175,23 @@ interface Application extends Container {
      * Run the given array of bootstrap classes.
      *
      * @param array $bootstrappers
+     *
      * @return void
      */
     public function bootstrapWith( array $bootstrappers );
 
     /**
+     * Get the current application locale.
+     *
+     * @return string
+     */
+    public function getLocale();
+
+    /**
      * Get the application namespace.
      *
      * @return string
+     *
      * @throws \RuntimeException
      */
     public function getNamespace();
@@ -160,6 +200,7 @@ interface Application extends Container {
      * Get the registered service provider instances if any exist.
      *
      * @param \Hybrid\Core\ServiceProvider|string $provider
+     *
      * @return array
      */
     public function getProviders( $provider );
@@ -179,9 +220,19 @@ interface Application extends Container {
     public function loadDeferredProviders();
 
     /**
+     * Set the current application locale.
+     *
+     * @param string $locale
+     *
+     * @return void
+     */
+    public function setLocale( $locale );
+
+    /**
      * Register a terminating callback with the application.
      *
      * @param callable|string $callback
+     *
      * @return \Hybrid\Contracts\Core\Application
      */
     public function terminating( $callback );
@@ -192,5 +243,4 @@ interface Application extends Container {
      * @return void
      */
     public function terminate();
-
 }

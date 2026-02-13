@@ -1,32 +1,16 @@
 <?php
 
-/**
- * Base service provider.
- *
- * This is the base service provider class. This is an abstract class that must
- * be extended to create new service providers for the application.
- *
- * @package   HybridCore
- * @link      https://github.com/themehybrid/hybrid-core
- *
- * @author    Theme Hybrid
- * @copyright Copyright (c) 2008 - 2024, Theme Hybrid
- * @license   https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
- */
-
 namespace Hybrid\Core;
 
+use Closure;
 use Hybrid\Contracts\Core\CachesConfiguration;
 use Hybrid\Contracts\Core\DeferrableProvider;
 
 /**
- * Service provider abstract class.
- *
  * @property array<string, string> $bindings All of the container bindings that should be registered.
  * @property array<array-key, string> $singletons All of the singletons that should be registered.
  */
 abstract class ServiceProvider {
-
     /**
      * The application instance.
      *
@@ -68,6 +52,7 @@ abstract class ServiceProvider {
      * Register a booting callback to be run before the "boot" method is called.
      *
      * @param \Closure $callback
+     *
      * @return void
      */
     public function booting( Closure $callback ) {
@@ -78,6 +63,7 @@ abstract class ServiceProvider {
      * Register a booted callback to be run after the "boot" method is called.
      *
      * @param \Closure $callback
+     *
      * @return void
      */
     public function booted( Closure $callback ) {
@@ -119,6 +105,7 @@ abstract class ServiceProvider {
      *
      * @param string $path
      * @param string $key
+     *
      * @return void
      */
     protected function mergeConfigFrom( $path, $key ) {
@@ -136,6 +123,7 @@ abstract class ServiceProvider {
      *
      * @param string $path
      * @param string $key
+     *
      * @return void
      */
     protected function replaceConfigRecursivelyFrom( $path, $key ) {
@@ -153,6 +141,7 @@ abstract class ServiceProvider {
      *
      * @param string|array $path
      * @param string       $namespace
+     *
      * @return void
      */
     protected function loadViewsFrom( $path, $namespace ) {
@@ -175,6 +164,7 @@ abstract class ServiceProvider {
      *
      * @param string   $name
      * @param callable $callback
+     *
      * @return void
      */
     protected function callAfterResolving( $name, $callback ) {
@@ -213,12 +203,12 @@ abstract class ServiceProvider {
     }
 
     /**
-     * Get the default providers for a Laravel application.
+     * Get the default providers for a Hybrid Core application.
      *
      * @return \Hybrid\Core\DefaultProviders
      */
     public static function defaultProviders() {
-        return new DefaultProviders();
+        return new DefaultProviders;
     }
 
     /**
@@ -226,6 +216,7 @@ abstract class ServiceProvider {
      *
      * @param string $provider
      * @param string $path
+     *
      * @return bool
      */
     public static function addProviderToBootstrapFile( string $provider, ?string $path = null ) {
@@ -264,6 +255,7 @@ return [
      * @param string|array $providersToRemove
      * @param string|null  $path
      * @param bool         $strict
+     *
      * @return bool
      */
     public static function removeProviderFromBootstrapFile(
@@ -305,5 +297,4 @@ return [
 
         return true;
     }
-
 }

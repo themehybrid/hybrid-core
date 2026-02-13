@@ -11,13 +11,13 @@ use ReflectionNamedType;
  * @internal
  */
 class Util {
-
     /**
      * If the given value is not an array and not null, wrap it in one.
      *
      * From Arr::wrap() in Hybrid\Tools.
      *
      * @param mixed $value
+     *
      * @return array
      */
     public static function arrayWrap( $value ) {
@@ -35,6 +35,7 @@ class Util {
      *
      * @param mixed $value
      * @param mixed ...$args
+     *
      * @return mixed
      */
     public static function unwrapIfClosure( $value, ...$args ) {
@@ -47,6 +48,7 @@ class Util {
      * From Reflector::getParameterClassName() in Hybrid\Tools.
      *
      * @param \ReflectionParameter $parameter
+     *
      * @return string|null
      */
     public static function getParameterClassName( $parameter ) {
@@ -75,10 +77,10 @@ class Util {
      * Get a contextual attribute from a dependency.
      *
      * @param \ReflectionParameter $dependency
+     *
      * @return \ReflectionAttribute|null
      */
     public static function getContextualAttributeFromDependency( $dependency ) {
         return $dependency->getAttributes( ContextualAttribute::class, ReflectionAttribute::IS_INSTANCEOF )[0] ?? null;
     }
-
 }

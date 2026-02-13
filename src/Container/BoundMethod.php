@@ -1,18 +1,15 @@
 <?php
 
-/**
- * @license https://opensource.org/licenses/MIT
- */
-
 namespace Hybrid\Container;
 
 use Closure;
+use Hybrid\Contracts\Container\BindingResolutionException;
 use Hybrid\Util;
+use InvalidArgumentException;
 use ReflectionFunction;
 use ReflectionMethod;
 
 class BoundMethod {
-
     /**
      * Call the given Closure / class@method and inject its dependencies.
      *
@@ -20,7 +17,9 @@ class BoundMethod {
      * @param callable|string             $callback
      * @param array                       $parameters
      * @param string|null                 $defaultMethod
+     *
      * @return mixed
+     *
      * @throws \ReflectionException
      * @throws \InvalidArgumentException
      */
@@ -45,7 +44,9 @@ class BoundMethod {
      * @param string                      $target
      * @param array                       $parameters
      * @param string|null                 $defaultMethod
+     *
      * @return mixed
+     *
      * @throws \InvalidArgumentException
      */
     protected static function callClass( $container, $target, array $parameters = [], $defaultMethod = null ) {
@@ -59,7 +60,7 @@ class BoundMethod {
             : $defaultMethod;
 
         if ( is_null( $method ) ) {
-            throw new \InvalidArgumentException( 'Method not provided.' );
+            throw new InvalidArgumentException( 'Method not provided.' );
         }
 
         return static::call(
@@ -75,6 +76,7 @@ class BoundMethod {
      * @param \Hybrid\Container\Container $container
      * @param callable                    $callback
      * @param mixed                       $default
+     *
      * @return mixed
      */
     protected static function callBoundMethod( $container, $callback, $default ) {
@@ -98,6 +100,7 @@ class BoundMethod {
      * Normalize the given callback into a Class@method string.
      *
      * @param callable $callback
+     *
      * @return string
      */
     protected static function normalizeMethod( $callback ) {
@@ -112,7 +115,9 @@ class BoundMethod {
      * @param \Hybrid\Container\Container $container
      * @param callable|string             $callback
      * @param array                       $parameters
+     *
      * @return array
+     *
      * @throws \ReflectionException
      */
     protected static function getMethodDependencies( $container, $callback, array $parameters = [] ) {
@@ -129,7 +134,9 @@ class BoundMethod {
      * Get the proper reflection instance for the given callback.
      *
      * @param callable|string $callback
+     *
      * @return \ReflectionFunctionAbstract
+     *
      * @throws \ReflectionException
      */
     protected static function getCallReflector( $callback ) {
@@ -151,7 +158,9 @@ class BoundMethod {
      * @param \ReflectionParameter        $parameter
      * @param array                       $parameters
      * @param array                       $dependencies
+     *
      * @return void
+     *
      * @throws \Hybrid\Contracts\Container\BindingResolutionException
      */
     protected static function addDependencyForCallParameter(
@@ -187,7 +196,7 @@ class BoundMethod {
         } elseif ( ! $parameter->isOptional() && ! array_key_exists( $paramName, $parameters ) ) {
             $message = "Unable to resolve dependency [{$parameter}] in class {$parameter->getDeclaringClass()->getName()}";
 
-            throw new \Hybrid\Contracts\Container\BindingResolutionException( $message );
+            throw new BindingResolutionException( $message );
         }
 
         foreach ( $pendingDependencies as $dependency ) {
@@ -201,10 +210,10 @@ class BoundMethod {
      * Determine if the given string is in Class@method syntax.
      *
      * @param mixed $callback
+     *
      * @return bool
      */
     protected static function isCallableWithAtSign( $callback ) {
         return is_string( $callback ) && str_contains( $callback, '@' );
     }
-
 }

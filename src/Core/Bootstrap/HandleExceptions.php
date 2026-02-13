@@ -14,7 +14,6 @@ use Throwable;
 use function Hybrid\Tools\with;
 
 class HandleExceptions {
-
     /**
      * Reserved memory so that errors can be displayed properly on memory exhaustion.
      *
@@ -33,6 +32,7 @@ class HandleExceptions {
      * Bootstrap the given application.
      *
      * @param \Hybrid\Contracts\Core\Application $app
+     *
      * @return void
      */
     public function bootstrap( Application $app ) {
@@ -60,7 +60,9 @@ class HandleExceptions {
      * @param string $message
      * @param string $file
      * @param int    $line
+     *
      * @return void
+     *
      * @throws \ErrorException
      */
     public function handleError( $level, $message, $file = '', $line = 0 ) {
@@ -78,6 +80,7 @@ class HandleExceptions {
      * @param string $file
      * @param int    $line
      * @param int    $level
+     *
      * @return void
      */
     public function handleDeprecationError( $message, $file, $line, $level = E_DEPRECATED ) {
@@ -162,6 +165,7 @@ class HandleExceptions {
      * be handled differently since they are not normal exceptions.
      *
      * @param \Throwable $e
+     *
      * @return void
      */
     public function handleException( Throwable $e ) {
@@ -188,16 +192,18 @@ class HandleExceptions {
      * Render an exception to the console.
      *
      * @param \Throwable $e
+     *
      * @return void
      */
     protected function renderForConsole( Throwable $e ) {
-        $this->getExceptionHandler()->renderForConsole( new ConsoleOutput(), $e );
+        $this->getExceptionHandler()->renderForConsole( new ConsoleOutput, $e );
     }
 
     /**
      * Render an exception as an HTTP response and send it.
      *
      * @param \Throwable $e
+     *
      * @return void
      */
     protected function renderHttpResponse( Throwable $e ) {
@@ -222,6 +228,7 @@ class HandleExceptions {
      *
      * @param array    $error
      * @param int|null $traceOffset
+     *
      * @return \Symfony\Component\ErrorHandler\Error\FatalError
      */
     protected function fatalErrorFromPhpError( array $error, $traceOffset = null ) {
@@ -243,6 +250,7 @@ class HandleExceptions {
      * Determine if the error level is a deprecation.
      *
      * @param int $level
+     *
      * @return bool
      */
     protected function isDeprecation( $level ) {
@@ -253,6 +261,7 @@ class HandleExceptions {
      * Determine if the error type is fatal.
      *
      * @param int $type
+     *
      * @return bool
      */
     protected function isFatal( $type ) {
@@ -272,10 +281,60 @@ class HandleExceptions {
      * Clear the local application instance from memory.
      *
      * @return void
-     * @deprecated This method will be removed in a future Laravel version.
+     *
+     * @deprecated This method will be removed in a future Hybrid Core version.
      */
     public static function forgetApp() {
         static::$app = null;
     }
 
+    /**
+     * Flush the bootstrapper's global state.
+     *
+     * @param \PHPUnit\Framework\TestCase|null $testCase
+     *
+     * @return void
+     */
+    public static function flushState( ?TestCase $testCase = null ) {
+        if ( is_null( static::$app ) ) {
+            return;
+        }
+
+        static::flushHandlersState( $testCase );
+
+        static::$app = null;
+
+        static::$reservedMemory = null;
+    }
+
+    /**
+     * Flush the bootstrapper's global handlers state.
+     *
+     * @param \PHPUnit\Framework\TestCase|null $testCase
+     *
+     * @return void
+     */
+    public static function flushHandlersState( ?TestCase $testCase = null ) {
+        while ( get_exception_handler() !== null ) {
+            restore_exception_handler();
+        }
+
+        while ( get_error_handler() !== null ) {
+            restore_error_handler();
+        }
+
+        if ( class_exists( ErrorHandler::class ) ) {
+            $instance = ErrorHandler::instance();
+
+            if ( ( fn() => $this->enabled ?? false )->call( $instance ) ) {
+                $instance->disable();
+
+                if ( version_compare( Version::id(), '12.3.4', '>=' ) ) {
+                    $instance->enable( $testCase );
+                } else {
+                    $instance->enable();
+                }
+            }
+        }
+    }
 }

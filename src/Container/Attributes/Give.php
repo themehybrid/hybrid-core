@@ -8,13 +8,11 @@ use Hybrid\Contracts\Container\ContextualAttribute;
 
 #[Attribute( Attribute::TARGET_PARAMETER )]
 class Give implements ContextualAttribute {
-
     /**
      * Provide a concrete class implementation for dependency injection.
      *
-     * @template T
-     * @param class-string<T> $class
-     * @param array|null      $params
+     * @param string     $class
+     * @param array|null $params
      */
     public function __construct(
         public string $class,
@@ -30,5 +28,4 @@ class Give implements ContextualAttribute {
     public static function resolve( self $attribute, Container $container ): mixed {
         return $container->make( $attribute->class, $attribute->params );
     }
-
 }

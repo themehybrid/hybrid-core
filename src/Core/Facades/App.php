@@ -131,7 +131,6 @@ namespace Hybrid\Core\Facades;
  * @method static void flushMacros()
  */
 class App extends Facade {
-
     /**
      * Get the registered name of the component.
      *
@@ -140,5 +139,4 @@ class App extends Facade {
     protected static function getFacadeAccessor() {
         return 'app';
     }
-
 }

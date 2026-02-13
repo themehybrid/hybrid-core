@@ -7,7 +7,6 @@ use Hybrid\Core\Bootstrap\RegisterProviders;
 use Hybrid\Events\Provider as AppEventServiceProvider;
 
 class ApplicationBuilder {
-
     /**
      * The service provider that are marked for registration.
      */
@@ -28,6 +27,7 @@ class ApplicationBuilder {
      *
      * @param array $providers
      * @param bool  $withBootstrapProviders
+     *
      * @return $this
      */
     public function withProviders( array $providers = [], bool $withBootstrapProviders = true ) {
@@ -45,6 +45,7 @@ class ApplicationBuilder {
      * Register the core event service provider for the application.
      *
      * @param array|bool $discover
+     *
      * @return $this
      */
     public function withEvents( iterable|bool $discover = true ) {
@@ -71,6 +72,7 @@ class ApplicationBuilder {
      * Register and configure the application's exception handler.
      *
      * @param callable|null $using
+     *
      * @return $this
      */
     public function withExceptions( ?callable $using = null ) {
@@ -79,12 +81,12 @@ class ApplicationBuilder {
             \Hybrid\Core\Exceptions\Handler::class
         );
 
-        $using ??= fn() => true;
-
-        $this->app->afterResolving(
-            \Hybrid\Core\Exceptions\Handler::class,
-            fn( $handler ) => $using( new Exceptions( $handler ) )
-        );
+        if ( null !== $using ) {
+            $this->app->afterResolving(
+                \Hybrid\Core\Exceptions\Handler::class,
+                fn( $handler ) => $using( new Exceptions( $handler ) )
+            );
+        }
 
         return $this;
     }
@@ -93,6 +95,7 @@ class ApplicationBuilder {
      * Register an array of container bindings to be bound when the application is booting.
      *
      * @param array $bindings
+     *
      * @return $this
      */
     public function withBindings( array $bindings ) {
@@ -107,6 +110,7 @@ class ApplicationBuilder {
      * Register an array of singleton container bindings to be bound when the application is booting.
      *
      * @param array $singletons
+     *
      * @return $this
      */
     public function withSingletons( array $singletons ) {
@@ -125,6 +129,7 @@ class ApplicationBuilder {
      * Register an array of scoped singleton container bindings to be bound when the application is booting.
      *
      * @param array $scopedSingletons
+     *
      * @return $this
      */
     public function withScopedSingletons( array $scopedSingletons ) {
@@ -143,6 +148,7 @@ class ApplicationBuilder {
      * Register a callback to be invoked when the application's service providers are registered.
      *
      * @param callable $callback
+     *
      * @return $this
      */
     public function registered( callable $callback ) {
@@ -155,6 +161,7 @@ class ApplicationBuilder {
      * Register a callback to be invoked when the application is "booting".
      *
      * @param callable $callback
+     *
      * @return $this
      */
     public function booting( callable $callback ) {
@@ -167,6 +174,7 @@ class ApplicationBuilder {
      * Register a callback to be invoked when the application is "booted".
      *
      * @param callable $callback
+     *
      * @return $this
      */
     public function booted( callable $callback ) {
@@ -183,5 +191,4 @@ class ApplicationBuilder {
     public function create() {
         return $this->app;
     }
-
 }

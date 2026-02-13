@@ -6,7 +6,6 @@ use Hybrid\Contracts\Core\Application;
 use Hybrid\Filesystem\Filesystem;
 
 class GenerateStorageStructures {
-
     /**
      * Bootstrap the given application.
      *
@@ -24,12 +23,11 @@ class GenerateStorageStructures {
         foreach ( $directories as $directory ) {
             $directory = dirname( $directory );
 
-            if ( ( new Filesystem() )->exists( $directory ) ) {
+            if ( ( new Filesystem )->exists( $directory ) ) {
                 continue;
             }
 
-            ( new Filesystem() )->ensureDirectoryExists( $directory );
+            ( new Filesystem )->ensureDirectoryExists( $directory );
         }
     }
-
 }

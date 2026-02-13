@@ -8,13 +8,14 @@ use function Hybrid\app;
 use function Hybrid\public_path;
 
 class Mix {
-
     /**
      * Get the path to a versioned Mix file.
      *
      * @param string $path
      * @param string $manifestDirectory
+     *
      * @return \Hybrid\Tools\HtmlString|string
+     *
      * @throws \Hybrid\Core\MixManifestNotFoundException|\Hybrid\Core\MixFileNotFoundException
      */
     public function __invoke( $path, $manifestDirectory = '' ) {
@@ -70,5 +71,4 @@ class Mix {
 
         return new HtmlString( app( 'config' )->get( 'app.mix_url' ) . $manifestDirectory . $manifest[ $path ] );
     }
-
 }

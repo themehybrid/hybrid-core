@@ -8,8 +8,7 @@ The framework simplifies many of the complexities of WordPress development and h
 
 ## Requirements
 
-* WordPress 6.1+
-* PHP 8.0+
+* PHP 8.2+
 * Composer 2.0+
 
 ## Donations
@@ -71,8 +70,16 @@ $slug->boot();
 
 This project is licensed under the [GNU GPL](https://www.gnu.org/licenses/old-licenses/gpl-2.0.html), version 2 or later.
 
-Hybrid Core uses code from Laravel Framework.
-The Laravel framework is open-sourced software licensed under the MIT license.
-License: MIT - https://opensource.org/licenses/MIT
+2008&thinsp;&ndash;&thinsp;2026 &copy; [Theme Hybrid](https://themehybrid.com).
 
-2008&thinsp;&ndash;&thinsp;2024 &copy; [Theme Hybrid](https://themehybrid.com).
+## Third-Party Licenses
+
+Hybrid Core utilizes code from the illuminate/* package(s).
+
+Repositories:
+
+<https://github.com/illuminate/*>
+
+License: MIT License - <https://opensource.org/licenses/MIT>
+
+Copyright (c) Taylor Otwell

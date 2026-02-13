@@ -1,9 +1,5 @@
 <?php
 
-/**
- * @license https://opensource.org/licenses/MIT
- */
-
 namespace Hybrid\Container;
 
 use Hybrid\Contracts\Container\Container;
@@ -11,7 +7,6 @@ use Hybrid\Contracts\Container\ContextualBindingBuilder as ContextualBindingBuil
 use Hybrid\Util;
 
 class ContextualBindingBuilder implements ContextualBindingBuilderContract {
-
     /**
      * The underlying container instance.
      *
@@ -48,6 +43,7 @@ class ContextualBindingBuilder implements ContextualBindingBuilderContract {
      * Define the abstract target that depends on the context.
      *
      * @param string $abstract
+     *
      * @return $this
      */
     public function needs( $abstract ) {
@@ -60,6 +56,7 @@ class ContextualBindingBuilder implements ContextualBindingBuilderContract {
      * Define the implementation for the contextual binding.
      *
      * @param \Closure|string|array $implementation
+     *
      * @return void
      */
     public function give( $implementation ) {
@@ -74,6 +71,7 @@ class ContextualBindingBuilder implements ContextualBindingBuilderContract {
      * Define tagged services to be used as the implementation for the contextual binding.
      *
      * @param string $tag
+     *
      * @return void
      */
     public function giveTagged( $tag ) {
@@ -89,10 +87,10 @@ class ContextualBindingBuilder implements ContextualBindingBuilderContract {
      *
      * @param string $key
      * @param mixed  $default
+     *
      * @return void
      */
     public function giveConfig( $key, $default = null ) {
         return $this->give( fn( $container ) => $container->get( 'config' )->get( $key, $default ) );
     }
-
 }

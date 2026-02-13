@@ -6,7 +6,6 @@ use Hybrid\Contracts\Core\Application;
 use Hybrid\Core\ServiceProvider;
 
 class RegisterProviders {
-
     /**
      * The service providers that should be merged before registration.
      *
@@ -25,6 +24,7 @@ class RegisterProviders {
      * Bootstrap the given application.
      *
      * @param \Hybrid\Contracts\Core\Application $app
+     *
      * @return void
      */
     public function bootstrap( Application $app ) {
@@ -68,6 +68,7 @@ class RegisterProviders {
      *
      * @param array       $providers
      * @param string|null $bootstrapProviderPath
+     *
      * @return void
      */
     public static function merge( array $providers, ?string $bootstrapProviderPath = null ) {
@@ -88,5 +89,4 @@ class RegisterProviders {
 
         static::$merge = [];
     }
-
 }

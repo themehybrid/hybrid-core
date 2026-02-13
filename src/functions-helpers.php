@@ -25,7 +25,9 @@ if ( ! function_exists( __NAMESPACE__ . '\\app' ) ) {
      * Get the available container instance.
      *
      * @template TClass of object
+     *
      * @param string|class-string<TClass>|null $abstract
+     *
      * @return ($abstract is class-string<TClass> ? TClass : ($abstract is null ? \Hybrid\Core\Application : mixed))
      */
     function app( $abstract = null, array $parameters = [] ) {
@@ -67,6 +69,7 @@ if ( ! function_exists( __NAMESPACE__ . '\\path' ) ) {
      * it'll be appended to the end of the path.
      *
      * @param string $file
+     *
      * @return string
      */
     function path( $file = '' ) {
@@ -96,6 +99,7 @@ if ( ! function_exists( 'event' ) ) {
      * @param string|object $event
      * @param mixed         $payload
      * @param bool          $halt
+     *
      * @return array|null
      */
     function event( ...$args ) {
@@ -122,6 +126,7 @@ if ( ! function_exists( __NAMESPACE__ . '\\config' ) ) {
      *
      * @param array<string, mixed>|string|null $key
      * @param mixed                            $default
+     *
      * @return ($key is null ? \Hybrid\Tools\Config\Repository : ($key is string ? mixed : null))
      */
     function config( $key = null, $default = null ) {
@@ -154,6 +159,7 @@ if ( ! function_exists( __NAMESPACE__ . '\\mix' ) ) {
      *
      * @param string $path
      * @param string $manifestDirectory
+     *
      * @throws \Exception
      */
     function mix( $path, $manifestDirectory = '' ): HtmlString|string {
@@ -166,6 +172,7 @@ if ( ! function_exists( __NAMESPACE__ . '\\public_path' ) ) {
      * Get the path to the public folder.
      *
      * @param string $path
+     *
      * @return string
      */
     function public_path( $path = '' ) {
@@ -178,7 +185,9 @@ if ( ! function_exists( __NAMESPACE__ . '\\resolve' ) ) {
      * Resolve a service from the container.
      *
      * @template TClass of object
+     *
      * @param string|class-string<TClass> $name
+     *
      * @return ($name is class-string<TClass> ? TClass : mixed)
      */
     function resolve( $name, array $parameters = [] ) {
@@ -191,6 +200,7 @@ if ( ! function_exists( __NAMESPACE__ . '\\resource_path' ) ) {
      * Get the path to the resources folder.
      *
      * @param string $path
+     *
      * @return string
      */
     function resource_path( $path = '' ) {
@@ -203,6 +213,7 @@ if ( ! function_exists( __NAMESPACE__ . '\\storage_path' ) ) {
      * Get the path to the storage folder.
      *
      * @param string $path
+     *
      * @return string
      */
     function storage_path( $path = '' ) {
