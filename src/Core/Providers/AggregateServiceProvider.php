@@ -5,7 +5,6 @@ namespace Hybrid\Core\Providers;
 use Hybrid\Core\ServiceProvider;
 
 class AggregateServiceProvider extends ServiceProvider {
-
     /**
      * The provider class names.
      *
@@ -49,5 +48,4 @@ class AggregateServiceProvider extends ServiceProvider {
 
         return $provides;
     }
-
 }
