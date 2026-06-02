@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Hybrid\Container\Attributes;
 
 use Attribute;
@@ -7,14 +9,13 @@ use Hybrid\Contracts\Container\Container;
 use Hybrid\Contracts\Container\ContextualAttribute;
 
 #[Attribute( Attribute::TARGET_PARAMETER )]
-class Config implements ContextualAttribute {
-    /**
-     * Create a new class instance.
-     */
-    public function __construct( public string $key, public mixed $default = null ) {}
+final class Tag implements ContextualAttribute {
+    public function __construct(
+        public string $tag
+    ) {}
 
     /**
-     * Resolve the configuration value.
+     * Resolve the tag.
      *
      * @param self                                  $attribute
      * @param \Hybrid\Contracts\Container\Container $container
@@ -22,6 +23,6 @@ class Config implements ContextualAttribute {
      * @return mixed
      */
     public static function resolve( self $attribute, Container $container ) {
-        return $container->make( 'config' )->get( $attribute->key, $attribute->default );
+        return $container->tagged( $attribute->tag );
     }
 }

@@ -3,10 +3,16 @@
 namespace Hybrid\Core\Facades;
 
 use Closure;
-use function Hybrid\Tools\collect;
+use Hybrid\Events\Facades\Event;
+use Hybrid\Filesystem\Facades\File;
+use Hybrid\Tools\Arr;
+use Hybrid\Tools\Benchmark;
+use Hybrid\Tools\Collection;
+use Hybrid\Tools\Facades\Config;
+use Hybrid\Tools\Str;
+use RuntimeException;
 
 abstract class Facade {
-
     /**
      * The application instance being facaded.
      *
@@ -31,6 +37,8 @@ abstract class Facade {
     /**
      * Run a Closure when the facade has been resolved.
      *
+     * @param \Closure $callback
+     *
      * @return void
      */
     public static function resolved( Closure $callback ) {
@@ -40,7 +48,7 @@ abstract class Facade {
             $callback( static::getFacadeRoot(), static::$app );
         }
 
-        static::$app->afterResolving( $accessor, static function ( $service, $app ) use ( $callback ) {
+        static::$app->afterResolving( $accessor, function ( $service, $app ) use ( $callback ) {
             $callback( $service, $app );
         } );
     }
@@ -49,6 +57,7 @@ abstract class Facade {
      * Hotswap the underlying instance behind the facade.
      *
      * @param mixed $instance
+     *
      * @return void
      */
     public static function swap( $instance ) {
@@ -72,16 +81,18 @@ abstract class Facade {
      * Get the registered name of the component.
      *
      * @return string
+     *
      * @throws \RuntimeException
      */
     protected static function getFacadeAccessor() {
-        throw new \RuntimeException( 'Facade does not implement getFacadeAccessor method.' );
+        throw new RuntimeException( 'Facade does not implement getFacadeAccessor method.' );
     }
 
     /**
      * Resolve the facade root instance from the container.
      *
      * @param string $name
+     *
      * @return mixed
      */
     protected static function resolveFacadeInstance( $name ) {
@@ -102,10 +113,11 @@ abstract class Facade {
      * Clear a resolved facade instance.
      *
      * @param string $name
+     *
      * @return void
      */
-    public static function clearResolvedInstance( $name ) {
-        unset( static::$resolvedInstance[ $name ] );
+    public static function clearResolvedInstance( $name = null ) {
+        unset( static::$resolvedInstance[ $name ?? static::getFacadeAccessor() ] );
     }
 
     /**
@@ -123,8 +135,15 @@ abstract class Facade {
      * @return \Hybrid\Tools\Collection
      */
     public static function defaultAliases() {
-        return collect( [
+        return new Collection( [
             'Hybrid\App' => App::class,
+            'Arr'        => Arr::class,
+            'Benchmark'  => Benchmark::class,
+            'Config'     => Config::class,
+            // 'Context' => Context::class,
+            'Event'      => Event::class,
+            'File'       => File::class,
+            'Str'        => Str::class,
         ] );
     }
 
@@ -141,6 +160,7 @@ abstract class Facade {
      * Set the application instance.
      *
      * @param \Hybrid\Contracts\Core\Application|null $app
+     *
      * @return void
      */
     public static function setFacadeApplication( $app ) {
@@ -152,17 +172,18 @@ abstract class Facade {
      *
      * @param string $method
      * @param array  $args
+     *
      * @return mixed
+     *
      * @throws \RuntimeException
      */
     public static function __callStatic( $method, $args ) {
         $instance = static::getFacadeRoot();
 
         if ( ! $instance ) {
-            throw new \RuntimeException( 'A facade root has not been set.' );
+            throw new RuntimeException( 'A facade root has not been set.' );
         }
 
         return $instance->$method( ...$args );
     }
-
 }

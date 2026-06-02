@@ -1,7 +1,4 @@
 <?php
-/**
- * @license https://opensource.org/licenses/MIT
- */
 
 namespace Hybrid\Container;
 
@@ -10,7 +7,6 @@ use Hybrid\Contracts\Container\ContextualBindingBuilder as ContextualBindingBuil
 use Hybrid\Util;
 
 class ContextualBindingBuilder implements ContextualBindingBuilderContract {
-
     /**
      * The underlying container instance.
      *
@@ -35,7 +31,8 @@ class ContextualBindingBuilder implements ContextualBindingBuilderContract {
     /**
      * Create a new contextual binding builder.
      *
-     * @param string|array $concrete
+     * @param \Hybrid\Contracts\Container\Container $container
+     * @param string|array                          $concrete
      */
     public function __construct( Container $container, $concrete ) {
         $this->concrete  = $concrete;
@@ -46,6 +43,7 @@ class ContextualBindingBuilder implements ContextualBindingBuilderContract {
      * Define the abstract target that depends on the context.
      *
      * @param string $abstract
+     *
      * @return $this
      */
     public function needs( $abstract ) {
@@ -58,22 +56,26 @@ class ContextualBindingBuilder implements ContextualBindingBuilderContract {
      * Define the implementation for the contextual binding.
      *
      * @param \Closure|string|array $implementation
-     * @return void
+     *
+     * @return $this
      */
     public function give( $implementation ) {
         foreach ( Util::arrayWrap( $this->concrete ) as $concrete ) {
             $this->container->addContextualBinding( $concrete, $this->needs, $implementation );
         }
+
+        return $this;
     }
 
     /**
      * Define tagged services to be used as the implementation for the contextual binding.
      *
      * @param string $tag
-     * @return void
+     *
+     * @return $this
      */
     public function giveTagged( $tag ) {
-        $this->give( static function ( $container ) use ( $tag ) {
+        return $this->give( function ( $container ) use ( $tag ) {
             $taggedServices = $container->tagged( $tag );
 
             return is_array( $taggedServices ) ? $taggedServices : iterator_to_array( $taggedServices );
@@ -85,10 +87,10 @@ class ContextualBindingBuilder implements ContextualBindingBuilderContract {
      *
      * @param string $key
      * @param mixed  $default
-     * @return void
+     *
+     * @return $this
      */
     public function giveConfig( $key, $default = null ) {
-        $this->give( static fn( $container ) => $container->get( 'config' )->get( $key, $default ) );
+        return $this->give( fn( $container ) => $container->get( 'config' )->get( $key, $default ) );
     }
-
 }

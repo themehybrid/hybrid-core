@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Helper functions.
  *
@@ -17,16 +18,17 @@ namespace Hybrid;
 
 use Hybrid\Container\Container;
 use Hybrid\Core\Mix;
+use Hybrid\Tools\HtmlString;
 
 if ( ! function_exists( __NAMESPACE__ . '\\app' ) ) {
     /**
      * Get the available container instance.
      *
-     * @param string|class-string<TClass>|null $abstract
-     * @param array                            $parameters
-     * @return ($abstract is class-string<TClass> ? TClass : ($abstract is null ? \Hybrid\Core\Application : mixed))
+     * @template TClass of object
      *
-     * @template TClass
+     * @param string|class-string<TClass>|null $abstract
+     *
+     * @return ($abstract is class-string<TClass> ? TClass : ($abstract is null ? \Hybrid\Core\Application : mixed))
      */
     function app( $abstract = null, array $parameters = [] ) {
         if ( is_null( $abstract ) ) {
@@ -42,9 +44,8 @@ if ( ! function_exists( __NAMESPACE__ . '\\app_path' ) ) {
      * Get the path to the application folder.
      *
      * @param string $path
-     * @return string
      */
-    function app_path( $path = '' ) {
+    function app_path( $path = '' ): string {
         return app()->path( $path );
     }
 }
@@ -68,6 +69,7 @@ if ( ! function_exists( __NAMESPACE__ . '\\path' ) ) {
      * it'll be appended to the end of the path.
      *
      * @param string $file
+     *
      * @return string
      */
     function path( $file = '' ) {
@@ -97,6 +99,7 @@ if ( ! function_exists( 'event' ) ) {
      * @param string|object $event
      * @param mixed         $payload
      * @param bool          $halt
+     *
      * @return array|null
      */
     function event( ...$args ) {
@@ -109,9 +112,8 @@ if ( ! function_exists( __NAMESPACE__ . '\\base_path' ) ) {
      * Get the path to the base of the install.
      *
      * @param string $path
-     * @return string
      */
-    function base_path( $path = '' ) {
+    function base_path( $path = '' ): string {
         return app()->basePath( $path );
     }
 }
@@ -124,6 +126,7 @@ if ( ! function_exists( __NAMESPACE__ . '\\config' ) ) {
      *
      * @param array<string, mixed>|string|null $key
      * @param mixed                            $default
+     *
      * @return ($key is null ? \Hybrid\Tools\Config\Repository : ($key is string ? mixed : null))
      */
     function config( $key = null, $default = null ) {
@@ -144,9 +147,8 @@ if ( ! function_exists( __NAMESPACE__ . '\\config_path' ) ) {
      * Get the configuration path.
      *
      * @param string $path
-     * @return string
      */
-    function config_path( $path = '' ) {
+    function config_path( $path = '' ): string {
         return app()->configPath( $path );
     }
 }
@@ -157,10 +159,10 @@ if ( ! function_exists( __NAMESPACE__ . '\\mix' ) ) {
      *
      * @param string $path
      * @param string $manifestDirectory
-     * @return \Hybrid\Tools\HtmlString|string
+     *
      * @throws \Exception
      */
-    function mix( $path, $manifestDirectory = '' ) {
+    function mix( $path, $manifestDirectory = '' ): HtmlString|string {
         return app( Mix::class )( ...func_get_args() );
     }
 }
@@ -170,6 +172,7 @@ if ( ! function_exists( __NAMESPACE__ . '\\public_path' ) ) {
      * Get the path to the public folder.
      *
      * @param string $path
+     *
      * @return string
      */
     function public_path( $path = '' ) {
@@ -178,15 +181,14 @@ if ( ! function_exists( __NAMESPACE__ . '\\public_path' ) ) {
 }
 
 if ( ! function_exists( __NAMESPACE__ . '\\resolve' ) ) {
-
     /**
      * Resolve a service from the container.
      *
-     * @param string|class-string<TClass> $name
-     * @param array                       $parameters
-     * @return ($name is class-string<TClass> ? TClass : mixed)
+     * @template TClass of object
      *
-     * @template TClass
+     * @param string|class-string<TClass> $name
+     *
+     * @return ($name is class-string<TClass> ? TClass : mixed)
      */
     function resolve( $name, array $parameters = [] ) {
         return app( $name, $parameters );
@@ -198,6 +200,7 @@ if ( ! function_exists( __NAMESPACE__ . '\\resource_path' ) ) {
      * Get the path to the resources folder.
      *
      * @param string $path
+     *
      * @return string
      */
     function resource_path( $path = '' ) {
@@ -210,6 +213,7 @@ if ( ! function_exists( __NAMESPACE__ . '\\storage_path' ) ) {
      * Get the path to the storage folder.
      *
      * @param string $path
+     *
      * @return string
      */
     function storage_path( $path = '' ) {

@@ -2,18 +2,27 @@
 
 namespace Hybrid\Core\Bootstrap;
 
+use Closure;
 use Hybrid\Contracts\Config\Repository as RepositoryContract;
 use Hybrid\Contracts\Core\Application;
+use Hybrid\Tools\Collection;
 use Hybrid\Tools\Config\Repository;
 use SplFileInfo;
 use Symfony\Component\Finder\Finder;
 
 class LoadConfiguration {
+    /**
+     * The closure that resolves the permanent, static configuration if applicable.
+     *
+     * @var (Closure(Application): array<array-key, mixed>)|null
+     */
+    protected static ?Closure $alwaysUseConfig = null;
 
     /**
      * Bootstrap the given application.
      *
      * @param \Hybrid\Contracts\Core\Application $app
+     *
      * @return void
      */
     public function bootstrap( Application $app ) {
@@ -22,25 +31,39 @@ class LoadConfiguration {
         // First we will see if we have a cache configuration file. If we do, we'll load
         // the configuration items from that file so that it is very quick. Otherwise
         // we will need to spin through every configuration file and load them all.
-        if ( file_exists( $cached = $app->getCachedConfigPath() ) ) {
+        $loadedFromCache = false;
+
+        if ( null !== self::$alwaysUseConfig ) {
+            $items = $app->call( self::$alwaysUseConfig );
+
+            $loadedFromCache = true;
+        } elseif ( file_exists( $cached = $app->getCachedConfigPath() ) ) {
             $items = require $cached;
 
-            $app->instance( 'config_loaded_from_cache', $loadedFromCache = true );
+            $loadedFromCache = true;
         }
+
+        $app->instance( 'config_loaded_from_cache', $loadedFromCache );
 
         // Next we will spin through all of the configuration files in the configuration
         // directory and load each one into the repository. This will make all of the
         // options available to the developer for use in various parts of this app.
         $app->instance( 'config', $config = new Repository( $items ) );
 
-        if ( ! isset( $loadedFromCache ) ) {
+        if ( ! $loadedFromCache ) {
             $this->loadConfigurationFiles( $app, $config );
         }
 
         // Finally, we will set the application's environment based on the configuration
         // values that were loaded. We will pass a callback which will be used to get
         // the environment in a web context where an "--env" switch is not present.
-        $app->detectEnvironment( static fn() => $config->get( 'app.env', 'production' ) );
+        $app->detectEnvironment( fn() => $config->get( 'app.env', 'production' ) );
+
+        $app->resolveEnvironmentUsing( $app->environment( ...) );
+
+        // date_default_timezone_set( $config->get( 'app.timezone', 'UTC' ) );
+
+        // mb_internal_encoding( 'UTF-8' );
     }
 
     /**
@@ -48,7 +71,9 @@ class LoadConfiguration {
      *
      * @param \Hybrid\Contracts\Core\Application  $app
      * @param \Hybrid\Contracts\Config\Repository $repository
+     *
      * @return void
+     *
      * @throws \Exception
      */
     protected function loadConfigurationFiles( Application $app, RepositoryContract $repository ) {
@@ -62,7 +87,7 @@ class LoadConfiguration {
             ? $this->getBaseConfiguration()
             : [];
 
-        foreach ( array_diff( array_keys( $base ), array_keys( $files ) ) as $name => $config ) {
+        foreach ( ( new Collection( $base ) )->diffKeys( $files ) as $name => $config ) {
             $repository->set( $name, $config );
         }
 
@@ -82,10 +107,11 @@ class LoadConfiguration {
      * @param string                              $name
      * @param string                              $path
      * @param array                               $base
+     *
      * @return array
      */
     protected function loadConfigurationFile( RepositoryContract $repository, $name, $path, array $base ) {
-        $config = require $path;
+        $config = ( fn() => require $path )();
 
         if ( isset( $base[ $name ] ) ) {
             $config = array_merge( $base[ $name ], $config );
@@ -108,6 +134,7 @@ class LoadConfiguration {
      * Get the options within the configuration file that should be merged again.
      *
      * @param string $name
+     *
      * @return array
      */
     protected function mergeableOptions( $name ) {
@@ -120,6 +147,7 @@ class LoadConfiguration {
      * Get all of the configuration files for the application.
      *
      * @param \Hybrid\Contracts\Core\Application $app
+     *
      * @return array
      */
     protected function getConfigurationFiles( Application $app ) {
@@ -147,6 +175,7 @@ class LoadConfiguration {
      *
      * @param \SplFileInfo $file
      * @param string       $configPath
+     *
      * @return string
      */
     protected function getNestedDirectory( SplFileInfo $file, $configPath ) {
@@ -183,4 +212,12 @@ class LoadConfiguration {
         return $config;
     }
 
+    /**
+     * Set a callback to return the permanent, static configuration values.
+     *
+     * @param (Closure(Application): array<array-key, mixed>)|null $alwaysUseConfig
+     */
+    public static function alwaysUse( ?Closure $alwaysUseConfig ): void {
+        static::$alwaysUseConfig = $alwaysUseConfig;
+    }
 }
