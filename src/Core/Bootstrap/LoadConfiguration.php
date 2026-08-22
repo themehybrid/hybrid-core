@@ -7,7 +7,6 @@ use Hybrid\Contracts\Config\Repository as RepositoryContract;
 use Hybrid\Contracts\Core\Application;
 use Hybrid\Tools\Collection;
 use Hybrid\Tools\Config\Repository;
-use SplFileInfo;
 use Symfony\Component\Finder\Finder;
 
 class LoadConfiguration {
@@ -146,6 +145,14 @@ class LoadConfiguration {
     /**
      * Get all of the configuration files for the application.
      *
+     * ROOT ONLY — this deliberately does not recurse.
+     *
+     * Root `config/*.php` files (app.php, logging.php, ...) configure the
+     * framework. Every package ships them and the last one loaded wins; that is
+     * intended. Anything NESTED belongs to the package that shipped it and must
+     * be loaded separately under a namespace, or two packages that both have
+     * `config/site/some.php` silently overwrite each other. See Config\Loader.
+     *
      * @param \Hybrid\Contracts\Core\Application $app
      *
      * @return array
@@ -159,33 +166,13 @@ class LoadConfiguration {
             return [];
         }
 
-        foreach ( Finder::create()->files()->name( '*.php' )->in( $configPath ) as $file ) {
-            $directory = $this->getNestedDirectory( $file, $configPath );
-
-            $files[ $directory . basename( $file->getRealPath(), '.php' ) ] = $file->getRealPath();
+        foreach ( glob( $configPath . '/*.php' ) as $file ) {
+            $files[ basename( $file, '.php' ) ] = $file;
         }
 
         ksort( $files, SORT_NATURAL );
 
         return $files;
-    }
-
-    /**
-     * Get the configuration file nesting path.
-     *
-     * @param \SplFileInfo $file
-     * @param string       $configPath
-     *
-     * @return string
-     */
-    protected function getNestedDirectory( SplFileInfo $file, $configPath ) {
-        $directory = $file->getPath();
-
-        if ( $nested = trim( str_replace( $configPath, '', $directory ), DIRECTORY_SEPARATOR ) ) {
-            $nested = str_replace( DIRECTORY_SEPARATOR, '.', $nested ) . '.';
-        }
-
-        return $nested;
     }
 
     /**
