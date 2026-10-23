@@ -2,6 +2,34 @@
 
 You can see the changes made via the [commit log](https://github.com/themehybrid/hybrid-core/commits/master) for the latest release.
 
+## [7.0.6] - 2026-10-22
+
+### Breaking
+
+- **Config files in subfolders no longer load on their own.**
+  - **You'll notice:** a value from a file such as `config/site/header.php`
+    (`site.header.*`) reads `null`. Root files like `config/app.php` still load.
+  - **Fix, one line** in your service provider's `register()`, keeping the
+    same keys:
+
+    ```php
+    \Hybrid\Tools\Config\Loader::load( get_template_directory() . '/config' );
+    ```
+
+  - **Why:** two packages shipping the same subfolder file, such as
+    `config/site/header.php`, silently overwrote each other. Pass a namespace
+    as the second argument to keep yours apart; see hybrid-tools'
+    [config docs](https://github.com/themehybrid/hybrid-tools/blob/master/docs/config.md).
+
+### Changed
+
+- Requires hybrid-tools ^2.0.6, which provides the `Loader` above.
+
+### Deprecated
+
+- `Hybrid\config()`. Use `Hybrid\Tools\config()`, which it now calls. It will be
+  removed in the next major version.
+
 ## [7.0.5] - 2026-06-02
 
 ### Changed
